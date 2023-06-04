@@ -1,7 +1,7 @@
 extends Node
 
 
-@export var painter: NodePath = null
+@export var painter : NodePath = NodePath("")
 
 
 var shaders = []
@@ -18,7 +18,7 @@ var selected_layer : Layer
 @onready var normal_map = $NormalMap
 @onready var depth = $Depth
 @onready var occlusion = $Occlusion
-@onready var painter_node = get_node(painter) if painter != null else null
+@onready var painter_node = get_node(painter) if painter != NodePath("") else null
 
 @onready var nm_material : ShaderMaterial = $NormalMap/Rect.get_material()
 var generate_nm : bool = true
@@ -46,9 +46,7 @@ func set_texture_size(s : float):
 	texture_size = s
 	var size = Vector2(s, s)
 	var selected_layer_save = selected_layer
-	var result = select_layer(null)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	await select_layer(null)
 	resize_layers(s)
 	for vp in [ albedo, metallic, roughness, emission, normal, depth, occlusion, normal_map ]:
 		vp.size = size
@@ -60,9 +58,7 @@ func set_texture_size(s : float):
 	#nm_material.set_shader_parameter("seams", painter_node.mesh_seams_tex)
 	
 	painter_node.set_texture_size(s)
-	select_layer(selected_layer_save)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	await select_layer(selected_layer_save)
 	_on_Painter_painted()
 
 func find_parent_array(layer : Layer, layer_array : Array = layers):
@@ -82,7 +78,7 @@ func resize_layers(size : int, layers_array : Array = layers):
 				var image : Image = Image.new()
 				image.copy_from(texture.get_data())
 				image.resize(size, size)
-				texture.create_from_image(image)
+				texture.set_image(image)
 		resize_layers(size, l.layers)
 
 func get_albedo_texture():
@@ -120,7 +116,7 @@ func select_layer(layer : Layer) -> void:
 			var old_texture : Texture2D = selected_layer.get(c)
 			var new_texture = ImageTexture.new()
 			if old_texture != null:
-				new_texture.create_from_image(old_texture.get_data())
+				new_texture.set_image(old_texture.get_image())
 			selected_layer.set(c, new_texture)
 	if layer != null:
 		for c in layer.get_channels():
@@ -175,7 +171,7 @@ func add_layer(layer_type : int = 0) -> void:
 	image.fill(Color(0, 0, 0, 0))
 	for c in layer.get_channels():
 		var texture = ImageTexture.new()
-		texture.create_from_image(image)
+		texture.set_image(image)
 		layer.set(c, texture)
 	layers_array.push_front(layer)
 	select_layer(layer)
@@ -295,6 +291,7 @@ func update_layers_renderer(visible_layers : Array) -> void:
 		var l = lm.layer
 		var m = lm.masks
 		var layer_shaders = get_shaders(m.size())
+		# TODO: factor the code below
 		# albedo
 		color_rect = ColorRect.new()
 		color_rect.size = albedo.size
@@ -425,8 +422,7 @@ func load_layers(data_layers : Array, layers_array : Array, path : String, first
 
 func save(file_name : String) -> Dictionary:
 	var dir_name = file_name.left(file_name.rfind("."))
-	var dir = Directory.new()
-	dir.make_dir(dir_name)
+	DirAccess.make_dir_absolute(dir_name)
 	var data = {}
 	data.layers = Layer.save_layers(layers, dir_name)
 	return data
@@ -434,12 +430,10 @@ func save(file_name : String) -> Dictionary:
 func _on_Painter_painted():
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-		viewport.update_worlds()
 	if generate_nm:
 		await get_tree().process_frame
 		await get_tree().process_frame
 		normal_map.render_target_update_mode = SubViewport.UPDATE_ONCE
-		normal_map.update_worlds()
 
 # debug
 

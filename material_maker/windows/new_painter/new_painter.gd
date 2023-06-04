@@ -1,6 +1,6 @@
 extends Window
 
-signal return_status(status)
+signal return_status(status : Dictionary)
 
 var mesh_filename    = null
 var project_filename = null
@@ -73,13 +73,14 @@ func _on_OK_pressed():
 	emit_signal("return_status", { mesh=mesh, mesh_filename=mesh_filename, project_filename=project_filename, size=pow(2, $VBoxContainer/Main/VBoxContainer/GridContainer/Resolution.size_value) })
 
 func _on_Cancel_pressed():
-	emit_signal("return_status", null)
+	emit_signal("return_status", {})
 
 func _on_NewPainterWindow_popup_hide():
 	await get_tree().process_frame
-	emit_signal("return_status", null)
+	emit_signal("return_status", {})
 
-func ask(obj_file_name = null) -> String:
+func ask(obj_file_name = null) -> Dictionary:
+	mm_globals.main_window.add_dialog(self)
 	if obj_file_name != null:
 		set_mesh(obj_file_name)
 	popup_centered()

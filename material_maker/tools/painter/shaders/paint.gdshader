@@ -1,6 +1,8 @@
 shader_type canvas_item;
 render_mode blend_disabled, unshaded;
 
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+
 uniform bool      texture_space = false;
 uniform vec2      rect_size;
 uniform vec2      texture_center = vec2(0.5);

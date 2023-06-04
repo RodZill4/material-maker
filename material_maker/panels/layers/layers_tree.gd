@@ -39,7 +39,7 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 		new_item.add_button(1, BUTTON_HIDDEN if l.hidden else BUTTON_SHOWN, 0)
 		new_item.set_editable(0, false)
 		new_item.set_meta("layer", l)
-		new_item.set_tooltip(0, str(new_item.get_instance_id()))
+		new_item.set_tooltip_text(0, str(new_item.get_instance_id()))
 		if l == selected_layer:
 			new_item.select(0)
 			selected_item = new_item

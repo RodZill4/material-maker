@@ -128,14 +128,13 @@ func finish_init():
 	# Render init texture
 	strokepaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	strokepaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
-	strokepaint_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	# Copy image from viewport
-	var image = strokepaint_viewport.get_texture().get_data()
+	var image = strokepaint_viewport.get_texture().get_image()
 	false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	var texture : ImageTexture = ImageTexture.new()
-	texture.create_from_image(image)
+	texture.set_image(image)
 	false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	layer_material.set_shader_parameter("tex", texture)
 	layerpaint_layerrect.visible = true
@@ -144,12 +143,10 @@ func finish_init():
 	strokepaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	strokepaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
 	strokepaint_rect.visible = false
-	strokepaint_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	layerpaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	layerpaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
-	layerpaint_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	strokepaint_rect.visible = true
@@ -164,7 +161,7 @@ func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 	for p in shader_params.keys():
 		match p:
 			"brush_opacity":
-				layerpaint_strokerect.self_modulate = Color(1.0, 1.0, 1.0, shader_params[p])
+				layerpaint_strokerect.color = Color(1.0, 1.0, 1.0, shader_params[p])
 			"erase":
 				stroke_material.set_shader_parameter("erase", shader_params[p])
 			"reset":
@@ -173,37 +170,30 @@ func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 				paint_material.set_shader_parameter(p, shader_params[p])
 	strokepaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	strokepaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE if reset else SubViewport.CLEAR_MODE_NEVER
-	strokepaint_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	layerpaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
 	layerpaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	strokepaint_rect.visible = true
 	layerpaint_layerrect.visible = !reset
-	layerpaint_viewport.update_worlds()
 	if end_of_stroke:
 		await get_tree().process_frame
 		await get_tree().process_frame
 		if false and reset:
 			var image = strokepaint_viewport.get_texture().get_data()
-			false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 			var texture : ImageTexture = ImageTexture.new()
-			texture.create_from_image(image)
-			false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+			texture.set_image(image)
 			layerpaint_strokerect.visible = false
 			return
 		else:
-			var image = layerpaint_viewport.get_texture().get_data()
-			false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+			var image = layerpaint_viewport.get_texture().get_image()
 			var texture : ImageTexture = ImageTexture.new()
-			texture.create_from_image(image)
-			false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+			texture.set_image(image)
 			layer_material.set_shader_parameter("tex", texture)
 			layerpaint_strokerect.visible = true
 		strokepaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
 		strokepaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 		strokepaint_rect.visible = false
-		strokepaint_viewport.update_worlds()
 		await get_tree().process_frame
 		await get_tree().process_frame
 		strokepaint_rect.visible = true

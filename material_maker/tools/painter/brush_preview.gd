@@ -35,7 +35,7 @@ func set_brush(brush) -> Texture2D:
 		preview_material.normal_texture = $NormalMap.get_texture()
 		preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
 		# TODO: Fix this
-		#preview_material.depth_enabled = true
+		#preview_material.heightmap_enabled = true
 		#preview_material.depth_deep_parallax = true
 		#preview_material.depth_texture = painter.get_depth_texture()
 		#preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT

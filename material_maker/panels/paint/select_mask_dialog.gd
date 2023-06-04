@@ -42,14 +42,11 @@ func set_mesh(mesh : Mesh):
 
 func _on_IdMapFile_pressed():
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.png;PNG image file")
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() == 1:
 		set_idmap(files[0])
 
@@ -57,7 +54,7 @@ func set_idmap(ifn : String):
 	idmap_filename = ifn
 	var image : Image = Image.new()
 	image.load(idmap_filename)
-	idmap.create_from_image(image)
+	idmap.set_image(image)
 	$VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/IdMapFile.text = idmap_filename.get_file()
 
 func set_view_mode(index):
@@ -86,7 +83,7 @@ func _on_Reset_pressed():
 	var image : Image = Image.new()
 	image.create(16, 16, 0, Image.FORMAT_RGBA8)
 	image.fill(Color(1, 1, 1))
-	mask.create_from_image(image)
+	mask.set_image(image)
 
 func update_mask_from_mouse_position(mouse_position : Vector2):
 	var texture : ViewportTexture = viewport.get_texture()
@@ -94,7 +91,7 @@ func update_mask_from_mouse_position(mouse_position : Vector2):
 	if showing_mask:
 		# Hide viewport while we capture the position
 		var hide_texture : ImageTexture = ImageTexture.new()
-		hide_texture.create_from_image(viewport.get_texture().get_data())
+		hide_texture.set_image(viewport.get_texture().get_image())
 		texture_rect.texture = hide_texture
 		texture_rect.visible = true
 		mesh_instance.get_surface_override_material(0).set_shader_parameter("tex", idmap)
@@ -102,24 +99,18 @@ func update_mask_from_mouse_position(mouse_position : Vector2):
 		await get_tree().process_frame
 		await get_tree().process_frame
 		await get_tree().process_frame
-	var image : Image = texture.get_data()
-	false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+	var image : Image = texture.get_image()
 	mouse_position.y = viewport.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
-	false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	if showing_mask:
 		_on_Show_item_selected(current_view_mode)
 		texture_rect.visible = false
 	genmask_material.set_shader_parameter("idmap", idmap)
 	genmask_material.set_shader_parameter("color", position_color)
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
+	var renderer = await mm_renderer.request(self)
 	if renderer == null:
 		return
-	renderer = renderer.render_material(self, genmask_material, idmap.get_size().x)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
+	renderer = await renderer.render_material(self, genmask_material, idmap.get_size().x)
 	renderer.copy_to_texture(mask)
 	renderer.release(self)
 
@@ -163,7 +154,7 @@ func ask(parameters : Dictionary) -> String:
 		var image : Image = Image.new()
 		image.create(16, 16, 0, Image.FORMAT_RGBA8)
 		image.fill(Color(0, 0, 0))
-		idmap.create_from_image(image)
+		idmap.set_image(image)
 	# Get mask texture
 	assert(parameters.has("mask"))
 	mask = parameters.mask

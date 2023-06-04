@@ -3,11 +3,12 @@ render_mode blend_disabled, unshaded;
 
 uniform bool erase = false;
 uniform sampler2D tex;
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
 void fragment() {
 	vec4 screen_color = clamp(texture(SCREEN_TEXTURE, UV), vec4(0.0), vec4(1.0));
 	vec4 color = clamp(texture(tex, UV), vec4(0.0), vec4(1.0));
-	vec2 a = color.ba*MODULATE.a;
+	vec2 a = color.ba*COLOR.a;
 	if (erase) {
 		COLOR = vec4(screen_color.rg, max(screen_color.ba-a, 0.0));
 	} else {

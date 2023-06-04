@@ -105,9 +105,9 @@ func _ready():
 	# Create white mask
 	mask = ImageTexture.new()
 	var image = Image.new()
-	image.create(16, 16, 0, Image.FORMAT_RGBA8)
+	image = Image.create(16, 16, 0, Image.FORMAT_RGBA8)
 	image.fill(Color(1, 1, 1))
-	mask.create_from_image(image)
+	mask.set_image(image)
 
 
 func update_tab_title() -> void:
@@ -179,9 +179,7 @@ func get_brush_preview() -> Texture2D:
 		preview = load("res://material_maker/tools/painter/brush_preview.tscn").instantiate()
 		preview.name = "BrushPreviewGenerator"
 		get_tree().get_root().add_child(preview)
-	var status = preview.set_brush(graph_edit.generator.get_node("Brush"))
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	var status = await preview.set_brush(graph_edit.generator.get_node("Brush"))
 	return status
 
 func get_graph_edit():
@@ -208,10 +206,10 @@ func set_object(o):
 		mat = StandardMaterial3D.new()
 	preview_material = StandardMaterial3D.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
-	preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
+	#preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.metallic = 1.0
 	preview_material.metallic_texture = layers.get_metallic_texture()
-	preview_material.metallic_texture.flags = Texture2D.FLAGS_DEFAULT
+	#preview_material.metallic_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.metallic_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 	preview_material.roughness = 1.0
 	preview_material.roughness_texture = layers.get_roughness_texture()
@@ -219,21 +217,21 @@ func set_object(o):
 	preview_material.emission_enabled = true
 	preview_material.emission = Color(0.0, 0.0, 0.0, 0.0)
 	preview_material.emission_texture = layers.get_emission_texture()
-	preview_material.emission_texture.flags = Texture2D.FLAGS_DEFAULT
+	#preview_material.emission_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.normal_enabled = true
 	preview_material.normal_texture = layers.get_normal_map()
-	preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
-	preview_material.depth_enabled = true
+	#preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
+	preview_material.heightmap_enabled = true
 	preview_material.depth_deep_parallax = true
 	preview_material.depth_texture = layers.get_depth_texture()
-	preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT
+	#preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.ao_enabled = true
 	preview_material.ao_light_affect = 1.0
 	preview_material.ao_texture = layers.get_occlusion_texture()
 	preview_material.ao_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_override_material(0, preview_material)
-	# Center camera checked  mesh
+	# Center camera on  mesh
 	var aabb : AABB = painted_mesh.get_aabb()
 	camera_position.transform.origin = aabb.position+0.5*aabb.size
 	# Set the painter target mesh
@@ -261,7 +259,7 @@ func set_settings(s : Dictionary):
 		preview_material.emission_enabled = settings.paint_emission
 		preview_material.normal_enabled = settings.paint_normal or settings.paint_depth_as_bump
 		layers.set_normal_options(settings.paint_normal, settings.paint_depth_as_bump, settings.bump_strength)
-		preview_material.depth_enabled = settings.paint_depth
+		preview_material.heightmap_enabled = settings.paint_depth
 		set_need_save(true)
 
 func check_material_feature(variable : String, value : bool) -> void:
@@ -300,9 +298,7 @@ func _on_Eraser_toggled(button_pressed):
 func _on_MaskSelector_pressed():
 	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instantiate()
 	add_child(dialog)
-	var result = dialog.ask({ mesh=painted_mesh.mesh, idmap_filename=idmap_filename, mask=mask })
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	var result = await dialog.ask({ mesh=painted_mesh.mesh, idmap_filename=idmap_filename, mask=mask })
 	if result != null and result.has("idmap_filename"):
 		idmap_filename = result.idmap_filename
 
@@ -313,11 +309,11 @@ func _physics_process(delta):
 
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
-		if ev.scancode == KEY_CTRL:
+		if ev.keycode == KEY_CTRL:
 			#TODO: move this to another shortcut, this is too annoying
 			#painter.show_pattern(ev.pressed)
 			accept_event()
-		elif ev.scancode == KEY_LEFT or ev.scancode == KEY_RIGHT or ev.scancode == KEY_UP or ev.scancode == KEY_DOWN:
+		elif ev.keycode == KEY_LEFT or ev.keycode == KEY_RIGHT or ev.keycode == KEY_UP or ev.keycode == KEY_DOWN:
 			var new_key_rotate = Vector2(0.0, 0.0)
 			if Input.is_key_pressed(KEY_UP):
 				key_rotate.y -= 1.0
@@ -404,7 +400,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				painter.update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
 				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize.set_value(brush_parameters.brush_size)
 				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness.set_value(brush_parameters.brush_hardness)
-			elif ev.control:
+			elif ev.is_command_or_control_pressed():
 				reset_stroke()
 				pattern_scale += ev.relative.x*0.1
 				pattern_scale = clamp(pattern_scale, 0.1, 25.0)
@@ -419,7 +415,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			reset_stroke()
 		painter.update_brush()
 	elif ev is InputEventMouseButton:
-		if !ev.control and !ev.shift_pressed:
+		if !ev.is_command_or_control_pressed() and !ev.shift_pressed:
 			if ev.button_index == MOUSE_BUTTON_LEFT:
 				if ev.pressed:
 					stroke_length = 0.0
@@ -462,7 +458,7 @@ func _on_View_gui_input(ev : InputEvent):
 				var factor = 0.0025*camera.position.z
 				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
 				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
-			elif ev.control:
+			elif ev.is_command_or_control_pressed():
 				camera.translate(Vector3(0.0, 0.0, -0.01*ev.relative.y*camera.transform.origin.z))
 				update_view()
 				accept_event()
@@ -470,11 +466,10 @@ func _on_View_gui_input(ev : InputEvent):
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
 	elif ev is InputEventMouseButton:
-		var pos = ev.position
 		if !ev.pressed and ev.button_index == MOUSE_BUTTON_MIDDLE:
 			update_view()
 		# Mouse wheel
-		if ev.control:
+		if ev.is_command_or_control_pressed():
 			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
 			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -670,9 +665,7 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 			paint_options.size = view_2d.size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
-	var result = painter.paint(paint_options, end_of_stroke)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	await painter.paint(paint_options, end_of_stroke)
 	previous_position = pos
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -697,7 +690,7 @@ func update_view():
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)
-		# DEBUG: show tex2view texture checked model
+		# DEBUG: show tex2view texture on model
 		#for i in range(10):
 		#	await get_tree().process_frame
 		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
@@ -755,22 +748,19 @@ func dump_texture(texture, filename):
 	var image = texture.get_data()
 	image.save_png(filename)
 
-func show_file_dialog(mode, filter, callback):
+func show_file_dialog(file_mode : FileDialog.FileMode, filter, callback):
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	add_child(dialog)
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.mode = mode
+	dialog.file_mode = file_mode
 	dialog.add_filter(filter)
-	var files = dialog.select_files()
-	while files is GDScriptFunctionState:
-		files = await files.completed
+	var files = await dialog.select_files()
 	if files.size() == 1:
 		call(callback, files[0])
 
 func load_project(file_name) -> bool:
-	var f : File = File.new()
-	if f.open(file_name, File.READ) != OK:
+	var f : FileAccess = FileAccess.open(file_name, FileAccess.READ)
+	if f != null:
 		return false
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(f.get_as_text())
@@ -813,9 +803,9 @@ func do_save_project(file_name):
 	data.settings = get_settings()
 	if idmap_filename != "":
 		data.idmap = idmap_filename
-	var file = File.new()
-	if file.open(file_name, File.WRITE) == OK:
-		file.store_string(JSON.new().stringify(data))
+	var file : FileAccess = FileAccess.open(file_name, FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify(data))
 		file.close()
 	set_project_path(file_name)
 	set_need_save(false)
@@ -955,11 +945,9 @@ func initialize_layer_history(layer):
 	for c in layer.get_channels():
 		var texture = layer.get_channel_texture(c)
 		if texture is ViewportTexture:
-			var image = texture.get_data()
-			false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+			var image = texture.get_image()
 			texture = ImageTexture.new()
-			texture.create_from_image(image)
-			false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+			texture.set_image(image)
 		channels[c] = texture
 	stroke_history.layers[layer] = { history=[channels], current=0 }
 

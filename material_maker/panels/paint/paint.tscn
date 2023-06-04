@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://material_maker/panels/paint/paint.gd" id="16"]
 [ext_resource type="PackedScene" path="res://material_maker/panels/graph_edit/graph_edit.tscn" id="17"]
 
-[sub_resource type="World3D" id=1]
+[sub_resource type="World" id=1]
 
 [sub_resource type="Sky" id=2]
 radiance_size = 4
@@ -95,7 +95,7 @@ region = Rect2( 224, 224, 32, 32 )
 
 [sub_resource type="InputEventKey" id=22]
 pressed = true
-scancode = 69
+keycode = 69
 
 [sub_resource type="Shortcut" id=23]
 shortcut = SubResource( 22 )

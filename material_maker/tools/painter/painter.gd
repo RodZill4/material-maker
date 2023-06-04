@@ -77,14 +77,11 @@ func _ready():
 
 func update_seams_texture(_m : Mesh = null) -> void:
 	texture_to_view_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	texture_to_view_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
 	add_child(map_renderer)
-	var result = map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_size)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	var result = await map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_size)
 	map_renderer.queue_free()
 
 func update_inv_uv_texture(m : Mesh) -> void:
@@ -92,19 +89,13 @@ func update_inv_uv_texture(m : Mesh) -> void:
 	add_child(map_renderer)
 	if mesh_inv_uv_tex == null:
 		mesh_inv_uv_tex = ImageTexture.new()
-	var result = map_renderer.gen(m, "position", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	var result =await map_renderer.gen(m, "position", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
 	if mesh_normal_tex == null:
 		mesh_normal_tex = ImageTexture.new()
-	result = map_renderer.gen(m, "normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	result = await map_renderer.gen(m, "normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
 	if mesh_tangent_tex == null:
 		mesh_tangent_tex = ImageTexture.new()
-	result = map_renderer.gen(m, "tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
-	while result is GDScriptFunctionState:
-		result = await result.completed
+	result = await map_renderer.gen(m, "tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
 	map_renderer.queue_free()
 	mesh_aabb = m.get_aabb()
 
@@ -117,9 +108,7 @@ func set_mesh(m : Mesh):
 	view_to_texture_mesh.mesh = m
 	view_to_texture_mesh.set_surface_override_material(0, mat)
 	for init_fct in [ "update_seams_texture", "update_inv_uv_texture" ]:
-		var result = call(init_fct, m)
-		while result is GDScriptFunctionState:
-			result = await result.completed
+		var result = await call(init_fct, m)
 
 func calculate_mask(value : float, channel : int) -> Color:
 	if (channel == StandardMaterial3D.TEXTURE_CHANNEL_RED):
@@ -171,8 +160,8 @@ func init_textures(m : StandardMaterial3D):
 		init_normal_texture(Color(1.0, 1.0, 1.0), m.n_texture)
 	else:
 		init_normal_texture(Color(0.5, 0.5, 0.0), null)
-	if m.depth_enabled or m.ao_enabled:
-		init_do_texture_channels(m.depth_scale if m.depth_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
+	if m.heightmap_enabled or m.ao_enabled:
+		init_do_texture_channels(m.depth_scale if m.heightmap_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
 	else:
 		init_do_texture(Color(0.0, 1.0, 0.0, 0.0), null)
 
@@ -188,9 +177,9 @@ func update_view(c, t, s):
 	camera = c
 	transform = t
 	viewport_size = s
-	brush_params.view_back = Vector3(0.0, 0.0, 1.0) * transform.basis.normalized()
-	brush_params.view_right = Vector3(1.0, 0.0, 0.0) * transform.basis.normalized()
-	brush_params.view_up = Vector3(0.0, 1.0, 0.0) * transform.basis.normalized()
+	brush_params.view_back = Vector3(0.0, 0.0, 1.0) * transform.basis.orthonormalized()
+	brush_params.view_right = Vector3(1.0, 0.0, 0.0) * transform.basis.orthonormalized()
+	brush_params.view_up = Vector3(0.0, 1.0, 0.0) * transform.basis.orthonormalized()
 	update_tex2view()
 	update_brush()
 
@@ -205,22 +194,20 @@ func update_tex2view():
 	view_to_texture_camera.far = camera.far
 	var mat : ShaderMaterial = view_to_texture_mesh.get_surface_override_material(0)
 	if true:
-		var shader_file = File.new()
-		shader_file.open("res://material_maker/tools/painter/shaders/view2texture.gdshader", File.READ)
-		mat.gdshader.code = shader_file.get_as_text()
+		var shader_file : FileAccess = FileAccess.open("res://material_maker/tools/painter/shaders/view2texture.gdshader", FileAccess.READ)
+		if shader_file != null:
+			mat.shader.code = shader_file.get_as_text()
 	mat.set_shader_parameter("near", camera.near)
 	mat.set_shader_parameter("far", camera.far)
 	view_to_texture_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	view_to_texture_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	view_to_texture_image = view_to_texture_viewport.get_texture().get_data()
-	false # view_to_texture_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+	view_to_texture_image = view_to_texture_viewport.get_texture().get_image()
 	mat = texture_to_view_mesh.get_surface_override_material(0)
 	if true:
-		var shader_file = File.new()
-		shader_file.open("res://material_maker/tools/painter/shaders/texture2view.gdshader", File.READ)
-		mat.gdshader.code = shader_file.get_as_text()
+		var shader_file : FileAccess = FileAccess.open("res://material_maker/tools/painter/shaders/texture2view.gdshader", FileAccess.READ)
+		if shader_file != null:
+			mat.shader.code = shader_file.get_as_text()
 	mat.set_shader_parameter("model_transform", transform)
 	mat.set_shader_parameter("fovy_degrees", camera.fov)
 	mat.set_shader_parameter("z_near", camera.near)
@@ -229,18 +216,13 @@ func update_tex2view():
 	mat.set_shader_parameter("texel_tolerance", 16)
 	mat.set_shader_parameter("aspect", aspect)
 	texture_to_view_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	texture_to_view_viewport.update_worlds()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var renderer = mm_renderer.request(self)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
+	var renderer = await mm_renderer.request(self)
 	texture_to_view_postprocess.set_shader_parameter("texture_size", texture_size)
 	texture_to_view_postprocess.set_shader_parameter("input_tex", texture_to_view_viewport.get_texture())
 	texture_to_view_postprocess.set_shader_parameter("seams_tex", mesh_seams_tex)
-	renderer = renderer.render_material(self, texture_to_view_postprocess, texture_size)
-	while renderer is GDScriptFunctionState:
-		renderer = await renderer.completed
+	renderer = await renderer.render_material(self, texture_to_view_postprocess, texture_size)
 	renderer.copy_to_texture(texture_to_view_texture)
 	renderer.release(self)
 
@@ -350,13 +332,13 @@ func get_output_code(index : int) -> String:
 	new_code += "float _seed_variation_ = 0.0;\n"
 	new_code += source_mask.code+"\n"
 	new_code += "vec2 __brush_box = abs(uv-vec2(0.5));\n"
-	new_code += "return (max(__brush_box.x, __brush_box.y) < 0.5) ? "+source_mask.f+" : 0.0;\n"
+	new_code += "return (max(__brush_box.x, __brush_box.y) < 0.5) ? "+source_mask.output_values.f+" : 0.0;\n"
 	new_code += "}\n"
 	new_code += source.defs+"\n"
 	new_code += "\nvec4 pattern_function(vec2 uv) {\n"
 	new_code += "float _seed_variation_ = 0.0;\n"
 	new_code += source.code+"\n"
-	new_code += "return "+source.rgba+";\n"
+	new_code += "return "+source.output_values.rgba+";\n"
 	new_code += "}\n"
 	return new_code
 
@@ -415,6 +397,8 @@ func fill(erase : bool, reset : bool = false, emit_end_of_stroke : bool = true) 
 	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)
 
 func view_to_texture(position : Vector2) -> Vector2:
+	if view_to_texture_image == null:
+		return Vector2(-1, -1)
 	var position_in_texture : Color = view_to_texture_image.get_pixelv(position*VIEW_TO_TEXTURE_RATIO)
 	if position_in_texture.r == position_in_texture.b && position_in_texture.g == position_in_texture.b:
 		return Vector2(-1, -1)

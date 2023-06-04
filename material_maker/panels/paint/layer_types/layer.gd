@@ -19,7 +19,7 @@ func duplicate():
 	layer.hidden = false
 	for c in get_channels():
 		var texture = ImageTexture.new()
-		texture.create_from_image(get(c).get_data())
+		texture.set_image(get(c).get_image())
 		layer.set(c, texture)
 	return layer
 
@@ -57,9 +57,7 @@ func save_layer(path : String) -> Dictionary:
 			var file_name : String = "%s_%d.png" % [ c, index ]
 			var file_path : String = path.path_join(file_name)
 			var image : Image = get(c).get_data()
-			false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 			image.save_png(file_path)
-			false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 			layer_data[c] = file_name
 	_save_layer(layer_data)
 	if !layers.is_empty():

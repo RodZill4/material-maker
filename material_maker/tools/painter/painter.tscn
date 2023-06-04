@@ -1,82 +1,87 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=3 uid="uid://d12t30rjvol15"]
 
-[ext_resource path="res://material_maker/tools/painter/shaders/texture2view.gdshader" type="Shader" id=1]
-[ext_resource path="res://material_maker/tools/painter/shaders/view2texture.tres" type="Material" id=5]
-[ext_resource path="res://material_maker/tools/painter/painter.gd" type="Script" id=6]
-[ext_resource path="res://material_maker/tools/painter/painter_viewport.tscn" type="PackedScene" id=7]
+[ext_resource type="Shader" path="res://material_maker/tools/painter/shaders/texture2view.gdshader" id="1"]
+[ext_resource type="Shader" path="res://material_maker/tools/painter/shaders/view2texture.gdshader" id="2_6tnmu"]
+[ext_resource type="Script" path="res://material_maker/tools/painter/painter.gd" id="6"]
+[ext_resource type="PackedScene" uid="uid://1g0jkm5gnhbs" path="res://material_maker/tools/painter/painter_viewport.tscn" id="7"]
 
-[sub_resource type="BoxMesh" id=1]
+[sub_resource type="World3D" id="World3D_tnt6i"]
 
-[sub_resource type="StandardMaterial3D" id=2]
-albedo_color = Color( 0.501961, 0.501961, 0, 1 )
+[sub_resource type="BoxMesh" id="1"]
 
-[sub_resource type="BoxMesh" id=3]
-material = SubResource( 2 )
-size = Vector3( 1, 1, 1 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ca54"]
+render_priority = 0
+shader = ExtResource("2_6tnmu")
+shader_parameter/near = null
+shader_parameter/far = null
 
-[sub_resource type="ViewportTexture" id=4]
+[sub_resource type="World3D" id="World3D_3l7cw"]
 
-[sub_resource type="ShaderMaterial" id=5]
-resource_local_to_scene = true
-shader = ExtResource( 1 )
-shader_param/seams_multiplier = 0.06125
-shader_param/model_transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4 )
-shader_param/fovy_degrees = 70.0
-shader_param/z_near = 0.833974
-shader_param/z_far = 10.2641
-shader_param/texture_size = 8.0
-shader_param/aspect = 1.83214
-shader_param/texel_tolerance = 1.0
-shader_param/view2texture = SubResource( 4 )
+[sub_resource type="StandardMaterial3D" id="2"]
+albedo_color = Color(0.501961, 0.501961, 0, 1)
+
+[sub_resource type="BoxMesh" id="3"]
+material = SubResource("2")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mwl52"]
+render_priority = 0
+shader = ExtResource("1")
+shader_parameter/seams_multiplier = 0.06125
+shader_parameter/model_transform = null
+shader_parameter/fovy_degrees = 45.0
+shader_parameter/z_near = 0.01
+shader_parameter/z_far = 60.0
+shader_parameter/texture_size = 8.0
+shader_parameter/aspect = 1.0
+shader_parameter/texel_tolerance = 1.0
 
 [node name="Painter" type="Node" groups=["preview"]]
-script = ExtResource( 6 )
+script = ExtResource("6")
 
 [node name="View2Texture" type="SubViewport" parent="."]
-size = Vector2( 1024, 600 )
-own_world = true
-keep_3d_linear = true
-render_target_v_flip = true
+own_world_3d = true
+world_3d = SubResource("World3D_tnt6i")
+size = Vector2i(1024, 600)
 render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="View2Texture"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 current = true
 far = 25.0
 
 [node name="PaintedMesh" type="MeshInstance3D" parent="View2Texture"]
-mesh = SubResource( 1 )
-material/0 = ExtResource( 5 )
+mesh = SubResource("1")
+surface_material_override/0 = SubResource("ShaderMaterial_5ca54")
 
 [node name="Texture2View" type="SubViewport" parent="."]
-size = Vector2( 2048, 2048 )
-own_world = true
+own_world_3d = true
+world_3d = SubResource("World3D_3l7cw")
 transparent_bg = true
-keep_3d_linear = true
+size = Vector2i(2048, 2048)
 render_target_update_mode = 0
 
 [node name="Camera3D" type="Camera3D" parent="Texture2View"]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 20 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 20)
 projection = 1
 current = true
 
 [node name="PaintedMesh" type="MeshInstance3D" parent="Texture2View"]
-transform = Transform3D( 1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0 )
-mesh = SubResource( 3 )
-material/0 = SubResource( 5 )
+transform = Transform3D(1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0)
+mesh = SubResource("3")
+surface_material_override/0 = SubResource("ShaderMaterial_mwl52")
 
-[node name="AlbedoPaint" parent="." instance=ExtResource( 7 )]
+[node name="AlbedoPaint" parent="." instance=ExtResource("7")]
 
-[node name="MRPaint" parent="." instance=ExtResource( 7 )]
+[node name="MRPaint" parent="." instance=ExtResource("7")]
 shader_prefix = "paint_mr"
 
-[node name="EmissionPaint" parent="." instance=ExtResource( 7 )]
+[node name="EmissionPaint" parent="." instance=ExtResource("7")]
 
-[node name="NormalPaint" parent="." instance=ExtResource( 7 )]
+[node name="NormalPaint" parent="." instance=ExtResource("7")]
 shader_prefix = "paint_nm"
 
-[node name="DOPaint" parent="." instance=ExtResource( 7 )]
+[node name="DOPaint" parent="." instance=ExtResource("7")]
 shader_prefix = "paint_mr"
 
-[node name="MaskPaint" parent="." instance=ExtResource( 7 )]
+[node name="MaskPaint" parent="." instance=ExtResource("7")]
 shader_prefix = "paint_mask"
