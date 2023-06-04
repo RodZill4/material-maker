@@ -26,6 +26,7 @@ layout_mode = 2
 [node name="ShaderType" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 item_count = 4
+selected = 0
 popup/item_0/text = "Shadertoy"
 popup/item_0/id = 0
 popup/item_1/text = "Godot Canvas item"

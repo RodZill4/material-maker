@@ -31,6 +31,8 @@ func generate_shadertoy() -> String:
 	code += "\n"
 	code = code.replace("varying float elapsed_time;", "")
 	code = code.replace("void vertex() {\n\telapsed_time = TIME;\n}\n", "")
+	code += src_code.uniforms_as_strings("const")
+	code += "\n"
 	if ! src_code.globals.is_empty():
 		for g in src_code.globals:
 			code += g
@@ -56,6 +58,8 @@ func generate_godot_canvasitem() -> String:
 	var code = "shader_type canvas_item;\n"
 	code += "const float seed_variation = 0.0;\n"
 	code += mm_renderer.common_shader
+	code += src_code.uniforms_as_strings()
+	code += "\n"
 	if ! src_code.globals.is_empty():
 		for g in src_code.globals:
 			code += g
@@ -77,6 +81,8 @@ func generate_godot_spatial() -> String:
 	var code = "shader_type spatial;\n"
 	code += "\nconst float seed_variation = 0.0;\n"
 	code += mm_renderer.common_shader
+	code += "\n"
+	code += src_code.uniforms_as_strings()
 	code += "\n"
 	if ! src_code.globals.is_empty():
 		for g in src_code.globals:

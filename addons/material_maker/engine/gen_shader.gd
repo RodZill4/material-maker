@@ -84,11 +84,11 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 	else:
 		return shader_model_preprocessed.outputs
 
-func get_preprocessed_output_def(output_index : int):
+func get_preprocessed_output_def(output_index : int) -> Dictionary:
 	if shader_model_preprocessed.has("outputs") and shader_model_preprocessed.outputs.size() > output_index:
 		return shader_model_preprocessed.outputs[output_index]
 	else:
-		return "#error"
+		return {}
 
 #
 # Shader model preprocessing
@@ -500,7 +500,7 @@ func replace_rnd(string : String, offset : int = 0) -> String:
 			var position : int = string.find(replace)
 			if position == -1:
 				break
-			var with = "param_rnd(%s, $seed+%f)" % [ params, sin(position)+offset ]
+			var with = "param_rnd(%s, $seed+%f)" % [ params, sin(position+offset)*0.5+0.5 ]
 			string = string.replace(replace, with)
 	return string
 
@@ -534,32 +534,6 @@ func replace_variables_old(string : String, variables : Dictionary) -> String:
 	return string
 
 const WORD_LETTERS : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
-
-func replace_variables(string : String, variables : Dictionary) -> String:
-	return replace_variables_old(string, variables)
-	var string_end : String = ""
-	while true:
-		var dollar_position = string.rfind("$")
-		if dollar_position == -1:
-			break
-		var variable_end : int
-		var variable : String
-		if string[dollar_position+1] == "(":
-			variable_end = find_matching_parenthesis(string, dollar_position+1)
-			variable = string.substr(dollar_position+2, variable_end-2-dollar_position)
-		else:
-			variable_end = string.length() - string.right(-dollar_position-1).lstrip(WORD_LETTERS).length()
-			variable = string.substr(dollar_position+1, variable_end-dollar_position-1)
-		string_end = string.right(-variable_end-1)+string_end
-		string = string.left(dollar_position)
-		if variables.has(variable):
-			if variables[variable] is String:
-				string += variables[variable]
-			else:
-				string += str(variables[variable])
-		else:
-			string_end = "(error: "+variable+" not found)"+string_end
-	return string+string_end
 
 func replace_input_call(input : String, parameters : Array[String], context : MMGenContext):
 	pass
@@ -656,7 +630,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					variables[input.name+".size"] = src_attributes.texture_size
 				else:
 					variables[input.name+"."+a] = src_attributes[a]
-	string = replace_variables(string, variables)
+	string = replace_variables_old(string, variables)
 	if shader_model_preprocessed.has("inputs") and typeof(shader_model_preprocessed.inputs) == TYPE_ARRAY:
 		var cont = true
 		while cont:
@@ -684,7 +658,7 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 					# Add generated code
 					required_code += result.code
 			cont = changed and new_pass_required
-			string = replace_variables(string, variables)
+			string = replace_variables_old(string, variables)
 	return { string=string, globals=required_globals, defs=required_defs, code=required_code }
 
 func generate_parameter_declarations(rv : ShaderCode) -> void:
@@ -713,85 +687,220 @@ func generate_parameter_declarations(rv : ShaderCode) -> void:
 				rv.defs += "uniform float %s = %.9f;\n" % [ sp, params[sp] ]
 			rv.defs += g.get_shader(genname+"_"+p.name)
 
+func generate_input_function(index : int, input: Dictionary, rv : ShaderCode, context : MMGenContext) -> void:
+	var genname = "o"+str(get_instance_id())
+	var source = get_source(index)
+	if source == null:
+		return
+	var local_context = MMGenContext.new(context)
+	var source_rv : ShaderCode = source.generator.get_shader_code("uv", source.output_index, local_context)
+	rv.uniforms.append_array(source_rv.uniforms)
+	rv.defs += source_rv.defs
+	rv.add_globals(source_rv.globals)
+	rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
+	rv.defs += "%s\n" % source_rv.code
+	rv.defs += "return %s;\n}\n" % source_rv.output_values[input.type]
+
 func generate_input_declarations(rv : ShaderCode, context : MMGenContext) -> void:
 	var genname = "o"+str(get_instance_id())
 	if shader_model_preprocessed.has("inputs"):
 		for i in range(shader_model_preprocessed.inputs.size()):
 			var input = shader_model_preprocessed.inputs[i]
 			if input.has("function") and input.function:
-				var source = get_source(i)
-				var string = "$%s(%s)" % [ input.name, mm_io_types.types[input.type].params ]
-				var local_context = MMGenContext.new(context)
-				var result = replace_input(string, local_context, input.name, input.type, source, input.default)
-				# Add global definitions
-				for d in result.globals:
-					if rv.globals.find(d) == -1:
-						rv.globals.push_back(d)
-				# Add generated definitions
-				rv.defs += result.defs
-				rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
-				rv.defs += "%s\n" % result.code
-				rv.defs += "return %s;\n}\n" % result.string
+				generate_input_function(i, input, rv, context)
+
+func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declarations : bool) -> void:
+	var genname = "o"+str(get_instance_id())
+	var rnd_offset = 0
+	if has_randomness():
+		if generate_declarations:
+			rv.uniforms.append(ShaderUniform.new("seed_%s" % genname, "float", get_seed()))
+		variables.seed = "(seed_%s+_seed_variation_)" % genname
+	for p in shader_model_preprocessed.parameters:
+		if p.type == "float":
+			if parameters[p.name] is float:
+				if generate_declarations:
+					rv.uniforms.append(ShaderUniform.new("p_%s_%s" % [ genname, p.name ], "float", parameters[p.name]))
+				variables[p.name] = "p_%s_%s" % [ genname, p.name ]
+			else:
+				variables[p.name] = "("+replace_rnd(str(parameters[p.name]), rnd_offset)+")"
+			rnd_offset += 17
+		elif p.type == "color":
+			if generate_declarations:
+				rv.uniforms.append(ShaderUniform.new("p_%s_%s" % [ genname, p.name ], "vec4", parameters[p.name]))
+			variables[p.name] = "p_%s_%s" % [ genname, p.name ]
+		elif p.type == "enum":
+			variables[p.name] = ""
+			if ! p.values.is_empty():
+				var value = parameters[p.name]
+				if ! ( value is int or value is float ) or value < 0 or value >= p.values.size():
+					value = 0
+				variables[p.name] = p.values[value].value
+		elif p.type == "boolean":
+			variables[p.name] = "true" if parameters[p.name] else "false"
+		elif p.type == "size":
+			variables[p.name] = "%.1f" % pow(2, parameters[p.name])
+		elif p.type == "gradient":
+			var g = parameters[p.name]
+			if !(g is MMGradient):
+				g = MMGradient.new()
+				g.deserialize(parameters[p.name])
+			if generate_declarations:
+				rv.defs += g.get_shader_params(genname+"_"+p.name)
+				rv.defs += g.get_shader(genname+"_"+p.name)
+			variables[p.name] = genname+"_"+p.name+"_gradient_fct"
+		elif p.type == "curve":
+			var g = parameters[p.name]
+			if !(g is MMCurve):
+				g = MMCurve.new()
+				g.deserialize(parameters[p.name])
+			var params = g.get_shader_params(genname+"_"+p.name)
+			if generate_declarations:
+				for sp in params.keys():
+					rv.uniforms.append(ShaderUniform.new(sp, "float", params[sp]))
+				rv.defs += g.get_shader(genname+"_"+p.name)
+			variables[p.name] = genname+"_"+p.name+"_curve_fct"
+		else:
+			print("ERROR: Unsupported parameter "+p.name+" of type "+p.type)
+
+func replace_input_new(input_name : String, suffix : String, parameters : String, variables : Dictionary, rv : ShaderCode, context : MMGenContext, input : int) -> String:
+	var input_def : Dictionary = shader_model_preprocessed.inputs[input]
+	var source = get_source(input)
+	if source == null:
+		return replace_variables(input_def.default, variables, rv, context)
+	if input_def.has("function") and input_def.function:
+		var function_name : String = "o%s_input_%s" % [ str(get_instance_id()), input_def.name ]
+		if suffix == "variation":
+			return function_name+parameters
+		else:
+			return function_name+"("+parameters+", 0.0)"
+	var source_rv : ShaderCode = source.generator.get_shader_code(parameters, source.output_index, context)
+	rv.uniforms.append_array(source_rv.uniforms)
+	rv.defs += source_rv.defs
+	rv.add_globals(source_rv.globals)
+	rv.code += source_rv.code
+	return source_rv.output_values[input_def.type]
+
+func process_inputs(rv : ShaderCode, variables : Dictionary, context : MMGenContext, generate_declarations : bool) -> void:
+	if ! shader_model_preprocessed.has("inputs"):
+		return
+	for i in range(shader_model_preprocessed.inputs.size()):
+		var input = shader_model_preprocessed.inputs[i]
+		if generate_declarations and input.has("function") and input.function:
+			generate_input_function(i, input, rv, context)
+		variables[input.name] = { has_parameters=true, has_suffix=true, replace_callable=self.replace_input_new.bind(i) }
+
+func replace_variables(string : String, variables : Dictionary, rv : ShaderCode, context : MMGenContext) -> String:
+	var string_end : String = ""
+	while true:
+		#print("Replacing variable in:")
+		#print(string)
+		var dollar_position = string.rfind("$")
+		if dollar_position == -1:
+			break
+		var variable_end : int
+		var variable : String
+		if string[dollar_position+1] == "(":
+			variable_end = find_matching_parenthesis(string, dollar_position+1)+1
+			variable = string.substr(dollar_position+2, variable_end-3-dollar_position)
+		else:
+			variable_end = string.length() - string.right(-dollar_position-1).lstrip(WORD_LETTERS).length()
+			variable = string.substr(dollar_position+1, variable_end-dollar_position-1)
+		#print("Found variable "+variable)
+		#print("End of string: "+string.right(-variable_end))
+		string_end = string.right(-variable_end)+string_end
+		string = string.left(dollar_position)
+		var replace_with
+		if variables.has(variable):
+			replace_with = variables[variable]
+		else:
+			replace_with = "(error: "+variable+" not found)"
+		if replace_with is String:
+			string += replace_with
+		elif replace_with is Dictionary:
+			string_end = string_end.strip_edges()
+			var function_parameters : String = ""
+			var function_suffix : String = ""
+			if replace_with.has("has_suffix") and replace_with.has_suffix and string_end[0] == ".":
+				string_end = string_end.right(-1).strip_edges()
+				var suffix_end : int = string_end.length()-string_end.lstrip(WORD_LETTERS).length()
+				function_suffix = string_end.left(suffix_end)
+				#print("Suffix: "+function_suffix)
+				string_end = string_end.right(-suffix_end).strip_edges()
+			if replace_with.has("has_parameters") and replace_with.has_parameters and string_end[0] == "(":
+				var parameters_end : int = find_matching_parenthesis(string_end, 0)
+				function_parameters = string_end.left(parameters_end+1)
+				#print("Parameters: "+function_parameters)
+				string_end = string_end.right(-parameters_end-1)
+			string += replace_with.replace_callable.call(variable, function_suffix, function_parameters, variables, rv, context)
+			#print("replace_with is Dictionary: "+str(replace_with))
+		else:
+			print("unsupported replace_with: "+str(replace_with))
+			string += replace_with
+	#print("Result: "+string+string_end)
+	return string+string_end
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
+	var parent : Node = get_parent()
 	var rv : ShaderCode = ShaderCode.new()
 	if shader_model_preprocessed == null:
 		return rv
+	var generate_declarations = ! context.has_variant(self)
 	var output = get_preprocessed_output_def(output_index)
-	if output == null:
+	if output.is_empty():
 		return rv
-	if !context.has_variant(self):
-		# Generate parameter declarations
-		generate_parameter_declarations(rv)
-		# Generate functions for inputs
-		generate_input_declarations(rv, context)
+	var variables : Dictionary = {}
+	variables.uv = uv
+	variables.time = "elapsed_time"
+	if ! mm_renderer.get_global_parameters().is_empty():
+		for gp in mm_renderer.get_global_parameters():
+			variables[gp] = "mm_global_"+gp
+	if parent.has_method("get_named_parameters"):
+		var named_parameters : Dictionary = parent.get_named_parameters()
+		for np in named_parameters.keys():
+			variables[np] = named_parameters[np].id
+	variables["name"] = genname
+	if seed_locked:
+		variables["seed"] = "seed_"+genname
+	else:
+		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
+	variables["node_id"] = str(get_instance_id())
+	process_parameters(rv, variables, generate_declarations)
+	process_inputs(rv, variables, context, generate_declarations)
+	# Add includes, globals and instance code
+	if generate_declarations:
+		if shader_model_preprocessed.has("includes"):
+			for i in shader_model_preprocessed.includes:
+				var g = mm_loader.get_predefined_global(i)
+				if g != "" and rv.globals.find(g) == -1:
+					rv.globals.push_back(g)
+		if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
+			rv.globals.push_back(shader_model_preprocessed.global)
 		if shader_model_preprocessed.has("instance"):
-			var subst_output = subst(shader_model_preprocessed.instance, context, "")
-			rv.defs += subst_output.string
+			rv.defs += replace_variables(shader_model_preprocessed.instance, variables, rv, context)
 	# Add inline code
 	if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
 		var variant_index = context.get_variant(self, uv)
+		var genname_uv : String = genname+"_"+str(context.get_variant(self, uv))
+		variables["name_uv"] = genname_uv
 		if variant_index == -1:
-			variant_index = context.get_variant(self, uv)
-			var subst_code = subst(shader_model_preprocessed.code, context, uv)
-			# Add global definitions
-			for d in subst_code.globals:
-				if rv.globals.find(d) == -1:
-					rv.globals.push_back(d)
-			# Add generated definitions
-			rv.defs += subst_code.defs
-			# Add generated code
-			rv.code += subst_code.code
-			rv.code += subst_code.string
+			rv.code += replace_variables(shader_model_preprocessed.code, variables, rv, context)
 	# Add output_code
 	var variant_string = uv+","+str(output_index)
 	var variant_index = context.get_variant(self, variant_string)
+	var assign_output : bool = false
 	if variant_index == -1:
 		variant_index = context.get_variant(self, variant_string)
-		for f in mm_io_types.types.keys():
-			if output.has(f):
-				var subst_output = subst(output[f].replace("@NOCODE", ""), context, uv)
-				# Add global definitions
-				for d in subst_output.globals:
-					if rv.globals.find(d) == -1:
-						rv.globals.push_back(d)
-				# Add generated definitions
-				rv.defs += subst_output.defs
-				# Add generated code
-				rv.code += subst_output.code
-				rv.code += "%s %s_%d_%d_%s = %s;\n" % [ mm_io_types.types[f].type, genname, output_index, variant_index, f, subst_output.string ]
+		assign_output = true
 	for f in mm_io_types.types.keys():
 		if output.has(f):
-			rv.output_values[f] = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
+			var expression = replace_variables(output[f].replace("@NOCODE", ""), variables, rv, context)
+			var variable_name : String = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
+			if assign_output:
+				rv.code += "%s %s = %s;\n" % [ mm_io_types.types[f].type, variable_name, expression ]
+			rv.output_values[f] = variable_name
 	rv.output_type = output.type
-	if shader_model_preprocessed.has("includes"):
-		for i in shader_model_preprocessed.includes:
-			var g = mm_loader.get_predefined_global(i)
-			if g != "" and rv.globals.find(g) == -1:
-				rv.globals.push_back(g)
-	if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
-		rv.globals.push_back(shader_model_preprocessed.global)
 	return rv
 
 func remove_comments(s : String) -> String:

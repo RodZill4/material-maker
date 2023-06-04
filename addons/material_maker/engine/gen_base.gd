@@ -28,14 +28,45 @@ class OutputPort:
 	func to_str() -> String:
 		return str(generator.name)+".out("+str(output_index)+")"
 
+class ShaderUniform:
+	var name : String
+	var type : String
+	var value
+	
+	func _init(n, t, v):
+		name = n
+		type = t
+		value = v
+	
+	func to_str(keyword : String = "uniform"):
+		var str_value : String = ""
+		match type:
+			"float":
+				str_value = "%.9f" % value
+			"vec4":
+				if value is Color:
+					str_value = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
+		return "%s %s %s = %s;\n" % [ keyword, type, name, str_value ]
+
 class ShaderCode:
 	var globals : Array[String] = []
+	var uniforms : Array[ShaderUniform] = []
 	var defs : String = ""
 	var code : String = ""
 	var textures : Dictionary = {}
 	var output_type : String = ""
 	var output_values : Dictionary = {}
-
+	
+	func add_globals(new_globals : Array[String]):
+		for g in new_globals:
+			if ! g in globals:
+				globals.append(g)
+	
+	func uniforms_as_strings(keyword : String = "uniform") -> String:
+		var rv : String = ""
+		for u in uniforms:
+			rv += u.to_str(keyword)
+		return rv
 
 var position : Vector2 = Vector2(0, 0)
 var model = null
@@ -303,6 +334,8 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	code += "uniform vec3 mesh_aabb_position;\n"
 	code += "uniform vec3 mesh_aabb_size;\n"
 	code += mm_renderer.common_shader
+	code += "\n"
+	code += src_code.uniforms_as_strings()
 	code += "\n"
 	for g in src_code.globals:
 		code += g

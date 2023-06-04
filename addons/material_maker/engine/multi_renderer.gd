@@ -57,6 +57,8 @@ func generate_shader(src_code : MMGenBase.ShaderCode) -> String:
 	for g in src_code.globals:
 		code += g
 	var shader_code = ""
+	shader_code += src_code.uniforms_as_strings()
+	shader_code += "\n"
 	if src_code.defs != "":
 		shader_code += src_code.defs
 		shader_code += "\n"
