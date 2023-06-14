@@ -36,7 +36,7 @@ func get_model_data() -> Dictionary:
 		data.shortdesc = $Description.short_description
 	if $Description.long_description != "":
 		data.longdesc = $Description.long_description
-	if $Function.pressed:
+	if $Function.button_pressed:
 		data.function = true
 	if $PortGroupButton.group_size > 0:
 		data.group_size = $PortGroupButton.group_size
