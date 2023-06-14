@@ -205,34 +205,22 @@ func get_render_queue_size() -> int:
 			invalidated_buffers += 1
 	return invalidated_buffers
 
-func material_update_params(material : ShaderMaterial):
-	# TODO: FIX THIS!
-	for p in material.get_property_list():
-		if p.name.left(17) != "shader_parameter/":
-			continue
-		var parameter_name : String = p.name.right(-17)
-		print(parameter_name)
-		if dependencies_values.has(parameter_name):
-			material.set_shader_parameter(parameter_name, dependencies_values[parameter_name])
+func material_update_params(material : MMShaderBase):
+	for p in material.get_parameters().keys():
+		if dependencies_values.has(p):
+			material.set_parameter(p, dependencies_values[p])
 
-func buffer_create_shader_material(buffer_name : String, material : ShaderMaterial, shader : String) -> ShaderMaterial:
-	if material == null:
-		material = ShaderMaterial.new()
-	if material.shader == null:
-		material.shader = Shader.new()
-	material.shader.code = shader
+func buffer_create_compute_material(buffer_name : String, material : MMShaderBase):
 	buffer_clear_dependencies(buffer_name)
-	# TODO: FIX THIS!
-	for p in material.get_property_list():
-		if p.name.left(17) != "shader_parameter/":
-			continue
-		var parameter_name : String = p.name.right(-17)
-		var value = buffer_add_dependency(buffer_name, parameter_name)
+	for p in material.get_parameters().keys():
+		var value = buffer_add_dependency(buffer_name, p)
 		if value != null:
-			material.set_shader_parameter(parameter_name, value)
+			material.set_parameter(p, value)
 	buffers[buffer_name].shader_generations += 1
-	return material
 
+func buffer_create_shader_material(buffer_name : String, material : MMShaderBase, shader : String):
+	material.set_shader(shader)
+	buffer_create_compute_material(buffer_name, material)
 
 func print_stats(object = null):
 	var statuses : Dictionary = {}

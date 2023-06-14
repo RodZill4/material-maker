@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="6"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true

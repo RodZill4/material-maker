@@ -151,9 +151,9 @@ func setup_controls(filter : String = "") -> void:
 			param_defs = generator.get_filtered_parameter_defs(filter)
 		else:
 			param_defs = generator.get_parameter_defs() 
-	for c in get_children():
-		if c.has_method("setup_control"):
-			c.setup_control(generator, param_defs)
+		for c in get_children():
+			if c.has_method("setup_control"):
+				c.setup_control(generator, param_defs)
 
 var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 var local_rotate : float = 0.0

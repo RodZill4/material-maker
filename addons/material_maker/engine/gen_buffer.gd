@@ -16,23 +16,20 @@ const VERSION_COMPLEX : int = 2
 var version : int = VERSION_OLD
 var exiting : bool = false
 
-var material : ShaderMaterial = null
-var is_paused : bool = false
+var shader_compute : MMShaderCompute
+var is_greyscale : bool = false
 
-var current_renderer = null
+var is_paused : bool = false
 
 
 func _ready() -> void:
-	material = ShaderMaterial.new()
-	material.shader = Shader.new()
+	shader_compute = MMShaderCompute.new()
 	if !parameters.has("size"):
 		parameters.size = 9
 	mm_deps.create_buffer("o%d_tex" % get_instance_id(), self)
 
 func _exit_tree() -> void:
 	exiting = true
-	if current_renderer != null:
-		current_renderer.release(self)
 
 func get_type() -> String:
 	return "buffer"
@@ -60,6 +57,7 @@ func get_parameter_defs() -> Array:
 		VERSION_COMPLEX:
 			parameter_defs.push_back({ name="filter", type="boolean", default=true })
 			parameter_defs.push_back({ name="mipmap", type="boolean", default=true })
+			parameter_defs.push_back({ name="f32", label="32 bits", type="boolean", default=false })
 	return parameter_defs
 
 func get_input_defs() -> Array:
@@ -102,45 +100,36 @@ func do_update_shader() -> void:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
 	else:
 		source = get_default_generated_shader()
-	var shader_code = mm_renderer.generate_shader(source)
-	material = mm_deps.buffer_create_shader_material("o%d_tex" % get_instance_id(), material, shader_code)
+	var f32 = false
+	if version == VERSION_COMPLEX:
+		f32 = get_parameter("f32")
+	await shader_compute.set_shader_from_shadercode(source, f32)
+	var new_is_greyscale = ((shader_compute.texture_type & 1) == 0)
+	if new_is_greyscale != is_greyscale:
+		is_greyscale = new_is_greyscale
+		notify_output_change(0)
+		notify_output_change(1)
+	mm_deps.buffer_create_compute_material("o%d_tex" % get_instance_id(), shader_compute)
 	mm_deps.update()
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value != null:
-		material.set_shader_parameter(parameter_name, value)
+		shader_compute.set_parameter(parameter_name, value)
 	return false
 
 func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
-	assert(current_renderer == null)
-	current_renderer = await mm_renderer.request(self)
-	var time = Time.get_ticks_msec()
-	current_renderer = await current_renderer.render_material(self, material, pow(2, get_parameter("size")))
-	current_renderer.copy_to_texture(texture)
-	current_renderer.release(self)
-	current_renderer = null
-#	match version:
-#		VERSION_COMPLEX:
-#			var flags = Texture2D.FLAG_REPEAT | ImageTexture.STORAGE_COMPRESS_LOSSLESS
-#			if ! parameters.has("filter") or parameters.filter:
-#				flags |= Texture2D.FLAG_FILTER
-#			if ! parameters.has("mipmap") or parameters.mipmap:
-#				flags |= Texture2D.FLAG_MIPMAPS
-#			texture.flags = flags
-#		_:
-#			texture.flags = Texture2D.FLAGS_DEFAULT
-	emit_signal("rendering_time", Time.get_ticks_msec() - time)
-	mm_deps.dependency_update(buffer_name, texture, true)
-	return true
-
-func get_globals(texture_name : String) -> Array[String]:
-	var texture_globals : String = "uniform sampler2D %s;\nuniform float %s_size = %d.0;\n" % [ texture_name, texture_name, pow(2, get_parameter("size")) ]
-	return [ texture_globals ]
+	if await shader_compute.render(texture, pow(2, get_parameter("size"))):
+		emit_signal("rendering_time", shader_compute.render_time)
+		mm_deps.dependency_update(buffer_name, texture, true)
+		return true
+	return false
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
-	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0 if output_index == 0 else parameters.lod)
+	var genname = "o"+str(get_instance_id())
+	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0 if output_index == 0 else parameters.lod)
+	shader_code.add_uniform("%s_tex_size" % genname, "float", pow(2, get_parameter("size")))
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:

@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name MMCurve
 
 class Point:
@@ -20,8 +20,8 @@ func to_string() -> String:
 		rv.append("("+str(p.x)+","+str(p.y)+","+str(p.ls)+","+str(p.rs)+")")
 	return ",".join(rv)
 
-func duplicate() -> Object:
-	var copy = get_script().new()
+func duplicate() -> MMCurve:
+	var copy = MMCurve.new()
 	copy.clear()
 	for p in points:
 		copy.add_point(p.p.x, p.p.y, p.ls, p.rs)

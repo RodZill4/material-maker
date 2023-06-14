@@ -43,7 +43,7 @@ func do_update_material(source, target_material : ShaderMaterial, template):
 	is_greyscale = source.output_type == "f"
 	# Update shader
 	var code = generate_preview_shader(source, template)
-	target_material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), target_material, code)
+	mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(target_material), code)
 	# Make sure position/size parameters are setup
 	on_resized()
 

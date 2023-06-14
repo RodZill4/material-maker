@@ -111,7 +111,9 @@ func update_shaders() -> void:
 	for t in preview_textures.keys():
 		var output_shader = generate_output_shader(preview_textures[t].output)
 		preview_textures[t].output_type = output_shader.output_type
-		preview_textures[t].material = mm_deps.buffer_create_shader_material(preview_textures[t].buffer, null, output_shader.shader)
+		var material : MMShaderMaterial = MMShaderMaterial.new()
+		mm_deps.buffer_create_shader_material(preview_textures[t].buffer, material, output_shader.shader)
+		preview_textures[t].material = material.material
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value == null:
@@ -177,7 +179,7 @@ func update() -> void:
 		return
 	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
-	preview_material = mm_deps.buffer_create_shader_material(buffer_name_prefix, preview_material, result.shader_code)
+	mm_deps.buffer_create_shader_material(buffer_name_prefix, MMShaderMaterial.new(preview_material), result.shader_code)
 	preview_texture_dependencies = {}
 	for p in RenderingServer.get_shader_parameter_list(preview_material.shader.get_rid()):
 		if p.hint_string == "Texture2D" and preview_textures.keys().find(p.name) == -1:
@@ -187,7 +189,7 @@ func update() -> void:
 	update_external_previews()
 
 class CustomOptions:
-	extends Object
+	extends RefCounted
 
 func check_custom_script(custom_script : String) -> bool:
 	for s in [ "OS", "Directory", "File" ]:
@@ -224,7 +226,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	if custom_script != "" and check_custom_script(custom_script):
 		print("Using custom script")
 		var custom_options_script = GDScript.new()
-		custom_options_script.source_code = "extends Object\n\n"+custom_script
+		custom_options_script.source_code = "extends RefCounted\n\n"+custom_script
 		custom_options_script.reload()
 		custom_options.set_script(custom_options_script)
 	var rv : ShaderCode = ShaderCode.new()

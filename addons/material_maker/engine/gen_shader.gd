@@ -385,7 +385,7 @@ func set_shader_model(data: Dictionary) -> void:
 			if output_code.find("$seed") != -1 or output_code.find("$(seed)") != -1:
 				model_uses_seed = true
 	for f in [ "code", "instance" ]:
-		if shader_model.has(f) and shader_model[f].find("$seed") != -1 or shader_model[f].find("$(seed)") != -1:
+		if shader_model.has(f) and ( shader_model[f].find("$seed") != -1 or shader_model[f].find("$(seed)") != -1 ):
 			model_uses_seed = true
 			break
 	if get_parent() != null and get_parent().has_method("check_input_connects"):
@@ -620,7 +620,8 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 			if source == null:
 				continue
 			var src_attributes = source.generator.get_output_attributes(source.output_index)
-			if src_attributes.has("texture"):
+			# TODO: port this to new shader generation
+			if false and src_attributes.has("texture"):
 				var source_globals = source.generator.get_globals(src_attributes.texture)
 				for sg in source_globals:
 					if required_globals.find(sg) == -1:
@@ -693,8 +694,8 @@ func generate_input_function(index : int, input: Dictionary, rv : ShaderCode, co
 	if source == null:
 		return
 	var local_context = MMGenContext.new(context)
-	var source_rv : ShaderCode = source.generator.get_shader_code("uv", source.output_index, local_context)
-	rv.uniforms.append_array(source_rv.uniforms)
+	var source_rv : ShaderCode = source.generator.get_shader_code(mm_io_types.types[input.type].params, source.output_index, local_context)
+	rv.add_uniforms(source_rv.uniforms)
 	rv.defs += source_rv.defs
 	rv.add_globals(source_rv.globals)
 	rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
@@ -714,20 +715,20 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 	var rnd_offset = 0
 	if has_randomness():
 		if generate_declarations:
-			rv.uniforms.append(ShaderUniform.new("seed_%s" % genname, "float", get_seed()))
+			rv.add_uniform("seed_%s" % genname, "float", get_seed())
 		variables.seed = "(seed_%s+_seed_variation_)" % genname
 	for p in shader_model_preprocessed.parameters:
 		if p.type == "float":
 			if parameters[p.name] is float:
 				if generate_declarations:
-					rv.uniforms.append(ShaderUniform.new("p_%s_%s" % [ genname, p.name ], "float", parameters[p.name]))
+					rv.add_uniform("p_%s_%s" % [ genname, p.name ], "float", parameters[p.name])
 				variables[p.name] = "p_%s_%s" % [ genname, p.name ]
 			else:
 				variables[p.name] = "("+replace_rnd(str(parameters[p.name]), rnd_offset)+")"
 			rnd_offset += 17
 		elif p.type == "color":
 			if generate_declarations:
-				rv.uniforms.append(ShaderUniform.new("p_%s_%s" % [ genname, p.name ], "vec4", parameters[p.name]))
+				rv.add_uniform("p_%s_%s" % [ genname, p.name ], "vec4", parameters[p.name])
 			variables[p.name] = "p_%s_%s" % [ genname, p.name ]
 		elif p.type == "enum":
 			variables[p.name] = ""
@@ -746,20 +747,26 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 				g = MMGradient.new()
 				g.deserialize(parameters[p.name])
 			if generate_declarations:
-				rv.defs += g.get_shader_params(genname+"_"+p.name)
+				rv.add_uniforms(g.get_parameters(genname+"_"+p.name))
 				rv.defs += g.get_shader(genname+"_"+p.name)
 			variables[p.name] = genname+"_"+p.name+"_gradient_fct"
 		elif p.type == "curve":
-			var g = parameters[p.name]
-			if !(g is MMCurve):
-				g = MMCurve.new()
-				g.deserialize(parameters[p.name])
-			var params = g.get_shader_params(genname+"_"+p.name)
+			var value = parameters[p.name]
+			if !(value is MMCurve):
+				value = MMCurve.new()
+				value.deserialize(parameters[p.name])
+			var params = value.get_shader_params(genname+"_"+p.name)
 			if generate_declarations:
 				for sp in params.keys():
-					rv.uniforms.append(ShaderUniform.new(sp, "float", params[sp]))
-				rv.defs += g.get_shader(genname+"_"+p.name)
+					rv.add_uniform(sp, "float", params[sp])
+				rv.defs += value.get_shader(genname+"_"+p.name)
 			variables[p.name] = genname+"_"+p.name+"_curve_fct"
+		elif p.type == "polygon" or p.type == "polyline":
+			var value = parameters[p.name]
+			if !(value is MMPolygon):
+				value = MMPolygon.new()
+				value.deserialize(parameters[p.name])
+			variables[p.name] = value.get_shader()
 		else:
 			print("ERROR: Unsupported parameter "+p.name+" of type "+p.type)
 
@@ -767,7 +774,11 @@ func replace_input_new(input_name : String, suffix : String, parameters : String
 	var input_def : Dictionary = shader_model_preprocessed.inputs[input]
 	var source = get_source(input)
 	if source == null:
-		return replace_variables(input_def.default, variables, rv, context)
+		var old_uv = variables.uv
+		variables.uv = parameters
+		var replaced : String = replace_variables(input_def.default, variables, rv, context)
+		variables.uv = old_uv
+		return replaced
 	if input_def.has("function") and input_def.function:
 		var function_name : String = "o%s_input_%s" % [ str(get_instance_id()), input_def.name ]
 		if suffix == "variation":
@@ -775,7 +786,7 @@ func replace_input_new(input_name : String, suffix : String, parameters : String
 		else:
 			return function_name+"("+parameters+", 0.0)"
 	var source_rv : ShaderCode = source.generator.get_shader_code(parameters, source.output_index, context)
-	rv.uniforms.append_array(source_rv.uniforms)
+	rv.add_uniforms(source_rv.uniforms)
 	rv.defs += source_rv.defs
 	rv.add_globals(source_rv.globals)
 	rv.code += source_rv.code
@@ -860,6 +871,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		var named_parameters : Dictionary = parent.get_named_parameters()
 		for np in named_parameters.keys():
 			variables[np] = named_parameters[np].id
+			rv.add_uniform(named_parameters[np].id, "float", named_parameters[np].value)
 	variables["name"] = genname
 	if seed_locked:
 		variables["seed"] = "seed_"+genname

@@ -9,12 +9,11 @@ class_name MMGenIterateBuffer
 
 var exiting : bool = false
 
-var material : ShaderMaterial = null
-var loop_material : ShaderMaterial = null
+var shader_computes : Array[MMShaderCompute]
+var is_greyscale : Array[bool] = [ false, false ]
 var is_paused : bool = false
+var is_rendering : bool = false
 var current_iteration : int = 0
-
-var current_renderer = null
 
 var buffer_names : Array
 var used_named_parameters : Array = []
@@ -22,10 +21,8 @@ var pending_textures = [[], []]
 
 func _init():
 	#texture.flags = Texture2D.FLAG_REPEAT
-	material = ShaderMaterial.new()
-	material.shader = Shader.new()
-	loop_material = ShaderMaterial.new()
-	loop_material.shader = Shader.new()
+	shader_computes.append(MMShaderCompute.new())
+	shader_computes.append(MMShaderCompute.new())
 	if !parameters.has("size"):
 		parameters.size = 9
 	buffer_names = [
@@ -41,8 +38,6 @@ func _init():
 
 func _exit_tree() -> void:
 	exiting = true
-	if current_renderer != null:
-		current_renderer.release(self)
 
 func get_type() -> String:
 	return "iterate_buffer"
@@ -69,7 +64,8 @@ func get_parameter_defs() -> Array:
 		{ name="autostop", type="boolean", default=false },
 		{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
 		{ name="filter", type="boolean", default=true },
-		{ name="mipmap", type="boolean", default=true }
+		{ name="mipmap", type="boolean", default=true },
+		{ name="f32", label="32 bits", type="boolean", default=false }
 	]
 
 func get_input_defs() -> Array:
@@ -108,16 +104,25 @@ func do_update_shaders() -> void:
 
 func do_update_shader(input_port_index : int) -> void:
 	var context : MMGenContext = MMGenContext.new()
-	var source = {}
+	var source : ShaderCode
 	var source_output = get_source(input_port_index)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
+	else:
+		source = get_default_generated_shader()
+	var f32 = get_parameter("f32")
 	if source.output_type == "":
 		source = get_default_generated_shader()
-	var m : ShaderMaterial = [ material, loop_material ][input_port_index]
+	var shader_compute : MMShaderCompute = shader_computes[input_port_index]
 	var buffer_name : String = buffer_names[input_port_index]
-	assert(m != null && m.shader != null)
-	mm_deps.buffer_create_shader_material(buffer_name, m, mm_renderer.generate_shader(source))
+	#assert(shader_compute.is_valid())
+
+	await shader_compute.set_shader_from_shadercode(source, f32)
+	var new_is_greyscale = ((shader_compute.texture_type & 1) == 0)
+	if new_is_greyscale != is_greyscale[input_port_index]:
+		is_greyscale[input_port_index] = new_is_greyscale
+		notify_output_change(input_port_index)
+	mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
 	set_current_iteration(0)
 
 func set_parameter(n : String, v) -> void:
@@ -129,9 +134,9 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		set_current_iteration(0)
 	if value != null:
 		if buffer_name == buffer_names[0]:
-			material.set_shader_parameter(parameter_name, value)
+			shader_computes[0].set_parameter(parameter_name, value)
 		elif buffer_name == buffer_names[1]:
-			loop_material.set_shader_parameter(parameter_name, value)
+			shader_computes[1].set_parameter(parameter_name, value)
 	return false
 
 func on_dep_buffer_invalidated(buffer_name : String):
@@ -141,11 +146,14 @@ func on_dep_buffer_invalidated(buffer_name : String):
 func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
-	if current_renderer != null:
-		return false
 	if buffer_name == buffer_names[3]:
 		return false
-	var m : Material = material if current_iteration == 0 else loop_material
+	if is_rendering:
+		return false
+	
+	is_rendering = true
+	
+	var shader_compute : MMShaderCompute = shader_computes[0] if current_iteration == 0 else shader_computes[1]
 	# Calculate iteration count
 	var iterations = calculate_float_parameter("iterations")
 	if iterations.has("used_named_parameters"):
@@ -157,17 +165,12 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if current_iteration > iterations:
 		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
+		is_rendering = false
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
 	var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
-	current_renderer = await mm_renderer.request(self)
-	if check_current_iteration != current_iteration:
-		print("Iteration changed")
-		current_renderer.release(self)
-		current_renderer = null
-		mm_deps.dependency_update(buffer_name, texture, true)
-		return false
+	
 	var time = Time.get_ticks_msec()
 	var size = pow(2, get_parameter("size"))
 	if get_parameter("shrink"):
@@ -175,16 +178,17 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		size >>= current_iteration
 		if size < 4:
 			size = 4
-	current_renderer = await current_renderer.render_material(self, m, size)
+	
+	await shader_compute.render(texture, size)
+	
+	is_rendering = false
+	
 	if check_current_iteration != current_iteration:
-		current_renderer.release(self)
-		current_renderer = null
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return false
-	current_renderer.copy_to_texture(texture)
+	
 	#todo texture.flags = 0
-	current_renderer.release(self)
-	current_renderer = null
+	
 	# Calculate iteration index
 	var hash_value : int = 1 if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
 	if autostop and hash_value == previous_hash_value:
@@ -207,24 +211,28 @@ func set_current_iteration(i : int) -> void:
 	if current_iteration == 0:
 		mm_deps.buffer_invalidate(buffer_names[3])
 
-func get_globals(texture_name : String) -> Array[String]:
+#TODO: Remove this
+func get_globals__(texture_name : String) -> Array[String]:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float o%d_tex_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, get_instance_id() 	, pow(2, get_parameter("size")), get_instance_id() ]
 	return [ texture_globals ]
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
-	var shader_code = _get_shader_code_lod(uv, output_index, context, -1.0, "_tex" if output_index == 0 else "_loop_tex")
+	var genname = "o"+str(get_instance_id())
+	var shader_code = _get_shader_code_lod(uv, output_index, context, false, -1.0, "_tex" if output_index == 0 else "_loop_tex")
+	shader_code.add_uniform("%s_tex_size" % genname, "float", pow(2, get_parameter("size")))
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:
+	var genname = "o"+str(get_instance_id())
 	var attributes : Dictionary = {}
 	match output_index:
 		0:
-			attributes.texture = "o%d_tex" % get_instance_id()
-			attributes.texture_size = "o%d_tex_size" % get_instance_id()
+			attributes.texture = "%s_tex" % genname
+			attributes.texture_size = "%s_tex_size" % genname
 		1:
-			attributes.texture = "o%d_loop_tex" % get_instance_id()
-			attributes.texture_size = "o%d_tex_size" % get_instance_id()
-			attributes.iteration = "o%d_iteration" % get_instance_id()
+			attributes.texture = "%s_loop_tex" % genname
+			attributes.texture_size = "%s_tex_size" % genname
+			attributes.iteration = "%s_iteration" % genname
 	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:

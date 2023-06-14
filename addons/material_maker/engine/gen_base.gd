@@ -10,7 +10,7 @@ class InputPort:
 	var generator : MMGenBase = null
 	var input_index : int = 0
 
-	func _init(g : MMGenBase,i : int):
+	func _init(g : MMGenBase, i : int):
 		generator = g
 		input_index = i
 
@@ -33,20 +33,20 @@ class ShaderUniform:
 	var type : String
 	var value
 	
-	func _init(n, t, v):
+	func _init(n : String, t : String, v):
 		name = n
 		type = t
 		value = v
 	
 	func to_str(keyword : String = "uniform"):
-		var str_value : String = ""
+		var str_value_assign : String = ""
 		match type:
 			"float":
-				str_value = "%.9f" % value
+				str_value_assign = " = %.9f" % value
 			"vec4":
 				if value is Color:
-					str_value = "vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
-		return "%s %s %s = %s;\n" % [ keyword, type, name, str_value ]
+					str_value_assign = " = vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
+		return "%s %s %s%s;\n" % [ keyword, type, name, str_value_assign ]
 
 class ShaderCode:
 	var globals : Array[String] = []
@@ -57,11 +57,21 @@ class ShaderCode:
 	var output_type : String = ""
 	var output_values : Dictionary = {}
 	
-	func add_globals(new_globals : Array[String]):
+	func add_globals(new_globals : Array[String]) -> void:
 		for g in new_globals:
 			if ! g in globals:
 				globals.append(g)
 	
+	func add_uniform(n : String, t : String, v) -> void:
+		for u in uniforms:
+			if n == u.name:
+				return
+		uniforms.append(ShaderUniform.new(n, t, v))
+
+	func add_uniforms(uniform_list : Array[ShaderUniform]) -> void:
+		for u in uniform_list:
+			add_uniform(u.name, u.type, u.value)
+
 	func uniforms_as_strings(keyword : String = "uniform") -> String:
 		var rv : String = ""
 		for u in uniforms:
@@ -99,6 +109,8 @@ static func get_default_generated_shader() -> ShaderCode:
 	var rv : ShaderCode = ShaderCode.new()
 	rv.output_type = "f"
 	rv.output_values.f = "0.0"
+	rv.output_values.rgb = "vec3(0.0)"
+	rv.output_values.rgba = "vec4(0.0, 0.0, 0.0, 1.0)"
 	return rv
 
 func _post_load() -> void:

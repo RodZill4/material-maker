@@ -90,7 +90,7 @@ func render_shader(object : Object, shader : String, render_size : int, with_hdr
 	var shader_material = ShaderMaterial.new()
 	shader_material.shader = Shader.new() 
 	shader_material.shader.code = shader
-	mm_deps.material_update_params(shader_material)
+	mm_deps.material_update_params(MMShaderMaterial.new(shader_material))
 	var status = await render_material(object, shader_material, render_size, with_hdr)
 	return self
 

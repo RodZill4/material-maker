@@ -15,7 +15,12 @@ var max_viewport_size : int = 2048
 
 var max_buffer_size = 0
 
+var rendering_device : RenderingDevice
+var rendering_device_user = null
+
+
 signal free_renderer
+signal free_rendering_device
 
 
 func _ready() -> void:
@@ -25,6 +30,7 @@ func _ready() -> void:
 		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instantiate()
 		add_child(renderer)
 		free_renderers.append(renderer)
+	rendering_device = RenderingServer.create_local_rendering_device()
 
 # Global parameters
 
@@ -98,3 +104,16 @@ func request(object : Object) -> Object:
 func release(renderer : Object) -> void:
 	free_renderers.append(renderer)
 	free_renderer.emit()
+
+
+func request_rendering_device(user) -> RenderingDevice:
+	while rendering_device_user != null:
+		await free_rendering_device
+	rendering_device_user = user
+	return rendering_device
+
+func release_rendering_device(user) -> void:
+	if rendering_device_user != user:
+		print("Release rendering device with incorrect user. Please fix your code")
+	rendering_device_user = null
+	free_rendering_device.emit()

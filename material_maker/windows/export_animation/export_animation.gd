@@ -51,7 +51,7 @@ func set_source(g, o):
 		var i = buffer_images[image_index]
 		var b : String = BUFFER_NAMES[image_index]
 		# Get parameter values from the shader code
-		i.material = mm_deps.buffer_create_shader_material(b, i.material, i.material.shader.code)
+		mm_deps.buffer_create_shader_material(b, MMShaderMaterial.new(i.material), i.material.shader.code)
 	var begin : float = value_begin.value
 	var end : float = value_end.value
 	image_begin.material.set_shader_parameter("elapsed_time", begin)

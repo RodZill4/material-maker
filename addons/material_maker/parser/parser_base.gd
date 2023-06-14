@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 
 # Lexer
 var lexer_regexs : Array = []
