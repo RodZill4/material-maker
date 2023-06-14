@@ -535,7 +535,7 @@ func load_file(filename) -> bool:
 		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = "Rescue file for "+filename.get_file()+" was found.\nLoad it?"
 		dialog.get_ok_button().text = "Rescue"
-		dialog.add_cancel_button("Load "+filename.get_file())
+		dialog.add_button("Load "+filename.get_file(), true, "load")
 		add_child(dialog)
 		var result = await dialog.ask()
 		if result == "ok":
