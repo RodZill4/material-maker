@@ -75,8 +75,10 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 			shader_source += "\n"
 			shader_source += texture_declarations
 		shader_source += "\n"
-		shader_source += preload("res://addons/material_maker/shader_functions.tres").text
-		shader_source += "\n"
+	shader_source += "layout(set = 3, binding = 0, std430) restrict buffer MM {\n"
+	shader_source += "\tint mm_chunk_y;\n"
+	shader_source += "};\n"
+	shader_source += preload("res://addons/material_maker/shader_functions.tres").text
 	shader_source += "\n"
 	shader_source += "\n".join(shader_code.globals)
 	shader_source += "\n"
@@ -84,11 +86,12 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 		shader_source += shader_code.defs
 	shader_source += "void main() {\n"
 	shader_source += "\tfloat _seed_variation_ = 0.0;\n"
-	shader_source += "\tvec2 uv = (gl_GlobalInvocationID.xy+0.5)/imageSize(OUTPUT_TEXTURE);\n"
+	shader_source += "\tvec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);\n"
+	shader_source += "\tvec2 uv = pixel/imageSize(OUTPUT_TEXTURE);\n"
 	if shader_code.code != "":
 		shader_source += "\t"+shader_code.code
 	shader_source += "\tvec4 outColor = "+shader_code.output_values.rgba+";\n"
-	shader_source += "\timageStore(OUTPUT_TEXTURE, ivec2(gl_GlobalInvocationID.xy), outColor);\n"
+	shader_source += "\timageStore(OUTPUT_TEXTURE, ivec2(pixel), outColor);\n"
 	shader_source += "}\n"
 	var src : RDShaderSource = RDShaderSource.new()
 	src.source_compute = shader_source
@@ -147,7 +150,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 	
 	print("Preparing render")
 	
-	var time = Time.get_ticks_msec()
+	var start_time = Time.get_ticks_msec()
 	
 	print("Preparing target texture")
 	
@@ -223,26 +226,51 @@ func render(texture : ImageTexture, size : int) -> bool:
 		uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
 		rids.append(uniform_set_2)
 	
-	# Create a compute pipeline
-	var pipeline : RID = rd.compute_pipeline_create(shader)
-	if !pipeline.is_valid():
-		print("Cannot create pipeline")
-	rids.append(pipeline)
-	var compute_list := rd.compute_list_begin()
-	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
-	rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
-	if uniform_set_1.is_valid():
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1, 1)
-	if uniform_set_2.is_valid():
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set_2, 2)
-	print("Dispatching compute list")
-	rd.compute_list_dispatch(compute_list, size, size, 1)
-	rd.compute_list_end()
-	print("Rendering "+str(self))
-	await mm_renderer.get_tree().process_frame
-	rd.submit()
-	rd.sync()
-	print("End rendering "+str(self))
+	var chunk_count : int = max(1, size*size/(2048*2048))
+	var chunk_height : int = size/chunk_count
+	
+	var y : int = 0
+	while y < size:
+		var h : int = min(chunk_height, size-y)
+		
+		# Create a compute pipeline
+		var pipeline : RID = rd.compute_pipeline_create(shader)
+		if !pipeline.is_valid():
+			print("Cannot create pipeline")
+		rids.append(pipeline)
+		var compute_list := rd.compute_list_begin()
+		rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
+		if uniform_set_1.is_valid():
+			rd.compute_list_bind_uniform_set(compute_list, uniform_set_1, 1)
+		if uniform_set_2.is_valid():
+			rd.compute_list_bind_uniform_set(compute_list, uniform_set_2, 2)
+		
+		var loop_parameters_values : PackedByteArray = PackedByteArray()
+		loop_parameters_values.resize(4)
+		loop_parameters_values.encode_s32(0, y)
+		var loop_parameters_buffer : RID = rd.storage_buffer_create(loop_parameters_values.size(), loop_parameters_values)
+		var loop_parameters_uniform : RDUniform = RDUniform.new()
+		loop_parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+		loop_parameters_uniform.binding = 0
+		loop_parameters_uniform.add_id(loop_parameters_buffer)
+		var uniform_set_3 : RID = rd.uniform_set_create([loop_parameters_uniform], shader, 1)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
+		
+		#print("Dispatching compute list")
+		rd.compute_list_dispatch(compute_list, size, h, 1)
+		rd.compute_list_end()
+		#print("Rendering "+str(self))
+		await mm_renderer.get_tree().process_frame
+		rd.submit()
+		rd.sync()
+		
+		rd.free_rid(uniform_set_3)
+		rd.free_rid(loop_parameters_buffer)
+		
+		#print("End rendering %d-%d (%dms)" % [ y, y+h, render_time ])
+		
+		y += h
 	
 	var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
 	var image : Image = Image.create_from_data(size, size, false, TEXTURE_TYPE[texture_type].image_format, byte_data)
@@ -251,7 +279,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 		if r.is_valid():
 			rd.free_rid(r)
 	
-	render_time = Time.get_ticks_msec() - time
+	render_time = Time.get_ticks_msec() - start_time
 	
 	mm_renderer.release_rendering_device(self)
 
