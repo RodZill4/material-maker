@@ -26,7 +26,7 @@ func _ready() -> void:
 	tree.set_column_expand(1, false)
 	tree.set_column_custom_minimum_width(1, 36)
 	# Connect
-	library_manager.connect("libraries_changed",Callable(self,"update_tree"))
+	library_manager.connect("libraries_changed", Callable(self, "update_tree"))
 	# Setup section buttons
 	for s in library_manager.get_sections():
 		var button : TextureButton = TextureButton.new()
@@ -35,9 +35,9 @@ func _ready() -> void:
 		button.texture_normal = texture
 		$SectionButtons.add_child(button)
 		category_buttons[s] = button
-		button.connect("pressed",Callable(self,"_on_Section_Button_pressed").bind( s ))
-		button.connect("gui_input",Callable(self,"_on_Section_Button_event").bind( s ))
-	libraries_button.get_popup().connect("id_pressed",Callable(self,"_on_Libraries_id_pressed"))
+		button.connect("pressed", Callable(self, "_on_Section_Button_pressed").bind(s))
+		button.connect("gui_input", Callable(self, "_on_Section_Button_event").bind(s))
+	libraries_button.get_popup().connect("id_pressed", Callable(self, "_on_Libraries_id_pressed"))
 	init_expanded_items()
 	update_tree()
 
@@ -244,7 +244,7 @@ func _on_Libraries_about_to_show():
 		unload = PopupMenu.new()
 		unload.name = "Unload"
 		popup.add_child(unload)
-		unload.connect("id_pressed",Callable(self,"_on_Libraries_Unload_id_pressed"))
+		unload.connect("id_pressed", Callable(self, "_on_Libraries_Unload_id_pressed"))
 	popup.clear()
 	unload.clear()
 	for i in library_manager.get_child_count():

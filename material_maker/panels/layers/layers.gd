@@ -27,9 +27,9 @@ func _on_Add_pressed():
 	var menu = preload("res://material_maker/panels/layers/add_layer_menu.tscn").instantiate()
 	add_child(menu)
 	var button_rect = $Buttons/Add.get_global_rect()
-	menu.connect("id_pressed",Callable(self,"_on_add_layer_menu"))
-	menu.connect("id_pressed",Callable(menu,"queue_free"))
-	menu.connect("popup_hide",Callable(menu,"queue_free"))
+	menu.connect("id_pressed", Callable(self, "_on_add_layer_menu"))
+	menu.connect("id_pressed", Callable(menu, "queue_free"))
+	menu.connect("popup_hide", Callable(menu, "queue_free"))
 	menu.popup(Rect2(Vector2(button_rect.position.x, button_rect.end.y), menu.get_minimum_size()))
 
 func _on_add_layer_menu(id):

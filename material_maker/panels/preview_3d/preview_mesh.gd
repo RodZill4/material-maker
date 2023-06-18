@@ -2,8 +2,8 @@ extends MeshInstance3D
 
 @export var can_tesselate : bool = true
 
-@export var uv_scale : Vector2 = Vector2(1, 1) : set = set_uv_scale
-@export var tesselated : bool = false : set = set_tesselated
+@export var uv_scale : Vector2 = Vector2(1, 1): set = set_uv_scale
+@export var tesselated : bool = false: set = set_tesselated
 
 
 func _ready():

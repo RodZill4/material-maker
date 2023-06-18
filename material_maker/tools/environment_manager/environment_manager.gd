@@ -175,9 +175,9 @@ func read_hdr(index : int, url : String) -> bool:
 		accept_dialog.window_title = "HDRI download error"
 		accept_dialog.dialog_text = "Failed to download %s" % url
 		mm_globals.main_window.add_child(accept_dialog)
-		accept_dialog.connect("confirmed",Callable(accept_dialog,"queue_free"))
-		accept_dialog.connect("popup_hide",Callable(accept_dialog,"queue_free"))
-		accept_dialog.connect("tree_exiting",Callable(self,"on_accept_dialog_closed"))
+		accept_dialog.connect("confirmed", Callable(accept_dialog, "queue_free"))
+		accept_dialog.connect("popup_hide", Callable(accept_dialog, "queue_free"))
+		accept_dialog.connect("tree_exiting", Callable(self, "on_accept_dialog_closed"))
 		accept_dialog.popup_centered()
 	return false
 

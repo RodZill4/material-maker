@@ -21,7 +21,7 @@ class OutputPort:
 	var generator : MMGenBase = null
 	var output_index : int = 0
 
-	func _init(g : MMGenBase,o : int):
+	func _init(g : MMGenBase, o : int) -> void:
 		generator = g
 		output_index = o
 

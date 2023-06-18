@@ -1,6 +1,6 @@
+@tool
 # Code ported from:
 # https://github.com/blender/blender/blob/594f47ecd2d5367ca936cf6fc6ec8168c2b360d0/intern/cycles/blender/blender_mesh.cpp#L541
-@tool
 extends Node
 
 const FLT_EPSILON = 1.192092896e-7
@@ -31,7 +31,7 @@ func generate(mesh: Mesh) -> Mesh:
 	var sorted_vert_indices := new_filled_array(num_verts, 0)
 	for vert_index in num_verts:
 		sorted_vert_indices[vert_index] = vert_index
-	sorted_vert_indices.sort_custom(Callable(VertexAverageComparator.new(b_mesh_vertices),"sort"))
+	sorted_vert_indices.sort_custom(Callable(VertexAverageComparator.new(b_mesh_vertices), "sort"))
 
 	# This array stores index of the original vertex for the given vertex
 	# index.
@@ -176,7 +176,7 @@ class EdgeMap:
 class VertexAverageComparator:
 	var verts_: Array
 
-	func _init(verts: Array):
+	func _init(verts: Array) -> void:
 		verts_ = verts
 
 	func sort(vert_idx_a: int, vert_idx_b: int) -> bool:

@@ -22,10 +22,10 @@ __meta__ = {
 [node name="Margin" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/offset_right = 2
-custom_constants/offset_top = 2
-custom_constants/offset_left = 2
-custom_constants/offset_bottom = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_bottom = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

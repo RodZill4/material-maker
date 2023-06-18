@@ -10,11 +10,12 @@ var is_greyscale : bool = false
 var need_generate : bool = false
 
 var last_export_filename : String = ""
-var last_export_size : int = 0
+var last_export_size = 0
 
 
 const MENU_EXPORT_AGAIN : int = 1000
 const MENU_EXPORT_ANIMATION : int = 1001
+const MENU_CUSTOM_SIZE : int = 1002
 
 
 func _enter_tree():
@@ -137,6 +138,16 @@ func export_animation() -> void:
 	window.popup_centered()
 
 func _on_Export_id_pressed(id : int) -> void:
+	var size
+	if id == MENU_CUSTOM_SIZE:
+		var dialog = load("res://material_maker/panels/preview_2d/custom_size_dialog.tscn").instantiate()
+		mm_globals.main_window.add_dialog(dialog)
+		size = await dialog.ask()
+		if ! size.has("size"):
+			return
+		size = size.size
+	else:
+		size = 64 << id
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM

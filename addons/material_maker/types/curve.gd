@@ -5,7 +5,7 @@ class Point:
 	var p : Vector2
 	var ls : float
 	var rs : float
-	func _init(x : float,y : float,nls : float,nrs : float):
+	func _init(x : float, y : float, nls : float, nrs : float) -> void:
 		p = Vector2(x, y)
 		ls = nls
 		rs = nrs

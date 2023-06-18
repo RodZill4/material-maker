@@ -36,7 +36,7 @@ func on_color_changed(c):
 	emit_signal("color_changed_undo", c, null)
 
 func on_picker_created():
-	get_popup().connect("about_to_popup",Callable(self,"on_about_to_show"))
+	get_popup().connect("about_to_popup", Callable(self, "on_about_to_show"))
 	previous_color = color
 
 func on_about_to_show():

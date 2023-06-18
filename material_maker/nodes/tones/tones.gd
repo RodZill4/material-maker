@@ -10,7 +10,7 @@ class Cursor:
 	const WIDTH : int = 12
 	const HEIGHT : int = 12
 
-	func _init(c,p,t = true):
+	func _init(c, p, t = true):
 		color = c
 		pos = p
 		top = t

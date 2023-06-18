@@ -6,6 +6,7 @@
 	"Filter/BrightnessContrast": "adjust",
 	"Filter/Colorize": "gradient,map,color,tint,ramp",
 	"Filter/Colorize/Invert": "negative",
+	"Filter/Colormap": "gradient,dynamic",
 	"Filter/Combine": "compose,rgba",
 	"Filter/Decompose": "split,rgba",
 	"Filter/Greyscale": "desaturate",

@@ -34,7 +34,7 @@ func _ready():
 		button = Button.new()
 		button.text = "Download"
 		$ScrollContainer/Languages.add_child(button)
-		button.connect("pressed",Callable(self,"download_language").bind( l ))
+		button.connect("pressed", Callable(self, "download_language").bind(l))
 	var minimum_size : Vector2 = $ScrollContainer/Languages.get_minimum_size()
 	popup(Rect2(get_global_mouse_position(), minimum_size))
 

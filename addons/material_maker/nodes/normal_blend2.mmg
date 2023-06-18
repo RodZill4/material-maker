@@ -1,0 +1,82 @@
+{
+	"generic_size": 1,
+	"name": "normal_blend2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount1": 0.5
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec3 $(name_uv)_b = $b($uv);",
+			"vec3 $(name_uv)_l;",
+			"float $(name_uv)_a;",
+			"#for",
+			"$(name_uv)_l = $l#($uv);",
+			"$(name_uv)_a = $amount# * $a#($uv);",
+			"$(name_uv)_b = normal_blend($uv, $(name_uv)_l, $(name_uv)_b, $(name_uv)_a);",
+			"#end"
+		],
+		"global": [
+			"vec3 normal_blend(vec2 uv, vec3 n1, vec3 n2, float opacity) {",
+			"\tn1.z = 1.0 - n1.z; // inverting z channel before calculations",
+			"\tn2.z = 1.0 - n2.z; // inverting z channel before calculations",
+			"\tvec3 t = n1*vec3( 2,  2, 2) + vec3(-1, -1,  0);",
+			"\tvec3 u = n2*vec3(-2, -2, 2) + vec3( 1,  1, -1);",
+			"\tvec3 r = mix(n2 * 2.0 - 1.0, t * dot(t, u) / t.z - u, opacity);",
+			"\tr.z = r.z * -1.0; // inverting z channel after calculations",
+			"\treturn r * 0.5 + 0.5;",
+			"}"
+		],
+		"inputs": [
+			{
+				"default": "vec3(0.5, 0.5, 0.0)",
+				"label": "Background",
+				"longdesc": "The foreground input",
+				"name": "b",
+				"shortdesc": "Foreground",
+				"type": "rgb"
+			},
+			{
+				"default": "vec3(0.5, 0.5, 0.0)",
+				"label": "Layer#",
+				"longdesc": "The background input",
+				"name": "l#",
+				"shortdesc": "Background",
+				"type": "rgb"
+			},
+			{
+				"default": "1.0",
+				"label": "Opacity#",
+				"longdesc": "The optional opacity mask",
+				"name": "a#",
+				"shortdesc": "Mask",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Normal Blend",
+		"outputs": [
+			{
+				"rgb": "$(name_uv)_b",
+				"type": "rgb"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "3:",
+				"max": 1,
+				"min": 0,
+				"name": "amount#",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

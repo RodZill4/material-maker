@@ -11,7 +11,7 @@ var button_pool := []
 
 func clear() -> void:
 	for bt in get_children():
-		bt.disconnect("pressed",Callable(self,"_on_bt_pressed"))
+		bt.disconnect("pressed", Callable(self, "_on_bt_pressed"))
 		remove_child(bt)
 		button_pool.append(bt)
 

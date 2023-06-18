@@ -6,7 +6,7 @@ class_name MMGenContext
 var variants : Dictionary = {}
 var parent_context : MMGenContext = null
 
-func _init(p = null):
+func _init(p = null) -> void:
 	parent_context = p
 
 func has_variant(generator) -> bool:

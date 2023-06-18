@@ -41,7 +41,7 @@ func update_node() -> void:
 			if l.has("tooltip"):
 				control.tooltip_text = l.tooltip
 			sizer.add_child(control)
-			control.connect("value_changed",Callable(self,"_on_value_changed").bind( l.name ))
+			control.connect("value_changed", Callable(self, "_on_value_changed").bind(l.name))
 			controls[l.name] = control
 			add_child(sizer)
 	else:

@@ -23,8 +23,8 @@ func _ready():
 func _draw() -> void:
 	var icon = preload("res://material_maker/icons/color_palette.png")
 	draw_texture_rect(icon, Rect2(size.x-40, 4, 16, 16), false)
-	if !is_connected("gui_input",Callable(self,"_on_gui_input")):
-		connect("gui_input",Callable(self,"_on_gui_input"))
+	if !is_connected("gui_input", Callable(self, "_on_gui_input")):
+		connect("gui_input", Callable(self, "_on_gui_input"))
 
 func set_generator(g) -> void:
 	generator = g
@@ -164,5 +164,5 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 		$Popup.hide()
 		$PopupSelector.popup(Rect2(event.global_position, $PopupSelector.get_minimum_size()))
 		$PopupSelector/PanelContainer/ColorPicker.color = generator.color
-		if !$PopupSelector/PanelContainer/ColorPicker.is_connected("color_changed",Callable(self,"set_color")):
-			$PopupSelector/PanelContainer/ColorPicker.connect("color_changed",Callable(self,"set_color"))
+		if !$PopupSelector/PanelContainer/ColorPicker.is_connected("color_changed", Callable(self, "set_color")):
+			$PopupSelector/PanelContainer/ColorPicker.connect("color_changed", Callable(self, "set_color"))

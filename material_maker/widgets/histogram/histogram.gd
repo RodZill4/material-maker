@@ -1,7 +1,7 @@
 @tool
 extends Control
 
-@export var texture_size : int = 256 : set = set_texture_size
+@export var texture_size : int = 256: set = set_texture_size
 
 var generator : MMGenBase = null
 var output : int = 0

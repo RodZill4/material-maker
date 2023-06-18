@@ -54,8 +54,8 @@ func set_texture_size(s : float):
 			c.size = size
 	
 	nm_material.set_shader_parameter("epsilon", 1/s)
-	#nm_material.set_shader_parameter("depth_tex", depth.get_texture())
-	#nm_material.set_shader_parameter("seams", painter_node.mesh_seams_tex)
+	#nm_material.set_shader_param("depth_tex", depth.get_texture())
+	#nm_material.set_shader_param("seams", painter_node.mesh_seams_tex)
 	
 	painter_node.set_texture_size(s)
 	await select_layer(selected_layer_save)
@@ -118,6 +118,7 @@ func select_layer(layer : Layer) -> void:
 			if old_texture != null:
 				new_texture.set_image(old_texture.get_image())
 			selected_layer.set(c, new_texture)
+	selected_layer = layer
 	if layer != null:
 		for c in layer.get_channels():
 			if layer.get(c) != null:

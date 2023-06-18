@@ -28,7 +28,7 @@ func _draw() -> void:
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)
-	generator.connect("parameter_changed",Callable(self,"on_parameter_changed"))
+	generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
 	update_node()
 
 func update():
@@ -338,7 +338,7 @@ func restore_preview_widget() -> void:
 			preview = preload("res://material_maker/panels/preview_2d/preview_2d_node.tscn").instantiate()
 			preview.shader_context_defs = get_parent().shader_context_defs
 			preview_timer.one_shot = true
-			preview_timer.connect("timeout",Callable(self,"do_update_preview"))
+			preview_timer.connect("timeout", Callable(self, "do_update_preview"))
 			preview.add_child(preview_timer)
 		var child_count = get_child_count()
 		var preview_parent = get_child(child_count-1)
@@ -587,22 +587,6 @@ func save_generator() -> void:
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		MMGraphNodeGeneric.do_save_generator(files[0], generator)
-
-static func extract_verbose_values(path : String, data : Dictionary) -> Array:
-	var rv = []
-	var keys = data.keys().duplicate()
-	keys.sort()
-	for key in keys:
-		var v = data[key]
-		var mpath = path + "." + key
-		match typeof(v):
-			TYPE_STRING:
-				if "\n" in v:
-					data.erase(key)
-					rv.append("string:" + mpath.substr(1) + "\n" + v)
-			TYPE_DICTIONARY:
-				rv.append_array(extract_verbose_values(mpath, v))
-	return rv
 
 static func do_save_generator(file_name : String, gen : MMGenBase) -> void:
 	mm_globals.config.set_value("path", "template", file_name.get_base_dir())

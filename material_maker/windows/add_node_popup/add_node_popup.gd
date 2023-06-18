@@ -20,9 +20,9 @@ func get_current_graph():
 
 
 func _ready() -> void:
-	filter.connect("text_changed",Callable(self,"update_list"))
-	filter.connect("text_submitted",Callable(self,"filter_entered"))
-	list.connect("object_selected",Callable(self,"object_selected"))
+	filter.connect("text_changed", Callable(self, "update_list"))
+	filter.connect("text_submitted", Callable(self, "filter_entered"))
+	list.connect("object_selected", Callable(self, "object_selected"))
 	update_list()
 
 

@@ -55,7 +55,6 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 						texture_declarations += "layout(set = 2, binding = %d) uniform sampler2D %s;\n" % [ textures.size(), u.name ]
 						texture_indexes[u.name] = textures.size()
 						textures.append(u.value)
-						print("Texture "+u.name+" "+str(u.value))
 						continue
 					_:
 						print("Unsupported parameter type "+u.type)
@@ -94,15 +93,22 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	var src : RDShaderSource = RDShaderSource.new()
 	src.source_compute = shader_source
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+	print("Compiling shader")
 	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
 	if shader.is_valid():
 		rd.free_rid(shader)
 	if spirv.compile_error_compute != "":
-		print(shader_source)
+		var ln : int = 0
+		for l in shader_source.split("\n"):
+			ln += 1
+			print("%4d: %s" % [ ln, l ])
 		print(spirv.compile_error_compute)
 		shader = RID()
+		print(self)
+		print(shader)
 	else:
 		shader = rd.shader_create_from_spirv(spirv)
+		print("Done")
 	mm_renderer.release_rendering_device(self)
 
 func get_parameters() -> Dictionary:
@@ -133,13 +139,17 @@ func set_parameter(name : String, value) -> void:
 	print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, p.type ])
 
 func render(texture : ImageTexture, size : int) -> bool:
-	if !shader.is_valid():
+	if ! shader.is_valid():
 		render_time = 0
 		return false
 	var rids : Array[RID] = []
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	
+	print("Preparing render")
+	
 	var time = Time.get_ticks_msec()
+	
+	print("Preparing target texture")
 	
 	var fmt := RDTextureFormat.new()
 	fmt.width = size
@@ -147,10 +157,8 @@ func render(texture : ImageTexture, size : int) -> bool:
 	fmt.format = TEXTURE_TYPE[texture_type].data_format
 	fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
-	var view = RDTextureView.new()
+	var view : RDTextureView = RDTextureView.new()
 	
-	#var output_image : Image = Image.create(size, size, false, TEXTURE_TYPE[texture_type].image_format)
-	#var output_tex : RID = rd.texture_create(fmt, view, [ output_image.get_data() ])
 	var output_tex : RID = rd.texture_create(fmt, view, PackedByteArray())
 	var output_tex_uniform : RDUniform = RDUniform.new()
 	output_tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
@@ -160,24 +168,18 @@ func render(texture : ImageTexture, size : int) -> bool:
 	rids.append(uniform_set_0)
 	rids.append(output_tex)
 	
-	# Create a compute pipeline
-	var pipeline : RID = rd.compute_pipeline_create(shader)
-	if !pipeline.is_valid():
-		print("Cannot create pipeline")
-	rids.append(pipeline)
-	var compute_list := rd.compute_list_begin()
-	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
-	rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
+	var uniform_set_1 : RID = RID()
 	if parameter_values.size() > 0:
 		var parameters_buffer : RID = rd.storage_buffer_create(parameter_values.size(), parameter_values)
 		var parameters_uniform : RDUniform = RDUniform.new()
 		parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 		parameters_uniform.binding = 0
 		parameters_uniform.add_id(parameters_buffer)
-		var uniform_set_1 : RID = rd.uniform_set_create([parameters_uniform], shader, 1)
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1, 1)
+		uniform_set_1 = rd.uniform_set_create([parameters_uniform], shader, 1)
 		rids.append(uniform_set_1)
 		rids.append(parameters_buffer)
+	
+	var uniform_set_2 = RID()
 	if !textures.is_empty():
 		var sampler_state : RDSamplerState = RDSamplerState.new()
 		sampler_state.mag_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
@@ -190,7 +192,8 @@ func render(texture : ImageTexture, size : int) -> bool:
 			var t : ImageTexture = textures[i]
 			var image : Image = t.get_image()
 			if image == null:
-				return false
+				print("No image for texture %s" % str(t))
+				image = Image.create(1, 1, false, Image.FORMAT_RF)
 			fmt = RDTextureFormat.new()
 			fmt.width = image.get_width()
 			fmt.height = image.get_height()
@@ -210,7 +213,6 @@ func render(texture : ImageTexture, size : int) -> bool:
 			fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
 			view = RDTextureView.new()
 			var tex : RID = rd.texture_create(fmt, view, [image.get_data()])
-			
 			rids.append(tex)
 			var sampler_uniform : RDUniform = RDUniform.new()
 			sampler_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
@@ -218,14 +220,30 @@ func render(texture : ImageTexture, size : int) -> bool:
 			sampler_uniform.add_id(sampler)
 			sampler_uniform.add_id(tex)
 			sampler_uniform_array.append(sampler_uniform)
-		var uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
+		uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
 		rids.append(uniform_set_2)
+	
+	# Create a compute pipeline
+	var pipeline : RID = rd.compute_pipeline_create(shader)
+	if !pipeline.is_valid():
+		print("Cannot create pipeline")
+	rids.append(pipeline)
+	var compute_list := rd.compute_list_begin()
+	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
+	rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
+	if uniform_set_1.is_valid():
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_1, 1)
+	if uniform_set_2.is_valid():
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_2, 2)
+	print("Dispatching compute list")
 	rd.compute_list_dispatch(compute_list, size, size, 1)
 	rd.compute_list_end()
+	print("Rendering "+str(self))
 	await mm_renderer.get_tree().process_frame
 	rd.submit()
 	rd.sync()
+	print("End rendering "+str(self))
+	
 	var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
 	var image : Image = Image.create_from_data(size, size, false, TEXTURE_TYPE[texture_type].image_format, byte_data)
 	texture.set_image(image)

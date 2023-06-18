@@ -27,7 +27,7 @@ func _enter_tree() -> void:
 		popup.add_icon_item(load(path + "curve_preset_" + icon_name + ".tres"), p.name)
 
 func _exit_tree() -> void:
-	get_popup().disconnect("id_pressed",Callable(self,"_menu_item_selected"))
+	get_popup().disconnect("id_pressed", Callable(self, "_menu_item_selected"))
 
 func _menu_item_selected(index : int) -> void:
 	var curve = MMCurve.new()

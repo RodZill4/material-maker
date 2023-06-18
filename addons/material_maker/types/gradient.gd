@@ -4,7 +4,7 @@ class_name MMGradient
 class Point:
 	var v : float
 	var c : Color
-	func _init(pos : float,color : Color):
+	func _init(pos : float, color : Color):
 		v = pos
 		c = color
 
@@ -49,7 +49,7 @@ func set_point_position(i : int, v : float) -> void:
 
 func sort() -> void:
 	if !sorted:
-		points.sort_custom(Callable(CustomSorter,"compare"))
+		points.sort_custom(Callable(CustomSorter, "compare"))
 		for i in range(points.size()-1):
 			if points[i].v+0.0000005 >= points[i+1].v:
 				points[i+1].v = points[i].v+0.000001

@@ -12,13 +12,12 @@ config_version=5
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material authoring tool"
-run/main_scene="res://start.tscn"
+run/main_scene="res://splash_screen/splash_screen.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 config/features=PackedStringArray("4.0")
-boot_splash/bg_color=Color(0.0901961, 0.0941176, 0.141176, 1)
-boot_splash/image="res://rodz_labs_logo.png"
-boot_splash/fullsize=false
+boot_splash/bg_color=Color(0.0901961, 0.0941176, 0.141176, 0)
+boot_splash/show_image=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="1.4.0.0"
@@ -48,8 +47,9 @@ gdscript/warnings/unused_class_variable=true
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=1
+window/size/viewport_height=1
+window/size/borderless=true
 window/handheld/orientation.Android="sensor_landscape"
 
 [editor_plugins]

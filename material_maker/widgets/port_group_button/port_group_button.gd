@@ -45,7 +45,7 @@ static func update_groups(parent : Control):
 			p.button = b
 			p.erase("parent")
 			buttons.append(p)
-	buttons.sort_custom(Callable(MyCustomSorter,"sort"))
+	buttons.sort_custom(Callable(MyCustomSorter, "sort"))
 	var in_group : bool = false
 	var current_group : int = -1
 	var group_sizes = {}

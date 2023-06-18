@@ -8,6 +8,7 @@ var resource_path : String
 
 
 func _ready():
+	get_window().size = Vector2(800, 600)
 	randomize()
 	set_process(false)
 	var dir : DirAccess
@@ -154,3 +155,8 @@ func show_error(message : String):
 	print(message)
 	$ErrorPanel.show()
 	$ErrorPanel/Label.text = message
+
+
+func _on_Patreon_gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		OS.shell_open("https://www.patreon.com/rodzlabs")

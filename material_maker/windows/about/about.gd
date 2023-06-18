@@ -31,12 +31,15 @@ const CONTRIBUTORS = [
 ]
 
 const PATRONS = [
-	"Edward Herbert", "LitmusZest", "Hugo Locurcio", "Jose Ivan Lopez Romo", "Andres Hernandez",
-	"Interstice", "Preclude Interactive", "Rafe Hall", "rustweaver", "Harken", "BasicIncomePlz",
-	"AdamRatai", "Hanzhong Wang", "Ryan Roden-Corrent", "Micha Grandel", "Ian Genskowsky Chang",
-	"Andreas Ratchev",
-	
-	"The5", "nargacu83", "Shikher Pandey", "a critter in flux", "Tom Wor"
+	"Edward Herbert", "Andres Hernandez", "LitmusZest", "Hugo Locurcio", "Jose Ivan Lopez Romo",
+	"Interstice", "MrDG", "rustweaver", "BasicIncomePlz", "AdamRatai",
+	"Harken", "Ian Genskowsky Chang", "Hanzhong Wang", "Ryan Roden-Corrent", "Micha Grandel",
+	"Andreas Ratchev", "Miouyouyou", "Valerian Bedin", "Mikael Nordenberg"
+]
+
+const PATRONS2 = [
+	"Preclude Interactive", "nargacu83", "realkotob", "Shikher Pandey", "The5",
+	"a critter in flux", "Tom Wor"
 ]
 
 func _ready() -> void:
@@ -53,6 +56,8 @@ func _ready() -> void:
 		label.text = c.contribution
 		authors_grid.add_child(label)
 	for p in PATRONS:
+		patrons_list.add_item(p)
+	for p in PATRONS2:
 		patrons_list.add_item(p)
 
 func open_url(url) -> void:

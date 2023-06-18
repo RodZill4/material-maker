@@ -52,6 +52,7 @@ func fix() -> void:
 	var removed_widgets = false
 	for w in widgets:
 		if ! w.has("linked_widgets"):
+			updated_widgets.push_back(w)
 			continue
 		var updated_linked_widgets : Array = []
 		for l in w.linked_widgets:

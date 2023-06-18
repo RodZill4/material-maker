@@ -1,6 +1,6 @@
 extends Window
 
-@export var closed : bool = true : set = set_closed
+@export var closed : bool = true: set = set_closed
 var previous_value
 
 signal polygon_changed(polygon)

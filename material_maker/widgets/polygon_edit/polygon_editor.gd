@@ -22,8 +22,8 @@ func update_controls() -> void:
 		add_child(control_point)
 		control_point.initialize(p)
 		control_point.position = transform_point(p)-control_point.OFFSET
-		control_point.connect("moved",Callable(self,"_on_ControlPoint_moved"))
-		control_point.connect("removed",Callable(self,"_on_ControlPoint_removed"))
+		control_point.connect("moved", Callable(self, "_on_ControlPoint_moved"))
+		control_point.connect("removed", Callable(self, "_on_ControlPoint_removed"))
 	emit_signal("value_changed", polygon)
 
 func _on_ControlPoint_moved(index):

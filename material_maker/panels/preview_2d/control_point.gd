@@ -54,8 +54,8 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 	if dragging:
 		return
 	hide()
-	if is_instance_valid(generator) and generator.is_connected("parameter_changed",Callable(self,"on_parameter_changed")):
-		generator.disconnect("parameter_changed",Callable(self,"on_parameter_changed"))
+	if is_instance_valid(generator) and generator.is_connected("parameter_changed", Callable(self, "on_parameter_changed")):
+		generator.disconnect("parameter_changed", Callable(self, "on_parameter_changed"))
 	generator = g
 	parameter_x = ""
 	parameter_y = ""
@@ -77,7 +77,7 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 				parameter_a = p.name
 	is_xy = parameter_x != "" or parameter_y != ""
 	if visible:
-		generator.connect("parameter_changed",Callable(self,"on_parameter_changed"))
+		generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
 		update_position(get_value())
 	else:
 		generator = null

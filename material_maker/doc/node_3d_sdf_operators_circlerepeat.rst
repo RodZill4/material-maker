@@ -21,7 +21,10 @@ repeated version of the input shape.
 Parameters
 ::::::::::
 
-The **CircleRepeat** node accepts *the number of repetitions* as parameter.
+The **CircleRepeat** node accepts the following parameters: 
+
+* *Count* controls the number of copies of the input
+* *Variations* controls whether the input is sampled with variations
 
 Example images
 ::::::::::::::

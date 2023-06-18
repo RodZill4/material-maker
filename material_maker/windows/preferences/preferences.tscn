@@ -408,7 +408,7 @@ config_variable = "auto_size_comment"
 offset_top = 324.0
 offset_right = 302.0
 offset_bottom = 324.0
-custom_constants/separation = 0
+theme_override_constants/separation = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 offset_left = 114.0

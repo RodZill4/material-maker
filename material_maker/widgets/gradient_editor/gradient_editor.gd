@@ -172,8 +172,8 @@ func _gui_input(ev) -> void:
 			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
 			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
 			popup.init(value)
-			popup.connect("updated",Callable(self,"set_value_and_update"))
-			popup.connect("popup_hide",Callable(popup,"queue_free"))
+			popup.connect("updated", Callable(self, "set_value_and_update"))
+			popup.connect("popup_hide", Callable(popup, "queue_free"))
 
 # Showing a color picker popup to change a cursor's color
 
@@ -198,7 +198,7 @@ func get_sorted_cursors() -> Array:
 	for c in get_children():
 		if c is GradientCursor:
 			array.append(c)
-	array.sort_custom(Callable(GradientCursor,"sort"))
+	array.sort_custom(Callable(GradientCursor, "sort"))
 	return array
 
 func get_gradient_color(x) -> Color:

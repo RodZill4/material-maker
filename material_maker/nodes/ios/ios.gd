@@ -5,7 +5,7 @@ func _ready():
 
 func set_generator(g) -> void:
 	super.set_generator(g)
-	generator.connect("parameter_changed",Callable(self,"on_parameter_changed"))
+	generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
 	update_node()
 
 func on_parameter_changed(p, _v) -> void:
@@ -39,7 +39,7 @@ func update_node() -> void:
 	PortGroupButton.update_groups(self)
 	var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instantiate()
 	add_child(add_button)
-	add_button.connect("pressed",Callable(generator,"add_port"))
+	add_button.connect("pressed", Callable(generator, "add_port"))
 	set_slot(get_child_count()-1, false, 0, color, false, 0, color)
 	update_up_down_buttons()
 

@@ -4,9 +4,10 @@ extends "res://material_maker/panels/preview_2d/preview_2d_panel.gd"
 var view_style : int = 0
 
 
-func generate_preview_shader(source, _template) -> String:
+func generate_preview_shader(source : MMGenBase.ShaderCode, _template) -> String:
 	var variables : Dictionary = {}
-	variables.GENERATED_GLOBALS = "\n".join(PackedStringArray(source.globals))
+	variables.GENERATED_GLOBALS = source.uniforms_as_strings()
+	variables.GENERATED_GLOBALS += "\n".join(PackedStringArray(source.globals))
 	variables.GENERATED_INSTANCE = source.defs
 	variables.GENERATED_CODE = source.code
 	if source.output_type == "sdf2d":

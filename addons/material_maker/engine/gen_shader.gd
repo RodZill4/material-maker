@@ -49,16 +49,16 @@ func get_parameter_defs() -> Array:
 
 func set_parameter(n : String, v) -> void:
 	var old_value = parameters[n] if parameters.has(n) else null
-	var parameter_uses_seed : bool = (v is String and v.find("$rnd(") != -1)
+	var parameter_uses_seed : bool = (v is String and (v.find("$rnd(") != -1 or v.find("$rndi(") != -1))
 	var uses_seed_updated : bool = false
 	if parameter_uses_seed:
 		if ! params_use_seed:
 			uses_seed_updated = true
 		params_use_seed = true
-	elif old_value is String and old_value.find("$rnd(") != -1:
+	elif old_value is String and (old_value.find("$rnd(") != -1 or old_value.find("$rndi(") != -1):
 		var new_params_use_seed : bool = false
 		for k in parameters.keys():
-			if k != n and parameters[k] is String and parameters[k].find("$rnd(") != -1:
+			if k != n and parameters[k] is String and (parameters[k].find("$rnd(") != -1 or parameters[k].find("$rndi(") != -1):
 				new_params_use_seed = true
 				break
 		if params_use_seed != new_params_use_seed:
@@ -66,7 +66,7 @@ func set_parameter(n : String, v) -> void:
 			params_use_seed = new_params_use_seed
 	super.set_parameter(n, v)
 	var had_rnd : bool = false
-	if old_value is String and old_value.find("$rnd(") != -1:
+	if old_value is String and (old_value.find("$rnd(") != -1 or old_value.find("$rndi(") != -1):
 		had_rnd = true
 	var has_rnd : bool = false
 	if uses_seed_updated and is_inside_tree():
@@ -504,6 +504,20 @@ func replace_rnd(string : String, offset : int = 0) -> String:
 			string = string.replace(replace, with)
 	return string
 
+func replace_rndi(string : String, offset : int = 0) -> String:
+	while true:
+		var params = find_keyword_call(string, "rndi")
+		if params == "" or params == "#error":
+			break
+		var replace = "$rndi(%s)" % params
+		while true:
+			var position : int = string.find(replace)
+			if position == -1:
+				break
+			var with = "param_rndi(%s, $seed+%f)" % [ params, sin(position)+offset ]
+			string = string.replace(replace, with)
+	return string
+
 func replace_variables_old(string : String, variables : Dictionary) -> String:
 	while true:
 		var old_string : String = string
@@ -576,7 +590,11 @@ func subst(string : String, context : MMGenContext, uv : String = "") -> Diction
 				if parameters[p.name] is float:
 					value_string = "p_%s_%s" % [ genname, p.name ]
 				elif parameters[p.name] is String:
-					value_string = "("+replace_rnd(parameters[p.name], rnd_offset)+")"
+					value_string = "("+parameters[p.name]+")"
+					if parameters[p.name].find("$rnd(") != -1:
+						value_string = replace_rnd(value_string, rnd_offset)
+					if parameters[p.name].find("$rndi(") != -1:
+						value_string = replace_rndi(value_string, rnd_offset)
 				else:
 					print("Error in float parameter "+p.name)
 					value_string = "0.0"
@@ -724,7 +742,10 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 					rv.add_uniform("p_%s_%s" % [ genname, p.name ], "float", parameters[p.name])
 				variables[p.name] = "p_%s_%s" % [ genname, p.name ]
 			else:
-				variables[p.name] = "("+replace_rnd(str(parameters[p.name]), rnd_offset)+")"
+				var string_value : String = str(parameters[p.name])
+				string_value = replace_rnd(string_value, rnd_offset)
+				string_value = replace_rndi(string_value, rnd_offset)
+				variables[p.name] = "("+string_value+")"
 			rnd_offset += 17
 		elif p.type == "color":
 			if generate_declarations:
@@ -779,6 +800,15 @@ func replace_input_new(input_name : String, suffix : String, parameters : String
 		var replaced : String = replace_variables(input_def.default, variables, rv, context)
 		variables.uv = old_uv
 		return replaced
+	if suffix == "texture" or suffix == "size":
+		if source.generator.has_method("get_output_attributes"):
+			var attributes = source.generator.get_output_attributes(source.output_index)
+			var attribute_name : String = suffix
+			if attribute_name == "size":
+				attribute_name = "texture_size"
+			if attributes != null and attributes is Dictionary and attributes.has(attribute_name):
+				return attributes[attribute_name]
+		return "(error: Cannot find texture for input %s)" % input_name
 	if input_def.has("function") and input_def.function:
 		var function_name : String = "o%s_input_%s" % [ str(get_instance_id()), input_def.name ]
 		if suffix == "variation":
@@ -851,16 +881,9 @@ func replace_variables(string : String, variables : Dictionary, rv : ShaderCode,
 	#print("Result: "+string+string_end)
 	return string+string_end
 
-func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
+func get_common_replace_variables(uv : String, rv : ShaderCode) -> Dictionary:
 	var genname = "o"+str(get_instance_id())
 	var parent : Node = get_parent()
-	var rv : ShaderCode = ShaderCode.new()
-	if shader_model_preprocessed == null:
-		return rv
-	var generate_declarations = ! context.has_variant(self)
-	var output = get_preprocessed_output_def(output_index)
-	if output.is_empty():
-		return rv
 	var variables : Dictionary = {}
 	variables.uv = uv
 	variables.time = "elapsed_time"
@@ -878,6 +901,19 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	else:
 		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
 	variables["node_id"] = str(get_instance_id())
+	return variables
+
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
+	var genname = "o"+str(get_instance_id())
+	var parent : Node = get_parent()
+	var rv : ShaderCode = ShaderCode.new()
+	if shader_model_preprocessed == null:
+		return rv
+	var generate_declarations = ! context.has_variant(self)
+	var output = get_preprocessed_output_def(output_index)
+	if output.is_empty():
+		return rv
+	var variables : Dictionary = get_common_replace_variables(uv, rv)
 	process_parameters(rv, variables, generate_declarations)
 	process_inputs(rv, variables, context, generate_declarations)
 	# Add includes, globals and instance code
@@ -969,8 +1005,8 @@ func do_edit(node, edit_window_scene : PackedScene) -> void:
 		var edit_window = edit_window_scene.instantiate()
 		mm_globals.main_window.add_dialog(edit_window)
 		edit_window.set_model_data(get_shader_model_for_edit())
-		edit_window.connect("node_changed",Callable(node,"update_shader_generator"))
-		edit_window.connect("popup_hide",Callable(edit_window,"queue_free"))
+		edit_window.connect("node_changed", Callable(node, "update_shader_generator"))
+		edit_window.connect("popup_hide", Callable(edit_window, "queue_free"))
 		edit_window.popup_centered()
 
 func edit(node) -> void:

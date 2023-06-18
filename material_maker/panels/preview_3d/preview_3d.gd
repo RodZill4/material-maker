@@ -70,13 +70,13 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 			menu.add_icon_item(thumbnail, "", i)
 		else:
 			menu.add_item(o.name, i)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_Model_item_selected")):
-		menu.connect("id_pressed",Callable(self,"_on_Model_item_selected"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_Model_item_selected")):
+		menu.connect("id_pressed", Callable(self, "_on_Model_item_selected"))
 
 func create_menu_environment_list(menu : PopupMenu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_Environment_item_selected")):
-		menu.connect("id_pressed",Callable(self,"_on_Environment_item_selected"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_Environment_item_selected")):
+		menu.connect("id_pressed", Callable(self, "_on_Environment_item_selected"))
 
 const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
 
@@ -87,8 +87,8 @@ func create_menu_tonemap_list(menu : PopupMenu) -> void:
 		menu.add_radio_check_item(TONEMAPS[i], i)
 		if i == tonemap_mode:
 			menu.set_item_checked(i, true)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_Tonemaps_item_selected")):
-		menu.connect("id_pressed",Callable(self,"_on_Tonemaps_item_selected"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_Tonemaps_item_selected")):
+		menu.connect("id_pressed", Callable(self, "_on_Tonemaps_item_selected"))
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
@@ -265,8 +265,8 @@ func create_menu_map(menu : PopupMenu, function : String) -> void:
 	menu.clear()
 	for i in range(5):
 		menu.add_item(str(256 << i)+"x"+str(256 << i), i)
-	if !menu.is_connected("id_pressed",Callable(self,function)):
-		menu.connect("id_pressed",Callable(self,function))
+	if !menu.is_connected("id_pressed", Callable(self, function)):
+		menu.connect("id_pressed", Callable(self, function))
 
 func create_menu_generate_normal_map(menu) -> void:
 	create_menu_map(menu, "generate_normal_map")

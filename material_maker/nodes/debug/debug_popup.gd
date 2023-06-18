@@ -7,8 +7,8 @@ const GENFUNCTIONS : Array = [ "generate_shadertoy", "generate_godot_canvasitem"
 func show_code(s) -> void:
 	src_code = s
 	_on_ShaderType_item_selected(0)
-	if !is_connected("popup_hide",Callable(self,"queue_free")):
-		connect("popup_hide",Callable(self,"queue_free"))
+	if !is_connected("popup_hide", Callable(self, "queue_free")):
+		connect("popup_hide", Callable(self, "queue_free"))
 	popup_centered()
 
 func _on_ShaderType_item_selected(index):

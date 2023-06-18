@@ -235,7 +235,7 @@ offset_left = 2.0
 offset_top = 2.0
 offset_right = 194.0
 offset_bottom = 32.0
-custom_constants/separation = 0
+theme_override_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -369,7 +369,7 @@ offset_left = -179.0
 offset_top = 3.0
 offset_right = -3.0
 offset_bottom = 122.0
-custom_constants/separation = 0
+theme_override_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -379,7 +379,7 @@ offset_left = 74.0
 offset_right = 176.0
 offset_bottom = 20.0
 size_flags_horizontal = 8
-custom_constants/separation = 2
+theme_override_constants/separation = 2
 
 [node name="Brush" type="Button" parent="VSplitContainer/HSplitContainer/Painter/Options/Buttons"]
 offset_right = 50.0

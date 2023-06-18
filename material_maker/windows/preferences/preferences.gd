@@ -65,7 +65,7 @@ func update_language_list():
 func _on_DownloadLanguage_pressed():
 	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
 	mm_globals.main_window.add_child(download_popup)
-	download_popup.connect("tree_exited",Callable(self,"_on_DownloadLanguage_closed"))
+	download_popup.connect("tree_exited", Callable(self, "_on_DownloadLanguage_closed"))
 
 func _on_DownloadLanguage_closed():
 	var locale = load("res://material_maker/locale/locale.gd").new()

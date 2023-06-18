@@ -14,7 +14,7 @@ class Token:
 	var pos_begin : int
 	var pos_end : int
 	
-	func _init(t,v,b,e):
+	func _init(t, v, b, e):
 		type = t
 		value = v
 		pos_begin = b
@@ -27,7 +27,7 @@ class StackElement:
 	var state : int
 	var token : Token
 	
-	func _init(s,t):
+	func _init(s, t):
 		state = s
 		token = t
 	

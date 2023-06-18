@@ -32,8 +32,8 @@ func update_controls() -> void:
 			var min_x = transform_point(curve.points[i-1].p).x+1
 			var max_x = transform_point(curve.points[i+1].p).x-1
 			control_point.set_constraint(min_x, max_x, -control_point.OFFSET.y, size.y-control_point.OFFSET.y)
-		control_point.connect("moved",Callable(self,"_on_ControlPoint_moved"))
-		control_point.connect("removed",Callable(self,"_on_ControlPoint_removed"))
+		control_point.connect("moved", Callable(self, "_on_ControlPoint_moved"))
+		control_point.connect("removed", Callable(self, "_on_ControlPoint_removed"))
 	emit_signal("value_changed", curve)
 
 func _on_ControlPoint_moved(index):

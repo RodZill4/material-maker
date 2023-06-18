@@ -168,7 +168,7 @@ func set_local_transform(r : float, s : float):
 
 func value_to_pos(value : Vector2, apply_parent_transform : bool = false, apply_local_transform : bool = false) -> Vector2:
 	if apply_parent_transform:
-		value = center_transform * value
+		value = center_transform * (value)
 	if apply_local_transform:
 		value = value.rotated(deg_to_rad(local_rotate))
 		value *= local_scale
@@ -180,7 +180,7 @@ func pos_to_value(pos : Vector2, apply_parent_transform : bool = false, apply_lo
 		value /= local_scale
 		value = value.rotated(-deg_to_rad(local_rotate))
 	if apply_parent_transform:
-		value = center_transform.affine_inverse() * value
+		value = center_transform.affine_inverse() * (value)
 	return value
 
 func update_shader_options() -> void:

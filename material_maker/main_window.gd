@@ -296,8 +296,8 @@ func create_menu_load_recent(menu) -> void:
 	else:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
-		if !menu.is_connected("id_pressed",Callable(self,"_on_LoadRecent_id_pressed")):
-			menu.connect("id_pressed",Callable(self,"_on_LoadRecent_id_pressed"))
+		if !menu.is_connected("id_pressed", Callable(self, "_on_LoadRecent_id_pressed")):
+			menu.connect("id_pressed", Callable(self, "_on_LoadRecent_id_pressed"))
 
 func _on_LoadRecent_id_pressed(id) -> void:
 	do_load_project(recent_files[id])
@@ -442,8 +442,8 @@ func create_menu_set_theme(menu) -> void:
 	menu.clear()
 	for t in THEMES:
 		menu.add_item(t)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_SetTheme_id_pressed")):
-		menu.connect("id_pressed",Callable(self,"_on_SetTheme_id_pressed"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_SetTheme_id_pressed")):
+		menu.connect("id_pressed", Callable(self, "_on_SetTheme_id_pressed"))
 
 func change_theme(theme_name) -> void:
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
@@ -461,8 +461,8 @@ func create_menu_show_panels(menu : PopupMenu) -> void:
 	for i in range(panels.size()):
 		menu.add_check_item(panels[i], i)
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
-	if !menu.is_connected("id_pressed",Callable(self,"_on_ShowPanels_id_pressed")):
-		menu.connect("id_pressed",Callable(self,"_on_ShowPanels_id_pressed"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_ShowPanels_id_pressed")):
+		menu.connect("id_pressed", Callable(self, "_on_ShowPanels_id_pressed"))
 
 func _on_ShowPanels_id_pressed(id) -> void:
 	var panel : String = layout.get_panel_list()[id]
@@ -475,8 +475,8 @@ func create_menu_create(menu : PopupMenu) -> void:
 	menu.size = Vector2(0, 0)
 	for i in gens.size():
 		menu.add_item(gens[i], i)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_Create_id_pressed")):
-		menu.connect("id_pressed",Callable(self,"_on_Create_id_pressed"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_Create_id_pressed")):
+		menu.connect("id_pressed", Callable(self, "_on_Create_id_pressed"))
 
 func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -514,8 +514,8 @@ func new_paint_project(obj_file_name = null) -> void:
 
 func load_project() -> void:
 	if OS.get_name() == "HTML5":
-		if ! Html5.is_connected("file_loaded",Callable(self,"on_html5_load_file")):
-			Html5.connect("file_loaded",Callable(self,"on_html5_load_file"))
+		if ! Html5.is_connected("file_loaded", Callable(self, "on_html5_load_file")):
+			Html5.connect("file_loaded", Callable(self, "on_html5_load_file"))
 		Html5.load_file(".ptex")
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
@@ -792,7 +792,7 @@ func edit_save_selection() -> void:
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
 	add_child(dialog)
-	dialog.connect("config_changed",Callable(self,"on_config_changed"))
+	dialog.connect("config_changed", Callable(self, "on_config_changed"))
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
@@ -832,8 +832,8 @@ func create_menu_add_to_library(menu, manager, function) -> void:
 		var lib = manager.get_child(i)
 		if ! lib.read_only:
 			menu.add_item(lib.library_name, i)
-	if !menu.is_connected("id_pressed",Callable(self,function)):
-		menu.connect("id_pressed",Callable(self,function))
+	if !menu.is_connected("id_pressed", Callable(self, function)):
+		menu.connect("id_pressed", Callable(self, function))
 
 func create_menu_add_selection_to_library(menu) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
@@ -888,8 +888,8 @@ func paint_project_settings():
 
 func create_menu_paint_environment(menu) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed",Callable(self,"_on_PaintEnvironment_id_pressed")):
-		menu.connect("id_pressed",Callable(self,"_on_PaintEnvironment_id_pressed"))
+	if !menu.is_connected("id_pressed", Callable(self, "_on_PaintEnvironment_id_pressed")):
+		menu.connect("id_pressed", Callable(self, "_on_PaintEnvironment_id_pressed"))
 
 func _on_PaintEnvironment_id_pressed(id) -> void:
 	var paint = get_current_project()
@@ -945,7 +945,7 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
-	about_box.connect("popup_hide",Callable(about_box,"queue_free"))
+	about_box.connect("popup_hide", Callable(about_box, "queue_free"))
 	about_box.popup_centered()
 
 # Preview

@@ -20,7 +20,7 @@ offset_left = 2.0
 offset_top = 2.0
 offset_right = -2.0
 offset_bottom = -2.0
-custom_constants/separation = 5
+theme_override_constants/separation = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }

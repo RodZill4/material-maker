@@ -36,13 +36,13 @@ func connect_controls() -> void:
 	for c in ui.get_children():
 		if c is LineEdit:
 			if c.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
-				c.connect("value_changed",Callable(self,"set_environment_value").bind( c.name ))
+				c.connect("value_changed", Callable(self, "set_environment_value").bind(c.name))
 			else:
-				c.connect("text_submitted",Callable(self,"set_environment_value").bind( c.name ))
+				c.connect("text_submitted", Callable(self, "set_environment_value").bind(c.name))
 		elif c is ColorPickerButton:
-			c.connect("color_changed",Callable(self,"set_environment_value").bind( c.name ))
+			c.connect("color_changed", Callable(self, "set_environment_value").bind(c.name))
 		elif c is CheckBox:
-			c.connect("toggled",Callable(self,"set_environment_value").bind( c.name ))
+			c.connect("toggled", Callable(self, "set_environment_value").bind(c.name))
 
 func set_environment_value(value, variable):
 	environment_manager.set_value(current_environment, variable, value)

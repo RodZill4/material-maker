@@ -31,7 +31,7 @@ func update_from_graph_edit(graph_edit) -> void:
 	update_index += 1
 	for g in item_from_gen.keys():
 		if is_instance_valid(g):
-			g.disconnect("parameter_changed",Callable(self,"on_gen_parameter_changed"))
+			g.disconnect("parameter_changed", Callable(self, "on_gen_parameter_changed"))
 	item_from_gen = {}
 	tree.set_column_expand(0, true)
 	tree.columns = preview+1
@@ -41,17 +41,17 @@ func update_from_graph_edit(graph_edit) -> void:
 	tree.clear()
 	pending_updates = {}
 	if current_graph_edit != null and is_instance_valid(current_graph_edit):
-		current_graph_edit.disconnect("view_updated",Callable(self,"on_view_updated"))
-	if current_generator != null and is_instance_valid(current_generator) and current_generator.is_connected("hierarchy_changed",Callable(self,"on_hierarchy_changed")):
-		current_generator.disconnect("hierarchy_changed",Callable(self,"on_hierarchy_changed"))
+		current_graph_edit.disconnect("view_updated", Callable(self, "on_view_updated"))
+	if current_generator != null and is_instance_valid(current_generator) and current_generator.is_connected("hierarchy_changed", Callable(self, "on_hierarchy_changed")):
+		current_generator.disconnect("hierarchy_changed", Callable(self, "on_hierarchy_changed"))
 	if graph_edit == null or graph_edit.top_generator == null or graph_edit.generator == null:
 		current_graph_edit = null
 		current_generator = null
 		return
 	current_graph_edit = graph_edit
-	current_graph_edit.connect("view_updated",Callable(self,"on_view_updated"))
+	current_graph_edit.connect("view_updated", Callable(self, "on_view_updated"))
 	current_generator = graph_edit.generator
-	current_generator.connect("hierarchy_changed",Callable(self,"on_hierarchy_changed"))
+	current_generator.connect("hierarchy_changed", Callable(self, "on_hierarchy_changed"))
 	var file_name = "PTex"
 	if graph_edit.save_path != null:
 		file_name = graph_edit.save_path.get_file()
@@ -81,7 +81,7 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, i
 		item.clear_custom_color(0)
 	item.set_metadata(0, generator)
 	item_from_gen[generator] = item
-	generator.connect("parameter_changed",Callable(self,"on_gen_parameter_changed").bind( generator ))
+	generator.connect("parameter_changed", Callable(self, "on_gen_parameter_changed").bind(generator))
 	if preview > 0 and generator.get_output_defs().size() > 0:
 		for i in range(min(preview, generator.get_output_defs().size())):
 			item.set_icon(i+1, default_texture)

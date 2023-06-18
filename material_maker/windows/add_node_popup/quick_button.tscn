@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cjcxjmoki7j0n"]
 
 [ext_resource type="Script" path="res://material_maker/windows/add_node_popup/quick_button.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://rodz_labs_logo.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="2"]
 
 [sub_resource type="Shader" id="11"]
 code = "shader_type canvas_item;

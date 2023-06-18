@@ -156,7 +156,7 @@ class BVHNode:
 			return level
 
 		var split_order := [0, 1, 2]
-		split_order.sort_custom(Callable(self,"_sort_by_extents"))
+		split_order.sort_custom(Callable(self, "_sort_by_extents"))
 
 		var left_triangles := []
 		var right_triangles := []
@@ -397,7 +397,7 @@ class BVHNode:
 
 	# All the stuff in _data and _node_data are appended and put into image.
 	func _finalize_data() -> void:
-#		var time := Time.get_ticks_msec()
+#		var time := OS.get_ticks_msec()
 		_data[0] = _node_ids.size() + DATA_HEADER_SIZE
 
 		_data += _node_data
@@ -423,7 +423,7 @@ class BVHNode:
 				))
 				i += 1
 		false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
-#		print((Time.get_ticks_msec() - time) / 1000.0)
+#		print((OS.get_ticks_msec() - time) / 1000.0)
 
 	func _sort_by_extents(a: int, b: int) -> bool:
 		return aabb.size[a] > aabb.size[b]

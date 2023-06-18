@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3]
 
-[ext_resource path="res://rodz_labs_logo.png" type="Texture2D" id=1]
+[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="1"]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type spatial;

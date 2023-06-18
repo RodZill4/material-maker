@@ -9,7 +9,7 @@ var node = null
 var param_name : String = ""
 var creating : bool = false
 
-func _init(parent):
+func _init(parent) -> void:
 	size_flags_horizontal = SIZE_EXPAND_FILL
 	size_flags_vertical = SIZE_EXPAND_FILL
 	size = parent.size

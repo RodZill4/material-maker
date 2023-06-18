@@ -19,7 +19,7 @@ class Buffer:
 	
 	const STATUS = ["Invalidated","Updating","UpdatingInvalidated","Updated"]
 	
-	func _init(n : String,o : Object = null):
+	func _init(n : String, o : Object = null):
 		name = n
 		object = o
 		dependencies = []
@@ -43,8 +43,8 @@ signal render_queue_empty
 func create_buffer(buffer_name : String, object : Object = null):
 	buffers[buffer_name] = Buffer.new(buffer_name, object)
 	buffer_invalidate(buffer_name)
-	if object is Node and not object.is_connected("tree_exiting",Callable(self,"delete_buffers_from_object")):
-		object.connect("tree_exiting",Callable(self,"delete_buffers_from_object").bind( object ))
+	if object is Node and not object.is_connected("tree_exiting", Callable(self, "delete_buffers_from_object")):
+		object.connect("tree_exiting", Callable(self, "delete_buffers_from_object").bind(object))
 
 func delete_buffer(buffer_name : String):
 	buffer_clear_dependencies(buffer_name)

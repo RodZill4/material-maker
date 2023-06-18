@@ -135,12 +135,12 @@ func update_node_parameters_grid():
 		if is_first:
 			button.disabled = true
 		else:
-			button.connect("pressed",Callable(self,"move_node_parameter").bind( pi, -1 ))
+			button.connect("pressed", Callable(self, "move_node_parameter").bind(pi, -1))
 		button = Button.new()
 		button.icon = preload("res://material_maker/icons/down.tres")
 		button.tooltip_text = "Move parameter down"
 		node_parameters_panel.add_child(button)
-		button.connect("pressed",Callable(self,"move_node_parameter").bind( pi, 1 ))
+		button.connect("pressed", Callable(self, "move_node_parameter").bind(pi, 1))
 		is_first = false
 	if button != null:
 		button.disabled = true

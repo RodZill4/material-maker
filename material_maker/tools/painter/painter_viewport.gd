@@ -1,6 +1,6 @@
 extends Node
 
-@export var shader_prefix: String = "paint" : set = set_shader_prefix
+@export var shader_prefix: String = "paint": set = set_shader_prefix
 
 
 @onready var strokepaint_viewport = $StrokePaint

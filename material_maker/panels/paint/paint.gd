@@ -143,7 +143,7 @@ func get_remote():
 func update_brush_graph():
 	if brush_graph != graph_edit.top_generator:
 		brush_graph = graph_edit.top_generator
-		brush_graph.connect("graph_changed",Callable(self,"on_brush_graph_changed"))
+		brush_graph.connect("graph_changed", Callable(self, "on_brush_graph_changed"))
 		on_brush_graph_changed()
 
 func on_brush_graph_changed() -> void:
@@ -161,7 +161,7 @@ func project_selected() -> void:
 
 func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
-	brush_node.connect("parameter_changed",Callable(self,"on_brush_changed"))
+	brush_node.connect("parameter_changed", Callable(self, "on_brush_changed"))
 	painter.set_brush_preview_material(brush_view_3d.material)
 	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
 

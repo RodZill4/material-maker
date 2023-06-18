@@ -17,38 +17,38 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	var line_edit : LineEdit = LineEdit.new()
 	line_edit.set_text(control.name)
 	grid.add_child(line_edit)
-	line_edit.connect("text_changed",Callable(self,"on_param_name_changed").bind( control.name, line_edit ))
-	line_edit.connect("text_submitted",Callable(self,"on_param_name_entered").bind( control.name, line_edit ))
-	line_edit.connect("focus_exited",Callable(self,"on_param_name_entered2").bind( control.name, line_edit ))
+	line_edit.connect("text_changed", Callable(self, "on_param_name_changed").bind(control.name, line_edit))
+	line_edit.connect("text_submitted", Callable(self, "on_param_name_entered").bind(control.name, line_edit))
+	line_edit.connect("focus_exited", Callable(self, "on_param_name_entered2").bind(control.name, line_edit))
 	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instantiate()
 	label.set_text(text)
-	label.connect("label_changed",Callable(self,"on_label_changed").bind( control.name ))
+	label.connect("label_changed", Callable(self, "on_label_changed").bind(control.name))
 	grid.add_child(label)
 	var description = preload("res://material_maker/widgets/desc_button/desc_button.tscn").instantiate()
 	description.short_description = short_description
 	description.long_description = long_description
-	description.connect("descriptions_changed",Callable(self,"_on_descriptions_changed").bind( control.name ))
+	description.connect("descriptions_changed", Callable(self, "_on_descriptions_changed").bind(control.name))
 	grid.add_child(description)
 	grid.add_child(control)
-	control.connect("mouse_entered",Callable(self,"on_enter_widget").bind( control ))
-	control.connect("mouse_exited",Callable(self,"on_exit_widget").bind( control ))
+	control.connect("mouse_entered", Callable(self, "on_enter_widget").bind(control))
+	control.connect("mouse_exited", Callable(self, "on_exit_widget").bind(control))
 	control.tooltip_text = ""
 	var button = Button.new()
 	if is_named_param:
 		button.icon = preload("res://material_maker/icons/edit.tres")
 		grid.add_child(button)
-		button.connect("pressed",Callable(self,"_on_Edit_pressed").bind( control.name ))
+		button.connect("pressed", Callable(self, "_on_Edit_pressed").bind(control.name))
 		button.tooltip_text = "Configure named parameter "+control.name
 	else:
 		button.icon = preload("res://material_maker/icons/link.tres")
 		grid.add_child(button)
-		button.connect("pressed",Callable(self,"_on_Link_pressed").bind( control.name ))
+		button.connect("pressed", Callable(self, "_on_Link_pressed").bind(control.name))
 		button.tooltip_text = "Link another parameter"
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/remove.tres")
 	button.tooltip_text = "Remove parameter"
 	grid.add_child(button)
-	button.connect("pressed",Callable(self,"remove_parameter").bind( control.name ))
+	button.connect("pressed", Callable(self, "remove_parameter").bind(control.name))
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/up.tres")
 	button.tooltip_text = "Move parameter up"
@@ -56,7 +56,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	if is_first:
 		button.disabled = true
 	else:
-		button.connect("pressed",Callable(self,"move_parameter").bind( control.name, -1 ))
+		button.connect("pressed", Callable(self, "move_parameter").bind(control.name, -1))
 	button = Button.new()
 	button.icon = preload("res://material_maker/icons/down.tres")
 	button.tooltip_text = "Move parameter down"
@@ -64,7 +64,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	if is_last:
 		button.disabled = true
 	else:
-		button.connect("pressed",Callable(self,"move_parameter").bind( control.name, 1 ))
+		button.connect("pressed", Callable(self, "move_parameter").bind(control.name, 1))
 
 func update_node() -> void:
 	# Show or hide the close button

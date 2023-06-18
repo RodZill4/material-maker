@@ -7,7 +7,7 @@ class NodeButton:
 	var texture : Texture2D
 	var modulate_texture : bool = false
 
-	func _init(t : Texture2D,m : bool = false):
+	func _init(t : Texture2D, m : bool = false):
 		hidden = false
 		texture = t
 		modulate_texture = m
@@ -151,7 +151,7 @@ func _draw() -> void:
 
 func set_generator(g) -> void:
 	super.set_generator(g)
-	g.connect("rendering_time",Callable(self,"update_rendering_time"))
+	g.connect("rendering_time", Callable(self, "update_rendering_time"))
 
 func update_rendering_time(t : int) -> void:
 	rendering_time = t
@@ -218,8 +218,8 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 					menu.add_item(tr("Paste seed"), 2)
 				add_child(menu)
 				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
-				menu.connect("popup_hide",Callable(menu,"queue_free"))
-				menu.connect("id_pressed",Callable(self,"_on_seed_menu"))
+				menu.connect("popup_hide", Callable(menu, "queue_free"))
+				menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
 				return true
 	elif b == buffer_button:
 		match event.button_index:

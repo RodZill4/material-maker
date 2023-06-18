@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d0417sp8jvp7a" path="res://material_maker/windows/about/itchio.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dntvnke4pcqqf" path="res://icon.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://bxfuae46y2fdc" path="res://material_maker/windows/about/youtube.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://rodz_labs_logo.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://d3measjdowk0x" path="res://material_maker/windows/about/facebook.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://dvniks5a8tybt" path="res://material_maker/windows/about/discord.png" id="10"]
 [ext_resource type="Texture2D" uid="uid://btvwy8odw2nmx" path="res://material_maker/windows/about/patreon.png" id="11"]

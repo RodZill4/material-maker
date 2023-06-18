@@ -13,7 +13,7 @@ func set_closed(c : bool = true):
 
 func _ready() -> void:
 	polygon = MMPolygon.new()
-	connect("resized",Callable(self,"_on_resize"))
+	connect("resized", Callable(self, "_on_resize"))
 	_on_resize()
 
 func transform_point(p : Vector2) -> Vector2:

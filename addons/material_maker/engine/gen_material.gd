@@ -192,7 +192,7 @@ class CustomOptions:
 	extends RefCounted
 
 func check_custom_script(custom_script : String) -> bool:
-	for s in [ "OS", "Directory", "File" ]:
+	for s in [ "OS", "DirAccess", "FileAccess" ]:
 		if custom_script.find(s) != -1:
 			print("Invalid custom script (found '%s')" % s)
 			return false
@@ -237,10 +237,9 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	var context : MMGenContext = MMGenContext.new()
 	var texture_regexp : RegEx = RegEx.new()
 	texture_regexp.compile("uniform\\s+sampler2D\\s+([\\w_]+).*output\\((\\d+)\\)")
-	# Generate parameter declarations
-	generate_parameter_declarations(rv)
-	# Generate functions for inputs
-	generate_input_declarations(rv, context)
+	var variables : Dictionary = get_common_replace_variables("UV", rv)
+	process_parameters(rv, variables, true)
+	process_inputs(rv, variables, context, true)
 	# Generate shader
 	var generating : bool = false
 	var gen_buffer : String = ""
@@ -248,16 +247,10 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	for l in shader_text.split("\n"):
 		if generating:
 			if l == "$end_generate":
-				var subst_code = subst(gen_buffer, context, "UV")
-				# Add global definitions
-				for d in subst_code.globals:
-					if rv.globals.find(d) == -1:
-						rv.globals.push_back(d)
-				# Add generated definitions
-				rv.defs += subst_code.defs
+				var subst_code = replace_variables(gen_buffer, variables, rv, context)
 				# Add generated code
-				var new_code : String = subst_code.code+"\n"
-				new_code += subst_code.string+"\n"
+				var new_code : String = rv.code+"\n"
+				new_code += subst_code+"\n"
 				var definitions : String = ""
 				for d in rv.globals:
 					definitions += d+"\n"
@@ -282,6 +275,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				mm_deps.create_buffer(buffer_name, self)
 			shader_code += l+"\n"
 	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
+	definitions += rv.uniforms_as_strings()
 	for d in rv.globals:
 		definitions += d+"\n"
 	definitions += rv.defs+"\n"
@@ -376,7 +370,7 @@ func preprocess_option_unreal5(s : String) -> Array:
 			d = process_option_hlsl_base(d)
 			var extracted = re.search_all(d)
 			unreal5_decls.append_array(extracted)
-	unreal5_decls.sort_custom(Callable(self,"sort_fct_longest_name"))
+	unreal5_decls.sort_custom(Callable(self, "sort_fct_longest_name"))
 	return unreal5_decls
 
 func process_option_unreal5(s : String, is_declaration : bool = false, declarations : String = "") -> String:

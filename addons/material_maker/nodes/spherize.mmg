@@ -1,0 +1,104 @@
+{
+	"generic_size": 1,
+	"name": "spherize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 1,
+		"cx": 0,
+		"cy": 0,
+		"r": 0.9
+	},
+	"seed": 0,
+	"shader_model": {
+		"code": [
+			"vec2 $(name_uv)_co = vec2($cx+0.5,$cy+0.5);",
+			"float $(name_uv)_f = dot(2.0*($uv - $(name_uv)_co),2.0*($uv - $(name_uv)_co));"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv,0.0,1.0)",
+				"label": "",
+				"longdesc": "Input image to be distorted",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Spherize",
+		"outputs": [
+			{
+				"longdesc": "Shows the distorted image",
+				"rgba": "clamp(mix($in#($(name_uv)_co-($(name_uv)_co-$uv)/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
+				"shortdesc": "Output#",
+				"type": "rgba"
+			},
+			{
+				"f": "clamp(step($(name_uv)_f,$r),0.0,1.0)",
+				"shortdesc": "Mask",
+				"type": "f"
+			},
+			{
+				"f": "clamp($r-$(name_uv)_f,0.0,1.0)",
+				"shortdesc": "Falloff",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.9,
+				"label": "2:Radius",
+				"longdesc": "Sphere radius",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1,
+				"label": "Amount",
+				"longdesc": "Distortion amount",
+				"max": 1,
+				"min": 0,
+				"name": "a",
+				"shortdesc": "Amount",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "Location of the sphere center",
+				"max": 1,
+				"min": -1,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "Location of the sphere center",
+				"max": 1,
+				"min": -1,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Distorts an image as if it was wrapped around a sphere"
+	},
+	"type": "shader"
+}

@@ -1,6 +1,6 @@
 extends Control
 
-var value = null : set = set_value
+var value = null: set = set_value
 
 
 signal updated(curve, old_value)

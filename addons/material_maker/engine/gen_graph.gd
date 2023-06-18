@@ -528,13 +528,13 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 	for c in get_children():
 		child_names.append([c.name, c.get_type()])
 	
-	child_names.sort_custom(Callable(self,"compare_name_and_type"))
+	child_names.sort_custom(Callable(self, "compare_name_and_type"))
 	
 	var other_child_names = []
 	for c in graph.get_children():
 		other_child_names.append([c.name, c.get_type()])
 	
-	other_child_names.sort_custom(Callable(self,"compare_name_and_type"))
+	other_child_names.sort_custom(Callable(self, "compare_name_and_type"))
 	
 	var added = []
 	var removed = []
@@ -600,9 +600,9 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 	
 func diff_connections(graph : MMGenGraph):
 	var cons = [] + connections
-	cons.sort_custom(Callable(self,"compare_connection"))
+	cons.sort_custom(Callable(self, "compare_connection"))
 	var other_cons = [] + graph.connections
-	other_cons.sort_custom(Callable(self,"compare_connection"))
+	other_cons.sort_custom(Callable(self, "compare_connection"))
 	
 	var new_connections : Array = []
 	var added_connections : Array = []

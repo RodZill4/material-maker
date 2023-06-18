@@ -42,7 +42,8 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 			source = MMGenBase.get_default_generated_shader()
 		var material = plane.get_surface_override_material(0)
 		var variables : Dictionary = {}
-		variables.GENERATED_GLOBALS = "\n".join(PackedStringArray(source.globals))
+		variables.GENERATED_GLOBALS = source.uniforms_as_strings()
+		variables.GENERATED_GLOBALS += "\n".join(PackedStringArray(source.globals))
 		variables.GENERATED_INSTANCE = source.defs
 		variables.GENERATED_CODE = source.code
 		variables.GENERATED_OUTPUT = source.output_values.sdf3d

@@ -54,14 +54,14 @@ func _on_EnumValues_item_selected(id) -> void:
 		var v = enum_values[enum_current]
 		add_child(dialog)
 		dialog.set_value(v.name, v.value)
-		dialog.connect("ok",Callable(self,"update_enum_value").bind( enum_current ))
-		dialog.connect("popup_hide",Callable(dialog,"queue_free"))
+		dialog.connect("ok", Callable(self, "update_enum_value").bind(enum_current))
+		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 	elif id == ENUM_ADD:
 		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instantiate()
 		add_child(dialog)
-		dialog.connect("ok",Callable(self,"update_enum_value").bind( -1 ))
-		dialog.connect("popup_hide",Callable(dialog,"queue_free"))
+		dialog.connect("ok", Callable(self, "update_enum_value").bind(-1))
+		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 	elif id == ENUM_REMOVE:
 		enum_values.remove_at(enum_current)

@@ -33,10 +33,10 @@ offset_bottom = 457.0
 clip_contents = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/offset_right = 4
-custom_constants/offset_top = 4
-custom_constants/offset_left = 4
-custom_constants/offset_bottom = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="PolygonEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource( 1 )]
 anchor_right = 0.0

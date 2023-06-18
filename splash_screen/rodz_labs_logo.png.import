@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d2aeyi0d5c0rw"
-path.s3tc="res://.godot/imported/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.ctex"
+path.s3tc="res://.godot/imported/rodz_labs_logo.png-2117003b7c24fdd5d40fef8b2c3e6b43.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://rodz_labs_logo.png"
-dest_files=["res://.godot/imported/rodz_labs_logo.png-c7a6eb91a5288e0860988f40f44de55a.s3tc.ctex"]
+source_file="res://splash_screen/rodz_labs_logo.png"
+dest_files=["res://.godot/imported/rodz_labs_logo.png-2117003b7c24fdd5d40fef8b2c3e6b43.s3tc.ctex"]
 
 [params]
 

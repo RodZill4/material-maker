@@ -10,7 +10,7 @@ func _run():
 func optimize_theme(theme_path):
 	# change this to share icons between themes
 	var icon_dir = theme_path.get_basename()
-	Directory.new().make_dir(icon_dir)
+	DirAccess.new().make_dir(icon_dir)
 	var theme : Theme = load(theme_path)
 	var new_theme : Theme = Theme.new()
 	for stylebox_name in theme.get_stylebox_type_list():

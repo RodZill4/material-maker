@@ -192,6 +192,6 @@ func edit(node) -> void:
 		node.get_parent().add_child(edit_window)
 		edit_window.set_node_parameter_defs(node_parameters)
 		edit_window.set_sdf_scene(scene)
-		edit_window.connect("node_changed",Callable(node,"update_sdf_generator"))
-		edit_window.connect("editor_window_closed",Callable(node,"finalize_generator_update"))
+		edit_window.connect("node_changed", Callable(node, "update_sdf_generator"))
+		edit_window.connect("editor_window_closed", Callable(node, "finalize_generator_update"))
 		edit_window.popup_centered()

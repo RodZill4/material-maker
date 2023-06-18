@@ -13,11 +13,11 @@ func _ready():
 
 func set_generator(g):
 	if g != generator:
-		if is_instance_valid(generator) and generator.is_connected("parameter_changed",Callable(self,"on_parameter_changed")):
-			generator.disconnect("parameter_changed",Callable(self,"on_parameter_changed"))
+		if is_instance_valid(generator) and generator.is_connected("parameter_changed", Callable(self, "on_parameter_changed")):
+			generator.disconnect("parameter_changed", Callable(self, "on_parameter_changed"))
 		generator = g
 		if generator != null:
-			generator.connect("parameter_changed",Callable(self,"on_parameter_changed"))
+			generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
 	for c in parameters.get_children():
 		parameters.remove_child(c)
 		c.free()

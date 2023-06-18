@@ -71,9 +71,9 @@ offset_bottom = 14.0
 offset_left = 815.0
 offset_right = 864.0
 offset_bottom = 14.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_colors/font_outline_modulate = Color( 1, 1, 1, 1 )
-custom_colors/font_color_shadow = Color( 1, 1, 1, 1 )
+theme_override_colors/font_color = Color( 0, 0, 0, 1 )
+theme_override_colors/font_outline_color = Color( 1, 1, 1, 1 )
+theme_override_colors/font_shadow_color = Color( 1, 1, 1, 1 )
 text = "Custom"
 __meta__ = {
 "_edit_use_anchors_": false

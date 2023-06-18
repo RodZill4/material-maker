@@ -2,14 +2,14 @@ extends Button
 class_name FilePickerButton
 
 var mode = FileDialog.FILE_MODE_OPEN_FILE
-var path : String = "" : set = set_path
+var path : String = "": set = set_path
 var filters : PackedStringArray = PackedStringArray()
 
 signal file_selected(f)
 
 func _ready() -> void:
-	if ! is_connected("pressed",Callable(self,"_on_Control_pressed")):
-		connect("pressed",Callable(self,"_on_Control_pressed"))
+	if ! is_connected("pressed", Callable(self, "_on_Control_pressed")):
+		connect("pressed", Callable(self, "_on_Control_pressed"))
 
 func set_mode(m):
 	mode = m

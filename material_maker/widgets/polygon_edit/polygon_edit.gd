@@ -1,7 +1,7 @@
 extends Control
 
-@export var closed : bool = true : set = set_closed
-var value = null : set = set_value
+@export var closed : bool = true: set = set_closed
+var value = null: set = set_value
 
 
 signal updated(polygon, old_value)

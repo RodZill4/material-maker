@@ -17,7 +17,7 @@ script = ExtResource( 1 )
 [node name="Panel" type="Panel" parent="."]
 offset_right = 632.0
 offset_bottom = 49.0
-custom_styles/panel = SubResource( 1 )
+theme_override_styles/panel = SubResource( 1 )
 
 [node name="Control" parent="Panel" instance=ExtResource( 2 )]
 anchor_right = 1.0

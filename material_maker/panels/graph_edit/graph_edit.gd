@@ -6,7 +6,7 @@ class Preview:
 	var generator
 	var output_index : int
 	
-	func _init(g,i : int = 0):
+	func _init(g, i : int = 0):
 		generator = g
 		output_index = i
 
@@ -16,7 +16,7 @@ class Preview:
 
 var node_factory = null
 
-var save_path = null : set = set_save_path
+var save_path = null: set = set_save_path
 var need_save : bool = false
 var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
@@ -52,6 +52,7 @@ func _ready() -> void:
 
 func _exit_tree():
 	save_config()
+	remove_crash_recovery_file()
 
 func load_config():
 	if mm_globals.has_config("graphedit_use_snap"):
@@ -241,7 +242,7 @@ func offset_from_global_position(global_pos) -> Vector2:
 func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
-	node.connect("close_request",Callable(self,"remove_node").bind( node ))
+	node.connect("close_request", Callable(self, "remove_node").bind(node))
 
 func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
 	var from_node : MMGraphNodeMinimal = get_node(from)
@@ -426,11 +427,11 @@ func center_view() -> void:
 
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
-		generator.disconnect("connections_changed",Callable(self,"on_connections_changed"))
+		generator.disconnect("connections_changed", Callable(self, "on_connections_changed"))
 	clear_view()
 	generator = g
 	if generator != null:
-		generator.connect("connections_changed",Callable(self,"on_connections_changed"))
+		generator.connect("connections_changed", Callable(self, "on_connections_changed"))
 	update_graph(generator.get_children(), generator.connections)
 	subgraph_ui.visible = generator != top_generator
 	subgraph_ui.get_node("Label").text = generator.label
@@ -556,7 +557,7 @@ func load_file(filename) -> bool:
 		add_child(dialog)
 		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
-		dialog.connect("popup_hide",Callable(dialog,"queue_free"))
+		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false
 
@@ -807,8 +808,8 @@ func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instantiate()
 	add_child(graph_tree)
 	graph_tree.init("Top", top_generator)
-	graph_tree.connect("item_icon_double_clicked",Callable(self,"edit_subgraph"))
-	graph_tree.connect("popup_hide",Callable(graph_tree,"queue_free"))
+	graph_tree.connect("item_icon_double_clicked", Callable(self, "edit_subgraph"))
+	graph_tree.connect("popup_hide", Callable(graph_tree, "queue_free"))
 	graph_tree.popup_centered()
 
 func edit_subgraph(g : MMGenGraph) -> void:

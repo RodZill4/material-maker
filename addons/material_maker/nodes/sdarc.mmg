@@ -22,7 +22,7 @@
 			"\tp *= mat2(vec2(sca.x,sca.y),vec2(-sca.y,sca.x));",
 			"\tp.x = abs(p.x);",
 			"\tfloat k = (scb.y*p.x>scb.x*p.y) ? dot(p.xy,scb) : length(p.xy);",
-			"\treturn sqrt( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;",
+			"\treturn sqrt( max(0.0, dot(p,p) + ra*ra - 2.0*ra*k) ) - rb;",
 			"}",
 			""
 		],
