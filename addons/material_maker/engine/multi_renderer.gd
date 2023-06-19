@@ -24,8 +24,14 @@ signal free_rendering_device
 
 
 func _ready() -> void:
-	var file = FileAccess.open("res://addons/material_maker/common.gdshader", FileAccess.READ)
-	common_shader = file.get_as_text()
+	#var file = FileAccess.open("res://addons/material_maker/common.gdshader", FileAccess.READ)
+	common_shader = "varying float elapsed_time;
+
+void vertex() {
+	elapsed_time = TIME;
+}
+"
+	common_shader += preload("res://addons/material_maker/shader_functions.tres").text
 	for i in total_renderers:
 		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instantiate()
 		add_child(renderer)

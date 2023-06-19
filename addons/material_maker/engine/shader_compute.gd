@@ -96,7 +96,7 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	var src : RDShaderSource = RDShaderSource.new()
 	src.source_compute = shader_source
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
-	print("Compiling shader")
+	#print("Compiling shader")
 	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
 	if shader.is_valid():
 		rd.free_rid(shader)
@@ -107,11 +107,9 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 			print("%4d: %s" % [ ln, l ])
 		print(spirv.compile_error_compute)
 		shader = RID()
-		print(self)
-		print(shader)
 	else:
 		shader = rd.shader_create_from_spirv(spirv)
-		print("Done")
+		#print("Done")
 	mm_renderer.release_rendering_device(self)
 
 func get_parameters() -> Dictionary:
@@ -145,7 +143,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 	if ! shader.is_valid():
 		render_time = 0
 		return false
-	var rids : Array[RID] = []
+	var rids : Dictionary = {}
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	
 	print("Preparing render")
@@ -168,8 +166,8 @@ func render(texture : ImageTexture, size : int) -> bool:
 	output_tex_uniform.binding = 0
 	output_tex_uniform.add_id(output_tex)
 	var uniform_set_0 : RID = rd.uniform_set_create([output_tex_uniform], shader, 0)
-	rids.append(uniform_set_0)
-	rids.append(output_tex)
+	rids[uniform_set_0] = "uniform_set_0"
+	rids[uniform_set_0] = "output_tex"
 	
 	var uniform_set_1 : RID = RID()
 	if parameter_values.size() > 0:
@@ -179,8 +177,8 @@ func render(texture : ImageTexture, size : int) -> bool:
 		parameters_uniform.binding = 0
 		parameters_uniform.add_id(parameters_buffer)
 		uniform_set_1 = rd.uniform_set_create([parameters_uniform], shader, 1)
-		rids.append(uniform_set_1)
-		rids.append(parameters_buffer)
+		rids[uniform_set_1] = "uniform_set_1"
+		rids[parameters_buffer] = "parameters_buffer"
 	
 	var uniform_set_2 = RID()
 	if !textures.is_empty():
@@ -189,7 +187,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 		sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
 		sampler_state.mip_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
 		var sampler : RID = rd.sampler_create(sampler_state)
-		rids.append(sampler)
+		rids[sampler] = "sampler"
 		var sampler_uniform_array : Array = []
 		for i in textures.size():
 			var t : ImageTexture = textures[i]
@@ -216,7 +214,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 			fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
 			view = RDTextureView.new()
 			var tex : RID = rd.texture_create(fmt, view, [image.get_data()])
-			rids.append(tex)
+			rids[tex] = "tex"
 			var sampler_uniform : RDUniform = RDUniform.new()
 			sampler_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
 			sampler_uniform.binding = i
@@ -224,10 +222,10 @@ func render(texture : ImageTexture, size : int) -> bool:
 			sampler_uniform.add_id(tex)
 			sampler_uniform_array.append(sampler_uniform)
 		uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
-		rids.append(uniform_set_2)
+		rids[uniform_set_2] = "uniform_set_2"
 	
-	var chunk_count : int = max(1, size*size/(2048*2048))
-	var chunk_height : int = size/chunk_count
+	var chunk_count : int = max(1, size*size/(512*512))
+	var chunk_height : int = max(1, size/chunk_count)
 	
 	var y : int = 0
 	while y < size:
@@ -237,7 +235,6 @@ func render(texture : ImageTexture, size : int) -> bool:
 		var pipeline : RID = rd.compute_pipeline_create(shader)
 		if !pipeline.is_valid():
 			print("Cannot create pipeline")
-		rids.append(pipeline)
 		var compute_list := rd.compute_list_begin()
 		rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
@@ -261,12 +258,13 @@ func render(texture : ImageTexture, size : int) -> bool:
 		rd.compute_list_dispatch(compute_list, size, h, 1)
 		rd.compute_list_end()
 		#print("Rendering "+str(self))
-		await mm_renderer.get_tree().process_frame
 		rd.submit()
+		await mm_renderer.get_tree().process_frame
 		rd.sync()
 		
 		rd.free_rid(uniform_set_3)
 		rd.free_rid(loop_parameters_buffer)
+		rd.free_rid(pipeline)
 		
 		#print("End rendering %d-%d (%dms)" % [ y, y+h, render_time ])
 		
@@ -275,9 +273,12 @@ func render(texture : ImageTexture, size : int) -> bool:
 	var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
 	var image : Image = Image.create_from_data(size, size, false, TEXTURE_TYPE[texture_type].image_format, byte_data)
 	texture.set_image(image)
-	for r in rids:
+	for r in rids.keys():
 		if r.is_valid():
+			print("Freeing %s: %s" % [ str(r), rids[r] ])
 			rd.free_rid(r)
+		else:
+			print("Bad rid for "+rids[r])
 	
 	render_time = Time.get_ticks_msec() - start_time
 	

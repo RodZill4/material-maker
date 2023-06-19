@@ -15,7 +15,7 @@ config/description="An open source, extensible procedural material authoring too
 run/main_scene="res://splash_screen/splash_screen.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
-config/features=PackedStringArray("4.0")
+config/features=PackedStringArray("4.1")
 boot_splash/bg_color=Color(0.0901961, 0.0941176, 0.141176, 0)
 boot_splash/show_image=false
 config/icon="res://icon.png"
@@ -40,9 +40,9 @@ Html5="*res://material_maker/html5.gd"
 
 [debug]
 
-gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_cast=true
 gdscript/warnings/unsafe_call_argument=true
+gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unused_class_variable=true
 
 [display]

@@ -12,7 +12,9 @@ on:
         default: 'false'
 
 env:
-  GODOT_VERSION: 4.0.3
+  GODOT_VERSION: 4.1
+  GODOT_SUB: beta2
+  GODOT_VERSION_DOWNLOAD_DIR: 4.1/beta2
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
@@ -29,10 +31,10 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
-          unzip Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip
-          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-          unzip -a Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64.zip
+          unzip Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64.zip
+          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
@@ -56,12 +58,12 @@ jobs:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
         run: |
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
         run: |
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
-          ./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
@@ -142,10 +144,10 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Download and extract Godot and export templates 💾
         run: |
-          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_macos.universal.zip
-          unzip -a Godot_v${GODOT_VERSION}-stable_macos.universal.zip
-          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz
-          unzip -a Godot_v${GODOT_VERSION}-stable_export_templates.tpz
+          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
+          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mkdir -v -p "/Users/runner/Library/Application Support/Godot/export_templates/${GODOT_VERSION}.stable"
           mv ./templates/* "/Users/runner/Library/Application Support/Godot/export_templates/${GODOT_VERSION}.stable"
       - name: Mac Build 🔧
