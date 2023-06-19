@@ -10,14 +10,15 @@ const BACKGROUNDS :Array[Dictionary] = [
 	{ title="Lace Material", author="Tarox", type="image", file="res://splash_screen/splash_bg_0.png" },
 	{ title="Golden Tiles", author="PixelMuncher", type="image", file="res://splash_screen/golden_tiles.png" },
 	{ title="Spiral Trails", author="DroppedBeat", type="shader", file="res://splash_screen/spiral_trails.tres" },
-	{ title="Matrix Rain", author="DroppedBeat", type="shader", file="res://splash_screen/matrix_rain.tres" }
+	{ title="Matrix Rain", author="DroppedBeat", type="shader", file="res://splash_screen/matrix_rain.tres" },
+	{ title="Terminator Ball", author="Paulo Falcao", type="shader", file="res://splash_screen/terminator_ball.tres" }
 ]
 
 
 func _enter_tree():
 	randomize()
 	var background_index : int = randi() % BACKGROUNDS.size()
-	#background_index = 3
+	#background_index = 4
 	var background : Dictionary = BACKGROUNDS[background_index]
 	match background.type:
 		"image":
