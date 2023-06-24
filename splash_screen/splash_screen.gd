@@ -7,23 +7,29 @@ var tween : Tween
 @onready var progress_bar = $SplashScreen/TextureRect/ProgressBar
 
 const BACKGROUNDS :Array[Dictionary] = [
-	{ title="Lace Material", author="Tarox", type="image", file="res://splash_screen/splash_bg_0.png" },
-	{ title="Golden Tiles", author="PixelMuncher", type="image", file="res://splash_screen/golden_tiles.png" },
-	{ title="Spiral Trails", author="DroppedBeat", type="shader", file="res://splash_screen/spiral_trails.tres" },
-	{ title="Matrix Rain", author="DroppedBeat", type="shader", file="res://splash_screen/matrix_rain.tres" },
-	{ title="Terminator Ball", author="Paulo Falcao", type="shader", file="res://splash_screen/terminator_ball.tres" }
+	{ title="Lace Material", author="Tarox", file="res://splash_screen/tarox_lace_material.png" },
+	{ title="Golden Tiles", author="PixelMuncher", file="res://splash_screen/pixelmuncher_golden_tiles.png" },
+	{ title="Spiral Trails", author="DroppedBeat", file="res://splash_screen/droppedbeat_spiral_trails.tres" },
+	{ title="Matrix Rain", author="DroppedBeat", file="res://splash_screen/droppedbeat_matrix_rain.tres" },
+	{ title="Procedural Material", author="DroppedBeat", file="res://splash_screen/droppedbeat_procedural_material.png" },
+	{ title="Vending Machines", author="DroppedBeat", file="res://splash_screen/droppedbeat_vending_machines.png" },
+	{ title="Terminator Ball", author="Paulo Falcao", file="res://splash_screen/paulo_falcao_terminator_ball.tres" },
+	{ title="Fractal Octahedron", author="Paulo Falcao", file="res://splash_screen/paulo_falcao_fractal_octahedron.tres" },
+	{ title="Dirty Tiles", author="cybereality", file="res://splash_screen/cybereality_dirty_tiles.png" },
+	{ title="Future Visions", author="cybereality", file="res://splash_screen/cybereality_future_visions.png" },
+	{ title="Brutalism", author="cybereality", file="res://splash_screen/cybereality_brutalism.png" }
 ]
 
 
 func _enter_tree():
 	randomize()
 	var background_index : int = randi() % BACKGROUNDS.size()
-	#background_index = 4
+	#background_index = 10
 	var background : Dictionary = BACKGROUNDS[background_index]
-	match background.type:
-		"image":
+	match background.file.get_extension():
+		"png":
 			$SplashScreen.texture = load(background.file)
-		"shader":
+		"tres":
 			$SplashScreen.material = load(background.file)
 	%Title.text = background.title
 	%Author.text = background.author

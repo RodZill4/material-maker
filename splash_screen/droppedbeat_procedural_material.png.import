@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csb6p3s82eter"
-path="res://.godot/imported/splash_bg_0.png-7cccb8ea842bd615ca3f79324b042d3f.ctex"
+uid="uid://dyvt5cu55bmcx"
+path="res://.godot/imported/droppedbeat_procedural_material.png-d37add0bdcc232abc8fd87e6a14ab35c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/splash_bg_0.png"
-dest_files=["res://.godot/imported/splash_bg_0.png-7cccb8ea842bd615ca3f79324b042d3f.ctex"]
+source_file="res://splash_screen/droppedbeat_procedural_material.png"
+dest_files=["res://.godot/imported/droppedbeat_procedural_material.png-d37add0bdcc232abc8fd87e6a14ab35c.ctex"]
 
 [params]
 

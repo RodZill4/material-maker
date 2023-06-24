@@ -1,16 +1,16 @@
 [gd_scene load_steps=8 format=3 uid="uid://bq7jj2aydbqug"]
 
 [ext_resource type="Script" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
-[ext_resource type="Texture2D" uid="uid://dajak2ajlrhbw" path="res://splash_screen/golden_tiles.png" id="2_lyj3x"]
+[ext_resource type="Texture2D" uid="uid://dajak2ajlrhbw" path="res://splash_screen/pixelmuncher_golden_tiles.png" id="2_bht0p"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
 [ext_resource type="FontFile" uid="uid://dttdyavpec18b" path="res://material_maker/fonts/vegur_regular.otf" id="3_m0b76"]
-[ext_resource type="Shader" path="res://splash_screen/splash_screen.gdshader" id="5_nfwi7"]
+[ext_resource type="Shader" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4lwu"]
 bg_color = Color(0.509804, 0.584314, 1, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dfnby"]
-shader = ExtResource("5_nfwi7")
+shader = ExtResource("5_xhfa4")
 
 [node name="Container" type="MarginContainer"]
 custom_minimum_size = Vector2(760, 430)
@@ -22,7 +22,7 @@ script = ExtResource("1_q7nii")
 clip_contents = true
 custom_minimum_size = Vector2(760, 430)
 layout_mode = 2
-texture = ExtResource("2_lyj3x")
+texture = ExtResource("2_bht0p")
 expand_mode = 1
 stretch_mode = 1
 
@@ -36,9 +36,9 @@ texture = ExtResource("2_ryhtq")
 [node name="MM" type="Label" parent="SplashScreen/TextureRect"]
 layout_mode = 0
 offset_left = 25.0
-offset_top = 7.0
+offset_top = 21.0
 offset_right = 352.0
-offset_bottom = 76.0
+offset_bottom = 90.0
 theme_override_fonts/font = ExtResource("3_m0b76")
 theme_override_font_sizes/font_size = 54
 text = "Material Maker"

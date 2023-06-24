@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dajak2ajlrhbw"
-path="res://.godot/imported/golden_tiles.png-571ff26ef2dde3f51ed06915d43e1848.ctex"
+uid="uid://d1e70us7xu5va"
+path="res://.godot/imported/droppedbeat_vending_machines.png-eea6ff61dee4cf66565fcb9925c11187.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/golden_tiles.png"
-dest_files=["res://.godot/imported/golden_tiles.png-571ff26ef2dde3f51ed06915d43e1848.ctex"]
+source_file="res://splash_screen/droppedbeat_vending_machines.png"
+dest_files=["res://.godot/imported/droppedbeat_vending_machines.png-eea6ff61dee4cf66565fcb9925c11187.ctex"]
 
 [params]
 
