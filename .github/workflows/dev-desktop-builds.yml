@@ -13,10 +13,10 @@ on:
 
 env:
   GODOT_VERSION: 4.1
-  GODOT_SUB: beta2
-  GODOT_VERSION_DOWNLOAD_DIR: 4.1/beta2
+  GODOT_SUB: beta3
+  GODOT_VERSION_DOWNLOAD_DIR: 4.1/beta3
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_4a1
+  MM_RELEASE: 1_4a2
 
 jobs:
   export_windows_linux:
