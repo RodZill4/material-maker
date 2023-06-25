@@ -54,7 +54,9 @@ func set_parameter(n : String, v) -> void:
 	if n == "image":
 		filetime = get_filetime(v)
 		var image : Image = Image.load_from_file(v)
-		texture.set_image(image)
+		if image != null:
+			var image_texture : ImageTexture = ImageTexture.create_from_image(image)
+			texture.set_texture(image_texture)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 
 func _on_timeout() -> void:
@@ -64,7 +66,8 @@ func _on_timeout() -> void:
 		filetime = new_filetime
 		var image : Image = Image.new()
 		image.load(file_path)
-		texture.set_image(image)
+		var image_texture : ImageTexture = ImageTexture.create_from_image(image)
+		texture.set_texture(image_texture)
 		super.set_parameter("image", file_path)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 

@@ -25,4 +25,7 @@ func get_parameters() -> Dictionary:
 	return rv
 
 func set_parameter(name : String, value):
-	material.set_shader_parameter(name, value)
+	if value is MMTexture:
+		material.set_shader_parameter(name, value.get_texture())
+	else:
+		material.set_shader_parameter(name, value)

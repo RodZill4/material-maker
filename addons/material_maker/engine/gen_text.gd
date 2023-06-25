@@ -59,8 +59,10 @@ func update_buffer() -> void:
 		while update_again:
 			update_again = false
 			renderer = await renderer.render_text(self, get_parameter("text"), get_parameter("font"), int(calculate_float_param("font_size", 64)), calculate_float_param("x"), calculate_float_param("y"), get_parameter("center"))
-		renderer.copy_to_texture(texture)
+		var image_texture : ImageTexture = ImageTexture.new()
+		renderer.copy_to_texture(image_texture)
 		renderer.release(self)
+		texture.set_texture(image_texture)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 		updating = false
 

@@ -18,7 +18,7 @@ var current_iteration : int = 0
 var buffer_names : Array
 var iteration_param_name : String
 var used_named_parameters : Array = []
-var pending_textures = [[], []]
+
 
 func _init():
 	#texture.flags = Texture2D.FLAG_REPEAT
@@ -171,7 +171,12 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
-	var previous_hash_value : int = 0 if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
+	var previous_hash_value : int = 0 # if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
+	if autostop and current_iteration > 0:
+		var image_texture : ImageTexture = await texture.get_texture()
+		var image = image_texture.get_image()
+		if image != null:
+			previous_hash_value = hash(image.get_data())
 	
 	var time = Time.get_ticks_msec()
 	var size = pow(2, get_parameter("size"))
@@ -192,7 +197,12 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	#todo texture.flags = 0
 	
 	# Calculate iteration index
-	var hash_value : int = 1 if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
+	var hash_value : int = 1 # if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
+	if autostop and current_iteration > 0:
+		var image_texture : ImageTexture = await texture.get_texture()
+		var image = image_texture.get_image()
+		if image != null:
+			hash_value = hash(image.get_data())
 	if autostop and hash_value == previous_hash_value:
 		set_current_iteration(iterations+1)
 	else:

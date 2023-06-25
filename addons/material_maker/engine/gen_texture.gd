@@ -6,7 +6,7 @@ class_name MMGenTexture
 # Base class for texture generators that provide a texture as output
 
 
-var texture : ImageTexture = ImageTexture.new()
+var texture : MMTexture = MMTexture.new()
 
 
 func get_output_defs(_show_hidden : bool = false) -> Array:

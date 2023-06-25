@@ -2,13 +2,33 @@ extends MMShaderBase
 class_name MMShaderCompute
 
 
+class Parameter:
+	var name : String
+	var type : String
+	var offset : int
+	var size : int
+	var value
+	
+	func _init(n : String, t : String, v):
+		name = n
+		type = t
+		offset = 0
+		match type:
+			"float":
+				size = 4
+			"vec4":
+				size = 16
+			_:
+				size = 0
+
+
 var shader_source : String
 var shader : RID
 var texture_type : int
 var parameters : Dictionary
 var parameter_values : PackedByteArray
 var texture_indexes : Dictionary
-var textures : Array[ImageTexture]
+var textures : Array[MMTexture]
 
 var render_time : int = 0
 
@@ -18,6 +38,7 @@ const TEXTURE_TYPE : Array[Dictionary] = [
 	{ decl="r32f", data_format=RenderingDevice.DATA_FORMAT_R32_SFLOAT, image_format=Image.FORMAT_RF },
 	{ decl="rgba32f", data_format=RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, image_format=Image.FORMAT_RGBAF }
 ]
+
 
 
 func _init():
@@ -80,12 +101,14 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	shader_source += "};\n"
 	shader_source += preload("res://addons/material_maker/shader_functions.tres").text
 	shader_source += "\n"
+	shader_source += "const float seed_variation = 0.0;\n"
+	shader_source += "\n"
 	shader_source += "\n".join(shader_code.globals)
 	shader_source += "\n"
 	if shader_code.defs != "":
 		shader_source += shader_code.defs
 	shader_source += "void main() {\n"
-	shader_source += "\tfloat _seed_variation_ = 0.0;\n"
+	shader_source += "\tfloat _seed_variation_ = seed_variation;\n"
 	shader_source += "\tvec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);\n"
 	shader_source += "\tvec2 uv = pixel/imageSize(OUTPUT_TEXTURE);\n"
 	if shader_code.code != "":
@@ -95,8 +118,9 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	shader_source += "}\n"
 	var src : RDShaderSource = RDShaderSource.new()
 	src.source_compute = shader_source
+	print("Getting rendering device")
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
-	#print("Compiling shader")
+	print("Compiling shader")
 	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
 	if shader.is_valid():
 		rd.free_rid(shader)
@@ -109,7 +133,6 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 		shader = RID()
 	else:
 		shader = rd.shader_create_from_spirv(spirv)
-		#print("Done")
 	mm_renderer.release_rendering_device(self)
 
 func get_parameters() -> Dictionary:
@@ -139,9 +162,10 @@ func set_parameter(name : String, value) -> void:
 				return
 	print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, p.type ])
 
-func render(texture : ImageTexture, size : int) -> bool:
+func render(texture : MMTexture, size : int) -> bool:
 	if ! shader.is_valid():
 		render_time = 0
+		print("shader is invalid")
 		return false
 	var rids : Dictionary = {}
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
@@ -152,11 +176,11 @@ func render(texture : ImageTexture, size : int) -> bool:
 	
 	print("Preparing target texture")
 	
-	var fmt := RDTextureFormat.new()
+	var fmt : RDTextureFormat = RDTextureFormat.new()
 	fmt.width = size
 	fmt.height = size
 	fmt.format = TEXTURE_TYPE[texture_type].data_format
-	fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
 	var view : RDTextureView = RDTextureView.new()
 	
@@ -190,31 +214,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 		rids[sampler] = "sampler"
 		var sampler_uniform_array : Array = []
 		for i in textures.size():
-			var t : ImageTexture = textures[i]
-			var image : Image = t.get_image()
-			if image == null:
-				print("No image for texture %s" % str(t))
-				image = Image.create(1, 1, false, Image.FORMAT_RF)
-			fmt = RDTextureFormat.new()
-			fmt.width = image.get_width()
-			fmt.height = image.get_height()
-			match image.get_format():
-				Image.FORMAT_RF:
-					fmt.format = RenderingDevice.DATA_FORMAT_R32_SFLOAT
-				Image.FORMAT_RGBAF:
-					fmt.format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
-				Image.FORMAT_RH:
-					fmt.format = RenderingDevice.DATA_FORMAT_R16_SFLOAT
-				Image.FORMAT_RGBAH:
-					fmt.format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
-				Image.FORMAT_RGBA8:
-					fmt.format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
-				_:
-					print("Unsupported texture format "+str(image.get_format()))
-			fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
-			view = RDTextureView.new()
-			var tex : RID = rd.texture_create(fmt, view, [image.get_data()])
-			rids[tex] = "tex"
+			var tex : RID = textures[i].get_texture_rid(rd)
 			var sampler_uniform : RDUniform = RDUniform.new()
 			sampler_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
 			sampler_uniform.binding = i
@@ -224,7 +224,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 		uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
 		rids[uniform_set_2] = "uniform_set_2"
 	
-	var chunk_count : int = max(1, size*size/(512*512))
+	var chunk_count : int = max(1, size*size/(2048*2048))
 	var chunk_height : int = max(1, size/chunk_count)
 	
 	var y : int = 0
@@ -251,7 +251,7 @@ func render(texture : ImageTexture, size : int) -> bool:
 		loop_parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 		loop_parameters_uniform.binding = 0
 		loop_parameters_uniform.add_id(loop_parameters_buffer)
-		var uniform_set_3 : RID = rd.uniform_set_create([loop_parameters_uniform], shader, 1)
+		var uniform_set_3 : RID = rd.uniform_set_create([loop_parameters_uniform], shader, 3)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
 		
 		#print("Dispatching compute list")
@@ -270,9 +270,11 @@ func render(texture : ImageTexture, size : int) -> bool:
 		
 		y += h
 	
-	var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
-	var image : Image = Image.create_from_data(size, size, false, TEXTURE_TYPE[texture_type].image_format, byte_data)
-	texture.set_image(image)
+	#var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
+	#var image : Image = Image.create_from_data(size, size, false, TEXTURE_TYPE[texture_type].image_format, byte_data)
+	#texture.set_image(image)
+	print(size)
+	texture.set_texture_rid(output_tex, Vector2i(size, size), TEXTURE_TYPE[texture_type].data_format)
 	for r in rids.keys():
 		if r.is_valid():
 			print("Freeing %s: %s" % [ str(r), rids[r] ])

@@ -109,11 +109,12 @@ func set_shader_model(data: Dictionary) -> void:
 
 func update_shaders() -> void:
 	for t in preview_textures.keys():
-		var output_shader = generate_output_shader(preview_textures[t].output)
-		preview_textures[t].output_type = output_shader.output_type
-		var material : MMShaderMaterial = MMShaderMaterial.new()
-		mm_deps.buffer_create_shader_material(preview_textures[t].buffer, material, output_shader.shader)
-		preview_textures[t].material = material.material
+		preview_textures[t].shader_compute = MMShaderCompute.new()
+		var context : MMGenContext = MMGenContext.new()
+		var source : ShaderCode = get_shader_code("uv", preview_textures[t].output, context)
+		await preview_textures[t].shader_compute.set_shader_from_shadercode(source, false)
+		mm_deps.buffer_create_compute_material(preview_textures[t].buffer, preview_textures[t].shader_compute)
+	mm_deps.update()
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value == null:
@@ -121,12 +122,15 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if buffer_name == buffer_name_prefix:
 		preview_parameters[parameter_name] = value
 		for p in external_previews:
-			p.set_shader_parameter(parameter_name, value)
+			if value is MMTexture:
+				p.set_shader_parameter(parameter_name, await value.get_texture())
+			else:
+				p.set_shader_parameter(parameter_name, value)
 		if preview_texture_dependencies.has(parameter_name):
 			preview_texture_dependencies[parameter_name] = value
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
-		preview_textures[texture_name].material.set_shader_parameter(parameter_name, value)
+		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
 	return false
 
 func on_dep_update_buffer(buffer_name) -> bool:
@@ -135,16 +139,12 @@ func on_dep_update_buffer(buffer_name) -> bool:
 		mm_deps.dependency_update(buffer_name, null, true)
 		return true
 	var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
-	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("material"):
+	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("shader_compute"):
 		print("Cannot update "+buffer_name)
 		print(preview_textures[texture_name])
 		return false
 	var size = get_image_size()
-	var renderer = await mm_renderer.request(self)
-	var status = await renderer.render_material(self, preview_textures[texture_name].material, size, preview_textures[texture_name].output_type != "rgba")
-	# Abort rendering if material changed
-	renderer.copy_to_texture(preview_textures[texture_name].texture)
-	renderer.release(self)
+	await preview_textures[texture_name].shader_compute.render(preview_textures[texture_name].texture, size)
 	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
 	if size <= TEXTURE_FILTERING_LIMIT:
 		pass
@@ -170,7 +170,7 @@ func update_external_previews() -> void:
 	for p in external_previews:
 		p.shader.code = preview_material.shader.code
 		for t in preview_textures.keys():
-			p.set_shader_parameter(t, preview_textures[t].texture)
+			p.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
 		for t in preview_texture_dependencies.keys():
 			p.set_shader_parameter(t, preview_texture_dependencies[t])
 
@@ -269,7 +269,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				var buffer_name = "%s_%s" % [ buffer_name_prefix, result.strings[1] ]
 				preview_textures[result.strings[1]] = {
 					output=result.strings[2].to_int(),
-					texture=ImageTexture.new(),
+					texture=MMTexture.new(),
 					buffer=buffer_name
 				}
 				mm_deps.create_buffer(buffer_name, self)

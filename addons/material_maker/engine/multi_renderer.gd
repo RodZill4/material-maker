@@ -6,10 +6,10 @@ var common_shader : String
 var global_parameters : Dictionary = {}
 
 
-const total_renderers = 8
+const total_renderers = 1
 var free_renderers = []
 
-var max_renderers : int = 8
+var max_renderers : int = 1
 var renderers_enabled : bool = true
 var max_viewport_size : int = 2048
 
@@ -19,12 +19,11 @@ var rendering_device : RenderingDevice
 var rendering_device_user = null
 
 
-signal free_renderer
-signal free_rendering_device
+signal free_renderer()
+signal free_rendering_device()
 
 
 func _ready() -> void:
-	#var file = FileAccess.open("res://addons/material_maker/common.gdshader", FileAccess.READ)
 	common_shader = "varying float elapsed_time;
 
 void vertex() {
@@ -114,7 +113,7 @@ func release(renderer : Object) -> void:
 
 func request_rendering_device(user) -> RenderingDevice:
 	while rendering_device_user != null:
-		await free_rendering_device
+		await self.free_rendering_device
 	rendering_device_user = user
 	return rendering_device
 
@@ -122,4 +121,4 @@ func release_rendering_device(user) -> void:
 	if rendering_device_user != user:
 		print("Release rendering device with incorrect user. Please fix your code")
 	rendering_device_user = null
-	free_rendering_device.emit()
+	self.free_rendering_device.emit()

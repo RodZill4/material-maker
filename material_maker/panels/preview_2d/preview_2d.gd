@@ -105,6 +105,8 @@ func get_preview_material():
 	return material
 
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
+	if value is MMTexture:
+		value = await value.get_texture()
 	get_preview_material().set_shader_parameter(parameter_name, value)
 	return false
 

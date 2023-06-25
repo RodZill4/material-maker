@@ -125,13 +125,15 @@ icon = SubResource("1")
 flat = true
 
 [node name="Main Code" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
+visible = false
 layout_mode = 2
-delimiter_strings = Array[String](["' '", "\" \""])
+delimiter_strings = Array[String](["\" \"", "' '"])
 
 [node name="Instance Functions" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
+visible = false
 layout_mode = 2
 syntax_highlighter = SubResource("CodeHighlighter_g2tsy")
-delimiter_strings = Array[String](["' '", "\" \""])
+delimiter_strings = Array[String](["\" \"", "' '"])
 
 [node name="Global Functions" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
@@ -152,7 +154,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_vertical = 3
 syntax_highlighter = SubResource("CodeHighlighter_062tj")
-delimiter_strings = Array[String](["' '", "\" \""])
+delimiter_strings = Array[String](["\" \"", "' '"])
 
 [node name="ErrorLabel" type="Label" parent="Sizer/TabBar/Global Functions/Functions"]
 visible = false
