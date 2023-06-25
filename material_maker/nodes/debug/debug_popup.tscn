@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bay8he3yeaj1q"]
+[gd_scene load_steps=5 format=3 uid="uid://bay8he3yeaj1q"]
 
 [ext_resource type="Script" path="res://material_maker/nodes/debug/debug_popup.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="2_tw3os"]
 
 [sub_resource type="Shader" id="2"]
 resource_local_to_scene = true
@@ -12,6 +13,7 @@ shader = SubResource("2")
 
 [node name="GeneratedShaderWindow" type="Window"]
 title = "Generated shader"
+size = Vector2i(500, 500)
 exclusive = true
 script = ExtResource("1")
 
@@ -40,9 +42,10 @@ popup/item_3/id = 3
 layout_mode = 2
 text = "Copy to clipboard"
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer"]
+[node name="Code" parent="VBoxContainer" instance=ExtResource("2_tw3os")]
 layout_mode = 2
 size_flags_vertical = 3
+editable = false
 
 [node name="ColorRect" type="ColorRect" parent="VBoxContainer"]
 visible = false
