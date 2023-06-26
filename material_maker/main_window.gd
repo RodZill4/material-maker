@@ -117,6 +117,7 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	get_window().borderless = false
 	#get_window().gui_embed_subwindows = false
 	
 	get_window().close_requested.connect(self.on_close_requested)
@@ -232,7 +233,11 @@ func _exit_tree() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
+		match get_window().mode:
+			Window.MODE_EXCLUSIVE_FULLSCREEN, Window.MODE_FULLSCREEN, Window.MODE_MAXIMIZED:
+				get_window().mode = Window.MODE_WINDOWED
+			_:
+				Window.MODE_MAXIMIZED
 
 func on_config_changed() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
