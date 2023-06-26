@@ -119,7 +119,10 @@ func do_update_shader(input_port_index : int) -> void:
 	var buffer_name : String = buffer_names[input_port_index]
 	#assert(shader_compute.is_valid())
 
-	await shader_compute.set_shader_from_shadercode(source, f32)
+	if input_port_index == 1 and get_parameter("autostop"):
+		await shader_compute.set_shader_from_shadercode(source, f32, texture)
+	else:
+		await shader_compute.set_shader_from_shadercode(source, f32)
 	var new_is_greyscale = ((shader_compute.texture_type & 1) == 0)
 	if new_is_greyscale != is_greyscale[input_port_index]:
 		is_greyscale[input_port_index] = new_is_greyscale
@@ -171,12 +174,6 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
-	var previous_hash_value : int = 0 # if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
-	if autostop and current_iteration > 0:
-		var image_texture : ImageTexture = await texture.get_texture()
-		var image = image_texture.get_image()
-		if image != null:
-			previous_hash_value = hash(image.get_data())
 	
 	var time = Time.get_ticks_msec()
 	var size = pow(2, get_parameter("size"))
@@ -197,13 +194,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	#todo texture.flags = 0
 	
 	# Calculate iteration index
-	var hash_value : int = 1 # if ( not autostop or current_iteration == 0 or texture == null or texture.get_image() == null ) else hash(texture.get_image().get_data())
-	if autostop and current_iteration > 0:
-		var image_texture : ImageTexture = await texture.get_texture()
-		var image = image_texture.get_image()
-		if image != null:
-			hash_value = hash(image.get_data())
-	if autostop and hash_value == previous_hash_value:
+	if autostop and shader_compute.get_difference() == 0:
 		set_current_iteration(iterations+1)
 	else:
 		set_current_iteration(current_iteration+1)

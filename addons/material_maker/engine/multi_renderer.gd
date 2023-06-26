@@ -20,7 +20,7 @@ var rendering_device_user = null
 
 
 signal free_renderer()
-signal free_rendering_device()
+signal free_rendering_device
 
 
 func _ready() -> void:
@@ -97,6 +97,7 @@ func enable_renderers(b : bool) -> void:
 		renderers_enabled = b
 		if renderers_enabled:
 			free_renderer.emit()
+			free_rendering_device.emit()
 
 func request(object : Object) -> Object:
 	while !renderers_enabled or free_renderers.size() <= total_renderers - max_renderers:
@@ -112,7 +113,7 @@ func release(renderer : Object) -> void:
 
 
 func request_rendering_device(user) -> RenderingDevice:
-	while rendering_device_user != null:
+	while !renderers_enabled or rendering_device_user != null:
 		await self.free_rendering_device
 	rendering_device_user = user
 	return rendering_device
@@ -121,4 +122,4 @@ func release_rendering_device(user) -> void:
 	if rendering_device_user != user:
 		print("Release rendering device with incorrect user. Please fix your code")
 	rendering_device_user = null
-	self.free_rendering_device.emit()
+	free_rendering_device.emit()

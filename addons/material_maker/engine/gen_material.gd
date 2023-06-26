@@ -146,6 +146,8 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	var size = get_image_size()
 	await preview_textures[texture_name].shader_compute.render(preview_textures[texture_name].texture, size)
 	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
+	for p in external_previews:
+		p.set_shader_parameter(texture_name, await preview_textures[texture_name].texture.get_texture())
 	if size <= TEXTURE_FILTERING_LIMIT:
 		pass
 		#preview_textures[texture_name].texture.flags &= ~Texture2D.FLAG_FILTER
@@ -167,6 +169,7 @@ func update_material(m, sequential : bool = false) -> void:
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
+	return
 	for p in external_previews:
 		p.shader.code = preview_material.shader.code
 		for t in preview_textures.keys():
@@ -186,7 +189,7 @@ func update() -> void:
 			var value = preview_material.get_shader_parameter(p.name)
 			preview_texture_dependencies[p.name] = value
 	update_shaders()
-	update_external_previews()
+	#update_external_previews()
 
 class CustomOptions:
 	extends RefCounted

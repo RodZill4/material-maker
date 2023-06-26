@@ -26,6 +26,6 @@ func get_parameters() -> Dictionary:
 
 func set_parameter(name : String, value):
 	if value is MMTexture:
-		material.set_shader_parameter(name, value.get_texture())
+		material.set_shader_parameter(name, await value.get_texture())
 	else:
 		material.set_shader_parameter(name, value)
