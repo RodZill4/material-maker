@@ -169,7 +169,6 @@ func update_material(m, sequential : bool = false) -> void:
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
-	return
 	for p in external_previews:
 		p.shader.code = preview_material.shader.code
 		for t in preview_textures.keys():
