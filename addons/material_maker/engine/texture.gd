@@ -16,10 +16,12 @@ func _init() -> void:
 func _notification(what : int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
+			#print("Deleting texture rid")
 			if rid.is_valid():
 				var rd = await mm_renderer.request_rendering_device(self)
 				rd.free_rid(rid)
 				mm_renderer.release_rendering_device(self)
+				#print("Texture rid deleted")
 
 func get_texture_rid(rd : RenderingDevice = null) -> RID:
 	if ! rid.is_valid():

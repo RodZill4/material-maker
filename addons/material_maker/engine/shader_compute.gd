@@ -16,6 +16,8 @@ class Parameter:
 		match type:
 			"float":
 				size = 4
+			"int":
+				size = 4
 			"vec4":
 				size = 16
 			_:
@@ -46,12 +48,15 @@ var diff : int
 
 var render_time : int = 0
 
+
 const TEXTURE_TYPE : Array[Dictionary] = [
 	{ decl="r16f", data_format=RenderingDevice.DATA_FORMAT_R16_SFLOAT, image_format=Image.FORMAT_RH },
 	{ decl="rgba16f", data_format=RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT, image_format=Image.FORMAT_RGBAH },
 	{ decl="r32f", data_format=RenderingDevice.DATA_FORMAT_R32_SFLOAT, image_format=Image.FORMAT_RF },
 	{ decl="rgba32f", data_format=RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, image_format=Image.FORMAT_RGBAF }
 ]
+
+const LOCAL_SIZE : int = 64
 
 
 func _init():
@@ -78,7 +83,7 @@ func add_parameter_or_texture(n : String, t : String, v):
 func get_uniform_declarations() -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
-	for type in [ "vec4", "float" ]:
+	for type in [ "vec4", "float", "int" ]:
 		for p in parameters.keys():
 			var parameter : Parameter = parameters[p]
 			if parameter.type != type:
@@ -135,7 +140,7 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	
 	shader_source = "#version 450\n"
 	shader_source += "\n"
-	shader_source += "layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;\n"
+	shader_source += "layout(local_size_x = %d, local_size_y = 1, local_size_z = 1) in;\n" % LOCAL_SIZE
 	shader_source += "\n"
 	shader_source += "layout(set = 0, binding = 0, %s) uniform image2D OUTPUT_TEXTURE;\n" % TEXTURE_TYPE[texture_type].decl
 	shader_source += get_uniform_declarations()
@@ -158,7 +163,8 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	shader_source += "void main() {\n"
 	shader_source += "\tfloat _seed_variation_ = seed_variation;\n"
 	shader_source += "\tvec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);\n"
-	shader_source += "\tvec2 uv = pixel/imageSize(OUTPUT_TEXTURE);\n"
+	shader_source += "\tvec2 image_size = imageSize(OUTPUT_TEXTURE);\n"
+	shader_source += "\tvec2 uv = pixel/image_size;\n"
 	if shader_code.code != "":
 		shader_source += "\t"+shader_code.code
 	shader_source += "\tvec4 outColor = "+shader_code.output_values.rgba+";\n"
@@ -180,8 +186,11 @@ func get_parameters() -> Dictionary:
 	return rv
 
 func set_parameter(name : String, value) -> void:
-	if value == null or !parameters.has(name):
-		print("Cannot set parameter "+name)
+	if !parameters.has(name):
+		print("Cannot assign unknown parameter "+name)
+		return
+	if value == null:
+		print("Cannot assign null value to parameter "+name)
 		return
 	var p : Parameter = parameters[name]
 	p.value = value
@@ -189,6 +198,10 @@ func set_parameter(name : String, value) -> void:
 		"float":
 			if value is float:
 				parameter_values.encode_float(p.offset, value)
+				return
+		"int":
+			if value is int:
+				parameter_values.encode_s32(p.offset, value)
 				return
 		"vec4":
 			if value is Color:
@@ -198,6 +211,53 @@ func set_parameter(name : String, value) -> void:
 				parameter_values.encode_float(p.offset+12, value.a)
 				return
 	print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, p.type ])
+
+func render_loop(rd : RenderingDevice, size : int, chunk_height : int, uniform_set_0 : RID, uniform_set_1 : RID, uniform_set_2 : RID, uniform_set_4 : RID):
+	var y : int = 0
+	while y < size:
+		var h : int = min(chunk_height, size-y)
+		
+		# Create a compute pipeline
+		var pipeline : RID = rd.compute_pipeline_create(shader)
+		if !pipeline.is_valid():
+			print("Cannot create pipeline")
+		var compute_list := rd.compute_list_begin()
+		rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
+		if uniform_set_1.is_valid():
+			rd.compute_list_bind_uniform_set(compute_list, uniform_set_1, 1)
+		if uniform_set_2.is_valid():
+			rd.compute_list_bind_uniform_set(compute_list, uniform_set_2, 2)
+		
+		var loop_parameters_values : PackedByteArray = PackedByteArray()
+		loop_parameters_values.resize(4)
+		loop_parameters_values.encode_s32(0, y)
+		var loop_parameters_buffer : RID = rd.storage_buffer_create(loop_parameters_values.size(), loop_parameters_values)
+		var loop_parameters_uniform : RDUniform = RDUniform.new()
+		loop_parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+		loop_parameters_uniform.binding = 0
+		loop_parameters_uniform.add_id(loop_parameters_buffer)
+		var uniform_set_3 : RID = rd.uniform_set_create([loop_parameters_uniform], shader, 3)
+		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
+		
+		if uniform_set_4.is_valid():
+			rd.compute_list_bind_uniform_set(compute_list, uniform_set_4, 4)
+		
+		#print("Dispatching compute list")
+		rd.compute_list_dispatch(compute_list, (size+LOCAL_SIZE-1)/LOCAL_SIZE, h, 1)
+		rd.compute_list_end()
+		#print("Rendering "+str(self))
+		rd.submit()
+		#await mm_renderer.get_tree().process_frame
+		rd.sync()
+		
+		rd.free_rid(uniform_set_3)
+		rd.free_rid(loop_parameters_buffer)
+		rd.free_rid(pipeline)
+		
+		#print("End rendering %d-%d (%dms)" % [ y, y+h, render_time ])
+		
+		y += h
 
 func render(texture : MMTexture, size : int) -> bool:
 	if ! shader.is_valid():
@@ -277,54 +337,15 @@ func render(texture : MMTexture, size : int) -> bool:
 		uniform_set_4 = rd.uniform_set_create([outputs_uniform], shader, 4)
 		rids[uniform_set_4] = "uniform_set_4"
 	
-	var chunk_count : int = max(1, size*size/(512*512))
+	var max_viewport_size = mm_renderer.max_viewport_size
+	var chunk_count : int = max(1, size*size/(max_viewport_size*max_viewport_size))
 	var chunk_height : int = max(1, size/chunk_count)
 	
-	var y : int = 0
-	while y < size:
-		var h : int = min(chunk_height, size-y)
-		
-		# Create a compute pipeline
-		var pipeline : RID = rd.compute_pipeline_create(shader)
-		if !pipeline.is_valid():
-			print("Cannot create pipeline")
-		var compute_list := rd.compute_list_begin()
-		rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
-		if uniform_set_1.is_valid():
-			rd.compute_list_bind_uniform_set(compute_list, uniform_set_1, 1)
-		if uniform_set_2.is_valid():
-			rd.compute_list_bind_uniform_set(compute_list, uniform_set_2, 2)
-		
-		var loop_parameters_values : PackedByteArray = PackedByteArray()
-		loop_parameters_values.resize(4)
-		loop_parameters_values.encode_s32(0, y)
-		var loop_parameters_buffer : RID = rd.storage_buffer_create(loop_parameters_values.size(), loop_parameters_values)
-		var loop_parameters_uniform : RDUniform = RDUniform.new()
-		loop_parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-		loop_parameters_uniform.binding = 0
-		loop_parameters_uniform.add_id(loop_parameters_buffer)
-		var uniform_set_3 : RID = rd.uniform_set_create([loop_parameters_uniform], shader, 3)
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
-		
-		if uniform_set_4.is_valid():
-			rd.compute_list_bind_uniform_set(compute_list, uniform_set_4, 4)
-		
-		#print("Dispatching compute list")
-		rd.compute_list_dispatch(compute_list, size, h, 1)
-		rd.compute_list_end()
-		#print("Rendering "+str(self))
-		rd.submit()
+	#await render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
+	var thread : Thread = Thread.new()
+	thread.start(render_loop.bind(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4))
+	while thread.is_alive():
 		await mm_renderer.get_tree().process_frame
-		rd.sync()
-		
-		rd.free_rid(uniform_set_3)
-		rd.free_rid(loop_parameters_buffer)
-		rd.free_rid(pipeline)
-		
-		#print("End rendering %d-%d (%dms)" % [ y, y+h, render_time ])
-		
-		y += h
 	
 	#var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
 	#var image : Image = Image.create_from_data(size, size, false, TEXTURE_TYPE[texture_type].image_format, byte_data)
@@ -347,6 +368,7 @@ func render(texture : MMTexture, size : int) -> bool:
 	mm_renderer.release_rendering_device(self)
 
 	return true
+
 
 func get_difference() -> int:
 	return diff
