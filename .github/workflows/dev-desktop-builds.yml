@@ -13,8 +13,8 @@ on:
 
 env:
   GODOT_VERSION: 4.1
-  GODOT_SUB: beta3
-  GODOT_VERSION_DOWNLOAD_DIR: 4.1/beta3
+  GODOT_SUB: rc1
+  GODOT_VERSION_DOWNLOAD_DIR: 4.1/rc1
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a2
 
