@@ -3,6 +3,9 @@ extends MarginContainer
 
 var resource_path : String
 var tween : Tween
+var background_index : int
+var delay_start : bool = false
+var mm_scene : PackedScene = null
 
 @onready var progress_bar = $SplashScreen/TextureRect/ProgressBar
 
@@ -23,20 +26,23 @@ const BACKGROUNDS :Array[Dictionary] = [
 
 func _enter_tree():
 	randomize()
-	var background_index : int = randi() % BACKGROUNDS.size()
-	#background_index = 10
+	set_screen(randi() % BACKGROUNDS.size())
+	var window : Window = get_window()
+	window.position = (DisplayServer.screen_get_size(window.current_screen)-Vector2i(size))/2
+	window.size = size
+
+func set_screen(bi : int) -> void:
+	background_index = bi
 	var background : Dictionary = BACKGROUNDS[background_index]
 	match background.file.get_extension():
 		"png":
 			$SplashScreen.texture = load(background.file)
+			$SplashScreen.material = null
 		"tres":
 			$SplashScreen.material = load(background.file)
 	%Title.text = background.title
 	%Author.text = background.author
 	%Version.text = ProjectSettings.get_setting("application/config/actual_release")
-	var window : Window = get_window()
-	window.position = (DisplayServer.screen_get_size(window.current_screen)-Vector2i(size))/2
-	window.size = size
 
 func _ready():
 	set_process(false)
@@ -57,7 +63,13 @@ func _ready():
 	else:
 		print("Error loading "+resource_path)
 
-func start_ui(scene):
+func start_ui(scene : PackedScene):
+	if delay_start:
+		mm_scene = scene
+	else:
+		do_start_ui(scene)
+
+func do_start_ui(scene : PackedScene):
 	var window : Window = get_window()
 	if OS.get_name() == "HTML5":
 		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
@@ -102,3 +114,17 @@ func _process(delta) -> void:
 		_:
 			print("error "+str(status))
 			set_process(false)
+
+func _on_secret_button_gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if mm_scene != null:
+			do_start_ui(mm_scene)
+		else:
+			delay_start = true
+			$BackgroundSelect.visible = true
+
+func _on_previous_pressed():
+	set_screen((background_index+BACKGROUNDS.size()-1) % BACKGROUNDS.size())
+
+func _on_next_pressed():
+	set_screen((background_index+1) % BACKGROUNDS.size())

@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bq7jj2aydbqug"]
+[gd_scene load_steps=9 format=3 uid="uid://bq7jj2aydbqug"]
 
 [ext_resource type="Script" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://dajak2ajlrhbw" path="res://splash_screen/pixelmuncher_golden_tiles.png" id="2_bht0p"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
 [ext_resource type="FontFile" uid="uid://dttdyavpec18b" path="res://material_maker/fonts/vegur_regular.otf" id="3_m0b76"]
 [ext_resource type="Shader" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
+[ext_resource type="Texture2D" uid="uid://btpt3nk4o7725" path="res://splash_screen/arrow.png" id="6_qghsp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4lwu"]
 bg_color = Color(0.509804, 0.584314, 1, 1)
@@ -69,6 +70,15 @@ offset_bottom = 134.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_k4lwu")
 show_percentage = false
 
+[node name="SecretButton" type="Control" parent="SplashScreen/TextureRect"]
+layout_mode = 1
+anchor_right = 0.026
+anchor_bottom = 0.098
+offset_left = 437.0
+offset_top = 44.0
+offset_right = 437.0
+offset_bottom = 43.986
+
 [node name="DarkenBottom" type="ColorRect" parent="SplashScreen"]
 material = SubResource("ShaderMaterial_dfnby")
 custom_minimum_size = Vector2(0, 100)
@@ -126,3 +136,35 @@ theme_override_colors/font_outline_color = Color(0, 0, 0.74902, 1)
 theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 18
 text = "Author"
+
+[node name="BackgroundSelect" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Previous" type="TextureButton" parent="BackgroundSelect"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource("6_qghsp")
+ignore_texture_size = true
+stretch_mode = 0
+flip_h = true
+
+[node name="Space" type="Control" parent="BackgroundSelect"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Next" type="TextureButton" parent="BackgroundSelect"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = ExtResource("6_qghsp")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="gui_input" from="SplashScreen/TextureRect/SecretButton" to="." method="_on_secret_button_gui_input"]
+[connection signal="pressed" from="BackgroundSelect/Previous" to="." method="_on_previous_pressed"]
+[connection signal="pressed" from="BackgroundSelect/Next" to="." method="_on_next_pressed"]
