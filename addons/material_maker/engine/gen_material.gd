@@ -604,7 +604,6 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	export_context["$(dir_prefix)"] = prefix.get_base_dir()
 	var exported_files : Array = []
 	var overwrite_files : Array = []
-	var dir : DirAccess = DirAccess.open("")
 	var export_profile = get_export(profile)
 	if export_profile.has("custom"):
 		export_context["@mm_custom_script"] = export_profile.custom
@@ -620,7 +619,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				continue
 		if f.has("prompt_overwrite") and f.prompt_overwrite:
 			var file_name = subst_string(f.file_name, export_context)
-			if dir.file_exists(file_name):
+			if FileAccess.file_exists(file_name):
 				overwrite_files.push_back(f)
 				continue
 		exported_files.push_back(f)
