@@ -2289,7 +2289,7 @@
 			"\tvec2 base_uv = UV;",
 			"$begin_generate",
 			"\tvec4 albedo_tex = texture(texture_albedo, base_uv);",
-			"\tALBEDO = $albedo_color.rgb * albedo_tex.rgb;",
+			"\tALBEDO = $albedo_color.rgb * mix(pow((albedo_tex + vec4(0.055))/vec4(1.055), vec4(2.4)), albedo_tex/vec4(12.92), lessThan(albedo_tex, vec4(0.04045))).rgb;",
 			"\tvec4 orm_tex = texture(texture_orm, base_uv);",
 			"\tMETALLIC = $metallic*orm_tex.b;",
 			"\tROUGHNESS = $roughness*orm_tex.g;",
