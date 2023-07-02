@@ -207,7 +207,16 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 			print("Cannot connect %s:%d to %s:%d" % [c.from, c.from_port, c.to, c.to_port])
 	return rv
 
-func create_gen(data) -> MMGenBase:
+func fix_data(data : Dictionary) -> Dictionary:
+	if data.has("nodes") and data.has("connections") and data.has("label") and data.label == "HBAO":
+		data.type = "hbao"
+		data.erase("nodes")
+		data.erase("connections")
+	return data
+
+func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
+	if fix:
+		data = fix_data(data)
 	var guess = [
 		{ keyword="shader_model/preview_shader", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
@@ -251,7 +260,7 @@ func create_gen(data) -> MMGenBase:
 			if !predefined_generators.has(data.type) and data.type.left(8) == "website:":
 				var status = await get_node_from_website(data.type)
 			if predefined_generators.has(data.type):
-				generator = await create_gen(predefined_generators[data.type])
+				generator = await create_gen(predefined_generators[data.type], false)
 				if generator == null:
 					print("Cannot find description for "+data.type)
 				else:
