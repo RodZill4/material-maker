@@ -270,12 +270,12 @@ func _on_gui_input(event) -> void:
 				doubleclicked = true
 			if event.button_index == MOUSE_BUTTON_RIGHT:
 				accept_event()
-				var menu = create_context_menu()
+				var menu : PopupMenu = create_context_menu()
 				if menu != null:
 					if menu.get_item_count() != 0:
 						add_child(menu)
-						menu.connect("modal_closed",Callable(menu,"queue_free"))
-						menu.connect("id_pressed",Callable(self,"_on_menu_id_pressed"))
+						menu.popup_hide.connect(menu.queue_free)
+						menu.id_pressed.connect(self._on_menu_id_pressed)
 						menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 					else:
 						menu.free()
@@ -390,7 +390,7 @@ func clear_connection_labels() -> void:
 		show_outputs = false
 		update()
 
-func create_context_menu():
+func create_context_menu() -> PopupMenu:
 	var menu : PopupMenu = PopupMenu.new()
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		var share_button = mm_globals.main_window.get_share_button()

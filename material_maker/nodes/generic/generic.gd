@@ -532,7 +532,7 @@ func update_node() -> void:
 	# Edit buttons
 	if generator.is_editable():
 		for theme_stylebox in ["frame", "selected_frame"]:
-			add_theme_stylebox_override(theme_stylebox, null)
+			remove_theme_stylebox_override(theme_stylebox)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
