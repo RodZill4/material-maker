@@ -188,7 +188,7 @@ func update() -> void:
 			var value = preview_material.get_shader_parameter(p.name)
 			preview_texture_dependencies[p.name] = value
 	update_shaders()
-	#update_external_previews()
+	update_external_previews()
 
 class CustomOptions:
 	extends RefCounted
