@@ -111,9 +111,8 @@ func release(renderer : Object) -> void:
 	free_renderers.append(renderer)
 	free_renderer.emit()
 
-
 func request_rendering_device(user) -> RenderingDevice:
-	while !renderers_enabled or rendering_device_user != null:
+	while ! renderers_enabled or rendering_device_user != null:
 		await self.free_rendering_device
 	rendering_device_user = user
 	return rendering_device

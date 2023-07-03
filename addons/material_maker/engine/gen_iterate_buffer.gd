@@ -234,7 +234,7 @@ func get_output_attributes(output_index : int) -> Dictionary:
 		1:
 			attributes.texture = "%s_loop_tex" % genname
 			attributes.texture_size = "%s_tex_size" % genname
-			attributes.iteration = "%s_iteration" % genname
+			attributes.iteration = iteration_param_name
 	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:

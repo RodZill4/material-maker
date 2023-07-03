@@ -10,7 +10,7 @@ class InputPort:
 	var generator : MMGenBase = null
 	var input_index : int = 0
 
-	func _init(g : MMGenBase, i : int):
+	func _init(g : MMGenBase, i : int) -> void:
 		generator = g
 		input_index = i
 
@@ -33,12 +33,12 @@ class ShaderUniform:
 	var type : String
 	var value
 	
-	func _init(n : String, t : String, v):
+	func _init(n : String, t : String, v) -> void:
 		name = n
 		type = t
 		value = v
 	
-	func to_str(keyword : String = "uniform"):
+	func to_str(keyword : String = "uniform") -> String:
 		var str_value_assign : String = ""
 		match type:
 			"float":
