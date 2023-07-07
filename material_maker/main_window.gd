@@ -223,7 +223,7 @@ func update_menus() -> void:
 func do_update_menus() -> void:
 	# Create menus
 	var menu_bar_class
-	if false and DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
+	if DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
 		menu_bar_class = mm_globals.menu_manager.MenuBarDisplayServer
 	else:
 		menu_bar_class = mm_globals.menu_manager.MenuBarGodot
