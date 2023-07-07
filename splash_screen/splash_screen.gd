@@ -10,7 +10,7 @@ var mm_scene : PackedScene = null
 @onready var progress_bar = $SplashScreen/TextureRect/ProgressBar
 
 const BACKGROUNDS :Array[Dictionary] = [
-	{ title="Lace Material", author="Tarox", file="res://splash_screen/tarox_lace_material.png" },
+	{ title="Lace", author="Pavel Oliva", file="res://splash_screen/pavel_oliva_lace.png" },
 	{ title="Golden Tiles", author="PixelMuncher", file="res://splash_screen/pixelmuncher_golden_tiles.png" },
 	{ title="Spiral Trails", author="DroppedBeat", file="res://splash_screen/droppedbeat_spiral_trails.tres" },
 	{ title="Matrix Rain", author="DroppedBeat", file="res://splash_screen/droppedbeat_matrix_rain.tres" },
@@ -20,7 +20,8 @@ const BACKGROUNDS :Array[Dictionary] = [
 	{ title="Fractal Octahedron", author="Paulo Falcao", file="res://splash_screen/paulo_falcao_fractal_octahedron.tres" },
 	{ title="Dirty Tiles", author="cybereality", file="res://splash_screen/cybereality_dirty_tiles.png" },
 	{ title="Future Visions", author="cybereality", file="res://splash_screen/cybereality_future_visions.png" },
-	{ title="Brutalism", author="cybereality", file="res://splash_screen/cybereality_brutalism.png" }
+	{ title="Brutalism", author="cybereality", file="res://splash_screen/cybereality_brutalism.png" },
+	{ title="Old Doors", author="cgmytro", file="res://splash_screen/cgmytro_old_doors.png" }
 ]
 
 
@@ -80,7 +81,11 @@ func do_start_ui(scene : PackedScene):
 		"""
 		add_child(dialog)
 		await dialog.ask()
+	
+	self.hide()
+	
 	var root = get_tree().root
+	assert(root == get_parent())
 	# Remove the current scene
 	root.remove_child(self)
 	call_deferred("free")

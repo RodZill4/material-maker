@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csb6p3s82eter"
-path="res://.godot/imported/tarox_lace_material.png-7d7d6f20aeca5612a59d5aff1f311bb9.ctex"
+uid="uid://dt7qpt0yl4kln"
+path="res://.godot/imported/cgmytro_old_doors.png-86bbbcd09fb5979f1d483ca150311a1e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/tarox_lace_material.png"
-dest_files=["res://.godot/imported/tarox_lace_material.png-7d7d6f20aeca5612a59d5aff1f311bb9.ctex"]
+source_file="res://splash_screen/cgmytro_old_doors.png"
+dest_files=["res://.godot/imported/cgmytro_old_doors.png-86bbbcd09fb5979f1d483ca150311a1e.ctex"]
 
 [params]
 
