@@ -1,4 +1,5 @@
 extends Node
+class_name MMMenuManager
 
 class MenuBase:
 	func clear():
@@ -10,7 +11,13 @@ class MenuBase:
 	func add_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
 		pass
 	
+	func add_icon_item(_icon: Texture, _label: String, _id: int = -1, _accel: Key = 0 as Key):
+		pass
+	
 	func add_check_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
+		pass
+	
+	func add_radio_check_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
 		pass
 	
 	func add_separator():
@@ -22,7 +29,7 @@ class MenuBase:
 	func set_item_checked(_i : int, _checked : bool):
 		pass
 	
-	func add_submenu(_name : String, _update_callable = null) -> MenuBase:
+	func add_submenu(_name : String) -> MenuBase:
 		return null
 
 class MenuBarBase:
@@ -39,16 +46,32 @@ class MenuGodot:
 		popup_menu = pm
 	
 	func connect_id_pressed(callable : Callable):
-		popup_menu.connect("id_pressed", callable)
+		if ! popup_menu.is_connected("id_pressed", callable):
+			popup_menu.connect("id_pressed", callable)
 	
 	func clear():
+		# apply UI scale?
+		#popup_menu.content_scale_aspect = mm_globals.main_window.get_viewport().content_scale_aspect
+		#popup_menu.content_scale_factor = mm_globals.main_window.get_viewport().content_scale_factor
+		#popup_menu.content_scale_mode = mm_globals.main_window.get_viewport().content_scale_mode
+		#popup_menu.content_scale_size = Vector2i(0, 0)
 		popup_menu.clear()
+		while popup_menu.get_child_count() > 0:
+			var c : Node = popup_menu.get_child(0)
+			popup_menu.remove_child(c)
+			c.free()
 	
 	func add_item(label: String, id: int = -1, accel: Key = 0 as Key):
 		popup_menu.add_item(label, id, accel)
 	
+	func add_icon_item(icon: Texture, label: String, id: int = -1, accel: Key = 0 as Key):
+		popup_menu.add_icon_item(icon, label, id, accel)
+	
 	func add_check_item(label: String, id: int = -1, accel: Key = 0 as Key):
 		popup_menu.add_check_item(label, id, accel)
+	
+	func add_radio_check_item(label: String, id: int = -1, accel: Key = 0 as Key):
+		popup_menu.add_radio_check_item(label, id, accel)
 	
 	func add_separator():
 		popup_menu.add_separator()
@@ -59,7 +82,7 @@ class MenuGodot:
 	func set_item_checked(i : int, checked : bool):
 		popup_menu.set_item_checked(popup_menu.get_item_index(i), checked)
 	
-	func add_submenu(submenu_name : String, update_callable = null) -> MenuBase:
+	func add_submenu(submenu_name : String) -> MenuBase:
 		var submenu : PopupMenu
 		if popup_menu.has_node(submenu_name):
 			submenu = popup_menu.get_node(submenu_name)
@@ -68,8 +91,6 @@ class MenuGodot:
 			submenu.name = submenu_name
 			popup_menu.add_child(submenu)
 		popup_menu.add_submenu_item(submenu_name, submenu.get_name())
-		if update_callable != null:
-			submenu.connect("about_to_popup", update_callable.bind(submenu));
 		return MenuGodot.new(submenu)
 
 class MenuBarGodot:
@@ -118,6 +139,9 @@ class MenuDisplayServer:
 		var index : int = DisplayServer.global_menu_add_item(menu_name, label, mm_globals.menu_manager.my_callback, mm_globals.menu_manager.my_callback, key, accel)
 		indexes[id] = index
 	
+	func add_icon_item(_icon: Texture, label: String, id: int = -1, accel: Key = 0 as Key):
+		add_item(label, id, accel)
+	
 	func add_check_item(label: String, id: int = -1, accel : Key = 0 as Key):
 		if accel & KEY_MASK_CTRL:
 			accel = ((accel & ~KEY_MASK_CTRL) | KEY_MASK_META) as Key
@@ -136,7 +160,7 @@ class MenuDisplayServer:
 		if indexes.has(id):
 			DisplayServer.global_menu_set_item_checked(menu_name, indexes[id], checked)
 	
-	func add_submenu(name : String, _update_callable = null) -> MenuBase:
+	func add_submenu(name : String) -> MenuBase:
 		var full_name : String = menu_name+"/"+name
 		var index = DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
 		return MenuDisplayServer.new(full_name)
@@ -200,12 +224,13 @@ func create_menu(menu_def : Array, object : Object, menu_name : String, menu : M
 		elif menu_def[i].has("submenu"):
 			#var submenu_name = "submenu_"+menu_def[i].submenu
 			var submenu_function = "create_menu_"+menu_def[i].submenu
+			#TODO: submenu must be created here
+			var submenu : MenuBase = menu.add_submenu(menu_item_name)
 			var popup_callback : Callable
 			if object.has_method(submenu_function):
-				popup_callback = Callable(object, submenu_function)
+				object.call(submenu_function, submenu)
 			else:
-				popup_callback = self.create_menu.bind(menu_def, object, menu_def[i].submenu)
-			menu.add_submenu(menu_item_name, popup_callback)
+				create_menu(menu_def, object, menu_def[i].submenu, submenu)
 		elif menu_item_name == "" or menu_item_name == "-":
 			if !last_is_separator:
 				menu.add_separator()

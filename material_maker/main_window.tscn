@@ -11,7 +11,7 @@
 [ext_resource type="Script" path="res://material_maker/main_window_projects_panel.gd" id="8_4er2h"]
 [ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
 [ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://cp2mbbfmrv6sf" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dnttargjmhjh8" path="res://material_maker/tools/share/share_button.tscn" id="12"]
 [ext_resource type="Script" path="res://material_maker/panel_container.gd" id="12_7mn0u"]
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
@@ -21,7 +21,7 @@
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dmmtn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o3j2h"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
@@ -167,9 +167,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource("12")]
-layout_mode = 2
-
 [node name="Layout" type="HSplitContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -213,7 +210,7 @@ offset_top = 28.0
 
 [node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource("ShaderMaterial_dmmtn")
+material = SubResource("ShaderMaterial_o3j2h")
 layout_mode = 1
 offset_right = 0.0
 offset_bottom = 0.0
@@ -338,6 +335,13 @@ scroll_active = false
 
 [node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/Tip"]
 
+[node name="Share" parent="VBoxContainer/StatusBar" instance=ExtResource("12")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar"]
+layout_mode = 2
+
 [node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
 layout_mode = 2
 script = SubResource("9")
@@ -359,7 +363,7 @@ texture = ExtResource("15")
 wait_time = 0.5
 autostart = true
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/StatusBar"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar"]
 layout_mode = 2
 
 [node name="RenderCounter" parent="VBoxContainer/StatusBar" instance=ExtResource("11")]

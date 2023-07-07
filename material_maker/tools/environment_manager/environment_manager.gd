@@ -85,7 +85,7 @@ func get_environment_list() -> Array:
 		list.push_back(item)
 	return list
 
-func create_environment_menu(menu : PopupMenu) -> void:
+func create_environment_menu(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
 	for e in get_environment_list():
 		menu.add_icon_item(e.thumbnail, e.name)

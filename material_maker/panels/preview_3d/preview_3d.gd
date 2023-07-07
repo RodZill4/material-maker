@@ -61,7 +61,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
 
-func create_menu_model_list(menu : PopupMenu) -> void:
+func create_menu_model_list(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
 	for i in objects.get_child_count():
 		var o = objects.get_child(i)
@@ -70,25 +70,22 @@ func create_menu_model_list(menu : PopupMenu) -> void:
 			menu.add_icon_item(thumbnail, "", i)
 		else:
 			menu.add_item(o.name, i)
-	if !menu.is_connected("id_pressed", Callable(self, "_on_Model_item_selected")):
-		menu.connect("id_pressed", Callable(self, "_on_Model_item_selected"))
+	menu.connect_id_pressed(self._on_Model_item_selected)
 
-func create_menu_environment_list(menu : PopupMenu) -> void:
+func create_menu_environment_list(menu : MMMenuManager.MenuBase) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", Callable(self, "_on_Environment_item_selected")):
-		menu.connect("id_pressed", Callable(self, "_on_Environment_item_selected"))
+	menu.connect_id_pressed(self._on_Environment_item_selected)
 
 const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
 
-func create_menu_tonemap_list(menu : PopupMenu) -> void:
+func create_menu_tonemap_list(menu : MMMenuManager.MenuBase) -> void:
 	var tonemap_mode : int = mm_globals.get_config("ui_3d_preview_tonemap")
 	menu.clear()
 	for i in TONEMAPS.size():
 		menu.add_radio_check_item(TONEMAPS[i], i)
 		if i == tonemap_mode:
 			menu.set_item_checked(i, true)
-	if !menu.is_connected("id_pressed", Callable(self, "_on_Tonemaps_item_selected")):
-		menu.connect("id_pressed", Callable(self, "_on_Tonemaps_item_selected"))
+	menu.connect_id_pressed(self._on_Tonemaps_item_selected)
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
@@ -261,14 +258,13 @@ func do_generate_map(file_name : String, map : String, image_size : int) -> void
 	map_renderer.queue_free()
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 
-func create_menu_map(menu : PopupMenu, function : String) -> void:
+func create_menu_map(menu : MMMenuManager.MenuBase, function : String) -> void:
 	menu.clear()
 	for i in range(5):
 		menu.add_item(str(256 << i)+"x"+str(256 << i), i)
-	if !menu.is_connected("id_pressed", Callable(self, function)):
-		menu.connect("id_pressed", Callable(self, function))
+	menu.connect_id_pressed(Callable(self, function))
 
-func create_menu_generate_normal_map(menu) -> void:
+func create_menu_generate_normal_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_normal_map")
 
 func generate_normal_map(i : int) -> void:
@@ -277,7 +273,7 @@ func generate_normal_map(i : int) -> void:
 func do_generate_normal_map(file_name : String, image_size : int) -> void:
 	do_generate_map(file_name, "normal", image_size)
 
-func create_menu_generate_position_map(menu) -> void:
+func create_menu_generate_position_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_position_map")
 
 func generate_position_map(i : int) -> void:
@@ -286,7 +282,7 @@ func generate_position_map(i : int) -> void:
 func do_generate_position_map(file_name : String, image_size : int) -> void:
 	do_generate_map(file_name, "position", image_size)
 
-func create_menu_generate_curvature_map(menu) -> void:
+func create_menu_generate_curvature_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_curvature_map")
 
 func generate_curvature_map(i : int) -> void:
@@ -295,7 +291,7 @@ func generate_curvature_map(i : int) -> void:
 func do_generate_curvature_map(file_name : String, image_size : int) -> void:
 	do_generate_map(file_name, "curvature", image_size)
 
-func create_menu_generate_thickness_map(menu) -> void:
+func create_menu_generate_thickness_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_thickness_map")
 
 func generate_thickness_map(i : int) -> void:
@@ -304,7 +300,7 @@ func generate_thickness_map(i : int) -> void:
 func do_generate_thickness_map(file_name : String, image_size : int) -> void:
 	do_generate_map(file_name, "thickness", image_size)
 
-func create_menu_generate_ao_map(menu) -> void:
+func create_menu_generate_ao_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_ao_map")
 
 func generate_ao_map(i : int) -> void:

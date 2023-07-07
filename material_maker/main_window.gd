@@ -213,7 +213,14 @@ func _ready() -> void:
 	
 	update_menus()
 
+var menu_update_requested : bool = false
+
 func update_menus() -> void:
+	if ! menu_update_requested:
+		menu_update_requested = true
+		do_update_menus.call_deferred()
+
+func do_update_menus() -> void:
 	# Create menus
 	var menu_bar_class
 	if false and DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
@@ -222,6 +229,7 @@ func update_menus() -> void:
 		menu_bar_class = mm_globals.menu_manager.MenuBarGodot
 	var menu_bar = menu_bar_class.new($VBoxContainer/TopBar/Menu)
 	mm_globals.menu_manager.create_menus(MENU, self, menu_bar)
+	menu_update_requested = false
 
 func _exit_tree() -> void:
 	# Save the window position and size to remember it when restarting the application
@@ -278,7 +286,7 @@ func get_current_graph_edit() -> MMGraphEdit:
 	return null
 
 func get_share_button():
-	return $VBoxContainer/TopBar/Share
+	return %Share
 
 # Modes
 
@@ -301,8 +309,7 @@ func create_menu_load_recent(menu) -> void:
 	else:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
-		if !menu.is_connected("id_pressed", Callable(self, "_on_LoadRecent_id_pressed")):
-			menu.connect("id_pressed", Callable(self, "_on_LoadRecent_id_pressed"))
+		menu.connect_id_pressed(self._on_LoadRecent_id_pressed)
 
 func _on_LoadRecent_id_pressed(id) -> void:
 	do_load_project(recent_files[id])
@@ -371,13 +378,9 @@ func export_again() -> void:
 	var export_path : String = material_node.get_export_path(export_target)
 	export_material(export_path, export_target)
 
-func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_profiles = null) -> void:
+func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String = "", export_profiles = null) -> void:
 	if prefix == "":
 		menu.clear()
-		menu.set_size(Vector2(0, 0))
-		for sm in menu.get_children():
-			menu.remove_child(sm)
-			sm.free()
 	var project = get_current_project()
 	if project == null:
 		return
@@ -385,7 +388,7 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_
 	if material_node == null:
 		return
 	var prefix_len = prefix.length()
-	var submenus = []
+	var submenus : Array[String] = []
 	if export_profiles == null:
 		export_profiles = material_node.get_export_profiles()
 	for id in range(export_profiles.size()):
@@ -398,16 +401,12 @@ func create_menu_export_material(menu : PopupMenu, prefix : String = "", export_
 		if slash_position == -1:
 			menu.add_item(p, id)
 		else:
-			var submenu_name = p.left(slash_position)
+			var submenu_name : String = p.left(slash_position)
 			if submenus.find(submenu_name) == -1:
-				var submenu = PopupMenu.new()
-				submenu.name = submenu_name
-				menu.add_child(submenu)
+				var submenu : MMMenuManager.MenuBase = menu.add_submenu(submenu_name)
 				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles)
-				menu.add_submenu_item(submenu_name, submenu_name, id)
-				submenus.push_back(submenu_name)
-	if ! menu.id_pressed.is_connected(self._on_ExportMaterial_id_pressed):
-		menu.id_pressed.connect(self._on_ExportMaterial_id_pressed)
+				submenus.append(submenu_name)
+	menu.connect_id_pressed(self._on_ExportMaterial_id_pressed)
 
 func _on_ExportMaterial_id_pressed(id) -> void:
 	var project = get_current_project()
@@ -443,12 +442,11 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 			export_material(files[0], profile)
 
 
-func create_menu_set_theme(menu) -> void:
+func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
 	for t in THEMES:
 		menu.add_item(t)
-	if !menu.is_connected("id_pressed", Callable(self, "_on_SetTheme_id_pressed")):
-		menu.connect("id_pressed", Callable(self, "_on_SetTheme_id_pressed"))
+	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
 func change_theme(theme_name) -> void:
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
@@ -460,28 +458,25 @@ func _on_SetTheme_id_pressed(id) -> void:
 	mm_globals.config.set_value("window", "theme", theme_name)
 
 
-func create_menu_show_panels(menu : PopupMenu) -> void:
+func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
 	var panels = layout.get_panel_list()
 	for i in range(panels.size()):
 		menu.add_check_item(panels[i], i)
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
-	if !menu.is_connected("id_pressed", Callable(self, "_on_ShowPanels_id_pressed")):
-		menu.connect("id_pressed", Callable(self, "_on_ShowPanels_id_pressed"))
+	menu.connect_id_pressed(self._on_ShowPanels_id_pressed)
 
 func _on_ShowPanels_id_pressed(id) -> void:
 	var panel : String = layout.get_panel_list()[id]
 	layout.set_panel_visible(panel, !layout.is_panel_visible(panel))
 
 
-func create_menu_create(menu : PopupMenu) -> void:
+func create_menu_create(menu : MMMenuManager.MenuBase) -> void:
 	var gens = mm_loader.get_generator_list()
 	menu.clear()
-	menu.size = Vector2(0, 0)
 	for i in gens.size():
 		menu.add_item(gens[i], i)
-	if !menu.is_connected("id_pressed", Callable(self, "_on_Create_id_pressed")):
-		menu.connect("id_pressed", Callable(self, "_on_Create_id_pressed"))
+	menu.connect_id_pressed(self._on_Create_id_pressed)
 
 func _on_Create_id_pressed(id) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -837,8 +832,7 @@ func create_menu_add_to_library(menu, manager, function) -> void:
 		var lib = manager.get_child(i)
 		if ! lib.read_only:
 			menu.add_item(lib.library_name, i)
-	if !menu.is_connected("id_pressed", Callable(self, function)):
-		menu.connect("id_pressed", Callable(self, function))
+	menu.connect_id_pressed(Callable(self, function))
 
 func create_menu_add_selection_to_library(menu) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")

@@ -30,6 +30,7 @@ func add_tab(control, legible_unique_name = false) -> void:
 
 func set_current_tab(t : int):
 	current_tab = t
+	mm_globals.main_window.update_menus()
 
 func close_tab(tab = null) -> void:
 	if tab == null:
@@ -37,6 +38,7 @@ func close_tab(tab = null) -> void:
 	var result = await check_save_tab(tab)
 	if result:
 		do_close_tab(tab)
+	mm_globals.main_window.update_menus()
 
 func get_tab_count() -> int:
 	return $TabBar.get_tab_count()
