@@ -127,7 +127,8 @@ class MenuDisplayServer:
 		menu_name = m
 	
 	func clear():
-		pass
+		while DisplayServer.global_menu_get_item_count(menu_name) > 0:
+			DisplayServer.global_menu_remove_item(menu_name, 0)
 	
 	func connect_id_pressed(callable : Callable):
 		mm_globals.menu_manager.menu_callables[get_instance_id()] = callable

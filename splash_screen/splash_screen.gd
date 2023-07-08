@@ -82,17 +82,7 @@ func do_start_ui(scene : PackedScene):
 		add_child(dialog)
 		await dialog.ask()
 	
-	self.hide()
-	
-	var root = get_tree().root
-	assert(root == get_parent())
-	# Remove the current scene
-	root.remove_child(self)
-	call_deferred("free")
-	# Add the next scene
-	var instance = scene.instantiate()
-	root.add_child(instance)
-	window.borderless = false
+	get_tree().change_scene_to_packed(scene)
 
 var wait : float = 0.0
 func _process(delta) -> void:
