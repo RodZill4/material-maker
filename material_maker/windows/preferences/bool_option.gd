@@ -10,4 +10,4 @@ func init_from_config(config : ConfigFile) -> void:
 		button_pressed = config.get_value("config", config_variable)
 
 func update_config(config : ConfigFile) -> void:
-	config.set_value("config", config_variable, pressed)
+	config.set_value("config", config_variable, button_pressed)
