@@ -2,7 +2,7 @@ extends SubViewportContainer
 
 
 @export var control_target : NodePath
-@export var mode : int = 1:
+@export_enum("NONE", "SDF2D", "SDF3D") var mode : int = 1:
 	get:
 		return mode
 	set(new_value):

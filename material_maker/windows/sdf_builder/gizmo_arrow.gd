@@ -2,7 +2,7 @@
 extends Node3D
 
 @export var material : Material : set = set_material
-@export var mode : int = 0:
+@export_enum("Full", "ArrowOnly", "TorusOnly", "Nothing") var mode : int = 0:
 	get:
 		return mode
 	set(new_value):
