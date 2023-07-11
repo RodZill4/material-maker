@@ -33,10 +33,6 @@ disabled = true
 texture_normal = SubResource("1")
 texture_disabled = SubResource("2")
 
-[node name="Space" type="Control" parent="."]
-custom_minimum_size = Vector2(15, 0)
-layout_mode = 2
-
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 max_redirects = 0
 timeout = 2.0
