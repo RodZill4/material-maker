@@ -47,7 +47,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
-const THEMES = [ "Dark", "Default", "Light" ]
+const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light" ]
 
 const MENU = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
