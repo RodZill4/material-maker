@@ -5,7 +5,7 @@ var left_panel = null
 var volume_option = null
 
 
-const DIALOG_HACK : bool = false
+const DIALOG_HACK : bool = true
 
 
 signal return_paths(path_list)
@@ -13,7 +13,7 @@ signal return_paths(path_list)
 
 func _ready() -> void:
 	if DIALOG_HACK:
-		var vbox = get_child(3)
+		var vbox = get_vbox()
 		var hbox = HSplitContainer.new()
 		add_child(hbox)
 		remove_child(vbox)
