@@ -25,6 +25,7 @@ func setup_material(material_textures : Dictionary) -> void:
 			continue
 		var channel_node = graph.get_node(c)
 		channel_node.texture.set_image(material_textures[c].get_image())
+		mm_deps.dependency_update("o%d_tex" % channel_node.get_instance_id(), channel_node.texture)
 	graph.get_node("material").all_sources_changed()
 
 
