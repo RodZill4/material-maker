@@ -887,11 +887,11 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 		current_preview[slot] = preview
 	emit_signal("preview_changed", self)
 	if is_instance_valid(node):
-		node.update()
+		node.queue_redraw()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
 			if c is GraphNode and (c.generator == old_preview or c.generator == old_locked_preview):
-				c.update()
+				c.queue_redraw()
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually  dragged
