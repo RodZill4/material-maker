@@ -75,6 +75,7 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 			only_return_index = return_index
 			var parse_result : Array = json.get_data()
 			visible = true
+			size = get_contents_minimum_size()
 			popup_centered()
 			var tmp_assets = parse_result
 			tmp_assets.reverse()
