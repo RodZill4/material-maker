@@ -125,6 +125,13 @@ func compile_shader() -> bool:
 		shader = rd.shader_create_from_spirv(spirv)
 	mm_renderer.release_rendering_device(self)
 	return rv
+	
+func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode):
+	for u in shader_code.uniforms:
+		for c in [ "\n".join(shader_code.globals), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
+			if c.find(u.name) != -1:
+				add_parameter_or_texture(u.name, u.type, u.value)
+				break
 
 func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null) -> void:
 	texture_type = 0 if shader_code.output_type == "f" else 1
@@ -132,12 +139,7 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 		texture_type |= 2
 	
 	clear()
-	var globals : String = "\n".join(shader_code.globals)
-	for u in shader_code.uniforms:
-		for c in [ globals, shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
-			if c.find(u.name) != -1:
-				add_parameter_or_texture(u.name, u.type, u.value)
-				break
+	set_parameters_from_shadercode(shader_code)
 	
 	if compare_texture != null:
 		add_parameter_or_texture("mm_compare", "sampler2D", compare_texture)
@@ -160,7 +162,7 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	shader_source += "\n"
 	shader_source += "const float seed_variation = 0.0;\n"
 	shader_source += "\n"
-	shader_source += globals
+	shader_source += "\n".join(shader_code.globals)
 	shader_source += "\n"
 	if shader_code.defs != "":
 		shader_source += shader_code.defs
@@ -219,10 +221,10 @@ func set_parameter(name : String, value) -> void:
 	else:
 		print("Cannot assign parameter "+name)
 
-func render_loop(rd : RenderingDevice, size : int, chunk_height : int, uniform_set_0 : RID, uniform_set_1 : RID, uniform_set_2 : RID, uniform_set_4 : RID):
+func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, uniform_set_0 : RID, uniform_set_1 : RID, uniform_set_2 : RID, uniform_set_4 : RID):
 	var y : int = 0
-	while y < size:
-		var h : int = min(chunk_height, size-y)
+	while y < size.y:
+		var h : int = min(chunk_height, size.y-y)
 		
 		# Create a compute pipeline
 		var pipeline : RID = rd.compute_pipeline_create(shader)
@@ -251,7 +253,7 @@ func render_loop(rd : RenderingDevice, size : int, chunk_height : int, uniform_s
 			rd.compute_list_bind_uniform_set(compute_list, uniform_set_4, 4)
 		
 		#print("Dispatching compute list")
-		rd.compute_list_dispatch(compute_list, (size+LOCAL_SIZE-1)/LOCAL_SIZE, h, 1)
+		rd.compute_list_dispatch(compute_list, (size.x+LOCAL_SIZE-1)/LOCAL_SIZE, h, 1)
 		rd.compute_list_end()
 		#print("Rendering "+str(self))
 		rd.submit()
@@ -267,11 +269,7 @@ func render_loop(rd : RenderingDevice, size : int, chunk_height : int, uniform_s
 		y += h
 
 func render(texture : MMTexture, size : int) -> bool:
-	var rids : Dictionary = {}
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
-	var outputs : PackedByteArray
-	
-	diff = 65536
 	
 	#print("Preparing render")
 	
@@ -288,93 +286,103 @@ func render(texture : MMTexture, size : int) -> bool:
 	var view : RDTextureView = RDTextureView.new()
 	
 	var output_tex : RID = rd.texture_create(fmt, view, PackedByteArray())
-	
 	if shader.is_valid():
-		var output_tex_uniform : RDUniform = RDUniform.new()
-		output_tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-		output_tex_uniform.binding = 0
-		output_tex_uniform.add_id(output_tex)
-		var uniform_set_0 : RID = rd.uniform_set_create([output_tex_uniform], shader, 0)
-		rids[uniform_set_0] = "uniform_set_0"
-		
-		var uniform_set_1 : RID = RID()
-		if parameter_values.size() > 0:
-			var parameters_buffer : RID = rd.storage_buffer_create(parameter_values.size(), parameter_values)
-			var parameters_uniform : RDUniform = RDUniform.new()
-			parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-			parameters_uniform.binding = 0
-			parameters_uniform.add_id(parameters_buffer)
-			uniform_set_1 = rd.uniform_set_create([parameters_uniform], shader, 1)
-			rids[uniform_set_1] = "uniform_set_1"
-			rids[parameters_buffer] = "parameters_buffer"
-		
-		var uniform_set_2 = RID()
-		if !textures.is_empty():
-			var sampler_state : RDSamplerState = RDSamplerState.new()
-			sampler_state.mag_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
-			sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
-			sampler_state.mip_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
-			var sampler : RID = rd.sampler_create(sampler_state)
-			rids[sampler] = "sampler"
-			var sampler_uniform_array : Array = []
-			for i in textures.size():
-				var tex : RID = textures[i].texture.get_texture_rid(rd)
-				if ! tex.is_valid():
-					print("Invalid texture")
-				var sampler_uniform : RDUniform = RDUniform.new()
-				sampler_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
-				sampler_uniform.binding = i
-				sampler_uniform.add_id(sampler)
-				sampler_uniform.add_id(tex)
-				sampler_uniform_array.append(sampler_uniform)
-			uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
-			rids[uniform_set_2] = "uniform_set_2"
-		
-		var uniform_set_4 = RID()
-		var outputs_buffer : RID
-		if texture_indexes.has("mm_compare"):
-			outputs = PackedInt32Array([0]).to_byte_array()
-			outputs_buffer = rd.storage_buffer_create(outputs.size(), outputs)
-			rids[outputs_buffer] = "outputs_buffer"
-			var outputs_uniform : RDUniform = RDUniform.new()
-			outputs_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-			outputs_uniform.binding = 0
-			outputs_uniform.add_id(outputs_buffer)
-			uniform_set_4 = rd.uniform_set_create([outputs_uniform], shader, 4)
-			rids[uniform_set_4] = "uniform_set_4"
-		
-		var max_viewport_size = mm_renderer.max_viewport_size
-		var chunk_count : int = max(1, size*size/(max_viewport_size*max_viewport_size))
-		var chunk_height : int = max(1, size/chunk_count)
-		
-		#await render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
-		var thread : Thread = Thread.new()
-		thread.start(render_loop.bind(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4))
-		while thread.is_alive():
-			await mm_renderer.get_tree().process_frame
-		
-		thread.wait_to_finish()
-		
-		if uniform_set_4.is_valid():
-			outputs = rd.buffer_get_data(outputs_buffer)
-			diff = outputs.to_int32_array()[0]
+		await do_render(rd, output_tex, Vector2i(size, size))
 	else:
 		print("Invalid shader, generating blank image")
 	
 	texture.set_texture_rid(output_tex, Vector2i(size, size), TEXTURE_TYPE[texture_type].data_format)
-	for r in rids.keys():
-		if r.is_valid():
-			#print("Freeing %s: %s" % [ str(r), rids[r] ])
-			rd.free_rid(r)
-		else:
-			print("Bad rid %s for %s" % [ str(r), rids[r]])
-	
+
 	render_time = Time.get_ticks_msec() - start_time
 	
 	mm_renderer.release_rendering_device(self)
 
 	return true
 
+func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i):
+	var rids : Dictionary = {}
+	var outputs : PackedByteArray
+	
+	diff = 65536
+	
+	var output_tex_uniform : RDUniform = RDUniform.new()
+	output_tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	output_tex_uniform.binding = 0
+	output_tex_uniform.add_id(output_tex)
+	var uniform_set_0 : RID = rd.uniform_set_create([output_tex_uniform], shader, 0)
+	rids[uniform_set_0] = "uniform_set_0"
+	
+	var uniform_set_1 : RID = RID()
+	if parameter_values.size() > 0:
+		var parameters_buffer : RID = rd.storage_buffer_create(parameter_values.size(), parameter_values)
+		var parameters_uniform : RDUniform = RDUniform.new()
+		parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+		parameters_uniform.binding = 0
+		parameters_uniform.add_id(parameters_buffer)
+		uniform_set_1 = rd.uniform_set_create([parameters_uniform], shader, 1)
+		rids[uniform_set_1] = "uniform_set_1"
+		rids[parameters_buffer] = "parameters_buffer"
+	
+	var uniform_set_2 = RID()
+	if !textures.is_empty():
+		var sampler_state : RDSamplerState = RDSamplerState.new()
+		sampler_state.mag_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
+		sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
+		sampler_state.mip_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
+		var sampler : RID = rd.sampler_create(sampler_state)
+		rids[sampler] = "sampler"
+		var sampler_uniform_array : Array = []
+		for i in textures.size():
+			var tex : RID = textures[i].texture.get_texture_rid(rd)
+			if ! tex.is_valid():
+				print("Invalid texture")
+			var sampler_uniform : RDUniform = RDUniform.new()
+			sampler_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
+			sampler_uniform.binding = i
+			sampler_uniform.add_id(sampler)
+			sampler_uniform.add_id(tex)
+			sampler_uniform_array.append(sampler_uniform)
+		uniform_set_2 = rd.uniform_set_create(sampler_uniform_array, shader, 2)
+		if ! uniform_set_2.is_valid():
+			print("uniform set is not valid")
+		else:
+			rids[uniform_set_2] = "uniform_set_2"
+	
+	var uniform_set_4 = RID()
+	var outputs_buffer : RID
+	if texture_indexes.has("mm_compare"):
+		outputs = PackedInt32Array([0]).to_byte_array()
+		outputs_buffer = rd.storage_buffer_create(outputs.size(), outputs)
+		rids[outputs_buffer] = "outputs_buffer"
+		var outputs_uniform : RDUniform = RDUniform.new()
+		outputs_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+		outputs_uniform.binding = 0
+		outputs_uniform.add_id(outputs_buffer)
+		uniform_set_4 = rd.uniform_set_create([outputs_uniform], shader, 4)
+		rids[uniform_set_4] = "uniform_set_4"
+	
+	var max_viewport_size = mm_renderer.max_viewport_size
+	var chunk_count : int = max(1, size.x*size.y/(max_viewport_size*max_viewport_size))
+	var chunk_height : int = max(1, size.y/chunk_count)
+	
+	#await render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
+	var thread : Thread = Thread.new()
+	thread.start(render_loop.bind(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4))
+	while thread.is_alive():
+		await mm_renderer.get_tree().process_frame
+	
+	thread.wait_to_finish()
+	
+	if uniform_set_4.is_valid():
+		outputs = rd.buffer_get_data(outputs_buffer)
+		diff = outputs.to_int32_array()[0]
+	
+	for r in rids.keys():
+		if r.is_valid():
+			#print("Freeing %s: %s" % [ str(r), rids[r] ])
+			rd.free_rid(r)
+		else:
+			print("Bad rid %s for %s" % [ str(r), rids[r]])
 
 func get_difference() -> int:
 	return diff
