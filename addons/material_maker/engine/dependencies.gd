@@ -154,7 +154,7 @@ func dependency_update(dependency_name : String, value = null, internal : bool =
 				b.pending_dependencies -= 1
 				if b.pending_dependencies == 0:
 					need_update = true
-			if b.object.has_method("on_dep_update_value") and b.object.on_dep_update_value(d, dependency_name, value):
+			if b.object.has_method("on_dep_update_value") and await b.object.on_dep_update_value(d, dependency_name, value):
 				continue
 			buffer_invalidate(d)
 			need_update = true
@@ -164,38 +164,44 @@ func dependencies_update(dependency_values : Dictionary):
 	for k in dependency_values.keys():
 		dependency_update(k, dependency_values[k])
 
+var updating : bool = false
 var update_scheduled : bool = false
+
 func update():
 	if update_scheduled:
 		return
-	call_deferred("do_update")
 	update_scheduled = true
+	if !updating:
+		call_deferred("do_update")
 
 # on_dep_update_buffer:
 # - returns true if update was performed immediately, set to updated
 # - if returns false or a gdScriptFunctionState, set to updating
 
 func do_update():
-	update_scheduled = false
-	var invalidated_buffers : int = 0
-	for b in buffers.keys():
-		if !buffers.has(b):
-			continue
-		var buffer : Buffer = buffers[b]
-		if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
-			invalidated_buffers += 1
-		if buffer.status == Buffer.Invalidated && buffer.pending_dependencies == 0:
-			if buffer.object.has_method("on_dep_update_buffer"):
-				buffer.status = Buffer.Updating
-				var status = await buffer.object.on_dep_update_buffer(b)
-				if status is bool and ! status:
-					buffer.status = Buffer.Invalidated
-	if reset_stats:
-		render_queue_size = invalidated_buffers
-		reset_stats = false
-	get_tree().call_group("render_counter", "on_counter_change", render_queue_size, invalidated_buffers)
-	if invalidated_buffers == 0:
-		emit_signal("render_queue_empty")
+	updating = true
+	while update_scheduled:
+		update_scheduled = false
+		var invalidated_buffers : int = 0
+		for b in buffers.keys():
+			if ! buffers.has(b):
+				continue
+			var buffer : Buffer = buffers[b]
+			if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
+				invalidated_buffers += 1
+			if buffer.status == Buffer.Invalidated && buffer.pending_dependencies == 0:
+				if buffer.object.has_method("on_dep_update_buffer"):
+					buffer.status = Buffer.Updating
+					var status = await buffer.object.on_dep_update_buffer(b)
+					if status is bool and ! status:
+						buffer.status = Buffer.Invalidated
+		if reset_stats:
+			render_queue_size = invalidated_buffers
+			reset_stats = false
+		get_tree().call_group("render_counter", "on_counter_change", render_queue_size, invalidated_buffers)
+		if invalidated_buffers == 0:
+			emit_signal("render_queue_empty")
+	updating = false
 
 func get_render_queue_size() -> int:
 	var invalidated_buffers : int = 0
