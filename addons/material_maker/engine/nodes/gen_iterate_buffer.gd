@@ -123,7 +123,7 @@ func do_update_shader(input_port_index : int) -> void:
 		await shader_compute.set_shader_from_shadercode(source, f32, texture)
 	else:
 		await shader_compute.set_shader_from_shadercode(source, f32)
-	var new_is_greyscale = ((shader_compute.texture_type & 1) == 0)
+	var new_is_greyscale = ((shader_compute.get_texture_type() & 1) == 0)
 	if new_is_greyscale != is_greyscale[input_port_index]:
 		is_greyscale[input_port_index] = new_is_greyscale
 		notify_output_change(input_port_index)

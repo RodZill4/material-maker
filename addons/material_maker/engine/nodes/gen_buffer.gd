@@ -104,7 +104,7 @@ func do_update_shader() -> void:
 	if version == VERSION_COMPLEX:
 		f32 = get_parameter("f32")
 	await shader_compute.set_shader_from_shadercode(source, f32)
-	var new_is_greyscale = ((shader_compute.texture_type & 1) == 0)
+	var new_is_greyscale = ((shader_compute.get_texture_type() & 1) == 0)
 	if new_is_greyscale != is_greyscale:
 		is_greyscale = new_is_greyscale
 		notify_output_change(0)
@@ -122,7 +122,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		return false
 	var status = await shader_compute.render(texture, pow(2, get_parameter("size")))
 	if status:
-		emit_signal("rendering_time", shader_compute.render_time)
+		emit_signal("rendering_time", shader_compute.get_render_time())
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return true
 	return false

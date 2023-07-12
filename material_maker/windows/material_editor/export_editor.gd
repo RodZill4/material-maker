@@ -19,7 +19,7 @@ var data : Dictionary = {}
 var exports : Dictionary = {}
 
 
-const GEN_MATERIAL = preload("res://addons/material_maker/engine/gen_material.gd")
+const GEN_MATERIAL = preload("res://addons/material_maker/engine/nodes/gen_material.gd")
 
 
 signal node_changed(model_data)
@@ -96,7 +96,7 @@ func select_file(i : int) -> void:
 					for p in f.file_params.keys():
 						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 					f.erase("file_params")
-				var template : String = GEN_MATERIAL.process_template(GEN_MATERIAL.get_template_text(f.template), file_export_context)
+				var template : String = MMGenMaterial.process_template(MMGenMaterial.get_template_text(f.template), file_export_context)
 				if template != f.template:
 					f.template = template
 				export_file_template.text = template
