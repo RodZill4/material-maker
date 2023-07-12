@@ -33,7 +33,6 @@ func get_texture_rid(rd : RenderingDevice = null) -> RID:
 		var fmt : RDTextureFormat = RDTextureFormat.new()
 		fmt.width = image.get_width()
 		fmt.height = image.get_height()
-		print(image.get_size())
 		fmt.format = texture_format
 		fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
 		var view : RDTextureView = RDTextureView.new()
