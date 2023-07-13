@@ -37,11 +37,8 @@ class InputTexture:
 class RIDs:
 	extends RefCounted
 	
-	var rendering_device : RenderingDevice
+
 	var rids : Array[RID] = []
-	
-	func _init(rd : RenderingDevice):
-		rendering_device = rd
 	
 	func add(rid : RID):
 		if rid.is_valid():
@@ -52,15 +49,16 @@ class RIDs:
 		else:
 			print("RID is invalid")
 	
-	func free_rids():
+	func free_rids(rd : RenderingDevice):
 		for r in rids:
-			rendering_device.free_rid(r)
+			if r.is_valid():
+				rd.free_rid(r)
 
 const TEXTURE_TYPE : Array[Dictionary] = [
-	{ decl="r16f", data_format=RenderingDevice.DATA_FORMAT_R16_SFLOAT, image_format=Image.FORMAT_RH },
-	{ decl="rgba16f", data_format=RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT, image_format=Image.FORMAT_RGBAH },
-	{ decl="r32f", data_format=RenderingDevice.DATA_FORMAT_R32_SFLOAT, image_format=Image.FORMAT_RF },
-	{ decl="rgba32f", data_format=RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, image_format=Image.FORMAT_RGBAF }
+	{ decl="r16f", data_format=RenderingDevice.DATA_FORMAT_R16_SFLOAT, image_format=Image.FORMAT_RH, channels=1, bytes_per_channel=2 },
+	{ decl="rgba16f", data_format=RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT, image_format=Image.FORMAT_RGBAH, channels=4, bytes_per_channel=2 },
+	{ decl="r32f", data_format=RenderingDevice.DATA_FORMAT_R32_SFLOAT, image_format=Image.FORMAT_RF, channels=1, bytes_per_channel=4 },
+	{ decl="rgba32f", data_format=RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, image_format=Image.FORMAT_RGBAF, channels=4, bytes_per_channel=4 }
 ]
 
 
@@ -187,3 +185,17 @@ func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RI
 	if uniform_set.is_valid():
 		rids.add(uniform_set)
 	return uniform_set
+
+func create_buffers_uniform_list(rd : RenderingDevice, buffers : Array[PackedByteArray], rids : RIDs) -> Array[RDUniform]:
+	var uniform_list : Array[RDUniform] = []
+	var binding : int = 0
+	for b in buffers:
+		var buffer : RID = rd.storage_buffer_create(b.size(), b)
+		rids.add(buffer)
+		var uniform : RDUniform = RDUniform.new()
+		uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+		uniform.binding = binding
+		uniform.add_id(buffer)
+		binding += 1
+		uniform_list.append(uniform)
+	return uniform_list

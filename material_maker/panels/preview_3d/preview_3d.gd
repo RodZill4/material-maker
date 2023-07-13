@@ -30,6 +30,7 @@ const MENU = [
 	{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
 	{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
 	{ menu="Model/Generate map/Position", submenu="generate_position_map" },
+	{ menu="Model/Generate map/Position (new)", submenu="generate_new_position_map" },
 	{ menu="Model/Generate map/Normal", submenu="generate_normal_map" },
 	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
 	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
@@ -258,6 +259,15 @@ func do_generate_map(file_name : String, map : String, image_size : int) -> void
 	map_renderer.queue_free()
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 
+func do_generate_map_new(file_name : String, map : String, image_size : int) -> void:
+	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
+	add_child(map_renderer)
+	var id = objects.get_child_count()-1
+	var object : MeshInstance3D = objects.get_child(id)
+	await map_renderer.gen_new(object.mesh, map, "save_to_file", [ file_name ], image_size)
+	map_renderer.queue_free()
+	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
+
 func create_menu_map(menu : MMMenuManager.MenuBase, function : String) -> void:
 	menu.clear()
 	for i in range(5):
@@ -281,6 +291,15 @@ func generate_position_map(i : int) -> void:
 
 func do_generate_position_map(file_name : String, image_size : int) -> void:
 	do_generate_map(file_name, "position", image_size)
+
+func create_menu_generate_new_position_map(menu : MMMenuManager.MenuBase) -> void:
+	create_menu_map(menu, "generate_new_position_map")
+
+func generate_new_position_map(i : int) -> void:
+	generate_map("do_generate_new_position_map", 256 << i)
+
+func do_generate_new_position_map(file_name : String, image_size : int) -> void:
+	do_generate_map_new(file_name, "position", image_size)
 
 func create_menu_generate_curvature_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_curvature_map")

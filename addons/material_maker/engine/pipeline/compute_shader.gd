@@ -113,10 +113,13 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 	while y < size.y:
 		var h : int = min(chunk_height, size.y-y)
 		
+		var rids : RIDs = RIDs.new()
+		
 		# Create a compute pipeline
 		var pipeline : RID = rd.compute_pipeline_create(shader)
 		if !pipeline.is_valid():
 			print("Cannot create pipeline")
+		rids.add(pipeline)
 		var compute_list := rd.compute_list_begin()
 		rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_0, 0)
@@ -128,12 +131,8 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		var loop_parameters_values : PackedByteArray = PackedByteArray()
 		loop_parameters_values.resize(4)
 		loop_parameters_values.encode_s32(0, y)
-		var loop_parameters_buffer : RID = rd.storage_buffer_create(loop_parameters_values.size(), loop_parameters_values)
-		var loop_parameters_uniform : RDUniform = RDUniform.new()
-		loop_parameters_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-		loop_parameters_uniform.binding = 0
-		loop_parameters_uniform.add_id(loop_parameters_buffer)
-		var uniform_set_3 : RID = rd.uniform_set_create([loop_parameters_uniform], shader, 3)
+		var uniform_set_3 : RID = rd.uniform_set_create(create_buffers_uniform_list(rd, [loop_parameters_values], rids), shader, 3)
+		rids.add(uniform_set_3)
 		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
 		
 		if uniform_set_4.is_valid():
@@ -147,9 +146,7 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		#await mm_renderer.get_tree().process_frame
 		rd.sync()
 		
-		rd.free_rid(uniform_set_3)
-		rd.free_rid(loop_parameters_buffer)
-		rd.free_rid(pipeline)
+		rids.free_rids(rd)
 		
 		#print("End rendering %d-%d (%dms)" % [ y, y+h, render_time ])
 		
@@ -157,10 +154,10 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 
 func render(texture : MMTexture, size : int) -> bool:
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
-	var rids : RIDs = RIDs.new(rd)
+	var rids : RIDs = RIDs.new()
 	var start_time = Time.get_ticks_msec()
 	var status = await render_2(rd, texture, size, rids)
-	rids.free_rids()
+	rids.free_rids(rd)
 	render_time = Time.get_ticks_msec() - start_time
 	mm_renderer.release_rendering_device(self)
 	return status

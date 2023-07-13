@@ -19,6 +19,22 @@ extends Node
 func _ready():
 	pass
 
+func gen_new(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
+	var map_generator : MMRenderingPipeline = MMRenderingPipeline.new()
+	var texture : ImageTexture = ImageTexture.new()
+	map_generator.render(mesh, Vector2i(map_size, map_size), 3, texture)
+	match renderer_method:
+		"save_to_file":
+			var image = texture.get_image()
+			if image:
+				var file_name : String = arguments[0]
+				print("Saving image to "+file_name)
+				match file_name.get_extension():
+					"png":
+						image.save_png(file_name)
+					"exr":
+						image.save_exr(file_name)
+
 func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
 	var bake_passes =  {
 		position =  { first=position_material, second=dilate_pass1, third=dilate_pass2 },
@@ -29,6 +45,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		ao =        { first=ao_material, second=dilate_pass1, third=dilate_pass2, map_name="Ambient Occlusion" },
 		seams =     { first=white_material, second=seams_pass1, third=seams_pass2 }
 	}
+	
 	var passes = bake_passes[map]
 	viewport.size = Vector2(map_size, map_size)
 	if map == "curvature":
