@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=125 format=3 uid="uid://dwfffr58feofm"]
+[gd_resource type="Theme" load_steps=126 format=3 uid="uid://dwfffr58feofm"]
 
 [ext_resource type="Texture2D" uid="uid://d2ohx44rm5pe1" path="res://material_maker/theme/dark/textedit_fold.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://cbnl1ajr2avjc" path="res://material_maker/theme/dark/textedit_space.png" id="2"]
@@ -60,12 +60,29 @@
 [ext_resource type="FontFile" path="res://material_maker/theme/font.tres" id="58"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="59"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ihgd"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.847059)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
+shadow_color = Color(0, 0, 0, 1)
+
 [sub_resource type="StyleBoxFlat" id="65"]
 content_margin_left = 6.0
 content_margin_top = 4.0
 content_margin_right = 6.0
 content_margin_bottom = 4.0
-bg_color = Color(0.113725, 0.113725, 0.113725, 0.847059)
+bg_color = Color(0.164706, 0.164706, 0.164706, 0.847059)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
 shadow_color = Color(0, 0, 0, 1)
 
@@ -710,7 +727,7 @@ Button/colors/font_pressed_color = Color(0.828125, 0.906524, 1, 1)
 Button/colors/icon_color_hover = Color(1.15, 1.15, 1.15, 1)
 Button/colors/icon_color_pressed = Color(0.952344, 1.0425, 1.15, 1)
 Button/fonts/font = ExtResource("58")
-Button/styles/disabled = SubResource("65")
+Button/styles/disabled = SubResource("StyleBoxFlat_8ihgd")
 Button/styles/focus = SubResource("65")
 Button/styles/hover = SubResource("65")
 Button/styles/normal = SubResource("65")
