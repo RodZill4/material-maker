@@ -114,7 +114,9 @@ func process_port_click(pressed : bool):
 							port_click_node = c
 							port_click_port_index = i
 						elif port_click_node == c and port_click_port_index == i:
-							set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CTRL))
+							var is_shift_pressed : bool = Input.is_key_pressed(KEY_SHIFT)
+							var is_control_pressed : bool = Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META)
+							set_current_preview(1 if is_shift_pressed else 0, port_click_node, port_click_port_index, is_control_pressed)
 							port_click_port_index = -1
 						return
 
