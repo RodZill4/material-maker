@@ -614,7 +614,7 @@ func save_project(project : Control = null) -> bool:
 	if project == null:
 		project = get_current_project()
 	if project != null:
-		return project.save()
+		return await project.save()
 	return false
 
 func save_project_as(project : Control = null) -> bool:
