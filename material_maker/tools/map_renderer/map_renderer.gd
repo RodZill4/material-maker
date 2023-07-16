@@ -16,16 +16,13 @@ extends Node
 @export var seams_pass1: ShaderMaterial
 @export var seams_pass2: ShaderMaterial
 
-func _ready():
-	pass
-
 func gen_new(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
-	var map_generator : MMRenderingPipeline = MMRenderingPipeline.new()
-	var texture : ImageTexture = ImageTexture.new()
-	map_generator.render(mesh, Vector2i(map_size, map_size), 3, texture)
+	var map_generator : MMMeshRenderingPipeline = MMMeshRenderingPipeline.new()
+	var texture : MMTexture = MMTexture.new()
+	await MMMapGenerator.generate(mesh, map, map_size, texture)
 	match renderer_method:
 		"save_to_file":
-			var image = texture.get_image()
+			var image = (await texture.get_texture()).get_image()
 			if image:
 				var file_name : String = arguments[0]
 				print("Saving image to "+file_name)

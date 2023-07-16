@@ -75,6 +75,27 @@ func clear():
 	texture_indexes = {}
 	textures = []
 
+func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces : Dictionary) -> RID:
+	var errors : bool = false
+	var src : RDShaderSource = RDShaderSource.new()
+	for k in shader_text.keys():
+		for s in replaces.keys():
+			shader_text[k] = shader_text[k].replace(s, replaces[s])
+		src["source_"+k] = shader_text[k]
+	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
+	var shader : RID = RID()
+	for k in shader_text.keys():
+		if spirv["compile_error_"+k] != "":
+			var ln : int = 0
+			for l in shader_text[k].split("\n"):
+				ln += 1
+				print("%4d: %s" % [ ln, l ])
+			print(k.to_upper()+" SHADER ERROR: "+spirv["compile_error_"+k])
+			errors = true
+	if !errors:
+		shader = rd.shader_create_from_spirv(spirv)
+	return shader
+
 func add_parameter_or_texture(n : String, t : String, v):
 	if t == "sampler2D":
 		if texture_indexes.has(n):
@@ -141,16 +162,24 @@ func get_texture_declarations() -> String:
 		texture_declarations += "layout(set = 2, binding = %d) uniform sampler2D %s;\n" % [ ti, t.name ]
 	return texture_declarations
 
-func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int) -> RID:
+func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, is_framebuffer : bool = false) -> RID:
 	var fmt : RDTextureFormat = RDTextureFormat.new()
+	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
 	fmt.width = texture_size.x
 	fmt.height = texture_size.y
-	fmt.format = TEXTURE_TYPE[texture_type].data_format
-	fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
-	
+	fmt.format = texture_type_struct.data_format
+	if is_framebuffer:
+		fmt.usage_bits =  RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
+	else:
+		fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	fmt.texture_type = RenderingDevice.TEXTURE_TYPE_2D
+		
 	var view : RDTextureView = RDTextureView.new()
 	
-	return rd.texture_create(fmt, view, PackedByteArray())
+	var data = PackedByteArray()
+	data.resize(fmt.height*fmt.width*texture_type_struct.channels*texture_type_struct.bytes_per_channel)
+
+	return rd.texture_create(fmt, view, [data])
 
 func get_parameter_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RID:
 	var parameters_buffer : RID = rd.storage_buffer_create(parameter_values.size(), parameter_values)

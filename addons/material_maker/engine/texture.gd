@@ -91,6 +91,9 @@ func set_texture(new_texture : ImageTexture) -> void:
 			texture_format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
 		_:
 			print("Unsupported texture format "+str(image.get_format()))
+			image.convert(Image.FORMAT_RGBAH)
+			texture.set_image(image)
+			texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
 	if rid.is_valid():
 		var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 		rd.free_rid(rid)

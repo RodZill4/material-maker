@@ -195,7 +195,7 @@ class BVHNode:
 			_finalize_data()
 		return int(max(left_max_level, right_max_level))
 
-	# This function is a one-to-one position of the shader function.
+	# This function is a one-to-one translation of the shader function.
 	# Not really used in this project, but makes debugging much easier.
 	func traverse(ray_start: Vector3, ray_dir: Vector3) -> float:
 		if _data.is_empty():
@@ -407,9 +407,7 @@ class BVHNode:
 		var img_height = data_size / 16384 + 1
 #		prints(data_size, img_width, img_height)
 
-		image = Image.new()
-		image.create(img_width, img_height, false, Image.FORMAT_RGBAF)
-		false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+		image = Image.create(img_width, img_height, false, Image.FORMAT_RGBAF)
 		var i = 0
 		for y in img_height:
 			for x in img_width:
@@ -422,7 +420,6 @@ class BVHNode:
 					_data[i * 4 + 3]
 				))
 				i += 1
-		false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 #		print((OS.get_ticks_msec() - time) / 1000.0)
 
 	func _sort_by_extents(a: int, b: int) -> bool:

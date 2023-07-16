@@ -30,7 +30,6 @@ const MENU = [
 	{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
 	{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
 	{ menu="Model/Generate map/Position", submenu="generate_position_map" },
-	{ menu="Model/Generate map/Position (new)", submenu="generate_new_position_map" },
 	{ menu="Model/Generate map/Normal", submenu="generate_normal_map" },
 	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
 	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
@@ -106,7 +105,8 @@ func _on_Model_item_selected(id) -> void:
 func do_load_custom_mesh(file_path) -> void:
 	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
-	var mesh = $ObjLoader.load_obj_file(file_path)
+	#var mesh = $ObjLoader.load_obj_file(file_path)
+	var mesh = load(file_path)
 	if mesh != null:
 		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh
@@ -274,14 +274,6 @@ func create_menu_map(menu : MMMenuManager.MenuBase, function : String) -> void:
 		menu.add_item(str(256 << i)+"x"+str(256 << i), i)
 	menu.connect_id_pressed(Callable(self, function))
 
-func create_menu_generate_normal_map(menu : MMMenuManager.MenuBase) -> void:
-	create_menu_map(menu, "generate_normal_map")
-
-func generate_normal_map(i : int) -> void:
-	generate_map("do_generate_normal_map", 256 << i)
-
-func do_generate_normal_map(file_name : String, image_size : int) -> void:
-	do_generate_map(file_name, "normal", image_size)
 
 func create_menu_generate_position_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_position_map")
@@ -290,16 +282,18 @@ func generate_position_map(i : int) -> void:
 	generate_map("do_generate_position_map", 256 << i)
 
 func do_generate_position_map(file_name : String, image_size : int) -> void:
-	do_generate_map(file_name, "position", image_size)
-
-func create_menu_generate_new_position_map(menu : MMMenuManager.MenuBase) -> void:
-	create_menu_map(menu, "generate_new_position_map")
-
-func generate_new_position_map(i : int) -> void:
-	generate_map("do_generate_new_position_map", 256 << i)
-
-func do_generate_new_position_map(file_name : String, image_size : int) -> void:
 	do_generate_map_new(file_name, "position", image_size)
+
+
+func create_menu_generate_normal_map(menu : MMMenuManager.MenuBase) -> void:
+	create_menu_map(menu, "generate_normal_map")
+
+func generate_normal_map(i : int) -> void:
+	generate_map("do_generate_normal_map", 256 << i)
+
+func do_generate_normal_map(file_name : String, image_size : int) -> void:
+	do_generate_map_new(file_name, "normal", image_size)
+
 
 func create_menu_generate_curvature_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_curvature_map")

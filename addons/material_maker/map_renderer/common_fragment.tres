@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://cw4tiqk7jsxce"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_5d6tj"]
+
+[resource]
+script = ExtResource("1_5d6tj")
+text = "#version 450
+layout(location = 0) out vec4 outColor;
+layout(location = 1) in vec3 output_color;
+void main() {
+	outColor = vec4(output_color, 1.0);
+}"

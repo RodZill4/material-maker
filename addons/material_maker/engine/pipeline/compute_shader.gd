@@ -2,7 +2,6 @@ extends MMPipeline
 class_name MMComputeShader
 
 
-var shader_source : String
 var shader : RID
 var texture_type : int
 
@@ -19,30 +18,17 @@ func _init():
 
 func clear():
 	super.clear()
-	shader_source = ""
 
-
-func compile_shader() -> bool:
-	var rv : bool = true
-	var src : RDShaderSource = RDShaderSource.new()
-	src.source_compute = shader_source
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
-	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
-	if shader.is_valid():
-		rd.free_rid(shader)
-	if spirv.compile_error_compute != "":
-		var ln : int = 0
-		for l in shader_source.split("\n"):
-			ln += 1
-			print("%4d: %s" % [ ln, l ])
-		print(spirv.compile_error_compute)
-		shader = RID()
-		rv = false
-	else:
-		shader = rd.shader_create_from_spirv(spirv)
-	mm_renderer.release_rendering_device(self)
-	return rv
+func set_shader(string : String, tex_type : int, replaces : Dictionary = {}):
+	texture_type = tex_type
+	replaces["@LOCAL_SIZE"] = str(LOCAL_SIZE)
+	replaces["@OUT_TEXTURE_TYPE"] = TEXTURE_TYPE[tex_type].decl
+	replaces["@DECLARATIONS"] = get_uniform_declarations()+"\n"+get_texture_declarations()
 	
+	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+	shader = do_compile_shader(rd, { compute=string }, replaces)
+	mm_renderer.release_rendering_device(self)
+
 func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode):
 	for u in shader_code.uniforms:
 		for c in [ "\n".join(shader_code.globals), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
@@ -51,9 +37,11 @@ func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode):
 				break
 
 func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null) -> void:
-	texture_type = 0 if shader_code.output_type == "f" else 1
+	var tex_type : int = 0 if shader_code.output_type == "f" else 1
 	if is_32_bits:
-		texture_type |= 2
+		tex_type |= 2
+	
+	var replaces : Dictionary = {}
 	
 	clear()
 	set_parameters_from_shadercode(shader_code)
@@ -61,44 +49,47 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	if compare_texture != null:
 		add_parameter_or_texture("mm_compare", "sampler2D", compare_texture)
 	
-	shader_source = "#version 450\n"
-	shader_source += "\n"
-	shader_source += "layout(local_size_x = %d, local_size_y = 1, local_size_z = 1) in;\n" % LOCAL_SIZE
-	shader_source += "\n"
-	shader_source += "layout(set = 0, binding = 0, %s) uniform image2D OUTPUT_TEXTURE;\n" % TEXTURE_TYPE[texture_type].decl
-	shader_source += get_uniform_declarations()
-	shader_source += get_texture_declarations()
-	shader_source += "layout(set = 3, binding = 0, std140) restrict buffer MM {\n"
-	shader_source += "\tint mm_chunk_y;\n"
-	shader_source += "};\n"
-	if compare_texture != null:
-		shader_source += "layout(set = 4, binding = 0, std140) buffer MMout {\n"
-		shader_source += "\tint mm_compare[1];\n"
-		shader_source += "} mm_out;\n"
-	shader_source += preload("res://addons/material_maker/shader_functions.tres").text
-	shader_source += "\n"
-	shader_source += "const float seed_variation = 0.0;\n"
-	shader_source += "\n"
-	shader_source += "\n".join(shader_code.globals)
-	shader_source += "\n"
-	if shader_code.defs != "":
-		shader_source += shader_code.defs
-	shader_source += "void main() {\n"
-	shader_source += "\tfloat _seed_variation_ = seed_variation;\n"
-	shader_source += "\tvec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);\n"
-	shader_source += "\tvec2 image_size = imageSize(OUTPUT_TEXTURE);\n"
-	shader_source += "\tvec2 uv = pixel/image_size;\n"
-	if shader_code.code != "":
-		shader_source += "\t"+shader_code.code
-	shader_source += "\tvec4 outColor = "+shader_code.output_values.rgba+";\n"
-	shader_source += "\timageStore(OUTPUT_TEXTURE, ivec2(pixel), outColor);\n"
-	if compare_texture != null:
-		shader_source += "\tvec4 diff_vec = abs(outColor - texture(mm_compare, uv));\n"
-		shader_source += "\tfloat diff = max(max(diff_vec.r, diff_vec.g), max(diff_vec.b, diff_vec.a));\n"
-		shader_source += "\tatomicMax(mm_out.mm_compare[0], int(diff*65536.0));\n"
-	shader_source += "}\n"
+	var string : String = ""
 	
-	compile_shader()
+	string = "#version 450\n"
+	string += "\n"
+	string += "layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;\n"
+	string += "\n"
+	string += "layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;\n" 
+	string += "@DECLARATIONS"
+	string += "layout(set = 3, binding = 0, std140) restrict buffer MM {\n"
+	string += "\tint mm_chunk_y;\n"
+	string += "};\n"
+	if compare_texture != null:
+		string += "layout(set = 4, binding = 0, std140) buffer MMout {\n"
+		string += "\tint mm_compare[1];\n"
+		string += "} mm_out;\n"
+	string += preload("res://addons/material_maker/shader_functions.tres").text
+	string += "\n"
+	string += "const float seed_variation = 0.0;\n"
+	string += "\n"
+	string += "@GLOBALS\n"
+	string += "@DEFINITIONS\n"
+	string += "void main() {\n"
+	string += "\tfloat _seed_variation_ = seed_variation;\n"
+	string += "\tvec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);\n"
+	string += "\tvec2 image_size = imageSize(OUTPUT_TEXTURE);\n"
+	string += "\tvec2 uv = pixel/image_size;\n"
+	string += "\t@CODE;\n"
+	string += "\tvec4 outColor = @OUTPUT_VALUE;\n"
+	string += "\timageStore(OUTPUT_TEXTURE, ivec2(pixel), outColor);\n"
+	if compare_texture != null:
+		string += "\tvec4 diff_vec = abs(outColor - texture(mm_compare, uv));\n"
+		string += "\tfloat diff = max(max(diff_vec.r, diff_vec.g), max(diff_vec.b, diff_vec.a));\n"
+		string += "\tatomicMax(mm_out.mm_compare[0], int(diff*65536.0));\n"
+	string += "}\n"
+	
+	replaces["@GLOBALS"] = "\n".join(shader_code.globals)
+	replaces["@DEFINITIONS"] = shader_code.defs
+	replaces["@CODE"] = shader_code.code
+	replaces["@OUTPUT_VALUE"] = shader_code.output_values.rgba
+
+	await set_shader(string, tex_type, replaces)
 
 func get_parameters() -> Dictionary:
 	var rv : Dictionary = {}
@@ -197,6 +188,7 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 	if !textures.is_empty():
 		uniform_set_2 = get_texture_uniforms(rd, shader, rids)
 		if ! uniform_set_2.is_valid():
+			print("Failed to create valid uniform for textures")
 			return false
 	
 	var uniform_set_4 = RID()
