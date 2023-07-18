@@ -7,7 +7,8 @@ const SHADERS : Dictionary = {
 	position = { vertex = "position_vertex", fragment = "common_fragment" },
 	normal = { vertex = "normal_vertex", fragment = "normal_fragment" },
 	tangent = { vertex = "tangent_vertex", fragment = "normal_fragment" },
-	ambient_occlusion = { vertex = "ao_vertex", fragment = "ao_fragment" }
+	ambient_occlusion = { vertex = "ao_vertex", fragment = "ao_fragment" },
+	thickness = { vertex = "ao_vertex", fragment = "ao_fragment" }
 }
 
 
@@ -22,21 +23,28 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 		"position", "normal", "tangent":
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
-		"ambient_occlusion":
+		"ambient_occlusion", "thickness":
 			var bvh : MMTexture = MMTexture.new()
 			bvh.set_texture(MMBvhGenerator.generate(mesh))
+			var ray_count = mm_globals.get_config("bake_ray_count")
+			var ao_ray_dist = -mesh.get_aabb().size.length() if map == "thickness" else mm_globals.get_config("bake_ao_ray_dist")
+			var ao_ray_bias = mm_globals.get_config("bake_ao_ray_bias")
+			var denoise_radius = mm_globals.get_config("bake_denoise_radius")
 			mesh_pipeline.add_parameter_or_texture("bvh_data", "sampler2D", bvh)
 			mesh_pipeline.add_parameter_or_texture("prev_iteration_tex", "sampler2D", texture)
-			mesh_pipeline.add_parameter_or_texture("max_dist", "float", 50)
-			mesh_pipeline.add_parameter_or_texture("bias_dist", "float", 0.1)
+			mesh_pipeline.add_parameter_or_texture("max_dist", "float", ao_ray_dist)
+			mesh_pipeline.add_parameter_or_texture("bias_dist", "float",ao_ray_bias)
 			mesh_pipeline.add_parameter_or_texture("iteration", "int", 1)
+			mesh_pipeline.add_parameter_or_texture("is_thickness", "bool", map == "thickness")
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
-			for i in range(128):
+			print("Casting %d rays..." % ray_count)
+			for i in range(ray_count):
 				mesh_pipeline.set_parameter("iteration", i+1)
 				mesh_pipeline.set_parameter("prev_iteration_tex", texture)
 				await mesh_pipeline.render(Vector2i(size, size), 3, texture)
 			
 			# Denoise
+			print("Denoising...")
 			var compute_pipeline : MMComputeShader = MMComputeShader.new()
 			compute_pipeline.clear()
 			compute_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)

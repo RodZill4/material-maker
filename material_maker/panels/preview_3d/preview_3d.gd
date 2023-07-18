@@ -311,7 +311,7 @@ func generate_thickness_map(i : int) -> void:
 	generate_map("do_generate_thickness_map", 256 << i)
 
 func do_generate_thickness_map(file_name : String, image_size : int) -> void:
-	do_generate_map(file_name, "thickness", image_size)
+	do_generate_map_new(file_name, "thickness", image_size)
 
 func create_menu_generate_ao_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_ao_map")
@@ -320,4 +320,4 @@ func generate_ao_map(i : int) -> void:
 	generate_map("do_generate_ao_map", 256 << i)
 
 func do_generate_ao_map(file_name : String, image_size : int) -> void:
-	do_generate_map(file_name, "ao", image_size)
+	do_generate_map_new(file_name, "ambient_occlusion", image_size)

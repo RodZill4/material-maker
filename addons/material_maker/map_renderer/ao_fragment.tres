@@ -252,10 +252,17 @@ void main() {
 	}
 	vec3 normal_hit;
 	float hit = intersects_bvh(ray_start, ray_dir, normal_hit);
-	if(hit == 65536.0 || hit < 0.0  || hit > max_dist) {
-		hit = 1.0;
-	} else{
-		hit = 1.0 - clamp(dot(model_norm, ray_dir),0.0,1.0);
+	if (is_thickness) {
+		if (hit == 65536.0 || hit < 0.0) {
+			hit = abs(max_dist);//ALPHA = 0.0;
+		}
+		hit /= abs(max_dist);
+	} else {
+		if (hit == 65536.0 || hit < 0.0  || hit > max_dist) {
+			hit = 1.0;
+		} else{
+			hit = 1.0 - clamp(dot(model_norm, ray_dir),0.0,1.0);
+		}
 	}
 
 	outColor = vec4(mix(texture(prev_iteration_tex, uv).rgb, vec3(hit), 1.0/float(iteration)), 1.0);

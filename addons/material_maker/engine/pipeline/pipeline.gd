@@ -14,9 +14,11 @@ class Parameter:
 		type = t
 		offset = 0
 		match type:
-			"float":
+			"bool":
 				size = 4
 			"int":
+				size = 4
+			"float":
 				size = 4
 			"vec4":
 				size = 16
@@ -115,13 +117,17 @@ func set_parameter(name : String, value) -> void:
 		var p : Parameter = parameters[name]
 		p.value = value
 		match p.type:
-			"float":
-				if value is float or value is int:
-					parameter_values.encode_float(p.offset, value)
+			"bool":
+				if value is bool:
+					parameter_values.encode_s32(p.offset, -1 if value else 0)
 					return
 			"int":
 				if value is int:
 					parameter_values.encode_s32(p.offset, value)
+					return
+			"float":
+				if value is float or value is int:
+					parameter_values.encode_float(p.offset, value)
 					return
 			"vec4":
 				if value is Color:
@@ -140,7 +146,7 @@ func set_parameter(name : String, value) -> void:
 func get_uniform_declarations() -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
-	for type in [ "vec4", "float", "int" ]:
+	for type in [ "vec4", "float", "int", "bool" ]:
 		for p in parameters.keys():
 			var parameter : Parameter = parameters[p]
 			if parameter.type != type:
