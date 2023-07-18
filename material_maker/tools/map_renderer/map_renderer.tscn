@@ -1,8 +1,8 @@
-[gd_scene load_steps=32 format=3 uid="uid://cv706ip72t48u"]
+[gd_scene load_steps=33 format=3 uid="uid://cv706ip72t48u"]
 
 [ext_resource type="Script" path="res://material_maker/tools/map_renderer/curvature_generator.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/tools/map_renderer/map_renderer.gd" id="2"]
-[ext_resource type="Script" path="res://material_maker/tools/map_renderer/bvh_generator.gd" id="3"]
+[ext_resource type="Script" path="res://addons/material_maker/bvh_generator.gd" id="3"]
 
 [sub_resource type="Shader" id="4"]
 code = "shader_type spatial;
@@ -122,13 +122,13 @@ uniform int iteration = 1;
 
 uniform sampler2D prev_iteration_tex;
 
-varying vec3 normal;
 varying vec3 model_vert;
+varying vec3 normal;
 
 void vertex() {
 	model_vert = VERTEX;
 	normal = NORMAL;
-	VERTEX = vec3(UV, 0.5);
+	VERTEX = vec3(UV.x, 1.0-UV.y, 0.5);
 }
 
 float intersect_aabb(vec3 ray_origin, vec3 ray_dir, vec3 box_min, vec3 box_max, bool solid) {
@@ -375,7 +375,7 @@ void fragment() {
 "
 
 [sub_resource type="ViewportTexture" id="11"]
-viewport_path = NodePath(".")
+viewport_path = NodePath("Viewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0j43v"]
 resource_local_to_scene = true
@@ -649,7 +649,7 @@ void fragment() {
 }"
 
 [sub_resource type="ViewportTexture" id="27"]
-viewport_path = NodePath(".")
+viewport_path = NodePath("Viewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_esyq5"]
 resource_local_to_scene = true
@@ -689,13 +689,16 @@ void fragment() {
 	ALBEDO = color / weight;
 }"
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_cyhhm"]
+viewport_path = NodePath("Viewport")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nu2ml"]
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("13")
 shader_parameter/radius = 0
 shader_parameter/size = 512.0
-shader_parameter/tex = SubResource("11")
+shader_parameter/tex = SubResource("ViewportTexture_cyhhm")
 
 [sub_resource type="Shader" id="15"]
 code = "shader_type canvas_item;

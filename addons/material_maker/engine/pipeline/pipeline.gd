@@ -116,7 +116,7 @@ func set_parameter(name : String, value) -> void:
 		p.value = value
 		match p.type:
 			"float":
-				if value is float:
+				if value is float or value is int:
 					parameter_values.encode_float(p.offset, value)
 					return
 			"int":

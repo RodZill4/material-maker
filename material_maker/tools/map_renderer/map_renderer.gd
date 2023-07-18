@@ -17,7 +17,6 @@ extends Node
 @export var seams_pass2: ShaderMaterial
 
 func gen_new(mesh: Mesh, map : String, renderer_method : String, arguments : Array, map_size = 512) -> void:
-	var map_generator : MMMeshRenderingPipeline = MMMeshRenderingPipeline.new()
 	var texture : MMTexture = MMTexture.new()
 	await MMMapGenerator.generate(mesh, map, map_size, texture)
 	match renderer_method:
@@ -69,17 +68,20 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 		passes.first.set_shader_parameter("bvh_data", bvh_data)
 		passes.first.set_shader_parameter("max_dist", ray_distance)
 		passes.first.set_shader_parameter("bias_dist", ao_ray_bias)
+		ray_count = 1
 		for i in ray_count:
 			progress_dialog.set_progress(float(i)/ray_count)
 			passes.first.set_shader_parameter("iteration", i+1)
 			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			await get_tree().process_frame
-		mesh_instance.set_surface_override_material(0, denoise_pass)
-		denoise_pass.set_shader_parameter("size", map_size)
-		denoise_pass.set_shader_parameter("radius", denoise_radius)
-		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-		await get_tree().process_frame
-		await get_tree().process_frame
+			await get_tree().process_frame
+		if false:
+			mesh_instance.set_surface_override_material(0, denoise_pass)
+			denoise_pass.set_shader_parameter("size", map_size)
+			denoise_pass.set_shader_parameter("radius", denoise_radius)
+			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+			await get_tree().process_frame
+			await get_tree().process_frame
 		progress_dialog.queue_free()
 	else:
 		passes.first.set_shader_parameter("position", aabb.position)

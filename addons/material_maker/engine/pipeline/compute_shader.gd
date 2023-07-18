@@ -183,6 +183,9 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 	var uniform_set_1 : RID = RID()
 	if parameter_values.size() > 0:
 		uniform_set_1 = get_parameter_uniforms(rd, shader, rids)
+		if ! uniform_set_1.is_valid():
+			print("Failed to create valid uniform for parameters")
+			return false
 	
 	var uniform_set_2 = RID()
 	if !textures.is_empty():
