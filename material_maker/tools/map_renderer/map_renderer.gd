@@ -45,7 +45,7 @@ func gen(mesh: Mesh, map : String, renderer_method : String, arguments : Array, 
 	var passes = bake_passes[map]
 	viewport.size = Vector2(map_size, map_size)
 	if map == "curvature":
-		mesh_instance.mesh = $CurvatureGenerator.generate(mesh)
+		mesh_instance.mesh = MMCurvatureGenerator.generate(mesh)
 	else:
 		mesh_instance.mesh = mesh
 	mesh_instance.set_surface_override_material(0, passes.first)

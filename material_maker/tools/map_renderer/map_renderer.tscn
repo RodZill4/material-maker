@@ -1,8 +1,6 @@
-[gd_scene load_steps=33 format=3 uid="uid://cv706ip72t48u"]
+[gd_scene load_steps=31 format=3 uid="uid://cv706ip72t48u"]
 
-[ext_resource type="Script" path="res://material_maker/tools/map_renderer/curvature_generator.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/tools/map_renderer/map_renderer.gd" id="2"]
-[ext_resource type="Script" path="res://addons/material_maker/bvh_generator.gd" id="3"]
 
 [sub_resource type="Shader" id="4"]
 code = "shader_type spatial;
@@ -923,9 +921,3 @@ mesh = SubResource("23")
 [node name="Camera3D" type="Camera3D" parent="Viewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 10)
 projection = 1
-
-[node name="CurvatureGenerator" type="Node" parent="."]
-script = ExtResource("1")
-
-[node name="BVHGenerator" type="Node" parent="."]
-script = ExtResource("3")

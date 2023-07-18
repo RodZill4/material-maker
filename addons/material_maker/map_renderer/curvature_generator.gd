@@ -1,21 +1,25 @@
-@tool
+extends Object
+class_name MMCurvatureGenerator
+
+
 # Code ported from:
 # https://github.com/blender/blender/blob/594f47ecd2d5367ca936cf6fc6ec8168c2b360d0/intern/cycles/blender/blender_mesh.cpp#L541
-extends Node
+
 
 const FLT_EPSILON = 1.192092896e-7
 
-func generate(mesh: Mesh) -> Mesh:
-	var b_mesh := MeshDataTool.new()
+
+static func generate(mesh: Mesh) -> Mesh:
+	var b_mesh : MeshDataTool = MeshDataTool.new()
 	if not mesh is ArrayMesh:
 		b_mesh.create_from_surface(mesh.create_outline(0.0), 0)
 	else:
 		b_mesh.create_from_surface(mesh, 0)
-
+	
 	var num_verts = b_mesh.get_vertex_count()
 	if (num_verts == 0):
 		return Mesh.new()
-
+	
 	var b_mesh_vertices := []
 	var b_mesh_normals := []
 	var b_mesh_edges := []
@@ -25,14 +29,14 @@ func generate(mesh: Mesh) -> Mesh:
 	for i in b_mesh.get_edge_count():
 		b_mesh_edges.append([b_mesh.get_edge_vertex(i, 0),
 				b_mesh.get_edge_vertex(i, 1)])
-
+	
 	# STEP 1: Find out duplicated vertices and point duplicates to a single
 	#         original vertex.
 	var sorted_vert_indices := new_filled_array(num_verts, 0)
 	for vert_index in num_verts:
 		sorted_vert_indices[vert_index] = vert_index
 	sorted_vert_indices.sort_custom(Callable(VertexAverageComparator.new(b_mesh_vertices), "sort"))
-
+	
 	# This array stores index of the original vertex for the given vertex
 	# index.
 	var vert_orig_index := new_filled_array(num_verts, 0)
@@ -52,17 +56,17 @@ func generate(mesh: Mesh) -> Mesh:
 				found = true
 				vert_orig_index[vert_index] = other_vert_index
 				break
-
+	
 		if not found:
 			vert_orig_index[vert_index] = vert_index
-
+	
 	# Make sure we always point to the very first orig vertex.
 	for vert_index in num_verts:
 		var orig_index: int = vert_orig_index[vert_index]
 		while orig_index != vert_orig_index[orig_index]:
 			orig_index = vert_orig_index[orig_index]
 		vert_orig_index[vert_index] = orig_index
-
+	
 	# STEP 2: Calculate vertex normals taking into account their possible
 	#         duplicates which gets "welded" together.
 	var vert_normal := new_filled_array(num_verts, Vector3())
@@ -71,13 +75,13 @@ func generate(mesh: Mesh) -> Mesh:
 		var normal: Vector3 = b_mesh_normals[vert_index]
 		var orig_index: int = vert_orig_index[vert_index]
 		vert_normal[orig_index] += normal
-
+	
 	# Then we normalize the accumulated result and flush it to all duplicates
 	# as well.
 	for vert_index in num_verts:
 		var orig_index: int = vert_orig_index[vert_index]
 		vert_normal[vert_index] = vert_normal[orig_index].normalized()
-
+	
 	# STEP 3: Calculate pointiness using single ring neighborhood.
 	var counter := new_filled_array(num_verts, 0)
 	var raw_data := new_filled_array(num_verts, 0.0)
@@ -96,7 +100,7 @@ func generate(mesh: Mesh) -> Mesh:
 		edge_accum[v1] += -edge
 		counter[v0] += 1
 		counter[v1] += 1
-
+	
 	for vert_index in num_verts:
 		var orig_index: int = vert_orig_index[vert_index]
 		if orig_index != vert_index:
@@ -108,7 +112,7 @@ func generate(mesh: Mesh) -> Mesh:
 			raw_data[vert_index] = angle / PI
 		else:
 			raw_data[vert_index] = 0.0
-
+	
 	# STEP 3: Blur vertices to approximate 2 ring neighborhood.
 	var data := raw_data.duplicate()
 	counter = new_filled_array(counter.size(), 0)
@@ -123,15 +127,15 @@ func generate(mesh: Mesh) -> Mesh:
 		data[v1] += raw_data[v0]
 		counter[v0] += 1
 		counter[v1] += 1
-
+	
 	for vert_index in num_verts:
 		data[vert_index] /= counter[vert_index] + 1
-
+	
 	# STEP 4: Copy attribute to the duplicated vertices.
 	for vert_index in num_verts:
 		var orig_index: int = vert_orig_index[vert_index]
 		data[vert_index] = data[orig_index]
-
+	
 	# STEP 5: Data gets transferred to the mesh's vertex colors.
 	# Since the vertex colors are 8-bit per channel, then we'll have to
 	# pack the curvature in the 4 channels to maintain precision.
@@ -146,14 +150,14 @@ func generate(mesh: Mesh) -> Mesh:
 		col[1] -= col[2] / 255.0
 		col[2] -= col[3] / 255.0
 		b_mesh.set_vertex_color(i, Color(col[0], col[1], col[2], col[3]))
-
+	
 	var new_mesh := ArrayMesh.new()
 	var _err := b_mesh.commit_to_surface(new_mesh)
-
+	
 	return new_mesh
 
-func new_filled_array(size: int, data = null) -> Array:
-	var array := []
+static func new_filled_array(size: int, data = null) -> Array:
+	var array : Array = []
 	array.resize(size)
 	for i in size:
 		array[i] = data
@@ -161,7 +165,7 @@ func new_filled_array(size: int, data = null) -> Array:
 
 
 class EdgeMap:
-	var edges := {}
+	var edges : Dictionary = {}
 
 	func insert(v0: int, v1: int) -> void:
 		edges[Vector2(v0, v1)] = true
