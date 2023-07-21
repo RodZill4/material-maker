@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw1wx40uqn41w"
-path="res://.godot/imported/cybereality_future_visions.png-c4621b721186cb6888dbbf4b8c9e9b57.ctex"
+uid="uid://cy4jb0mgqbptr"
+path="res://.godot/imported/pavel_oliva_flowing_lava.png-83ae59ca33bc1be35dfb1169e90a607a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/cybereality_future_visions.png"
-dest_files=["res://.godot/imported/cybereality_future_visions.png-c4621b721186cb6888dbbf4b8c9e9b57.ctex"]
+source_file="res://splash_screen/backgrounds/pavel_oliva_flowing_lava.png"
+dest_files=["res://.godot/imported/pavel_oliva_flowing_lava.png-83ae59ca33bc1be35dfb1169e90a607a.ctex"]
 
 [params]
 

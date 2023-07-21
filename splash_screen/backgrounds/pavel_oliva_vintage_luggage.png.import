@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6nnspi7hgwph"
-path="res://.godot/imported/cybereality_brutalism.png-94c36046b49e96d59165bbbda125e63f.ctex"
+uid="uid://c88t6i2eqapx3"
+path="res://.godot/imported/pavel_oliva_vintage_luggage.png-355be8b3b26aea090de4e0a9ca4ce2a7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/cybereality_brutalism.png"
-dest_files=["res://.godot/imported/cybereality_brutalism.png-94c36046b49e96d59165bbbda125e63f.ctex"]
+source_file="res://splash_screen/backgrounds/pavel_oliva_vintage_luggage.png"
+dest_files=["res://.godot/imported/pavel_oliva_vintage_luggage.png-355be8b3b26aea090de4e0a9ca4ce2a7.ctex"]
 
 [params]
 

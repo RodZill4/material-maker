@@ -9,19 +9,29 @@ var mm_scene : PackedScene = null
 
 @onready var progress_bar = $SplashScreen/TextureRect/ProgressBar
 
-const BACKGROUNDS :Array[Dictionary] = [
-	{ title="Lace", author="Pavel Oliva", file="res://splash_screen/pavel_oliva_lace.png" },
-	{ title="Golden Tiles", author="PixelMuncher", file="res://splash_screen/pixelmuncher_golden_tiles.png" },
-	{ title="Spiral Trails", author="DroppedBeat", file="res://splash_screen/droppedbeat_spiral_trails.tres" },
-	{ title="Matrix Rain", author="DroppedBeat", file="res://splash_screen/droppedbeat_matrix_rain.tres" },
-	{ title="Procedural Material", author="DroppedBeat", file="res://splash_screen/droppedbeat_procedural_material.png" },
-	{ title="Vending Machines", author="DroppedBeat", file="res://splash_screen/droppedbeat_vending_machines.png" },
-	{ title="Terminator Ball", author="Paulo Falcao", file="res://splash_screen/paulo_falcao_terminator_ball.tres" },
-	{ title="Fractal Octahedron", author="Paulo Falcao", file="res://splash_screen/paulo_falcao_fractal_octahedron.tres" },
-	{ title="Dirty Tiles", author="cybereality", file="res://splash_screen/cybereality_dirty_tiles.png" },
-	{ title="Future Visions", author="cybereality", file="res://splash_screen/cybereality_future_visions.png" },
-	{ title="Brutalism", author="cybereality", file="res://splash_screen/cybereality_brutalism.png" },
-	{ title="Old Doors", author="cgmytro", file="res://splash_screen/cgmytro_old_doors.png" }
+
+const BACKGROUNDS_DIR : String = "res://splash_screen/backgrounds/"
+const BACKGROUNDS : Array[Dictionary] = [
+	{ title="Carved Wood", author="Pavel Oliva", file="pavel_oliva_carved_wood.png" },
+	{ title="Celestial Floor", author="Pavel Oliva", file="pavel_oliva_celestial_floor.png" },
+	{ title="Cursed Planks", author="Pavel Oliva", file="pavel_oliva_cursed_planks.png" },
+	{ title="Flowing Lava", author="Pavel Oliva", file="pavel_oliva_flowing_lava.png" },
+	{ title="Lace", author="Pavel Oliva", file="pavel_oliva_lace.png" },
+	{ title="Pavement Generator", author="Pavel Oliva", file="pavel_oliva_pavement_generator.png" },
+	{ title="Stylized Pavement", author="Pavel Oliva", file="pavel_oliva_stylized_pavement.png" },
+	{ title="Treasures", author="Pavel Oliva", file="pavel_oliva_treasures.png" },
+	{ title="Vintage Luggage", author="Pavel Oliva", file="pavel_oliva_vintage_luggage.png" },
+	{ title="Golden Tiles", author="PixelMuncher", file="pixelmuncher_golden_tiles.png" },
+	{ title="Spiral Trails", author="DroppedBeat", file="droppedbeat_spiral_trails.tres" },
+	{ title="Matrix Rain", author="DroppedBeat", file="droppedbeat_matrix_rain.tres" },
+	{ title="Procedural Material", author="DroppedBeat", file="droppedbeat_procedural_material.png" },
+	{ title="Vending Machines", author="DroppedBeat", file="droppedbeat_vending_machines.png" },
+	{ title="Terminator Ball", author="Paulo Falcao", file="paulo_falcao_terminator_ball.tres" },
+	{ title="Fractal Octahedron", author="Paulo Falcao", file="paulo_falcao_fractal_octahedron.tres" },
+	{ title="Dirty Tiles", author="cybereality", file="cybereality_dirty_tiles.png" },
+	{ title="Future Visions", author="cybereality", file="cybereality_future_visions.png" },
+	{ title="Brutalism", author="cybereality", file="cybereality_brutalism.png" },
+	{ title="Old Doors", author="cgmytro", file="cgmytro_old_doors.png" }
 ]
 
 
@@ -37,10 +47,10 @@ func set_screen(bi : int) -> void:
 	var background : Dictionary = BACKGROUNDS[background_index]
 	match background.file.get_extension():
 		"png":
-			$SplashScreen.texture = load(background.file)
+			$SplashScreen.texture = load(BACKGROUNDS_DIR+background.file)
 			$SplashScreen.material = null
 		"tres":
-			$SplashScreen.material = load(background.file)
+			$SplashScreen.material = load(BACKGROUNDS_DIR+background.file)
 	%Title.text = background.title
 	%Author.text = background.author
 	%Version.text = ProjectSettings.get_setting("application/config/actual_release")

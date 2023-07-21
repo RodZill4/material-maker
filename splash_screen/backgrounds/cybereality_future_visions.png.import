@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dt7qpt0yl4kln"
-path="res://.godot/imported/cgmytro_old_doors.png-86bbbcd09fb5979f1d483ca150311a1e.ctex"
+uid="uid://bw1wx40uqn41w"
+path="res://.godot/imported/cybereality_future_visions.png-e3ee8b3d810e5bb3ad97be0493277e72.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/cgmytro_old_doors.png"
-dest_files=["res://.godot/imported/cgmytro_old_doors.png-86bbbcd09fb5979f1d483ca150311a1e.ctex"]
+source_file="res://splash_screen/backgrounds/cybereality_future_visions.png"
+dest_files=["res://.godot/imported/cybereality_future_visions.png-e3ee8b3d810e5bb3ad97be0493277e72.ctex"]
 
 [params]
 

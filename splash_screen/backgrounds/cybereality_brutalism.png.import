@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://16efieuxbsv1"
-path="res://.godot/imported/pavel_oliva_lace.png-63fd2ed91649683a59a57919a4f0cee7.ctex"
+uid="uid://6nnspi7hgwph"
+path="res://.godot/imported/cybereality_brutalism.png-a7c928539ca05e030899ac96ef1a5f83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/pavel_oliva_lace.png"
-dest_files=["res://.godot/imported/pavel_oliva_lace.png-63fd2ed91649683a59a57919a4f0cee7.ctex"]
+source_file="res://splash_screen/backgrounds/cybereality_brutalism.png"
+dest_files=["res://.godot/imported/cybereality_brutalism.png-a7c928539ca05e030899ac96ef1a5f83.ctex"]
 
 [params]
 

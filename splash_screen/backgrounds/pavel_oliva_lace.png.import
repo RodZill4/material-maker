@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dajak2ajlrhbw"
-path="res://.godot/imported/pixelmuncher_golden_tiles.png-4f856cce90c96aff9a503a1f56b509a9.ctex"
+uid="uid://16efieuxbsv1"
+path="res://.godot/imported/pavel_oliva_lace.png-982aac23fd3c4b45d5ef5a2bced9c31b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/pixelmuncher_golden_tiles.png"
-dest_files=["res://.godot/imported/pixelmuncher_golden_tiles.png-4f856cce90c96aff9a503a1f56b509a9.ctex"]
+source_file="res://splash_screen/backgrounds/pavel_oliva_lace.png"
+dest_files=["res://.godot/imported/pavel_oliva_lace.png-982aac23fd3c4b45d5ef5a2bced9c31b.ctex"]
 
 [params]
 

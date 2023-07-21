@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyvt5cu55bmcx"
-path="res://.godot/imported/droppedbeat_procedural_material.png-d37add0bdcc232abc8fd87e6a14ab35c.ctex"
+uid="uid://de8gt24b11l8g"
+path="res://.godot/imported/pavel_oliva_pavement_generator.png-6e2a063a6795529e9036d9d8a1474a9f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://splash_screen/droppedbeat_procedural_material.png"
-dest_files=["res://.godot/imported/droppedbeat_procedural_material.png-d37add0bdcc232abc8fd87e6a14ab35c.ctex"]
+source_file="res://splash_screen/backgrounds/pavel_oliva_pavement_generator.png"
+dest_files=["res://.godot/imported/pavel_oliva_pavement_generator.png-6e2a063a6795529e9036d9d8a1474a9f.ctex"]
 
 [params]
 
