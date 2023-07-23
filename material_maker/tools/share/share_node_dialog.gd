@@ -19,6 +19,7 @@ func _on_Share_popup_hide() -> void:
 	emit_signal("return_status", "cancel")
 
 func ask(status : Array) -> String:
+	size = $MarginContainer.get_combined_minimum_size()
 	mm_globals.main_window.add_dialog(self)
 	for s in status:
 		var icon : TextureRect = TextureRect.new()

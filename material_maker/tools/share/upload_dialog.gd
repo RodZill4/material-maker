@@ -6,7 +6,7 @@ extends Window
 @onready var asset_license : OptionButton = $MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/License
 @onready var asset_tags : LineEdit = $MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/Tags
 @onready var asset_description : TextEdit = $MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Description
-@onready var asset_preview : Control = $MarginContainer/VBoxContainer/HBoxContainer/Preview
+@onready var asset_preview : TextureRect = $MarginContainer/VBoxContainer/HBoxContainer/Preview
 
 
 var my_assets : Array = []
@@ -22,6 +22,7 @@ func _on_UploadDialog_popup_hide() -> void:
 	emit_signal("return_status", "cancel")
 
 func ask(data : Dictionary) -> Dictionary:
+	size = $MarginContainer.get_combined_minimum_size()
 	mm_globals.main_window.add_dialog(self)
 	if data.type == "node":
 		asset_target.visible = false
@@ -32,7 +33,7 @@ func ask(data : Dictionary) -> Dictionary:
 		for a in my_assets:
 			if a.type == data.type:
 				asset_target.add_item("Update - %s (%d)" % [ a.name, a.id ], a.id)
-	asset_preview.material.set_shader_parameter("tex", data.preview)
+	asset_preview.texture = data.preview
 	asset_license.clear()
 	for l in data.licenses:
 		asset_license.add_item(l.name)
@@ -57,16 +58,13 @@ func ask(data : Dictionary) -> Dictionary:
 func _on_MarginContainer_minimum_size_changed():
 	size = $MarginContainer.get_minimum_size()
 
-func _on_Preview_resized():
-	asset_preview.material.set_shader_parameter("size", asset_preview.size)
-
 func validate_form():
 	var valid = true
 	if asset_name.text == "":
 		valid = false
 	$MarginContainer/VBoxContainer/Buttons/OK.disabled = !valid
 
-func _on_Name_text_changed(new_text):
+func _on_Name_text_changed(_new_text):
 	validate_form()
 
 func _on_Target_item_selected(index):

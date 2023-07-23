@@ -151,12 +151,12 @@ func find_in_parameter_values(node : Dictionary, keywords : Array) -> bool:
 	return false
 
 func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture2D) -> void:
-	var data = { type=asset_type, preview=preview_texture, licenses=licenses, my_assets=my_assets }
+	var data : Dictionary = { type=asset_type, preview=preview_texture, licenses=licenses, my_assets=my_assets }
 	var upload_dialog = load("res://material_maker/tools/share/upload_dialog.tscn").instantiate()
 	var asset_info = await upload_dialog.ask(data)
 	if asset_info.is_empty():
 		return
-	var png_image = preview_texture.get_data().save_png_to_buffer()
+	var png_image = preview_texture.get_image().save_png_to_buffer()
 	asset_info.type = asset_type
 	asset_info.mm_version = ProjectSettings.get_setting("application/config/actual_release")
 	asset_info.image_text = "data:image/png;base64,"+Marshalls.raw_to_base64(png_image)
