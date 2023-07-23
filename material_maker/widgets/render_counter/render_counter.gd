@@ -22,13 +22,14 @@ const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
 func _ready() -> void:
 	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
 	menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
-	menu.add_check_item("Auto", ITEM_AUTO)
-	menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
-	# Renderers menu
-	menu.add_submenu_item("Renderers", "Renderers")
-	for i in range(8):
-		renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
-	renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
+	if mm_renderer.total_renderers > 1:
+		menu.add_check_item("Auto", ITEM_AUTO)
+		menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
+		# Renderers menu
+		menu.add_submenu_item("Renderers", "Renderers")
+		for i in range(mm_renderer.total_renderers):
+			renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
+		renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
 	menu.add_separator()
 	# Render size limit menu
 	menu.add_submenu_item("Maximum render size", "MaxRenderSize")
@@ -83,11 +84,11 @@ func e3tok(value : float) -> String:
 func _process(_delta):
 	var fps : float = Performance.get_monitor(Performance.TIME_FPS)
 	$FpsCounter.text = "%.1f FPS " % fps
-	if auto:
+	if auto and mm_renderer.total_renderers > 1:
 		if fps > 50.0:
 			fast_counter += 1
 			if fast_counter > 5:
-				set_max_renderers(int(min(mm_renderer.max_renderers+1, 8)))
+				set_max_renderers(int(min(mm_renderer.max_renderers+1, mm_renderer.total_renderers)))
 		else:
 			fast_counter = 0
 			if fps < 20.0:
@@ -105,7 +106,7 @@ func set_max_renderers(max_renderers : int):
 	if mm_renderer.max_renderers == max_renderers:
 		return
 	renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), false)
-	mm_renderer.max_renderers = max_renderers
+	mm_renderer.set_max_renderers(max_renderers)
 	renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
 
 func _on_PopupMenu_id_pressed(id):
