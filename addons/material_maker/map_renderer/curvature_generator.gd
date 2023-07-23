@@ -136,20 +136,11 @@ static func generate(mesh: Mesh) -> Mesh:
 		var orig_index: int = vert_orig_index[vert_index]
 		data[vert_index] = data[orig_index]
 	
-	# STEP 5: Data gets transferred to the mesh's vertex colors.
-	# Since the vertex colors are 8-bit per channel, then we'll have to
-	# pack the curvature in the 4 channels to maintain precision.
+	# STEP 5: Data gets transferred to the first element of the mesh's tangent
 	for i in data.size():
 		var p: float = data[i] * 0.5 + 0.5
-		var col := [p, p*255.0, p*255.0*255.0, p*255.0*255.0*255.0]
-		col[0] = col[0] - int(col[0])
-		col[1] = col[1] - int(col[1])
-		col[2] = col[2] - int(col[2])
-		col[3] = col[3] - int(col[3])
-		col[0] -= col[1] / 255.0
-		col[1] -= col[2] / 255.0
-		col[2] -= col[3] / 255.0
-		b_mesh.set_vertex_color(i, Color(col[0], col[1], col[2], col[3]))
+		# Store curvature in position.x
+		b_mesh.set_vertex(i, Vector3(p, 0.0, 0.0))
 	
 	var new_mesh := ArrayMesh.new()
 	var _err := b_mesh.commit_to_surface(new_mesh)

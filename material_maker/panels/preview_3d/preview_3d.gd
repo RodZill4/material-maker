@@ -33,6 +33,7 @@ const MENU = [
 	{ menu="Model/Generate map/Normal", submenu="generate_normal_map" },
 	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
 	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
+	{ menu="Model/Generate map/Bent Normals", submenu="generate_bent_normals_map" },
 	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
 	{ menu="Environment/Select", submenu="environment_list" },
 	{ menu="Environment/Tonemap", submenu="tonemap_list" }
@@ -302,7 +303,8 @@ func generate_curvature_map(i : int) -> void:
 	generate_map("do_generate_curvature_map", 256 << i)
 
 func do_generate_curvature_map(file_name : String, image_size : int) -> void:
-	do_generate_map(file_name, "curvature", image_size)
+	do_generate_map_new(file_name, "curvature", image_size)
+
 
 func create_menu_generate_thickness_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_thickness_map")
@@ -313,6 +315,7 @@ func generate_thickness_map(i : int) -> void:
 func do_generate_thickness_map(file_name : String, image_size : int) -> void:
 	do_generate_map_new(file_name, "thickness", image_size)
 
+
 func create_menu_generate_ao_map(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_map(menu, "generate_ao_map")
 
@@ -321,3 +324,13 @@ func generate_ao_map(i : int) -> void:
 
 func do_generate_ao_map(file_name : String, image_size : int) -> void:
 	do_generate_map_new(file_name, "ambient_occlusion", image_size)
+
+
+func create_menu_generate_bent_normals_map(menu : MMMenuManager.MenuBase) -> void:
+	create_menu_map(menu, "generate_bent_normals_map")
+
+func generate_bent_normals_map(i : int) -> void:
+	generate_map("do_generate_bent_normals_map", 256 << i)
+
+func do_generate_bent_normals_map(file_name : String, image_size : int) -> void:
+	do_generate_map_new(file_name, "bent_normals", image_size)

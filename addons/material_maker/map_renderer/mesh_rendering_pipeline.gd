@@ -20,7 +20,7 @@ func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, 
 	buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TANGENT].to_byte_array())
 	buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV].to_byte_array())
 	bind_buffer_uniforms(rd, draw_list, shader, buffers, 0, rids)
-		
+	
 	var indexes = mesh.surface_get_arrays(0)[Mesh.ARRAY_INDEX]
 	if indexes == null:
 		index_count = mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX].size()

@@ -252,12 +252,12 @@ void main() {
 	}
 	vec3 normal_hit;
 	float hit = intersects_bvh(ray_start, ray_dir, normal_hit);
-	if (is_thickness) {
+	if (mode == 2) {
 		if (hit == 65536.0 || hit < 0.0) {
 			hit = abs(max_dist);//ALPHA = 0.0;
 		}
 		hit /= abs(max_dist);
-	} else {
+    } else {
 		if (hit == 65536.0 || hit < 0.0  || hit > max_dist) {
 			hit = 1.0;
 		} else{
@@ -265,6 +265,10 @@ void main() {
 		}
 	}
 
-	outColor = vec4(mix(texture(prev_iteration_tex, uv).rgb, vec3(hit), 1.0/float(iteration)), 1.0);
+	if (mode == 1) { 
+		outColor = vec4(texture(prev_iteration_tex, uv).rgb+hit*normalize(ray_dir), 1.0);
+	} else {
+		outColor = vec4(mix(texture(prev_iteration_tex, uv).rgb, vec3(hit), 1.0/float(iteration)), 1.0);
+	}
 }
 "
