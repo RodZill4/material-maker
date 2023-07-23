@@ -6,8 +6,7 @@ func get_translations_dir() -> String:
 	return LOCALE_DIR
 
 func create_translations_dir():
-	var dir : DirAccess = DirAccess.open("")
-	dir.make_dir_recursive(LOCALE_DIR)
+	DirAccess.make_dir_absolute(LOCALE_DIR)
 
 func install_translation(fn : String):
 	create_translations_dir()

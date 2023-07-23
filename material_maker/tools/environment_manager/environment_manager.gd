@@ -154,7 +154,7 @@ func read_hdr(index : int, url : String) -> bool:
 		return true
 	if OS.get_name() == "HTML5":
 		return false
-	DirAccess.open("res://").make_dir_recursive("user://hdris")
+	DirAccess.make_dir_absolute("user://hdris")
 	$HTTPRequest.download_file = file_path
 	var error = $HTTPRequest.request(url)
 	if error == OK:

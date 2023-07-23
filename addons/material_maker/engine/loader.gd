@@ -84,7 +84,7 @@ func get_node_from_website(node_name : String) -> bool:
 	if json.parse(result[3].get_string_from_ascii()) != OK or ! json.data is Dictionary:
 		return false
 	predefined_generators[node_name] = string_to_dict_tree(json.data.json)
-	DirAccess.open("user://").make_dir_recursive(SHARED_NODES_DIR)
+	DirAccess.make_dir_absolute(SHARED_NODES_DIR)
 	var file : FileAccess = FileAccess.open(SHARED_NODES_DIR+"/website_"+node_id+".mmg", FileAccess.WRITE)
 	if file != null:
 		file.store_string(dict_tree_to_string(predefined_generators[node_name].duplicate(true)))
@@ -334,7 +334,7 @@ func save_export_target(material_name : String, export_target_name : String, exp
 
 func update_external_export_targets(material_name : String, export_targets : Dictionary):
 	var dir : DirAccess = DirAccess.open("")
-	dir.make_dir_recursive(USER_EXPORT_DIR)
+	DirAccess.make_dir_absolute(USER_EXPORT_DIR)
 	var files = []
 	for k in export_targets.keys():
 		files.append(save_export_target(material_name, k, export_targets[k]))

@@ -163,7 +163,7 @@ class MenuDisplayServer:
 	
 	func add_submenu(name : String) -> MenuBase:
 		var full_name : String = menu_name+"/"+name
-		var index = DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
+		DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
 		return MenuDisplayServer.new(full_name)
 
 class MenuBarDisplayServer:
@@ -227,7 +227,6 @@ func create_menu(menu_def : Array, object : Object, menu_name : String, menu : M
 			var submenu_function = "create_menu_"+menu_def[i].submenu
 			#TODO: submenu must be created here
 			var submenu : MenuBase = menu.add_submenu(menu_item_name)
-			var popup_callback : Callable
 			if object.has_method(submenu_function):
 				object.call(submenu_function, submenu)
 			else:
