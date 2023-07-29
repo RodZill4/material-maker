@@ -234,8 +234,8 @@ func _gui_input(event) -> void:
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
-		if c.to == node and c.to_port == port:
-			return { node=c.from, slot=c.from_port }
+		if c.to_node == node and c.to_port == port:
+			return { node=c.from_node, slot=c.from_port }
 	return {}
 
 func offset_from_global_position(global_pos) -> Vector2:
@@ -345,8 +345,8 @@ func do_remove_node(node) -> void:
 	if generator.remove_generator(node.generator):
 		var node_name = node.name
 		for c in get_connection_list():
-			if c.from == node_name or c.to == node_name:
-				do_disconnect_node(c.from, c.from_port, c.to, c.to_port)
+			if c.from_node == node_name or c.to_node == node_name:
+				do_disconnect_node(c.from_node, c.from_port, c.to_node, c.to_port)
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
