@@ -76,11 +76,9 @@ func _can_drop_data(position, data):
 
 func get_item_index(item : TreeItem) -> int:
 	var index = 0
-	var i = item.get_parent().get_children()
-	while i != null:
+	for i in item.get_parent().get_children():
 		if i == item:
 			return index
-		i = i.get_next()
 		index += 1
 	return -1
 

@@ -16,7 +16,7 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tbsrk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pgcwv"]
 resource_local_to_scene = true
 shader = SubResource("1")
 
@@ -53,7 +53,7 @@ select_mode = 1
 script = ExtResource("4")
 
 [node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_tbsrk")
+material = SubResource("ShaderMaterial_pgcwv")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -124,6 +124,7 @@ script = ExtResource("1")
 editor = true
 
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
 [connection signal="item_collapsed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_edited" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_edited"]
