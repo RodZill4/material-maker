@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dy1u50we7gtru"]
+[gd_scene load_steps=9 format=3 uid="uid://dy1u50we7gtru"]
 
 [ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_edit.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
@@ -22,8 +22,6 @@ GraphEdit/icons/reset = null
 GraphEdit/icons/snap = null
 GraphEdit/styles/bg = null
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5rtaw"]
-
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("2")
 region = Rect2(64, 32, 16, 16)
@@ -45,9 +43,7 @@ offset_bottom = -1.49829
 theme = SubResource("1")
 theme_override_constants/port_hotzone_inner_extent = 4
 theme_override_constants/port_hotzone_outer_extent = 4
-theme_override_styles/bg = SubResource("StyleBoxEmpty_5rtaw")
 right_disconnects = true
-use_snap = false
 script = ExtResource("1")
 
 [node name="Timer" type="Timer" parent="."]

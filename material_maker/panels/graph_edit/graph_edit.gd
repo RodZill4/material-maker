@@ -56,13 +56,13 @@ func _exit_tree():
 
 func load_config():
 	if mm_globals.has_config("graphedit_use_snap"):
-		use_snap = mm_globals.get_config("graphedit_use_snap")
+		snapping_enabled = mm_globals.get_config("graphedit_use_snap")
 	if mm_globals.has_config("graphedit_snap_distance"):
-		snap_distance = mm_globals.get_config("graphedit_snap_distance")
+		snapping_distance = mm_globals.get_config("graphedit_snap_distance")
 
 func save_config():
-	mm_globals.set_config("graphedit_use_snap", use_snap)
-	mm_globals.set_config("graphedit_snap_distance", snap_distance)
+	mm_globals.set_config("graphedit_use_snap", snapping_enabled)
+	mm_globals.set_config("graphedit_snap_distance", snapping_distance)
 
 func _on_GraphEdit_visibility_changed():
 	if is_visible_in_tree():
@@ -834,11 +834,12 @@ func highlight_connections() -> void:
 	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		await get_tree().process_frame
 	for c in get_connection_list():
-		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(NodePath(c.from)).selected or get_node(NodePath(c.to)).selected else 0.0)
+		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphNode) -> void:
-	if node.comment:
+	# TODO: Rewrite that comment node related feature
+	if false: # node.comment:
 		# Need to account for zoom level when checking for contained nodes within comment
 		var current_zoom = get_zoom()
 		var node_rect = node.get_rect()
