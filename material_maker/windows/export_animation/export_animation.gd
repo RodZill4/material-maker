@@ -27,6 +27,7 @@ const BUFFER_NAMES = [ "export_animation_buffer_begin", "export_animation_buffer
 
 
 func _ready():
+	size = $VBox.get_combined_minimum_size()
 	for i in range(BUFFER_NAMES.size()):
 		mm_deps.create_buffer(BUFFER_NAMES[i], self)
 

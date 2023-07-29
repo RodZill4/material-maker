@@ -82,6 +82,8 @@ shader = SubResource("10")
 
 [node name="ExportAnimation" type="Window"]
 title = "Export animation"
+position = Vector2i(0, 36)
+size = Vector2i(750, 300)
 script = ExtResource("1")
 shader = "uniform float mm_chunk_size = 1.0;
 uniform vec2 mm_chunk_offset = vec2(0.0);
@@ -205,8 +207,10 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/Begin"]
+custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 text = "First frame"
+horizontal_alignment = 1
 
 [node name="SubViewport" type="SubViewport" parent="VBox/Images/HBox/Begin"]
 handle_input_locally = false
@@ -219,20 +223,23 @@ material = SubResource("2")
 custom_minimum_size = Vector2(256, 256)
 offset_right = 256.0
 offset_bottom = 256.0
+color = Color(0, 0, 0, 1)
 
 [node name="Animated" type="ColorRect" parent="VBox/Images/HBox"]
 material = SubResource("4")
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
+color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/Animated"]
-layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -33.0
-offset_right = 33.0
-offset_bottom = 14.0
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 26.0
+grow_horizontal = 2
 text = "Animation"
+horizontal_alignment = 1
 
 [node name="Diff" type="ColorRect" parent="VBox/Images/HBox/Animated"]
 modulate = Color(1, 1, 1, 0)
@@ -264,8 +271,10 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/End"]
+custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 text = "Last frame"
+horizontal_alignment = 1
 
 [node name="SubViewport" type="SubViewport" parent="VBox/Images/HBox/End"]
 handle_input_locally = false
@@ -278,6 +287,7 @@ material = SubResource("11")
 custom_minimum_size = Vector2(256, 256)
 offset_right = 256.0
 offset_bottom = 256.0
+color = Color(0, 0, 0, 1)
 
 [node name="Buttons" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
