@@ -114,6 +114,10 @@ func save_to_file(file_name : String):
 		match file_name.get_extension():
 			"png":
 				export_image.save_png(file_name)
+			"jpg":
+				export_image.save_jpg(file_name, 1.0)
+			"webp":
+				export_image.save_webp(file_name)
 			"exr":
 				match image.get_format():
 					Image.FORMAT_RF,Image.FORMAT_RH:

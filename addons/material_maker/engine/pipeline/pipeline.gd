@@ -67,12 +67,15 @@ const TEXTURE_TYPE : Array[Dictionary] = [
 var parameters : Dictionary
 var parameter_values : PackedByteArray
 
+var constants : Dictionary
+
 var texture_indexes : Dictionary
 var textures : Array[InputTexture]
 
 
 func clear():
 	parameters = {}
+	constants = {}
 	parameter_values = PackedByteArray()
 	texture_indexes = {}
 	textures = []
@@ -98,12 +101,16 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 		shader = rd.shader_create_from_spirv(spirv)
 	return shader
 
-func add_parameter_or_texture(n : String, t : String, v):
+func add_parameter_or_texture(n : String, t : String, v, parameter_as_constant : bool = false):
 	if t == "sampler2D":
 		if texture_indexes.has(n):
 			print("ERROR: Redefining texture "+n)
 		texture_indexes[n] = textures.size()
 		textures.append(InputTexture.new(n, v))
+	elif parameter_as_constant:
+		if constants.has(n):
+			print("ERROR: Redefining constant "+n)
+		constants[n] = Parameter.new(t, v)
 	else:
 		if parameters.has(n):
 			print("ERROR: Redefining parameter "+n)
@@ -143,6 +150,12 @@ func set_parameter(name : String, value) -> void:
 	else:
 		print("Cannot assign parameter "+name)
 
+func constant_as_string(value, type : String) -> String:
+	if value is Color:
+		return "vec4"+str(value)
+	else:
+		return str(value)
+
 func get_uniform_declarations() -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
@@ -159,6 +172,11 @@ func get_uniform_declarations() -> String:
 		parameter_values.resize(size)
 		for p in parameters.keys():
 			set_parameter(p, parameters[p].value)
+	if ! constants.is_empty():
+		uniform_declarations += "\n"
+		for c in constants.keys():
+			var constant : Parameter = constants[c]
+			uniform_declarations += "const %s %s = %s;\n" % [ constant.type, c, constant_as_string(constant.value, constant.type) ]
 	return uniform_declarations
 
 func get_texture_declarations() -> String:

@@ -27,7 +27,7 @@ func set_source(generator, output):
 	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
 	extra_parameters.append({ name="mm_iteration", type="int", value=0 })
 	extra_parameters.append({ name="mm_accumulate_previous", type="sampler2D", value=acc_texture })
-	await accumulate_render.set_shader_from_shadercode_ext(shader_template, source, true, null, extra_parameters)
+	await accumulate_render.set_shader_from_shadercode_ext(shader_template, source, true, null, extra_parameters, true)
 	divide_render.add_parameter_or_texture("mm_iteration", "float", 0)
 	divide_render.add_parameter_or_texture("mm_texture_acc", "sampler2D", acc_texture)
 	divide_render.add_parameter_or_texture("mm_exponent", "float", 1)
@@ -68,8 +68,10 @@ func _on_Export_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	dialog.add_filter("*.png;PNG image file")
 	dialog.add_filter("*.exr;EXR image file")
+	dialog.add_filter("*.jpg;JPG image file")
+	dialog.add_filter("*.png;PNG image file")
+	dialog.add_filter("*.webp;WEBP image file")
 	if mm_globals.config.has_section_key("path", "save_preview"):
 		dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
 	var files = await dialog.select_files()

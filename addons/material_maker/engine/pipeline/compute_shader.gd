@@ -29,14 +29,14 @@ func set_shader(string : String, tex_type : int, replaces : Dictionary = {}):
 	shader = do_compile_shader(rd, { compute=string }, replaces)
 	mm_renderer.release_rendering_device(self)
 
-func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode):
+func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, parameters_as_constants : bool = false):
 	for u in shader_code.uniforms:
 		for c in [ "\n".join(shader_code.globals), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
 			if c.find(u.name) != -1:
-				add_parameter_or_texture(u.name, u.type, u.value)
+				add_parameter_or_texture(u.name, u.type, u.value, parameters_as_constants)
 				break
 
-func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = []) -> void:
+func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:
 	var tex_type : int = 0 if shader_code.output_type == "f" else 1
 	if is_32_bits:
 		tex_type |= 2
@@ -44,7 +44,7 @@ func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGe
 	var replaces : Dictionary = {}
 	
 	clear()
-	set_parameters_from_shadercode(shader_code)
+	set_parameters_from_shadercode(shader_code, parameters_as_constants)
 	for p in extra_parameters:
 		add_parameter_or_texture(p.name, p.type, p.value)
 	
