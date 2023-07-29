@@ -15,7 +15,8 @@ var last_export_size = 0
 
 const MENU_EXPORT_AGAIN : int = 1000
 const MENU_EXPORT_ANIMATION : int = 1001
-const MENU_CUSTOM_SIZE : int = 1002
+const MENU_EXPORT_TAA_RENDER : int = 1002
+const MENU_EXPORT_CUSTOM_SIZE : int = 1003
 
 
 func _enter_tree():
@@ -33,6 +34,7 @@ func update_export_menu() -> void:
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), true)
 	$ContextMenu.add_item("Export animation", MENU_EXPORT_ANIMATION)
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
+	$ContextMenu.add_item("Export TAA render", MENU_EXPORT_TAA_RENDER)
 	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func generate_preview_shader(source, template) -> String:
@@ -101,13 +103,13 @@ func on_parameter_changed(n : String, v) -> void:
 			_:
 				set_generator(generator, output, true)
 
-func get_preview_material():
-	return material
+func set_preview_shader_parameter(parameter_name, value):
+	material.set_shader_parameter(parameter_name, value)
 
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	if value is MMTexture:
 		value = await value.get_texture()
-	get_preview_material().set_shader_parameter(parameter_name, value)
+	set_preview_shader_parameter(parameter_name, value)
 	return false
 
 func on_resized() -> void:
@@ -135,13 +137,21 @@ func export_animation() -> void:
 	if generator == null:
 		return
 	var window = load("res://material_maker/windows/export_animation/export_animation.tscn").instantiate()
-	add_child(window)
+	mm_globals.main_window.add_dialog(window)
+	window.set_source(generator, output)
+	window.popup_centered()
+
+func export_taa() -> void:
+	if generator == null:
+		return
+	var window = load("res://material_maker/windows/export_taa/export_taa.tscn").instantiate()
+	mm_globals.main_window.add_dialog(window)
 	window.set_source(generator, output)
 	window.popup_centered()
 
 func _on_Export_id_pressed(id : int) -> void:
 	var size
-	if id == MENU_CUSTOM_SIZE:
+	if id == MENU_EXPORT_CUSTOM_SIZE:
 		var dialog = load("res://material_maker/panels/preview_2d/custom_size_dialog.tscn").instantiate()
 		mm_globals.main_window.add_dialog(dialog)
 		size = await dialog.ask()

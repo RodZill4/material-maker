@@ -105,3 +105,18 @@ func get_width() -> int:
 
 func get_height() -> int:
 	return texture_size.y
+
+func save_to_file(file_name : String):
+	var texture = await get_texture()
+	var image : Image = texture.get_image()
+	if image != null:
+		var export_image : Image = image
+		match file_name.get_extension():
+			"png":
+				export_image.save_png(file_name)
+			"exr":
+				match image.get_format():
+					Image.FORMAT_RF,Image.FORMAT_RH:
+						export_image.save_exr(file_name, true)
+					_:
+						export_image.save_exr(file_name, false)

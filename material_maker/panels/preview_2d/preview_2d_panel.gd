@@ -1,9 +1,10 @@
 extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
+
 @export var config_var_suffix : String = ""
 
-@export var shader_accumulate : String = "" # (String, MULTILINE)
-@export var shader_divide : String = "" # (String, MULTILINE)
+@export_multiline var shader_accumulate : String = "" # (String, MULTILINE)
+@export_multiline var shader_divide : String = "" # (String, MULTILINE)
 # warning-ignore:unused_class_variable
 @export var control_target : NodePath
 
@@ -11,9 +12,6 @@ var center : Vector2 = Vector2(0.5, 0.5)
 var view_scale : float = 1.2
 
 var view_mode : int = 0
-
-var temporal_aa : bool = false
-var temporal_aa_current : bool = false
 
 var current_postprocess_option = 0
 const POSTPROCESS_OPTIONS : Array = [
@@ -29,16 +27,14 @@ const POSTPROCESS_OPTIONS : Array = [
 const VIEW_EXTEND : int = 0
 const VIEW_REPEAT : int = 1
 const VIEW_CLAMP : int = 2
-const VIEW_TEMPORAL_AA : int = 3
-const VIEW_TEMPORAL_AA22 : int = 4
 
 
 func _ready():
 	update_shader_options()
 	update_view_menu()
+	update_postprocess_menu()
 	update_Guides_menu()
 	update_export_menu()
-	update_postprocess_menu()
 
 func update_view_menu() -> void:
 	$ContextMenu.add_submenu_item("View", "View")
@@ -73,70 +69,16 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	update_shader_options()
 
 func update_material(source):
-	temporal_aa_current = temporal_aa
-	# Here we could detect $time to disable temporal AA
-	if temporal_aa_current:
-		do_update_material(source, $Accumulate/Iteration.material, shader_context_defs+shader_accumulate)
-		material.shader.code = shader_divide
-		material.set_shader_parameter("sum", $Accumulate.get_texture())
-		start_accumulate()
-	else:
-		super.update_material(source)
-		material.set_shader_parameter("mode", view_mode)
-		material.set_shader_parameter("background_color_1", Color(0.4, 0.4, 0.4))
-		material.set_shader_parameter("background_color_2", Color(0.6, 0.6, 0.6))
+	super.update_material(source)
+	material.set_shader_parameter("mode", view_mode)
+	material.set_shader_parameter("background_color_1", Color(0.4, 0.4, 0.4))
+	material.set_shader_parameter("background_color_2", Color(0.6, 0.6, 0.6))
 
-var started : bool = false
-var divide : int = 0
-
-func set_temporal_aa(v : bool):
-	if v != temporal_aa:
-		temporal_aa = v
-		if ! temporal_aa:
-			# stop AA loop
-			started = false
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-		set_generator(generator, output, true)
-	if temporal_aa:
-		material.set_shader_parameter("exponent", 1.0/2.2 if view_mode == VIEW_TEMPORAL_AA22 else 1.0 )
-
-var start_accumulate_trigger : bool = false
-
-func start_accumulate():
-	if !temporal_aa_current:
-		return
-	if !start_accumulate_trigger:
-		start_accumulate_trigger = true
-		call_deferred("do_start_accumulate")
-
-func do_start_accumulate():
-	started = false
-	await get_tree().process_frame
-	await get_tree().process_frame
-	start_accumulate_trigger = false
-	$Accumulate/Iteration.material.set_shader_parameter("sum", $Accumulate.get_texture())
-	$Accumulate/Iteration.material.set_shader_parameter("clear", true)
-	divide = 1
-	started = true
-	while started:
-		$Accumulate.render_target_update_mode = SubViewport.UPDATE_ONCE
-		material.set_shader_parameter("divide", divide)
-		await get_tree().process_frame
-		await get_tree().process_frame
-		$Accumulate/Iteration.material.set_shader_parameter("clear", false)
-		divide += 1
-		if divide > 100000:
-			started = false
-			break
-
-func get_preview_material():
-	return $Accumulate/Iteration.material if temporal_aa_current else material
+func set_preview_shader_parameter(parameter_name, value):
+	material.set_shader_parameter(parameter_name, value)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	super.on_dep_update_value(buffer_name, parameter_name, value)
-	start_accumulate()
 	return false
 
 var setup_controls_filter : String = ""
@@ -198,7 +140,6 @@ func on_resized() -> void:
 	$Accumulate/Iteration.material.set_shader_parameter("preview_2d_size", size)
 	setup_controls("previous")
 	$Guides.queue_redraw()
-	start_accumulate()
 
 var dragging : bool = false
 var zooming : bool = false
@@ -259,6 +200,8 @@ func _on_ContextMenu_id_pressed(id) -> void:
 			export_again()
 		MENU_EXPORT_ANIMATION:
 			export_animation()
+		MENU_EXPORT_TAA_RENDER:
+			export_taa()
 		_:
 			print("unsupported id "+str(id))
 
@@ -267,7 +210,6 @@ func _on_View_id_pressed(id):
 		return
 	$ContextMenu/View.set_item_checked(view_mode, false)
 	view_mode = id
-	set_temporal_aa(view_mode >= VIEW_TEMPORAL_AA)
 	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_parameter("mode", view_mode)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)

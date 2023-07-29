@@ -18,7 +18,7 @@ func get_texture_type() -> int:
 	return compute_shader.texture_type
 
 func render(texture : MMTexture, size : int) -> bool:
-	return await compute_shader.render(texture, size)
+	return await compute_shader.render(texture, Vector2i(size, size))
 
 func get_difference() -> int:
 	return compute_shader.get_difference()

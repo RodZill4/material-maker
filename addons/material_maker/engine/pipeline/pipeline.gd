@@ -194,7 +194,7 @@ func get_parameter_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> 
 	parameters_uniform.binding = 0
 	parameters_uniform.add_id(parameters_buffer)
 	var uniform_set : RID = rd.uniform_set_create([parameters_uniform], shader, 1)
-	rids.add(uniform_set)
+	#rids.add(uniform_set)
 	rids.add(parameters_buffer)
 	return uniform_set
 
@@ -216,9 +216,8 @@ func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RI
 		sampler_uniform.add_id(sampler)
 		sampler_uniform.add_id(tex)
 		sampler_uniform_array.append(sampler_uniform)
-	var uniform_set = rd.uniform_set_create(sampler_uniform_array, shader, 2)
-	if uniform_set.is_valid():
-		rids.add(uniform_set)
+	var uniform_set : RID = rd.uniform_set_create(sampler_uniform_array, shader, 2)
+	#rids.add(uniform_set)
 	return uniform_set
 
 func create_buffers_uniform_list(rd : RenderingDevice, buffers : Array[PackedByteArray], rids : RIDs) -> Array[RDUniform]:

@@ -1,0 +1,175 @@
+[gd_scene load_steps=3 format=3 uid="uid://dggvp800opr7x"]
+
+[ext_resource type="Script" path="res://material_maker/windows/export_taa/export_taa.gd" id="1_cnqcw"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2_ltlj8"]
+
+[node name="ExportTAA" type="Window"]
+title = "TAA Render"
+position = Vector2i(0, 36)
+size = Vector2i(700, 400)
+script = ExtResource("1_cnqcw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Settings" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="WidthLabel" type="Label" parent="VBoxContainer/Settings"]
+layout_mode = 2
+text = "Width:"
+
+[node name="Width" parent="VBoxContainer/Settings" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+value = 512.0
+min_value = 1.0
+max_value = 4096.0
+step = 1.0
+float_only = true
+
+[node name="HeightLabel" type="Label" parent="VBoxContainer/Settings"]
+layout_mode = 2
+text = "Height:"
+
+[node name="Height" parent="VBoxContainer/Settings" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+value = 512.0
+min_value = 1.0
+max_value = 4096.0
+step = 1.0
+float_only = true
+
+[node name="Space" type="Control" parent="VBoxContainer/Settings"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="GammaLabel" type="Label" parent="VBoxContainer/Settings"]
+layout_mode = 2
+text = "Gamma:"
+
+[node name="Gamma" parent="VBoxContainer/Settings" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+value = 1.0
+max_value = 10.0
+step = 0.01
+float_only = true
+
+[node name="Control" type="Control" parent="VBoxContainer/Settings"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Iteration" type="Label" parent="VBoxContainer/Settings"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Iteration: 0"
+horizontal_alignment = 2
+
+[node name="Denoise" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Denoise" type="OptionButton" parent="VBoxContainer/Denoise"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "No denoise"
+popup/item_0/id = 0
+popup/item_1/text = "Simple denoise"
+popup/item_1/id = 1
+popup/item_2/text = "Smart denoise"
+popup/item_2/id = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/Denoise"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="RadiusLabel" type="Label" parent="VBoxContainer/Denoise"]
+layout_mode = 2
+text = "Radius:"
+
+[node name="Radius" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+text = "1"
+value = 1.0
+max_value = 3.0
+step = 1.0
+float_only = true
+
+[node name="SigmaLabel" type="Label" parent="VBoxContainer/Denoise"]
+layout_mode = 2
+text = "Sigma:"
+
+[node name="Sigma" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+text = "1"
+value = 3.0
+min_value = 0.005
+max_value = 10.0
+step = 0.001
+float_only = true
+
+[node name="kSigmaLabel" type="Label" parent="VBoxContainer/Denoise"]
+layout_mode = 2
+text = "kSigma:"
+
+[node name="kSigma" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+text = "1"
+value = 4.0
+max_value = 10.0
+step = 0.001
+float_only = true
+
+[node name="ThresholdLabel" type="Label" parent="VBoxContainer/Denoise"]
+layout_mode = 2
+text = "Threshold:"
+
+[node name="Threshold" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
+layout_mode = 2
+text = "1"
+value = 0.7
+step = 0.001
+float_only = true
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="Export" type="Button" parent="VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+focus_next = NodePath("../Close")
+focus_previous = NodePath("../../Settings/Spritesheet")
+text = "Export"
+
+[node name="Close" type="Button" parent="VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+focus_next = NodePath("../../Settings/Size")
+focus_previous = NodePath("../Export")
+text = "Close"
+
+[connection signal="close_requested" from="." to="." method="queue_free"]
+[connection signal="size_changed" from="." to="." method="_on_size_changed"]
+[connection signal="value_changed" from="VBoxContainer/Settings/Gamma" to="." method="_on_gamma_value_changed"]
+[connection signal="item_selected" from="VBoxContainer/Denoise/Denoise" to="." method="_on_denoise_item_selected"]
+[connection signal="value_changed" from="VBoxContainer/Denoise/Radius" to="." method="_on_denoise_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/Denoise/Sigma" to="." method="_on_denoise_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/Denoise/kSigma" to="." method="_on_denoise_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/Denoise/Threshold" to="." method="_on_denoise_value_changed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Export" to="." method="_on_Export_pressed"]
+[connection signal="pressed" from="VBoxContainer/Buttons/Close" to="." method="queue_free"]

@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://4fwvegr8i2gd"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_kkc5r"]
+
+[resource]
+script = ExtResource("1_kkc5r")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
+@DECLARATIONS
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+@COMMON_SHADER_FUNCTIONS
+
+const float seed_variation = 0.0;
+
+@GLOBALS
+
+@DEFINITIONS
+
+vec4 mm_image(vec2 uv) {
+	float _seed_variation_ = seed_variation;
+	@CODE
+	return @OUTPUT_VALUE;
+}
+
+void main() {
+	vec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);
+	vec2 image_size = imageSize(OUTPUT_TEXTURE);
+	float smallest = min(image_size.x, image_size.y);
+	vec2 uv = (pixel-0.5*(image_size-vec2(smallest)))/smallest;
+
+	vec2 exy = uv*image_size + vec2(676.0,807.0);
+	vec2 t = mod(elapsed_time*vec2(0.724079,0.325093),vec2(9.1223,7.3947))+vec2(83.235541,79.433931); 
+   	vec2 rnds = fract(t*exy.x*exy.y*vec2(0.00004387155,0.00002194742));
+   	rnds = fract(t*rnds*exy.x*exy.y*vec2(0.00001853812,0.00003936601));
+	rnds = (sin(rnds*vec2(887.236017,651.419473))*0.5)/image_size;
+	rnds = vec2(0.0);
+
+	vec4 outColor = mm_image(uv+rnds);
+	if (mm_iteration > 1) {
+		outColor += texture(mm_accumulate_previous, pixel/image_size);
+	}
+	imageStore(OUTPUT_TEXTURE, ivec2(pixel), outColor);
+}"
