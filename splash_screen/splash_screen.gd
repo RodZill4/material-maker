@@ -26,6 +26,7 @@ const BACKGROUNDS : Array[Dictionary] = [
 	{ title="Matrix Rain", author="DroppedBeat", file="droppedbeat_matrix_rain.tres" },
 	{ title="Procedural Material", author="DroppedBeat", file="droppedbeat_procedural_material.png" },
 	{ title="Vending Machines", author="DroppedBeat", file="droppedbeat_vending_machines.png" },
+	{ title="Path Traced Green Thing", author="Paulo Falcao", file="paulo_falcao_green_thing.png" },
 	{ title="Terminator Ball", author="Paulo Falcao", file="paulo_falcao_terminator_ball.tres" },
 	{ title="Fractal Octahedron", author="Paulo Falcao", file="paulo_falcao_fractal_octahedron.tres" },
 	{ title="Dirty Tiles", author="cybereality", file="cybereality_dirty_tiles.png" },
@@ -41,6 +42,7 @@ func _enter_tree():
 	var window : Window = get_window()
 	window.position = (DisplayServer.screen_get_size(window.current_screen)-Vector2i(size))/2
 	window.size = size
+	#await get_tree().process_frame
 
 func set_screen(bi : int) -> void:
 	background_index = bi
