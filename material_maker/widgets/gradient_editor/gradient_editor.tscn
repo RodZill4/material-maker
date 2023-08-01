@@ -125,4 +125,5 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="resized" from="." to="." method="_on_Control_resized"]
+[connection signal="item_selected" from="Interpolation" to="." method="_on_interpolation_item_selected"]
 [connection signal="pressed" from="Interpolation" to="." method="_on_interpolation_pressed"]
