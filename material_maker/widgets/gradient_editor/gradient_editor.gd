@@ -212,7 +212,12 @@ func update_shader() -> void:
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
 
-func _on_Interpolation_item_selected(ID) -> void:
+func _on_interpolation_pressed():
+	var popup : PopupMenu = $Interpolation.get_popup()
+	#TODO set scaling factor
+	#popup.content_scale_factor = 0.5
+
+func _on_interpolation_item_selected(ID) -> void:
 	value.interpolation = ID
 	update_shader()
 	emit_signal("updated", value, false)
