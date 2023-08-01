@@ -1,10 +1,16 @@
 extends Window
 
+
 @export var closed : bool = true: set = set_closed
 var previous_value
 
+
 signal polygon_changed(polygon)
 signal return_polygon(polygon)
+
+
+func _ready():
+	min_size = $VBoxContainer.get_combined_minimum_size()
 
 func set_closed(c : bool = true):
 	closed = c

@@ -22,8 +22,8 @@ func set_value(v) -> void:
 func _on_PolygonEdit_pressed():
 	var dialog = preload("res://material_maker/widgets/polygon_edit/polygon_dialog.tscn").instantiate()
 	dialog.set_closed(closed)
-	add_child(dialog)
-	dialog.connect("polygon_changed",Callable(self,"on_value_changed"))
+	mm_globals.main_window.add_dialog(dialog)
+	dialog.polygon_changed.connect(self.on_value_changed)
 	var new_polygon = await dialog.edit_polygon(value)
 	if new_polygon != null:
 		set_value(new_polygon.value)
