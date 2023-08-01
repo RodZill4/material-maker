@@ -688,8 +688,8 @@ func serialize_selection(nodes = []) -> Dictionary:
 		s.node_position = { x=p.x, y=p.y }
 		data.nodes.append(s)
 	for c in get_connection_list():
-		var from = get_node(NodePath(c.from))
-		var to = get_node(NodePath(c.to))
+		var from = get_node(NodePath(c.from_node))
+		var to = get_node(NodePath(c.to_node))
 		if from != null and from.selected and to != null and to.selected:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name
