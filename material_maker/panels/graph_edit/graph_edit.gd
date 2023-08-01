@@ -1264,20 +1264,20 @@ func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 	var new_connections = []
 	var removed : bool = false
 	for c in get_connection_list():
-		if c.to == node.name and c.to_port == port_index:
-			var from_node = get_node(c.from)
+		if c.to_node == node.name and c.to_port == port_index:
+			var from_node = get_node(NodePath(c.from_node))
 			if from_node.generator is MMGenReroute:
 				var source = null
 				for c2 in get_connection_list():
-					if c2.to == c.from:
-						source = {from=c2.from,from_port=c2.from_port}
-						do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+					if c2.to_node == c.from_node:
+						source = {from=c2.from_node,from_port=c2.from_port}
+						do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
 				if source != null:
 					for c2 in get_connection_list():
-						if c2.from == c.from:
-							do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
-							new_connections.push_back({from=get_node(source.from).generator.name, from_port=source.from_port, to=get_node(c2.to).generator.name, to_port=c2.to_port})
-							#connect_node(source.from, source.from_port, c2.to, c2.to_port)
+						if c2.from_node == c.from_node:
+							do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
+							new_connections.push_back({from=get_node(NodePath(source.from)).generator.name, from_port=source.from_port, to=get_node(NodePath(c2.to_node)).generator.name, to_port=c2.to_port})
+							#connect_node(source.from, source.from_port, c2.to_node, c2.to_port)
 					do_remove_node(from_node)
 					if !new_connections.is_empty():
 						do_create_nodes({nodes=[], connections=new_connections})
@@ -1289,9 +1289,9 @@ func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 		var reroute_position = port_position+Vector2(-74, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		for c2 in get_connection_list():
-			if c2.to == node.name and c2.to_port == port_index:
-				do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
-				new_connections.push_back({from=get_node(c2.from).generator.name, from_port=c2.from_port, to="reroute", to_port=0})
+			if c2.to_node == node.name and c2.to_port == port_index:
+				do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
+				new_connections.push_back({from=get_node(NodePath(c2.from_node)).generator.name, from_port=c2.from_port, to="reroute", to_port=0})
 		new_connections.push_back({from="reroute", from_port=0, to=node.generator.name, to_port=port_index})
 		do_create_nodes({nodes=[reroute_node], connections=new_connections})
 	var next = generator.serialize()
@@ -1302,15 +1302,15 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 	var reroutes : bool = false
 	var destinations = []
 	for c in get_connection_list():
-		if c.from == node.name and c.from_port == port_index:
-			var to_node = get_node(c.to)
+		if c.from_node == node.name and c.from_port == port_index:
+			var to_node = get_node(NodePath(c.to_node))
 			if to_node.generator is MMGenReroute:
 				reroutes = true
 				var reroute_connections = []
 				for c2 in get_connection_list():
-					if c2.from == c.to:
-						do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
-						reroute_connections.push_back({ from=node.generator.name, from_port=port_index, to=get_node(c2.to).generator.name, to_port=c2.to_port })
+					if c2.from_node == c.to_node:
+						do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
+						reroute_connections.push_back({ from=node.generator.name, from_port=port_index, to=get_node(NodePath(c2.to_node)).generator.name, to_port=c2.to_port })
 				if !reroute_connections.is_empty():
 					do_create_nodes({nodes=[], connections=reroute_connections})
 				do_remove_node(to_node)
@@ -1323,8 +1323,8 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		var reroute_connections = [ { from=node.generator.name, from_port=port_index, to="reroute", to_port=0 }]
 		for d in destinations:
-			do_disconnect_node(d.from, d.from_port, d.to, d.to_port)
-			reroute_connections.push_back({ from="reroute", from_port=0, to=get_node(d.to).generator.name, to_port=d.to_port })
+			do_disconnect_node(d.from_node, d.from_port, d.to_node, d.to_port)
+			reroute_connections.push_back({ from="reroute", from_port=0, to=get_node(NodePath(d.to_node)).generator.name, to_port=d.to_port })
 		do_create_nodes({nodes=[ reroute_node ],connections=reroute_connections})
 	var next = generator.serialize()
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)
