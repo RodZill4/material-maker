@@ -16,7 +16,7 @@ func set_value(v) -> void:
 
 func _on_CurveEdit_pressed():
 	var dialog = preload("res://material_maker/widgets/curve_edit/curve_dialog.tscn").instantiate()
-	add_child(dialog)
+	mm_globals.main_window.add_dialog(dialog)
 	dialog.connect("curve_changed",Callable(self,"on_value_changed"))
 	var new_curve = await dialog.edit_curve(value)
 	if new_curve != null:

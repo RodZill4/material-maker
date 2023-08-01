@@ -7,6 +7,7 @@
 [node name="CurveDialog" type="Window"]
 title = "Edit curve"
 size = Vector2i(300, 300)
+exclusive = true
 min_size = Vector2i(300, 300)
 script = ExtResource("2")
 
