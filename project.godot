@@ -15,7 +15,7 @@ config/description="An open source, extensible procedural material authoring too
 run/main_scene="res://splash_screen/splash_screen.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
-config/features=PackedStringArray("4.1")
+config/features=PackedStringArray("4.2")
 boot_splash/bg_color=Color(0.0901961, 0.0941176, 0.141176, 0)
 boot_splash/show_image=false
 config/icon="res://icon.png"
@@ -118,6 +118,7 @@ limits/debugger/max_chars_per_second=204800000
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 shading/overrides/force_vertex_shading.mobile=false
 shading/overrides/force_lambert_over_burley.mobile=false
 environment/defaults/default_environment="res://default_env.tres"
