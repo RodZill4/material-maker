@@ -45,6 +45,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
 				update_generic(generator.generic_size+1)
+				return true
 			MOUSE_BUTTON_RIGHT:
 				var popup_menu : PopupMenu = PopupMenu.new()
 				var minimum = get_generic_minimum()
@@ -57,7 +58,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 				popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
 				popup_menu.connect("id_pressed",Callable(self,"update_generic"))
 				popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
-				accept_event()
+				return true
 	else:
 		return super.on_node_button(b, event)
 	return false
@@ -125,7 +126,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 	if parameter_controls.has(p):
 		var o = parameter_controls[p]
 		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.value = v
+			o.set_value(v)
 		elif o is HSlider:
 			o.value = v
 		elif o is LineEdit:
