@@ -54,7 +54,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				normalize_pipeline.clear()
 				normalize_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
 				await normalize_pipeline.set_shader(load("res://addons/material_maker/map_renderer/normalize_compute.tres").text, 3)
-				await normalize_pipeline.render(texture, size)
+				await normalize_pipeline.render(texture, Vector2i(size, size))
 			
 			# Denoise
 			print("Denoising...")
@@ -63,7 +63,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			denoise_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
 			denoise_pipeline.add_parameter_or_texture("radius", "int", 3)
 			await denoise_pipeline.set_shader(load("res://addons/material_maker/map_renderer/denoise_compute.tres").text, 3)
-			await denoise_pipeline.render(texture, size)
+			await denoise_pipeline.render(texture, Vector2i(size, size))
 
 	# Extend the map past seams
 	if pixels > 0:
@@ -72,11 +72,11 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 		compute_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
 		compute_pipeline.add_parameter_or_texture("pixels", "int", pixels)
 		await compute_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_1_compute.tres").text, 3)
-		await compute_pipeline.render(texture, size)
+		await compute_pipeline.render(texture, Vector2i(size, size))
 
 		compute_pipeline.clear()
 		compute_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
 		compute_pipeline.add_parameter_or_texture("pixels", "int", pixels)
 		await compute_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_2_compute.tres").text, 3)
-		await compute_pipeline.render(texture, size)
+		await compute_pipeline.render(texture, Vector2i(size, size))
 
