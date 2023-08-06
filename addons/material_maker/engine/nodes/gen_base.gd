@@ -361,6 +361,13 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	code += main_fct
+	for c in [ "PI", "TAU" ]:
+		var regex : RegEx = RegEx.create_from_string("const\\s+float\\s+%s\\s*=.*?;" % c)
+		while true:
+			var result : RegExMatch = regex.search(code)
+			if result == null:
+				break
+			code = code.replace(result.strings[0], "")
 	return code
 
 func generate_output_shader(output_index : int, preview : bool = false):
