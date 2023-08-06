@@ -27,7 +27,7 @@ func set_source(generator, output):
 	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
 	extra_parameters.append({ name="mm_iteration", type="int", value=0 })
 	extra_parameters.append({ name="mm_accumulate_previous", type="sampler2D", value=acc_texture })
-	await accumulate_render.set_shader_from_shadercode_ext(shader_template, source, true, null, extra_parameters, true)
+	await accumulate_render.set_shader_from_shadercode_ext(shader_template, source, false, true, null, extra_parameters, true)
 	divide_render.add_parameter_or_texture("mm_iteration", "float", 0)
 	divide_render.add_parameter_or_texture("mm_texture_acc", "sampler2D", acc_texture)
 	divide_render.add_parameter_or_texture("mm_exponent", "float", 1)

@@ -36,8 +36,8 @@ func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, paramete
 				add_parameter_or_texture(u.name, u.type, u.value, parameters_as_constants)
 				break
 
-func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:
-	var tex_type : int = 0 if shader_code.output_type == "f" else 1
+func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, is_greyscale : bool = false, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:
+	var tex_type : int = 0 if is_greyscale else 1
 	if is_32_bits:
 		tex_type |= 2
 	
@@ -69,7 +69,7 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	
 	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
 	
-	await set_shader_from_shadercode_ext(shader_template, shader_code, is_32_bits, compare_texture, extra_parameters)
+	await set_shader_from_shadercode_ext(shader_template, shader_code, shader_code.output_type == "f", is_32_bits, compare_texture, extra_parameters)
 
 func get_parameters() -> Dictionary:
 	var rv : Dictionary = {}

@@ -10,7 +10,7 @@ class_name MMGenIterateBuffer
 var exiting : bool = false
 
 var shader_computes : Array[MMShaderCompute]
-var is_greyscale : Array[bool] = [ false, false ]
+var is_greyscale : bool = false
 var is_paused : bool = false
 var is_rendering : bool = false
 var current_iteration : int = 0
@@ -104,30 +104,33 @@ func do_update_shaders() -> void:
 			do_update_shader(i)
 	required_shader_updates = 0
 
-func do_update_shader(input_port_index : int) -> void:
-	var context : MMGenContext = MMGenContext.new()
-	var source : ShaderCode
-	var source_output = get_source(input_port_index)
-	if source_output != null:
-		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
-	else:
-		source = get_default_generated_shader()
+func do_update_shader(input_po_index : int) -> void:
+	var sources : Array[ShaderCode] = [null, null]
+	var new_is_greyscale = true
+	for i in 2:
+		var context : MMGenContext = MMGenContext.new()
+		var source_output = get_source(i)
+		if source_output != null:
+			sources[i] = source_output.generator.get_shader_code("uv", source_output.output_index, context)
+		else:
+			sources[i] = get_default_generated_shader()
+		if sources[i].output_type == "":
+			sources[i] = get_default_generated_shader()
+		if sources[i].output_type != "f":
+			new_is_greyscale = false
 	var f32 = get_parameter("f32")
-	if source.output_type == "":
-		source = get_default_generated_shader()
-	var shader_compute : MMShaderCompute = shader_computes[input_port_index]
-	var buffer_name : String = buffer_names[input_port_index]
-	#assert(shader_compute.is_valid())
-
-	if input_port_index == 1 and get_parameter("autostop"):
-		await shader_compute.set_shader_from_shadercode(source, f32, texture)
-	else:
-		await shader_compute.set_shader_from_shadercode(source, f32)
-	var new_is_greyscale = ((shader_compute.get_texture_type() & 1) == 0)
-	if new_is_greyscale != is_greyscale[input_port_index]:
-		is_greyscale[input_port_index] = new_is_greyscale
-		notify_output_change(input_port_index)
-	mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
+	for i in 2:
+		var shader_compute : MMShaderCompute = shader_computes[i]
+		var buffer_name : String = buffer_names[i]
+		if i == 1 and get_parameter("autostop"):
+			await shader_compute.set_shader_from_shadercode(sources[i], f32, texture)
+		else:
+			await shader_compute.set_shader_from_shadercode(sources[i], f32)
+		mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
+	if new_is_greyscale != is_greyscale:
+		is_greyscale = new_is_greyscale
+		notify_output_change(0)
+		notify_output_change(1)
 	set_current_iteration(0)
 
 func set_parameter(n : String, v) -> void:
@@ -220,7 +223,7 @@ func get_globals__(texture_name : String) -> Array[String]:
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
-	var shader_code = _get_shader_code_lod(uv, output_index, context, false, -1.0, "_tex" if output_index == 0 else "_loop_tex")
+	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0, "_tex" if output_index == 0 else "_loop_tex")
 	shader_code.add_uniform("%s_tex_size" % genname, "float", pow(2, get_parameter("size")))
 	return shader_code
 
