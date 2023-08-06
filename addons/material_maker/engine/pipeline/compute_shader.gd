@@ -67,6 +67,8 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	else:
 		shader_template = load("res://addons/material_maker/engine/nodes/buffer_compute.tres").text
 	
+	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
+	
 	await set_shader_from_shadercode_ext(shader_template, shader_code, is_32_bits, compare_texture, extra_parameters)
 
 func get_parameters() -> Dictionary:
@@ -125,6 +127,7 @@ func render(texture : MMTexture, size : Vector2i) -> bool:
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	var rids : RIDs = RIDs.new()
 	var start_time = Time.get_ticks_msec()
+	set_parameter("elapsed_time", 0.001*float(start_time))
 	var status = await render_2(rd, texture, size, rids)
 	rids.free_rids(rd)
 	render_time = Time.get_ticks_msec() - start_time
