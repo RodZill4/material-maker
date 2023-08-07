@@ -179,8 +179,9 @@ func update_external_previews() -> void:
 func update() -> void:
 	if preview_material == null:
 		return
-	var processed_preview_shader = process_conditionals(shader_model.preview_shader)
+	var processed_preview_shader : String = process_conditionals(shader_model.preview_shader)
 	var result = process_shader(processed_preview_shader)
+	result.shader_code = MMGenBase.remove_constant_declarations(result.shader_code)
 	mm_deps.buffer_create_shader_material(buffer_name_prefix, MMShaderMaterial.new(preview_material), result.shader_code)
 	preview_texture_dependencies = {}
 	for p in RenderingServer.get_shader_parameter_list(preview_material.shader.get_rid()):
@@ -555,7 +556,7 @@ func process_uids(template : String) -> String:
 
 func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
 	template = get_template_text(template)
-	var processed_template = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
+	var processed_template : String = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
 	var custom_script = ""
 	if export_context.has("@mm_custom_script"):
 		custom_script = export_context["@mm_custom_script"]

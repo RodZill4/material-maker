@@ -337,6 +337,16 @@ func get_input_shader(input_index : int) -> ShaderCode:
 func get_shader(output_index : int, context) -> ShaderCode:
 	return get_shader_code("UV", output_index, context)
 
+static func remove_constant_declarations(s : String, constants : Array[String] = [ "PI", "TAU" ]) -> String:
+	for c in [ "PI", "TAU" ]:
+		var regex : RegEx = RegEx.create_from_string("const\\s+float\\s+%s\\s*=.*?;" % c)
+		while true:
+			var result : RegExMatch = regex.search(s)
+			if result == null:
+				break
+			s = s.replace(result.strings[0], "")
+	return s
+
 static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
 	var code
 	code = "shader_type canvas_item;\n"
@@ -361,13 +371,7 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += shader_code
 	code += main_fct
-	for c in [ "PI", "TAU" ]:
-		var regex : RegEx = RegEx.create_from_string("const\\s+float\\s+%s\\s*=.*?;" % c)
-		while true:
-			var result : RegExMatch = regex.search(code)
-			if result == null:
-				break
-			code = code.replace(result.strings[0], "")
+	code = remove_constant_declarations(code)
 	return code
 
 func generate_output_shader(output_index : int, preview : bool = false):
