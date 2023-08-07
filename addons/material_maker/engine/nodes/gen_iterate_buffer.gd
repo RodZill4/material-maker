@@ -89,22 +89,15 @@ func follow_input(input_index : int) -> Array:
 	else:
 		return super.follow_input(input_index)
 
-var required_shader_updates : int = 0
+var require_shaders_update : bool = false
 
 func update_shader(input_port_index : int) -> void:
-	if required_shader_updates == 0:
+	if !require_shaders_update:
 		call_deferred("do_update_shaders")
-	required_shader_updates = required_shader_updates | (1 << input_port_index)
+		require_shaders_update = true
 
 func do_update_shaders() -> void:
-	if ! is_instance_valid(self) or exiting:
-		return
-	for i in range(2):
-		if required_shader_updates & (1 << i):
-			do_update_shader(i)
-	required_shader_updates = 0
-
-func do_update_shader(input_po_index : int) -> void:
+	require_shaders_update = false
 	var sources : Array[ShaderCode] = [null, null]
 	var new_is_greyscale = true
 	for i in 2:
