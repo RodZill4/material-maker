@@ -396,12 +396,12 @@ func crash_recovery_save() -> void:
 	if top_generator.get_child_count() < 2:
 		return
 	if save_crash_recovery_path == "":
-		var dir : DirAccess = DirAccess.open("res://")
-		dir.make_dir_recursive("user://unsaved_projects")
+		if DirAccess.dir_exists_absolute("user://unsaved_projects"):
+			DirAccess.make_dir_recursive_absolute("user://unsaved_projects")
 		var i : int = 0
 		while true:
 			save_crash_recovery_path = "user://unsaved_projects/unsaved_%03d.mmcr" % i
-			if ! dir.file_exists(save_crash_recovery_path):
+			if ! FileAccess.file_exists(save_crash_recovery_path):
 				break
 			i += 1
 	var data = top_generator.serialize()
