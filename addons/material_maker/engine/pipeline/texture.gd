@@ -5,7 +5,7 @@ class_name MMTexture
 var rid : RID
 var texture_size : Vector2i
 var texture_format : RenderingDevice.DataFormat
-var texture : ImageTexture
+var texture : Texture2D
 var texture_needs_update : bool = false
 
 
@@ -52,25 +52,30 @@ func set_texture_rid(new_rid : RID, size : Vector2i, format : RenderingDevice.Da
 	texture_format = format
 	texture_needs_update = true
 
-func get_texture() -> ImageTexture:
+func get_texture() -> Texture2D:
 	if texture_needs_update:
-		var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
-		var byte_data : PackedByteArray = rd.texture_get_data(rid, 0)
-		mm_renderer.release_rendering_device(self)
-		var image_format : Image.Format
-		match texture_format:
-			RenderingDevice.DATA_FORMAT_R32_SFLOAT:
-				image_format = Image.FORMAT_RF
-			RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT:
-				image_format = Image.FORMAT_RGBAF
-			RenderingDevice.DATA_FORMAT_R16_SFLOAT:
-				image_format = Image.FORMAT_RH
-			RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT:
-				image_format = Image.FORMAT_RGBAH
-			RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM:
-				image_format = Image.FORMAT_RGBA8
-		var image : Image = Image.create_from_data(texture_size.x, texture_size.y, false, image_format, byte_data)
-		texture.set_image(image)
+		if false:
+			# Use Texture2DRD
+			texture = Texture2DRD.new()
+			texture.texture_rd_rid = RenderingServer.texture_get_rd_texture(rid)
+		else:
+			var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+			var byte_data : PackedByteArray = rd.texture_get_data(rid, 0)
+			mm_renderer.release_rendering_device(self)
+			var image_format : Image.Format
+			match texture_format:
+				RenderingDevice.DATA_FORMAT_R32_SFLOAT:
+					image_format = Image.FORMAT_RF
+				RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT:
+					image_format = Image.FORMAT_RGBAF
+				RenderingDevice.DATA_FORMAT_R16_SFLOAT:
+					image_format = Image.FORMAT_RH
+				RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT:
+					image_format = Image.FORMAT_RGBAH
+				RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM:
+					image_format = Image.FORMAT_RGBA8
+			var image : Image = Image.create_from_data(texture_size.x, texture_size.y, false, image_format, byte_data)
+			texture.set_image(image)
 		texture_needs_update = false
 	return texture
 
