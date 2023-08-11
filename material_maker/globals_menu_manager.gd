@@ -91,7 +91,7 @@ class MenuGodot:
 			submenu.name = submenu_name
 			popup_menu.add_child(submenu)
 		popup_menu.add_submenu_item(submenu_name, submenu.get_name())
-		return MenuGodot.new(submenu)
+		return new(submenu)
 
 class MenuBarGodot:
 	extends MenuBarBase
@@ -164,7 +164,7 @@ class MenuDisplayServer:
 	func add_submenu(name : String) -> MenuBase:
 		var full_name : String = menu_name+"/"+name
 		DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
-		return MenuDisplayServer.new(full_name)
+		return new(full_name)
 
 class MenuBarDisplayServer:
 	extends MenuBarBase
