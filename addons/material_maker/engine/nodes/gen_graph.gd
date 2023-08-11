@@ -302,7 +302,7 @@ func disconnect_children_ext(from_name : String, from_port : int, to_name : Stri
 	return true
 
 func disconnect_children_by_name(from_name : String, from_port : int, to_name : String, to_port : int) -> bool:
-	return disconnect_children_ext(from_name, from_port, to_name, get_node(to_name), to_port)
+	return disconnect_children_ext(from_name, from_port, to_name, get_node(NodePath(to_name)), to_port)
 
 func disconnect_children(from, from_port : int, to, to_port : int) -> bool:
 	return disconnect_children_ext(from.name, from_port, to.name, to, to_port)
@@ -441,7 +441,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 			if port_index == -1:
 				port_index = outputs.size()
 				outputs.push_back(src_name)
-				var type = new_graph.get_node(c.from).get_output_defs()[c.from_port].type
+				var type = new_graph.get_node(NodePath(c.from)).get_output_defs()[c.from_port].type
 				gen_outputs.ports.push_back( { name="port"+str(port_index), type=type } )
 			my_new_connections.push_back( { from=new_graph.name, from_port=port_index, to=c.to, to_port=c.to_port } )
 			new_graph_connections.push_back( { from=c.from, from_port=c.from_port, to="gen_outputs", to_port=port_index } )
@@ -450,7 +450,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 			if port_index == -1:
 				port_index = inputs.size()
 				inputs.push_back(src_name)
-				var type = get_node(c.from).get_output_defs()[c.from_port].type
+				var type = get_node(NodePath(c.from)).get_output_defs()[c.from_port].type
 				gen_inputs.ports.push_back( { name="port"+str(port_index), type=type } )
 			my_new_connections.push_back( { from=c.from, from_port=c.from_port, to=new_graph.name, to_port=port_index } )
 			new_graph_connections.push_back( { from="gen_inputs", from_port=port_index, to=c.to, to_port=c.to_port } )
@@ -459,7 +459,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	connections = my_new_connections
 	new_graph.connections = new_graph_connections
 	var found_remote = false
-	var remote_script = load("res://addons/material_maker/engine/gen_remote.gd")
+	var remote_script = preload("res://addons/material_maker/engine/nodes/gen_remote.gd")
 	for g in generators:
 		if g.get_script() == remote_script:
 			g.name = "gen_parameters"
