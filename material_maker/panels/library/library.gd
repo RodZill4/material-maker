@@ -294,20 +294,24 @@ func _on_Libraries_Unload_id_pressed(id : int) -> void:
 
 var current_item : TreeItem
 
-func _on_Tree_item_rmb_selected(mouse_position):
+func _on_tree_item_mouse_selected(mouse_position : Vector2i, mouse_button_index : int):
+	if mouse_button_index == MOUSE_BUTTON_RIGHT:
+		_on_Tree_item_rmb_selected(mouse_position)
+
+func _on_Tree_item_rmb_selected(mouse_position : Vector2i):
 	current_item = $Tree.get_item_at_position(mouse_position)
 	if current_item.get_metadata(1) != null:
-		item_menu.popup(Rect2(get_global_mouse_position(), item_menu.get_minimum_size()))
-
-func _on_PopupMenu_about_to_show():
-	var library_index : int = current_item.get_metadata(1)
-	var read_only : bool = library_manager.get_child(library_index).read_only
-	item_menu.set_item_disabled(0, read_only)
-	item_menu.set_item_disabled(1, read_only)
-	item_menu.set_item_disabled(2, read_only)
+		var library_index : int = current_item.get_metadata(1)
+		var read_only : bool = library_manager.get_child(library_index).read_only
+		item_menu.set_item_disabled(0, read_only)
+		item_menu.set_item_disabled(1, read_only)
+		item_menu.set_item_disabled(2, read_only)
+		item_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 
 func _on_PopupMenu_index_pressed(index):
-	var library_index : int = current_item.get_metadata(1)
+	var library_index : int = 0
+	if current_item:
+		library_index = current_item.get_metadata(1)
 	var item_path : String = get_item_path(current_item)
 	match index:
 		0: # Rename

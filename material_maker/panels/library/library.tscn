@@ -1,12 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
+[gd_scene load_steps=7 format=3 uid="uid://drbpisn5f3h8y"]
 
 [ext_resource type="Script" path="res://material_maker/panels/library/library_tree.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="3_el42x"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("3")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m5x46"]
+atlas = ExtResource("3_el42x")
+region = Rect2(48, 0, 16, 16)
 
 [node name="Library" type="VBoxContainer" groups=["updated_from_locale"]]
 custom_minimum_size = Vector2(200, 200)
@@ -32,10 +37,11 @@ icon = SubResource("1")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GetFromWebsite" type="LinkButton" parent="HBoxContainer"]
+[node name="GetFromWebsite" type="TextureButton" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
-text = "Get more nodes"
+tooltip_text = "Get more nodes from website"
+texture_normal = SubResource("AtlasTexture_m5x46")
 
 [node name="SectionButtons" type="GridContainer" parent="."]
 layout_mode = 2
@@ -79,9 +85,11 @@ item_3/separator = true
 item_4/text = "Define aliases"
 item_4/id = 4
 
+[connection signal="about_to_popup" from="HBoxContainer/Libraries" to="." method="_on_Libraries_about_to_show"]
 [connection signal="pressed" from="HBoxContainer/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]
 [connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
+[connection signal="item_mouse_selected" from="Tree" to="." method="_on_tree_item_mouse_selected"]
 [connection signal="about_to_popup" from="ItemMenu" to="." method="_on_PopupMenu_about_to_show"]
 [connection signal="index_pressed" from="ItemMenu" to="." method="_on_PopupMenu_index_pressed"]

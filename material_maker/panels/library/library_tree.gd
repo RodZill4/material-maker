@@ -6,12 +6,12 @@ var scroll_position = 0.0
 
 func get_last_item(parent : TreeItem):
 	while true:
+		if parent.collapsed:
+			return parent
 		var items : Array[TreeItem] = parent.get_children()
-		var last_item : TreeItem = items.back()
-		if last_item.collapsed or last_item.get_children().size() == 0:
-			return last_item
-		else:
-			parent = last_item
+		if items.is_empty():
+			return parent
+		parent = items.back()
 
 func _draw():
 	if get_root() == null:
