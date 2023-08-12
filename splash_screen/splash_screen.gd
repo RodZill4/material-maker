@@ -14,6 +14,7 @@ const BACKGROUNDS_DIR : String = "res://splash_screen/backgrounds/"
 const BACKGROUNDS : Array[Dictionary] = [
 	{ title="Beanbag Chair", author="Angel", file="angel_beanbag_chair.png" },
 	{ title="Soft Nurball", author="Angel", file="angel_soft_nurball.png" },
+	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds", file="oneiric_worlds_zefyr.png" },
 	{ title="Carved Wood", author="Pavel Oliva", file="pavel_oliva_carved_wood.png" },
 	{ title="Celestial Floor", author="Pavel Oliva", file="pavel_oliva_celestial_floor.png" },
 	{ title="Cursed Planks", author="Pavel Oliva", file="pavel_oliva_cursed_planks.png" },
