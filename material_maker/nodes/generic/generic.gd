@@ -70,12 +70,20 @@ func update_button_tooltip(b : NodeButton) -> bool:
 	return super.update_button_tooltip(b)
 
 func get_generic_minimum():
+	var rv : int = 0
 	var generic_inputs = generator.get_generic_range(generator.shader_model.inputs, "name")
 	var generic_input_count = generic_inputs.last-generic_inputs.first
-	var rv : int = 0
+	var generic_outputs = generator.get_generic_range(generator.shader_model.outputs, "type", 1)
+	var generic_output_count = generic_outputs.last-generic_outputs.first
 	for i in generator.generic_size:
 		for p in generic_input_count:
 			if generator.get_source(generic_inputs.first+i*generic_input_count+p) != null:
+				rv = i+1
+				break
+		if rv == i+1:
+			continue
+		for p in generic_output_count:
+			if ! generator.get_targets(generic_outputs.first+i*generic_output_count+p).is_empty():
 				rv = i+1
 				break
 	if rv < 1:

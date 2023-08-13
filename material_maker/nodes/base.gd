@@ -217,7 +217,7 @@ func on_node_button(b : NodeButton, event : InputEvent) -> bool:
 				if ! generator.is_seed_locked() and DisplayServer.clipboard_get().left(5) == "seed=":
 					menu.add_item(tr("Paste seed"), 2)
 				add_child(menu)
-				menu.popup(Rect2(get_global_mouse_position(), menu.get_minimum_size()))
+				menu.popup(Rect2i(get_global_mouse_position(), Vector2i(0, 0)))
 				menu.connect("popup_hide", Callable(menu, "queue_free"))
 				menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
 				return true
