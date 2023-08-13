@@ -51,7 +51,7 @@ func _exit_tree():
 
 func _ready() -> void:
 	ui = get_node(ui_path)
-	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
+	update_menu()
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
 	# Required for supersampling to work.
@@ -61,6 +61,9 @@ func _ready() -> void:
 	# attempts to read the setting before the configuration file is loaded.
 	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
+
+func update_menu():
+	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
 
 func create_menu_model_list(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
@@ -77,7 +80,7 @@ func create_menu_environment_list(menu : MMMenuManager.MenuBase) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
 	menu.connect_id_pressed(self._on_Environment_item_selected)
 
-const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES", "ACES Fitted" ]
+const TONEMAPS : Array = [ "Linear", "Reinhard", "Filmic", "ACES" ]
 
 func create_menu_tonemap_list(menu : MMMenuManager.MenuBase) -> void:
 	var tonemap_mode : int = mm_globals.get_config("ui_3d_preview_tonemap")
@@ -131,6 +134,7 @@ func _on_Tonemaps_item_selected(id) -> void:
 	mm_globals.set_config("ui_3d_preview_tonemap", id)
 	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	environment.tonemap_mode = id
+	update_menu.call_deferred()
 
 func _on_material_preview_size_changed() -> void:
 	pass
@@ -194,7 +198,7 @@ func on_gui_input(event) -> void:
 
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-					_mouse_start_position = event.global_position
+					_mouse_start_position = event.global_position/get_window().content_scale_factor
 					moving = true
 				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
