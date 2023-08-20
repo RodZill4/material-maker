@@ -51,7 +51,7 @@ func get_adjusted_uv(uv : String) -> String:
 
 func set_parameter(n : String, v) -> void:
 	super.set_parameter(n, v)
-	if n == "image":
+	if n == "image" and FileAccess.file_exists(v):
 		filetime = get_filetime(v)
 		var image : Image = Image.load_from_file(v)
 		if image != null:
