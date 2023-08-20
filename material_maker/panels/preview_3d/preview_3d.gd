@@ -175,7 +175,7 @@ func on_gui_input(event) -> void:
 		camera_stand.rotate(camera_basis.x.normalized(), -camera_rotation.y)
 		camera_stand.rotate(camera_basis.y.normalized(), -camera_rotation.x)
 	elif event is InputEventMagnifyGesture:
-		zoom(event.factor)
+		zoom(1.0/event.factor)
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
