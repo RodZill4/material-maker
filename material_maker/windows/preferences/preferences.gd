@@ -10,8 +10,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func edit_preferences(c : ConfigFile) -> void:
 	config = c
+	var main_window = mm_globals.main_window
+	main_window.add_dialog(self)
+	config_changed.connect(main_window.on_config_changed)
 	update_controls(self)
-	popup_centered()
+	size = $VBoxContainer.get_combined_minimum_size()
+	popup_centered(size)
 
 func update_controls(p : Node) -> void:
 	for c in p.get_children():
@@ -43,8 +47,9 @@ func _on_Preferences_about_to_show():
 	_on_VBoxContainer_minimum_size_changed()
 
 func _on_VBoxContainer_minimum_size_changed():
-	size = $VBoxContainer.size+Vector2(4, 4)
-
+	min_size = $VBoxContainer.get_combined_minimum_size()
+	size = min_size
+	
 
 func _on_InstallLanguage_pressed():
 	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()

@@ -792,8 +792,6 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
-	add_child(dialog)
-	dialog.connect("config_changed", Callable(self, "on_config_changed"))
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:

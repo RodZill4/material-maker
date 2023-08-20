@@ -7,11 +7,6 @@ signal return_string(status)
 func set_value(v) -> void:
 	$VBoxContainer/LineEdit.text = v
 
-func popup_centered_(window_size : Vector2i = Vector2i(0, 0)) -> void:
-	_on_VBoxContainer_minimum_size_changed()
-	super.popup_centered(window_size)
-	$VBoxContainer/LineEdit.grab_focus()
-
 func _on_OK_pressed() -> void:
 	_on_LineEdit_text_entered($VBoxContainer/LineEdit.text)
 

@@ -1,25 +1,23 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://c4r2t41ej37cr"]
 
-[ext_resource path="res://material_maker/windows/preferences/language_download.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/preferences/language_download.gd" id="1"]
 
 [node name="LanguageDownload" type="PopupPanel"]
-anchor_right = 0.267
-anchor_bottom = 0.189
-offset_right = 0.23999
-offset_bottom = -0.0800018
-script = ExtResource( 1 )
+visible = true
+script = ExtResource("1")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 338.0
-offset_bottom = 132.0
-scroll_horizontal_enabled = false
-scroll_vertical_enabled = false
+offset_right = 96.0
+offset_bottom = 96.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
 
 [node name="Languages" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
 columns = 3
 
 [connection signal="popup_hide" from="." to="." method="queue_free"]
