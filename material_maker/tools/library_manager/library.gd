@@ -29,28 +29,32 @@ func load_library(path : String, ro : bool = false, raw_data : String = "") -> b
 			print("Failed to open "+path)
 			return false
 		raw_data = file.get_as_text()
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(raw_data)
-	var data : Dictionary = test_json_conv.get_data()
-	library_path = path
-	library_name = data.name if data.has("name") else ""
-	library_items = data.lib
-	read_only = ro
-	for i in data.lib:
-		library_items_by_name[i.tree_item] = i
-		var texture : ImageTexture = ImageTexture.new()
-		var image : Image = Image.new()
-		if i.has("icon_data"):
-			image.load_png_from_buffer(Marshalls.base64_to_raw(i.icon_data))
-		elif i.has("icon"):
-			image.load(path.get_basename()+"/"+i.icon+".png")
-			i.icon_data = Marshalls.raw_to_base64(image.save_png_to_buffer())
-		else:
-			library_icons[i.tree_item] = null
-			continue
-		texture = ImageTexture.create_from_image(image)
-		library_icons[i.tree_item] = texture
-	return true
+	var json = JSON.new()
+	if json.parse(raw_data) == OK and json.get_data() is Dictionary:
+		var data : Dictionary = json.get_data()
+		library_path = path
+		library_name = data.name if data.has("name") else ""
+		library_items = data.lib
+		read_only = ro
+		for i in data.lib:
+			library_items_by_name[i.tree_item] = i
+			var texture : ImageTexture = ImageTexture.new()
+			var image : Image = Image.new()
+			if i.has("icon_data"):
+				image.load_png_from_buffer(Marshalls.base64_to_raw(i.icon_data))
+			elif i.has("icon"):
+				image.load(path.get_basename()+"/"+i.icon+".png")
+				i.icon_data = Marshalls.raw_to_base64(image.save_png_to_buffer())
+			else:
+				library_icons[i.tree_item] = null
+				continue
+			texture = ImageTexture.create_from_image(image)
+			library_icons[i.tree_item] = texture
+		print("Successfully read library %s" % path)
+		return true
+	else:
+		print("%s is not a valid library file" % path)
+	return false
 
 func get_item(lib_name : String):
 	for i in library_items:
