@@ -69,7 +69,7 @@ var brush_view_3d_shown = false
 var brush_view_2d_shown = false
 
 @onready var brush_size_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize
-@onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushStrength
+@onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness
 @onready var brush_opacity_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity
 @onready var brush_spacing_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSpacing
 
@@ -289,7 +289,7 @@ func set_current_tool(m):
 func _on_Fill_pressed():
 	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
 		return
-	painter.fill(eraser_button.pressed)
+	painter.fill(eraser_button.button_pressed)
 	set_need_save()
 
 func _on_Eraser_toggled(button_pressed):
@@ -709,34 +709,22 @@ func pick_color(position : Vector2):
 	var uv = painter.view_to_texture(position)
 	var colors = {}
 	var albedo_image = layers.get_albedo_texture().get_data()
-	false # albedo_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Albedo"] = albedo_image.get_pixelv(uv*albedo_image.get_size())
-	false # albedo_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	
 	var metallic_image = layers.get_metallic_texture().get_data()
-	false # metallic_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Metallic"] = metallic_image.get_pixelv(uv*metallic_image.get_size()).r
-	false # metallic_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	
 	var roughness_image = layers.get_roughness_texture().get_data()
-	false # roughness_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Roughness"] = roughness_image.get_pixelv(uv*roughness_image.get_size()).r
-	false # roughness_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 	var emission_image = layers.get_emission_texture().get_data()
-	false # emission_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Emission"] = emission_image.get_pixelv(uv*emission_image.get_size())
-	false # emission_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 	var depth_image = layers.get_depth_texture().get_data()
-	false # depth_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Depth"] = depth_image.get_pixelv(uv*depth_image.get_size()).r
-	false # depth_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	
 	var occlusion_image = layers.get_occlusion_texture().get_data()
-	false # occlusion_image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 	colors["Occlusion"] = occlusion_image.get_pixelv(uv*occlusion_image.get_size()).r
-	false # occlusion_image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
 
 	for p in remote_node.get_parameter_defs():
 		if colors.has(p.label):

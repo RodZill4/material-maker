@@ -346,7 +346,7 @@ func update_shader(buffer_name : String, shader_material : ShaderMaterial, shade
 	if shader_material == null:
 		print("no shader material")
 		return
-	mm_deps.buffer_create_shader_material(buffer_name, shader_material, mm_preprocessor.preprocess_file(shader_file, defines))
+	mm_deps.buffer_create_shader_material(buffer_name, MMShaderMaterial.new(shader_material), mm_preprocessor.preprocess_file(shader_file, defines))
 	if get_parent().has_method("update_procedural_layer"):
 		get_parent().update_procedural_layer()
 
