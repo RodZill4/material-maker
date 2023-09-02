@@ -25,7 +25,7 @@ static func generate(mesh: Mesh) -> ImageTexture:
 			3: i
 		})
 
-	var bvh := BVHNode.new()
+	var bvh : BVHNode = BVHNode.new()
 	bvh.vertices = vertices
 	bvh.triangles = triangles
 	print("Generating BVH...")
@@ -45,17 +45,17 @@ class BVHNode:
 
 	var node_debug: Node3D
 
-	var aabb := AABB()
-	var center: Vector3
-	var level := 0
+	var aabb : AABB = AABB()
+	var center : Vector3
+	var level : int = 0
 
-	var root := self
-	var parent: BVHNode
-	var left_node: BVHNode
-	var right_node: BVHNode
+	var root : BVHNode = self
+	var parent : BVHNode
+	var left_node : BVHNode
+	var right_node : BVHNode
 
-	var triangles := []
-	var vertices := []
+	var triangles : = []
+	var vertices : = []
 
 	# The properties that follow are only made in the root node.
 	var image: Image
@@ -173,7 +173,7 @@ class BVHNode:
 		_append_4(root._node_data)
 
 		# Generate the new children nodes.
-		left_node = BVHNode.new()
+		left_node = new()
 		left_node.root = root
 		left_node.parent = self
 		left_node.level = level + 1
@@ -182,7 +182,7 @@ class BVHNode:
 		var left_max_level := left_node.generate()
 		root._node_data[data_offset + 8] = root._node_ids[left_node]
 
-		right_node = BVHNode.new()
+		right_node = new()
 		right_node.root = root
 		right_node.parent = self
 		right_node.level = level + 1
@@ -422,7 +422,7 @@ class BVHNode:
 				))
 				i += 1
 #		print((OS.get_ticks_msec() - time) / 1000.0)
-		image.save_png("d:/bvh.png")
+#		image.save_png("d:/bvh.png")
 
 	func _sort_by_extents(a: int, b: int) -> bool:
 		return aabb.size[a] > aabb.size[b]

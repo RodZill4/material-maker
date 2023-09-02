@@ -3,7 +3,7 @@ class_name MMMapGenerator
 
 
 const SHADERS_PATH : String = "res://addons/material_maker/map_renderer"
-const SHADERS : Dictionary = {
+const MAP_DEFINITIONS : Dictionary = {
 	position = { vertex = "position_vertex", fragment = "common_fragment" },
 	normal = { vertex = "normal_vertex", fragment = "normal_fragment" },
 	tangent = { vertex = "tangent_vertex", fragment = "normal_fragment" },
@@ -21,9 +21,9 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 		mesh_pipeline.mesh = MMCurvatureGenerator.generate(mesh)
 	else:
 		mesh_pipeline.mesh = mesh
-	var shaders : Dictionary = SHADERS[map]
-	var vertex_shader : String = load(SHADERS_PATH+"/"+shaders.vertex+".tres").text
-	var fragment_shader : String = load(SHADERS_PATH+"/"+shaders.fragment+".tres").text
+	var map_definition : Dictionary = MAP_DEFINITIONS[map]
+	var vertex_shader : String = load(SHADERS_PATH+"/"+map_definition.vertex+".tres").text
+	var fragment_shader : String = load(SHADERS_PATH+"/"+map_definition.fragment+".tres").text
 	match map:
 		"position", "normal", "tangent", "curvature":
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
@@ -40,7 +40,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			mesh_pipeline.add_parameter_or_texture("max_dist", "float", ao_ray_dist)
 			mesh_pipeline.add_parameter_or_texture("bias_dist", "float",ao_ray_bias)
 			mesh_pipeline.add_parameter_or_texture("iteration", "int", 1)
-			mesh_pipeline.add_parameter_or_texture("mode", "int", shaders.mode)
+			mesh_pipeline.add_parameter_or_texture("mode", "int", map_definition.mode)
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			print("Casting %d rays..." % ray_count)
 			for i in range(ray_count):
@@ -57,26 +57,28 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				await normalize_pipeline.render(texture, Vector2i(size, size))
 			
 			# Denoise
-			print("Denoising...")
-			var denoise_pipeline : MMComputeShader = MMComputeShader.new()
-			denoise_pipeline.clear()
-			denoise_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-			denoise_pipeline.add_parameter_or_texture("radius", "int", 3)
-			await denoise_pipeline.set_shader(load("res://addons/material_maker/map_renderer/denoise_compute.tres").text, 3)
-			await denoise_pipeline.render(texture, Vector2i(size, size))
+			if true:
+				print("Denoising...")
+				var denoise_pipeline : MMComputeShader = MMComputeShader.new()
+				denoise_pipeline.clear()
+				denoise_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
+				denoise_pipeline.add_parameter_or_texture("radius", "int", 3)
+				await denoise_pipeline.set_shader(load("res://addons/material_maker/map_renderer/denoise_compute.tres").text, 3)
+				await denoise_pipeline.render(texture, Vector2i(size, size))
 
 	# Extend the map past seams
 	if pixels > 0:
-		var compute_pipeline : MMComputeShader = MMComputeShader.new()
-		compute_pipeline.clear()
-		compute_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-		compute_pipeline.add_parameter_or_texture("pixels", "int", pixels)
-		await compute_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_1_compute.tres").text, 3)
-		await compute_pipeline.render(texture, Vector2i(size, size))
+		print("Extending...")
+		var extend_pipeline : MMComputeShader = MMComputeShader.new()
+		extend_pipeline.clear()
+		extend_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
+		extend_pipeline.add_parameter_or_texture("pixels", "int", pixels)
+		await extend_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_1_compute.tres").text, 3)
+		await extend_pipeline.render(texture, Vector2i(size, size))
 
-		compute_pipeline.clear()
-		compute_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-		compute_pipeline.add_parameter_or_texture("pixels", "int", pixels)
-		await compute_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_2_compute.tres").text, 3)
-		await compute_pipeline.render(texture, Vector2i(size, size))
+		extend_pipeline.clear()
+		extend_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
+		extend_pipeline.add_parameter_or_texture("pixels", "int", pixels)
+		await extend_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_2_compute.tres").text, 3)
+		await extend_pipeline.render(texture, Vector2i(size, size))
 

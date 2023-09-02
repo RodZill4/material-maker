@@ -14,7 +14,7 @@ func create_framebuffer(rd : RenderingDevice, texture_rid : RID) -> RID:
 
 func bind_buffer_uniforms(rd : RenderingDevice, draw_list : int, shader : RID, buffers : Array[PackedByteArray], set : int, rids : RIDs):
 	var uniform_set : RID = rd.uniform_set_create(create_buffers_uniform_list(rd, buffers, rids), shader, set)
-	rids.add(uniform_set)
+	#rids.add(uniform_set, "uniform_set")
 	rd.draw_list_bind_uniform_set(draw_list, uniform_set, set)
 
 func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, rids : RIDs):
@@ -32,7 +32,7 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture):
 	
 	var target_texture_id : RID = create_output_texture(rd, size, texture_type, true)
 	var framebuffer : RID = create_framebuffer(rd, target_texture_id)
-	rids.add(framebuffer)
+	rids.add(framebuffer, "framebuffer")
 
 	var blend : RDPipelineColorBlendState = RDPipelineColorBlendState.new()
 	blend.attachments.push_back(RDPipelineColorBlendStateAttachment.new())

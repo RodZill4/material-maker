@@ -10,10 +10,14 @@ layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
 
 layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
 
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
 @DECLARATIONS
 
 void main() {
-	vec2 pixel = gl_GlobalInvocationID.xy;
+	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
 	vec2 image_size = imageSize(OUTPUT_TEXTURE);
 	vec2 uv = pixel/image_size;
 
@@ -30,5 +34,7 @@ void main() {
 			weight += col.a;
 		}
 	}
-	imageStore(OUTPUT_TEXTURE, ivec2(gl_GlobalInvocationID.xy), vec4(color / weight, 1.0));
-}"
+	imageStore(OUTPUT_TEXTURE, pixel, vec4(color / weight, 1.0));
+}
+
+"

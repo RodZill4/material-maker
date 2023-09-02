@@ -10,6 +10,10 @@ layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
 
 layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
 
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
 @DECLARATIONS
 
 vec4 dilate_distance_v(vec2 uv, float size) {
@@ -34,10 +38,11 @@ vec4 dilate_distance_v(vec2 uv, float size) {
 }
 
 void main() {
-	vec2 pixel = gl_GlobalInvocationID.xy;
+	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
 	vec2 image_size = imageSize(OUTPUT_TEXTURE);
-	vec2 uv = pixel/image_size;
+	vec2 uv = (pixel+vec2(0.5, 0.5))/image_size;
 	vec4 color =  dilate_distance_v(uv, image_size.x);
 	color.a = step(0.0, color.a);
-	imageStore(OUTPUT_TEXTURE, ivec2(gl_GlobalInvocationID.xy),color);
-}"
+	imageStore(OUTPUT_TEXTURE, pixel, color);
+}
+"

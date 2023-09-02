@@ -90,7 +90,7 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		
 		# Create a compute pipeline
 		var pipeline : RID = rd.compute_pipeline_create(shader)
-		if !pipeline.is_valid():
+		if ! pipeline.is_valid():
 			print("Cannot create pipeline")
 		rids.add(pipeline)
 		var compute_list := rd.compute_list_begin()
@@ -104,7 +104,10 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		loop_parameters_values.encode_s32(0, y)
 		var uniform_set_3 : RID = rd.uniform_set_create(create_buffers_uniform_list(rd, [loop_parameters_values], rids), shader, 3)
 		#rids.add(uniform_set_3)
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
+		if rd.uniform_set_is_valid(uniform_set_3):
+			rd.compute_list_bind_uniform_set(compute_list, uniform_set_3, 3)
+		else:
+			print("Incorrect uniform 3")
 		
 		if uniform_set_4.is_valid():
 			rd.compute_list_bind_uniform_set(compute_list, uniform_set_4, 4)
@@ -127,7 +130,7 @@ func render(texture : MMTexture, size : Vector2i) -> bool:
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	var rids : RIDs = RIDs.new()
 	var start_time = Time.get_ticks_msec()
-	set_parameter("elapsed_time", 0.001*float(start_time))
+	set_parameter("elapsed_time", 0.001*float(start_time), true)
 	var status = await render_2(rd, texture, size, rids)
 	rids.free_rids(rd)
 	render_time = Time.get_ticks_msec() - start_time

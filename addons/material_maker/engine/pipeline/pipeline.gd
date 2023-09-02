@@ -40,20 +40,21 @@ class RIDs:
 	extends RefCounted
 	
 
-	var rids : Array[RID] = []
+	var rids : Dictionary
 	
-	func add(rid : RID):
+	func add(rid : RID, description : String = ""):
 		if rid.is_valid():
-			if rids.find(rid) != -1:
-				print("ERROR: RID stored twice")
+			if rids.has(rid):
+				push_error("ERROR: RID %s stored twice (%s)" % [ rid, description ])
 			else:
-				rids.append(rid)
+				rids[rid] = description
 		else:
 			print("RID is invalid")
 	
 	func free_rids(rd : RenderingDevice):
-		for r in rids:
+		for r in rids.keys():
 			if r.is_valid():
+				#push_warning("Freeing RID %s (%s)" % [ str(r), rids[r] ])
 				rd.free_rid(r)
 
 const TEXTURE_TYPE : Array[Dictionary] = [
@@ -116,7 +117,7 @@ func add_parameter_or_texture(n : String, t : String, v, parameter_as_constant :
 			print("ERROR: Redefining parameter "+n)
 		parameters[n] = Parameter.new(t, v)
 
-func set_parameter(name : String, value) -> void:
+func set_parameter(name : String, value, silent : bool = false) -> void:
 	if parameters.has(name):
 		if value == null:
 			print("Cannot assign null value to parameter "+name)
@@ -147,7 +148,7 @@ func set_parameter(name : String, value) -> void:
 	elif texture_indexes.has(name):
 		var texture_index : int = texture_indexes[name]
 		textures[texture_index].texture = value
-	else:
+	elif not silent:
 		print("Cannot assign parameter "+name)
 
 func constant_as_string(value, type : String) -> String:
@@ -212,8 +213,8 @@ func get_parameter_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> 
 	parameters_uniform.binding = 0
 	parameters_uniform.add_id(parameters_buffer)
 	var uniform_set : RID = rd.uniform_set_create([parameters_uniform], shader, 1)
-	#rids.add(uniform_set)
-	rids.add(parameters_buffer)
+	rids.add(uniform_set)
+	rids.add(parameters_buffer, "parameters_buffer")
 	return uniform_set
 
 func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RID:
@@ -222,7 +223,7 @@ func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RI
 	sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
 	sampler_state.mip_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
 	var sampler : RID = rd.sampler_create(sampler_state)
-	rids.add(sampler)
+	rids.add(sampler, "sampler")
 	var sampler_uniform_array : Array = []
 	for i in textures.size():
 		var tex : RID = textures[i].texture.get_texture_rid(rd)
@@ -243,7 +244,7 @@ func create_buffers_uniform_list(rd : RenderingDevice, buffers : Array[PackedByt
 	var binding : int = 0
 	for b in buffers:
 		var buffer : RID = rd.storage_buffer_create(b.size(), b)
-		rids.add(buffer)
+		rids.add(buffer, "buffer")
 		var uniform : RDUniform = RDUniform.new()
 		uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
 		uniform.binding = binding
