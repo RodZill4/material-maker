@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cag6ab0lsd4eh"]
+
+[ext_resource type="Script" path="res://addons/material_maker/map_renderer/map_renderer_test.gd" id="1_c57v2"]
+
+[node name="MapRendererTest" type="Node"]
+script = ExtResource("1_c57v2")
