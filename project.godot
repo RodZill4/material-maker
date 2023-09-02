@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material authoring tool"
-run/main_scene="res://splash_screen/splash_screen.tscn"
+run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 config/features=PackedStringArray("4.2")
@@ -51,6 +51,11 @@ window/size/viewport_width=1
 window/size/viewport_height=1
 window/size/borderless=true
 window/handheld/orientation.Android="sensor_landscape"
+
+[editor]
+
+run/main_run_args_paint="--no-logo /Users/rodolphesuescun/Documents/GitHub/material-maker-g4/material_maker/meshes/suzanne.obj"
+run/main_run_args_nologo="--no-logo"
 
 [editor_plugins]
 

@@ -185,28 +185,38 @@ func _ready() -> void:
 	
 	get_window().connect("files_dropped", self.on_files_dropped)
 	
-	do_load_projects(OS.get_cmdline_args())
+	var args : PackedStringArray = OS.get_cmdline_args()
+	for a in args:
+		if a.get_extension() == "ptex":
+			do_load_project(get_file_absolute_path(a))
+		elif a.get_extension() == "obj":
+			var mesh_filename : String = get_file_absolute_path(a)
+			var mesh : Mesh = load(mesh_filename)
+			var project_filename : String = mesh_filename.get_basename()+".mmpp"
+			create_paint_project(mesh, mesh_filename, 1024, project_filename)
 	
-	var dir : DirAccess = DirAccess.open("user://unsaved_projects")
-	if dir != null:
-		var files : Array = []
-		dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
-		var file_name = dir.get_next()
-		while file_name != "":
-			file_name = dir.get_next()
-			if !dir.current_is_dir() and file_name.get_extension() == "mmcr":
-				files.append("user://unsaved_projects".path_join(file_name))
-				print(file_name)
-		if ! files.is_empty():
-			for f in files:
-				var graph_edit = new_graph_panel()
-				graph_edit.load_from_recovery(f)
-				graph_edit.update_tab_title()
-			hierarchy.update_from_graph_edit(get_current_graph_edit())
-			var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
-			dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
-			add_child(dialog)
-			await dialog.ask()
+	# Rescue unsaved projects
+	if true:
+		var dir : DirAccess = DirAccess.open("user://unsaved_projects")
+		if dir != null:
+			var files : Array = []
+			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+			var file_name = dir.get_next()
+			while file_name != "":
+				file_name = dir.get_next()
+				if !dir.current_is_dir() and file_name.get_extension() == "mmcr":
+					files.append("user://unsaved_projects".path_join(file_name))
+					print(file_name)
+			if ! files.is_empty():
+				for f in files:
+					var graph_edit = new_graph_panel()
+					graph_edit.load_from_recovery(f)
+					graph_edit.update_tab_title()
+				hierarchy.update_from_graph_edit(get_current_graph_edit())
+				var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+				dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
+				add_child(dialog)
+				await dialog.ask()
 	
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
@@ -246,7 +256,7 @@ func _input(event: InputEvent) -> void:
 			Window.MODE_EXCLUSIVE_FULLSCREEN, Window.MODE_FULLSCREEN, Window.MODE_MAXIMIZED:
 				get_window().mode = Window.MODE_WINDOWED
 			_:
-				Window.MODE_MAXIMIZED
+				get_window().mode = Window.MODE_MAXIMIZED
 
 func on_config_changed() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
@@ -508,9 +518,12 @@ func new_paint_project(obj_file_name = null) -> void:
 	var result = await new_painter_dialog.ask(obj_file_name)
 	if ! result.has("mesh"):
 		return
+	create_paint_project(result.mesh, result.mesh_filename, result.size, result.project_filename)
+
+func create_paint_project(mesh, mesh_filename, texture_size, project_filename):
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
 	projects.add_tab(paint_panel)
-	paint_panel.init_project(result.mesh, result.mesh_filename, result.size, result.project_filename)
+	paint_panel.init_project(mesh, mesh_filename, texture_size, project_filename)
 	projects.current_tab = paint_panel.get_index()
 
 func load_project() -> void:
@@ -537,18 +550,23 @@ func on_html5_load_file(file_name, _file_type, file_data):
 			if do_load_material_from_data(file_name, file_data, false):
 				hierarchy.update_from_graph_edit(get_current_graph_edit())
 
+func get_file_absolute_path(filename : String) -> String:
+	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)
+	if ! file:
+		return ""
+	return file.get_path_absolute()
+		
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
 	for f in filenames:
-		var file : FileAccess = FileAccess.open(f, FileAccess.READ)
-		if ! file.is_open():
-			continue
-		file_name = file.get_path_absolute()
-		do_load_project(file_name)
+		f = get_file_absolute_path(f)
+		if f != "":
+			file_name = f
+			do_load_project(file_name)
 	if file_name != "":
 		mm_globals.config.set_value("path", "project", file_name.get_base_dir())
 
-func do_load_project(file_name) -> bool:
+func do_load_project(file_name : String) -> bool:
 	var status : bool = false
 	match file_name.get_extension():
 		"ptex":
