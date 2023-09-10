@@ -28,7 +28,7 @@ var item_usage : Dictionary
 const LIBRARY = preload("res://material_maker/tools/library_manager/library.gd")
 
 
-signal libraries_changed
+signal libraries_changed()
 
 
 func _ready():
@@ -75,6 +75,7 @@ func init_libraries() -> void:
 	if mm_globals.config.has_section_key(config_section, "disabled_sections"):
 		disabled_sections = mm_globals.config.get_value(config_section, "disabled_sections")
 	emit_signal("libraries_changed")
+	print("Libraries updated ("+name+")")
 
 func compare_item_usage(i1, i2) -> int:
 	var u1 = item_usage[i1.name] if item_usage.has(i1.name) else 0
@@ -223,7 +224,7 @@ func get_section_color(section_name : String) -> Color:
 	for s in section_colors.keys():
 		if TranslationServer.translate(s) == section_name:
 			return section_colors[s]
-	return Color(0.0, 0.0, 0.0)
+	return Color(0.0, 0.0, 0.0, 0.0)
 
 func is_section_enabled(section_name : String) -> bool:
 	return disabled_sections.find(section_name) == -1

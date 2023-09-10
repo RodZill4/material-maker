@@ -27,7 +27,7 @@ func _draw():
 	var items : Array[TreeItem] = get_root().get_children()
 	for item in items:
 		var color = library_manager.get_section_color(item.get_text(0))
-		if color != null:
+		if color.a > 0.0:
 			var rect : Rect2 = get_item_area_rect(item)
 			var last_rect : Rect2 = rect
 			if !item.collapsed:

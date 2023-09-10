@@ -26,7 +26,7 @@ func _ready() -> void:
 	tree.set_column_expand(1, false)
 	tree.set_column_custom_minimum_width(1, 36)
 	# Connect
-	library_manager.connect("libraries_changed", Callable(self, "update_tree"))
+	library_manager.libraries_changed.connect(self.update_tree)
 	# Setup section buttons
 	for s in library_manager.get_sections():
 		var button : TextureButton = TextureButton.new()
@@ -35,9 +35,9 @@ func _ready() -> void:
 		button.texture_normal = texture
 		$SectionButtons.add_child(button)
 		category_buttons[s] = button
-		button.connect("pressed", Callable(self, "_on_Section_Button_pressed").bind(s))
-		button.connect("gui_input", Callable(self, "_on_Section_Button_event").bind(s))
-	libraries_button.get_popup().connect("id_pressed", Callable(self, "_on_Libraries_id_pressed"))
+		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
+		button.connect("gui_input", self._on_Section_Button_event.bind(s))
+	libraries_button.get_popup().id_pressed.connect(self._on_Libraries_id_pressed)
 	init_expanded_items()
 	update_tree()
 
@@ -111,12 +111,12 @@ func update_tree() -> void:
 	for c in category_buttons.keys():
 		update_category_button(c)
 	# update tree
-	var filter : String = $Filter/Filter.text.to_lower()
+	var filter : String = filter_line_edit.text.to_lower()
 	tree.clear()
 	tree.create_item()
 	for i in library_manager.get_items(filter):
 		add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
-	$Tree.queue_redraw()
+	tree.queue_redraw()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
 	if item_parent == null:
@@ -215,11 +215,11 @@ func _on_SectionButtons_resized():
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:
-	for item in $Tree.get_root().get_children():
+	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			$Tree.ensure_cursor_is_visible()
+			tree.ensure_cursor_is_visible()
 			break
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
@@ -244,7 +244,7 @@ func _on_Libraries_about_to_show():
 		unload = PopupMenu.new()
 		unload.name = "Unload"
 		popup.add_child(unload)
-		unload.connect("id_pressed", Callable(self, "_on_Libraries_Unload_id_pressed"))
+		unload.id_pressed.connect(self._on_Libraries_Unload_id_pressed)
 	popup.clear()
 	unload.clear()
 	for i in library_manager.get_child_count():
@@ -263,6 +263,7 @@ func on_html5_load_file(file_name, _file_type, file_data):
 			library_manager.load_library(file_name, file_data)
 
 func _on_Libraries_id_pressed(id : int) -> void:
+	print(id)
 	match id:
 		MENU_CREATE_LIBRARY:
 			var dialog = preload("res://material_maker/panels/library/create_lib_dialog.tscn").instantiate()
@@ -299,7 +300,7 @@ func _on_tree_item_mouse_selected(mouse_position : Vector2i, mouse_button_index 
 		_on_Tree_item_rmb_selected(mouse_position)
 
 func _on_Tree_item_rmb_selected(mouse_position : Vector2i):
-	current_item = $Tree.get_item_at_position(mouse_position)
+	current_item = tree.get_item_at_position(mouse_position)
 	if current_item.get_metadata(1) != null:
 		var library_index : int = current_item.get_metadata(1)
 		var read_only : bool = library_manager.get_child(library_index).read_only
