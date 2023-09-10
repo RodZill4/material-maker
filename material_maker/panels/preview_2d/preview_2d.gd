@@ -150,16 +150,16 @@ func export_taa() -> void:
 	window.popup_centered()
 
 func _on_Export_id_pressed(id : int) -> void:
-	var size
+	var export_size
 	if id == MENU_EXPORT_CUSTOM_SIZE:
 		var dialog = load("res://material_maker/panels/preview_2d/custom_size_dialog.tscn").instantiate()
 		mm_globals.main_window.add_dialog(dialog)
-		size = await dialog.ask()
-		if ! size.has("size"):
+		export_size = await dialog.ask()
+		if ! export_size.has("size"):
 			return
-		size = size.size
+		export_size = export_size.size
 	else:
-		size = 64 << id
+		export_size = 64 << id
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
@@ -170,6 +170,7 @@ func _on_Export_id_pressed(id : int) -> void:
 		dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
 	var files = await dialog.select_files()
 	if files.size() == 1:
+		# TODO: fix custom export size here
 		export_as_image_file(files[0], 64 << id)
 
 func create_image(renderer_function : String, params : Array, image_size : int) -> void:

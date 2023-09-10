@@ -59,14 +59,14 @@ func item_is_child(i1 : TreeItem, i2 : TreeItem):
 		i1 = i1.get_parent()
 	return false
 
-func _can_drop_data(position : Vector2, data):
+func _can_drop_data(pos : Vector2, data):
 	drop_mode_flags = DROP_MODE_ON_ITEM | DROP_MODE_INBETWEEN
-	var target_item = get_item_at_position(position)
+	var target_item = get_item_at_position(pos)
 	if target_item != null and !item_is_child(target_item, data):
 		return true
 	return false
 
-static func get_item_index(item : TreeItem) -> int:
+func get_item_index(item : TreeItem) -> int:
 	var rv : int = 0
 	while item.get_prev() != null:
 		item = item.get_prev()

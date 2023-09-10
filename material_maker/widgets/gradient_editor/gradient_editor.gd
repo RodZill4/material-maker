@@ -213,7 +213,8 @@ func update_shader() -> void:
 	$Gradient.material.shader.set_code(shader)
 
 func _on_interpolation_pressed():
-	var popup : PopupMenu = $Interpolation.get_popup()
+	pass
+	#var popup : PopupMenu = $Interpolation.get_popup()
 	#TODO set scaling factor
 	#popup.content_scale_factor = 0.5
 

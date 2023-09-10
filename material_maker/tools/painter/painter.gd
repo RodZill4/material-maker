@@ -81,7 +81,7 @@ func update_seams_texture(_m : Mesh = null) -> void:
 	await get_tree().process_frame
 	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
 	add_child(map_renderer)
-	var result = await map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_size)
+	await map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_size)
 	map_renderer.queue_free()
 
 func update_inv_uv_texture(m : Mesh) -> void:
@@ -89,13 +89,13 @@ func update_inv_uv_texture(m : Mesh) -> void:
 	add_child(map_renderer)
 	if mesh_inv_uv_tex == null:
 		mesh_inv_uv_tex = ImageTexture.new()
-	var result =await map_renderer.gen(m, "position", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
+	await map_renderer.gen(m, "position", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
 	if mesh_normal_tex == null:
 		mesh_normal_tex = ImageTexture.new()
-	result = await map_renderer.gen(m, "normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
+	await map_renderer.gen(m, "normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
 	if mesh_tangent_tex == null:
 		mesh_tangent_tex = ImageTexture.new()
-	result = await map_renderer.gen(m, "tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
+	await map_renderer.gen(m, "tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
 	map_renderer.queue_free()
 	mesh_aabb = m.get_aabb()
 
@@ -311,9 +311,9 @@ func get_output_code(index : int) -> String:
 		brush_node = null
 		return ""
 	var context : MMGenContext = MMGenContext.new()
-	var source_mask = brush_node.get_shader_code("uv", 0, context)
+	var source_mask : MMGenBase.ShaderCode = brush_node.get_shader_code("uv", 0, context)
 	context = MMGenContext.new(context)
-	var source = brush_node.get_shader_code("uv", index, context)
+	var source : MMGenBase.ShaderCode = brush_node.get_shader_code("uv", index, context)
 	var new_code : String = mm_renderer.common_shader
 	new_code += "\n"
 	for g in source.globals:
@@ -321,6 +321,8 @@ func get_output_code(index : int) -> String:
 			source_mask.globals.append(g)
 	for g in source_mask.globals:
 		new_code += g
+	new_code += source_mask.uniforms_as_strings()
+	new_code += source.uniforms_as_strings()
 	"""
 	for t in source.textures.keys():
 		if !source_mask.textures.has(t):
