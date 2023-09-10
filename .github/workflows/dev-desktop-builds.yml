@@ -13,8 +13,8 @@ on:
 
 env:
   GODOT_VERSION: 4.2
-  GODOT_SUB: dev3
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.2-dev3
+  GODOT_SUB: dev4
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.2-dev4
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
