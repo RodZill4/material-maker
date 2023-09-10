@@ -843,7 +843,7 @@ func make_selected_nodes_editable() -> void:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
 
-func create_menu_add_to_library(menu, manager, function) -> void:
+func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function) -> void:
 	menu.clear()
 	for i in manager.get_child_count():
 		var lib = manager.get_child(i)
@@ -851,7 +851,7 @@ func create_menu_add_to_library(menu, manager, function) -> void:
 			menu.add_item(lib.library_name, i)
 	menu.connect_id_pressed(Callable(self, function))
 
-func create_menu_add_selection_to_library(menu) -> void:
+func create_menu_add_selection_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
 func add_selection_to_library(index) -> void:
@@ -879,7 +879,7 @@ func add_selection_to_library(index) -> void:
 	result.release(self)
 	node_library_manager.add_item_to_library(index, status.text, image, data)
 
-func create_menu_add_brush_to_library(menu) -> void:
+func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
 
 func add_brush_to_library(index) -> void:
@@ -902,10 +902,9 @@ func paint_project_settings():
 	add_child(dialog)
 	dialog.edit_settings(get_current_project())
 
-func create_menu_paint_environment(menu) -> void:
+func create_menu_paint_environment(menu : MMMenuManager.MenuBase) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
-	if !menu.is_connected("id_pressed", Callable(self, "_on_PaintEnvironment_id_pressed")):
-		menu.connect("id_pressed", Callable(self, "_on_PaintEnvironment_id_pressed"))
+	menu.connect_id_pressed(self._on_PaintEnvironment_id_pressed)
 
 func _on_PaintEnvironment_id_pressed(id) -> void:
 	var paint = get_current_project()
