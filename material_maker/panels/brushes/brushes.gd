@@ -1,7 +1,7 @@
 extends "res://material_maker/panels/library/library.gd"
 
 func _ready():
-	pass
+	super._ready()
 
 func _on_Tree_item_activated():
 	var main_window = mm_globals.main_window
