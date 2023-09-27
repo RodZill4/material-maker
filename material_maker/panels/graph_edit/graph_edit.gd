@@ -91,7 +91,8 @@ func get_nodes_under_mouse() -> Array:
 	for c in get_children():
 		if c is GraphNode:
 			var rect : Rect2 = c.get_global_rect()
-			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+			var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+			rect = Rect2(rect.position, rect.size*transform_scale)
 			if rect.has_point(get_global_mouse_position()):
 				array.push_back(c)
 	return array
@@ -100,16 +101,16 @@ func process_port_click(pressed : bool):
 	for c in get_nodes_under_mouse():
 		var rect : Rect2 = c.get_global_rect()
 		var pos = get_global_mouse_position()-rect.position
-		rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-		var output_count : int = c.get_connection_output_count()
+		var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+		rect = Rect2(rect.position, rect.size*transform_scale)
+		var output_count : int = c.get_output_port_count()
 		if output_count > 0:
-			var transform_scale = c.get_global_transform().get_scale()
-			var output_1 : Vector2 = c.get_connection_output_position(0)-5*transform_scale
-			var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*transform_scale
+			var output_1 : Vector2 = c.get_output_port_position(0)-5*transform_scale
+			var output_2 : Vector2 = c.get_output_port_position(output_count-1)+5*transform_scale
 			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 			if in_output:
 				for i in range(output_count):
-					if (c.get_connection_output_position(i)-pos).length() < 5*transform_scale.x:
+					if (c.get_output_port_position(i)-pos).length() < 5*transform_scale.x:
 						if pressed:
 							port_click_node = c
 							port_click_port_index = i
@@ -156,22 +157,23 @@ func _gui_input(event) -> void:
 				if ! c is GraphNode:
 					continue
 				var rect = c.get_global_rect()
-				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+				rect = Rect2(rect.position, rect.size*transform_scale)
 				if rect.has_point(get_global_mouse_position()):
-					if c.has_method("get_input_slot"):
-						var slot = c.get_input_slot(get_global_mouse_position()-c.global_position)
-						if slot >= 0:
-							# Tell the node its connector was clicked
-							if c.has_method("on_clicked_input"):
-								c.on_clicked_input(slot, Input.is_key_pressed(KEY_SHIFT))
-								return
-					if c.has_method("get_output_slot"):
-						var slot = c.get_output_slot(get_global_mouse_position()-c.global_position)
-						if slot >= 0:
-							# Tell the node its connector was clicked
-							if c.has_method("on_clicked_output"):
-								c.on_clicked_output(slot, Input.is_key_pressed(KEY_SHIFT))
-								return
+					print("Node: "+c.name)
+					if c.has_method("get_slot_from_position"):
+						var slot = c.get_slot_from_position(get_global_mouse_position())
+						match slot.type:
+							"input":
+								# Tell the node its connector was clicked
+								if c.has_method("on_clicked_input"):
+									c.on_clicked_input(slot.index, Input.is_key_pressed(KEY_SHIFT))
+									return
+							"output":
+								# Tell the node its connector was clicked
+								if c.has_method("on_clicked_output"):
+									c.on_clicked_output(slot.index, Input.is_key_pressed(KEY_SHIFT))
+									return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
 			node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
@@ -208,7 +210,8 @@ func _gui_input(event) -> void:
 				for c in get_children():
 					if c.has_method("set_slot_tip_text"):
 						var rect = c.get_global_rect()
-						rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+						var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+						rect = Rect2(rect.position, rect.size*transform_scale)
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
 	elif event is InputEventMouseMotion:
@@ -216,18 +219,20 @@ func _gui_input(event) -> void:
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
 				var rect = c.get_global_rect()
-				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+				rect = Rect2(rect.position, rect.size*transform_scale)
 				if rect.has_point(get_global_mouse_position()):
-					var rel_pos : Vector2 = get_global_mouse_position()-c.global_position
-					var slot : Dictionary = c.get_slot_from_position(rel_pos)
-					tooltip_text = c.get_slot_tooltip(rel_pos, slot)
-					found_tip = found_tip or c.set_slot_tip_text(rel_pos, slot)
+					var mouse_pos : Vector2 = get_global_mouse_position()
+					var slot : Dictionary = c.get_slot_from_position(mouse_pos)
+					tooltip_text = c.get_slot_tooltip(mouse_pos, slot)
+					found_tip = found_tip or c.set_slot_tip_text(mouse_pos, slot)
 					break
 				else:
 					c.clear_connection_labels()
 		if !found_tip:
 			var rect = get_global_rect()
-			rect = Rect2(rect.position, rect.size*get_global_transform().get_scale())
+			var transform_scale : Vector2 = Vector2(1, 1) # get_global_transform().get_scale()
+			rect = Rect2(rect.position, rect.size*transform_scale)
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
@@ -1284,8 +1289,8 @@ func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 				removed = true
 			break
 	if ! removed:
-		var global_scale = node.get_global_transform().get_scale()
-		var port_position = node.position_offset+node.get_connection_input_position(port_index)/global_scale
+		var global_scale = Vector2(1, 1) # node.get_global_transform().get_scale()
+		var port_position = node.position_offset+node.get_input_port_position(port_index)/global_scale
 		var reroute_position = port_position+Vector2(-74, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		for c2 in get_connection_list():
@@ -1317,8 +1322,8 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 			else:
 				destinations.push_back(c.duplicate())
 	if !reroutes:
-		var global_scale = node.get_global_transform().get_scale()
-		var port_position = node.position_offset+node.get_connection_output_position(port_index)/global_scale
+		var global_scale = Vector2(1, 1) # node.get_global_transform().get_scale()
+		var port_position = node.position_offset+node.get_output_port_position(port_index)/global_scale
 		var reroute_position = port_position+Vector2(50, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		var reroute_connections = [ { from=node.generator.name, from_port=port_index, to="reroute", to_port=0 }]

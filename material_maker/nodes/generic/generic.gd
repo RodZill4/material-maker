@@ -8,7 +8,7 @@ var output_count = 0
 
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
-var generic_button : NodeButton
+var generic_button : TextureButton
 
 
 const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic.tres")
@@ -16,14 +16,33 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 
 func _ready() -> void:
 	super._ready()
-	generic_button = add_button(GENERIC_ICON, true)
 	add_to_group("updated_from_locale")
+
+func init_buttons():
+	super.init_buttons()
+	generic_button = add_button(GENERIC_ICON, self.on_generic_pressed, self.generic_button_create_popup)
+	generic_button.tooltip_text = tr("Add more ports/parameters (left mouse button) / Variadic node menu (right mouse button)")
+
+func on_generic_pressed():
+	update_generic(generator.generic_size+1)
+
+func generic_button_create_popup():
+	var popup_menu : PopupMenu = PopupMenu.new()
+	var minimum = get_generic_minimum()
+	if minimum < generator.generic_size:
+		popup_menu.add_item(str(minimum), minimum)
+		popup_menu.add_separator()
+	for c in range(generator.generic_size+1, generator.generic_size+4):
+		popup_menu.add_item(str(c), c)
+	add_child(popup_menu)
+	popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
+	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
+	popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 
 func _draw() -> void:
 	super._draw()
-	if generator != null and generator.preview >= 0 and get_connection_output_count() > 0:
-		var conn_pos = get_connection_output_position(generator.preview)
-		conn_pos /= get_global_transform().get_scale()
+	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
+		var conn_pos = get_output_port_position(generator.preview)
 		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_theme_color("title_color"))
 
 func set_generator(g : MMGenBase) -> void:
@@ -33,41 +52,10 @@ func set_generator(g : MMGenBase) -> void:
 
 func update():
 	if generator != null and generator.has_method("is_generic") and generator.is_generic():
-		generic_button.hidden = false
+		generic_button.visible = true
 	else:
-		generic_button.hidden = true
+		generic_button.visible = false
 	super.update()
-
-func on_node_button(b : NodeButton, event : InputEvent) -> bool:
-	if b == generic_button:
-		if ! event is InputEventMouseButton or ! event.pressed:
-			return false
-		match event.button_index:
-			MOUSE_BUTTON_LEFT:
-				update_generic(generator.generic_size+1)
-				return true
-			MOUSE_BUTTON_RIGHT:
-				var popup_menu : PopupMenu = PopupMenu.new()
-				var minimum = get_generic_minimum()
-				if minimum < generator.generic_size:
-					popup_menu.add_item(str(minimum), minimum)
-					popup_menu.add_separator()
-				for c in range(generator.generic_size+1, generator.generic_size+4):
-					popup_menu.add_item(str(c), c)
-				add_child(popup_menu)
-				popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
-				popup_menu.connect("id_pressed",Callable(self,"update_generic"))
-				popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
-				return true
-	else:
-		return super.on_node_button(b, event)
-	return false
-
-func update_button_tooltip(b : NodeButton) -> bool:
-	if b == generic_button:
-		tooltip_text = tr("Add more ports/parameters (left mouse button) / Variadic node menu (right mouse button)")
-		return true
-	return super.update_button_tooltip(b)
 
 func get_generic_minimum():
 	var rv : int = 0
@@ -407,7 +395,8 @@ func update_node() -> void:
 		remove_child(c)
 		c.free()
 	# Show or hide the close button
-	show_close = generator.can_be_deleted()
+	# TODO!
+	#show_close = generator.can_be_deleted()
 	# Rebuild node
 	update_title()
 	# Resize to minimum

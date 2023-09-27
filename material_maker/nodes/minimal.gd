@@ -5,10 +5,47 @@ class_name MMGraphNodeMinimal
 var generator : MMGenBase = null : set = set_generator
 var disable_undoredo_for_offset : bool = false
 
+var buttons : HBoxContainer = null
+var close_button : TextureButton
+
+
+const CLOSE_ICON : Texture2D = preload("res://material_maker/icons/close.tres")
+
 
 func _ready() -> void:
 	position_offset_changed.connect(self._on_offset_changed)
+	if buttons == null:
+		buttons = HBoxContainer.new()
+		buttons.add_theme_constant_override("separation", 1)
+		get_titlebar_hbox().add_child(buttons)
+		init_buttons()
 	add_to_group("generator_node")
+
+func update():
+	queue_redraw()
+
+func add_button(texture : Texture2D, pressed_callback = null, popup_callback = null) -> TextureButton:
+	var button : TextureButton = preload("res://material_maker/nodes/node_button.tscn").instantiate()
+	button.texture_normal = texture
+	buttons.add_child(button)
+	buttons.move_child(button, 0)
+	if pressed_callback:
+		if pressed_callback is Callable:
+			button.pressed.connect(pressed_callback)
+		else:
+			print("unsupported callback")
+	if popup_callback:
+		if popup_callback is Callable:
+			button.on_show_popup.connect(popup_callback)
+		else:
+			print("unsupported callback")
+	return button
+
+func init_buttons():
+	close_button = add_button(CLOSE_ICON, self.on_close_pressed)
+	
+func on_close_pressed():
+	close_request.emit()
 
 func _on_offset_changed() -> void:
 	if ! disable_undoredo_for_offset:
@@ -34,31 +71,29 @@ func do_set_position(o : Vector2) -> void:
 	position_offset = o
 	disable_undoredo_for_offset = false
 
-func get_input_slot(pos : Vector2) -> int:
+func get_slot_from_position(pos : Vector2) -> Dictionary:
+	var rv : Dictionary = { type="none", index=-1, show_inputs = false, show_outputs=false }
 	var global_scale = get_global_transform().get_scale()
-	if get_connection_input_count() > 0:
-		var input_1 : Vector2 = get_connection_input_position(0)-5*global_scale
-		var input_2 : Vector2 = get_connection_input_position(get_connection_input_count()-1)+5*global_scale
-		var new_show_inputs : bool = Rect2(input_1, input_2-input_1).has_point(pos)
-		if new_show_inputs:
-			for i in range(get_connection_input_count()):
-				if (get_connection_input_position(i)-pos).length() < 5*global_scale.x:
-					return i
-			return -1
-	return -2
-
-func get_output_slot(pos : Vector2) -> int:
-	var global_scale = get_global_transform().get_scale()
-	if get_connection_output_count() > 0:
-		var output_1 : Vector2 = get_connection_output_position(0)-5*global_scale
-		var output_2 : Vector2 = get_connection_output_position(get_connection_output_count()-1)+5*global_scale
-		var new_show_outputs : bool = Rect2(output_1, output_2-output_1).has_point(pos)
-		if new_show_outputs:
-			for i in range(get_connection_output_count()):
-				if (get_connection_output_position(i)-pos).length() < 5*global_scale.x:
-					return i
-			return -1
-	return -2
+	var rel_pos : Vector2 = (pos-global_position)/global_scale
+	if get_input_port_count() > 0:
+		var input_1 : Vector2 = get_input_port_position(0)-5*global_scale
+		var input_2 : Vector2 = get_input_port_position(get_input_port_count()-1)+5*global_scale
+		rv.show_inputs = Rect2(input_1, input_2-input_1).has_point(rel_pos)
+		if rv.show_inputs:
+			for i in range(get_input_port_count()):
+				if (get_input_port_position(i)-rel_pos).length() < 5*global_scale.x:
+					rv.type = "input"
+					rv.index = i
+	if get_output_port_count() > 0:
+		var output_1 : Vector2 = get_output_port_position(0)-5*global_scale
+		var output_2 : Vector2 = get_output_port_position(get_output_port_count()-1)+5*global_scale
+		rv.show_outputs = Rect2(output_1, output_2-output_1).has_point(rel_pos)
+		if rv.show_outputs:
+			for i in range(get_output_port_count()):
+				if (get_output_port_position(i)-rel_pos).length() < 5*global_scale.x:
+					rv.type = "output"
+					rv.index = i
+	return rv
 
 func on_clicked_input(index : int, with_shift : bool) -> bool:
 	if ! with_shift:

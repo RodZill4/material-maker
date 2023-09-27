@@ -7,7 +7,7 @@
    viewBox="0 0 256 256"
    version="1.1"
    id="svg8"
-   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    sodipodi:docname="icons.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -211,9 +211,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="165.875"
-     inkscape:cy="170"
+     inkscape:zoom="22.627417"
+     inkscape:cx="197.2607"
+     inkscape:cy="131.10202"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -241,7 +241,11 @@
        type="xygrid"
        id="grid815"
        spacingx="16"
-       spacingy="16" />
+       spacingy="16"
+       originx="0"
+       originy="0"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -4372,5 +4376,29 @@
        d="m 176.46419,226.72966 5.44661,4.91405 9.74573,-12.17863 -3.05031,-3.01907 -6.78224,11.59772 -3.23153,-3.97173 z"
        id="path1125"
        sodipodi:nodetypes="ccccccc" />
+    <g
+       inkscape:export-ydpi="16.531826"
+       inkscape:export-xdpi="16.531826"
+       inkscape:export-filename="remove.png"
+       id="g3"
+       transform="matrix(0.43370177,0.42718925,-0.43370177,0.42718925,203.77584,209.11139)"
+       style="fill:#ffffff;fill-opacity:1">
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect1"
+         width="5.2916665"
+         height="26.458334"
+         x="10.583333"
+         y="8.604167"
+         ry="0" />
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         id="rect3"
+         width="26.458332"
+         height="5.2916665"
+         x="0"
+         y="19.1875"
+         ry="0" />
+    </g>
   </g>
 </svg>

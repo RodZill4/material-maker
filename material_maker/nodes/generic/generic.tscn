@@ -6,5 +6,4 @@
 offset_right = 95.0
 offset_bottom = 29.0
 title = "Generic"
-show_close = true
 script = ExtResource("1")

@@ -328,6 +328,7 @@ script = ExtResource("12_7mn0u")
 layout_mode = 2
 
 [node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar"]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
 bbcode_enabled = true

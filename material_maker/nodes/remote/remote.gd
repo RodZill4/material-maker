@@ -68,7 +68,8 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 
 func update_node() -> void:
 	# Show or hide the close button
-	show_close = generator.can_be_deleted()
+	# TODO!
+	#show_close = generator.can_be_deleted()
 	# Delete the contents and wait until it's done
 	for c in grid.get_children():
 		grid.remove_child(c)

@@ -7,6 +7,7 @@ class_name MMGenBase
 
 
 class InputPort:
+	extends RefCounted
 	var generator : MMGenBase = null
 	var input_index : int = 0
 
@@ -18,6 +19,7 @@ class InputPort:
 		return str(generator.name)+".in("+str(input_index)+")"
 
 class OutputPort:
+	extends RefCounted
 	var generator : MMGenBase = null
 	var output_index : int = 0
 
@@ -29,6 +31,7 @@ class OutputPort:
 		return str(generator.name)+".out("+str(output_index)+")"
 
 class ShaderUniform:
+	extends RefCounted
 	var name : String
 	var type : String
 	var value
@@ -49,6 +52,7 @@ class ShaderUniform:
 		return "%s %s %s%s;\n" % [ keyword, type, name, str_value_assign ]
 
 class ShaderCode:
+	extends RefCounted
 	var globals : Array[String] = []
 	var uniforms : Array[ShaderUniform] = []
 	var defs : String = ""
@@ -86,6 +90,8 @@ var parameters = {}
 var seed_locked : bool = false
 var seed_value : float = 0
 
+var rendering_time : int = 0
+
 var preview : int = -1
 var minimized : bool = false
 
@@ -99,7 +105,7 @@ const BUFFERS_RUNNING : int = 2
 
 
 signal parameter_changed(n, v)
-signal rendering_time(t)
+signal rendering_time_updated(t)
 
 
 func _ready() -> void:
