@@ -152,23 +152,23 @@ func export_taa() -> void:
 func _on_Export_id_pressed(id : int) -> void:
 	var export_size
 	if id == MENU_EXPORT_CUSTOM_SIZE:
-		var dialog = load("res://material_maker/panels/preview_2d/custom_size_dialog.tscn").instantiate()
-		mm_globals.main_window.add_dialog(dialog)
-		export_size = await dialog.ask()
+		var custom_size_dialog = load("res://material_maker/panels/preview_2d/custom_size_dialog.tscn").instantiate()
+		mm_globals.main_window.add_dialog(custom_size_dialog)
+		export_size = await custom_size_dialog.ask()
 		if ! export_size.has("size"):
 			return
 		export_size = export_size.size
 	else:
 		export_size = 64 << id
-	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.min_size = Vector2(500, 500)
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	dialog.add_filter("*.png;PNG image file")
-	dialog.add_filter("*.exr;EXR image file")
+	var file_dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	file_dialog.min_size = Vector2(500, 500)
+	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	file_dialog.add_filter("*.png;PNG image file")
+	file_dialog.add_filter("*.exr;EXR image file")
 	if mm_globals.config.has_section_key("path", "save_preview"):
-		dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
-	var files = await dialog.select_files()
+		file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
+	var files = await file_dialog.select_files()
 	if files.size() == 1:
 		# TODO: fix custom export size here
 		export_as_image_file(files[0], 64 << id)

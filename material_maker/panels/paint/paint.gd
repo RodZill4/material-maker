@@ -702,11 +702,11 @@ func _on_resized():
 
 # Pick color
 
-func pick_color(position : Vector2):
+func pick_color(pick_position : Vector2):
 	if remote_node == null:
 		return
 	
-	var uv = painter.view_to_texture(position)
+	var uv = painter.view_to_texture(pick_position)
 	var colors = {}
 	var albedo_image = layers.get_albedo_texture().get_data()
 	colors["Albedo"] = albedo_image.get_pixelv(uv*albedo_image.get_size())
@@ -834,7 +834,7 @@ func _on_ChannelSelect_item_selected(ID):
 	for p in get_2D_paint_select_texture_sources():
 		var textures_count = p.debug_get_texture_names().size()
 		if ID < textures_count:
-			view_2d.material.set_shader_parameter("tex", p.debug_get_texture(ID))
+			view_2d.material.set_shader_parameter("tex", await p.debug_get_texture(ID))
 			return
 		ID -= textures_count
 

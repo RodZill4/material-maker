@@ -73,11 +73,11 @@ func get_item_index(item : TreeItem) -> int:
 		rv += 1
 	return rv
 
-func _drop_data(position : Vector2, data):
-	var target_item : TreeItem = get_item_at_position(position)
+func _drop_data(pos : Vector2, data):
+	var target_item : TreeItem = get_item_at_position(pos)
 	if data != null and target_item != null and !item_is_child(target_item, data):
 		var layer = data.get_meta("layer")
-		match get_drop_section_at_position(position):
+		match get_drop_section_at_position(pos):
 			0:
 				layers.move_layer_into(layer, target_item.get_meta("layer"))
 			-1:
