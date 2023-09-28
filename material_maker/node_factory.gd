@@ -41,10 +41,10 @@ func set_theme_overrides(node, generator : MMGenBase = null) -> void:
 			theme_overrides[section] = {}
 			var color = library_manager.get_section_color(section)
 			if color != null:
-				for s in [ "frame", "selected_frame" ]:
+				for s in [ "titlebar", "titlebar_selected" ]:
 					var frame : StyleBoxFlat = theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
-					color.a = frame.border_color.a
-					frame.border_color = color
+					color.a = frame.bg_color.a
+					frame.bg_color = color
 					theme_overrides[section][s] = frame
 		for s in theme_overrides[section].keys():
 			node.add_theme_stylebox_override(s, theme_overrides[section][s])
