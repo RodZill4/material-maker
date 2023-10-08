@@ -22,6 +22,8 @@ class Parameter:
 				size = 4
 			"vec4":
 				size = 16
+			"mat4x4":
+				size = 64
 			_:
 				size = 0
 		value = v
@@ -39,7 +41,6 @@ class InputTexture:
 class RIDs:
 	extends RefCounted
 	
-
 	var rids : Dictionary
 	
 	func add(rid : RID, description : String = ""):
@@ -73,6 +74,17 @@ var constants : Dictionary
 var texture_indexes : Dictionary
 var textures : Array[InputTexture]
 
+
+
+var time_current_desc : String = ""
+var time_current_time : int = 0
+
+func time(desc : String = ""):
+	return
+	if time_current_desc != "":
+		print("time(%s): %dms" % [ time_current_desc, Time.get_ticks_msec()-time_current_time ])
+	time_current_desc = desc
+	time_current_time = Time.get_ticks_msec()
 
 func clear():
 	parameters = {}
@@ -144,6 +156,16 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 					parameter_values.encode_float(p.offset+8,  value.b)
 					parameter_values.encode_float(p.offset+12, value.a)
 					return
+			"mat4x4":
+				if value is Projection:
+					var offset : int = p.offset
+					if parameter_values.size() < offset+16:
+						print("Ack!")
+					for v in [ value.x, value.y, value.z, value.w ]:
+						for f in [ v.x, v.y, v.z, v.w ]:
+							parameter_values.encode_float(offset, f)
+							offset += 4
+					return
 		print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, p.type ])
 	elif texture_indexes.has(name):
 		var texture_index : int = texture_indexes[name]
@@ -160,7 +182,7 @@ func constant_as_string(value, type : String) -> String:
 func get_uniform_declarations() -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
-	for type in [ "vec4", "float", "int", "bool" ]:
+	for type in [ "mat4x4", "vec4", "float", "int", "bool" ]:
 		for p in parameters.keys():
 			var parameter : Parameter = parameters[p]
 			if parameter.type != type:
@@ -169,7 +191,7 @@ func get_uniform_declarations() -> String:
 			parameter.offset = size
 			size += parameter.size
 	if uniform_declarations != "":
-		uniform_declarations = "layout(set = 1, binding = 0, std430) restrict buffer Parameters {\n"+uniform_declarations+"};\n"
+		uniform_declarations = "layout(set = 1, binding = 0, std430) restrict readonly buffer Parameters {\n"+uniform_declarations+"};\n"
 		parameter_values.resize(size)
 		for p in parameters.keys():
 			set_parameter(p, parameters[p].value)
@@ -203,6 +225,21 @@ func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, textur
 	
 	var data = PackedByteArray()
 	data.resize(fmt.height*fmt.width*texture_type_struct.channels*texture_type_struct.bytes_per_channel)
+
+	return rd.texture_create(fmt, view, [data])
+
+func create_depth_texture(rd : RenderingDevice, texture_size : Vector2i) -> RID:
+	var fmt : RDTextureFormat = RDTextureFormat.new()
+	fmt.width = texture_size.x
+	fmt.height = texture_size.y
+	fmt.format = RenderingDevice.DATA_FORMAT_D32_SFLOAT
+	fmt.usage_bits =  RenderingDevice.TEXTURE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
+	fmt.texture_type = RenderingDevice.TEXTURE_TYPE_2D
+		
+	var view : RDTextureView = RDTextureView.new()
+	
+	var data = PackedByteArray()
+	data.resize(fmt.height*fmt.width*4)
 
 	return rd.texture_create(fmt, view, [data])
 

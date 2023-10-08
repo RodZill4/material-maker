@@ -11,6 +11,7 @@ const MATERIAL_MENU_EDIT_EXPORTS : int = 10002
 
 func _ready():
 	super._ready()
+	close_button.visible = false
 
 func get_material_nodes() -> Array:
 	if material_nodes.is_empty():

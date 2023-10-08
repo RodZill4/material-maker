@@ -84,6 +84,7 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 	var loop_parameters_values : PackedByteArray = PackedByteArray()
 	loop_parameters_values.resize(4)
 	while y < size.y:
+		#print("Render %d/%d" % [y, size.y])
 		var h : int = min(chunk_height, size.y-y)
 		
 		var rids : RIDs = RIDs.new()
@@ -157,6 +158,7 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 	
 	diff = 65536
 	
+	time("Create target texture")
 	var output_tex_uniform : RDUniform = RDUniform.new()
 	output_tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 	output_tex_uniform.binding = 0
@@ -164,6 +166,7 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 	var uniform_set_0 : RID = rd.uniform_set_create([output_tex_uniform], shader, 0)
 	rids.add(uniform_set_0)
 	
+	time("Create parameters uniforms")
 	var uniform_set_1 : RID = RID()
 	if parameter_values.size() > 0:
 		uniform_set_1 = get_parameter_uniforms(rd, shader, rids)
@@ -171,6 +174,7 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 			print("Failed to create valid uniform for parameters")
 			return false
 	
+	time("Create textures uniforms")
 	var uniform_set_2 = RID()
 	if !textures.is_empty():
 		uniform_set_2 = get_texture_uniforms(rd, shader, rids)
@@ -178,6 +182,7 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 			print("Failed to create valid uniform for textures")
 			return false
 	
+	time("Create comparison uniform")
 	var uniform_set_4 = RID()
 	var outputs_buffer : RID
 	if texture_indexes.has("mm_compare"):
@@ -191,6 +196,7 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 		uniform_set_4 = rd.uniform_set_create([outputs_uniform], shader, 4)
 		rids.add(uniform_set_4)
 	
+	time("Render")
 	var max_viewport_size = mm_renderer.max_viewport_size
 	var chunk_count : int = max(1, size.x*size.y/(max_viewport_size*max_viewport_size))
 	var chunk_height : int = max(1, size.y/chunk_count)
@@ -208,8 +214,11 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 		render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
 	
 	if uniform_set_4.is_valid():
+		time("Store comparison result")
 		outputs = rd.buffer_get_data(outputs_buffer)
 		diff = outputs.to_int32_array()[0]
+	
+	time()
 	
 	return true
 

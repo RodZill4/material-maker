@@ -16,7 +16,10 @@ func _ready() -> void:
 	position_offset_changed.connect(self._on_offset_changed)
 	if buttons == null:
 		buttons = HBoxContainer.new()
+		var space : Control = Control.new()
 		buttons.add_theme_constant_override("separation", 1)
+		space.custom_minimum_size = Vector2(4, 0)
+		buttons.add_child(space)
 		get_titlebar_hbox().add_child(buttons)
 		init_buttons()
 	add_to_group("generator_node")
@@ -45,7 +48,7 @@ func init_buttons():
 	close_button = add_button(CLOSE_ICON, self.on_close_pressed)
 	
 func on_close_pressed():
-	close_request.emit()
+	delete_request.emit()
 
 func _on_offset_changed() -> void:
 	if ! disable_undoredo_for_offset:

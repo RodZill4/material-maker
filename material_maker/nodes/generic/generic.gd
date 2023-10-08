@@ -47,7 +47,7 @@ func _draw() -> void:
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)
-	generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
+	generator.parameter_changed.connect(self.on_parameter_changed)
 	update_node()
 
 func update():
@@ -370,14 +370,8 @@ func do_update_preview() -> void:
 	preview_connect()
 	preview.visible = true
 
-func update_rendering_time(t : int) -> void:
-	super.update_rendering_time(t)
-	update_title()
-
 func update_title() -> void:
 	title = TranslationServer.translate(generator.get_type_name())
-	if rendering_time > 0:
-		title += " ("+str(rendering_time)+"ms)"
 	if generator == null or generator.minimized:
 		var font : Font = get_theme_font("default_font")
 		var max_title_width = 28

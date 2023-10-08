@@ -122,7 +122,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		return false
 	var status = await shader_compute.render(texture, pow(2, get_parameter("size")))
 	if status:
-		self.rendering_time_updated.emit(shader_compute.get_render_time())
+		rendering_time = shader_compute.get_render_time()
+		self.rendering_time_updated.emit(rendering_time)
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return true
 	return false

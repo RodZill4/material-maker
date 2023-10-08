@@ -249,7 +249,7 @@ func offset_from_global_position(global_pos) -> Vector2:
 func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
-	node.connect("close_request", Callable(self, "remove_node").bind(node))
+	node.connect("delete_request", Callable(self, "remove_node").bind(node))
 
 func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
 	var from_node : MMGraphNodeMinimal = get_node(from)

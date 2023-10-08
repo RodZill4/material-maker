@@ -6,8 +6,6 @@ var minimize_button : TextureButton
 var randomness_button : TextureButton
 var buffer_button : TextureButton
 
-var rendering_time : int = -1
-
 var show_inputs : bool = false
 var show_outputs : bool = false
 
@@ -27,6 +25,14 @@ const MENU_SHARE_NODE : int        = 1001
 const MENU_BUFFER_PAUSE : int  = 0
 const MENU_BUFFER_RESUME : int = 1
 const MENU_BUFFER_DUMP : int   = 2
+
+const TIME_COLOR_BAD : Color = Color(1, 0, 0)
+const TIME_COLOR_AVG : Color = Color(1, 1, 0)
+const TIME_COLOR_GOOD : Color = Color(0, 1, 0)
+const TIME_BAD : int = 1000
+const TIME_AVG : int = 500
+const TIME_GOOD : int = 100
+
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -97,6 +103,16 @@ func on_generator_changed(g):
 	if generator == g:
 		update()
 
+func get_rendering_time_color(rendering_time : int) -> Color:
+	if rendering_time <= TIME_GOOD:
+		return TIME_COLOR_GOOD
+	elif rendering_time <= TIME_AVG:
+		return TIME_COLOR_GOOD.lerp(TIME_COLOR_AVG, float(rendering_time-TIME_GOOD)/float(TIME_AVG-TIME_GOOD))
+	elif rendering_time <= TIME_BAD:
+		return TIME_COLOR_AVG.lerp(TIME_COLOR_BAD, float(rendering_time-TIME_AVG)/float(TIME_BAD-TIME_AVG))
+	else:
+		return TIME_COLOR_BAD
+
 func update():
 	super.update()
 	if generator != null and generator.has_randomness():
@@ -158,14 +174,15 @@ func _draw() -> void:
 			draw_string(font, get_output_port_position(i)+Vector2(12, string_size.y*0.3), string, 0, -1, 16, color)
 	if false and selected:
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
+	if generator.rendering_time > 0:
+		var time_color : Color = get_rendering_time_color(generator.rendering_time)
+		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
 
 func set_generator(g) -> void:
 	super.set_generator(g)
-	rendering_time = g.rendering_time
 	g.rendering_time_updated.connect(self.update_rendering_time)
 
-func update_rendering_time(t : int) -> void:
-	rendering_time = t
+func update_rendering_time(_t : int) -> void:
 	queue_redraw()
 
 func set_generator_seed(s : float):

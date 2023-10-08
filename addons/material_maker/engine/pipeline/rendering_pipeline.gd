@@ -1,15 +1,19 @@
 extends MMPipeline
 class_name MMRenderingPipeline
 
+
 var shader : RID = RID()
 
 var index_count : int = 0
 var clearColors : PackedColorArray = PackedColorArray([Color.TRANSPARENT])
 
 
-func create_framebuffer(rd : RenderingDevice, texture_rid : RID) -> RID:
-	var framebuffer : RID = rd.framebuffer_create([texture_rid])
-	
+func create_framebuffer(rd : RenderingDevice, texture_rid : RID, depth_rid : RID = RID()) -> RID:
+	var textures : Array[RID] = [ texture_rid ]
+	if depth_rid.is_valid():
+		textures.append(depth_rid)
+	var framebuffer : RID
+	framebuffer = rd.framebuffer_create(textures)
 	return framebuffer
 
 func bind_buffer_uniforms(rd : RenderingDevice, draw_list : int, shader : RID, buffers : Array[PackedByteArray], set : int, rids : RIDs):
@@ -26,24 +30,36 @@ func set_shader(vertex_source : String, fragment_source : String, replaces : Dic
 	shader = do_compile_shader(rd, { vertex=vertex_source, fragment=fragment_source }, replaces)
 	mm_renderer.release_rendering_device(self)
 
-func render(size : Vector2i, texture_type : int, target_texture : MMTexture):
+func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	var rids : RIDs = RIDs.new()
 	
 	var target_texture_id : RID = create_output_texture(rd, size, texture_type, true)
-	var framebuffer : RID = create_framebuffer(rd, target_texture_id)
+	var depth_texture_id : RID
+	if with_depth:
+		depth_texture_id = create_depth_texture(rd, size)
+		#rids.add(depth_texture_id, "depth texture")
+	else:
+		depth_texture_id = RID()
+	var framebuffer : RID = create_framebuffer(rd, target_texture_id, depth_texture_id)
 	rids.add(framebuffer, "framebuffer")
 
 	var blend : RDPipelineColorBlendState = RDPipelineColorBlendState.new()
 	blend.attachments.push_back(RDPipelineColorBlendStateAttachment.new())
+	var rasterization_state = RDPipelineRasterizationState.new()
+	rasterization_state.cull_mode = RenderingDevice.POLYGON_CULL_BACK
+	var depth_stencil_state = RDPipelineDepthStencilState.new()
+	depth_stencil_state.enable_depth_test = true
+	depth_stencil_state.depth_compare_operator = RenderingDevice.COMPARE_OP_LESS_OR_EQUAL
+	depth_stencil_state.enable_depth_write = true
 	var pipeline : RID = rd.render_pipeline_create(
 		shader,
 		rd.framebuffer_get_format(framebuffer),
 		-1,
 		RenderingDevice.RENDER_PRIMITIVE_TRIANGLES,
-		RDPipelineRasterizationState.new(),
+		rasterization_state,
 		RDPipelineMultisampleState.new(),
-		RDPipelineDepthStencilState.new(),
+		depth_stencil_state,
 		blend
 	)
 	
