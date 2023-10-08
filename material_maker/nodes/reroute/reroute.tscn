@@ -39,7 +39,8 @@ GraphNode/styles/frame = SubResource("1")
 GraphNode/styles/position = null
 GraphNode/styles/selected_frame = SubResource("2")
 
-[node name="reroute" type="GraphNode"]
+[node name="Reroute" type="GraphNode"]
+clip_children = 2
 custom_minimum_size = Vector2(24, 24)
 offset_right = 24.0
 offset_bottom = 24.0
@@ -55,7 +56,13 @@ slot/0/right_icon = null
 slot/0/draw_stylebox = true
 script = ExtResource("1")
 
-[node name="Foo" type="Control" parent="."]
+[node name="Contents" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=121 format=3 uid="uid://dwfffr58feofm"]
+[gd_resource type="Theme" load_steps=126 format=3 uid="uid://dwfffr58feofm"]
 
 [ext_resource type="Texture2D" uid="uid://d2ohx44rm5pe1" path="res://material_maker/theme/dark/textedit_fold.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://cbnl1ajr2avjc" path="res://material_maker/theme/dark/textedit_space.png" id="2"]
@@ -287,7 +287,7 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.0745098, 0.0745098, 0.0745098, 1)
 
-[sub_resource type="FontFile" id="120"]
+[sub_resource type="FontFile" id="FontFile_l006w"]
 fallbacks = Array[Font]([ExtResource("59")])
 cache/0/16/0/ascent = 0.0
 cache/0/16/0/descent = 0.0
@@ -312,9 +312,9 @@ content_margin_top = 4.0
 content_margin_right = 28.0
 content_margin_bottom = 5.0
 bg_color = Color(0, 0, 0, 0.901961)
-border_width_left = 1
-border_width_right = 1
-border_width_bottom = 1
+border_width_left = 2
+border_width_right = 2
+border_width_bottom = 2
 border_color = Color(1, 1, 1, 0.85098)
 border_blend = true
 corner_radius_bottom_right = 6
@@ -337,7 +337,6 @@ bg_color = Color(0.333333, 0.333333, 0.333333, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
-border_width_bottom = 2
 border_blend = true
 corner_radius_top_left = 6
 corner_radius_top_right = 6
@@ -523,6 +522,40 @@ corner_radius_top_left = 24
 corner_radius_top_right = 24
 corner_radius_bottom_right = 24
 corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bnq62"]
+
+[sub_resource type="FontFile" id="FontFile_00yus"]
+fallbacks = Array[Font]([ExtResource("59")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_573hy"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.376471, 0.376471, 0.376471, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6qocj"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.376471, 0.376471, 0.376471, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4fru0"]
 
 [sub_resource type="StyleBoxEmpty" id="105"]
 
@@ -765,7 +798,7 @@ GraphNode/constants/port_offset = 10
 GraphNode/constants/separation = 1
 GraphNode/constants/title_h_offset = -16
 GraphNode/constants/title_offset = 20
-GraphNode/fonts/title_font = SubResource("120")
+GraphNode/fonts/title_font = SubResource("FontFile_l006w")
 GraphNode/icons/close = ExtResource("13")
 GraphNode/icons/port = ExtResource("20")
 GraphNode/icons/resizer = ExtResource("10")
@@ -872,8 +905,42 @@ PopupMenu/styles/separator = SubResource("104")
 PopupPanel/styles/panel = SubResource("100")
 ProgressBar/colors/font_color = Color(0.787255, 0.787255, 0.787255, 1)
 ProjectSettingsEditor/styles/panel = SubResource("70")
-Reroute/styles/frame = SubResource("121")
-Reroute/styles/selected_frame = SubResource("122")
+Reroute/colors/close_color = Color(1, 1, 1, 0.7)
+Reroute/colors/resizer_color = Color(1, 1, 1, 0.7)
+Reroute/colors/title_color = Color(1, 1, 1, 1)
+Reroute/constants/close_h_offset = 20
+Reroute/constants/close_offset = 20
+Reroute/constants/port_h_offset = 0
+Reroute/constants/port_offset = 0
+Reroute/constants/separation = 1
+Reroute/constants/title_h_offset = -16
+Reroute/constants/title_offset = 20
+Reroute/fonts/title_font = SubResource("FontFile_l006w")
+Reroute/icons/close = ExtResource("13")
+Reroute/icons/port = ExtResource("20")
+Reroute/icons/resizer = ExtResource("10")
+Reroute/styles/panel = SubResource("121")
+Reroute/styles/panel_selected = SubResource("122")
+Reroute/styles/titlebar = SubResource("StyleBoxEmpty_bnq62")
+Reroute/styles/titlebar_selected = SubResource("StyleBoxEmpty_bnq62")
+ReroutePreview/colors/close_color = Color(1, 1, 1, 0.7)
+ReroutePreview/colors/resizer_color = Color(1, 1, 1, 0.7)
+ReroutePreview/colors/title_color = Color(1, 1, 1, 1)
+ReroutePreview/constants/close_h_offset = 20
+ReroutePreview/constants/close_offset = 20
+ReroutePreview/constants/port_h_offset = 0
+ReroutePreview/constants/port_offset = 0
+ReroutePreview/constants/separation = 1
+ReroutePreview/constants/title_h_offset = -16
+ReroutePreview/constants/title_offset = 20
+ReroutePreview/fonts/title_font = SubResource("FontFile_00yus")
+ReroutePreview/icons/close = ExtResource("13")
+ReroutePreview/icons/port = ExtResource("20")
+ReroutePreview/icons/resizer = ExtResource("10")
+ReroutePreview/styles/panel = SubResource("StyleBoxFlat_573hy")
+ReroutePreview/styles/panel_selected = SubResource("StyleBoxFlat_6qocj")
+ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_4fru0")
+ReroutePreview/styles/titlebar_selected = SubResource("StyleBoxEmpty_4fru0")
 RichTextLabel/colors/default_color = Color(0.787255, 0.787255, 0.787255, 1)
 RichTextLabel/colors/font_color_shadow = Color(0, 0, 0, 0)
 RichTextLabel/constants/shadow_as_outline = 0

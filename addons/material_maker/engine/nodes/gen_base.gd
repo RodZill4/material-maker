@@ -319,7 +319,10 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
 func get_source(input_index : int) -> OutputPort:
-	return get_parent().get_port_source(name, input_index)
+	var parent : MMGenGraph = get_parent()
+	if parent == null:
+		return null
+	return parent.get_port_source(name, input_index)
 
 func get_targets(output_index : int) -> Array:
 	var parent = get_parent()
