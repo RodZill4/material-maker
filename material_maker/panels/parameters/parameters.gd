@@ -33,12 +33,12 @@ func set_generator(g):
 					continue
 				elif parameter_labels.has("Paint "+p.label):
 					var paint_parameter = parameter_labels["Paint "+p.label]
-					var control = GENERIC.create_parameter_control(paint_parameter, false)
-					control.name = paint_parameter.name
-					if control is CheckBox:
-						control.text = p.label
-					parameters.add_child(control)
-					controls[paint_parameter.name] = control
+					var channel_control = GENERIC.create_parameter_control(paint_parameter, false)
+					channel_control.name = paint_parameter.name
+					if channel_control is CheckBox:
+						channel_control.text = p.label
+					parameters.add_child(channel_control)
+					controls[paint_parameter.name] = channel_control
 				else:
 					var label : Label = Label.new()
 					label.text = p.label if p.has("label") else ""

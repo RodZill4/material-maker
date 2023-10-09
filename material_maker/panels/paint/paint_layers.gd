@@ -103,7 +103,7 @@ func get_depth_texture():
 func get_occlusion_texture():
 	return occlusion.get_texture()
 
-func _on_Tree_selection_changed(old_selected : TreeItem, new_selected : TreeItem) -> void:
+func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	select_layer(new_selected.get_meta("layer"))
 
 func select_layer(layer : Layer) -> void:
@@ -136,7 +136,7 @@ func select_layer(layer : Layer) -> void:
 	await get_tree().process_frame
 	_on_layers_changed()
 
-func get_unused_layer_name(layers_array : Array) -> String:
+func get_unused_layer_name(_layers_array : Array) -> String:
 	return "New layer"
 
 func layer_index_is_used(index : int, layers_array : Array) -> bool:
@@ -167,12 +167,10 @@ func add_layer(layer_type : int = 0) -> void:
 	layer.name = get_unused_layer_name(layers)
 	layer.index = get_unused_layer_index()
 	layer.hidden = false
-	var image : Image = Image.new()
-	image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
+	var image : Image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
 	for c in layer.get_channels():
-		var texture = ImageTexture.new()
-		texture.set_image(image)
+		var texture = ImageTexture.create_from_image(image)
 		layer.set(c, texture)
 	layers_array.push_front(layer)
 	select_layer(layer)
@@ -278,7 +276,6 @@ func update_layers_renderer(visible_layers : Array) -> void:
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		while viewport.get_child_count() > 0:
 			viewport.remove_child(viewport.get_child(0))
-	var texture_rect : TextureRect
 	var color_rect : ColorRect
 	color_rect = ColorRect.new()
 	color_rect.size = normal.size
