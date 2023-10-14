@@ -171,7 +171,19 @@
 					{
 						"name": "snap(A, B)",
 						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
-					}
+					},
+					{
+						"name": "sinh(A)",
+						"value": "sinh($in1($uv))"
+					},
+					{
+						"name": "cosh(A)",
+						"value": "cosh($in1($uv))"
+					},
+					{
+						"name": "tanh(A)",
+						"value": "tanh($in1($uv))"
+					},
 				]
 			},
 			{
