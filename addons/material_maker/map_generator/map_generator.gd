@@ -2,33 +2,36 @@ extends Object
 class_name MMMapGenerator
 
 
-const SHADERS_PATH : String = "res://addons/material_maker/map_renderer"
+const SHADERS_PATH : String = "res://addons/material_maker/map_generator"
 const MAP_DEFINITIONS : Dictionary = {
-	position = { vertex = "position_vertex", fragment = "common_fragment" },
-	normal = { vertex = "normal_vertex", fragment = "normal_fragment" },
-	tangent = { vertex = "tangent_vertex", fragment = "normal_fragment" },
-	ambient_occlusion = { vertex = "ao_vertex", fragment = "ao_fragment", mode=0 },
-	bent_normals = { vertex = "ao_vertex", fragment = "ao_fragment", mode=1 },
-	thickness = { vertex = "ao_vertex", fragment = "ao_fragment", mode=2 },
-	curvature = { vertex = "curvature_vertex", fragment = "common_fragment" }
+	position = { type="simple", vertex = "position_vertex", fragment = "common_fragment", postprocess=["dilate_1", "dilate_2"] },
+	normal = { type="simple", vertex = "normal_vertex", fragment = "normal_fragment", postprocess=["dilate_1", "dilate_2"] },
+	tangent = { type="simple", vertex = "tangent_vertex", fragment = "normal_fragment", postprocess=["dilate_1", "dilate_2"] },
+	ambient_occlusion = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=0, postprocess=["dilate_1", "dilate_2"] },
+	bent_normals = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=1, postprocess=["dilate_1", "dilate_2"] },
+	thickness = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=2, postprocess=["dilate_1", "dilate_2"] },
+	curvature = { type="curvature", vertex = "curvature_vertex", fragment = "common_fragment", postprocess=["dilate_1", "dilate_2"] },
+	seams = { type="simple", vertex = "position_vertex", fragment = "common_fragment", postprocess=["seams_1", "seams_2"] }
 }
 
 
 static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture):
 	var pixels : int = size/4
-	var mesh_pipeline : MMMeshRenderingPipeline = MMMeshRenderingPipeline.new()
-	if map == "curvature":
-		mesh_pipeline.mesh = MMCurvatureGenerator.generate(mesh)
-	else:
-		mesh_pipeline.mesh = mesh
 	var map_definition : Dictionary = MAP_DEFINITIONS[map]
+	var mesh_pipeline : MMMeshRenderingPipeline = MMMeshRenderingPipeline.new()
 	var vertex_shader : String = load(SHADERS_PATH+"/"+map_definition.vertex+".tres").text
 	var fragment_shader : String = load(SHADERS_PATH+"/"+map_definition.fragment+".tres").text
-	match map:
-		"position", "normal", "tangent", "curvature":
+	match map_definition.type:
+		"simple":
+			mesh_pipeline.mesh = mesh
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
-		"ambient_occlusion", "bent_normals", "thickness":
+		"curvature":
+			mesh_pipeline.mesh = MMCurvatureGenerator.generate(mesh)
+			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
+			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
+		"bvh":
+			mesh_pipeline.mesh = mesh
 			var bvh : MMTexture = MMTexture.new()
 			bvh.set_texture(MMBvhGenerator.generate(mesh))
 			var ray_count = mm_globals.get_config("bake_ray_count")
@@ -53,7 +56,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				var normalize_pipeline : MMComputeShader = MMComputeShader.new()
 				normalize_pipeline.clear()
 				normalize_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-				await normalize_pipeline.set_shader(load("res://addons/material_maker/map_renderer/normalize_compute.tres").text, 3)
+				await normalize_pipeline.set_shader(load("res://addons/material_maker/map_generator/normalize_compute.tres").text, 3)
 				await normalize_pipeline.render(texture, Vector2i(size, size))
 			
 			# Denoise
@@ -63,22 +66,16 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				denoise_pipeline.clear()
 				denoise_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
 				denoise_pipeline.add_parameter_or_texture("radius", "int", 3)
-				await denoise_pipeline.set_shader(load("res://addons/material_maker/map_renderer/denoise_compute.tres").text, 3)
+				await denoise_pipeline.set_shader(load("res://addons/material_maker/map_generator/denoise_compute.tres").text, 3)
 				await denoise_pipeline.render(texture, Vector2i(size, size))
 
 	# Extend the map past seams
 	if pixels > 0:
-		print("Extending...")
-		var extend_pipeline : MMComputeShader = MMComputeShader.new()
-		extend_pipeline.clear()
-		extend_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-		extend_pipeline.add_parameter_or_texture("pixels", "int", pixels)
-		await extend_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_1_compute.tres").text, 3)
-		await extend_pipeline.render(texture, Vector2i(size, size))
-
-		extend_pipeline.clear()
-		extend_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-		extend_pipeline.add_parameter_or_texture("pixels", "int", pixels)
-		await extend_pipeline.set_shader(load("res://addons/material_maker/map_renderer/dilate_2_compute.tres").text, 3)
-		await extend_pipeline.render(texture, Vector2i(size, size))
-
+		print("Postprocessing...")
+		for p in map_definition.postprocess:
+			var extend_pipeline : MMComputeShader = MMComputeShader.new()
+			extend_pipeline.clear()
+			extend_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
+			extend_pipeline.add_parameter_or_texture("pixels", "int", pixels)
+			await extend_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
+			await extend_pipeline.render(texture, Vector2i(size, size))

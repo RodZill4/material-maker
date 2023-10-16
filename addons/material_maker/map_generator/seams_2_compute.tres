@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://biv4023hh6bnk"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_rskvy"]
+
+[resource]
+script = ExtResource("1_rskvy")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+@DECLARATIONS
+
+vec4 dilate_distance_v(vec2 uv, float size) {
+	vec2 e = vec2(0.0, 1.0/size);
+	float d = float(pixels)/size;
+ 	float best_length = 10.0;
+	vec4 rv = vec4(uv, 0.0, 1.0);
+	for (int i = 0; i < pixels; ++i) {
+		vec2 src_uv = uv+float(i)*e;
+		vec4 src_color = texture(tex, src_uv);
+		if (src_color.b >= 1.0) {
+			float l = length(uv-src_color.xy);
+			if (best_length > l) {
+				best_length = l;
+				rv = src_color;
+			}
+		}
+		src_uv = uv-float(i)*e;
+		src_color = texture(tex, src_uv);
+		if (src_color.b >= 1.0) {
+			float l = length(uv-src_color.xy);
+			if (best_length > l) {
+				best_length = l;
+				rv = src_color;
+			}
+		}
+	}
+	return rv;
+}
+
+void main() {
+	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	vec2 image_size = imageSize(OUTPUT_TEXTURE);
+	vec2 uv = (pixel+vec2(0.5, 0.5))/image_size;
+	imageStore(OUTPUT_TEXTURE, pixel, dilate_distance_v(uv, image_size.y));
+}
+"
