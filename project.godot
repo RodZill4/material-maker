@@ -16,8 +16,10 @@ run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
 config/features=PackedStringArray("4.2")
-boot_splash/bg_color=Color(0.0901961, 0.0941176, 0.141176, 0)
+boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
 config/release="1.4.0.0"
@@ -50,12 +52,15 @@ gdscript/warnings/unused_class_variable=true
 window/size/viewport_width=1
 window/size/viewport_height=1
 window/size/borderless=true
+window/size/window_width_override=1
+window/size/window_height_override=1
 window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
 
-run/main_run_args_paint="--no-logo /Users/rodolphesuescun/Documents/GitHub/material-maker-g4/material_maker/meshes/suzanne.obj"
-run/main_run_args_nologo="--no-logo"
+run/main_run_args="--no-splash D:\\Dev\\Godot\\mmg4\\material-maker\\material_maker\\meshes\\suzanne.obj"
+run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\mmg4\\material-maker\\material_maker\\meshes\\suzanne.obj"
+run/main_run_args_nosplash="--no-splash"
 
 [editor_plugins]
 
