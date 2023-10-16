@@ -256,21 +256,11 @@ func generate_map(generate_function : String, image_size : int) -> void:
 		call(generate_function, files[0], image_size)
 
 func do_generate_map(file_name : String, map : String, image_size : int) -> void:
-	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
-	add_child(map_renderer)
 	var id = objects.get_child_count()-1
 	var object : MeshInstance3D = objects.get_child(id)
-	await map_renderer.gen(object.mesh, map, "save_to_file", [ file_name ], image_size)
-	map_renderer.queue_free()
-	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
-
-func do_generate_map_new(file_name : String, map : String, image_size : int) -> void:
-	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
-	add_child(map_renderer)
-	var id = objects.get_child_count()-1
-	var object : MeshInstance3D = objects.get_child(id)
-	await map_renderer.gen_new(object.mesh, map, "save_to_file", [ file_name ], image_size)
-	map_renderer.queue_free()
+	var t : MMTexture = MMTexture.new()
+	await MMMapGenerator.generate(object.mesh, map, image_size, t)
+	t.save_to_file(file_name)
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 
 func create_menu_map(menu : MMMenuManager.MenuBase, function : String) -> void:
@@ -287,7 +277,7 @@ func generate_position_map(i : int) -> void:
 	generate_map("do_generate_position_map", 256 << i)
 
 func do_generate_position_map(file_name : String, image_size : int) -> void:
-	do_generate_map_new(file_name, "position", image_size)
+	do_generate_map(file_name, "position", image_size)
 
 
 func create_menu_generate_normal_map(menu : MMMenuManager.MenuBase) -> void:
@@ -297,7 +287,7 @@ func generate_normal_map(i : int) -> void:
 	generate_map("do_generate_normal_map", 256 << i)
 
 func do_generate_normal_map(file_name : String, image_size : int) -> void:
-	do_generate_map_new(file_name, "normal", image_size)
+	do_generate_map(file_name, "normal", image_size)
 
 
 func create_menu_generate_curvature_map(menu : MMMenuManager.MenuBase) -> void:
@@ -307,7 +297,7 @@ func generate_curvature_map(i : int) -> void:
 	generate_map("do_generate_curvature_map", 256 << i)
 
 func do_generate_curvature_map(file_name : String, image_size : int) -> void:
-	do_generate_map_new(file_name, "curvature", image_size)
+	do_generate_map(file_name, "curvature", image_size)
 
 
 func create_menu_generate_thickness_map(menu : MMMenuManager.MenuBase) -> void:
@@ -317,7 +307,7 @@ func generate_thickness_map(i : int) -> void:
 	generate_map("do_generate_thickness_map", 256 << i)
 
 func do_generate_thickness_map(file_name : String, image_size : int) -> void:
-	do_generate_map_new(file_name, "thickness", image_size)
+	do_generate_map(file_name, "thickness", image_size)
 
 
 func create_menu_generate_ao_map(menu : MMMenuManager.MenuBase) -> void:
@@ -327,7 +317,7 @@ func generate_ao_map(i : int) -> void:
 	generate_map("do_generate_ao_map", 256 << i)
 
 func do_generate_ao_map(file_name : String, image_size : int) -> void:
-	do_generate_map_new(file_name, "ambient_occlusion", image_size)
+	do_generate_map(file_name, "ambient_occlusion", image_size)
 
 
 func create_menu_generate_bent_normals_map(menu : MMMenuManager.MenuBase) -> void:
@@ -337,4 +327,4 @@ func generate_bent_normals_map(i : int) -> void:
 	generate_map("do_generate_bent_normals_map", 256 << i)
 
 func do_generate_bent_normals_map(file_name : String, image_size : int) -> void:
-	do_generate_map_new(file_name, "bent_normals", image_size)
+	do_generate_map(file_name, "bent_normals", image_size)
