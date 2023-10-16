@@ -2,6 +2,14 @@ extends Node
 
 var texture_size : float = 0
 
+var initialized : bool = false
+
+var v2t_texture : MMTexture
+var v2t_pipeline : MMMeshRenderingPipeline
+
+var t2v_texture : MMTexture
+var t2v_pipeline : MMMeshRenderingPipeline
+
 @onready var view_to_texture_viewport = $View2Texture
 @onready var view_to_texture_mesh = $View2Texture/PaintedMesh
 @onready var view_to_texture_camera = $View2Texture/Camera3D
@@ -30,9 +38,9 @@ const viewport_names : Array = [ "albedo", "mr", "emission", "normal", "do", "ma
 	mask=mask_viewport
 }
 
-var camera
-var transform
-var viewport_size
+var camera : Camera3D
+var transform : Transform3D
+var viewport_size : Vector2i
 
 var brush_node = null
 var brush_params = {
@@ -74,29 +82,45 @@ func _ready():
 	for v in viewports.keys():
 		viewports[v].set_intermediate_textures(texture_to_view_texture, mesh_seams_tex)
 		mm_deps.create_buffer("painter_%d:%s" % [ get_instance_id(), v ], self)
+	
+	var vertex_shader : String
+	var fragment_shader : String
+	v2t_texture = MMTexture.new()
+	v2t_pipeline = MMMeshRenderingPipeline.new()
+	vertex_shader = load("res://material_maker/tools/painter/shaders/v2t_vertex.tres").text
+	fragment_shader = load("res://material_maker/tools/painter/shaders/v2t_fragment.tres").text
+	v2t_pipeline.add_parameter_or_texture("transform", "mat4x4", Projection())
+	await v2t_pipeline.set_shader(vertex_shader, fragment_shader)
+	
+	t2v_texture = MMTexture.new()
+	t2v_pipeline = MMMeshRenderingPipeline.new()
+	vertex_shader = load("res://material_maker/tools/painter/shaders/t2v_vertex.tres").text
+	fragment_shader = load("res://material_maker/tools/painter/shaders/t2v_fragment.tres").text
+	t2v_pipeline.add_parameter_or_texture("transform", "mat4x4", Projection())
+	t2v_pipeline.add_parameter_or_texture("v2t", "sampler2D", v2t_texture)
+	await t2v_pipeline.set_shader(vertex_shader, fragment_shader)
+	
+	initialized = true
 
 func update_seams_texture(_m : Mesh = null) -> void:
-	texture_to_view_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
-	add_child(map_renderer)
-	await map_renderer.gen(texture_to_view_mesh.mesh, "seams", "copy_to_texture", [ mesh_seams_tex ], texture_size)
-	map_renderer.queue_free()
+	var t : MMTexture = MMTexture.new()
+	await MMMapGenerator.generate(texture_to_view_mesh.mesh, "seams", texture_size, t)
+	mesh_seams_tex = await t.get_texture()
 
 func update_inv_uv_texture(m : Mesh) -> void:
-	var map_renderer = load("res://material_maker/tools/map_renderer/map_renderer.tscn").instantiate()
-	add_child(map_renderer)
-	if mesh_inv_uv_tex == null:
-		mesh_inv_uv_tex = ImageTexture.new()
-	await map_renderer.gen(m, "position", "copy_to_texture", [ mesh_inv_uv_tex ], texture_size)
-	if mesh_normal_tex == null:
-		mesh_normal_tex = ImageTexture.new()
-	await map_renderer.gen(m, "normal", "copy_to_texture", [ mesh_normal_tex ], texture_size)
-	if mesh_tangent_tex == null:
-		mesh_tangent_tex = ImageTexture.new()
-	await map_renderer.gen(m, "tangent", "copy_to_texture", [ mesh_tangent_tex ], texture_size)
-	map_renderer.queue_free()
+	var t : MMTexture
+	# position texture
+	t = MMTexture.new()
+	await MMMapGenerator.generate(texture_to_view_mesh.mesh, "position", texture_size, t)
+	mesh_inv_uv_tex = await t.get_texture()
+	# normal texture
+	t = MMTexture.new()
+	await MMMapGenerator.generate(texture_to_view_mesh.mesh, "normal", texture_size, t)
+	mesh_normal_tex = await t.get_texture()
+	# tangent texture
+	t = MMTexture.new()
+	await MMMapGenerator.generate(texture_to_view_mesh.mesh, "tangent", texture_size, t)
+	mesh_tangent_tex = await t.get_texture()
 	mesh_aabb = m.get_aabb()
 
 func set_mesh(m : Mesh):
@@ -173,7 +197,7 @@ func set_texture_size(s : float):
 			viewports[v].set_texture_size(s)
 		update_seams_texture()
 
-func update_view(c, t, s):
+func update_view(c : Camera3D, t : Transform3D, s : Vector2i):
 	camera = c
 	transform = t
 	viewport_size = s
@@ -186,6 +210,31 @@ func update_view(c, t, s):
 func update_tex2view():
 	if viewport_size.y <= 0:
 		return
+	
+	if initialized:
+		# Generate v2t texture
+		v2t_pipeline.mesh = texture_to_view_mesh.mesh
+		var transform : Projection = camera.get_camera_projection()*Projection(transform)
+		v2t_pipeline.set_parameter("transform", transform)
+		await v2t_pipeline.render(viewport_size, 3, v2t_texture, true)
+		view_to_texture_image = (await v2t_texture.get_texture()).get_image()
+		
+		# Generate t2v texture
+		t2v_pipeline = MMMeshRenderingPipeline.new()
+		var vertex_shader : String = load("res://material_maker/tools/painter/shaders/t2v_vertex.tres").text
+		var fragment_shader : String = load("res://material_maker/tools/painter/shaders/t2v_fragment.tres").text
+		t2v_pipeline.add_parameter_or_texture("transform", "mat4x4", Projection())
+		t2v_pipeline.add_parameter_or_texture("v2t", "sampler2D", v2t_texture)
+		await t2v_pipeline.set_shader(vertex_shader, fragment_shader)
+
+		t2v_pipeline.mesh = texture_to_view_mesh.mesh
+		t2v_pipeline.set_parameter("transform", transform)
+		await t2v_pipeline.render(viewport_size, 3, t2v_texture)
+		t2v_texture.get_texture()
+		texture_to_view_texture = await t2v_texture.get_texture()
+	
+	return
+	
 	var aspect = viewport_size.x/viewport_size.y
 	view_to_texture_viewport.size = VIEW_TO_TEXTURE_RATIO*viewport_size
 	view_to_texture_camera.transform = camera.global_transform
@@ -430,13 +479,13 @@ func save_viewport(v : SubViewport, f : String):
 
 func debug_get_texture_names():
 	if OS.is_debug_build():
-		return [ "View to texture", "Texture2D to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)", "Inv. UV map", "Mesh normal map", "Mesh tangent map" ]
+		return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)", "Inv. UV map", "Mesh normal map", "Mesh tangent map" ]
 	else:
 		return [ "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
 
 # Localization strings
 # tr("View to texture")
-# tr("Texture2D to view")
+# tr("Texture to view")
 # tr("Seams")
 # tr("Albedo (current layer)")
 # tr("Metallic/Roughness (current layer)")
@@ -450,9 +499,9 @@ func debug_get_texture(ID):
 		ID -= 3
 	match ID:
 		0:
-			return view_to_texture_viewport.get_texture()
+			return await v2t_texture.get_texture()
 		1:
-			return texture_to_view_texture
+			return await t2v_texture.get_texture()
 		2:
 			return mesh_seams_tex
 		3:
@@ -473,7 +522,4 @@ func debug_get_texture(ID):
 			return mesh_normal_tex
 		11:
 			return mesh_tangent_tex
-
-
-
 	return null

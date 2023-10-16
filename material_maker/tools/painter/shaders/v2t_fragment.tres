@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://qjqy4v48xate"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_ok0si"]
+
+[resource]
+script = ExtResource("1_ok0si")
+text = "#version 450
+
+layout(location = 0) out vec4 outColor;
+//layout(location = 1) out float outDepth;
+layout(location = 2) in vec3 model_vert;
+layout(location = 3) in vec3 normal;
+layout(location = 4) in vec2 uv;
+
+void main() {
+	outColor = vec4(uv, 0.0, 1.0);
+	//outDepth = model_vert.z;
+}
+"

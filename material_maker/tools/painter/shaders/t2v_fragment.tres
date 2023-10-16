@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://vl3mifeswrlj"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_yim88"]
+
+[resource]
+script = ExtResource("1_yim88")
+text = "#version 450
+
+layout(location = 0) out vec4 outColor;
+layout(location = 2) in vec3 model_vert;
+layout(location = 3) in vec3 normal;
+layout(location = 4) in vec2 uv;
+
+@DECLARATIONS
+
+void main() {
+	float box = 1.0;
+	vec2 epsilon = vec2(0.001);
+	float v = 1.0;
+	if (model_vert.x > 0.0 && model_vert.x < 1.0 && model_vert.y > 0.0 && model_vert.y < 1.0) {
+		for (float dx = -box*epsilon.x; dx <= box*epsilon.x; dx += epsilon.x) {
+			for (float dy = -box*epsilon.y; dy <= box*epsilon.y; dy += epsilon.y) {
+				v = min(v, length(texture(v2t, model_vert.xy+vec2(dx, dy)).xy-uv));
+			}
+		}
+	}
+	v = clamp(1.0-100.0*v, 0.0, 1.0);
+	outColor = vec4(model_vert.xy, v, 1.0);
+}
+"
