@@ -67,7 +67,8 @@ func _on_timeout() -> void:
 		var image : Image = Image.new()
 		image.load(file_path)
 		var image_texture : ImageTexture = ImageTexture.create_from_image(image)
-		texture.set_texture(image_texture)
+		if image_texture:
+			texture.set_texture(image_texture)
 		super.set_parameter("image", file_path)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
 
