@@ -39,8 +39,8 @@ func set_generator(g) -> void:
 
 func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
-	if parent.use_snap:
-		new_size = parent.snap_distance*Vector2(round(new_size.x/parent.snap_distance), round(new_size.y/parent.snap_distance))
+	if parent.snapping_enabled:
+		new_size = parent.snapping_distance*Vector2(round(new_size.x/parent.snapping_distance), round(new_size.y/parent.snapping_distance))
 	if size == new_size:
 		return
 	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
@@ -155,8 +155,8 @@ func set_color(c):
 
 func set_stylebox_color(c):
 	c.a = 0.3
-	get_theme_stylebox("comment").bg_color = c
-	get_theme_stylebox("comment_focus").bg_color = c
+	get_theme_stylebox("frame").bg_color = c
+	get_theme_stylebox("frame_selected").bg_color = c
 
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
