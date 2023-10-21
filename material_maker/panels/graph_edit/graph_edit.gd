@@ -185,7 +185,7 @@ func _gui_input(event) -> void:
 		if event.pressed:
 			var scancode_with_modifiers = event.get_scancode_with_modifiers()
 			match scancode_with_modifiers:
-				KEY_DELETE,KEY_BACKSPACE:
+				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*rect_size.x
