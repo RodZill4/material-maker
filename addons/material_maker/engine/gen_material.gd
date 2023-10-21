@@ -31,7 +31,7 @@ const TEXTURE_SIZE_MAX : int = 13  # 8192x8192
 const TEXTURE_SIZE_DEFAULT : int = 10  # 1024x1024
 
 # The minimum allowed texture size as a power-of-two exponent
-const TEXTURE_FILTERING_LIMIT : int = 256
+const TEXTURE_FILTERING_LIMIT : int = 8192
 
 const EXPORT_OUTPUT_DEF_INDEX : int = 12345
 
