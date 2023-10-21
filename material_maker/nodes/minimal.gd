@@ -4,6 +4,7 @@ class_name MMGraphNodeMinimal
 
 var generator : MMGenBase = null setget set_generator
 var disable_undoredo_for_offset : bool = false
+var grab_offset : Vector2
 
 
 func _ready() -> void:

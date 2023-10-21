@@ -42,6 +42,7 @@ signal graph_changed
 signal view_updated
 signal preview_changed
 
+var grabbing = false
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
@@ -135,6 +136,8 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
+		if event.is_pressed():
+			grabbing = false
 		# reverted to default GraphEdit behavior
 		if false and event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
 			if event.control:
@@ -180,9 +183,11 @@ func _gui_input(event) -> void:
 						on_ButtonUp_pressed()
 				else:
 					process_port_click(event.is_pressed())
+					grabbing = false
 			call_deferred("check_previews")
 	elif event is InputEventKey:
 		if event.pressed:
+			grabbing = false
 			var scancode_with_modifiers = event.get_scancode_with_modifiers()
 			match scancode_with_modifiers:
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
@@ -199,6 +204,13 @@ func _gui_input(event) -> void:
 				KEY_DOWN:
 					scroll_offset.y += 0.5*rect_size.y
 					accept_event()
+				KEY_G:
+					if !grabbing:
+						grabbing = true
+						for node in get_selected_nodes():
+							var mousepos = offset_from_global_position(get_global_mouse_position())
+							# note: get_offset() becomes get_offset_position() in Godot 4:
+							node.grab_offset = mousepos - node.get_offset()
 		match event.get_scancode():
 			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
 				var found_tip : bool = false
@@ -209,6 +221,11 @@ func _gui_input(event) -> void:
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.rect_global_position)
 	elif event is InputEventMouseMotion:
+		if grabbing:
+			for node in get_selected_nodes():
+				var mousepos = offset_from_global_position(get_global_mouse_position())
+				node.do_set_position(mousepos - node.grab_offset)
+		
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
