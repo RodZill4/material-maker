@@ -1,9 +1,3 @@
-### Nothke's improvements:
-
-- Material preview textures now without filtering (in all resolutions). Ideal for big pixel art sheets
-- Delete nodes on X (just like in blender!)
-- Move nodes on G (just like in blender!)
-
 # Material Maker
 
 This is a tool based on [Godot Engine](https://godotengine.org/) that can
