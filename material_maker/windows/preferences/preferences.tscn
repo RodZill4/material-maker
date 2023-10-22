@@ -208,7 +208,7 @@ margin_right = 296.0
 margin_bottom = 216.0
 hint_tooltip = "If disabled, the preview will be shown with nearest neighbor (point) filtering. Useful to disable when working on pixel art."
 pressed = true
-text = "3D preview use texture filtering"
+text = "3D preview use texture filtering (requires restart)"
 config_variable = "ui_3d_preview_texture_filtering"
 
 [node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
