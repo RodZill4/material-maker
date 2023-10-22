@@ -20,6 +20,7 @@ const DEFAULT_CONFIG = {
 	ui_3d_preview_resolution = 2.0,
 	ui_3d_preview_tesselation_detail = 256,
 	ui_3d_preview_sun_shadow = false,
+	ui_3d_preview_texture_filtering = true,
 	ui_3d_preview_tonemap = 0,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,

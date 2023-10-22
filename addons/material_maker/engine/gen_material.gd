@@ -31,7 +31,7 @@ const TEXTURE_SIZE_MAX : int = 13  # 8192x8192
 const TEXTURE_SIZE_DEFAULT : int = 10  # 1024x1024
 
 # The minimum allowed texture size as a power-of-two exponent
-const TEXTURE_FILTERING_LIMIT : int = 256
+#const TEXTURE_FILTERING_LIMIT : int = 8192
 
 const EXPORT_OUTPUT_DEF_INDEX : int = 12345
 
@@ -148,7 +148,7 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	renderer.copy_to_texture(preview_textures[texture_name].texture)
 	renderer.release(self)
 	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
-	if size <= TEXTURE_FILTERING_LIMIT:
+	if !mm_globals.get_config("ui_3d_preview_texture_filtering"):
 		preview_textures[texture_name].texture.flags &= ~Texture.FLAG_FILTER
 	else:
 		preview_textures[texture_name].texture.flags |= Texture.FLAG_FILTER
