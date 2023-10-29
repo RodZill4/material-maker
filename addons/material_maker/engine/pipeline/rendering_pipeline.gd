@@ -96,7 +96,7 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 	rd.sync()
 	
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
-	target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
+	await target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
 	
 	rids.free_rids(rd)
 	

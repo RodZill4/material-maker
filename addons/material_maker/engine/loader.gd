@@ -233,6 +233,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 		image = MMGenImage,
 		text = MMGenText,
 		iterate_buffer = MMGenIterateBuffer,
+		meshmap = MMGenMeshMap,
 		sdf = MMGenSDF,
 		ios = MMGenIOs,
 		switch = MMGenSwitch,

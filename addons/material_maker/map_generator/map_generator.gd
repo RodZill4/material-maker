@@ -2,6 +2,9 @@ extends Object
 class_name MMMapGenerator
 
 
+static var mesh_maps : Dictionary = {}
+static var debug_index : int = 0
+
 const SHADERS_PATH : String = "res://addons/material_maker/map_generator"
 const MAP_DEFINITIONS : Dictionary = {
 	position = { type="simple", vertex = "position_vertex", fragment = "common_fragment", postprocess=["dilate_1", "dilate_2"] },
@@ -72,10 +75,24 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 	# Extend the map past seams
 	if pixels > 0:
 		print("Postprocessing...")
+		texture.save_to_file("d:/debug_x_%d.png" % debug_index)
+		debug_index += 1
 		for p in map_definition.postprocess:
-			var extend_pipeline : MMComputeShader = MMComputeShader.new()
-			extend_pipeline.clear()
-			extend_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-			extend_pipeline.add_parameter_or_texture("pixels", "int", pixels)
-			await extend_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
-			await extend_pipeline.render(texture, Vector2i(size, size))
+			var postprocess_pipeline : MMComputeShader = MMComputeShader.new()
+			postprocess_pipeline.clear()
+			postprocess_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
+			postprocess_pipeline.add_parameter_or_texture("pixels", "int", pixels)
+			await postprocess_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
+			await postprocess_pipeline.render(texture, Vector2i(size, size))
+			texture.save_to_file("d:/debug_%d.png" % debug_index)
+			debug_index += 1
+
+static func get_map(mesh : Mesh, map : String) -> MMTexture:
+	if ! mesh_maps.has(mesh):
+		mesh_maps[mesh] = {}
+	if ! mesh_maps[mesh].has(map):
+		var texture : MMTexture = MMTexture.new()
+		mesh_maps[mesh][map] = texture
+		await generate(mesh, map, 2048, texture)
+	return mesh_maps[mesh][map] as MMTexture
+		

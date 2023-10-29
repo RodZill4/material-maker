@@ -108,7 +108,8 @@ func do_update_shader() -> void:
 	if new_is_greyscale != is_greyscale:
 		is_greyscale = new_is_greyscale
 		notify_output_change(0)
-		notify_output_change(1)
+		if version == VERSION_OLD:
+			notify_output_change(1)
 	mm_deps.buffer_create_compute_material("o%d_tex" % get_instance_id(), shader_compute)
 	mm_deps.update()
 

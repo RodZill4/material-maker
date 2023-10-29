@@ -149,7 +149,7 @@ func render_2(rd : RenderingDevice, texture : MMTexture, size : Vector2i, rids :
 		print("Invalid shader, generating blank image")
 		return false
 	
-	texture.set_texture_rid(output_tex, size, TEXTURE_TYPE[texture_type].data_format)
+	await texture.set_texture_rid(output_tex, size, TEXTURE_TYPE[texture_type].data_format, rd)
 	
 	return true
 

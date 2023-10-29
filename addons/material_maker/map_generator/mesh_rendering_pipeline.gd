@@ -4,6 +4,8 @@ class_name MMMeshRenderingPipeline
 var mesh : Mesh
 
 func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, rids : RIDs):
+	if mesh == null:
+		return
 	var buffers : Array[PackedByteArray] = []
 	buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX].to_byte_array())
 	var bounding_box : AABB = mesh.get_aabb()
@@ -17,7 +19,11 @@ func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, 
 	bounding_box_array.encode_float(20, bounding_box.size.z)
 	buffers.append(bounding_box_array)
 	buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_NORMAL].to_byte_array())
-	buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TANGENT].to_byte_array())
+	if mesh.surface_get_arrays(0)[Mesh.ARRAY_TANGENT] == null:
+		buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV].to_byte_array())
+		buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV].to_byte_array())
+	else:
+		buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TANGENT].to_byte_array())
 	buffers.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV].to_byte_array())
 	bind_buffer_uniforms(rd, draw_list, shader, buffers, 0, rids)
 	

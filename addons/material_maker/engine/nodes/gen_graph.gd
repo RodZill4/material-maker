@@ -11,6 +11,8 @@ var editable : bool = false
 
 var transmits_seed : bool = true
 
+var current_mesh : Mesh = null
+
 signal graph_changed()
 signal connections_changed(removed_connections, added_connections)
 signal hierarchy_changed()
@@ -364,6 +366,31 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		return rv
 	return ShaderCode.new()
 
+#region Current Mesh (for smart materials)
+
+func get_current_mesh():
+	var n : MMGenGraph = self
+	var p : Node = get_parent()
+	while p is MMGenGraph:
+		n = p
+		p = n.get_parent()
+	return n.current_mesh
+
+func set_current_mesh(m : Mesh):
+	# Only applies to top level
+	assert(! (get_parent() is MMGenGraph))
+	if current_mesh != m:
+		current_mesh = m
+		set_current_mesh_in_meshmap_nodes(current_mesh)
+
+func set_current_mesh_in_meshmap_nodes(m : Mesh, n : MMGenGraph = self):
+	for c in n.get_children():
+		if c is MMGenGraph:
+			set_current_mesh_in_meshmap_nodes(m, c)
+		elif c is MMGenMeshMap:
+			c.set_current_mesh(m)
+
+#endregion
 
 func edit(node) -> void:
 	node.get_parent().call_deferred("update_view", self)
@@ -520,6 +547,7 @@ func _deserialize(data : Dictionary) -> void:
 			connection_array = connections_from_compact(data.connections)
 	var new_stuff = await mm_loader.add_to_gen_graph(self, nodes, connection_array)
 
+#region Node Graph Diff
 func apply_diff_from(graph : MMGenGraph) -> void:
 	shortdesc = graph.shortdesc
 	longdesc = graph.longdesc
@@ -661,3 +689,4 @@ func compare_connection(a, b):
 		return false
 		
 	return a.to_port < b.to_port
+#endregion

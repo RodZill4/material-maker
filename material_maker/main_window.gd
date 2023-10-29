@@ -118,6 +118,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	get_window().borderless = false
+	get_window().transparent = false
 	get_window().move_to_foreground()
 	#get_window().gui_embed_subwindows = false
 	
@@ -277,8 +278,7 @@ func on_config_changed() -> void:
 		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	get_viewport().content_scale_factor = ui_scale
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
-
-
+	
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
@@ -1214,6 +1214,12 @@ func accept_dialog(dialog_text : String, cancel_button : bool = false):
 	add_child(dialog)
 	var result = await dialog.ask()
 	return result
+
+# Current mesh
+
+func set_current_mesh(m : Mesh):
+	get_current_graph_edit().top_generator.set_current_mesh(m)
+	
 
 # Use this to investigate the connect bug
 

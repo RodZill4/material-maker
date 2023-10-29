@@ -114,6 +114,7 @@ func do_load_custom_mesh(file_path) -> void:
 	if mesh != null:
 		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh
+		mm_globals.main_window.set_current_mesh(mesh)
 		select_object(id)
 
 func select_object(id) -> void:
