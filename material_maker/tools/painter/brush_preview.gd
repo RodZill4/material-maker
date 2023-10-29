@@ -16,10 +16,8 @@ func set_brush(brush) -> Texture2D:
 	if !initialized:
 		var preview_material : StandardMaterial3D = StandardMaterial3D.new()
 		preview_material.albedo_texture = painter.get_albedo_texture()
-		preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
 		preview_material.metallic = 1.0
 		preview_material.metallic_texture = painter.get_mr_texture()
-		preview_material.metallic_texture.flags = Texture2D.FLAGS_DEFAULT
 		preview_material.metallic_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 		preview_material.roughness = 1.0
 		preview_material.roughness_texture = painter.get_mr_texture()
@@ -27,22 +25,18 @@ func set_brush(brush) -> Texture2D:
 		preview_material.emission_enabled = true
 		preview_material.emission = Color(0.0, 0.0, 0.0, 0.0)
 		preview_material.emission_texture = painter.get_emission_texture()
-		preview_material.emission_texture.flags = Texture2D.FLAGS_DEFAULT
 		preview_material.normal_enabled = true
 		$NormalMap/Rect.material.set_shader_parameter("epsilon", 1.0/512.0)
 		# TODO: Fix this
 		#$NormalMap/Rect.material.set_shader_parameter("tex", painter.get_depth_texture())
 		preview_material.normal_texture = $NormalMap.get_texture()
-		preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
 		# TODO: Fix this
 		#preview_material.heightmap_enabled = true
 		#preview_material.depth_deep_parallax = true
 		#preview_material.depth_texture = painter.get_depth_texture()
 		#preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT
 		$SubViewport/Object.set_surface_override_material(0, preview_material)
-		var result = painter.set_mesh($SubViewport/Object.mesh)
-		while result is GDScriptFunctionState:
-			result = await result.completed
+		var result = await painter.set_mesh($SubViewport/Object.mesh)
 		var mesh_instance = $SubViewport/Object
 		var mesh_aabb = mesh_instance.get_aabb()
 		var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size

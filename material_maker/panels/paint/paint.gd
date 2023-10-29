@@ -61,8 +61,8 @@ var mask : ImageTexture
 @onready var graph_edit = $VSplitContainer/GraphEdit
 @onready var undoredo = $UndoRedo
 
-@onready var brush_view_3d = $VSplitContainer/HSplitContainer/Painter/BrushView
-var brush_view_3d_shown = false
+@onready var brush_view_3d : ColorRect = $VSplitContainer/HSplitContainer/Painter/BrushView
+var brush_view_3d_shown : bool = false
 
 @onready var view_2d : ColorRect = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D
 @onready var brush_view_2d = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D/BrushView
@@ -442,7 +442,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 					reset_stroke()
 
 func _on_View_gui_input(ev : InputEvent):
-	handle_stroke_input(ev, PAINTING_MODE_TEXTURE_FROM_VIEW if paint_engine_button.pressed else PAINTING_MODE_VIEW)
+	handle_stroke_input(ev, PAINTING_MODE_TEXTURE_FROM_VIEW if paint_engine_button.button_pressed else PAINTING_MODE_VIEW)
 	if ev is InputEventPanGesture:
 		camera_rotation1.rotate_y(-0.1*ev.delta.x)
 		camera_rotation2.rotate_x(-0.1*ev.delta.y)
@@ -458,13 +458,17 @@ func _on_View_gui_input(ev : InputEvent):
 				var factor = 0.0025*camera.position.z
 				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
 				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
+				#update_view()
+				accept_event()
 			elif ev.is_command_or_control_pressed():
 				camera.translate(Vector3(0.0, 0.0, -0.01*ev.relative.y*camera.transform.origin.z))
-				update_view()
+				#update_view()
 				accept_event()
 			else:
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
+				#update_view()
+				accept_event()
 	elif ev is InputEventMouseButton:
 		if !ev.pressed and ev.button_index == MOUSE_BUTTON_MIDDLE:
 			update_view()
@@ -596,7 +600,7 @@ func show_brush(p, op = null):
 		brush_view_3d_shown = true
 		if op == null:
 			op = p
-		brush_view_3d.material.set_shader_parameter("texture_space", paint_engine_button.pressed)
+		brush_view_3d.material.set_shader_parameter("texture_space", paint_engine_button.button_pressed)
 		brush_view_3d.material.set_shader_parameter("brush_pos", p)
 		brush_view_3d.material.set_shader_parameter("brush_ppos", op)
 		brush_view_3d.material.set_shader_parameter("mask_tex", mask)
@@ -706,25 +710,25 @@ func pick_color(pick_position : Vector2):
 	if remote_node == null:
 		return
 	
-	var uv = painter.view_to_texture(pick_position)
+	var uv : Vector2 = painter.view_to_texture(pick_position)
 	var colors = {}
-	var albedo_image = layers.get_albedo_texture().get_data()
-	colors["Albedo"] = albedo_image.get_pixelv(uv*albedo_image.get_size())
+	var albedo_image = layers.get_albedo_texture().get_image()
+	colors["Albedo"] = albedo_image.get_pixelv(uv*Vector2(albedo_image.get_size()))
 	
-	var metallic_image = layers.get_metallic_texture().get_data()
-	colors["Metallic"] = metallic_image.get_pixelv(uv*metallic_image.get_size()).r
+	var metallic_image = layers.get_metallic_texture().get_image()
+	colors["Metallic"] = metallic_image.get_pixelv(uv*Vector2(metallic_image.get_size())).r
 	
-	var roughness_image = layers.get_roughness_texture().get_data()
-	colors["Roughness"] = roughness_image.get_pixelv(uv*roughness_image.get_size()).r
+	var roughness_image = layers.get_roughness_texture().get_image()
+	colors["Roughness"] = roughness_image.get_pixelv(uv*Vector2(roughness_image.get_size())).r
 
-	var emission_image = layers.get_emission_texture().get_data()
-	colors["Emission"] = emission_image.get_pixelv(uv*emission_image.get_size())
+	var emission_image = layers.get_emission_texture().get_image()
+	colors["Emission"] = emission_image.get_pixelv(uv*Vector2(emission_image.get_size()))
 
-	var depth_image = layers.get_depth_texture().get_data()
-	colors["Depth"] = depth_image.get_pixelv(uv*depth_image.get_size()).r
+	var depth_image = layers.get_depth_texture().get_image()
+	colors["Depth"] = depth_image.get_pixelv(uv*Vector2(depth_image.get_size())).r
 	
-	var occlusion_image = layers.get_occlusion_texture().get_data()
-	colors["Occlusion"] = occlusion_image.get_pixelv(uv*occlusion_image.get_size()).r
+	var occlusion_image = layers.get_occlusion_texture().get_image()
+	colors["Occlusion"] = occlusion_image.get_pixelv(uv*Vector2(occlusion_image.get_size())).r
 
 	for p in remote_node.get_parameter_defs():
 		if colors.has(p.label):

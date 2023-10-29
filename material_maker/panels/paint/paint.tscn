@@ -1,11 +1,11 @@
 [gd_scene load_steps=34 format=3 uid="uid://qx02gvymgb5o"]
 
 [ext_resource type="Script" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="1"]
-[ext_resource type="PackedScene" path="res://material_maker/panels/paint/export.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://ftx52hy53io2" path="res://material_maker/panels/paint/export.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5"]
 [ext_resource type="PackedScene" uid="uid://d12t30rjvol15" path="res://material_maker/tools/painter/painter.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://material_maker/panels/paint/paint_layers.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://drudtoqh4ks4n" path="res://material_maker/panels/paint/paint_layers.tscn" id="13"]
 [ext_resource type="Script" path="res://material_maker/panels/paint/paint.gd" id="16"]
 [ext_resource type="PackedScene" uid="uid://dy1u50we7gtru" path="res://material_maker/panels/graph_edit/graph_edit.tscn" id="17"]
 
@@ -541,11 +541,13 @@ size_flags_vertical = 3
 color = Color(1, 1, 1, 0)
 
 [node name="BrushView" type="ColorRect" parent="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D"]
-visible = false
 material = SubResource("5")
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
 [node name="GraphEdit" parent="VSplitContainer" instance=ExtResource("17")]

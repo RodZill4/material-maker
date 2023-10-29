@@ -1,74 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://d12t30rjvol15"]
+[gd_scene load_steps=3 format=3 uid="uid://d12t30rjvol15"]
 
-[ext_resource type="Shader" path="res://material_maker/tools/painter/shaders/texture2view.gdshader" id="1"]
-[ext_resource type="Shader" path="res://material_maker/tools/painter/shaders/view2texture.gdshader" id="2_6tnmu"]
 [ext_resource type="Script" path="res://material_maker/tools/painter/painter.gd" id="6"]
 [ext_resource type="PackedScene" uid="uid://1g0jkm5gnhbs" path="res://material_maker/tools/painter/painter_viewport.tscn" id="7"]
 
-[sub_resource type="World3D" id="World3D_tnt6i"]
-
-[sub_resource type="BoxMesh" id="1"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ca54"]
-render_priority = 0
-shader = ExtResource("2_6tnmu")
-shader_parameter/near = null
-shader_parameter/far = null
-
-[sub_resource type="World3D" id="World3D_3l7cw"]
-
-[sub_resource type="StandardMaterial3D" id="2"]
-albedo_color = Color(0.501961, 0.501961, 0, 1)
-
-[sub_resource type="BoxMesh" id="3"]
-material = SubResource("2")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mwl52"]
-render_priority = 0
-shader = ExtResource("1")
-shader_parameter/seams_multiplier = 0.06125
-shader_parameter/model_transform = null
-shader_parameter/fovy_degrees = 45.0
-shader_parameter/z_near = 0.01
-shader_parameter/z_far = 60.0
-shader_parameter/texture_size = 8.0
-shader_parameter/aspect = 1.0
-shader_parameter/texel_tolerance = 1.0
-
 [node name="Painter" type="Node" groups=["preview"]]
 script = ExtResource("6")
-
-[node name="View2Texture" type="SubViewport" parent="."]
-own_world_3d = true
-world_3d = SubResource("World3D_tnt6i")
-size = Vector2i(1024, 600)
-render_target_update_mode = 0
-
-[node name="Camera3D" type="Camera3D" parent="View2Texture"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-current = true
-far = 25.0
-
-[node name="PaintedMesh" type="MeshInstance3D" parent="View2Texture"]
-mesh = SubResource("1")
-surface_material_override/0 = SubResource("ShaderMaterial_5ca54")
-
-[node name="Texture2View" type="SubViewport" parent="."]
-own_world_3d = true
-world_3d = SubResource("World3D_3l7cw")
-transparent_bg = true
-size = Vector2i(2048, 2048)
-render_target_update_mode = 0
-
-[node name="Camera3D" type="Camera3D" parent="Texture2View"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 20)
-projection = 1
-current = true
-
-[node name="PaintedMesh" type="MeshInstance3D" parent="Texture2View"]
-transform = Transform3D(1, -5.09656e-08, 1.56295e-08, 5.09656e-08, 1, 5.78721e-10, -1.56295e-08, -5.78721e-10, 1, 0, 0, 0)
-mesh = SubResource("3")
-surface_material_override/0 = SubResource("ShaderMaterial_mwl52")
 
 [node name="AlbedoPaint" parent="." instance=ExtResource("7")]
 

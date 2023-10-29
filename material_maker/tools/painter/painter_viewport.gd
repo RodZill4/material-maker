@@ -132,10 +132,10 @@ func finish_init():
 	await get_tree().process_frame
 	# Copy image from viewport
 	var image = strokepaint_viewport.get_texture().get_image()
-	false # image.lock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+	
 	var texture : ImageTexture = ImageTexture.new()
 	texture.set_image(image)
-	false # image.unlock() # TODOConverter40, Image no longer requires locking, `false` helps to not break one line if/else, so it can freely be removed
+	
 	layer_material.set_shader_parameter("tex", texture)
 	layerpaint_layerrect.visible = true
 	layerpaint_strokerect.visible = false

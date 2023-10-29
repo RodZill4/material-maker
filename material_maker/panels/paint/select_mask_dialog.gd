@@ -28,7 +28,8 @@ func _ready():
 	pass
 
 func _on_ViewportContainer_resized():
-	viewport.size = viewport_container.size
+	if viewport and viewport_container:
+		viewport.size = viewport_container.size
 
 func set_mesh(mesh : Mesh):
 	var material = mesh_instance.get_surface_override_material(0)

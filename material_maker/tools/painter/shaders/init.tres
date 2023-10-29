@@ -1,7 +1,7 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cse8mh5hgll8n"]
 
-[ext_resource path="res://material_maker/tools/painter/shaders/init.gdshader" type="Shader" id=1]
+[ext_resource type="Shader" path="res://material_maker/tools/painter/shaders/init.gdshader" id="1"]
 
 [resource]
-shader = ExtResource( 1 )
-shader_param/col = Color( 1, 1, 1, 1 )
+shader = ExtResource("1")
+shader_parameter/col = Vector4(1, 1, 1, 1)
