@@ -11,7 +11,7 @@ class MenuBase:
 	func add_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
 		pass
 	
-	func add_icon_item(_icon: Texture, _label: String, _id: int = -1, _accel: Key = 0 as Key):
+	func add_icon_item(_icon: Texture2D, _label: String, _id: int = -1, _accel: Key = 0 as Key):
 		pass
 	
 	func add_check_item(_label: String, _id: int = -1, _accel: Key = 0 as Key):
@@ -64,7 +64,7 @@ class MenuGodot:
 	func add_item(label: String, id: int = -1, accel: Key = 0 as Key):
 		popup_menu.add_item(label, id, accel)
 	
-	func add_icon_item(icon: Texture, label: String, id: int = -1, accel: Key = 0 as Key):
+	func add_icon_item(icon: Texture2D, label: String, id: int = -1, accel: Key = 0 as Key):
 		popup_menu.add_icon_item(icon, label, id, accel)
 	
 	func add_check_item(label: String, id: int = -1, accel: Key = 0 as Key):
@@ -105,16 +105,16 @@ class MenuBarGodot:
 		for md in menu_def:
 			var menu_name : String = md.menu.split("/")[0]
 			if ! menu_bar.has_node(menu_name):
-				var menu_button = MenuButton.new()
+				var menu_button : MenuButton = MenuButton.new()
 				menu_button.name = menu_name
 				menu_button.text = menu_name
 				menu_button.switch_on_hover = true
 				menu_bar.add_child(menu_button)
-		for m in menu_bar.get_children():
+		for m : Node in menu_bar.get_children():
 			if ! m is MenuButton:
 				continue
-			var menu = m.get_popup()
-			menu.connect("about_to_popup", Callable(self,"create_menu").bind(menu_def, object, menu, m.name+"/"))
+			var menu : PopupMenu = m.get_popup()
+			#menu.connect("about_to_popup", mm_globals.menu_manager.create_menu.bind(menu_def, object, menu, m.name+"/"))
 			mm_globals.menu_manager.create_menu(menu_def, object, m.name+"/", MenuGodot.new(menu))
 
 class MenuDisplayServer:
@@ -140,7 +140,7 @@ class MenuDisplayServer:
 		var index : int = DisplayServer.global_menu_add_item(menu_name, label, mm_globals.menu_manager.my_callback, mm_globals.menu_manager.my_callback, key, accel)
 		indexes[id] = index
 	
-	func add_icon_item(_icon: Texture, label: String, id: int = -1, accel: Key = 0 as Key):
+	func add_icon_item(_icon: Texture2D, label: String, id: int = -1, accel: Key = 0 as Key):
 		add_item(label, id, accel)
 	
 	func add_check_item(label: String, id: int = -1, accel : Key = 0 as Key):

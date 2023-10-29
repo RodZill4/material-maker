@@ -156,7 +156,7 @@ func _gui_input(event) -> void:
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
-				var rect = c.get_global_rect()
+				var rect : Rect2 = c.get_global_rect()
 				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
 				rect = Rect2(rect.position, rect.size*transform_scale)
 				if rect.has_point(get_global_mouse_position()):
@@ -230,7 +230,7 @@ func _gui_input(event) -> void:
 				else:
 					c.clear_connection_labels()
 		if !found_tip:
-			var rect = get_global_rect()
+			var rect : Rect2 = get_global_rect()
 			var transform_scale : Vector2 = Vector2(1, 1) # get_global_transform().get_scale()
 			rect = Rect2(rect.position, rect.size*transform_scale)
 			if rect.has_point(get_global_mouse_position()):
