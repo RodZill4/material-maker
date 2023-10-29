@@ -39,7 +39,7 @@ viewport_path = NodePath("ViewportImage")
 [sub_resource type="ShaderMaterial" id="6"]
 resource_local_to_scene = true
 shader = SubResource("4")
-shader_parameter/size = 256
+shader_parameter/size = 256.0
 shader_parameter/tex = SubResource("5")
 
 [sub_resource type="Shader" id="7"]
@@ -64,7 +64,7 @@ viewport_path = NodePath("ViewportHistogram1")
 [sub_resource type="ShaderMaterial" id="9"]
 resource_local_to_scene = true
 shader = SubResource("7")
-shader_parameter/size = 256
+shader_parameter/size = 256.0
 shader_parameter/tex = SubResource("8")
 
 [sub_resource type="Shader" id="10"]

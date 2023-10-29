@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dffueustyojkh"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_polygon.gd" id="1"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/polygon_edit/polygon_edit.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bklgd7r3g3w0h" path="res://material_maker/widgets/polygon_edit/polygon_edit.tscn" id="2"]
 
 [node name="polygon" type="HBoxContainer"]
 offset_right = 148.0

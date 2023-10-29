@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dn262nq5pxuwx"]
 
-[ext_resource path="res://material_maker/windows/progress_window/progress_window.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/progress_window/progress_window.gd" id="1"]
 
 [node name="ProgressWindow" type="Popup"]
 anchor_left = 0.5
@@ -12,7 +12,7 @@ offset_top = -163.0
 offset_right = 5.0
 offset_bottom = -98.0
 exclusive = true
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dn13ybhfpg52k"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_float.gd" id="1"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2"]
 
 [node name="float" type="HBoxContainer"]
 offset_right = 400.0

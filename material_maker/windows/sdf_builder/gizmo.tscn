@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bkaug0arymhda"]
 
-[ext_resource type="PackedScene" path="res://material_maker/windows/sdf_builder/gizmo_arrow.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://duqci7ecjbnyx" path="res://material_maker/windows/sdf_builder/gizmo_arrow.tscn" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/sdf_builder/gizmo.gd" id="2"]
 [ext_resource type="Shader" path="res://material_maker/windows/sdf_builder/gizmo.gdshader" id="3"]
 

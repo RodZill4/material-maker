@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://lt2wnsnw4af6" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
 
 [sub_resource type="AtlasTexture" id="2"]
 atlas = ExtResource("1")

@@ -1,27 +1,24 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://c5kgvwl2snpc8"]
 
 [ext_resource type="Script" path="res://material_maker/panels/hierarchy/hierarchy_panel.gd" id="1"]
-[ext_resource type="Texture2D" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 7
-atlas = ExtResource( 2 )
-region = Rect2( 32, 48, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("2")
+region = Rect2(32, 48, 16, 16)
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 7
-atlas = ExtResource( 2 )
-region = Rect2( 16, 48, 16, 16 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("2")
+region = Rect2(16, 48, 16, 16)
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 7
-atlas = ExtResource( 2 )
-region = Rect2( 0, 32, 16, 16 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("2")
+region = Rect2(0, 32, 16, 16)
 
 [node name="Hierarchy" type="VBoxContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -34,33 +31,33 @@ offset_bottom = 22.0
 offset_right = 28.0
 offset_bottom = 22.0
 tooltip_text = "Expand all"
-icon = SubResource( 1 )
+icon = SubResource("1")
 
 [node name="Collapse" type="Button" parent="HBoxContainer"]
 offset_left = 32.0
 offset_right = 60.0
 offset_bottom = 22.0
 tooltip_text = "Collapse all"
-icon = SubResource( 2 )
+icon = SubResource("2")
 
 [node name="Space" type="Control" parent="HBoxContainer"]
 offset_left = 64.0
 offset_right = 74.0
 offset_bottom = 22.0
-custom_minimum_size = Vector2( 10, 0 )
+custom_minimum_size = Vector2(10, 0)
 
 [node name="PreviewMenu" type="MenuButton" parent="HBoxContainer"]
 offset_left = 78.0
 offset_right = 106.0
 offset_bottom = 22.0
-icon = SubResource( 3 )
-items = [ "No preview", null, 0, false, false, 0, 0, null, "", false, "1 preview", null, 0, false, false, 1, 0, null, "", false, "2 previews", null, 0, false, false, 2, 0, null, "", false, "3 previews", null, 0, false, false, 3, 0, null, "", false ]
+icon = SubResource("3")
+items = ["No preview", null, 0, false, false, 0, 0, null, "", false, "1 preview", null, 0, false, false, 1, 0, null, "", false, "2 previews", null, 0, false, false, 2, 0, null, "", false, "3 previews", null, 0, false, false, 3, 0, null, "", false]
 
 [node name="Tree" type="Tree" parent="."]
 offset_top = 26.0
 offset_right = 200.0
 offset_bottom = 176.0
-custom_minimum_size = Vector2( 200, 150 )
+custom_minimum_size = Vector2(200, 150)
 size_flags_vertical = 3
 allow_reselect = true
 __meta__ = {
@@ -70,6 +67,7 @@ __meta__ = {
 [node name="Delay" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
 [connection signal="pressed" from="HBoxContainer/Expand" to="." method="_on_Expand_pressed"]
 [connection signal="pressed" from="HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
 [connection signal="item_activated" from="Tree" to="." method="_on_Hierarchy_item_double_clicked"]

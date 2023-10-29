@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://bhr7y7noxv5e6"]
 
-[ext_resource path="res://material_maker/widgets/curve_edit/slope_point.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/curve_edit/control_point.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/slope_point.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/control_point.gd" id="2"]
 
 [node name="ControlPoint" type="Control"]
 offset_left = 56.9864
 offset_top = 33.8615
 offset_right = 63.9864
 offset_bottom = 40.8615
-custom_minimum_size = Vector2( 7, 7 )
-script = ExtResource( 2 )
+custom_minimum_size = Vector2(7, 7)
+script = ExtResource("2")
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -18,8 +18,8 @@ __meta__ = {
 offset_left = -18.5235
 offset_right = -11.5235
 offset_bottom = 7.0
-custom_minimum_size = Vector2( 7, 7 )
-script = ExtResource( 1 )
+custom_minimum_size = Vector2(7, 7)
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -29,11 +29,12 @@ distance = -30.0
 offset_left = 15.6919
 offset_right = 22.6919
 offset_bottom = 7.0
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
 distance = 30.0
+
 [connection signal="gui_input" from="." to="." method="_on_ControlPoint_gui_input"]
 [connection signal="gui_input" from="LeftSlope" to="LeftSlope" method="_on_ControlPoint_gui_input"]
 [connection signal="gui_input" from="RightSlope" to="RightSlope" method="_on_ControlPoint_gui_input"]

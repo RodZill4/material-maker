@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bqm3uffhyqjqt"]
 
-[ext_resource path="res://material_maker/windows/accept_dialog/accept_dialog.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/accept_dialog/accept_dialog.gd" id="1"]
 
 [node name="AcceptDialog" type="AcceptDialog"]
 offset_right = 95.0
 offset_bottom = 58.0
 window_title = "Alert"
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [connection signal="confirmed" from="." to="." method="_on_AcceptDialog_confirmed"]
 [connection signal="custom_action" from="." to="." method="_on_AcceptDialog_custom_action"]

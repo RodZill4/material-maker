@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://7wslfieqleli"]
 
-[ext_resource type="PackedScene" path="res://material_maker/widgets/histogram/histogram.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://0b6d65sghy3s" path="res://material_maker/widgets/histogram/histogram.tscn" id="1"]
 [ext_resource type="Script" path="res://material_maker/nodes/tones/tones.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 

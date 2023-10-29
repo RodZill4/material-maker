@@ -1,25 +1,26 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://jyqnc0l3oaeu"]
 
-[ext_resource path="res://material_maker/panels/reference/gradient_slot.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/panels/reference/gradient_slot.gd" id="1"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+render_priority = 0
+shader = SubResource("1")
 
 [node name="GradientSlot" type="ColorRect"]
 offset_right = 32.0
 offset_bottom = 32.0
-custom_minimum_size = Vector2( 32, 32 )
-color = Color( 1, 1, 1, 0 )
-script = ExtResource( 1 )
+custom_minimum_size = Vector2(32, 32)
+color = Color(1, 1, 1, 0)
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource( 2 )
+material = SubResource("2")
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 3.0
@@ -27,7 +28,7 @@ offset_top = 3.0
 offset_right = -3.0
 offset_bottom = -3.0
 mouse_filter = 2
-color = Color( 0.501961, 0.501961, 0.501961, 1 )
+color = Color(0.501961, 0.501961, 0.501961, 1)
 __meta__ = {
 "_edit_use_anchors_": false
 }

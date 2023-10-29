@@ -54,7 +54,7 @@
 [ext_resource type="Texture2D" uid="uid://p5p3mlddsxcx" path="res://material_maker/theme/dark/popupmenu_radio_unchecked.png" id="52"]
 [ext_resource type="Texture2D" uid="uid://2dheuv4p0d2d" path="res://material_maker/theme/dark/tabcontainer_increment_highlight.png" id="53"]
 [ext_resource type="Texture2D" uid="uid://tetgna5qjvkf" path="res://material_maker/theme/dark/tabs_increment.png" id="54"]
-[ext_resource type="FontFile" path="res://material_maker/theme/font.tres" id="55"]
+[ext_resource type="FontFile" uid="uid://bbh5pjbblx75w" path="res://material_maker/theme/font.tres" id="55"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="56"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_no02t"]
@@ -665,7 +665,7 @@ shadow_color = Color(0, 0, 0, 0.3)
 shadow_size = 4
 
 [resource]
-default_font = ExtResource("55")
+default_font = ExtResource("56")
 Button/colors/font_color = Color(0.8, 0.8075, 0.8275, 1)
 Button/colors/font_color_disabled = Color(1, 1, 1, 0.3)
 Button/colors/font_color_hover = Color(0.88, 0.8845, 0.8965, 1)

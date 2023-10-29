@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dmfusfaiojjvf"]
 
-[ext_resource type="PackedScene" path="res://material_maker/widgets/curve_edit/curve_editor.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://c2ns17avhb2nx" path="res://material_maker/widgets/curve_edit/curve_editor.tscn" id="1"]
 [ext_resource type="Script" path="res://material_maker/widgets/curve_edit/curve_dialog.gd" id="2"]
 [ext_resource type="Script" path="res://material_maker/widgets/curve_edit/presets_selector.gd" id="3"]
 

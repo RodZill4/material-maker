@@ -182,12 +182,14 @@ split_offset = 312
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/Left"]
 layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
 script = ExtResource("12_7mn0u")
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/Left"]
 layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
 script = ExtResource("12_7mn0u")
 
@@ -315,12 +317,14 @@ split_offset = 312
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
 layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
 script = ExtResource("12_7mn0u")
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
 layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
 script = ExtResource("12_7mn0u")
 

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/input.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/port_group_button/port_group_button.tscn" id="3"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://bi88rsdxt0ld7" path="res://material_maker/widgets/port_group_button/port_group_button.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2")

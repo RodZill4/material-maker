@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://c1j6a4jdggjm6"]
 
-[ext_resource type="PackedScene" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://drg0s4lftblx3" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
-[ext_resource type="PackedScene" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
 [ext_resource type="Script" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 
 [node name="Preferences" type="Window"]

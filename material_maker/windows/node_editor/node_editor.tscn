@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor_item_list.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="5_l5uxq"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -23,8 +23,8 @@ function_color = Color(0.792157, 0, 0.796078, 1)
 member_variable_color = Color(0, 0.639216, 0.635294, 1)
 
 [node name="NodeEditor" type="Window"]
-initial_position = 2
 title = "Node Editor"
+initial_position = 2
 size = Vector2i(950, 450)
 exclusive = true
 script = ExtResource("1")
@@ -127,13 +127,11 @@ flat = true
 [node name="Main Code" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 visible = false
 layout_mode = 2
-delimiter_strings = Array[String](["\" \"", "' '"])
 
 [node name="Instance Functions" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 visible = false
 layout_mode = 2
 syntax_highlighter = SubResource("CodeHighlighter_g2tsy")
-delimiter_strings = Array[String](["\" \"", "' '"])
 
 [node name="Global Functions" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
@@ -154,7 +152,6 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_vertical = 3
 syntax_highlighter = SubResource("CodeHighlighter_062tj")
-delimiter_strings = Array[String](["\" \"", "' '"])
 
 [node name="ErrorLabel" type="Label" parent="Sizer/TabBar/Global Functions/Functions"]
 visible = false

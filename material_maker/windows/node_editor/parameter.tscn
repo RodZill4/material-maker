@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bv38uib754hon" path="res://material_maker/windows/node_editor/parameter_boolean.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://42kwj2l3x2of" path="res://material_maker/windows/node_editor/parameter_color.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://c6pc6upxc23kc" path="res://material_maker/windows/node_editor/parameter_gradient.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="9"]
 [ext_resource type="PackedScene" uid="uid://ew3gj3j2u7w2" path="res://material_maker/windows/node_editor/parameter_curve.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://dffueustyojkh" path="res://material_maker/windows/node_editor/parameter_polygon.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dij6o75etamwy" path="res://material_maker/windows/node_editor/parameter_polyline.tscn" id="12"]

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_edit.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="Script" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
-[ext_resource type="PackedScene" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 
 [sub_resource type="Theme" id="1"]
 GraphEdit/colors/activity = Color(1, 1, 1, 1)
