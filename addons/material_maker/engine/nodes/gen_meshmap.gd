@@ -33,9 +33,47 @@ const MESH_MAPS : Array[Dictionary] = [
 		output="2.0*texture($TEXTURE, $UV).rgb-vec3(1.0)"
 	},
 	{
-		name="Occlusion",
+		name="Maximum Curvature",
+		output_type="f",
+		map="curvature",
+		output="texture($TEXTURE, $UV).r"
+	},
+	{
+		name="Minimum Curvature",
+		output_type="f",
+		map="curvature",
+		output="texture($TEXTURE, $UV).g"
+	},
+	{
+		name="Cavity",
+		output_type="f",
+		map="curvature",
+		code="vec4 $NODE_curvature = texture($TEXTURE, $UV);",
+		output="-step($NODE_curvature.r, 0.0)*step($NODE_curvature.g, 0.0)*dot($NODE_curvature.rg, vec2(0.5))"
+	},
+	{
+		name="Pointiness",
+		output_type="f",
+		map="curvature",
+		code="vec4 $NODE_curvature = texture($TEXTURE, $UV);",
+		output="step(0.0, $NODE_curvature.r)*step(0.0, $NODE_curvature.g)*dot($NODE_curvature.rg, vec2(0.5))"
+	},
+	{
+		name="Ambient occlusion",
 		output_type="f",
 		map="ambient_occlusion",
+		output="texture($TEXTURE, $UV).r"
+	},
+	{
+		name="Bent normals",
+		output_type="rgb",
+		map="bent_normals",
+		output="2.0*texture($TEXTURE, $UV).rgb-vec3(1.0)"
+	},
+	{
+		name="Thickness",
+		output_type="f",
+		map="thickness",
 		output="texture($TEXTURE, $UV).r"
 	}
 ]
@@ -91,15 +129,18 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if variant_index == -1:
 		variant_index = context.get_variant(self, uv)
 		rv.add_uniform(texture_name, "sampler2D", current_map)
-		print(current_map)
-		var code : String = MESH_MAPS[map_index].output
+		var code : String = ""
+		if MESH_MAPS[map_index].has("code"):
+			code = MESH_MAPS[map_index].code+"\n"
+		code += "%s %s_%d = %s;\n" % [ type, genname, variant_index, MESH_MAPS[map_index].output ]
+		code = code.replace("$NODE", "o%d" % get_instance_id())
 		code = code.replace("$TEXTURE", texture_name)
 		code = code.replace("$UV", uv)
 		if current_mesh:
 			var aabb : AABB = current_mesh.get_aabb()
 			code = code.replace("$AABB_POSITION", "vec3(%.09f, %.09f, %.09f)" % [aabb.position.x, aabb.position.y, aabb.position.z])
 			code = code.replace("$AABB_SIZE", "vec3(%.09f, %.09f, %.09f)" % [aabb.size.x, aabb.size.y, aabb.size.z])
-		rv.code = "%s %s_%d = %s;\n" % [ type, genname, variant_index, code ]
+		rv.code = code
 	rv.output_values[rv.output_type] = "%s_%d" % [ genname, variant_index ]
 	return rv
 

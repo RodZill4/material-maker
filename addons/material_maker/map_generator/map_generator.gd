@@ -7,7 +7,12 @@ static var debug_index : int = 0
 
 const SHADERS_PATH : String = "res://addons/material_maker/map_generator"
 const MAP_DEFINITIONS : Dictionary = {
-	position = { type="simple", vertex = "position_vertex", fragment = "common_fragment", postprocess=["dilate_1", "dilate_2"] },
+	position = {
+		type="simple",
+		vertex = "position_vertex",
+		fragment = "common_fragment",
+		postprocess=["dilate_1", "dilate_2"]
+	},
 	normal = { type="simple", vertex = "normal_vertex", fragment = "normal_fragment", postprocess=["dilate_1", "dilate_2"] },
 	tangent = { type="simple", vertex = "tangent_vertex", fragment = "normal_fragment", postprocess=["dilate_1", "dilate_2"] },
 	ambient_occlusion = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=0, postprocess=["dilate_1", "dilate_2"] },
@@ -73,9 +78,9 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				await denoise_pipeline.render(texture, Vector2i(size, size))
 
 	# Extend the map past seams
-	if pixels > 0:
+	if pixels > 0 and map_definition.has("postprocess"):
 		print("Postprocessing...")
-		texture.save_to_file("d:/debug_x_%d.png" % debug_index)
+		#texture.save_to_file("d:/debug_x_%d.png" % debug_index)
 		debug_index += 1
 		for p in map_definition.postprocess:
 			var postprocess_pipeline : MMComputeShader = MMComputeShader.new()
@@ -84,7 +89,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			postprocess_pipeline.add_parameter_or_texture("pixels", "int", pixels)
 			await postprocess_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
 			await postprocess_pipeline.render(texture, Vector2i(size, size))
-			texture.save_to_file("d:/debug_%d.png" % debug_index)
+			#texture.save_to_file("d:/debug_%d.png" % debug_index)
 			debug_index += 1
 
 static func get_map(mesh : Mesh, map : String) -> MMTexture:

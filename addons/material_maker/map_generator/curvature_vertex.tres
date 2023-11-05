@@ -26,6 +26,6 @@ layout(binding = 4, std430) buffer restrict readonly UVs {
 
 void main() {
 	gl_Position = vec4(uvs[gl_VertexIndex]*2.0-vec2(1.0), 0.0, 1.0);
-	output_color = vec3(positions[gl_VertexIndex*3]);
+	output_color = vec3(positions[gl_VertexIndex*3], positions[gl_VertexIndex*3+1], positions[gl_VertexIndex*3+2]);
 }
 "
