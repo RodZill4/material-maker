@@ -7012,12 +7012,12 @@
 			"name": "spherize",
 			"parameters": {
 				"a": 1,
-				"r": 0.9,
 				"cx": 0,
-				"cy": 0
+				"cy": 0,
+				"r": 0.9
 			},
 			"tree_item": "Transform/Spherize",
-			"type":"spherize" 
+			"type": "spherize"
 		},
 		{
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABGFJREFUeJzlWz1LK0EUnZEnWqWx0kYxFsFCLU2lVoIgiMQiIIhaaaGVfyEQCztBEBS1CBaiYGGw0AWDgmBnoYX/wE6L2HhfIYk7nzsze3em8MAUuztz7pm7O7ubPTcEHLG6ugqEkHbLAnH+tE2FDvLH8S+0ABW6urqEfblcjoyPj5Pu7m5CKSWU0vYxACDf39/k4+ODRFEkjK3VaqRcLouBXC/P5eXlTJcAMbyEVdje3jbicF4CzWbTdWgi4meWEELGxsasOba2toR9U1NTYkfXM5TP55nsPj4+ulIxaDQaqc9+HElczuw8cVqhKt6DgwNUPl6nteqZmRnt46ZWqzmLLZfLXpL69fX1e8yUpF6vozx3bYRiYW1tTcltFMVm4q6TyGpJqfh3dnZ+9tuKUq4lTb/FxUVrgdh4fn6WxpBGWl9fdzqrV1dX2nEPDw/ScXy/ubk5hCknx8nn82wCZFmKt9PTU6NAs7Ozxgk8PDzM/OzHIdFD4O7uTit4YmICKxjToigS9l1fX+POmENfXx8Tj7ayoMLPPNKBf7PLOl4S4nqUr8LNZhNNDACQ/f39xH6Xl5co8ZIwNDTEbDOXRKVSyfQSLBQKKI9NV7y9vYn3gFa7uLjIXAAAwOjoqDYJw8PDmcRVxPN7BjRChLa7u4sSr1gs6uL4TUC1WhVE9Pb2ZrIsTk5OtLyDg4NARkZGgj6HG41G+1hPTw9aInQ8m5ubv/1knaMoQpoui4GBAaNJ6cRPT09rY+jGdnZ2iv0BAI6Pj71cBTYxnp6etJM5Oztj+s/PzztdPe0j/ICFhYWU0+UCcfz9/f1G41ZWVoxvmrJ2c3Oj16UTiYWXl5fU3LYTL5VKRrzaz+KUUpS3wUKhwGxXq1VrjpYOk9dqK81JmU6LjY0NdM5KpSI96+/v79ZcgppSqYQqmOf6/PxMxafi3dvbc+MxIT86OnIip5Rmdl/h7/qukP4avL29ZbaXlpbM1xS7vLTbaZDL5VB4pAmYnJwU9lFKyevrqxHp+fm5cLMqFov26jTo6MDxdZVPAQAQJsHfzW1wf3/vPFYGm48sOvx5e/zPJ0C5BLz586GhejyQlI8vU3/eFVj1CdIl4NWfdwRafQKfEd/+vCuw6hMSfwtk7c+H5mVGhfDnbYFdn+Dle4DOnzdFVvUJyi9CmAmQ8bf8eZexmIlQJgAbKn9eK85icrp+uvoE6Vdhn/68DD7rE0hofz6OEPUJhD/o258nJGx9glAfAJ79+SRg6NHFY16FQ/nzMvisT/C2/gGk/jzTAtQniCI8+/PtFqg+QS3Ikz/v9QoEEE5EYH/ecwKE+oTQ/nzo+gQjYyTesP152Rif9QnKdPvy5wHC1ickRsran1eJ81WfYJxq24mb+vO6GFjQ1ScY/20OsvLnNfBSn+CSUUx/ngfPmRZJ9Qlof5py9ed5+K5PcGbH8udl4EVnWZ/g7A1i+fMy+KxPcE4Alj8vg8/6BOc/T2P58yqAp/qE/zFx/UFU6FGrAAAAAElFTkSuQmCC",
@@ -7031,6 +7031,16 @@
 			"seed_int": 0,
 			"tree_item": "Pattern/Cairo",
 			"type": "cairo"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAJZJREFUeJzt0EERwDAAw7Cs/Dl3MPSohcDnb9vdw44O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpA+wFQtAF/ACpk+QAAAABJRU5ErkJggg==",
+			"name": "uniform",
+			"parameters": {
+				"map": 0
+			},
+			"seed": 51108,
+			"tree_item": "Miscellaneous/Mesh Map",
+			"type": "meshmap"
 		}
 	],
 	"name": "Base library"
