@@ -151,7 +151,11 @@ jobs:
           mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_SUB}
       - name: Download Godot headless binary 🤖
         run: |
+          echo "Getting ${GODOT_MAC_HEADLESS_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_${GODOT_VERSION}-${GODOT_SUB}_mac_headless.64.zip"
           wget -q ${GODOT_MAC_HEADLESS_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_${GODOT_VERSION}-${GODOT_SUB}_mac_headless.64.zip
+          unzip -a Godot_${GODOT_VERSION}-${GODOT_SUB}_mac_headless.64.zip
+          ls -la
+          ls -la bin
       - name: Setup 💻
         run: mkdir -v -p ./build/mac
       - name: Mac Build 🔧
