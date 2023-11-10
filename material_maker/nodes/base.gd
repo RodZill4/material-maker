@@ -246,7 +246,7 @@ func _on_gui_input(event) -> void:
 		elif doubleclicked:
 			doubleclicked = false
 			if generator is MMGenGraph:
-				get_parent().call_deferred("update_view", generator)
+				get_parent().update_view.call_deferred(generator)
 			elif generator is MMGenSDF:
 				edit_generator()
 	elif event is InputEventMouseMotion:
@@ -334,7 +334,7 @@ func _on_menu_id_pressed(id : int) -> void:
 			add_child(dialog)
 			var result = await dialog.ask()
 			if result == "ok":
-				get_parent().call_deferred("propagate_node_changes", generator)
+				get_parent().propagate_node_changes.call_deferred(generator)
 		MENU_SHARE_NODE:
 			# Prepare warning dialog
 			var status : Array = []

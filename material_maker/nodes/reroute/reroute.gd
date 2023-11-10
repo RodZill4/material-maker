@@ -8,7 +8,7 @@ func _ready() -> void:
 	super._ready()
 	close_button.visible = false
 	set_theme_type("Reroute")
-	call_deferred("on_connections_changed")
+	on_connections_changed.call_deferred()
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)

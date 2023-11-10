@@ -73,7 +73,7 @@ func update_node() -> void:
 	# Delete the contents and wait until it's done
 	for c in grid.get_children():
 		grid.remove_child(c)
-		c.call_deferred("free")
+		c.free.call_deferred()
 	title = generator.get_type_name()
 	controls = {}
 	var parameter_count : int = generator.get_parameter_defs().size()

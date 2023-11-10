@@ -10,7 +10,7 @@ func set_generator(g) -> void:
 
 func on_parameter_changed(p, _v) -> void:
 	if p == "__update_all__":
-		call_deferred("update_node")
+		update_node.call_deferred()
 
 func update_up_down_buttons() -> void:
 	for c in get_children():

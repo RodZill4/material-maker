@@ -566,7 +566,7 @@ func do_load_generator(file_name : String) -> void:
 		var parent_generator = generator.get_parent()
 		parent_generator.replace_generator(generator, new_generator)
 		generator = new_generator
-		call_deferred("update_node")
+		update_node.call_deferred()
 
 func save_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()

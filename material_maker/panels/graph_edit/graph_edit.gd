@@ -81,7 +81,8 @@ func do_zoom(factor : float):
 	var old_zoom : float = zoom
 	zoom *= factor
 	var global_mouse_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
-	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*global_mouse_position)
+	await get_tree().process_frame
+	scroll_offset += (zoom/old_zoom-1.0)*old_zoom*global_mouse_position
 
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
@@ -100,7 +101,7 @@ func get_nodes_under_mouse() -> Array:
 func process_port_click(pressed : bool):
 	for c in get_nodes_under_mouse():
 		var rect : Rect2 = c.get_global_rect()
-		var pos = get_global_mouse_position()-rect.position
+		var pos : Vector2 = get_global_mouse_position()-rect.position
 		var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
 		rect = Rect2(rect.position, rect.size*transform_scale)
 		var output_count : int = c.get_output_port_count()
