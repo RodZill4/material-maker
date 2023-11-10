@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://w3hn6xt204hc"]
 
-[ext_resource path="res://material_maker/nodes/generic/generic.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/nodes/material_export/material_export.gd" type="Script" id=2]
+[ext_resource type="PackedScene" uid="uid://o548y7t5j5ii" path="res://material_maker/nodes/generic/generic.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/nodes/material_export/material_export.gd" id="2"]
 
-[node name="MaterialExport" instance=ExtResource( 1 )]
-script = ExtResource( 2 )
+[node name="MaterialExport" instance=ExtResource("1")]
+script = ExtResource("2")

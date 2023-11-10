@@ -13,8 +13,8 @@ const REGEXS : Array = [
 	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|?:^]" },
 ]
 
-const KEYWORDS = [ "const", "if", "else", "for", "while", "break", "continue", "return",
-				   "in", "out" ]
+const KEYWORDS = [  "const", "if", "else", "for", "while", "break", "continue", "return",
+					"in", "out" ]
 
 const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",
 				"bvec2", "bvec3", "bvec4", "ivec2", "ivec3", "ivec4",
@@ -24,22 +24,23 @@ const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",
 				"sampler1dshadow", "sampler2dshadow" ]
 
 func _init():
+	super._init()
 	init_lexer(REGEXS)
 
 func create_token(type : String, value, pos_begin : int, pos_end : int) -> Token:
 	match type:
 		"FLOATCONSTANT":
-			return .create_token(type, value.to_float(), pos_begin, pos_end)
+			return super.create_token(type, value.to_float(), pos_begin, pos_end)
 		"IDENTIFIER":
 			if value in KEYWORDS:
-				return .create_token(value.to_upper(), null, pos_begin, pos_end)
+				return super.create_token(value.to_upper(), null, pos_begin, pos_end)
 			if value in TYPES:
-				return .create_token("TYPE", value.to_upper(), pos_begin, pos_end)
-			return .create_token(type, value, pos_begin, pos_end)
+				return super.create_token("TYPE", value.to_upper(), pos_begin, pos_end)
+			return super.create_token(type, value, pos_begin, pos_end)
 		"SYMBOLS":
-			return .create_token(value, null, pos_begin, pos_end)
+			return super.create_token(value, null, pos_begin, pos_end)
 		_:
-			return .create_token(type, value, pos_begin, pos_end)
+			return super.create_token(type, value, pos_begin, pos_end)
 
 var selection_regex : RegEx
 

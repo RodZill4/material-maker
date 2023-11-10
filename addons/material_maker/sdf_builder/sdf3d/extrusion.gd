@@ -48,7 +48,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	ctxt2.local_uv = "$(name_uv)_n%d_p.xy" % scene.index
 	ctxt2.uv = "$(name_uv)_n%d_p.xy" % scene.index
 	ctxt2.check = false
-	var color_code : Dictionary = .get_color_code(scene, ctxt2, editor)
+	var color_code : Dictionary = super.get_color_code(scene, ctxt2, editor)
 	if color_code.has("color"):
 		return { color = color_code.color, distance = "_n%d" % scene.index }
 	else:

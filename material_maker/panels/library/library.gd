@@ -1,18 +1,18 @@
 extends VBoxContainer
 
 
-export var library_manager_name = ""
+@export var library_manager_name = ""
 
 var expanded_items : Array = []
 
-onready var library_manager = get_node("/root/MainWindow/"+library_manager_name)
+@onready var library_manager = get_node("/root/MainWindow/"+library_manager_name)
 
 var category_buttons = {}
 
-onready var tree : Tree = $Tree
-onready var libraries_button : MenuButton = $HBoxContainer/Libraries
-onready var filter_line_edit : LineEdit = $Filter/Filter
-onready var item_menu : PopupMenu = $ItemMenu
+@onready var tree : Tree = $Tree
+@onready var libraries_button : MenuButton = $HBoxContainer/Libraries
+@onready var filter_line_edit : LineEdit = $Filter/Filter
+@onready var item_menu : PopupMenu = $ItemMenu
 #onready var dir_menu : PopupMenu = $DirMenu
 
 
@@ -24,28 +24,29 @@ func _ready() -> void:
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
-	tree.set_column_min_width(1, 36)
+	tree.set_column_custom_minimum_width(1, 36)
 	# Connect
-	library_manager.connect("libraries_changed", self, "update_tree")
+	library_manager.libraries_changed.connect(self.update_tree)
 	# Setup section buttons
 	for s in library_manager.get_sections():
 		var button : TextureButton = TextureButton.new()
-		var texture : Texture = library_manager.get_section_icon(s)
+		var texture : Texture2D = library_manager.get_section_icon(s)
 		button.name = s
 		button.texture_normal = texture
 		$SectionButtons.add_child(button)
 		category_buttons[s] = button
-		button.connect("pressed", self, "_on_Section_Button_pressed", [ s ])
-		button.connect("gui_input", self, "_on_Section_Button_event", [ s ])
-	libraries_button.get_popup().connect("id_pressed", self, "_on_Libraries_id_pressed")
+		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
+		button.connect("gui_input", self._on_Section_Button_event.bind(s))
+	libraries_button.get_popup().id_pressed.connect(self._on_Libraries_id_pressed)
 	init_expanded_items()
 	update_tree()
 
 func init_expanded_items() -> void:
-	var f = File.new()
-	if f.open("user://expanded_items.bin", File.READ) == OK:
-		var json = parse_json(f.get_as_text())
-		f.close()
+	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
+	if f:
+		var test_json_conv = JSON.new()
+		test_json_conv.parse(f.get_as_text())
+		var json = test_json_conv.get_data()
 		if json != null and json is Array:
 			expanded_items = json
 			return
@@ -59,13 +60,12 @@ func init_expanded_items() -> void:
 			expanded_items.push_back(n)
 
 func _exit_tree() -> void:
-	var f = File.new()
-	if f.open("user://expanded_items.bin", File.WRITE) == OK:
-		f.store_string(to_json(expanded_items))
-		f.close()
+	var f = FileAccess.open("user://expanded_items.bin", FileAccess.WRITE)
+	if f.is_open():
+		f.store_string(JSON.stringify(expanded_items))
 
 func _unhandled_input(event : InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.command and event.scancode == KEY_F:
+	if event is InputEventKey and event.pressed and event.is_command_or_control_pressed() and event.keycode == KEY_F:
 		filter_line_edit.grab_focus()
 		filter_line_edit.select_all()
 
@@ -73,51 +73,50 @@ func get_selected_item_name() -> String:
 	return get_item_path(tree.get_selected())
 
 func get_selected_item_doc_name() -> String:
-	var name : String = ""
+	var doc_name : String = ""
 	var item : TreeItem = tree.get_selected()
 	if item == null:
 		return ""
 	while item != tree.get_root():
-		if name == "":
-			name = item.get_text(0).to_lower()
+		if doc_name == "":
+			doc_name = item.get_text(0).to_lower()
 		else:
-			name = item.get_text(0).to_lower()+"_"+name
+			doc_name = item.get_text(0).to_lower()+"_"+doc_name
 		item = item.get_parent()
-	return name.replace(" ", "_")
+	return doc_name.replace(" ", "_")
 
-func get_expanded_items(item : TreeItem = null) -> PoolStringArray:
-	var rv : PoolStringArray = PoolStringArray()
+func get_expanded_items(item : TreeItem = null) -> PackedStringArray:
+	var rv : PackedStringArray = PackedStringArray()
 	if item == null:
 		item = tree.get_root()
 		if item == null:
 			return rv
 	elif !item.collapsed:
 		rv.push_back(get_item_path(item))
-	var i = item.get_children()
-	while i != null:
+	var items : Array[TreeItem] = item.get_children()
+	for i in items:
 		rv.append_array(get_expanded_items(i))
-		i = i.get_next()
 	return rv
 
 func update_category_button(category : String) -> void:
 	if library_manager.is_section_enabled(category):
 		category_buttons[category].material = null
-		category_buttons[category].hint_tooltip = category+"\nLeft click to show\nRight click to disable"
+		category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 	else:
 		category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
-		category_buttons[category].hint_tooltip = category+"\nRight click to enable"
+		category_buttons[category].tooltip_text = category+"\nRight click to enable"
 
 func update_tree() -> void:
 	# update category buttons
 	for c in category_buttons.keys():
 		update_category_button(c)
 	# update tree
-	var filter : String = $Filter/Filter.text.to_lower()
+	var filter : String = filter_line_edit.text.to_lower()
 	tree.clear()
 	tree.create_item()
 	for i in library_manager.get_items(filter):
 		add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
-	$Tree.update()
+	tree.queue_redraw()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
 	if item_parent == null:
@@ -126,12 +125,10 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 	var slash_position = item_name.find("/")
 	if slash_position == -1:
 		var new_item : TreeItem = null
-		var c = item_parent.get_children()
-		while c != null:
+		for c in item_parent.get_children():
 			if c.get_text(0) == item_name:
 				new_item = c
 				break
-			c = c.get_next()
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
 			new_item.set_text(0, TranslationServer.translate(item_name))
@@ -144,14 +141,12 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 		return new_item
 	else:
 		var prefix = TranslationServer.translate(item_name.left(slash_position))
-		var suffix = item_name.right(slash_position+1)
+		var suffix = item_name.right(-(slash_position+1))
 		var new_parent = null
-		var c = item_parent.get_children()
-		while c != null:
+		for c in item_parent.get_children():
 			if c.get_text(0) == prefix:
 				new_parent = c
 				break
-			c = c.get_next()
 		if new_parent == null:
 			new_parent = tree.create_item(item_parent)
 			new_parent.set_text(0, TranslationServer.translate(prefix))
@@ -175,12 +170,12 @@ func _on_Filter_text_changed(_filter : String) -> void:
 	update_tree()
 
 # Should be moved to library manager
-func generate_screenshots(graph_edit, item : TreeItem = null) -> int:
+func generate_screenshots(graph_edit, parent_item : TreeItem = null) -> int:
 	var count : int = 0
-	if item == null:
-		item = tree.get_root()
-	item = item.get_children()
-	while item != null:
+	if parent_item == null:
+		parent_item = tree.get_root()
+	var items : Array[TreeItem] = parent_item.get_children()
+	for item in items:
 		if item.get_metadata(0) != null:
 			var timer : Timer = Timer.new()
 			add_child(timer)
@@ -188,21 +183,18 @@ func generate_screenshots(graph_edit, item : TreeItem = null) -> int:
 			timer.wait_time = 0.05
 			timer.one_shot = true
 			timer.start()
-			yield(timer, "timeout")
+			await timer.timeout
 			var image = get_viewport().get_texture().get_data()
 			image.flip_y()
-			image = image.get_rect(Rect2(new_nodes[0].rect_global_position, new_nodes[0].rect_size+Vector2(0, 2)))
+			image = image.get_rect(Rect2(new_nodes[0].global_position, new_nodes[0].size+Vector2(0, 2)))
 			print(get_icon_name(get_item_path(item)))
 			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
 			for n in new_nodes:
 				graph_edit.remove_node(n)
 			timer.queue_free()
 			count += 1
-		var result = generate_screenshots(graph_edit, item)
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await generate_screenshots(graph_edit, item)
 		count += result
-		item = item.get_next()
 	return count
 
 func _on_Tree_item_collapsed(item) -> void:
@@ -212,34 +204,32 @@ func _on_Tree_item_collapsed(item) -> void:
 			var index = expanded_items.find(path)
 			if index == -1:
 				break
-			expanded_items.remove(index)
+			expanded_items.remove_at(index)
 	else:
 		expanded_items.push_back(path)
 
 
 func _on_SectionButtons_resized():
-	$SectionButtons.columns = $SectionButtons.rect_size.x / 33
+	$SectionButtons.columns = $SectionButtons.size.x / 33
 
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:
-	var item : TreeItem = $Tree.get_root().get_children()
-	while item != null:
+	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			$Tree.ensure_cursor_is_visible()
+			tree.ensure_cursor_is_visible()
 			break
-		item = item.get_next()
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == BUTTON_RIGHT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		if library_manager.toggle_section(category):
 			category_buttons[category].material = null
-			category_buttons[category].hint_tooltip = category+"\nLeft click to show\nRight click to disable"
+			category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 		else:
 			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
-			category_buttons[category].hint_tooltip = category+"\nRight click to enable"
+			category_buttons[category].tooltip_text = category+"\nRight click to enable"
 			if current_category == category:
 				current_category = ""
 
@@ -254,7 +244,7 @@ func _on_Libraries_about_to_show():
 		unload = PopupMenu.new()
 		unload.name = "Unload"
 		popup.add_child(unload)
-		unload.connect("id_pressed", self, "_on_Libraries_Unload_id_pressed")
+		unload.id_pressed.connect(self._on_Libraries_Unload_id_pressed)
 	popup.clear()
 	unload.clear()
 	for i in library_manager.get_child_count():
@@ -267,36 +257,34 @@ func _on_Libraries_about_to_show():
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
 
-func on_html5_load_file(file_name, file_type, file_data):
+func on_html5_load_file(file_name, _file_type, file_data):
 	match file_name.get_extension():
 		"json":
 			library_manager.load_library(file_name, file_data)
 
 func _on_Libraries_id_pressed(id : int) -> void:
+	print(id)
 	match id:
 		MENU_CREATE_LIBRARY:
-			var dialog = preload("res://material_maker/panels/library/create_lib_dialog.tscn").instance()
+			var dialog = preload("res://material_maker/panels/library/create_lib_dialog.tscn").instantiate()
 			add_child(dialog)
-			var status = dialog.enter_info()
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+			var status = await dialog.enter_info()
 			if status.ok:
 				library_manager.create_library(status.path, status.name)
 		MENU_LOAD_LIBRARY:
 			if OS.get_name() == "HTML5":
-				if ! Html5.is_connected("file_loaded", self, "on_html5_load_file"):
-					Html5.connect("file_loaded", self, "on_html5_load_file")
-				Html5.load_file(".json")
+				pass
+				# TODO: Fix this
+#				if ! Html5.is_connected("file_loaded",Callable(self,"on_html5_load_file")):
+#					Html5.connect("file_loaded",Callable(self,"on_html5_load_file"))
+#				Html5.load_file(".json")
 			else:
-				var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-				add_child(dialog)
-				dialog.rect_min_size = Vector2(500, 500)
+				var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+				dialog.min_size = Vector2(500, 500)
 				dialog.access = FileDialog.ACCESS_FILESYSTEM
-				dialog.mode = FileDialog.MODE_OPEN_FILE
+				dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 				dialog.add_filter("*.json;Material Maker Library")
-				var files = dialog.select_files()
-				while files is GDScriptFunctionState:
-					files = yield(files, "completed")
+				var files = await dialog.select_files()
 				if files.size() == 1:
 					library_manager.load_library(files[0])
 		_:
@@ -307,28 +295,30 @@ func _on_Libraries_Unload_id_pressed(id : int) -> void:
 
 var current_item : TreeItem
 
-func _on_Tree_item_rmb_selected(position):
-	current_item = $Tree.get_item_at_position(position)
-	if current_item.get_metadata(1) != null:
-		item_menu.popup(Rect2(get_global_mouse_position(), item_menu.get_minimum_size()))
+func _on_tree_item_mouse_selected(mouse_position : Vector2i, mouse_button_index : int):
+	if mouse_button_index == MOUSE_BUTTON_RIGHT:
+		_on_Tree_item_rmb_selected(mouse_position)
 
-func _on_PopupMenu_about_to_show():
-	var library_index : int = current_item.get_metadata(1)
-	var read_only : bool = library_manager.get_child(library_index).read_only
-	item_menu.set_item_disabled(0, read_only)
-	item_menu.set_item_disabled(1, read_only)
-	item_menu.set_item_disabled(2, read_only)
+func _on_Tree_item_rmb_selected(mouse_position : Vector2i):
+	current_item = tree.get_item_at_position(mouse_position)
+	if current_item.get_metadata(1) != null:
+		var library_index : int = current_item.get_metadata(1)
+		var read_only : bool = library_manager.get_child(library_index).read_only
+		item_menu.set_item_disabled(0, read_only)
+		item_menu.set_item_disabled(1, read_only)
+		item_menu.set_item_disabled(2, read_only)
+		item_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 
 func _on_PopupMenu_index_pressed(index):
-	var library_index : int = current_item.get_metadata(1)
+	var library_index : int = 0
+	if current_item:
+		library_index = current_item.get_metadata(1)
 	var item_path : String = get_item_path(current_item)
 	match index:
 		0: # Rename
-			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 			add_child(dialog)
-			var status = dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+			var status = await dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
 			if status.ok:
 				library_manager.rename_item_in_library(library_index, item_path, status.text)
 		1: # Update thumbnail
@@ -336,9 +326,7 @@ func _on_PopupMenu_index_pressed(index):
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
 			if current_node == null:
 				return
-			var result = current_node.generator.render(self, 0, 64, true)
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+			var result = await current_node.generator.render(self, 0, 64, true)
 			var image : Image = result.get_image()
 			result.release(self)
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
@@ -346,11 +334,9 @@ func _on_PopupMenu_index_pressed(index):
 			library_manager.remove_item_from_library(library_index, item_path)
 		4: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
-			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 			add_child(dialog)
-			var status = dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
-			while status is GDScriptFunctionState:
-				status = yield(status, "completed")
+			var status = await dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
 			if ! status.ok:
 				return
 			library_manager.set_aliases(item_path, status.text)
@@ -359,13 +345,10 @@ func update_from_locale() -> void:
 	update_tree()
 
 func _on_GetFromWebsite_pressed():
-	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
-	add_child(dialog)
-	var result = dialog.select_asset(3, true)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
+	var result = await dialog.select_asset(3, true)
 	if result is Dictionary and result.has("index"):
 		var graph_edit : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
 		if graph_edit != null:
-			var gens = mm_loader.get_generator_list()
-			graph_edit.create_gen_from_type("website:%d" % result.index)
+			mm_loader.get_generator_list()
+			await graph_edit.create_gen_from_type("website:%d" % result.index)

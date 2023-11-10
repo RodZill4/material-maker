@@ -7,12 +7,6 @@
 			"to_port": 0
 		},
 		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "buffer_2",
-			"to_port": 0
-		},
-		{
 			"from": "fast_blur_shader",
 			"from_port": 0,
 			"to": "buffer_3",
@@ -35,6 +29,18 @@
 			"from_port": 2,
 			"to": "gen_outputs",
 			"to_port": 2
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "ensure_greyscale",
+			"to_port": 0
+		},
+		{
+			"from": "ensure_greyscale",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
 		}
 	],
 	"label": "Fast Blur",
@@ -48,8 +54,8 @@
 		{
 			"name": "fast_blur_shader",
 			"node_position": {
-				"x": -160,
-				"y": 123
+				"x": -157,
+				"y": 127
 			},
 			"parameters": {
 				"quality": 1,
@@ -62,7 +68,7 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -187,
+				"x": -183,
 				"y": 61.5
 			},
 			"parameters": {
@@ -129,8 +135,8 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -254.5,
-				"y": -122.5
+				"x": -321.5,
+				"y": -230.5
 			},
 			"parameters": {
 				"param0": 11,
@@ -202,8 +208,8 @@
 		{
 			"name": "buffer_3",
 			"node_position": {
-				"x": -194.700012,
-				"y": 213.5
+				"x": -186.700012207031,
+				"y": 252.5
 			},
 			"parameters": {
 				"size": 11
@@ -211,6 +217,45 @@
 			"seed": -48026,
 			"type": "buffer",
 			"version": 1
+		},
+		{
+			"name": "ensure_greyscale",
+			"node_position": {
+				"x": -170.533325195313,
+				"y": -20.25
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(0.0)",
+						"label": "",
+						"longdesc": "The input greyscale image",
+						"name": "input",
+						"shortdesc": "Input",
+						"type": "rgba"
+					}
+				],
+				"instance": "",
+				"longdesc": "Convert the input to RGBA",
+				"name": "EnsureRGBA",
+				"outputs": [
+					{
+						"longdesc": "The remapped greyscale image",
+						"rgba": "$input($uv)",
+						"shortdesc": "Output",
+						"type": "rgba"
+					}
+				],
+				"parameters": [],
+				"shortdesc": "EnsureRGBA"
+			},
+			"type": "shader"
 		}
 	],
 	"parameters": {

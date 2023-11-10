@@ -16,7 +16,7 @@
 		],
 		"global": [
 			"vec3 circle_repeat_transform(vec3 p, float count) {",
-			"\tfloat r = 6.28/count;",
+			"\tfloat r = 6.28318530718/count;",
 			"\tfloat pa = atan(p.x, p.y);",
 			"\tfloat a = mod(pa+0.5*r, r)-0.5*r;",
 			"\tvec3 rv;",

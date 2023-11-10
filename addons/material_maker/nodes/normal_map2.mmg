@@ -1,12 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 0
-		},
-		{
 			"from": "edge_detect_1",
 			"from_port": 0,
 			"to": "gen_outputs",
@@ -19,28 +13,28 @@
 			"to_port": 0
 		},
 		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "pack_2x32_to_4x16_3",
-			"to_port": 0
-		},
-		{
-			"from": "pack_2x32_to_4x16_3",
-			"from_port": 0,
-			"to": "buffer",
-			"to_port": 0
-		},
-		{
-			"from": "buffer",
-			"from_port": 0,
-			"to": "pack_4x16_to_2x32_3",
-			"to_port": 0
-		},
-		{
-			"from": "pack_4x16_to_2x32_3",
+			"from": "buffer_2",
 			"from_port": 0,
 			"to": "switch",
 			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "ensure_greyscale",
+			"to_port": 0
+		},
+		{
+			"from": "ensure_greyscale",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
 		}
 	],
 	"label": "Normal Map",
@@ -52,23 +46,10 @@
 	},
 	"nodes": [
 		{
-			"name": "buffer",
-			"node_position": {
-				"x": -695.663818,
-				"y": -44.39386
-			},
-			"parameters": {
-				"lod": 0,
-				"size": 10
-			},
-			"seed": -32011,
-			"type": "buffer"
-		},
-		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -802.910156,
-				"y": -293.916687
+				"x": -802.91015625,
+				"y": -293.916687011719
 			},
 			"parameters": {
 				"buffer": 1,
@@ -96,11 +77,11 @@
 					"label": "",
 					"linked_widgets": [
 						{
-							"node": "buffer",
+							"node": "edge_detect_1",
 							"widget": "size"
 						},
 						{
-							"node": "edge_detect_1",
+							"node": "buffer_2",
 							"widget": "size"
 						}
 					],
@@ -156,8 +137,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -445.663818,
-				"y": 75.047363
+				"x": -458.663818359375,
+				"y": 73.04736328125
 			},
 			"parameters": {
 
@@ -177,8 +158,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1094.910156,
-				"y": 74.047363
+				"x": -1147.91015625,
+				"y": 77.9473648071289
 			},
 			"parameters": {
 
@@ -199,8 +180,8 @@
 		{
 			"name": "switch",
 			"node_position": {
-				"x": -675.5,
-				"y": 110.297363
+				"x": -683.5,
+				"y": 141.29736328125
 			},
 			"parameters": {
 				"choices": 2,
@@ -213,8 +194,8 @@
 		{
 			"name": "edge_detect_1",
 			"node_position": {
-				"x": -674.092529,
-				"y": 211.868774
+				"x": -691.092529296875,
+				"y": 239.868774414063
 			},
 			"parameters": {
 				"algo": 0,
@@ -329,28 +310,32 @@
 			"type": "shader"
 		},
 		{
-			"name": "pack_2x32_to_4x16_3",
+			"name": "buffer_2",
 			"node_position": {
-				"x": -695.7901,
-				"y": -104.091614
+				"x": -702.5,
+				"y": -27.0291137695313
 			},
 			"parameters": {
-
+				"f32": true,
+				"filter": true,
+				"mipmap": false,
+				"size": 10
 			},
 			"seed_int": 0,
-			"type": "pack_1x32_to_2x16"
+			"type": "buffer",
+			"version": 2
 		},
 		{
-			"name": "pack_4x16_to_2x32_3",
+			"name": "ensure_greyscale",
 			"node_position": {
-				"x": -698.7901,
-				"y": 46.908386
+				"x": -703.5,
+				"y": -84.9617156982422
 			},
 			"parameters": {
 
 			},
 			"seed_int": 0,
-			"type": "pack_2x16_to_1x32"
+			"type": "ensure_greyscale"
 		}
 	],
 	"parameters": {

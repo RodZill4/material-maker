@@ -1,8 +1,8 @@
-extends WindowDialog
+extends Window
 
-onready var application_name_label = $HBoxContainer/VBoxContainer/HBoxContainer3/VBoxContainer/ApplicationName
-onready var authors_grid = $HBoxContainer/VBoxContainer/VBoxContainer/Authors/List
-onready var patrons_list = $HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/Patrons
+@onready var application_name_label = $HBoxContainer/VBoxContainer/HBoxContainer3/VBoxContainer/ApplicationName
+@onready var authors_grid = $HBoxContainer/VBoxContainer/VBoxContainer/Authors/List
+@onready var patrons_list = $HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/Patrons
 
 const CONTRIBUTORS = [
 	{ name="Rodolphe Suescun", contribution="Lead developer" },
@@ -43,7 +43,7 @@ const PATRONS2 = [
 ]
 
 func _ready() -> void:
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		application_name_label.text = "Material Maker"
 	else:
 		application_name_label.text = ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release")
@@ -52,7 +52,7 @@ func _ready() -> void:
 		label.text = c.name
 		authors_grid.add_child(label)
 		label = Label.new()
-		label.autowrap = true
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		label.text = c.contribution
 		authors_grid.add_child(label)
 	for p in PATRONS:

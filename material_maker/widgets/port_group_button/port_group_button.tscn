@@ -1,16 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://bi88rsdxt0ld7"]
 
-[ext_resource path="res://material_maker/widgets/port_group_button/port_group_button.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/icons/port_group_0.tres" type="Texture" id=2]
+[ext_resource type="Script" path="res://material_maker/widgets/port_group_button/port_group_button.gd" id="1"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/port_group_0.tres" id="2"]
 
 [node name="PortGroupButton" type="TextureButton" groups=["port_group_button"]]
-margin_right = 16.0
-margin_bottom = 16.0
-hint_tooltip = "Click to define port groups"
+offset_right = 16.0
+offset_bottom = 16.0
+tooltip_text = "Click to define port groups"
 size_flags_vertical = 4
-texture_normal = ExtResource( 2 )
+texture_normal = ExtResource("2")
 stretch_mode = 2
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }

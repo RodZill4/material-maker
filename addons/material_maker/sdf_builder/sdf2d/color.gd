@@ -1,8 +1,8 @@
 extends "res://addons/material_maker/sdf_builder/sdf2d/union.gd"
 
 
-export var channel_name : String
-export(int, "greyscale", "rgb", "rgba") var type : int
+@export var channel_name : String
+@export var type : int # (int, "greyscale", "rgb", "rgba")
 
 
 func _ready():
@@ -36,6 +36,6 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 		ctxt2.uv = ctxt.local_uv
 	for s in scene.children:
 		var color_code : Dictionary = mm_sdf_builder.get_color_code(s, ctxt2, editor)
-		if ! color_code.empty():
+		if ! color_code.is_empty():
 			return { color = ctxt.target+" = "+color_code.color+";" }
 	return {}

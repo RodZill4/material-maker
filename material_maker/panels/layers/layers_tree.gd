@@ -16,12 +16,12 @@ signal selection_changed(old_selected, new_selected)
 
 func _ready():
 	set_column_expand(1, false)
-	set_column_min_width(1, 30)
+	set_column_custom_minimum_width(1, 30)
 
 func _make_custom_tooltip(for_text):
 	if for_text == "":
 		return null
-	var panel = preload("res://material_maker/panels/layers/layer_tooltip.tscn").instance()
+	var panel = preload("res://material_maker/panels/layers/layer_tooltip.tscn").instantiate()
 	var item : TreeItem = instance_from_id(int(for_text)) as TreeItem
 	panel.set_layer(item.get_meta("layer"))
 	return panel
@@ -39,13 +39,13 @@ func do_update_from_layers(layers_array : Array, item : TreeItem, selected_layer
 		new_item.add_button(1, BUTTON_HIDDEN if l.hidden else BUTTON_SHOWN, 0)
 		new_item.set_editable(0, false)
 		new_item.set_meta("layer", l)
-		new_item.set_tooltip(0, str(new_item.get_instance_id()))
+		new_item.set_tooltip_text(0, str(new_item.get_instance_id()))
 		if l == selected_layer:
 			new_item.select(0)
 			selected_item = new_item
 		do_update_from_layers(l.layers, new_item, selected_layer)
 
-func get_drag_data(_position : Vector2):
+func _get_drag_data(_position : Vector2):
 	var layer = get_selected().get_meta("layer")
 	var label : Label = Label.new()
 	label.text = layer.name
@@ -59,25 +59,25 @@ func item_is_child(i1 : TreeItem, i2 : TreeItem):
 		i1 = i1.get_parent()
 	return false
 
-func can_drop_data(position : Vector2, data):
+func _can_drop_data(pos : Vector2, data):
 	drop_mode_flags = DROP_MODE_ON_ITEM | DROP_MODE_INBETWEEN
-	var target_item = get_item_at_position(position)
+	var target_item = get_item_at_position(pos)
 	if target_item != null and !item_is_child(target_item, data):
 		return true
 	return false
 
-static func get_item_index(item : TreeItem) -> int:
+func get_item_index(item : TreeItem) -> int:
 	var rv : int = 0
 	while item.get_prev() != null:
 		item = item.get_prev()
 		rv += 1
 	return rv
 
-func drop_data(position : Vector2, data):
-	var target_item : TreeItem = get_item_at_position(position)
+func _drop_data(pos : Vector2, data):
+	var target_item : TreeItem = get_item_at_position(pos)
 	if data != null and target_item != null and !item_is_child(target_item, data):
 		var layer = data.get_meta("layer")
-		match get_drop_section_at_position(position):
+		match get_drop_section_at_position(pos):
 			0:
 				layers.move_layer_into(layer, target_item.get_meta("layer"))
 			-1:
@@ -105,7 +105,7 @@ func _on_Tree_cell_selected():
 		emit_signal("selection_changed", selected_item, get_selected())
 
 func _on_Tree_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed and selected_item != null and just_selected:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and !event.pressed and selected_item != null and just_selected:
 		selected_item.set_editable(0, true)
 		just_selected = false
 

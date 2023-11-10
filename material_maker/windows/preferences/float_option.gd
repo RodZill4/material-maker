@@ -1,6 +1,6 @@
 extends "res://material_maker/widgets/float_edit/float_edit.gd"
 
-export var config_variable : String
+@export var config_variable : String
 
 func _ready() -> void:
 	pass

@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://byqr5nxyt3n1u"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_8vydb"]
+
+[resource]
+script = ExtResource("1_8vydb")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
+@DECLARATIONS
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+vec4 average(vec2 uv) {
+	return texture(mm_texture_acc, uv)/mm_iteration;
+}
+
+vec4 denoise_1(vec2 uv, vec2 duv, int radius) {
+	vec4 color = vec4(0.0);
+	float weight = 0.0;
+	for (int y = -radius; y < radius+1; y++) {
+		for (int x = -radius; x < radius+1; x++) {
+			vec4 col = average(uv + vec2(ivec2(x, y))*duv);
+			color += col;
+			weight += 1.0;
+		}
+	}
+	return color / weight;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  Copyright (c) 2018-2019 Michele Morrone
+//  All rights reserved.
+//
+//  https://michelemorrone.eu - https://BrutPitt.com
+//
+//  me@michelemorrone.eu - brutpitt@gmail.com
+//  twitter: @BrutPitt - github: BrutPitt
+//  
+//  https://github.com/BrutPitt/glslSmartDeNoise/
+//
+//  This software is distributed under the terms of the BSD 2-Clause license
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  smartDeNoise - parameters
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//  sampler2D tex	 - sampler image / texture
+//  vec2 uv		   - actual fragment coord
+//  float sigma  >  0 - sigma Standard Deviation
+//  float kSigma >= 0 - sigma coefficient 
+//	  kSigma * sigma  -->  radius of the circular kernel
+//  float threshold   - edge sharpening threshold 
+vec4 denoise_2(vec2 uv, vec2 size, float sigma, float kSigma, float threshold) {
+	float INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI
+	float INV_PI = 0.31830988618379067153776752674503;
+	float radius = round(kSigma*sigma);
+	float radQ = radius * radius;
+
+	float invSigmaQx2 = .5 / (sigma * sigma);	  // 1.0 / (sigma^2 * 2.0)
+	float invSigmaQx2PI = INV_PI * invSigmaQx2;	// 1/(2 * PI * sigma^2)
+
+	float invThresholdSqx2 = .5 / (threshold * threshold);	 // 1.0 / (sigma^2 * 2.0)
+	float invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)
+
+	vec4 centrPx = average(uv); 
+
+	float zBuff = 0.0;
+	vec4 aBuff = vec4(0.0);
+
+	for (float dx=-radius; dx <= radius; dx++) {
+		float pt = sqrt(radQ-dx*dx);	   // pt = yRadius: have circular trend
+		for (float dy=-pt; dy <= pt; dy++) {
+			vec2 d = vec2(dx, dy);
+			float blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;
+
+			vec4 walkPx =  average(uv+d/size);
+			vec4 dC = walkPx-centrPx;
+			float deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;
+
+			zBuff += deltaFactor;
+			aBuff += deltaFactor*walkPx;
+		}
+	}
+	return aBuff/zBuff;
+}
+
+void main() {
+	vec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);
+	vec2 image_size = imageSize(OUTPUT_TEXTURE);
+	vec2 uv = pixel/image_size;
+	vec4 outColor;
+	if (mm_denoise == 1) {
+		outColor = denoise_1(uv, 1.0/image_size, mm_denoise_radius);
+	} else if (mm_denoise == 2) {
+		outColor = denoise_2(uv, image_size, mm_denoise_sigma, mm_denoise_ksigma, mm_denoise_threshold);
+	} else {
+		outColor = average(uv);
+	}
+	outColor = vec4(pow(outColor.rgb, vec3(mm_exponent)), outColor.a);
+	imageStore(OUTPUT_TEXTURE, ivec2(pixel), outColor);
+}"

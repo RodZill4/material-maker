@@ -1,7 +1,7 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
 
-export var op_sign : String = "-"
+@export var op_sign : String = "-"
 
 
 func get_parameter_defs():

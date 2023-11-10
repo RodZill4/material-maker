@@ -1,30 +1,37 @@
 extends Control
 
-var loader : ResourceInteractiveLoader
 
-onready var progress_bar = $VBoxContainer/ProgressBar
+var resource_path : String
+
+
+@onready var progress_bar = $VBoxContainer/ProgressBar
+
 
 func _ready():
+	get_window().size = Vector2(800, 600)
 	randomize()
 	set_process(false)
-	var resource_path : String
-	if Directory.new().file_exists("res://material_maker/main_window.tscn"):
+	var dir : DirAccess
+	# TODO: Fix this
+	if ResourceLoader.exists("res://material_maker/main_window.tscn"):
+		print("loading MM")
+		print(size)
 		if ("--export" in OS.get_cmdline_args()) or ("--export-material" in OS.get_cmdline_args()):
 			var output = []
-			var dir : Directory = Directory.new()
 			match OS.get_name():
 				"Windows":
 					var bat_file_path : String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)+"\\mm_cd.bat"
-					var bat_file : File = File.new()
-					bat_file.open(bat_file_path, File.WRITE)
+					var bat_file : FileAccess = FileAccess.open(bat_file_path, FileAccess.WRITE)
 					bat_file.store_line("cd")
 					bat_file.close()
-					OS.execute(bat_file_path, [], true, output)
-					dir.remove(bat_file_path)
-					dir.change_dir(output[0].split("\n")[2])
+					OS.execute(bat_file_path, [], output)
+					#TODO: fix this
+					#dir.remove(bat_file_path)
+					#FileAccess.change_dir(output[0].split("\n")[2])
 			var target : String = "Godot/Godot 4 Standard"
-			var output_dir : String = dir.get_current_dir()
-			var size : int = 0
+			#TODO: fix this
+			var output_dir : String = "" #DirAccess.get_current_dir()
+			var texture_size : int = 0
 			var files : Array = []
 			var i = 1
 			while i < OS.get_cmdline_args().size():
@@ -37,14 +44,14 @@ func _ready():
 						output_dir = OS.get_cmdline_args()[i]
 					"--size":
 						i += 1
-						size = int(OS.get_cmdline_args()[i])
-						if size < 0:
+						texture_size = int(OS.get_cmdline_args()[i])
+						if texture_size < 0:
 							show_error("ERROR: incorrect size "+OS.get_cmdline_args()[i])
 							return
 					_:
 						files.push_back(OS.get_cmdline_args()[i])
 				i += 1
-			if !dir.dir_exists(output_dir):
+			if ! dir.dir_exists(output_dir):
 				show_error("ERROR: Output directory '%s' does not exist" % output_dir)
 				return
 			var expanded_files = []
@@ -55,10 +62,11 @@ func _ready():
 				var basename : String = f.get_file()
 				if basename.find("*") != -1:
 					basename = basename.replace("*", ".*")
-					if dir.open(basedir) == OK:
+					dir = DirAccess.open(basedir)
+					if dir.is_open():
 						var regex : RegEx = RegEx.new()
 						regex.compile("^"+basename+"$")
-						dir.list_dir_begin()
+						dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 						var file_name = dir.get_next()
 						while file_name != "":
 							if regex.search(file_name) and file_name.get_extension() == "ptex":
@@ -73,57 +81,59 @@ func _ready():
 	else:
 		resource_path = "res://demo/demo.tscn"
 	
-	var patrons = $Background.permutations(preload("res://material_maker/windows/about/about.gd").PATRONS, 3)
-	$VBoxContainer/Patreon.text = "Join %s, %s and %s in supporting this project on Patreon and help us continue to improve our software." % [patrons[0], patrons[1], patrons[2]]
-	
+	await get_tree().process_frame
+
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
-	
-	loader = ResourceLoader.load_interactive(resource_path)
-	if loader != null: # check for errors
+
+	# TODO: enable threaded loading
+	if false:
+		start_ui(ResourceLoader.load(resource_path))
+	elif ResourceLoader.load_threaded_request(resource_path) == OK: # check for errors
 		set_process(true)
 
-func start_ui():
+func start_ui(scene):
 	if OS.get_name() == "HTML5":
-		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = """
 			This HTML5 version of Material Maker has many limitations (such as lack of export, 16 bits rendering and 3D model painting) and is meant for evaluation only.
 			If you intend to use this software seriously, it is recommended to download a Windows, MacOS or Linux version.
 			Note there's a known 3D preview rendering problem in Safari.
 		"""
 		add_child(dialog)
-		var result = dialog.ask()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		await dialog.ask()
 	var root = get_tree().root
 	# Remove the current scene
 	root.remove_child(self)
 	call_deferred("free")
 	# Add the next scene
 	progress_bar.value = 100.0
-	var scene = loader.get_resource()
-	var instance = scene.instance()
+	var instance = scene.instantiate()
 	root.add_child(instance)
-	
+
 var wait : float = 0.0
 func _process(delta) -> void:
 	wait += delta
 	if wait < 0.01:
 		return
 	wait = 0.0
-	var err = loader.poll()
-	if err == ERR_FILE_EOF:
-		set_process(false)
-		start_ui()
-	elif err == OK:
-		progress_bar.value = 100.0*float(loader.get_stage()) / loader.get_stage_count()
+	var percent : Array = []
+	var status = ResourceLoader.load_threaded_get_status(resource_path, percent)
+	match status:
+		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			progress_bar.value = percent[0]*100
+		ResourceLoader.THREAD_LOAD_LOADED:
+			set_process(false)
+			start_ui(ResourceLoader.load_threaded_get(resource_path))
+		_:
+			print("error "+str(status))
 
-func export_files(files, output_dir, target, size) -> void:
+func export_files(files, output_dir, target, image_size) -> void:
 	$VBoxContainer/ProgressBar.min_value = 0
 	$VBoxContainer/ProgressBar.max_value = files.size()
 	$VBoxContainer/ProgressBar.value = 0
 	for f in files:
-		var gen = mm_loader.load_gen(f)
+		var gen = await mm_loader.load_gen(f)
 		if gen != null:
 			add_child(gen)
 			for c in gen.get_children():
@@ -136,9 +146,7 @@ func export_files(files, output_dir, target, size) -> void:
 					$VBoxContainer/Label.text = export_msg
 					print(export_msg)
 					var prefix : String = output_dir+"/"+f.get_file().get_basename()
-					var result = c.export_material(prefix, target, size)
-					while result is GDScriptFunctionState:
-						result = yield(result, "completed")
+					await c.export_material(prefix, target, image_size)
 			gen.queue_free()
 		$VBoxContainer/ProgressBar.value += 1
 	get_tree().quit()

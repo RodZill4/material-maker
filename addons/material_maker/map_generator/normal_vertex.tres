@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://kud0k3gj8htv"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_w0xod"]
+
+[resource]
+script = ExtResource("1_w0xod")
+text = "#version 450
+
+layout(location = 1) out vec3 output_color;
+
+layout(binding = 0, std430) buffer restrict readonly Positions {
+	float positions[];
+};
+layout(binding = 1, std430) buffer restrict readonly AABB {
+	float aabb[];
+};
+layout(binding = 2, std430) buffer restrict readonly Normals {
+	float normals[];
+};
+layout(binding = 3, std430) buffer restrict readonly Tangents {
+	float tangents[];
+};
+layout(binding = 4, std430) buffer restrict readonly UVs {
+	vec2 uvs[];
+};
+
+void main() {
+	vec3 normal = vec3(normals[3*gl_VertexIndex], normals[3*gl_VertexIndex+1], normals[3*gl_VertexIndex+2]);
+	gl_Position = vec4(uvs[gl_VertexIndex]*2.0-vec2(1.0), 0.0, 1.0);
+	output_color = normal;
+}
+"

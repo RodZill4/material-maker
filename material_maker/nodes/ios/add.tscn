@@ -1,17 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://dfd4ymqyv4wqr"]
 
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 
-
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 50, 1, 12, 14 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("1")
+region = Rect2(50, 1, 12, 14)
 
 [node name="Add" type="Button"]
-margin_left = 16.0
-margin_top = 44.0
-margin_right = 40.0
-margin_bottom = 64.0
+offset_left = 16.0
+offset_top = 44.0
+offset_right = 40.0
+offset_bottom = 64.0
 size_flags_horizontal = 0
-icon = SubResource( 4 )
+icon = SubResource("4")

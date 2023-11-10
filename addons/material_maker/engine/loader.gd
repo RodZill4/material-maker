@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 var predefined_generators : Dictionary = {}
@@ -23,14 +23,14 @@ func get_predefined_generators_from_dir(path : String) -> void:
 	var parser
 	if CHECK_PREDEFINED:
 		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
-	var dir = Directory.new()
-	if dir.open(path) == OK:
+	var dir : DirAccess = DirAccess.open(path)
+	if dir != null:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.get_extension() == "mmg":
-				var file : File = File.new()
-				if file.open(path+"/"+file_name, File.READ) == OK:
+				var file : FileAccess = FileAccess.open(path+"/"+file_name, FileAccess.READ)
+				if file.is_open():
 					var generator = string_to_dict_tree(file.get_as_text())
 					if CHECK_PREDEFINED:
 						if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
@@ -53,39 +53,40 @@ func get_predefined_generators_from_dir(path : String) -> void:
 					var node_name : String = file_name.get_basename()
 					if node_name.left(8) == "website_":
 						node_name[7] = ":"
-					predefined_generators[node_name] = generator
-					file.close()
+					predefined_generators[file_name.get_basename()] = generator
 			file_name = dir.get_next()
 
-func update_predefined_generators() -> void:
+func update_predefined_generators()-> void:
+	var parser
+	if CHECK_PREDEFINED:
+		parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 	predefined_generators = {}
 	predefined_functions = {}
 	for path in MMPaths.get_nodes_paths():
 		get_predefined_generators_from_dir(path)
 	if false:
-		var file : File = File.new()
-		if file.open("predefined_nodes.json", File.WRITE) == OK:
-			file.store_string(to_json(predefined_generators))
+		var file : FileAccess = FileAccess.open("predefined_nodes.json", FileAccess.WRITE)
+		if file.is_open():
+			file.store_string(JSON.stringify(predefined_generators))
 			file.close()
 
 func get_node_from_website(node_name : String) -> bool:
-	var node_id : String = node_name.right(8)
+	var node_id : String = node_name.right(-8)
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
 	var error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+node_id)
 	if error != OK:
 		return false
-	var result = yield(http_request, "request_completed")
+	var result = await http_request.request_completed
 	if ! result is Array or result[0] != 0 or result[1] != 200:
 		return false
-	var json : JSONParseResult = JSON.parse(result[3].get_string_from_ascii())
-	if json.error != OK or ! json.result is Dictionary:
+	var json : JSON = JSON.new()
+	if json.parse(result[3].get_string_from_ascii()) != OK or ! json.data is Dictionary:
 		return false
-	predefined_generators[node_name] = string_to_dict_tree(json.result.json)
-	var dir : Directory = Directory.new()
-	dir.make_dir_recursive(SHARED_NODES_DIR)
-	var file : File = File.new()
-	if file.open(SHARED_NODES_DIR+"/website_"+node_id+".mmg", File.WRITE) == OK:
+	predefined_generators[node_name] = string_to_dict_tree(json.data.json)
+	DirAccess.make_dir_absolute(SHARED_NODES_DIR)
+	var file : FileAccess = FileAccess.open(SHARED_NODES_DIR+"/website_"+node_id+".mmg", FileAccess.WRITE)
+	if file != null:
 		file.store_string(dict_tree_to_string(predefined_generators[node_name].duplicate(true)))
 		file.close()
 	return true
@@ -109,9 +110,6 @@ func get_predefined_global(g : String) -> String:
 	return predefined_generators[g].shader_model.global
 
 func generator_name_from_path(path : String) -> String:
-	for p in MMPaths.get_nodes_paths():
-		print(p)
-	print(path.get_base_dir())
 	return path.get_basename().get_file()
 
 const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "custom", "global", "instance", "preview_shader", "template" ]
@@ -140,7 +138,7 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 		for k in data.keys():
 			if k in REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS:
 				if data[k] is Array:
-					data[k] = PoolStringArray(data[k]).join("\n")
+					data[k] = "\n".join(PackedStringArray(data[k]))
 			elif walk_children or k in REPLACE_MULTILINE_STRINGS_WALK_ITEMS:
 				data[k] = replace_arrays_with_multiline_strings(data[k])
 			elif k in REPLACE_MULTILINE_STRINGS_WALK_CHILDREN:
@@ -151,30 +149,28 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 	return data
 
 static func string_to_dict_tree(string_data : String) -> Dictionary:
-	var json : JSONParseResult = JSON.parse(string_data)
-	if json.error == OK and json.result is Dictionary:
-		return replace_arrays_with_multiline_strings(json.result)
+	var test_json_conv : JSON = JSON.new()
+	if test_json_conv.parse(string_data) == OK and test_json_conv.data is Dictionary:
+		return replace_arrays_with_multiline_strings(test_json_conv.data)
 	return {}
 
 static func dict_tree_to_string(data : Dictionary) -> String:
-	return JSON.print(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true)
+	return JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true)
 
 func load_gen(filename: String) -> MMGenBase:
-	var file = File.new()
-	if file.open(filename, File.READ) == OK:
+	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)
+	if file != null:
 		var data = string_to_dict_tree(file.get_as_text())
 		if data != null:
 			current_project_path = filename.get_base_dir()
-			var generator = create_gen(data)
-			while generator is GDScriptFunctionState:
-				generator = yield(generator, "completed")
+			var generator = await create_gen(data)
 			current_project_path = ""
 			return generator
 	return null
 
 func save_gen(filename : String, generator : MMGenBase) -> void:
-	var file = File.new()
-	if file.open(filename, File.WRITE) == OK:
+	var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
+	if file.is_open():
 		var data = generator.serialize()
 		data.name = filename.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
@@ -190,9 +186,7 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 	var rv = { generators=[], connections=[] }
 	var gennames = {}
 	for n in generators:
-		var g = create_gen(n)
-		while g is GDScriptFunctionState:
-			g = yield(g, "completed")
+		var g = await create_gen(n)
 		if g != null:
 			g.orig_name = g.name
 			var orig_name = g.name
@@ -207,13 +201,22 @@ func add_to_gen_graph(gen_graph, generators, connections, position : Vector2 = V
 			c.from = gennames[c.from]
 		if gennames.has(c.to):
 			c.to = gennames[c.to]
-		if gen_graph.connect_children(gen_graph.get_node(c.from), c.from_port, gen_graph.get_node(c.to), c.to_port):
+		if gen_graph.connect_children(gen_graph.get_node(NodePath(c.from)), c.from_port, gen_graph.get_node(NodePath(c.to)), c.to_port):
 			rv.connections.append(c)
 		else:
 			print("Cannot connect %s:%d to %s:%d" % [c.from, c.from_port, c.to, c.to_port])
 	return rv
 
-func create_gen(data) -> MMGenBase:
+func fix_data(data : Dictionary) -> Dictionary:
+	if data.has("nodes") and data.has("connections") and data.has("label") and data.label == "HBAO":
+		data.type = "hbao"
+		data.erase("nodes")
+		data.erase("connections")
+	return data
+
+func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
+	if fix:
+		data = fix_data(data)
 	var guess = [
 		{ keyword="shader_model/preview_shader", type=MMGenMaterial },
 		{ keyword="connections", type=MMGenGraph },
@@ -230,6 +233,7 @@ func create_gen(data) -> MMGenBase:
 		image = MMGenImage,
 		text = MMGenText,
 		iterate_buffer = MMGenIterateBuffer,
+		meshmap = MMGenMeshMap,
 		sdf = MMGenSDF,
 		ios = MMGenIOs,
 		switch = MMGenSwitch,
@@ -255,13 +259,9 @@ func create_gen(data) -> MMGenBase:
 			generator = types[data.type].new()
 		else:
 			if !predefined_generators.has(data.type) and data.type.left(8) == "website:":
-				var status = get_node_from_website(data.type)
-				while status is GDScriptFunctionState:
-					status = yield(status, "completed")
+				var status = await get_node_from_website(data.type)
 			if predefined_generators.has(data.type):
-				generator = create_gen(predefined_generators[data.type])
-				while generator is GDScriptFunctionState:
-					generator = yield(generator, "completed")
+				generator = await create_gen(predefined_generators[data.type], false)
 				if generator == null:
 					print("Cannot find description for "+data.type)
 				else:
@@ -272,24 +272,21 @@ func create_gen(data) -> MMGenBase:
 		print("LOADER: data not supported:"+str(data))
 	if generator != null:
 		var status = generator.deserialize(data)
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
 	return generator
 
 func get_generator_list() -> Array:
 	var rv = []
-	var dir : Directory = Directory.new()
 	for p in MMPaths.get_nodes_paths():
-		dir.open(p)
-		dir.list_dir_begin(true)
-		while true:
+		var dir : DirAccess = DirAccess.open(p)
+		if dir != null:
+			dir.list_dir_begin()
 			var f = dir.get_next()
-			if f == "":
-				break
-			if f.right(f.length()-4) == ".mmg":
-				var n = f.left(f.length()-4)
-				if rv.find(n) == -1:
-					rv.push_back(n)
+			while f != "":
+				if f.right(4) == ".mmg":
+					var n = f.left(f.length()-4)
+					if rv.find(n) == -1:
+						rv.push_back(n)
+				f = dir.get_next()
 	rv.sort()
 	return rv
 
@@ -303,8 +300,8 @@ static func get_export_file_name(material_name : String, export_name : String) -
 	return material_name+"_export_"+export_name+".mme"
 
 func load_external_export_targets():
-	var dir = Directory.new()
-	if dir.open(USER_EXPORT_DIR) != OK:
+	var dir = DirAccess.open(USER_EXPORT_DIR)
+	if ! dir:
 		print("Cannot open "+USER_EXPORT_DIR)
 		return
 	var rv : Dictionary = {}
@@ -312,8 +309,8 @@ func load_external_export_targets():
 	var file_name : String = dir.get_next()
 	while file_name != "":
 		if file_name.get_extension() == "mme":
-			var file : File = File.new()
-			if file.open(USER_EXPORT_DIR.plus_file(file_name), File.READ) == OK:
+			var file : FileAccess = FileAccess.open(USER_EXPORT_DIR.path_join(file_name), FileAccess.READ)
+			if file.is_open():
 				var export_data : Dictionary = string_to_dict_tree(file.get_as_text())
 				if export_data != {}:
 					var material : String = export_data.material
@@ -329,16 +326,16 @@ func get_external_export_targets(material_name : String) -> Dictionary:
 	return external_export_targets[material_name].exports if external_export_targets.has(material_name) else {}
 
 func save_export_target(material_name : String, export_target_name : String, export_target : Dictionary) -> String:
-	var file : File = File.new()
 	var file_name : String = get_export_file_name(material_name, export_target_name)
-	if file.open(USER_EXPORT_DIR.plus_file(file_name), File.WRITE) == OK:
+	var file : FileAccess = FileAccess.open(USER_EXPORT_DIR.path_join(file_name), FileAccess.WRITE)
+	if file.is_open():
 		export_target.name = export_target_name
 		file.store_string(dict_tree_to_string(export_target))
 	return file_name
 
 func update_external_export_targets(material_name : String, export_targets : Dictionary):
-	var dir : Directory = Directory.new()
-	dir.make_dir_recursive(USER_EXPORT_DIR)
+	var dir : DirAccess = DirAccess.open("")
+	DirAccess.make_dir_absolute(USER_EXPORT_DIR)
 	var files = []
 	for k in export_targets.keys():
 		files.append(save_export_target(material_name, k, export_targets[k]))
@@ -347,5 +344,5 @@ func update_external_export_targets(material_name : String, export_targets : Dic
 	external_export_targets[material_name].exports = export_targets
 	for f in external_export_targets[material_name].files:
 		if files.find(f) == -1:
-			dir.remove(USER_EXPORT_DIR.plus_file(f))
+			dir.remove_at(USER_EXPORT_DIR.path_join(f))
 	external_export_targets[material_name].files = files

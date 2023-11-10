@@ -1,10 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://drn8t5132w352"]
 
-[ext_resource path="res://material_maker/panels/reference/reference_panel.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/panels/reference/color_slot.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/panels/reference/gradient_slot.tscn" type="PackedScene" id=3]
+[ext_resource type="Script" path="res://material_maker/panels/reference/reference_panel.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cqalnln5sq2ff" path="res://material_maker/panels/reference/color_slot.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://jyqnc0l3oaeu" path="res://material_maker/panels/reference/gradient_slot.tscn" id="3"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
 
 uniform sampler2D image;
@@ -19,114 +19,94 @@ void fragment() {
 	COLOR = mix(vec4(0.0), texture(image, uv), step(length(uv-clamp(uv, vec2(0.0), vec2(1.0))), 0.0001));
 }"
 
-[sub_resource type="ImageTexture" id=2]
+[sub_resource type="ImageTexture" id="2"]
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 1 )
-shader_param/canvas_size = null
-shader_param/image_size = null
-shader_param/scale = null
-shader_param/center = Vector2( 0.5, 0.5 )
-shader_param/image = SubResource( 2 )
+[sub_resource type="ShaderMaterial" id="3"]
+shader = SubResource("1")
+shader_parameter/canvas_size = null
+shader_parameter/image_size = null
+shader_parameter/scale = null
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/image = SubResource("2")
 
 [node name="ReferencePanel" type="Panel"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -1032.0
-margin_bottom = -367.0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = -1032.0
+offset_bottom = -367.0
+script = ExtResource("1")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/separation = -1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Image" type="ColorRect" parent="VBoxContainer"]
-material = SubResource( 3 )
-margin_right = 248.0
-margin_bottom = 291.0
+material = SubResource("3")
+layout_mode = 2
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Image"]
+layout_mode = 0
 anchor_right = 1.0
 mouse_filter = 2
 
 [node name="Prev" type="Button" parent="VBoxContainer/Image/HBoxContainer"]
-margin_right = 20.0
-margin_bottom = 20.0
+layout_mode = 2
 text = "<"
 
 [node name="Control" type="Control" parent="VBoxContainer/Image/HBoxContainer"]
-margin_left = 24.0
-margin_right = 224.0
-margin_bottom = 20.0
-mouse_filter = 2
+layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="Next" type="Button" parent="VBoxContainer/Image/HBoxContainer"]
-margin_left = 228.0
-margin_right = 248.0
-margin_bottom = 20.0
+layout_mode = 2
 text = ">"
 
 [node name="Colors" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 290.0
-margin_right = 248.0
-margin_bottom = 322.0
-custom_constants/separation = -1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
-[node name="ColorSlot1" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_right = 50.0
+[node name="ColorSlot1" parent="VBoxContainer/Colors" instance=ExtResource("2")]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorSlot2" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_left = 49.0
-margin_right = 99.0
+[node name="ColorSlot2" parent="VBoxContainer/Colors" instance=ExtResource("2")]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorSlot3" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_left = 98.0
-margin_right = 149.0
+[node name="ColorSlot3" parent="VBoxContainer/Colors" instance=ExtResource("2")]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorSlot4" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_left = 148.0
-margin_right = 198.0
+[node name="ColorSlot4" parent="VBoxContainer/Colors" instance=ExtResource("2")]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ColorSlot5" parent="VBoxContainer/Colors" instance=ExtResource( 2 )]
-margin_left = 197.0
-margin_right = 248.0
+[node name="ColorSlot5" parent="VBoxContainer/Colors" instance=ExtResource("2")]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GradientSlot" parent="VBoxContainer" instance=ExtResource( 3 )]
-margin_top = 321.0
-margin_right = 248.0
-margin_bottom = 353.0
+[node name="GradientSlot" parent="VBoxContainer" instance=ExtResource("3")]
+layout_mode = 2
 
 [node name="ContextMenu" type="PopupMenu" parent="."]
-margin_right = 20.0
-margin_bottom = 20.0
-items = [ "Load Reference", null, 0, false, false, 0, 0, null, "", false, "Remove Reference", null, 0, false, false, 1, 0, null, "", false ]
+item_count = 2
+item_0/text = "Load Reference"
+item_0/id = 0
+item_1/text = "Remove Reference"
+item_1/id = 1
 
 [connection signal="gui_input" from="VBoxContainer/Image" to="." method="_on_Image_gui_input"]
 [connection signal="resized" from="VBoxContainer/Image" to="." method="_on_Image_resized"]
-[connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Prev" to="." method="change_image" binds= [ -1 ]]
-[connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Next" to="." method="change_image" binds= [ 1 ]]
+[connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Prev" to="." method="change_image" binds= [-1]]
+[connection signal="pressed" from="VBoxContainer/Image/HBoxContainer/Next" to="." method="change_image" binds= [1]]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot1" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot2" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot3" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot4" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/Colors/ColorSlot5" to="." method="select_slot"]
 [connection signal="clicked" from="VBoxContainer/GradientSlot" to="." method="select_slot"]
-[connection signal="about_to_show" from="ContextMenu" to="." method="_on_ContextMenu_about_to_show"]
+[connection signal="about_to_popup" from="ContextMenu" to="." method="_on_ContextMenu_about_to_show"]
 [connection signal="index_pressed" from="ContextMenu" to="." method="_on_ContextMenu_index_pressed"]

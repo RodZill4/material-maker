@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://dftem3gvk6iaq"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_28bnl"]
+
+[resource]
+script = ExtResource("1_28bnl")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
+@DECLARATIONS
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+layout(set = 4, binding = 0, std140) buffer MMout {
+	int mm_compare[1];
+} mm_out;
+
+@COMMON_SHADER_FUNCTIONS
+
+const float seed_variation = 0.0;
+
+@GLOBALS
+
+@DEFINITIONS
+
+void main() {
+	float _seed_variation_ = seed_variation;
+	vec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);
+	vec2 image_size = imageSize(OUTPUT_TEXTURE);
+	vec2 uv = pixel/image_size;
+	@CODE
+	vec4 outColor = @OUTPUT_VALUE;
+	imageStore(OUTPUT_TEXTURE, ivec2(pixel), outColor);
+
+	vec4 diff_vec = abs(outColor - texture(mm_compare, uv));
+	float diff = max(max(diff_vec.r, diff_vec.g), max(diff_vec.b, diff_vec.a));
+	atomicMax(mm_out.mm_compare[0], int(diff*65536.0));
+}"

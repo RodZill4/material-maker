@@ -14,9 +14,8 @@ func load_obj_file(path : String) -> ArrayMesh:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	var mdlFile := File.new()
-	var errorCheck = mdlFile.open(path, File.READ)
-	if errorCheck != OK:
+	var mdlFile := FileAccess.open(path, FileAccess.READ)
+	if ! mdlFile.is_open():
 		print("cannot open file at path[", path,"]")
 		mdlFile.close()
 		return null
@@ -29,21 +28,21 @@ func load_obj_file(path : String) -> ArrayMesh:
 	for i in newTriMsh.indices.size():
 		var triangle : Triangle = newTriMsh.indices[i]
 		if hasTex:
-			st.add_uv(newTriMsh.uvs[triangle.uv_id_0])
+			st.set_uv(newTriMsh.uvs[triangle.uv_id_0])
 		if hasNrm:
-			st.add_normal(newTriMsh.normals[triangle.nrm_id_0])
+			st.set_normal(newTriMsh.normals[triangle.nrm_id_0])
 		st.add_vertex(newTriMsh.vertices[triangle.id_0])
 		
 		if hasTex:
-			st.add_uv(newTriMsh.uvs[triangle.uv_id_1])
+			st.set_uv(newTriMsh.uvs[triangle.uv_id_1])
 		if hasNrm:
-			st.add_normal(newTriMsh.normals[triangle.nrm_id_1])
+			st.set_normal(newTriMsh.normals[triangle.nrm_id_1])
 		st.add_vertex(newTriMsh.vertices[triangle.id_1])
 		
 		if hasTex:
-			st.add_uv(newTriMsh.uvs[triangle.uv_id_2])
+			st.set_uv(newTriMsh.uvs[triangle.uv_id_2])
 		if hasNrm:
-			st.add_normal(newTriMsh.normals[triangle.nrm_id_2])
+			st.set_normal(newTriMsh.normals[triangle.nrm_id_2])
 		st.add_vertex(newTriMsh.vertices[triangle.id_2])
 	
 	if !hasNrm:
@@ -63,7 +62,7 @@ func _obj_rel_indice(indice : Vector3, cur_vArr_size : int) -> Vector3:
 	
 	return output
 
-func _import_obj(mdlFile : File) -> TriMesh:
+func _import_obj(mdlFile : FileAccess) -> TriMesh:
 	var newMsh := TriMesh.new()
 	
 	while !mdlFile.eof_reached():

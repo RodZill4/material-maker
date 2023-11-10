@@ -1,13 +1,13 @@
-extends Object
+extends RefCounted
 class_name MMPolygon
 
 var points : Array = [Vector2(0.2, 0.2), Vector2(0.7, 0.4), Vector2(0.4, 0.7)]
 
 func to_string() -> String:
-	var rv = PoolStringArray()
+	var rv = PackedStringArray()
 	for p in points:
 		rv.append("("+str(p.x)+","+str(p.y)+")")
-	return rv.join(",")
+	return ",".join(rv)
 
 func duplicate() -> Object:
 	var copy = get_script().new()
@@ -33,10 +33,10 @@ func add_point(x : float, y : float, closed : bool = true) -> void:
 	if points_count < 3:
 		points.append(p)
 		return
-	var min_length : float = (p-Geometry.get_closest_point_to_segment_2d(p, points[0], points[points_count-1])).length()
+	var min_length : float = (p-Geometry2D.get_closest_point_to_segment(p, points[0], points[points_count-1])).length()
 	var insert_point = 0
 	for i in points_count-1:
-		var length = (p-Geometry.get_closest_point_to_segment_2d(p, points[i], points[i+1])).length()
+		var length = (p-Geometry2D.get_closest_point_to_segment(p, points[i], points[i+1])).length()
 		if length < min_length:
 			min_length = length
 			insert_point = i+1
@@ -49,7 +49,7 @@ func remove_point(index : int) -> bool:
 	if s < 4 or index < 0 or index >= s:
 		return false
 	else:
-		points.remove(index)
+		points.remove_at(index)
 	return true
 
 func get_point_count() -> int:
@@ -62,10 +62,10 @@ func set_point(i : int, v : Vector2) -> void:
 	points[i] = v
 
 func get_shader() -> String:
-	var elements : PoolStringArray = PoolStringArray()
+	var elements : PackedStringArray = PackedStringArray()
 	for p in points:
 		elements.append("vec2(%.9f, %.9f)" % [p.x, p.y])
-	return "{"+elements.join(", ")+"}"
+	return "{"+", ".join(elements)+"}"
 
 func serialize() -> Dictionary:
 	var rv = []

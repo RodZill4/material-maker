@@ -19,12 +19,12 @@ func duplicate():
 	layer.hidden = false
 	for c in get_channels():
 		var texture = ImageTexture.new()
-		texture.create_from_image(get(c).get_data())
+		texture.set_image(get(c).get_image())
 		layer.set(c, texture)
 	return layer
 
 
-func get_channel_texture(channel_name : String) -> Texture:
+func get_channel_texture(channel_name : String) -> Texture2D:
 	return get(channel_name)
 
 func get_channels() -> Array:
@@ -55,14 +55,12 @@ func save_layer(path : String) -> Dictionary:
 	for c in get_channels():
 		if get(c) != null:
 			var file_name : String = "%s_%d.png" % [ c, index ]
-			var file_path : String = path.plus_file(file_name)
+			var file_path : String = path.path_join(file_name)
 			var image : Image = get(c).get_data()
-			image.lock()
 			image.save_png(file_path)
-			image.unlock()
 			layer_data[c] = file_name
 	_save_layer(layer_data)
-	if !layers.empty():
+	if !layers.is_empty():
 		layer_data.layers = save_layers(layers, path)
 	return layer_data
 

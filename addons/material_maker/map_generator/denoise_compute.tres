@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://dyduptoh12rkt"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_puend"]
+
+[resource]
+script = ExtResource("1_puend")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+@DECLARATIONS
+
+void main() {
+	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	vec2 image_size = imageSize(OUTPUT_TEXTURE);
+	vec2 uv = pixel/image_size;
+
+	if (texture(tex, uv).a == 0.0) {
+		return;
+	}
+
+	vec3 color = vec3(0.0);
+	float weight = 0.0;
+	for(int y = -radius; y < radius+1; y++) {
+		for(int x = -radius; x < radius+1; x++) {
+			vec4 col = texture(tex, uv + vec2(ivec2(x, y)) / image_size, 0);
+			color += col.rgb * col.a;
+			weight += col.a;
+		}
+	}
+	imageStore(OUTPUT_TEXTURE, pixel, vec4(color / weight, 1.0));
+}
+
+"

@@ -1,12 +1,15 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Box", "Ellipsoid") var shape
+
+@export_enum("Box", "Ellipsoid") var shape : int
+
 
 const INCLUDES : Array = [
 	[ "rotate", "sdf3d_box" ],
 	[ "rotate", "sdf3d_ellipsoid" ]
 ]
 const FUNCTIONS : Array = [ "box3d", "sdEllipsoid" ]
+
 
 func _ready():
 	pass # Replace with function body.

@@ -4,7 +4,7 @@
 
 [sub_resource type="SphereMesh" id=1]
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="StandardMaterial3D" id=2]
 flags_unshaded = true
 flags_do_not_receive_shadows = true
 
@@ -23,23 +23,23 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 5 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array( 0, 5 ),
+"transitions": PackedFloat32Array( 1, 1 ),
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( 360, 0, 0 ) ]
 }
 
-[node name="MeshInstance" type="MeshInstance"]
+[node name="MeshInstance3D" type="MeshInstance3D"]
 mesh = SubResource( 1 )
 material/0 = ExtResource( 1 )
 
-[node name="LightPivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.929776, -0.368125, 0, 0.368125, 0.929776, 0, 0, 0 )
+[node name="LightPivot" type="Node3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 0.929776, -0.368125, 0, 0.368125, 0.929776, 0, 0, 0 )
 
-[node name="OmniLight" type="OmniLight" parent="LightPivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0746527, 1.74306, 0 )
+[node name="OmniLight3D" type="OmniLight3D" parent="LightPivot"]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0746527, 1.74306, 0 )
 
-[node name="MeshInstance" type="MeshInstance" parent="LightPivot/OmniLight"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LightPivot/OmniLight3D"]
 cast_shadow = 0
 mesh = SubResource( 3 )
 material/0 = null

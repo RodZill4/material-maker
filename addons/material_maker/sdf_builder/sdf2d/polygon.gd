@@ -10,7 +10,7 @@ func get_parameter_defs():
 		{ label="Rotation", name="angle", type="float", min=-180.0, max=180.0, step=0.01, default=0.0, control="RotateScale1.a" },
 		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0, control="RotateScale1.r" },
 		{ label="Radius", name="radius", type="float", min=0.0, max=1.0, step=0.01, default=0.5 },
-		{ label="Points", name="polygon", type="polygon", "default": { "points": [ {"x": 0.2, "y": 0.2 }, { "x": 0.4, "y": 0.7 }, { "x": 0.7, "y": 0.4 } ], "type": "Polygon" } }
+		{ label="Points", name="polygon", type="polygon", default= { points= [ {x= 0.2, y= 0.2 }, { x= 0.4, y= 0.7 }, { x= 0.7, y= 0.4 } ], type= "Polygon" } }
 	]
 
 func get_includes():

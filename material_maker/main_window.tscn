@@ -1,44 +1,44 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=28 format=3 uid="uid://cgfeik04a5qqs"]
 
-[ext_resource path="res://material_maker/main_window.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/main_window_layout.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d.tscn" type="PackedScene" id=4]
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" type="PackedScene" id=5]
-[ext_resource path="res://material_maker/widgets/tabs/tabs.gd" type="Script" id=6]
-[ext_resource path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" type="PackedScene" id=7]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=8]
-[ext_resource path="res://material_maker/node_factory.gd" type="Script" id=9]
-[ext_resource path="res://material_maker/theme/default.tres" type="Theme" id=10]
-[ext_resource path="res://material_maker/widgets/render_counter/render_counter.tscn" type="PackedScene" id=11]
-[ext_resource path="res://material_maker/tools/share/share_button.tscn" type="PackedScene" id=12]
-[ext_resource path="res://material_maker/tools/environment_manager/environment_manager.tscn" type="PackedScene" id=13]
-[ext_resource path="res://material_maker/tools/library_manager/library_manager.gd" type="Script" id=14]
-[ext_resource path="res://material_maker/icons/paste_none.tres" type="Texture" id=15]
+[ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="5"]
+[ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="6"]
+[ext_resource type="PackedScene" uid="uid://clw8sb0p8webl" path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" id="7"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="8"]
+[ext_resource type="Script" path="res://material_maker/main_window_projects_panel.gd" id="8_4er2h"]
+[ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
+[ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
+[ext_resource type="PackedScene" uid="uid://cp2mbbfmrv6sf" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
+[ext_resource type="PackedScene" uid="uid://dnttargjmhjh8" path="res://material_maker/tools/share/share_button.tscn" id="12"]
+[ext_resource type="Script" path="res://material_maker/panel_container.gd" id="12_7mn0u"]
+[ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
+[ext_resource type="Script" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
+[ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8fw7q"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+render_priority = 0
+shader = SubResource("1")
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 96, 96, 32, 32 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("8")
+region = Rect2(96, 96, 32, 32)
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 96, 32, 32, 32 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("8")
+region = Rect2(96, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 96, 64, 32, 31 )
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("8")
+region = Rect2(96, 64, 32, 31)
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id="9"]
 script/source = "extends HBoxContainer
 
 
@@ -51,10 +51,8 @@ const PASTE_TYPE_ICON : Dictionary = {
 }
 
 func _on_Timer_timeout():
-	var data : String = OS.clipboard.strip_edges()
-	var parsed_data = mm_globals.parse_paste_data(data)
-	while parsed_data is GDScriptFunctionState:
-		parsed_data = yield(parsed_data, \"completed\")
+	var data : String = DisplayServer.clipboard_get().strip_edges()
+	var parsed_data = await mm_globals.parse_paste_data(data)
 	$Contents.texture = PASTE_TYPE_ICON[parsed_data.type]
 	var hint : String
 	match parsed_data.type:
@@ -66,15 +64,14 @@ func _on_Timer_timeout():
 			hint = \"The clipboard can be pasted as a new graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
 		\"graph\":
 			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
-	hint_tooltip = hint
+	tooltip_text = hint
 "
 
-[sub_resource type="AtlasTexture" id=8]
-flags = 4
-atlas = ExtResource( 8 )
-region = Rect2( 32, 128, 16, 16 )
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("8")
+region = Rect2(32, 128, 16, 16)
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id="6"]
 script/source = "extends Label
 
 func _ready():
@@ -86,52 +83,55 @@ func show_step(step : int):
 	$AnimationPlayer.play(\"show\")
 "
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id="7"]
 resource_name = "show"
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ true, false ]
+"values": [true, false]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kxf7t"]
+_data = {
+"show": SubResource("7")
 }
 
 [node name="MainWindow" type="Panel" groups=["preview"]]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource( 10 )
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+theme = ExtResource("10")
+script = ExtResource("1")
 
 [node name="NodeLibraryManager" type="Node" parent="."]
-script = ExtResource( 14 )
+script = ExtResource("14")
 base_lib_name = "Base library"
 base_lib = "root://library/base.json"
 alt_base_lib = "res://material_maker/library/base.json"
 user_lib_name = "User library"
 user_lib = "user://library/user.json"
-sections = PoolStringArray( "Simple", "Pattern", "Noise", "Filter", "Transform", "Workflow", "3D", "Miscellaneous" )
+sections = PackedStringArray("Simple", "Pattern", "Noise", "Filter", "Transform", "Workflow", "3D", "Miscellaneous")
 config_section = "node_lib"
 base_aliases_file_name = "root://library/aliases.json"
 alt_base_aliases_file_name = "res://material_maker/library/aliases.json"
@@ -139,7 +139,7 @@ user_aliases_file_name = "user://library/aliases.json"
 item_usage_file = "user://library/item_usage.json"
 
 [node name="BrushLibraryManager" type="Node" parent="."]
-script = ExtResource( 14 )
+script = ExtResource("14")
 base_lib_name = "Base library"
 base_lib = "root://library/base_brushes.json"
 alt_base_lib = "res://material_maker/library/base_brushes.json"
@@ -147,99 +147,77 @@ user_lib_name = "User library"
 user_lib = "user://library/user_brushes.json"
 config_section = "brush_lib"
 
-[node name="EnvironmentManager" parent="." instance=ExtResource( 13 )]
+[node name="EnvironmentManager" parent="." instance=ExtResource("13")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 6.0
-margin_top = 6.0
-margin_right = -6.0
-margin_bottom = -6.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TopBar" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 1268.0
-margin_bottom = 25.0
+layout_mode = 2
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
-margin_right = 1177.0
-margin_bottom = 25.0
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="File" type="MenuButton" parent="VBoxContainer/TopBar/Menu"]
-margin_right = 31.0
-margin_bottom = 25.0
-text = "File"
-items = [ "New material", null, 0, false, false, 0, 0, null, "", false, "Load material", null, 0, false, false, 1, 268435535, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save material", null, 0, false, false, 4, 268435539, null, "", false, "Save material as...", null, 0, false, false, 5, 301989971, null, "", false, "Save all materials...", null, 0, false, false, 6, 0, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Export material", null, 0, false, false, 8, 268435525, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Close material", null, 0, false, false, 10, 0, null, "", false, "Quit", null, 0, false, false, 11, 268435537, null, "", false ]
-switch_on_hover = true
-
-[node name="Share" parent="VBoxContainer/TopBar" instance=ExtResource( 12 )]
-margin_left = 1181.0
-margin_right = 1268.0
-margin_bottom = 25.0
-
 [node name="Layout" type="HSplitContainer" parent="VBoxContainer"]
-margin_top = 29.0
-margin_right = 1268.0
-margin_bottom = 679.0
-grow_horizontal = 0
+layout_mode = 2
 size_flags_vertical = 3
 split_offset = -1118
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="Left" type="VSplitContainer" parent="VBoxContainer/Layout"]
-margin_right = 124.0
-margin_bottom = 650.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 312
 
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/Left"]
-margin_right = 124.0
-margin_bottom = 349.0
-tab_align = 0
+layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/Left"]
-margin_top = 357.0
-margin_right = 124.0
-margin_bottom = 650.0
-tab_align = 0
+layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="SplitRight" type="HSplitContainer" parent="VBoxContainer/Layout"]
-margin_left = 132.0
-margin_right = 1268.0
-margin_bottom = 650.0
+layout_mode = 2
 split_offset = 133
 
 [node name="ProjectsPanel" type="Control" parent="VBoxContainer/Layout/SplitRight"]
-margin_right = 981.0
-margin_bottom = 650.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
+script = ExtResource("8_4er2h")
 
 [node name="BackgroundPreviews" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 28.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_top = 28.0
 
-[node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource( 3 )]
+[node name="Preview2D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("3")]
 visible = false
-material = SubResource( 2 )
-margin_right = 0.0
-margin_bottom = 0.0
+material = SubResource("ShaderMaterial_8fw7q")
+layout_mode = 1
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 shader = "uniform vec2 preview_2d_size = vec2(100.0, 100.0);
 const float preview_2d_scale = 1.2;
 const vec2 preview_2d_center = vec2(0.5);
@@ -254,217 +232,182 @@ void fragment() {
 }
 "
 
-[node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource( 4 )]
+[node name="Preview3D" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews" instance=ExtResource("4")]
 visible = false
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 0.0
-margin_bottom = 0.0
-ui_path = "../../PreviewUI/Panel/HBoxContainer/Preview3DUI"
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+ui_path = NodePath("../../PreviewUI/Panel/HBoxContainer/Preview3DUI")
 
 [node name="Projects" type="Panel" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
-self_modulate = Color( 1, 1, 1, 0 )
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 5.0
-margin_bottom = 5.0
+offset_right = 5.0
+offset_bottom = 5.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource( 6 )
+script = ExtResource("6")
 
-[node name="Tabs" type="Tabs" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects"]
-margin_right = 950.0
-margin_bottom = 24.0
-tab_align = 0
+[node name="TabBar" type="TabBar" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects"]
+layout_mode = 0
+offset_right = 950.0
+offset_bottom = 24.0
 tab_close_display_policy = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CrashRecoveryTimer" type="Timer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects"]
 wait_time = 15.0
 autostart = true
 
 [node name="PreviewUI" type="HBoxContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel"]
+layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 1.0
-margin_top = -45.0
-margin_right = 331.0
-margin_bottom = -13.0
+offset_left = 1.0
+offset_top = -45.0
+offset_right = 331.0
+offset_bottom = -13.0
 mouse_filter = 2
-custom_constants/separation = 7
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Preview2DButton" type="Button" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI"]
-margin_right = 44.0
-margin_bottom = 40.0
-hint_tooltip = "Show 2D preview"
+layout_mode = 2
+tooltip_text = "Show 2D preview"
 toggle_mode = true
-icon = SubResource( 3 )
+icon = SubResource("3")
 
 [node name="Preview3DButton" type="Button" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI"]
-margin_left = 51.0
-margin_right = 95.0
-margin_bottom = 40.0
-hint_tooltip = "Show 3D preview"
+layout_mode = 2
+tooltip_text = "Show 3D preview"
 toggle_mode = true
-icon = SubResource( 4 )
+icon = SubResource("4")
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI"]
 visible = false
-margin_left = 102.0
-margin_right = 336.0
-margin_bottom = 40.0
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 230.0
-margin_bottom = 36.0
-custom_constants/separation = 5
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="SpaceLeft" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer"]
-margin_bottom = 32.0
+layout_mode = 2
 
 [node name="ControlView" type="TextureRect" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer"]
-margin_left = 5.0
-margin_right = 37.0
-margin_bottom = 31.0
+layout_mode = 2
 size_flags_vertical = 4
-texture = SubResource( 5 )
+texture = SubResource("5")
 
-[node name="Preview3DUI" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer" instance=ExtResource( 5 )]
-anchor_right = 0.0
-margin_left = 42.0
-margin_top = 4.0
-margin_right = 221.0
-margin_bottom = 28.0
+[node name="Preview3DUI" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer" instance=ExtResource("5")]
+layout_mode = 2
 size_flags_vertical = 4
 
 [node name="SpaceRight" type="Control" parent="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel/HBoxContainer"]
-margin_left = 226.0
-margin_right = 226.0
-margin_bottom = 32.0
+layout_mode = 2
 
 [node name="Right" type="VSplitContainer" parent="VBoxContainer/Layout/SplitRight"]
-margin_left = 989.0
-margin_right = 1136.0
-margin_bottom = 650.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 split_offset = 312
 
 [node name="Top" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
-margin_right = 147.0
-margin_bottom = 349.0
-tab_align = 0
+layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="Bottom" type="TabContainer" parent="VBoxContainer/Layout/SplitRight/Right"]
-margin_top = 357.0
-margin_right = 147.0
-margin_bottom = 650.0
-tab_align = 0
+layout_mode = 2
 drag_to_rearrange_enabled = true
+tabs_rearrange_group = 0
 use_hidden_tabs_for_min_size = true
+script = ExtResource("12_7mn0u")
 
 [node name="StatusBar" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 683.0
-margin_right = 1268.0
-margin_bottom = 708.0
+layout_mode = 2
 
 [node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar"]
-margin_right = 1062.0
-margin_bottom = 25.0
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
 size_flags_horizontal = 3
 bbcode_enabled = true
 scroll_active = false
 
 [node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/Tip"]
 
+[node name="Share" parent="VBoxContainer/StatusBar" instance=ExtResource("12")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar"]
+layout_mode = 2
+
 [node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
-margin_left = 1066.0
-margin_right = 1082.0
-margin_bottom = 25.0
-script = SubResource( 9 )
+layout_mode = 2
+script = SubResource("9")
 
 [node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
 visible = false
-margin_top = 4.0
-margin_right = 16.0
-margin_bottom = 20.0
-mouse_filter = 2
+layout_mode = 2
 size_flags_vertical = 4
-texture = SubResource( 8 )
+mouse_filter = 2
+texture = SubResource("8")
 
 [node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
-margin_top = 4.0
-margin_right = 16.0
-margin_bottom = 20.0
-mouse_filter = 2
+layout_mode = 2
 size_flags_vertical = 4
-texture = ExtResource( 15 )
+mouse_filter = 2
+texture = ExtResource("15")
 
 [node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
 wait_time = 0.5
 autostart = true
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/StatusBar"]
-margin_left = 1086.0
-margin_right = 1090.0
-margin_bottom = 25.0
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar"]
+layout_mode = 2
 
-[node name="RenderCounter" parent="VBoxContainer/StatusBar" instance=ExtResource( 11 )]
-margin_left = 1094.0
-margin_right = 1268.0
-margin_bottom = 25.0
+[node name="RenderCounter" parent="VBoxContainer/StatusBar" instance=ExtResource("11")]
+layout_mode = 2
 
 [node name="NodeFactory" type="Node" parent="."]
-script = ExtResource( 9 )
+script = ExtResource("9")
 
-[node name="AddNodePopup" parent="." instance=ExtResource( 7 )]
+[node name="AddNodePopup" parent="." instance=ExtResource("7")]
 visible = false
-margin_left = 138.0
-margin_top = 32.0
-margin_right = 413.0
-margin_bottom = 351.0
 
 [node name="UndoRedoLabel" type="Label" parent="."]
-modulate = Color( 1, 1, 1, 0 )
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -82.5
-margin_right = 82.5
-margin_bottom = 22.0
+offset_left = -82.5
+offset_right = 82.5
+offset_bottom = 22.0
 text = "Undo/Redo action added"
-align = 1
-script = SubResource( 6 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = SubResource("6")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UndoRedoLabel"]
-anims/show = SubResource( 7 )
+libraries = {
+"": SubResource("AnimationLibrary_kxf7t")
+}
 
 [connection signal="dragged" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Left_dragged"]
 [connection signal="resized" from="VBoxContainer/Layout" to="VBoxContainer/Layout" method="_on_Layout_resized"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Top" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/Left/Bottom" to="VBoxContainer/Layout" method="_on_tab_changed"]
 [connection signal="dragged" from="VBoxContainer/Layout/SplitRight" to="VBoxContainer/Layout" method="_on_Right_dragged"]
+[connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPanel" to="VBoxContainer/Layout/SplitRight/ProjectsPanel" method="_on_projects_panel_resized"]
 [connection signal="need_update" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D" to="." method="update_preview_3d"]
 [connection signal="no_more_tabs" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="." method="new_material"]
 [connection signal="resized" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_Projects_resized"]
 [connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" to="." method="_on_Projects_tab_changed"]
-[connection signal="reposition_active_tab_request" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/Tabs" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="move_active_tab_to"]
-[connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/Tabs" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="set_current_tab"]
-[connection signal="tab_close" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/Tabs" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="close_tab"]
+[connection signal="tab_changed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/TabBar" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="set_current_tab"]
+[connection signal="tab_close_pressed" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/TabBar" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="close_tab"]
 [connection signal="timeout" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects/CrashRecoveryTimer" to="VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects" method="_on_CrashRecoveryTimer_timeout"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]

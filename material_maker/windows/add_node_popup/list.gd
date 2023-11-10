@@ -11,19 +11,17 @@ var button_pool := []
 
 func clear() -> void:
 	for bt in get_children():
-		bt.disconnect("pressed", self, "_on_bt_pressed")
+		bt.disconnect("pressed", Callable(self, "_on_bt_pressed"))
 		remove_child(bt)
 		button_pool.append(bt)
 
 
-func add_item(obj, path: String, name: String, icon: Texture = null) -> void:
-	var bt := NodeSelectionButton.instance() if button_pool == [] else button_pool.pop_back()
+func add_item(obj, node_path: String, node_name: String, node_icon: Texture2D = null) -> void:
+	var bt = NodeSelectionButton.instantiate() if button_pool == [] else button_pool.pop_back()
 	add_child(bt)
-	bt.hint_tooltip = path + "/" + name # Could add node description to this.
-	bt.set_name(name)
-	bt.set_path(path)
-	bt.set_icon(icon)
-	bt.connect("pressed", self, "_on_bt_pressed", [obj])
+	bt.tooltip_text = node_path + "/" + name
+	bt.set_node(node_name, node_path, node_icon)
+	bt.connect("pressed",Callable(self,"_on_bt_pressed").bind(obj))
 
 
 func _on_bt_pressed(obj) -> void:

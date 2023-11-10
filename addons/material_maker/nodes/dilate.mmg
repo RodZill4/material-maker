@@ -51,11 +51,11 @@
 		{
 			"from": "dilate_pass_1",
 			"from_port": 0,
-			"to": "buffer_2",
+			"to": "buffer_3",
 			"to_port": 0
 		},
 		{
-			"from": "buffer_2",
+			"from": "buffer_3",
 			"from_port": 0,
 			"to": "dilate_pass_4",
 			"to_port": 0
@@ -72,38 +72,25 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": 283.308716,
-				"y": -510.988342
+				"x": 283.308715820313,
+				"y": -510.988342285156
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 11
+				"size": 10
 			},
 			"seed": 32897,
 			"type": "buffer"
 		},
 		{
-			"name": "buffer_2",
-			"node_position": {
-				"x": 542.308716,
-				"y": -399.988342
-			},
-			"parameters": {
-				"lod": 0,
-				"size": 11
-			},
-			"seed": 65434,
-			"type": "buffer"
-		},
-		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": 463.693542,
-				"y": -773.953613
+				"x": 463.693542480469,
+				"y": -773.95361328125
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 0.1,
+				"param0": 10,
+				"param1": 0.27,
 				"param2": 0,
 				"param3": 0,
 				"param4": true
@@ -116,10 +103,6 @@
 					"linked_widgets": [
 						{
 							"node": "buffer",
-							"widget": "size"
-						},
-						{
-							"node": "buffer_2",
 							"widget": "size"
 						},
 						{
@@ -136,6 +119,10 @@
 						},
 						{
 							"node": "buffer_2_3",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
 							"widget": "size"
 						}
 					],
@@ -206,8 +193,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -124.306458,
-				"y": -462.481384
+				"x": -124.306457519531,
+				"y": -462.481384277344
 			},
 			"parameters": {
 
@@ -234,8 +221,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 1126.21106,
-				"y": -488.481384
+				"x": 1126.21105957031,
+				"y": -488.481384277344
 			},
 			"parameters": {
 
@@ -256,12 +243,12 @@
 		{
 			"name": "buffer_2_2",
 			"node_position": {
-				"x": 510.676453,
-				"y": -100.695679
+				"x": 510.676452636719,
+				"y": -100.695678710938
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 11
+				"size": 10
 			},
 			"seed": 65483,
 			"type": "buffer"
@@ -269,12 +256,12 @@
 		{
 			"name": "dilate_pass_1",
 			"node_position": {
-				"x": 547.301208,
-				"y": -542.369019
+				"x": 547.301208496094,
+				"y": -542.369018554688
 			},
 			"parameters": {
-				"d": 0.18,
-				"s": 11,
+				"d": 0.27,
+				"s": 10,
 				"tile": true
 			},
 			"seed": 71939,
@@ -282,9 +269,6 @@
 			"shader_model": {
 				"code": "",
 				"global": "",
-				"includes": [
-					"pack_1x32_to_2x16"
-				],
 				"inputs": [
 					{
 						"default": "0.0",
@@ -319,8 +303,8 @@
 				"name": "Dilate pass 1",
 				"outputs": [
 					{
-						"rgba": "pack_2x32_to_4x16($(name)_distance_h($uv, $tile).xy)",
-						"type": "rgba"
+						"rgb": "vec3($(name)_distance_h($uv, $tile).xy, 0.0)",
+						"type": "rgb"
 					}
 				],
 				"parameters": [
@@ -355,13 +339,13 @@
 		{
 			"name": "dilate_pass_4",
 			"node_position": {
-				"x": 558.310547,
-				"y": -294.577271
+				"x": 558.310546875,
+				"y": -294.577270507813
 			},
 			"parameters": {
-				"d": 0.18,
+				"d": 0.27,
 				"distance": 0,
-				"s": 11,
+				"s": 10,
 				"tile": true
 			},
 			"seed": 50297,
@@ -382,9 +366,6 @@
 					"",
 					""
 				],
-				"includes": [
-					"pack_1x32_to_2x16"
-				],
 				"inputs": [
 					{
 						"default": "vec3(0.0)",
@@ -398,13 +379,13 @@
 					"vec3 $(name)_distance_v(vec2 uv, bool tile) {",
 					"\tvec2 e = vec2(0.0, 1.0/$s);",
 					"\tint steps = int($s*$d);",
-					"\tvec3 p = vec3(pack_4x16_to_2x32($in(uv)), uv.y);",
+					"\tvec3 p = vec3($in(uv).xy, uv.y);",
 					"\tvec2 source_uv;",
 					"\tfor (int i = 0; i < steps; ++i) {",
 					"\t\tvec2 dx = float(i)*e;",
 					"\t\tsource_uv = uv+dx;",
 					"\t\tif (tile || (source_uv.y >= 0.0 && source_uv.y < 1.0)) {",
-					"\t\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(source_uv)), source_uv.y);",
+					"\t\t\tvec3 p2 = vec3($in(source_uv).xy, source_uv.y);",
 					"\t\t\tif (p2.x > p.x) {",
 					"\t\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
 					"\t\t\t\tp = mix(p, p2, step(p.x, p2.x));",
@@ -412,7 +393,7 @@
 					"\t\t}",
 					"\t\tsource_uv = uv-dx;",
 					"\t\tif (tile || (source_uv.y >= 0.0 && source_uv.y < 1.0)) {",
-					"\t\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(source_uv)), source_uv.y);",
+					"\t\t\tvec3 p2 = vec3($in(source_uv).xy, source_uv.y);",
 					"\t\t\tif (p2.x > p.x) {",
 					"\t\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
 					"\t\t\t\tp = mix(p, p2, step(p.x, p2.x));",
@@ -482,12 +463,12 @@
 		{
 			"name": "buffer_2_3",
 			"node_position": {
-				"x": 899.033875,
-				"y": -345.711548
+				"x": 899.033874511719,
+				"y": -345.711547851563
 			},
 			"parameters": {
 				"lod": 0,
-				"size": 11
+				"size": 10
 			},
 			"seed": -38802,
 			"type": "buffer"
@@ -495,8 +476,8 @@
 		{
 			"name": "default_color",
 			"node_position": {
-				"x": 284.131287,
-				"y": -66.02066
+				"x": 284.131286621094,
+				"y": -66.0206604003906
 			},
 			"parameters": {
 				"default": {
@@ -513,8 +494,8 @@
 		{
 			"name": "dilate_pass_3",
 			"node_position": {
-				"x": 759.301208,
-				"y": -172.368988
+				"x": 759.301208496094,
+				"y": -172.368988037109
 			},
 			"parameters": {
 				"amount": 0
@@ -559,11 +540,27 @@
 				]
 			},
 			"type": "shader"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": 544.77001953125,
+				"y": -431.83056640625
+			},
+			"parameters": {
+				"f32": true,
+				"filter": false,
+				"mipmap": false,
+				"size": 9
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
 		}
 	],
 	"parameters": {
-		"param0": 11,
-		"param1": 0.18,
+		"param0": 10,
+		"param1": 0.27,
 		"param2": 0,
 		"param3": 0,
 		"param4": true

@@ -1,53 +1,60 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://dpulty2lkvcht"]
 
-[ext_resource path="res://material_maker/panels/preview_3d/preview_objects.tscn" type="PackedScene" id=2]
+[ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
 
-[sub_resource type="PanoramaSky" id=1]
-resource_local_to_scene = true
-
-[sub_resource type="Environment" id=2]
-resource_local_to_scene = true
-background_mode = 2
-background_sky = SubResource( 1 )
-
-[sub_resource type="Animation" id=3]
-loop = true
+[sub_resource type="Animation" id="3"]
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("ObjectsPivot:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+"values": [Vector3(0, 0, 0), Vector3(0, 360, 0)]
 }
 
-[node name="Preview3dScene" type="Spatial"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sxr5g"]
+_data = {
+"rotate": SubResource("3")
+}
 
-[node name="ObjectsPivot" type="Spatial" parent="."]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
 
-[node name="Objects" parent="ObjectsPivot" instance=ExtResource( 2 )]
+[sub_resource type="Sky" id="Sky_wye7d"]
+sky_material = SubResource("PanoramaSkyMaterial_40ogr")
 
-[node name="CameraPivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0 )
+[sub_resource type="Environment" id="Environment_qxxdb"]
+background_mode = 2
+sky = SubResource("Sky_wye7d")
 
-[node name="Camera" type="Camera" parent="CameraPivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4 )
-environment = SubResource( 2 )
+[node name="Preview3dScene" type="Node3D"]
+
+[node name="ObjectsPivot" type="Node3D" parent="."]
+
+[node name="Objects" parent="ObjectsPivot" instance=ExtResource("2")]
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
 current = true
 fov = 50.0
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 autoplay = "rotate"
-playback_speed = 0.1
-anims/rotate = SubResource( 3 )
+libraries = {
+"": SubResource("AnimationLibrary_sxr5g")
+}
 
-[node name="Sun" type="DirectionalLight" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="."]
 shadow_enabled = true
 shadow_bias = 0.03
 directional_shadow_mode = 0
-directional_shadow_normal_bias = 0.0
 directional_shadow_max_distance = 5.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qxxdb")

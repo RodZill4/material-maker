@@ -3,7 +3,7 @@
 [ext_resource path="res://material_maker/meshes/suzanne.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://material_maker/panels/preview_3d/preview_mesh.gd" type="Script" id=3]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="BoxMesh" id=1]
 
 [sub_resource type="CylinderMesh" id=2]
 radial_segments = 32
@@ -20,43 +20,43 @@ rings = 16
 [sub_resource type="PlaneMesh" id=5]
 size = Vector2( 8, 8 )
 
-[node name="Objects" type="Spatial"]
+[node name="Objects" type="Node3D"]
 
-[node name="Cube" type="MeshInstance" parent="."]
+[node name="Cube" type="MeshInstance3D" parent="."]
 mesh = SubResource( 1 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 3, 2 )
 
-[node name="Cylinder" type="MeshInstance" parent="."]
+[node name="Cylinder" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource( 2 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 2, 2 )
 
-[node name="Sphere" type="MeshInstance" parent="."]
+[node name="Sphere" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource( 3 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 4, 2 )
 
-[node name="Prism" type="MeshInstance" parent="."]
+[node name="Prism" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource( 4 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 3, 2 )
 
-[node name="Plane" type="MeshInstance" parent="."]
+[node name="Plane" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource( 5 )
 material/0 = null
 script = ExtResource( 3 )
 uv_scale = Vector2( 4, 4 )
 
-[node name="Custom" type="MeshInstance" parent="."]
+[node name="Custom" type="MeshInstance3D" parent="."]
 visible = false
 mesh = ExtResource( 1 )
 material/0 = null

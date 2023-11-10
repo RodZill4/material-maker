@@ -6,224 +6,24 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Button",
-"class": "FilePickerButton",
-"language": "GDScript",
-"path": "res://material_maker/widgets/file_picker_button/file_picker_button.gd"
-}, {
-"base": "Object",
-"class": "MMCurve",
-"language": "GDScript",
-"path": "res://addons/material_maker/types/curve.gd"
-}, {
-"base": "Node",
-"class": "MMGenBase",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_base.gd"
-}, {
-"base": "MMGenShader",
-"class": "MMGenBrush",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_brush.gd"
-}, {
-"base": "MMGenTexture",
-"class": "MMGenBuffer",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_buffer.gd"
-}, {
-"base": "MMGenTexture",
-"class": "MMGenComment",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_comment.gd"
-}, {
-"base": "Object",
-"class": "MMGenContext",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_context.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenDebug",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_debug.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenExport",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_export.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenGraph",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_graph.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenIOs",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_ios.gd"
-}, {
-"base": "MMGenTexture",
-"class": "MMGenImage",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_image.gd"
-}, {
-"base": "MMGenTexture",
-"class": "MMGenIterateBuffer",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_iterate_buffer.gd"
-}, {
-"base": "MMGenShader",
-"class": "MMGenMaterial",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_material.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenRemote",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_remote.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenReroute",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_reroute.gd"
-}, {
-"base": "MMGenShader",
-"class": "MMGenSDF",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_sdf.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenShader",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_shader.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenSwitch",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_switch.gd"
-}, {
-"base": "MMGenTexture",
-"class": "MMGenText",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_text.gd"
-}, {
-"base": "MMGenBase",
-"class": "MMGenTexture",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/gen_texture.gd"
-}, {
-"base": "Object",
-"class": "MMGradient",
-"language": "GDScript",
-"path": "res://addons/material_maker/types/gradient.gd"
-}, {
-"base": "GraphEdit",
-"class": "MMGraphEdit",
-"language": "GDScript",
-"path": "res://material_maker/panels/graph_edit/graph_edit.gd"
-}, {
-"base": "MMGraphNodeMinimal",
-"class": "MMGraphNodeBase",
-"language": "GDScript",
-"path": "res://material_maker/nodes/base.gd"
-}, {
-"base": "MMGraphNodeBase",
-"class": "MMGraphNodeGeneric",
-"language": "GDScript",
-"path": "res://material_maker/nodes/generic/generic.gd"
-}, {
-"base": "GraphNode",
-"class": "MMGraphNodeMinimal",
-"language": "GDScript",
-"path": "res://material_maker/nodes/minimal.gd"
-}, {
-"base": "MMGraphNodeGeneric",
-"class": "MMGraphNodeRemote",
-"language": "GDScript",
-"path": "res://material_maker/nodes/remote/remote.gd"
-}, {
-"base": "Control",
-"class": "MMNodeLink",
-"language": "GDScript",
-"path": "res://material_maker/widgets/linked_widgets/link.gd"
-}, {
-"base": "Reference",
-"class": "MMPaths",
-"language": "GDScript",
-"path": "res://addons/material_maker/engine/paths.gd"
-}, {
-"base": "Object",
-"class": "MMPolygon",
-"language": "GDScript",
-"path": "res://addons/material_maker/types/polygon.gd"
-}, {
-"base": "Node",
-"class": "MMType",
-"language": "GDScript",
-"path": "res://addons/material_maker/types/types.gd"
-}, {
-"base": "TextureButton",
-"class": "PortGroupButton",
-"language": "GDScript",
-"path": "res://material_maker/widgets/port_group_button/port_group_button.gd"
-}, {
-"base": "OptionButton",
-"class": "SizeOptionButton",
-"language": "GDScript",
-"path": "res://material_maker/widgets/size_option_button/size_option_button.gd"
-} ]
-_global_script_class_icons={
-"FilePickerButton": "",
-"MMCurve": "",
-"MMGenBase": "",
-"MMGenBrush": "",
-"MMGenBuffer": "",
-"MMGenComment": "",
-"MMGenContext": "",
-"MMGenDebug": "",
-"MMGenExport": "",
-"MMGenGraph": "",
-"MMGenIOs": "",
-"MMGenImage": "",
-"MMGenIterateBuffer": "",
-"MMGenMaterial": "",
-"MMGenRemote": "",
-"MMGenReroute": "",
-"MMGenSDF": "",
-"MMGenShader": "",
-"MMGenSwitch": "",
-"MMGenText": "",
-"MMGenTexture": "",
-"MMGradient": "",
-"MMGraphEdit": "",
-"MMGraphNodeBase": "",
-"MMGraphNodeGeneric": "",
-"MMGraphNodeMinimal": "",
-"MMGraphNodeRemote": "",
-"MMNodeLink": "",
-"MMPaths": "",
-"MMPolygon": "",
-"MMType": "",
-"PortGroupButton": "",
-"SizeOptionButton": ""
-}
+config_version=5
 
 [application]
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material authoring tool"
-run/main_scene="res://start.tscn"
+run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker"
-boot_splash/image="res://rodz_labs_logo.png"
+config/features=PackedStringArray("4.2")
+boot_splash/bg_color=Color(0, 0, 0, 0)
+boot_splash/show_image=false
 boot_splash/fullsize=false
-boot_splash/bg_color=Color( 0.0901961, 0.0941176, 0.141176, 1 )
+boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="1.3.0.0"
-config/actual_release="1.3"
+config/release="1.4.0.0"
+config/actual_release="1.4pre"
 
 [audio]
 
@@ -242,21 +42,28 @@ Html5="*res://material_maker/html5.gd"
 
 [debug]
 
-gdscript/warnings/unused_class_variable=true
-gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unsafe_cast=true
 gdscript/warnings/unsafe_call_argument=true
+gdscript/warnings/return_value_discarded=false
+gdscript/warnings/unused_class_variable=true
 
 [display]
 
-window/size/width=1280
-window/size/height=720
-window/dpi/allow_hidpi=true
+window/size/viewport_width=1
+window/size/viewport_height=1
+window/size/borderless=true
+window/size/window_width_override=1
+window/size/window_height_override=1
 window/handheld/orientation.Android="sensor_landscape"
+
+[editor]
+
+run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\mmg4\\material-maker\\material_maker\\meshes\\suzanne.obj"
+run/main_run_args_nosplash="--no-splash"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/material_maker/plugin.cfg" )
+enabled=PackedStringArray()
 
 [gui]
 
@@ -266,45 +73,45 @@ timers/tooltip_delay_sec=0.1
 
 toggle_fullscreen={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":true,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777221,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":16777254,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":true,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":16777221,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 ui_library_popup={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":32,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 ui_hierarchy_up={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":true,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":16777220,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":16777218,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 ui_hierarchy_down={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":16777218,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 ui_toggle_docks={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":true,"command":true,"pressed":false,"scancode":32,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":true,"pressed":false,"keycode":32,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 ui_previous_tab={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":true,"control":true,"meta":true,"command":true,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":true,"ctrl_pressed":true,"meta_pressed":true,"pressed":false,"keycode":16777218,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 ui_next_tab={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":true,"meta":true,"command":true,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":true,"pressed":false,"keycode":16777218,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
 }
 
 [locale]
 
-translations=PoolStringArray(  )
+translations=PackedStringArray()
 
 [logging]
 
@@ -316,14 +123,15 @@ limits/message_queue/max_size_kb=16384
 
 [network]
 
-limits/debugger_stdout/max_chars_per_second=204800000
+limits/debugger/max_chars_per_second=204800000
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
+shading/overrides/force_vertex_shading.mobile=false
+shading/overrides/force_lambert_over_burley.mobile=false
+environment/defaults/default_environment="res://default_env.tres"
 quality/shadows/filter_mode=2
-quality/shading/force_vertex_shading.mobile=false
-quality/shading/force_lambert_over_burley.mobile=false
-quality/shading/force_blinn_over_ggx.mobile=false
+shading/overrides/force_blinn_over_ggx.mobile=false
 quality/filters/anisotropic_filter_level=16
 quality/depth/hdr.mobile=true
-environment/default_environment="res://default_env.tres"

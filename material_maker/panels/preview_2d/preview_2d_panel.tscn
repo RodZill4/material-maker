@@ -1,13 +1,13 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=13 format=3 uid="uid://b7x7yqgsurxhv"]
 
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=1]
-[ext_resource path="res://material_maker/panels/preview_2d/control_point.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d.tscn" type="PackedScene" id=3]
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" type="Script" id=4]
-[ext_resource path="res://material_maker/panels/preview_2d/lines.gd" type="Script" id=5]
-[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=6]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
+[ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="6"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -16,56 +16,32 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+shader = SubResource("1")
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 64, 48, 32, 32 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1")
+region = Rect2(64, 48, 32, 32)
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 1 )
-region = Rect2( 16, 64, 16, 16 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("1")
+region = Rect2(16, 64, 16, 16)
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id="5"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id=6]
+[sub_resource type="ShaderMaterial" id="6"]
 resource_local_to_scene = true
-shader = SubResource( 5 )
+render_priority = 0
+shader = SubResource("5")
 
-[node name="Preview2D" instance=ExtResource( 3 )]
-material = SubResource( 2 )
-margin_right = -758.0
-margin_bottom = -267.0
-rect_min_size = Vector2( 200, 200 )
-script = ExtResource( 4 )
-shader = "uniform vec2 preview_2d_size = vec2(100.0);
-uniform float preview_2d_scale = 1.2;
-uniform vec2 preview_2d_center = vec2(0.5);
-uniform int mode = 0;
-uniform vec4 background_color_1 = vec4(0.0);
-uniform vec4 background_color_2 = vec4(1.0);
-
-void fragment() {
-	vec2 ratio = preview_2d_size;
-	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
-	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
-		COLOR = vec4(0.0);
-	} else {
-		if (mode == 1) {
-			uv = fract(uv);
-		}
-		vec4 image = preview_2d_postprocessed(uv);
-		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
-		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
-		COLOR = vec4(image_with_background, 1.0);
-	}
-}
-"
+[node name="Preview2D" instance=ExtResource("3")]
+material = SubResource("2")
+custom_minimum_size = Vector2(200, 200)
+offset_right = -758.0
+offset_bottom = -267.0
+script = ExtResource("4")
 config_var_suffix = ""
 shader_accumulate = "uniform sampler2D sum;
 uniform bool clear = false;
@@ -98,239 +74,267 @@ void fragment() {
 	COLOR = vec4(pow(texture(sum, UV).rgb/float(divide), vec3(exponent)), 1.0);
 }"
 control_target = NodePath("")
+shader = "uniform vec2 preview_2d_size = vec2(100.0);
+uniform float preview_2d_scale = 1.2;
+uniform vec2 preview_2d_center = vec2(0.5);
+uniform int mode = 0;
+uniform vec4 background_color_1 = vec4(0.0);
+uniform vec4 background_color_2 = vec4(1.0);
+
+void fragment() {
+	vec2 ratio = preview_2d_size;
+	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
+		COLOR = vec4(0.0);
+	} else {
+		if (mode == 1) {
+			uv = fract(uv);
+		}
+		vec4 image = preview_2d_postprocessed(uv);
+		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
+		COLOR = vec4(image_with_background, 1.0);
+	}
+}
+"
 
 [node name="Guides" type="Control" parent="." index="0"]
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("5")
 
-[node name="P1" parent="." index="1" instance=ExtResource( 2 )]
+[node name="P1" parent="." index="1" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.466667, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 37.0
-margin_bottom = 61.0
-texture = SubResource( 3 )
+self_modulate = Color(1, 0.466667, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 37.0
+offset_bottom = 61.0
+texture = SubResource("3")
 
-[node name="P2" parent="." index="2" instance=ExtResource( 2 )]
+[node name="P2" parent="." index="2" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 0, 0.505882, 1, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 37.0
-margin_bottom = 61.0
-texture = SubResource( 3 )
+self_modulate = Color(0, 0.505882, 1, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 37.0
+offset_bottom = 61.0
+texture = SubResource("3")
 
-[node name="P11" parent="." index="3" instance=ExtResource( 2 )]
+[node name="P11" parent="." index="3" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 0, 0.505882, 1, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 37.0
-margin_bottom = 61.0
-texture = SubResource( 3 )
+self_modulate = Color(0, 0.505882, 1, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 37.0
+offset_bottom = 61.0
+texture = SubResource("3")
 parent_control = "P1"
 apply_local_transform = true
 
-[node name="RadiusP11" parent="." index="4" instance=ExtResource( 2 )]
+[node name="RadiusP11" parent="." index="4" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P11"
 control_type = 2
 
-[node name="P12" parent="." index="5" instance=ExtResource( 2 )]
+[node name="P12" parent="." index="5" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 0, 0.505882, 1, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 37.0
-margin_bottom = 61.0
-texture = SubResource( 3 )
+self_modulate = Color(0, 0.505882, 1, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 37.0
+offset_bottom = 61.0
+texture = SubResource("3")
 parent_control = "P1"
 apply_local_transform = true
 
-[node name="P3" parent="." index="6" instance=ExtResource( 2 )]
+[node name="P3" parent="." index="6" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 0, 1, 0.380392, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
-texture = SubResource( 4 )
+self_modulate = Color(0, 1, 0.380392, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
+texture = SubResource("4")
 
-[node name="Rect1" parent="." index="7" instance=ExtResource( 2 )]
+[node name="Rect1" parent="." index="7" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
-texture = SubResource( 4 )
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
+texture = SubResource("4")
 parent_control = "P1"
 control_type = 1
 apply_local_transform = true
 
-[node name="Radius1" parent="." index="8" instance=ExtResource( 2 )]
+[node name="Radius1" parent="." index="8" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="Radius2" parent="." index="9" instance=ExtResource( 2 )]
+[node name="Radius2" parent="." index="9" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 0, 0.505882, 1, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(0, 0.505882, 1, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P2"
 control_type = 2
 
-[node name="Radius11" parent="." index="10" instance=ExtResource( 2 )]
+[node name="Radius11" parent="." index="10" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "Radius1"
 control_type = 2
 
-[node name="Scale1" parent="." index="11" instance=ExtResource( 2 )]
+[node name="Scale1" parent="." index="11" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P1"
 control_type = 3
 
-[node name="RotateScale1" parent="." index="12" instance=ExtResource( 2 )]
+[node name="RotateScale1" parent="." index="12" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P1"
 control_type = 4
 
-[node name="Angle1" parent="." index="13" instance=ExtResource( 2 )]
+[node name="Angle1" parent="." index="13" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="Angle2" parent="." index="14" instance=ExtResource( 2 )]
+[node name="Angle2" parent="." index="14" instance=ExtResource("2")]
 visible = false
-self_modulate = Color( 1, 0.631373, 0, 1 )
-margin_left = 5.0
-margin_top = 29.0
-margin_right = 21.0
-margin_bottom = 45.0
+self_modulate = Color(1, 0.631373, 0, 1)
+layout_mode = 0
+offset_left = 5.0
+offset_top = 29.0
+offset_right = 21.0
+offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource( 4 )
+texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
 [node name="ContextMenu" type="PopupMenu" parent="." index="15"]
-margin_right = 109.0
-margin_bottom = 52.0
-items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
+item_count = 1
+item_0/text = "Reset view"
+item_0/id = 0
 
-[node name="View" type="PopupMenu" parent="ContextMenu" index="0"]
-margin_right = 91.0
-margin_bottom = 88.0
-items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false, "Temporal AA 2.2", null, 2, false, false, 4, 0, null, "", false ]
+[node name="View" type="PopupMenu" parent="ContextMenu" index="3"]
+item_count = 5
+item_0/text = "Extend"
+item_0/checkable = 2
+item_0/checked = true
+item_0/id = 0
+item_1/text = "Repeat"
+item_1/checkable = 2
+item_1/id = 1
+item_2/text = "Clamp"
+item_2/checkable = 2
+item_2/id = 2
+item_3/text = "Temporal AA"
+item_3/checkable = 2
+item_3/id = 3
+item_4/text = "Temporal AA 2.2"
+item_4/checkable = 2
+item_4/id = 4
 
-[node name="Guides" type="PopupMenu" parent="ContextMenu" index="2"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="Guides" type="PopupMenu" parent="ContextMenu" index="4"]
 
-[node name="Grid" type="Popup" parent="ContextMenu/Guides" index="1"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Grid" type="Popup" parent="ContextMenu/Guides" index="3"]
 
 [node name="Panel" type="PanelContainer" parent="ContextMenu/Guides/Grid" index="0"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="GridSize" parent="ContextMenu/Guides/Grid/Panel" index="0" instance=ExtResource( 6 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 65.0
-margin_bottom = 33.0
+[node name="GridSize" parent="ContextMenu/Guides/Grid/Panel" index="0" instance=ExtResource("6")]
+layout_mode = 2
 value = 4.0
 min_value = 2.0
 max_value = 64.0
 step = 1.0
 float_only = true
 
-[node name="Export" type="PopupMenu" parent="ContextMenu" index="3"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="Export" type="PopupMenu" parent="ContextMenu" index="5"]
 
-[node name="Reference" type="PopupMenu" parent="ContextMenu" index="4"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="Reference" type="PopupMenu" parent="ContextMenu" index="6"]
 
-[node name="PostProcess" type="PopupMenu" parent="ContextMenu" index="5"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="PostProcess" type="PopupMenu" parent="ContextMenu" index="7"]
 
-[node name="Accumulate" type="Viewport" parent="." index="16"]
-size = Vector2( 2, 2 )
-handle_input_locally = false
-use_32_bpc_depth = true
+[node name="Accumulate" type="SubViewport" parent="." index="16"]
 disable_3d = true
-keep_3d_linear = true
-render_target_v_flip = true
+handle_input_locally = false
+gui_snap_controls_to_pixels = false
+size = Vector2i(2, 2)
 render_target_clear_mode = 1
 render_target_update_mode = 1
-gui_snap_controls_to_pixels = false
 
 [node name="Iteration" type="ColorRect" parent="Accumulate" index="0"]
-material = SubResource( 6 )
-margin_right = 40.0
-margin_bottom = 40.0
+material = SubResource("6")
+offset_right = 40.0
+offset_bottom = 40.0
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]

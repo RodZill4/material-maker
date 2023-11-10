@@ -5,11 +5,12 @@ signal value_changed(value)
 
 
 func _ready():
+	super._ready()
 	update_controls()
 
 func set_polygon(p : MMPolygon) -> void:
 	polygon = p
-	update()
+	queue_redraw()
 	update_controls()
 
 func update_controls() -> void:
@@ -17,32 +18,32 @@ func update_controls() -> void:
 		c.queue_free()
 	for i in polygon.points.size():
 		var p = polygon.points[i]
-		var control_point = preload("res://material_maker/widgets/polygon_edit/control_point.tscn").instance()
+		var control_point = preload("res://material_maker/widgets/polygon_edit/control_point.tscn").instantiate()
 		add_child(control_point)
 		control_point.initialize(p)
-		control_point.rect_position = transform_point(p)-control_point.OFFSET
-		control_point.connect("moved", self, "_on_ControlPoint_moved")
-		control_point.connect("removed", self, "_on_ControlPoint_removed")
+		control_point.position = transform_point(p)-control_point.OFFSET
+		control_point.connect("moved", Callable(self, "_on_ControlPoint_moved"))
+		control_point.connect("removed", Callable(self, "_on_ControlPoint_removed"))
 	emit_signal("value_changed", polygon)
 
 func _on_ControlPoint_moved(index):
 	var control_point = get_child(index)
-	polygon.points[index] = reverse_transform_point(control_point.rect_position+control_point.OFFSET)
-	update()
+	polygon.points[index] = reverse_transform_point(control_point.position+control_point.OFFSET)
+	queue_redraw()
 	emit_signal("value_changed", polygon)
 
 func _on_ControlPoint_removed(index):
 	if polygon.remove_point(index):
-		update()
+		queue_redraw()
 		update_controls()
 
 func _on_PolygonEditor_gui_input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and event.doubleclick:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
 			var new_point_position = reverse_transform_point(get_local_mouse_position())
 			polygon.add_point(new_point_position.x, new_point_position.y, closed)
 			update_controls()
 
 func _on_resize() -> void:
-	._on_resize()
+	super._on_resize()
 	update_controls()

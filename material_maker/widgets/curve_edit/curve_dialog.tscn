@@ -1,102 +1,68 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://dmfusfaiojjvf"]
 
-[ext_resource path="res://material_maker/widgets/curve_edit/curve_editor.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/widgets/curve_edit/curve_dialog.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/widgets/curve_edit/presets_selector.gd" type="Script" id=3]
+[ext_resource type="PackedScene" uid="uid://c2ns17avhb2nx" path="res://material_maker/widgets/curve_edit/curve_editor.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/curve_dialog.gd" id="2"]
+[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/presets_selector.gd" id="3"]
 
-[node name="CurveDialog" type="WindowDialog"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 307.0
-margin_top = 151.0
-margin_right = -578.0
-margin_bottom = -174.0
-rect_min_size = Vector2( 300, 300 )
-window_title = "Edit curve"
-resizable = true
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="CurveDialog" type="Window"]
+title = "Edit curve"
+size = Vector2i(300, 300)
+exclusive = true
+min_size = Vector2i(300, 300)
+script = ExtResource("2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
 
 [node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
-margin_right = 385.0
-margin_bottom = 353.0
-rect_clip_content = true
+clip_contents = true
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/margin_right = 4
-custom_constants/margin_top = 4
-custom_constants/margin_left = 4
-custom_constants/margin_bottom = 4
 
-[node name="CurveEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 381.0
-margin_bottom = 349.0
+[node name="CurveEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource("1")]
+layout_mode = 2
 size_flags_vertical = 3
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 357.0
-margin_right = 385.0
-margin_bottom = 361.0
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 365.0
-margin_right = 385.0
-margin_bottom = 385.0
+layout_mode = 2
 
 [node name="PresetsSelector" type="MenuButton" parent="VBoxContainer/HBoxContainer"]
-margin_right = 60.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "Presets"
 flat = false
-items = [ "Linear", null, 0, false, false, 0, 0, null, "", false, "EaseOut", null, 0, false, false, 1, 0, null, "", false, "EaseInOut", null, 0, false, false, 2, 0, null, "", false, "EaseIn", null, 0, false, false, 3, 0, null, "", false, "SawTooth", null, 0, false, false, 4, 0, null, "", false, "Bounce", null, 0, false, false, 5, 0, null, "", false, "Bevel", null, 0, false, false, 6, 0, null, "", false ]
-script = ExtResource( 3 )
+script = ExtResource("3")
 
 [node name="Invert" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 64.0
-margin_right = 124.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "Invert"
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
-margin_left = 128.0
-margin_right = 257.0
-margin_bottom = 20.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 261.0
-margin_right = 321.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-margin_left = 325.0
-margin_right = 385.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "Cancel"
 
-[connection signal="popup_hide" from="." to="." method="_on_CurveDialog_popup_hide"]
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="value_changed" from="VBoxContainer/EditorContainer/CurveEditor" to="." method="_on_CurveEditor_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Invert" to="." method="_on_Invert_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]

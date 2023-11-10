@@ -1,6 +1,6 @@
 extends ScrollContainer
 
-onready var parameters : GridContainer = $Parameters
+@onready var parameters : GridContainer = $Parameters
 
 const GENERIC = preload("res://material_maker/nodes/generic/generic.gd")
 
@@ -13,11 +13,11 @@ func _ready():
 
 func set_generator(g):
 	if g != generator:
-		if is_instance_valid(generator) and generator.is_connected("parameter_changed", self, "on_parameter_changed"):
-			generator.disconnect("parameter_changed", self, "on_parameter_changed")
+		if is_instance_valid(generator) and generator.is_connected("parameter_changed", Callable(self, "on_parameter_changed")):
+			generator.disconnect("parameter_changed", Callable(self, "on_parameter_changed"))
 		generator = g
 		if generator != null:
-			generator.connect("parameter_changed", self, "on_parameter_changed")
+			generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
 	for c in parameters.get_children():
 		parameters.remove_child(c)
 		c.free()
@@ -29,16 +29,16 @@ func set_generator(g):
 				parameter_labels[p.label] = p
 		for p in generator.get_parameter_defs():
 			if p.has("label"):
-				if p.label.left(6) == "Paint " and parameter_labels.has(p.label.right(6)):
+				if p.label.left(6) == "Paint " and parameter_labels.has(p.label.right(-6)):
 					continue
 				elif parameter_labels.has("Paint "+p.label):
 					var paint_parameter = parameter_labels["Paint "+p.label]
-					var control = GENERIC.create_parameter_control(paint_parameter, false)
-					control.name = paint_parameter.name
-					if control is CheckBox:
-						control.text = p.label
-					parameters.add_child(control)
-					controls[paint_parameter.name] = control
+					var channel_control = GENERIC.create_parameter_control(paint_parameter, false)
+					channel_control.name = paint_parameter.name
+					if channel_control is CheckBox:
+						channel_control.text = p.label
+					parameters.add_child(channel_control)
+					controls[paint_parameter.name] = channel_control
 				else:
 					var label : Label = Label.new()
 					label.text = p.label if p.has("label") else ""

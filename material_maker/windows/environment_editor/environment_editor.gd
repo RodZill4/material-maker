@@ -1,15 +1,15 @@
-extends WindowDialog
+extends Window
 
-onready var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+@onready var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 
-onready var environment_list : ItemList = $Main/HSplitContainer/Environments
-onready var camera : Camera = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2/Camera
-onready var camera_position = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition
-onready var camera_rotation1 = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1
-onready var camera_rotation2 = $Main/HSplitContainer/ViewportContainer/Viewport/CameraPosition/CameraRotation1/CameraRotation2
-onready var environment : Environment = camera.environment
-onready var sun : DirectionalLight = $Main/HSplitContainer/ViewportContainer/Viewport/Sun
-onready var ui : GridContainer = $Main/HSplitContainer/UI
+@onready var environment_list : ItemList = $Main/HSplitContainer/Environments
+@onready var camera : Camera3D = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition/CameraRotation1/CameraRotation2/Camera3D
+@onready var camera_position = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition
+@onready var camera_rotation1 = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition/CameraRotation1
+@onready var camera_rotation2 = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition/CameraRotation1/CameraRotation2
+@onready var environment : Environment = camera.environment
+@onready var sun : DirectionalLight3D = $Main/HSplitContainer/SubViewportContainer/SubViewport/Sun
+@onready var ui : GridContainer = $Main/HSplitContainer/UI
 
 var share_button
 
@@ -21,12 +21,12 @@ func _ready():
 	popup_centered()
 	_on_ViewportContainer_resized()
 	connect_controls()
-	environment_manager.connect("environment_updated", self, "on_environment_updated")
-	environment_manager.connect("name_updated", self, "on_name_updated")
-	environment_manager.connect("thumbnail_updated", self, "on_thumbnail_updated")
+	environment_manager.environment_updated.connect(self.on_environment_updated)
+	environment_manager.name_updated.connect(self.on_name_updated)
+	environment_manager.thumbnail_updated.connect(self.on_thumbnail_updated)
 	read_environment_list()
 	share_button = mm_globals.main_window.get_share_button()
-	$Main/Buttons/Share.disabled = ! share_button.can_share()
+	# todo  $Main/Buttons/Share.disabled = ! share_button.can_share()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -36,13 +36,13 @@ func connect_controls() -> void:
 	for c in ui.get_children():
 		if c is LineEdit:
 			if c.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
-				c.connect("value_changed", self, "set_environment_value", [ c.name ])
+				c.connect("value_changed", Callable(self, "set_environment_value").bind(c.name))
 			else:
-				c.connect("text_entered", self, "set_environment_value", [ c.name ])
+				c.connect("text_submitted", Callable(self, "set_environment_value").bind(c.name))
 		elif c is ColorPickerButton:
-			c.connect("color_changed", self, "set_environment_value", [ c.name ])
+			c.connect("color_changed", Callable(self, "set_environment_value").bind(c.name))
 		elif c is CheckBox:
-			c.connect("toggled", self, "set_environment_value", [ c.name ])
+			c.connect("toggled", Callable(self, "set_environment_value").bind(c.name))
 
 func set_environment_value(value, variable):
 	environment_manager.set_value(current_environment, variable, value)
@@ -72,39 +72,39 @@ func read_environment_list(select : int = 0):
 		set_current_environment(select)
 
 func _on_ViewportContainer_resized():
-	$Main/HSplitContainer/ViewportContainer/Viewport.size = $Main/HSplitContainer/ViewportContainer.rect_size
+	$Main/HSplitContainer/SubViewportContainer/SubViewport.size = $Main/HSplitContainer/SubViewportContainer.size
 
 func _on_name_text_entered(new_text : String):
 	environment_list.set_item_text(current_environment, new_text)
 
 func _on_ViewportContainer_gui_input(ev : InputEvent):
 	if ev is InputEventMouseMotion:
-		if ev.button_mask & BUTTON_MASK_MIDDLE != 0:
-			if ev.shift:
-				var factor = 0.0025*camera.translation.z
+		if ev.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0:
+			if ev.shift_pressed:
+				var factor = 0.0025*camera.position.z
 				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
 				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
 			else:
 				camera_rotation2.rotate_x(-0.01*ev.relative.y)
 				camera_rotation1.rotate_y(-0.01*ev.relative.x)
 	elif ev is InputEventMouseButton:
-		if ev.control:
-			if ev.button_index == BUTTON_WHEEL_UP:
+		if ev.is_command_or_control_pressed():
+			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
-			elif ev.button_index == BUTTON_WHEEL_DOWN:
+			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.fov -= 1
 			else:
 				return
-			accept_event()
+			$Main.accept_event()
 		else:
 			var zoom = 0.0
-			if ev.button_index == BUTTON_WHEEL_UP:
+			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
 				zoom -= 1.0
-			elif ev.button_index == BUTTON_WHEEL_DOWN:
+			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				zoom += 1.0
 			if zoom != 0.0:
-				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift else 0.1)))
-				accept_event()
+				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
+				$Main.accept_event()
 
 func _update_environment_variable(value, variable):
 	environment.set(variable, value)
@@ -122,7 +122,7 @@ func set_current_environment(index : int) -> void:
 		elif control is ColorPickerButton:
 			control.color = MMType.deserialize_value(env[k])
 		elif control is CheckBox:
-			control.pressed = env[k]
+			control.button_pressed = env[k]
 	environment_manager.apply_environment(index, environment, sun)
 	var read_only : bool = environment_manager.is_read_only(index)
 	for c in ui.get_children():
@@ -142,12 +142,12 @@ func _on_Environments_item_selected(index):
 	set_current_environment(index)
 
 func _on_Environments_gui_input(event):
-	if ! (event is InputEventMouseButton) or event.button_index != BUTTON_RIGHT:
+	if ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:
 		return
-	var context_menu = $Main/HSplitContainer/Environments/ContextMenu
+	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
-		context_menu.popup(Rect2(get_global_mouse_position(), context_menu.get_minimum_size()))
+		context_menu.popup(Rect2($Main.get_global_mouse_position(), context_menu.get_contents_minimum_size()))
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]
@@ -157,27 +157,21 @@ func _on_ContextMenu_id_pressed(id):
 	_on_Environments_item_selected(index-1)
 
 func _on_Download_pressed():
-	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instance()
-	add_child(dialog)
-	var result = dialog.select_asset(2)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
-	if result == "":
-		return
-	var new_environment = JSON.parse(result).result
-	new_environment.erase("thumbnail")
-	environment_manager.add_environment(new_environment)
-	read_environment_list(-1)
+	var dialog = load("res://material_maker/windows/load_from_website/load_from_website.tscn").instantiate()
+	var result : Dictionary = await dialog.select_asset(2)
+	if result != {}:
+		var new_environment = result
+		new_environment.erase("thumbnail")
+		environment_manager.add_environment(new_environment)
+		read_environment_list(-1)
 
 func _on_Share_pressed():
-	var image = environment_manager.create_preview(current_environment, 512)
-	while image is GDScriptFunctionState:
-		image = yield(image, "completed")
+	var image = await environment_manager.create_preview(current_environment, 512)
 	var preview_texture : ImageTexture = ImageTexture.new()
-	preview_texture.create_from_image(image)
+	preview_texture.set_image(image)
 	var env = environment_manager.get_environment(current_environment).duplicate()
 	env.erase("thumbnail")
 	share_button.send_asset("environment", env, preview_texture)
 
 func _on_Main_minimum_size_changed():
-	rect_size = $Main.rect_size+Vector2(4, 4)
+	size = $Main.size+Vector2(4, 4)

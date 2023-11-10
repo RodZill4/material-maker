@@ -1,12 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "voronoi_3",
-			"from_port": 0,
-			"to": "buffer_5",
-			"to_port": 0
-		},
-		{
 			"from": "buffer_7",
 			"from_port": 0,
 			"to": "gen_outputs",
@@ -27,11 +21,17 @@
 		{
 			"from": "buffer_5",
 			"from_port": 0,
-			"to": "denoiser",
+			"to": "voronoi_2",
 			"to_port": 0
 		},
 		{
-			"from": "denoiser",
+			"from": "voronoi_3",
+			"from_port": 0,
+			"to": "buffer_5",
+			"to_port": 0
+		},
+		{
+			"from": "voronoi_2",
 			"from_port": 0,
 			"to": "buffer_7",
 			"to_port": 0
@@ -48,8 +48,8 @@
 		{
 			"name": "voronoi_3",
 			"node_position": {
-				"x": -600.80072,
-				"y": -894.601807
+				"x": -600.800720214844,
+				"y": -894.601806640625
 			},
 			"parameters": {
 				"angleBiasDeg": 15,
@@ -85,10 +85,15 @@
 					"  int steps = int($quality);",
 					"",
 					"  float angleBias = 0.0174532925 * angleBiasDeg;",
+					"  vec2 epsilon = vec2(0.001, 0.0);",
 					"",
 					"  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);",
+					"  vec2 uvpdx = uv+epsilon;",
+					"  vec2 uvpdy = uv+epsilon.yx;",
+					"  vec3 c_point_pdx = vec3(uvpdx*2.0 - 1.0, $in(uvpdx)*$depth_scale);",
+					"  vec3 c_point_pdy = vec3(uvpdy*2.0 - 1.0, $in(uvpdy)*$depth_scale);",
 					"  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177",
-					"  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));",
+					"  vec3 c_normal = normalize(cross(c_point_pdx-c_point, c_point_pdy-c_point));",
 					"",
 					"",
 					"  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));",
@@ -221,8 +226,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1338.030762,
-				"y": -788.080872
+				"x": -1338.03076171875,
+				"y": -788.080871582031
 			},
 			"parameters": {
 
@@ -242,8 +247,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -902.684204,
-				"y": -327.282288
+				"x": -902.684204101563,
+				"y": -327.282287597656
 			},
 			"parameters": {
 
@@ -263,8 +268,8 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -1488.979004,
-				"y": -561.71167
+				"x": -1488.97900390625,
+				"y": -561.711669921875
 			},
 			"parameters": {
 				"param0": 10,
@@ -280,6 +285,10 @@
 				{
 					"label": "Size",
 					"linked_widgets": [
+						{
+							"node": "voronoi_2",
+							"widget": "size"
+						},
 						{
 							"node": "buffer_2",
 							"widget": "size"
@@ -365,10 +374,150 @@
 			]
 		},
 		{
+			"name": "voronoi_2",
+			"node_position": {
+				"x": -718.111145019531,
+				"y": -642.459533691406
+			},
+			"parameters": {
+				"ksigma": 4,
+				"sigma": 3,
+				"size": 10,
+				"threshold": 0.7
+			},
+			"seed": 38722,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					}
+				],
+				"instance": [
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//  Copyright (c) 2018-2019 Michele Morrone",
+					"//  All rights reserved.",
+					"//",
+					"//  https://michelemorrone.eu - https://BrutPitt.com",
+					"//",
+					"//  me@michelemorrone.eu - brutpitt@gmail.com",
+					"//  twitter: @BrutPitt - github: BrutPitt",
+					"//  ",
+					"//  https://github.com/BrutPitt/glslSmartDeNoise/",
+					"//",
+					"//  This software is distributed under the terms of the BSD 2-Clause license",
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//  smartDeNoise - parameters",
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//",
+					"//  sampler2D tex\t - sampler image / texture",
+					"//  vec2 uv\t\t   - actual fragment coord",
+					"//  float sigma  >  0 - sigma Standard Deviation",
+					"//  float kSigma >= 0 - sigma coefficient ",
+					"//\t  kSigma * sigma  -->  radius of the circular kernel",
+					"//  float threshold   - edge sharpening threshold ",
+					"vec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)",
+					"{",
+					"\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI",
+					"\tfloat INV_PI = 0.31830988618379067153776752674503;",
+					"\tfloat radius = round(kSigma*sigma);",
+					"\tfloat radQ = radius * radius;",
+					"",
+					"\tfloat invSigmaQx2 = .5 / (sigma * sigma);\t  // 1.0 / (sigma^2 * 2.0)",
+					"\tfloat invSigmaQx2PI = INV_PI * invSigmaQx2;\t// 1/(2 * PI * sigma^2)",
+					"",
+					"\tfloat invThresholdSqx2 = .5 / (threshold * threshold);\t // 1.0 / (sigma^2 * 2.0)",
+					"\tfloat invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)",
+					"",
+					"\tvec4 centrPx = $in(uv); ",
+					"",
+					"\tfloat zBuff = 0.0;",
+					"\tvec4 aBuff = vec4(0.0);",
+					"\tvec2 size = vec2($size, $size);",
+					"",
+					"\tvec2 d;",
+					"\tfor (d.x=-radius; d.x <= radius; d.x++) {",
+					"\t\tfloat pt = sqrt(radQ-d.x*d.x);\t   // pt = yRadius: have circular trend",
+					"\t\tfor (d.y=-pt; d.y <= pt; d.y++) {",
+					"\t\t\tfloat blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;",
+					"",
+					"\t\t\tvec4 walkPx =  $in(uv+d/size);",
+					"\t\t\tvec4 dC = walkPx-centrPx;",
+					"\t\t\tfloat deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;",
+					"",
+					"\t\t\tzBuff += deltaFactor;",
+					"\t\t\taBuff += deltaFactor*walkPx;",
+					"\t\t}",
+					"\t}",
+					"\treturn aBuff/zBuff;",
+					"}"
+				],
+				"longdesc": "A node that generates several images from a tileable voronoi noise",
+				"name": "Denoiser",
+				"outputs": [
+					{
+						"longdesc": "A color pattern that assigns a random color to each cell",
+						"rgba": "$(name)_smartDeNoise($uv, $sigma, $ksigma, $threshold)",
+						"shortdesc": "Random color",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10,
+						"first": 0,
+						"label": "size",
+						"last": 12,
+						"longdesc": "The scale along the X axis",
+						"name": "size",
+						"shortdesc": "Scale.x",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sigma",
+						"max": 1,
+						"min": 0.005,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "kSigma",
+						"max": 1,
+						"min": 0,
+						"name": "ksigma",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "threshold",
+						"max": 1,
+						"min": 0,
+						"name": "threshold",
+						"step": 0.1,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Voronoi Noise"
+			},
+			"type": "shader"
+		},
+		{
 			"name": "buffer_5",
 			"node_position": {
-				"x": -931.449646,
-				"y": -724.330017
+				"x": -931.449645996094,
+				"y": -724.330017089844
 			},
 			"parameters": {
 				"size": 10
@@ -380,8 +529,8 @@
 		{
 			"name": "buffer_7",
 			"node_position": {
-				"x": -948.36377,
-				"y": -449.796295
+				"x": -948.36376953125,
+				"y": -449.796295166016
 			},
 			"parameters": {
 				"size": 10
@@ -393,7 +542,7 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -976.009644,
+				"x": -976.009643554688,
 				"y": -975.5
 			},
 			"parameters": {
@@ -402,21 +551,6 @@
 			"seed": 42465,
 			"type": "buffer",
 			"version": 1
-		},
-		{
-			"name": "denoiser",
-			"node_position": {
-				"x": -711,
-				"y": -632
-			},
-			"parameters": {
-				"param0": 10,
-				"param1": 3,
-				"param2": 4,
-				"param3": 0.7
-			},
-			"seed_int": 0,
-			"type": "denoiser"
 		}
 	],
 	"parameters": {

@@ -1,4 +1,4 @@
-extends WindowDialog
+extends Window
 
 signal ok
 

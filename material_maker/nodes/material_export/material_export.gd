@@ -9,8 +9,12 @@ const MATERIAL_MENU_PASTE : int        = 10001
 const MATERIAL_MENU_EDIT_EXPORTS : int = 10002
 
 
+func _ready():
+	super._ready()
+	close_button.visible = false
+
 func get_material_nodes() -> Array:
-	if material_nodes.empty():
+	if material_nodes.is_empty():
 		material_nodes = mm_loader.get_material_nodes()
 	return material_nodes
 
@@ -20,7 +24,9 @@ func create_context_menu():
 		menu.add_item(n.label)
 	var can_copy = ( generator.model == null )
 	var can_paste = false
-	var graph = parse_json(OS.clipboard)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(DisplayServer.clipboard_get())
+	var graph = test_json_conv.get_data()
 	if graph != null and graph is Dictionary and graph.has("nodes"):
 		if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export" and graph.nodes[0].has("shader_model"):
 			can_paste = true
@@ -35,13 +41,19 @@ func create_context_menu():
 	menu.add_item("Edit export targets", MATERIAL_MENU_EDIT_EXPORTS)
 	return menu
 
+func _on_MaterialExport_gui_input(event : InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed == true:
+		accept_event()
+
 func _on_menu_id_pressed(id : int) -> void:
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	match id:
 		MATERIAL_MENU_COPY:
-			OS.clipboard = to_json(get_parent().serialize_selection([ self ]))
+			DisplayServer.clipboard_set(JSON.stringify(get_parent().serialize_selection([ self ])))
 		MATERIAL_MENU_PASTE:
-			var graph = parse_json(OS.clipboard)
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(DisplayServer.clipboard_get())
+			var graph = test_json_conv.get_data()
 			if graph != null:
 				if graph.nodes.size() == 1 and graph.nodes[0].type == "material_export":
 					generator.model = null
