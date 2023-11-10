@@ -2,7 +2,7 @@ name: "dev-desktop-builds"
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, material_maker_1_3 ]
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -144,10 +144,11 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Download and extract export templates 💾
         run: |
-          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}-${GODOT_SUB}.stable
+          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_SUB}
           curl -O ${GODOT_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          ls -la
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
-          mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION}-${GODOT_SUB}.stable
+          mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_SUB}
       - name: Download Godot headless binary 🤖
         run: |
           wget -q ${GODOT_MAC_HEADLESS_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_${GODOT_VERSION}-${GODOT_SUB}_mac_headless.64.zip
