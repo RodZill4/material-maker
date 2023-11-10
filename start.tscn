@@ -189,7 +189,7 @@ margin_right = 164.0
 margin_bottom = 26.0
 rect_scale = Vector2( 0.5, 0.5 )
 rect_pivot_offset = Vector2( 212, 330 )
-texture = ExtResource( 7 )
+texture = ExtResource( 28 )
 stretch_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

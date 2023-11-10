@@ -14,8 +14,10 @@ on:
         default: 'false'
 
 env:
-  GODOT_VERSION: 3.5.2
-  GODOT_VERSION_MAC: 3.5.2
+  GODOT_VERSION: 3.5.3
+  GODOT_SUB: stable
+  GODOT_DOWNLOAD_URL: https://github.com/godotengine/godot/releases/download
+  GODOT_MAC_HEADLESS_DOWNLOAD_URL: https://github.com/huskeee/godot-headless-mac/releases/download
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_3
 
@@ -32,15 +34,19 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
-          wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
-          unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
+          wget -q ${GODOT_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux_headless.64.zip
+          unzip Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux_headless.64.zip
+          wget -q ${GODOT_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
+          mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
           dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
           ls -la /usr/bin
           chown root:root -R ~
           wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
           mkdir -v -p ~/.local/share/rcedit
           mv rcedit-x64.exe ~/.local/share/rcedit
-          ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -q
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux_headless.64 -q
           mkdir -p ~/.config/godot
           cd ~/.local/share/rcedit
           RCEDIT_PATH=`pwd`
@@ -55,9 +61,9 @@ jobs:
         with:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
-        run: ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+        run: ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux_headless.64 -v --export "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
-        run: ./Godot_v${GODOT_VERSION}-stable_linux_headless.64 -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+        run: ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux_headless.64 -v --export "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
@@ -105,7 +111,7 @@ jobs:
           submodules: true
       - name: Setup environment 🔧
         run: |
-          export GODOT_VERSION=${GODOT_VERSION_MAC}
+          export GODOT_VERSION=${GODOT_VERSION}-${GODOT_SUB}
           export EXPORT_NAME=material_maker
       - name: Install the Apple certificate and provisioning profile
         if: ${{ github.event.inputs.sign_macos == 'true' }}
@@ -138,14 +144,13 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Download and extract export templates 💾
         run: |
-          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
-          curl -O https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION_MAC}/Godot_v${GODOT_VERSION_MAC}-stable_export_templates.tpz
-          unzip -a Godot_v${GODOT_VERSION_MAC}-stable_export_templates.tpz
-          mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION_MAC}.stable
+          mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}-${GODOT_SUB}.stable
+          curl -O ${GODOT_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION}-${GODOT_SUB}.stable
       - name: Download Godot headless binary 🤖
         run: |
-          wget -q https://github.com/huskeee/godot-headless-mac/releases/download/${GODOT_VERSION_MAC}-stable/Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
-          unzip -a Godot_v${GODOT_VERSION_MAC}-stable_mac_headless.64.zip
+          wget -q ${GODOT_MAC_HEADLESS_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_${GODOT_VERSION}-${GODOT_SUB}_mac_headless.64.zip
       - name: Setup 💻
         run: mkdir -v -p ./build/mac
       - name: Mac Build 🔧
