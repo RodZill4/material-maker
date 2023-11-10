@@ -2,7 +2,9 @@ name: "dev-desktop-builds"
 
 on:
   push:
-    branches: [ godot4 ]
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
   workflow_dispatch:
     inputs:
       sign_macos:
@@ -13,8 +15,8 @@ on:
 
 env:
   GODOT_VERSION: 4.2
-  GODOT_SUB: beta4
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.2-beta4
+  GODOT_SUB: beta5
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.2-beta5
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
