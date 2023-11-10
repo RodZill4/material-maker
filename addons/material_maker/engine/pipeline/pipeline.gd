@@ -110,7 +110,7 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 				print("%4d: %s" % [ ln, l ])
 			print(k.to_upper()+" SHADER ERROR: "+spirv["compile_error_"+k])
 			errors = true
-	if !errors:
+	if ! errors:
 		shader = rd.shader_create_from_spirv(spirv)
 	return shader
 

@@ -87,7 +87,7 @@ var updating_shader : bool = false
 func update_shader() -> void:
 	if ! updating_shader:
 		updating_shader = true
-		call_deferred("do_update_shader")
+		do_update_shader.call_deferred()
 
 func do_update_shader() -> void:
 	if ! is_instance_valid(self) or exiting:
@@ -95,7 +95,8 @@ func do_update_shader() -> void:
 	updating_shader = false
 	var context : MMGenContext = MMGenContext.new()
 	var source : ShaderCode
-	var source_output = get_source(0)
+	var source_output : OutputPort = get_source(0)
+	print(source_output)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
 	else:
@@ -127,6 +128,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		self.rendering_time_updated.emit(rendering_time)
 		mm_deps.dependency_update(buffer_name, texture, true)
 		return true
+	mm_deps.dependency_update(buffer_name, texture, true)
 	return false
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:

@@ -118,7 +118,6 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		rd.compute_list_end()
 		#print("Rendering "+str(self))
 		rd.submit()
-		#await mm_renderer.get_tree().process_frame
 		rd.sync()
 		
 		rids.free_rids(rd)
@@ -146,7 +145,6 @@ func render_2(rd : RenderingDevice, texture : MMTexture, size : Vector2i, rids :
 		if ! status:
 			return false
 	else:
-		print("Invalid shader, generating blank image")
 		return false
 	
 	await texture.set_texture_rid(output_tex, size, TEXTURE_TYPE[texture_type].data_format, rd)

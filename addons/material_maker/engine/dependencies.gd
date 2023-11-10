@@ -172,7 +172,7 @@ func update():
 		return
 	update_scheduled = true
 	if !updating:
-		call_deferred("do_update")
+		do_update.call_deferred()
 
 # on_dep_update_buffer:
 # - returns true if update was performed immediately, set to updated
@@ -221,12 +221,12 @@ func buffer_create_compute_material(buffer_name : String, material : MMShaderBas
 	for p in material.get_parameters().keys():
 		var value = buffer_add_dependency(buffer_name, p)
 		if value != null:
-			material.set_parameter(p, value)
+			await material.set_parameter(p, value)
 	buffers[buffer_name].shader_generations += 1
 
 func buffer_create_shader_material(buffer_name : String, material : MMShaderBase, shader : String):
 	material.set_shader(shader)
-	buffer_create_compute_material(buffer_name, material)
+	await buffer_create_compute_material(buffer_name, material)
 
 func print_stats(object = null):
 	var statuses : Dictionary = {}

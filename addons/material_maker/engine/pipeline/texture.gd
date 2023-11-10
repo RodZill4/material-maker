@@ -2,6 +2,7 @@ extends RefCounted
 class_name MMTexture
 
 
+var rd : RenderingDevice
 var rid : RID
 var texture_size : Vector2i
 var texture_format : RenderingDevice.DataFormat
@@ -16,14 +17,10 @@ func _init() -> void:
 func _notification(what : int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
-			#print("Deleting texture rid")
 			if rid.is_valid():
-				var rd = await mm_renderer.request_rendering_device(self)
 				rd.free_rid(rid)
-				mm_renderer.release_rendering_device(self)
-				#print("Texture rid deleted")
 
-func get_texture_rid(rd : RenderingDevice = null) -> RID:
+func get_texture_rid(target_rd : RenderingDevice) -> RID:
 	if ! rid.is_valid():
 		var image : Image = texture.get_image()
 		if image == null:
@@ -36,17 +33,16 @@ func get_texture_rid(rd : RenderingDevice = null) -> RID:
 		fmt.format = texture_format
 		fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
 		var view : RDTextureView = RDTextureView.new()
+		rd = target_rd
 		rid = rd.texture_create(fmt, view, [ image.get_data() ])
+	else:
+		assert(target_rd == rd)
 	return rid
 
-func set_texture_rid(new_rid : RID, size : Vector2i, format : RenderingDevice.DataFormat, rd : RenderingDevice = null) -> void:
+func set_texture_rid(new_rid : RID, size : Vector2i, format : RenderingDevice.DataFormat, new_rd : RenderingDevice) -> void:
 	if rid.is_valid():
-		if rd != null:
-			rd.free_rid(rid)
-		else:
-			rd = await mm_renderer.request_rendering_device(self)
-			rd.free_rid(rid)
-			mm_renderer.release_rendering_device(self)
+		rd.free_rid(rid)
+	rd = new_rd
 	rid = new_rid
 	texture_size = size
 	texture_format = format
@@ -57,11 +53,9 @@ func get_texture() -> Texture2D:
 		if false:
 			# Use Texture2DRD
 			texture = Texture2DRD.new()
-			texture.texture_rd_rid = RenderingServer.texture_get_rd_texture(rid)
+			texture.texture_rd_rid = rid
 		else:
-			var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 			var byte_data : PackedByteArray = rd.texture_get_data(rid, 0)
-			mm_renderer.release_rendering_device(self)
 			var image_format : Image.Format
 			match texture_format:
 				RenderingDevice.DATA_FORMAT_R32_SFLOAT:
@@ -100,9 +94,7 @@ func set_texture(new_texture : ImageTexture) -> void:
 			texture.set_image(image)
 			texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
 	if rid.is_valid():
-		var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 		rd.free_rid(rid)
-		mm_renderer.release_rendering_device(self)
 	rid = RID()
 
 func get_width() -> int:
@@ -112,7 +104,7 @@ func get_height() -> int:
 	return texture_size.y
 
 func save_to_file(file_name : String):
-	var texture = await get_texture()
+	var texture : ImageTexture = get_texture()
 	var image : Image = texture.get_image()
 	if image != null:
 		var export_image : Image = image
