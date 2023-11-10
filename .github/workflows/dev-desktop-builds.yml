@@ -145,7 +145,7 @@ jobs:
       - name: Download and extract export templates 💾
         run: |
           mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_SUB}
-          curl -O ${GODOT_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          wget -q ${GODOT_DOWNLOAD_URL}/${GODOT_VERSION}-${GODOT_SUB}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           ls -la
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mv ./templates/* ~/.local/share/godot/templates/${GODOT_VERSION}.${GODOT_SUB}
