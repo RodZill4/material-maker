@@ -2,6 +2,7 @@ extends MMGraphNodeBase
 
 func _ready():
 	super._ready()
+	close_button.visible = false
 
 func set_generator(g) -> void:
 	super.set_generator(g)
@@ -54,4 +55,3 @@ func command(command_name : String, command_parameters : Array, update_node : bo
 	if prev != null:
 		var next = parent_generator.serialize().duplicate(true)
 		get_parent().undoredo_create_step("IO update", parent_generator.get_hier_name(), prev, next)
-			

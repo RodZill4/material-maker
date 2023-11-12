@@ -8,6 +8,7 @@ class_name MMGenRemote
 
 var widgets = []
 
+
 func _enter_tree():
 	fix()
 	for p in parameters.keys():

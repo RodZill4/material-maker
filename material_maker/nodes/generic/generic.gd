@@ -389,8 +389,7 @@ func update_node() -> void:
 		remove_child(c)
 		c.free()
 	# Show or hide the close button
-	# TODO!
-	#show_close = generator.can_be_deleted()
+	close_button.visible = generator.can_be_deleted()
 	# Rebuild node
 	update_title()
 	# Resize to minimum

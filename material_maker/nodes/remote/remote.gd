@@ -67,13 +67,13 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 		button.connect("pressed", Callable(self, "move_parameter").bind(control.name, 1))
 
 func update_node() -> void:
+	await get_tree().process_frame
 	# Show or hide the close button
-	# TODO!
-	#show_close = generator.can_be_deleted()
+	close_button.visible = generator.can_be_deleted()
 	# Delete the contents and wait until it's done
 	for c in grid.get_children():
 		grid.remove_child(c)
-		c.free.call_deferred()
+		c.free()
 	title = generator.get_type_name()
 	controls = {}
 	var parameter_count : int = generator.get_parameter_defs().size()
