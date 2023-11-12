@@ -20,7 +20,7 @@ var iteration_param_name : String
 var used_named_parameters : Array = []
 
 
-func _init():
+func _ready():
 	#texture.flags = Texture2D.FLAG_REPEAT
 	shader_computes.append(MMShaderCompute.new())
 	shader_computes.append(MMShaderCompute.new())
@@ -77,11 +77,10 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type="rgba" }, { type="rgba" } ]
 
 func source_changed(input_port_index : int) -> void:
-	update_shader(input_port_index)
+	update_shaders()
 
 func all_sources_changed() -> void:
-	update_shader(0)
-	update_shader(1)
+	update_shaders()
 
 func follow_input(input_index : int) -> Array:
 	if input_index == 1:
@@ -91,9 +90,9 @@ func follow_input(input_index : int) -> Array:
 
 var require_shaders_update : bool = false
 
-func update_shader(input_port_index : int) -> void:
-	if !require_shaders_update:
-		call_deferred("do_update_shaders")
+func update_shaders() -> void:
+	if ! require_shaders_update:
+		do_update_shaders.call_deferred()
 		require_shaders_update = true
 
 func do_update_shaders() -> void:
@@ -120,6 +119,7 @@ func do_update_shaders() -> void:
 		else:
 			await shader_compute.set_shader_from_shadercode(sources[i], f32)
 		mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
+	mm_deps.update()
 	if new_is_greyscale != is_greyscale:
 		is_greyscale = new_is_greyscale
 		notify_output_change(0)
@@ -149,7 +149,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		return false
 	if buffer_name == buffer_names[3]:
 		return false
-	if is_rendering:
+	if false and is_rendering:
 		return false
 	
 	is_rendering = true
@@ -179,7 +179,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		if size < 4:
 			size = 4
 	
-	await shader_compute.render(texture, size)
+	var status : bool = await shader_compute.render(texture, size)
 	
 	is_rendering = false
 	
@@ -199,7 +199,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture, true)
 	mm_deps.dependency_update(buffer_name, texture, true)
-	return true
+	
+	return status
 
 func set_current_iteration(i : int) -> void:
 	if i == current_iteration:

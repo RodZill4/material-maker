@@ -221,12 +221,12 @@ func buffer_create_compute_material(buffer_name : String, material : MMShaderBas
 	for p in material.get_parameters().keys():
 		var value = buffer_add_dependency(buffer_name, p)
 		if value != null:
-			await material.set_parameter(p, value)
+			material.set_parameter(p, value)
 	buffers[buffer_name].shader_generations += 1
 
 func buffer_create_shader_material(buffer_name : String, material : MMShaderBase, shader : String):
 	material.set_shader(shader)
-	await buffer_create_compute_material(buffer_name, material)
+	buffer_create_compute_material(buffer_name, material)
 
 func print_stats(object = null):
 	var statuses : Dictionary = {}

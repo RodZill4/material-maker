@@ -96,7 +96,6 @@ func do_update_shader() -> void:
 	var context : MMGenContext = MMGenContext.new()
 	var source : ShaderCode
 	var source_output : OutputPort = get_source(0)
-	print(source_output)
 	if source_output != null:
 		source = source_output.generator.get_shader_code("uv", source_output.output_index, context)
 	else:
@@ -126,10 +125,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if status:
 		rendering_time = shader_compute.get_render_time()
 		self.rendering_time_updated.emit(rendering_time)
-		mm_deps.dependency_update(buffer_name, texture, true)
-		return true
 	mm_deps.dependency_update(buffer_name, texture, true)
-	return false
+	return status
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
