@@ -43,7 +43,7 @@ func _ready() -> void:
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
-	if f:
+	if f != null:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(f.get_as_text())
 		var json = test_json_conv.get_data()
@@ -61,7 +61,7 @@ func init_expanded_items() -> void:
 
 func _exit_tree() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.WRITE)
-	if f.is_open():
+	if f != null:
 		f.store_string(JSON.stringify(expanded_items))
 
 func _unhandled_input(event : InputEvent) -> void:

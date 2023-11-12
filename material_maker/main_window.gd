@@ -327,14 +327,14 @@ func _on_LoadRecent_id_pressed(id) -> void:
 
 func load_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.READ)
-	if f.is_open():
+	if f != null:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(f.get_as_text())
 		recent_files = test_json_conv.get_data()
 
 func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
-	if f.is_open():
+	if f != null:
 		f.store_string(JSON.stringify(recent_files))
 
 func add_recent(path, save = true) -> void:
@@ -552,7 +552,7 @@ func on_html5_load_file(file_name, _file_type, file_data):
 
 func get_file_absolute_path(filename : String) -> String:
 	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)
-	if ! file:
+	if file == null:
 		return ""
 	return file.get_path_absolute()
 		
@@ -783,7 +783,7 @@ func edit_load_selection() -> void:
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file : FileAccess = FileAccess.open(files[0], FileAccess.READ)
-		if file.is_open():
+		if file != null:
 			var test_json_conv = JSON.new()
 			test_json_conv.parse(file.get_as_text())
 			graph_edit.do_paste(test_json_conv.get_data())
@@ -804,7 +804,7 @@ func edit_save_selection() -> void:
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
 		var file : FileAccess = FileAccess.open(files[0], FileAccess.WRITE)
-		if file.is_open():
+		if file != null:
 			file.store_string(JSON.stringify(graph_edit.serialize_selection()))
 			file.close()
 
@@ -978,18 +978,19 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
+		var previews : Array = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
 		for i in range(2):
 			var preview = graph_edit.get_current_preview(i)
+			var generator : MMGenBase = null
+			var output_index : int = -1
 			if preview != null:
-				preview_2d[i].set_generator(preview.generator, preview.output_index)
-				if i == 0:
-					histogram.set_generator(preview.generator, preview.output_index)
-					preview_2d_background.set_generator(preview.generator, preview.output_index)
-			else:
-				preview_2d[i].set_generator(null)
-				if i == 0:
-					histogram.set_generator(null)
-					preview_2d_background.set_generator(null)
+				generator = preview.generator
+				output_index = preview.output_index
+			if previews[i] != null:
+				previews[i].set_generator(generator, output_index)
+			if i == 0:
+				histogram.set_generator(generator, output_index)
+				preview_2d_background.set_generator(generator, output_index)
 
 var current_gen_material = null
 func update_preview_3d(previews : Array, _sequential = false) -> void:
@@ -1150,7 +1151,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 	await get_tree().process_frame
 	for f in files:
 		var file : FileAccess = FileAccess.open(f, FileAccess.READ)
-		if ! file.is_open():
+		if file == null:
 			continue
 		f = file.get_path_absolute()
 		match f.get_extension():

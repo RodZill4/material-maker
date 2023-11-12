@@ -30,7 +30,7 @@ func get_predefined_generators_from_dir(path : String) -> void:
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.get_extension() == "mmg":
 				var file : FileAccess = FileAccess.open(path+"/"+file_name, FileAccess.READ)
-				if file.is_open():
+				if file != null:
 					var generator = string_to_dict_tree(file.get_as_text())
 					if CHECK_PREDEFINED:
 						if generator.has("shader_model") and generator.shader_model.has("global") and generator.shader_model.global != "":
@@ -66,7 +66,7 @@ func update_predefined_generators()-> void:
 		get_predefined_generators_from_dir(path)
 	if false:
 		var file : FileAccess = FileAccess.open("predefined_nodes.json", FileAccess.WRITE)
-		if file.is_open():
+		if file != null:
 			file.store_string(JSON.stringify(predefined_generators))
 			file.close()
 
@@ -170,7 +170,7 @@ func load_gen(filename: String) -> MMGenBase:
 
 func save_gen(filename : String, generator : MMGenBase) -> void:
 	var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		var data = generator.serialize()
 		data.name = filename.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
@@ -310,7 +310,7 @@ func load_external_export_targets():
 	while file_name != "":
 		if file_name.get_extension() == "mme":
 			var file : FileAccess = FileAccess.open(USER_EXPORT_DIR.path_join(file_name), FileAccess.READ)
-			if file.is_open():
+			if file != null:
 				var export_data : Dictionary = string_to_dict_tree(file.get_as_text())
 				if export_data != {}:
 					var material : String = export_data.material
@@ -328,7 +328,7 @@ func get_external_export_targets(material_name : String) -> Dictionary:
 func save_export_target(material_name : String, export_target_name : String, export_target : Dictionary) -> String:
 	var file_name : String = get_export_file_name(material_name, export_target_name)
 	var file : FileAccess = FileAccess.open(USER_EXPORT_DIR.path_join(file_name), FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		export_target.name = export_target_name
 		file.store_string(dict_tree_to_string(export_target))
 	return file_name

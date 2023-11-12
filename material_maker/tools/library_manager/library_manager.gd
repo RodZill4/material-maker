@@ -42,7 +42,7 @@ func _exit_tree():
 		return
 	DirAccess.open("res://").make_dir_recursive(item_usage_file.get_base_dir())
 	var file = FileAccess.open(item_usage_file, FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		file.store_string(JSON.stringify(item_usage, "\t", true))
 
 # Libraries
@@ -262,7 +262,7 @@ func save_aliases() -> void:
 		return
 	DirAccess.open("res://").make_dir_recursive(user_aliases_file_name.get_base_dir())
 	var file = FileAccess.open(user_aliases_file_name, FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		file.store_string(JSON.stringify(user_item_aliases, "\t", true))
 		file.close()
 

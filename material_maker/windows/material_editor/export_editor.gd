@@ -151,7 +151,7 @@ func _on_Save_Export_pressed():
 		if data.has("template_name"):
 			export_data.material = data.template_name
 		var file : FileAccess = FileAccess.open(files[0], FileAccess.WRITE)
-		if file != null:
+		if file == null:
 			return
 		file.store_string(JSON.stringify(export_data))
 

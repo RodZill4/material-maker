@@ -412,7 +412,7 @@ func crash_recovery_save() -> void:
 			i += 1
 	var data = top_generator.serialize()
 	var file : FileAccess = FileAccess.open(save_crash_recovery_path, FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		file.store_string(JSON.stringify(data))
 		need_save_crash_recovery = false
 
@@ -634,7 +634,7 @@ func save_file(filename) -> bool:
 		JavaScriptBridge.download_buffer(JSON.stringify(data, "\t", true).to_ascii_buffer(), filename)
 	else:
 		var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
-		if file.is_open():
+		if file != null:
 			file.store_string(JSON.stringify(data, "\t", true))
 		else:
 			return false

@@ -551,7 +551,7 @@ func do_load_generator(file_name : String) -> void:
 	var new_generator = null
 	if file_name.ends_with(".mmn"):
 		var file : FileAccess = FileAccess.open(file_name, FileAccess.READ)
-		if file.is_open():
+		if file != null:
 			new_generator = MMGenShader.new()
 			var test_json_conv = JSON.new()
 			test_json_conv.parse(file.get_as_text())

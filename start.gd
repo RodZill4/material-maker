@@ -22,12 +22,13 @@ func _ready():
 				"Windows":
 					var bat_file_path : String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)+"\\mm_cd.bat"
 					var bat_file : FileAccess = FileAccess.open(bat_file_path, FileAccess.WRITE)
-					bat_file.store_line("cd")
-					bat_file.close()
-					OS.execute(bat_file_path, [], output)
-					#TODO: fix this
-					#dir.remove(bat_file_path)
-					#FileAccess.change_dir(output[0].split("\n")[2])
+					if bat_file != null:
+						bat_file.store_line("cd")
+						bat_file.close()
+						OS.execute(bat_file_path, [], output)
+						#TODO: fix this
+						#dir.remove(bat_file_path)
+						#FileAccess.change_dir(output[0].split("\n")[2])
 			var target : String = "Godot/Godot 4 Standard"
 			#TODO: fix this
 			var output_dir : String = "" #DirAccess.get_current_dir()

@@ -566,7 +566,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	else:
 		DirAccess.remove_absolute(file_name)
 		var out_file = FileAccess.open(file_name, FileAccess.WRITE)
-		if ! out_file.is_open():
+		if out_file == null:
 			print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
 			return false
 		out_file.store_string(processed_template)

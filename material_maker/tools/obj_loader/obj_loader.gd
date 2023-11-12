@@ -14,8 +14,8 @@ func load_obj_file(path : String) -> ArrayMesh:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	var mdlFile := FileAccess.open(path, FileAccess.READ)
-	if ! mdlFile.is_open():
+	var mdlFile : FileAccess = FileAccess.open(path, FileAccess.READ)
+	if mdlFile == null:
 		print("cannot open file at path[", path,"]")
 		mdlFile.close()
 		return null

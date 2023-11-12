@@ -44,7 +44,7 @@ func read_translations():
 			file_name = dir.get_next()
 		for fn in csv_files:
 			var f : FileAccess = FileAccess.open(LOCALE_DIR+"/"+fn, FileAccess.READ)
-			if f.is_open():
+			if f != null:
 				var l : String = f.get_line()
 				if l.left(2) == "id":
 					var separator = l[2]

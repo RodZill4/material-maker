@@ -23,7 +23,7 @@ func get_file(file_name : String, include_paths : Array = []) -> String:
 			shader_text = shader_files[p]
 		else:
 			var file = FileAccess.open(p, FileAccess.READ)
-			if file.is_open():
+			if file != null:
 				shader_text = file.get_as_text()
 				file = null
 				shader_files[file_name] = shader_text

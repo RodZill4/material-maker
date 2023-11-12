@@ -109,7 +109,7 @@ func get_sections() -> Array:
 func save_library() -> void:
 	DirAccess.open("res://").make_dir_recursive(library_path.get_base_dir())
 	var file : FileAccess = FileAccess.open(library_path, FileAccess.WRITE)
-	if file.is_open():
+	if file != null:
 		file.store_string(JSON.stringify({name=library_name, lib=library_items}, "\t", true))
 		file.close()
 
