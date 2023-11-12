@@ -1,9 +1,6 @@
-extends Node
+extends Object
 
-func _ready():
-	pass # Replace with function body.
-
-func load_obj_file(path : String) -> ArrayMesh:
+static func load_obj_file(path : String) -> ArrayMesh:
 	if path == null:
 		return null
 	var ext := path.get_extension()
@@ -53,7 +50,7 @@ func load_obj_file(path : String) -> ArrayMesh:
 	
 	return mdl
 
-func _obj_rel_indice(indice : Vector3, cur_vArr_size : int) -> Vector3:
+static func _obj_rel_indice(indice : Vector3, cur_vArr_size : int) -> Vector3:
 	var output := Vector3.ZERO
 	var indSign := indice.sign()
 	output.x = indice.x - 1 if (indSign.x >= 0) else cur_vArr_size + indice.x
@@ -62,7 +59,7 @@ func _obj_rel_indice(indice : Vector3, cur_vArr_size : int) -> Vector3:
 	
 	return output
 
-func _import_obj(mdlFile : FileAccess) -> TriMesh:
+static func _import_obj(mdlFile : FileAccess) -> TriMesh:
 	var newMsh := TriMesh.new()
 	
 	while !mdlFile.eof_reached():

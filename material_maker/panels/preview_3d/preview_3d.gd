@@ -110,7 +110,9 @@ func do_load_custom_mesh(file_path) -> void:
 	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
 	#var mesh = $ObjLoader.load_obj_file(file_path)
-	var mesh = load(file_path)
+	var mesh : Mesh = null
+	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd")
+	mesh = obj_loader.load_obj_file(file_path)
 	if mesh != null:
 		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh
