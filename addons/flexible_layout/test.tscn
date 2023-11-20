@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://dg6wvikeic0k1"]
+
+[ext_resource type="PackedScene" uid="uid://eiq3i53x72m2" path="res://addons/flexible_layout/flexible_layout.tscn" id="1"]
+[ext_resource type="Script" path="res://addons/flexible_layout/test.gd" id="2"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2")
+
+[node name="FlexibleLayout" parent="." instance=ExtResource("1")]
+layout_mode = 1
+mouse_filter = 2
+
+[node name="Main" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.239216, 0.462745, 1, 1)
+
+[node name="ColorRect1" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0.690196, 0.25098, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.713726, 1, 0.368627, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.592157, 0.25098, 1, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0.368627, 0.65098, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.25098, 0.615686, 1, 1)
+
+[node name="ColorRect6" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.368627, 1, 0.572549, 1)
+
+[node name="ColorRect7" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0.25098, 0.356863, 1)
+
+[node name="ColorRect8" type="ColorRect" parent="FlexibleLayout"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(1, 0.988235, 0.368627, 1)
