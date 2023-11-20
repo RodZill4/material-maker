@@ -39,6 +39,8 @@ var brushes
 @onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
 @onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
+var current_mesh : Mesh = null
+
 
 const FPS_LIMIT_MIN = 20
 const FPS_LIMIT_MAX = 500
@@ -506,6 +508,7 @@ func new_graph_panel() -> GraphEdit:
 func new_material() -> void:
 	var graph_edit = new_graph_panel()
 	graph_edit.new_material()
+	graph_edit.top_generator.set_current_mesh(current_mesh)
 	graph_edit.update_tab_title()
 	hierarchy.update_from_graph_edit(get_current_graph_edit())
 
@@ -1028,6 +1031,8 @@ func _on_Projects_tab_changed(_tab) -> void:
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
 			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
 			set_current_mode("material")
+			if current_mesh and new_graph_edit.top_generator:
+				new_graph_edit.top_generator.set_current_mesh(current_mesh)
 		else:
 			if new_tab.has_method("get_graph_edit"):
 				new_graph_edit = new_tab.get_graph_edit()
@@ -1061,8 +1066,8 @@ func _notification(what : int) -> void:
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 
 func on_close_requested():
-			await get_tree().process_frame
-			quit()
+	await get_tree().process_frame
+	quit()
 
 func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting
@@ -1147,6 +1152,21 @@ func get_controls_at_position(pos : Vector2, parent : Control) -> Array:
 		return_value.append(parent)
 	return return_value
 
+func run_method_at_position(pos : Vector2i, method : String, parameters : Array) -> bool:
+	var controls : Array = get_controls_at_position(pos, self)
+	while ! controls.is_empty():
+		var next_controls = []
+		for control in controls:
+			if control == null:
+				continue
+			if control.has_method(method):
+				control.callv(method, parameters)
+				return true
+			if control.get_parent() != self:
+				next_controls.append(control.get_parent())
+		controls = next_controls
+	return false
+
 func on_files_dropped(files : PackedStringArray) -> void:
 	await get_tree().process_frame
 	for f in files:
@@ -1158,20 +1178,10 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"ptex":
 				do_load_material(f)
 			"obj":
-				await new_paint_project(f)
+				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
+					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
-				var controls : Array = get_controls_at_position(get_global_mouse_position(), self)
-				while ! controls.is_empty():
-					var next_controls = []
-					for control in controls:
-						if control == null:
-							continue
-						if control.has_method("on_drop_image_file"):
-							control.on_drop_image_file(f)
-							return
-						if control.get_parent() != self:
-							next_controls.append(control.get_parent())
-					controls = next_controls
+				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
 				var test_json_conv = JSON.new()
 				test_json_conv.parse(file.get_as_text())
@@ -1219,8 +1229,8 @@ func accept_dialog(dialog_text : String, cancel_button : bool = false):
 # Current mesh
 
 func set_current_mesh(m : Mesh):
+	current_mesh = m
 	get_current_graph_edit().top_generator.set_current_mesh(m)
-	
 
 # Use this to investigate the connect bug
 
