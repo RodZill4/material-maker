@@ -136,10 +136,11 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		code = code.replace("$NODE", "o%d" % get_instance_id())
 		code = code.replace("$TEXTURE", texture_name)
 		code = code.replace("$UV", uv)
+		var aabb : AABB
 		if current_mesh:
-			var aabb : AABB = current_mesh.get_aabb()
-			code = code.replace("$AABB_POSITION", "vec3(%.09f, %.09f, %.09f)" % [aabb.position.x, aabb.position.y, aabb.position.z])
-			code = code.replace("$AABB_SIZE", "vec3(%.09f, %.09f, %.09f)" % [aabb.size.x, aabb.size.y, aabb.size.z])
+			aabb = current_mesh.get_aabb()
+		code = code.replace("$AABB_POSITION", "vec3(%.09f, %.09f, %.09f)" % [aabb.position.x, aabb.position.y, aabb.position.z])
+		code = code.replace("$AABB_SIZE", "vec3(%.09f, %.09f, %.09f)" % [aabb.size.x, aabb.size.y, aabb.size.z])
 		rv.code = code
 	rv.output_values[rv.output_type] = "%s_%d" % [ genname, variant_index ]
 	return rv
