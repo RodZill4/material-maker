@@ -18,7 +18,7 @@ func _ready():
 	super._ready()
 	for s in [ "comment", "comment_focus" ]:
 		var frame : StyleBoxFlat = mm_globals.main_window.theme.get_stylebox(s, "GraphNode").duplicate(true) as StyleBoxFlat
-		add_theme_stylebox_override(s, frame);
+		add_theme_stylebox_override(s, frame)
 
 func _draw() -> void:
 	var icon = preload("res://material_maker/icons/color_palette.png")
