@@ -1,5 +1,10 @@
 extends ColorRect
 
+
+var arrow_icon = preload("res://addons/flexible_layout/arrow.svg")
+var tab_icon = preload("res://addons/flexible_layout/tab.svg")
+
+
 func find_position_from_target(at_position, target):
 	const POSITIONS = [ -1, 1, -1, 2, 0, 3, -1, 4, -1]
 	var pos_x = int(3*(at_position.x-target.rect.position.x) / target.rect.size.x)
@@ -23,22 +28,27 @@ func _can_drop_data(at_position, data):
 					$Arrow.visible = false
 					return false
 				$Arrow.visible = true
+				$Arrow.texture = tab_icon
 				$Arrow.position = rect.get_center()-Vector2(32, 32)
 				$Arrow.rotation_degrees = 0
 			1:
 				$Arrow.visible = true
+				$Arrow.texture = arrow_icon
 				$Arrow.position = Vector2(rect.get_center().x-32, rect.position.y)
 				$Arrow.rotation_degrees = 0
 			2:
 				$Arrow.visible = true
+				$Arrow.texture = arrow_icon
 				$Arrow.position = Vector2(rect.position.x, rect.get_center().y-32)
 				$Arrow.rotation_degrees = -90
 			3:
 				$Arrow.visible = true
+				$Arrow.texture = arrow_icon
 				$Arrow.position = Vector2(rect.end.x-64, rect.get_center().y-32)
 				$Arrow.rotation_degrees = 90
 			4:
 				$Arrow.visible = true
+				$Arrow.texture = arrow_icon
 				$Arrow.position = Vector2(rect.get_center().x-32, rect.end.y-64)
 				$Arrow.rotation_degrees = 180
 			_:

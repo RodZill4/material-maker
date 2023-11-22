@@ -9,13 +9,16 @@ var vertical : bool
 func _init():
 	set_meta("flexlayout", true)
 
-func _draw():
-	draw_rect(Rect2(Vector2(0, 0), size), Color(1, 1, 0))
-
 func set_split(s, i : int, v : bool):
 	flex_split = s
 	dragger_index = i
 	vertical = v
+	if vertical:
+		mouse_default_cursor_shape = Control.CURSOR_VSPLIT
+		$TextureRect.texture = get_theme_icon("grabber", "VSplitContainer")
+	else:
+		mouse_default_cursor_shape = Control.CURSOR_HSPLIT
+		$TextureRect.texture = get_theme_icon("grabber", "HSplitContainer")
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
