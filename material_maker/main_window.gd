@@ -23,7 +23,8 @@ var preview_tesselation_detail : int = 256
 @onready var node_library_manager = $NodeLibraryManager
 @onready var brush_library_manager = $BrushLibraryManager
 
-@onready var projects = $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects
+
+@onready var projects_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel
 
 @onready var layout = $VBoxContainer/Layout
 var library
@@ -33,11 +34,6 @@ var preview_3d
 var hierarchy
 var brushes
 
-@onready var preview_2d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview2D
-@onready var preview_2d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview2DButton
-@onready var preview_3d_background = $VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews/Preview3D
-@onready var preview_3d_background_button = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Preview3DButton
-@onready var preview_3d_background_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI/Panel
 
 var current_mesh : Mesh = null
 
@@ -290,10 +286,10 @@ func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 
 func get_current_project() -> Control:
-	return projects.get_current_tab_control()
+	return projects_panel.get_projects().get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
-	var graph_edit = projects.get_current_tab_control()
+	var graph_edit = projects_panel.get_projects().get_current_tab_control()
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
 	return null
@@ -501,8 +497,8 @@ func _on_Create_id_pressed(id) -> void:
 func new_graph_panel() -> GraphEdit:
 	var graph_edit = preload("res://material_maker/panels/graph_edit/graph_edit.tscn").instantiate()
 	graph_edit.node_factory = $NodeFactory
-	projects.add_tab(graph_edit)
-	projects.current_tab = graph_edit.get_index()
+	projects_panel.get_projects().add_tab(graph_edit)
+	projects_panel.get_projects().current_tab = graph_edit.get_index()
 	return graph_edit
 
 func new_material() -> void:
@@ -525,9 +521,9 @@ func new_paint_project(obj_file_name = null) -> void:
 
 func create_paint_project(mesh, mesh_filename, texture_size, project_filename):
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
-	projects.add_tab(paint_panel)
+	projects_panel.get_projects().add_tab(paint_panel)
 	paint_panel.init_project(mesh, mesh_filename, texture_size, project_filename)
-	projects.current_tab = paint_panel.get_index()
+	projects_panel.get_projects().current_tab = paint_panel.get_index()
 
 func load_project() -> void:
 	if OS.get_name() == "HTML5":
@@ -615,9 +611,9 @@ func do_load_material_from_data(filename : String, data : String, update_hierarc
 
 func do_load_painting(filename : String) -> bool:
 	var paint_panel = load("res://material_maker/panels/paint/paint.tscn").instantiate()
-	projects.add_tab(paint_panel)
+	projects_panel.get_projects().add_tab(paint_panel)
 	var status : bool = paint_panel.load_project(filename)
-	projects.current_tab = paint_panel.get_index()
+	projects_panel.get_projects().current_tab = paint_panel.get_index()
 	return status
 
 func load_material_from_website() -> void:
@@ -646,11 +642,11 @@ func save_project_as(project : Control = null) -> bool:
 	return false
 
 func save_all_projects() -> void:
-	for i in range(projects.get_tab_count()):
-		await projects.get_tab(i).save()
+	for i in range(projects_panel.get_projects().get_tab_count()):
+		await projects_panel.get_projects().get_tab(i).save()
 
 func close_project() -> void:
-	projects.close_tab()
+	projects_panel.get_projects().close_tab()
 
 func quit() -> void:
 	if quitting:
@@ -763,7 +759,7 @@ func edit_select_sources() -> void:
 
 func edit_select_targets_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit.get_selected_nodes().is_empty()
+	return graph_edit.get_selected_nodes().is_empty() if graph_edit else true
 
 func edit_select_targets() -> void:
 	edit_select_connected("from", "to")
@@ -970,7 +966,7 @@ func about() -> void:
 
 func update_preview() -> void:
 	update_preview_2d()
-	update_preview_3d([ preview_3d, preview_3d_background ])
+	update_preview_3d([ preview_3d, projects_panel.preview_3d_background ])
 
 func get_current_node(graph_edit : MMGraphEdit) -> Node:
 	for n in graph_edit.get_children():
@@ -993,7 +989,7 @@ func update_preview_2d() -> void:
 				previews[i].set_generator(generator, output_index)
 			if i == 0:
 				histogram.set_generator(generator, output_index)
-				preview_2d_background.set_generator(generator, output_index)
+				projects_panel.preview_2d_background.set_generator(generator, output_index)
 
 var current_gen_material = null
 func update_preview_3d(previews : Array, _sequential = false) -> void:
@@ -1019,7 +1015,7 @@ func _on_Projects_tab_changed(_tab) -> void:
 	var project = get_current_project()
 	if project.has_method("project_selected"):
 		project.call("project_selected")
-	var new_tab = projects.get_current_tab_control()
+	var new_tab = projects_panel.get_projects().get_current_tab_control()
 	if new_tab != current_tab:
 # TODO: ???
 #		for c in get_incoming_connections():
@@ -1073,17 +1069,6 @@ func dim_window() -> void:
 	# Darken the UI to denote that the application is currently exiting
 	# (it won't respond to user input in this state).
 	modulate = Color(0.5, 0.5, 0.5)
-
-func show_background_preview_2d(button_pressed):
-	preview_2d_background.visible = button_pressed
-	if button_pressed:
-		preview_3d_background_button.button_pressed = false
-
-func show_background_preview_3d(button_pressed):
-	preview_3d_background.visible = button_pressed
-	preview_3d_background_panel.visible = button_pressed
-	if button_pressed:
-		preview_2d_background_button.button_pressed = false
 
 func generate_screenshots():
 	var result = await library.generate_screenshots(get_current_graph_edit())

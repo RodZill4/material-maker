@@ -18,7 +18,7 @@ var current_tab : int = -1 :
 		$TabBar.current_tab = current_tab
 		emit_signal("tab_changed", current_tab)
 
-signal tab_changed
+signal tab_changed(tab : int)
 signal no_more_tabs
 
 func add_tab(control, legible_unique_name = false) -> void:
