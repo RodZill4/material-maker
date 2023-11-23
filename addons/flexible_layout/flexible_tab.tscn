@@ -34,9 +34,13 @@ text = "Blah"
 [node name="Undock" type="TextureButton" parent="Container"]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture_normal = SubResource("PlaceholderTexture2D_b47q6")
 
 [node name="Close" type="TextureButton" parent="Container"]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture_normal = SubResource("PlaceholderTexture2D_bok24")

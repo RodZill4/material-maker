@@ -21,6 +21,12 @@ class FlexNode:
 		if what == NOTIFICATION_PREDELETE:
 			print("removing %s!" % type)
 	
+	func serialize() -> Dictionary:
+		var rv : Dictionary = { type=type, w=rect.size.x, h=rect.size.y, children=[] }
+		for c in get_children():
+			rv.children.append(c.serialize())
+		return rv
+	
 	func get_children() -> Array[FlexNode]:
 		return []
 	
@@ -99,6 +105,11 @@ class FlexSplit:
 	func _init(p : FlexNode, fl : Control):
 		super._init(p, fl)
 		type = "FlexSplit"
+	
+	func serialize() -> Dictionary:
+		var rv : Dictionary = super.serialize()
+		rv.dir = "v" if vertical else "h"
+		return rv
 	
 	func get_children() -> Array[FlexNode]:
 		return children
@@ -213,6 +224,14 @@ class FlexTab:
 		tabs = TAB_SCENE.instantiate()
 		flexible_layout.add_child(tabs)
 		tabs.set_flex_tab(self)
+	
+	func serialize() -> Dictionary:
+		var rv : Dictionary = super.serialize()
+		rv.tabs = []
+		for t in children:
+			rv.tabs.append(t.name)
+		rv.current = tabs.current
+		return rv
 	
 	func add(fp : FlexPanel):
 		children.push_back(fp)
@@ -403,3 +422,4 @@ func move_panel(panel, reference_panel : FlexNode, destination):
 	panel.flex_node.remove(panel.flex_panel)
 	tab.add(panel.flex_panel)
 	layout()
+	print(top.serialize())

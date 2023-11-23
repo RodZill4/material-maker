@@ -24,7 +24,7 @@ var preview_tesselation_detail : int = 256
 @onready var brush_library_manager = $BrushLibraryManager
 
 
-@onready var projects_panel = $VBoxContainer/Layout/SplitRight/ProjectsPanel
+@onready var projects_panel = $VBoxContainer/Layout/FlexibleLayout/Main
 
 @onready var layout = $VBoxContainer/Layout
 var library
@@ -658,7 +658,7 @@ func quit() -> void:
 			quitting = false
 			return
 	if mm_globals.get_config("confirm_close_project"):
-		var result = await $VBoxContainer/Layout/SplitRight/ProjectsPanel/Projects.check_save_tabs()
+		var result = await $VBoxContainer/Layout/FlexibleLayout/Main/Projects.check_save_tabs()
 		if !result:
 			quitting = false
 			return
@@ -1024,16 +1024,16 @@ func _on_Projects_tab_changed(_tab) -> void:
 		var new_graph_edit = null
 		if new_tab is GraphEdit:
 			new_graph_edit = new_tab
-			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.show()
-			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.show()
+			$VBoxContainer/Layout/FlexibleLayout/Main/BackgroundPreviews.show()
+			$VBoxContainer/Layout/FlexibleLayout/Main/PreviewUI.show()
 			set_current_mode("material")
 			if current_mesh and new_graph_edit.top_generator:
 				new_graph_edit.top_generator.set_current_mesh(current_mesh)
 		else:
 			if new_tab.has_method("get_graph_edit"):
 				new_graph_edit = new_tab.get_graph_edit()
-			$VBoxContainer/Layout/SplitRight/ProjectsPanel/BackgroundPreviews.hide()
-			$VBoxContainer/Layout/SplitRight/ProjectsPanel/PreviewUI.hide()
+			$VBoxContainer/Layout/FlexibleLayout/Main/BackgroundPreviews.hide()
+			$VBoxContainer/Layout/FlexibleLayout/Main/PreviewUI.hide()
 			set_current_mode("paint")
 		current_tab = new_tab
 		if new_graph_edit != null:

@@ -1,4 +1,4 @@
-extends HSplitContainer
+extends HBoxContainer
 
 const PANEL_POSITIONS = {
 	TopLeft="Left/Top",
@@ -38,8 +38,10 @@ func toggle_side_panels() -> void:
 
 func load_panels() -> void:
 	# Create panels
+	"""
 	for panel_pos in PANEL_POSITIONS.keys():
 		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
+	"""
 	for panel in PANELS:
 		var node : Node = panel.scene.instantiate()
 		node.name = panel.name
@@ -47,6 +49,8 @@ func load_panels() -> void:
 			for p in panel.parameters.keys():
 				node.set(p, panel.parameters[p])
 		panels[panel.name] = node
+		$FlexibleLayout.add(panel.name, node)
+		"""
 		var tab = get_node(PANEL_POSITIONS[panel.position])
 		var config_panel_name = panel.name.replace(" ", "_").replace("(", "_").replace(")", "_")
 		if mm_globals.config.has_section_key("layout", config_panel_name+"_location"):
@@ -57,7 +61,9 @@ func load_panels() -> void:
 		else:
 			tab.add_child(node)
 			node.set_meta("hidden", false)
+		"""
 	# Split positions
+	"""
 	await get_tree().process_frame
 	if mm_globals.config.has_section_key("layout", "LeftVSplitOffset"):
 		split_offset = mm_globals.config.get_value("layout", "LeftVSplitOffset")
@@ -67,8 +73,10 @@ func load_panels() -> void:
 		$SplitRight.split_offset = mm_globals.config.get_value("layout", "RightVSplitOffset")
 	if mm_globals.config.has_section_key("layout", "RightHSplitOffset"):
 		$SplitRight/Right.split_offset = mm_globals.config.get_value("layout", "RightHSplitOffset")
+	"""
 
 func save_config() -> void:
+	return
 	for p in panels:
 		var config_panel_name = p.replace(" ", "_").replace("(", "_").replace(")", "_")
 		var location = panels[p].get_parent()
@@ -80,10 +88,12 @@ func save_config() -> void:
 		for l in PANEL_POSITIONS.keys():
 			if location == get_node(PANEL_POSITIONS[l]):
 				mm_globals.config.set_value("layout", config_panel_name+"_location", l)
+	"""
 	mm_globals.config.set_value("layout", "LeftVSplitOffset", split_offset)
 	mm_globals.config.set_value("layout", "LeftHSplitOffset", $Left.split_offset)
 	mm_globals.config.set_value("layout", "RightVSplitOffset", $SplitRight.split_offset)
 	mm_globals.config.set_value("layout", "RightHSplitOffset", $SplitRight/Right.split_offset)
+	"""
 
 func get_panel(n) -> Control:
 	if panels.has(n):
@@ -112,11 +122,14 @@ func set_panel_visible(panel_name : String, v : bool) -> void:
 
 func change_mode(m : String) -> void:
 	current_mode = m
+	return
 	for p in panels:
 		set_panel_visible(p, !panels[p].get_meta("hidden"))
 	update_panels()
 
 func update_panels() -> void:
+	return
+	"""
 	var left_width = $Left.size.x
 	var left_requested = left_width
 	var right_width = $SplitRight/Right.size.x
@@ -146,6 +159,7 @@ func update_panels() -> void:
 	split_offset += left_requested - left_width + right_requested - right_width
 	clamp_split_offset()
 	$SplitRight.split_offset += right_width - right_requested
+	"""
 
 func _on_Left_dragged(_offset : int) -> void:
 	$Left.clamp_split_offset()
@@ -157,6 +171,7 @@ func _on_tab_changed(_tab):
 	update_panels()
 
 func _on_Layout_resized():
+	pass
 	# warning-ignore:narrowing_conversion
-	split_offset -= size.x - previous_width
-	previous_width = size.x
+	#split_offset -= size.x - previous_width
+	#previous_width = size.x

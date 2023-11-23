@@ -28,25 +28,30 @@ atlas = ExtResource("5_1qnqj")
 region = Rect2(96, 64, 32, 31)
 
 [node name="ProjectsPanel" type="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 script = ExtResource("1_m3usq")
 
 [node name="BackgroundPreviews" type="Control" parent="."]
+layout_mode = 1
 anchors_preset = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
 offset_top = 28.0
 
 [node name="Preview2D" parent="BackgroundPreviews" instance=ExtResource("2_oiaqi")]
 visible = false
 material = SubResource("ShaderMaterial_8fw7q")
 layout_mode = 1
-offset_right = 0.0
-offset_bottom = 0.0
+offset_right = 64.0
+offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 shader = "uniform vec2 preview_2d_size = vec2(100.0, 100.0);
@@ -76,19 +81,23 @@ ui_path = NodePath("../../PreviewUI/Panel/HBoxContainer/Preview3DUI")
 
 [node name="Projects" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0)
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 5.0
 offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_mpinq")
 
 [node name="TabBar" type="TabBar" parent="Projects"]
-layout_mode = 0
-offset_right = 950.0
-offset_bottom = 24.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 tab_close_display_policy = 1
 
 [node name="CrashRecoveryTimer" type="Timer" parent="Projects"]
@@ -96,13 +105,15 @@ wait_time = 15.0
 autostart = true
 
 [node name="PreviewUI" type="HBoxContainer" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_top = -45.0
-offset_right = 331.0
-offset_bottom = -13.0
+offset_left = 5.5
+offset_top = -53.5
+offset_right = 335.5
+offset_bottom = -13.5
+grow_vertical = 0
 mouse_filter = 2
 
 [node name="Preview2DButton" type="Button" parent="PreviewUI"]
