@@ -209,9 +209,6 @@ func _on_Tree_item_collapsed(item) -> void:
 		expanded_items.push_back(path)
 
 
-func _on_SectionButtons_resized():
-	$SectionButtons.columns = $SectionButtons.size.x / 33
-
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cj6b1r8b6jel3"]
+[gd_scene load_steps=10 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
@@ -26,7 +26,17 @@ shader = SubResource("1")
 shader_parameter/aabb_position = null
 shader_parameter/aabb_size = null
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
+
+[sub_resource type="Sky" id="Sky_wye7d"]
+sky_material = SubResource("PanoramaSkyMaterial_40ogr")
+
+[sub_resource type="Environment" id="Environment_qxxdb"]
+background_mode = 2
+sky = SubResource("Sky_wye7d")
+
 [sub_resource type="World3D" id="World3D_3xlky"]
+environment = SubResource("Environment_qxxdb")
 
 [node name="Preview3D" instance=ExtResource("1")]
 custom_minimum_size = Vector2(250, 200)
@@ -39,7 +49,7 @@ click_material = SubResource("2")
 
 [node name="MaterialPreview" parent="." index="0"]
 world_3d = SubResource("World3D_3xlky")
-size = Vector2i(1280, 720)
+size = Vector2i(250, 200)
 
 [node name="TextureRect" type="TextureRect" parent="." index="1"]
 visible = false

@@ -38,7 +38,7 @@ shader = SubResource("5")
 
 [node name="Preview2D" instance=ExtResource("3")]
 material = SubResource("2")
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(100, 100)
 offset_right = -758.0
 offset_bottom = -267.0
 script = ExtResource("4")

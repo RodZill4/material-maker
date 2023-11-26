@@ -14,7 +14,7 @@ atlas = ExtResource("3_el42x")
 region = Rect2(48, 0, 16, 16)
 
 [node name="Library" type="VBoxContainer" groups=["updated_from_locale"]]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(100, 100)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -30,7 +30,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-text = "Manage Libraries"
+text = "Manage"
 icon = SubResource("1")
 
 [node name="Control" type="Control" parent="HBoxContainer"]
@@ -43,9 +43,8 @@ size_flags_vertical = 4
 tooltip_text = "Get more nodes from website"
 texture_normal = SubResource("AtlasTexture_m5x46")
 
-[node name="SectionButtons" type="GridContainer" parent="."]
+[node name="SectionButtons" type="HFlowContainer" parent="."]
 layout_mode = 2
-columns = 5
 
 [node name="Filter" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -61,7 +60,7 @@ size_flags_horizontal = 3
 clear_button_enabled = true
 
 [node name="Tree" type="Tree" parent="."]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -87,7 +86,6 @@ item_4/id = 4
 
 [connection signal="about_to_popup" from="HBoxContainer/Libraries" to="." method="_on_Libraries_about_to_show"]
 [connection signal="pressed" from="HBoxContainer/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]
-[connection signal="resized" from="SectionButtons" to="." method="_on_SectionButtons_resized"]
 [connection signal="text_changed" from="Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="item_collapsed" from="Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_mouse_selected" from="Tree" to="." method="_on_tree_item_mouse_selected"]

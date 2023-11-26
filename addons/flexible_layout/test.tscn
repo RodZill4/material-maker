@@ -71,3 +71,6 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(1, 0.988235, 0.368627, 1)
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="layout_changed" from="FlexibleLayout" to="." method="_on_flexible_layout_layout_changed"]

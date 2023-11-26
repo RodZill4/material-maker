@@ -2,7 +2,7 @@ extends Control
 
 
 var dragging : bool = false
-var flex_split
+var flex_split : WeakRef
 var dragger_index : int
 var vertical : bool
 
@@ -10,7 +10,7 @@ func _init():
 	set_meta("flexlayout", true)
 
 func set_split(s, i : int, v : bool):
-	flex_split = s
+	flex_split = weakref(s)
 	dragger_index = i
 	vertical = v
 	if vertical:
@@ -28,7 +28,7 @@ func _on_gui_input(event):
 		if dragging:
 			if vertical:
 				position.y += event.position.y-5
-				flex_split.drag(dragger_index, position.y)
+				flex_split.get_ref().drag(dragger_index, position.y)
 			else:
 				position.x += event.position.x-5
-				flex_split.drag(dragger_index, position.x)
+				flex_split.get_ref().drag(dragger_index, position.x)

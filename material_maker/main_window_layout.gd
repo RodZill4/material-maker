@@ -38,10 +38,6 @@ func toggle_side_panels() -> void:
 
 func load_panels() -> void:
 	# Create panels
-	"""
-	for panel_pos in PANEL_POSITIONS.keys():
-		get_node(PANEL_POSITIONS[panel_pos]).set_tabs_rearrange_group(1)
-	"""
 	for panel in PANELS:
 		var node : Node = panel.scene.instantiate()
 		node.name = panel.name
@@ -50,50 +46,13 @@ func load_panels() -> void:
 				node.set(p, panel.parameters[p])
 		panels[panel.name] = node
 		$FlexibleLayout.add(panel.name, node)
-		"""
-		var tab = get_node(PANEL_POSITIONS[panel.position])
-		var config_panel_name = panel.name.replace(" ", "_").replace("(", "_").replace(")", "_")
-		if mm_globals.config.has_section_key("layout", config_panel_name+"_location"):
-			tab = get_node(PANEL_POSITIONS[mm_globals.config.get_value("layout", config_panel_name+"_location")])
-		if mm_globals.config.has_section_key("layout", config_panel_name+"_hidden") && mm_globals.config.get_value("layout", config_panel_name+"_hidden"):
-			node.set_meta("parent_tab_container", tab)
-			node.set_meta("hidden", true)
-		else:
-			tab.add_child(node)
-			node.set_meta("hidden", false)
-		"""
-	# Split positions
-	"""
-	await get_tree().process_frame
-	if mm_globals.config.has_section_key("layout", "LeftVSplitOffset"):
-		split_offset = mm_globals.config.get_value("layout", "LeftVSplitOffset")
-	if mm_globals.config.has_section_key("layout", "LeftHSplitOffset"):
-		$Left.split_offset = mm_globals.config.get_value("layout", "LeftHSplitOffset")
-	if mm_globals.config.has_section_key("layout", "RightVSplitOffset"):
-		$SplitRight.split_offset = mm_globals.config.get_value("layout", "RightVSplitOffset")
-	if mm_globals.config.has_section_key("layout", "RightHSplitOffset"):
-		$SplitRight/Right.split_offset = mm_globals.config.get_value("layout", "RightHSplitOffset")
-	"""
+	if mm_globals.config.has_section_key("layout", "material"):
+		var current_config : Dictionary = JSON.parse_string(mm_globals.config.get_value("layout", "material"))
+		$FlexibleLayout.layout(current_config)
 
 func save_config() -> void:
-	return
-	for p in panels:
-		var config_panel_name = p.replace(" ", "_").replace("(", "_").replace(")", "_")
-		var location = panels[p].get_parent()
-		var panel_hidden = false
-		if location == null:
-			panel_hidden = panels[p].get_meta("hidden")
-			location = panels[p].get_meta("parent_tab_container")
-		mm_globals.config.set_value("layout", config_panel_name+"_hidden", panel_hidden)
-		for l in PANEL_POSITIONS.keys():
-			if location == get_node(PANEL_POSITIONS[l]):
-				mm_globals.config.set_value("layout", config_panel_name+"_location", l)
-	"""
-	mm_globals.config.set_value("layout", "LeftVSplitOffset", split_offset)
-	mm_globals.config.set_value("layout", "LeftHSplitOffset", $Left.split_offset)
-	mm_globals.config.set_value("layout", "RightVSplitOffset", $SplitRight.split_offset)
-	mm_globals.config.set_value("layout", "RightHSplitOffset", $SplitRight/Right.split_offset)
-	"""
+	var current_config : Dictionary = $FlexibleLayout.serialize()
+	mm_globals.config.set_value("layout", "material", JSON.stringify(current_config))
 
 func get_panel(n) -> Control:
 	if panels.has(n):
