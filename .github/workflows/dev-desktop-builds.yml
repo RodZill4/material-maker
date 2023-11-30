@@ -15,8 +15,8 @@ on:
 
 env:
   GODOT_VERSION: 4.2
-  GODOT_SUB: rc1
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.2-rc1
+  GODOT_SUB: stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.2-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
