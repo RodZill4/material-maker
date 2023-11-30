@@ -24,8 +24,6 @@ jobs:
   export_windows_linux:
     name: Export Windows and Linux 🗔
     runs-on: ubuntu-latest
-    container:
-      image: docker://barichello/godot-ci:3.5
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -54,7 +52,6 @@ jobs:
           echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-4.tres
           echo 'export/windows/rcedit = "'$RCEDIT_PATH'/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-4.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
-          mkdir /tmp/sphinx-log
       - name: Generate Documentation
         uses: ammaraskar/sphinx-action@master
         with:
