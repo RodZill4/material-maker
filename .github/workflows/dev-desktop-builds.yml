@@ -12,6 +12,11 @@ on:
         type: boolean
         required: true
         default: 'false'
+      gen_doc:
+        description: 'Generate documentation'     
+        type: boolean
+        required: true
+        default: 'false'
 
 env:
   GODOT_VERSION: 4.2
@@ -53,6 +58,7 @@ jobs:
           echo 'export/windows/rcedit = "'$RCEDIT_PATH'/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-4.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Generate Documentation
+        if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "material_maker/doc"
@@ -79,13 +85,14 @@ jobs:
           cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/meshes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
           cp -R ./material_maker/misc/export ./build/${EXPORT_NAME}_${MM_RELEASE}_linux
-          cp -R ./material_maker/doc/_build/html ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/doc
+          cp -Rf ./material_maker/doc/_build/html ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/doc
       - name: Create archives 📁
         run: |
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Upload Documentation 🚀
+        if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: documentation
@@ -165,6 +172,7 @@ jobs:
       - name: Fix application icon 🖼
         run: sips -s format icns "./build/mac/Material Maker.app/Contents/Resources/icon.icns" --out "./build/mac/Material Maker.app/Contents/Resources/icon.icns"
       - name: Get documentation 🚀
+        if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: actions/download-artifact@v3
         with:
           name: documentation
@@ -177,7 +185,7 @@ jobs:
           cp -R ./material_maker/library "./build/mac/Material Maker.app/Contents/MacOS"
           cp -R ./material_maker/meshes "./build/mac/Material Maker.app/Contents/MacOS"
           cp -R ./material_maker/misc/export "./build/mac/Material Maker.app/Contents/MacOS"
-          cp -R ./doc "./build/mac/Material Maker.app/Contents/MacOS/doc"
+          cp -Rf ./doc "./build/mac/Material Maker.app/Contents/MacOS/doc"
       - name: Ad-hoc signing ✍️
         if: ${{ github.event.inputs.sign_macos != 'true' }}
         run: |
