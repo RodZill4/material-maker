@@ -37,8 +37,8 @@ jobs:
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
           mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
-          dpkg --add-architecture i386 && apt-get update && apt-get install -y wine-stable && apt-get install -y wine32
-          chown root:root -R ~
+          sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y wine-stable && sudo apt-get install -y wine32
+          #chown root:root -R ~
           wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
           mkdir -v -p ~/.local/share/rcedit
           mv rcedit-x64.exe ~/.local/share/rcedit
