@@ -1,6 +1,8 @@
 extends ColorRect
 
 
+var flex_layout
+
 var arrow_icon = preload("res://addons/flexible_layout/arrow.svg")
 var tab_icon = preload("res://addons/flexible_layout/tab.svg")
 
@@ -12,19 +14,21 @@ func find_position_from_target(at_position, target):
 	return POSITIONS[pos_x+3*pos_y]
 
 func _drop_data(at_position, data):
-	var target = get_parent().get_flexnode_at(at_position)
+	at_position /= get_window().content_scale_factor
+	var target = flex_layout.get_flexnode_at(at_position)
 	if target:
 		var destination = find_position_from_target(at_position, target)
 		if destination != -1:
-			get_parent().move_panel(data, target, destination)
+			flex_layout.move_panel(data, target, destination)
 
 func _can_drop_data(at_position, data):
-	var target = get_parent().get_flexnode_at(at_position)
+	at_position /= get_window().content_scale_factor
+	var target = flex_layout.get_flexnode_at(at_position)
 	if target:
 		var rect : Rect2 = target.rect
 		match find_position_from_target(at_position, target):
 			0:
-				if data.flex_node == target:
+				if data.flex_panel.get_meta("flex_node") == target:
 					$Arrow.visible = false
 					return false
 				$Arrow.visible = true

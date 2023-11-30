@@ -118,7 +118,7 @@ func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().move_to_foreground()
-	#get_window().gui_embed_subwindows = false
+	get_window().gui_embed_subwindows = false
 	
 	get_window().close_requested.connect(self.on_close_requested)
 	
@@ -161,7 +161,6 @@ func _ready() -> void:
 			if f.ends_with(".ptex"):
 				print(f)
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
-		print("Done")
 	
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
 	get_window().min_size = Vector2(1024, 600)

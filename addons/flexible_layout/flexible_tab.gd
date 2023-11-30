@@ -14,8 +14,12 @@ func init(fp : Control):
 func _draw():
 	var is_current : bool = (get_index() == get_parent().get_parent().current)
 	draw_style_box(get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "TabBar"), Rect2(Vector2(), size))
-	#$Container/Undock.visible = is_current
+	$Container/Undock.visible = is_current
 	$Container/Close.visible = is_current
+
+func _on_undock_pressed():
+	var flex_tab = get_parent().get_parent().get_flex_tab()
+	flex_tab.flexible_layout.undock(flex_panel)
 
 func _on_close_pressed():
 	var flex_tab = get_parent().get_parent().get_flex_tab()
@@ -27,6 +31,6 @@ func _gui_input(event):
 		get_parent().get_parent().set_current(get_index())
 
 func _get_drag_data(_position):
-	var flex_tab = get_parent().get_parent().get_flex_tab()
-	var flexible_layout = flex_tab.flexible_layout
-	return flexible_layout.PanelInfo.new(flex_tab, flex_panel)
+	return preload("res://addons/flexible_layout/flexible_layout.gd").PanelInfo.new(flex_panel)
+
+

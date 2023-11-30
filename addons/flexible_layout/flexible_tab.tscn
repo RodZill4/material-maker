@@ -1,9 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://e06xegp2tp3f"]
 
 [ext_resource type="Script" path="res://addons/flexible_layout/flexible_tab.gd" id="1"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_b47q6"]
-size = Vector2(16, 16)
+[ext_resource type="Texture2D" uid="uid://c5br5opw6gmyp" path="res://addons/flexible_layout/undock.svg" id="2_ln5tf"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bok24"]
 size = Vector2(16, 16)
@@ -36,7 +34,7 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = SubResource("PlaceholderTexture2D_b47q6")
+texture_normal = ExtResource("2_ln5tf")
 
 [node name="Close" type="TextureButton" parent="Container"]
 visible = false
@@ -45,4 +43,5 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture_normal = SubResource("PlaceholderTexture2D_bok24")
 
+[connection signal="pressed" from="Container/Undock" to="." method="_on_undock_pressed"]
 [connection signal="pressed" from="Container/Close" to="." method="_on_close_pressed"]
