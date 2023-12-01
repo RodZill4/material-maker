@@ -14,7 +14,7 @@ config/name="Material Maker"
 config/description="An open source, extensible procedural material authoring tool"
 run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="material_maker"
+config/custom_user_dir_name="material_maker_dev"
 config/features=PackedStringArray("4.2")
 boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
@@ -58,6 +58,7 @@ window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
 
+run/main_run_args="--no-splash"
 run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\mmg4\\material-maker\\material_maker\\meshes\\suzanne.obj"
 run/main_run_args_nosplash="--no-splash"
 
