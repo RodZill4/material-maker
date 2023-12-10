@@ -476,8 +476,8 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 
 func _on_ShowPanels_id_pressed(id) -> void:
 	var panel : String = layout.get_panel_list()[id]
-	layout.set_panel_visible(panel, !layout.is_panel_visible(panel))
-
+	layout.set_panel_visible(panel, not layout.is_panel_visible(panel))
+	update_menus()
 
 func create_menu_create(menu : MMMenuManager.MenuBase) -> void:
 	var gens = mm_loader.get_generator_list()

@@ -1,11 +1,6 @@
 extends HBoxContainer
 
-const PANEL_POSITIONS = {
-	TopLeft="Left/Top",
-	BottomLeft="Left/Bottom",
-	TopRight="SplitRight/Right/Top",
-	BottomRight="SplitRight/Right/Bottom"
-}
+
 const PANELS = [
 	{ name="Library", scene=preload("res://material_maker/panels/library/library.tscn"), position="TopLeft" },
 	{ name="Preview2D", scene=preload("res://material_maker/panels/preview_2d/preview_2d_panel.tscn"), position="TopRight" },
@@ -23,9 +18,11 @@ const HIDE_PANELS = {
 	paint=[ "Preview3D", "Histogram", "Hierarchy" ]
 }
 
+
 var panels = {}
 var previous_width : float
 var current_mode : String = "material"
+
 
 func _ready() -> void:
 	previous_width = size.x
@@ -46,9 +43,10 @@ func load_panels() -> void:
 				node.set(p, panel.parameters[p])
 		panels[panel.name] = node
 		$FlexibleLayout.add(panel.name, node)
+	var current_config = null
 	if mm_globals.config.has_section_key("layout", "material"):
-		var current_config : Dictionary = JSON.parse_string(mm_globals.config.get_value("layout", "material"))
-		$FlexibleLayout.layout(current_config)
+		current_config = JSON.parse_string(mm_globals.config.get_value("layout", "material"))
+	$FlexibleLayout.init(current_config)
 
 func save_config() -> void:
 	var current_config : Dictionary = $FlexibleLayout.serialize()
@@ -65,72 +63,17 @@ func get_panel_list() -> Array:
 	return panels_list
 
 func is_panel_visible(panel_name : String) -> bool:
-	return panels[panel_name].get_parent() != null
+	return $FlexibleLayout.flex_layout.is_panel_shown(panel_name)
 
 func set_panel_visible(panel_name : String, v : bool) -> void:
-	var panel = panels[panel_name]
-	panel.set_meta("hidden", !v)
-	if panel.is_inside_tree():
-		panel.set_meta("parent_tab_container", panel.get_parent())
-	if v and HIDE_PANELS[current_mode].find(panel_name) == -1:
-		if ! panel.is_inside_tree():
-			panel.get_meta("parent_tab_container").add_child(panel)
-	elif panel.is_inside_tree():
-		panel.get_parent().remove_child(panel)
-	update_panels()
+	$FlexibleLayout.show_panel(panel_name, v)
+	$FlexibleLayout.layout()
 
 func change_mode(m : String) -> void:
 	current_mode = m
 	return
 	for p in panels:
 		set_panel_visible(p, !panels[p].get_meta("hidden"))
-	update_panels()
-
-func update_panels() -> void:
-	return
-	"""
-	var left_width = $Left.size.x
-	var left_requested = left_width
-	var right_width = $SplitRight/Right.size.x
-	var right_requested = right_width
-	if $Left/Top.get_tab_count() == 0:
-		if $Left/Bottom.get_tab_count() == 0:
-			left_requested = 10
-			$Left.split_offset -= ($Left/Top.size.y-$Left/Bottom.size.y)/2
-			$Left.clamp_split_offset()
-		else:
-			$Left.split_offset -= $Left/Top.size.y-10
-			$Left.clamp_split_offset()
-	elif $Left/Bottom.get_tab_count() == 0:
-		$Left.split_offset += $Left/Bottom.size.y-10
-		$Left.clamp_split_offset()
-	if $SplitRight/Right/Top.get_tab_count() == 0:
-		if $SplitRight/Right/Bottom.get_tab_count() == 0:
-			right_requested = 10
-			$SplitRight/Right.split_offset -= ($SplitRight/Right/Top.size.y-$SplitRight/Right/Bottom.size.y)/2
-			$SplitRight/Right.clamp_split_offset()
-		else:
-			$SplitRight/Right.split_offset -= $SplitRight/Right/Top.size.y-10
-			$SplitRight/Right.clamp_split_offset()
-	elif $SplitRight/Right/Bottom.get_tab_count() == 0:
-		$SplitRight/Right.split_offset += $SplitRight/Right/Bottom.size.y-10
-		$SplitRight/Right.clamp_split_offset()
-	split_offset += left_requested - left_width + right_requested - right_width
-	clamp_split_offset()
-	$SplitRight.split_offset += right_width - right_requested
-	"""
-
-func _on_Left_dragged(_offset : int) -> void:
-	$Left.clamp_split_offset()
-
-func _on_Right_dragged(_offset : int) -> void:
-	$SplitRight/Right.clamp_split_offset()
 
 func _on_tab_changed(_tab):
-	update_panels()
-
-func _on_Layout_resized():
 	pass
-	# warning-ignore:narrowing_conversion
-	#split_offset -= size.x - previous_width
-	#previous_width = size.x

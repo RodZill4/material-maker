@@ -14,7 +14,7 @@ var current_tab : int = -1 :
 		node = get_child(current_tab)
 		node.visible = true
 		node.position = Vector2(0, $TabBar.size.y)
-		node.size = size - node.position
+		node.size = size - node.position - Vector2(6, 6)
 		$TabBar.current_tab = current_tab
 		emit_signal("tab_changed", current_tab)
 
@@ -115,7 +115,10 @@ func _on_Tabs_tab_changed(tab) -> void:
 
 func _on_Projects_resized() -> void:
 	$TabBar.size.x = size.x
-
+	if current_tab >= 0:
+		var node = get_child(current_tab)
+		node.position = Vector2(0, $TabBar.size.y)
+		node.size = size - node.position - Vector2(6, 6)
 
 func _on_CrashRecoveryTimer_timeout():
 	for i in range($TabBar.get_tab_count()):

@@ -388,8 +388,21 @@ class FlexLayout:
 				top.set_child(flex_split)
 			top.child.insert(tab)
 		return tab
-
-	func layout(layout = null):
+	
+	func is_panel_shown(panel_name : String) -> bool:
+		var panel : Control = main_control.panels[panel_name]
+		return (panel and panel.get_meta("flex_node") != null)
+	
+	func show_panel(panel_name : String):
+		var panel : Control = main_control.panels[panel_name]
+		if panel.get_meta("flex_node") != null:
+			return
+		if panel_name == "Main":
+			get_flexmain().add(panel)
+		else:
+			get_default_flextab().add(panel)
+	
+	func init(layout = null):
 		var default_flextab : FlexTab = null
 		if layout != null:
 			top = deserialize(null, layout)
@@ -397,15 +410,10 @@ class FlexLayout:
 			if top == null:
 				top = FlexTop.new(self)
 			for panel_name in main_control.panels.keys():
-				var panel : Control = main_control.panels[panel_name]
-				if panel.get_meta("flex_node") != null:
-					continue
-				if panel_name == "Main":
-					get_flexmain().add(panel)
-				else:
-					if default_flextab == null:
-						default_flextab = get_default_flextab()
-					default_flextab.add(panel)
+				show_panel(panel_name)
+		layout()
+	
+	func layout():
 		if top:
 			top.layout(control.get_rect())
 		main_control.layout_changed.emit()
@@ -478,7 +486,7 @@ class FlexWindow:
 		flex_layout = FlexLayout.new(main_control, panel)
 		main_control.get_viewport().add_child(self)
 		if first_panel:
-			flex_layout.layout({children=[{type="FlexTab",tabs=[first_panel.name],current=0,h=768,w=288,children=[]}],type="FlexTop",h=768,w=1024})
+			flex_layout.init({children=[{type="FlexTab",tabs=[first_panel.name],current=0,h=768,w=288,children=[]}],type="FlexTop",h=768,w=1024})
 			resize()
 	
 	func _ready():
@@ -498,10 +506,10 @@ class FlexWindow:
 		data.layout = flex_layout.serialize()
 		return data
 	
-	func layout(data : Dictionary):
+	func init(data : Dictionary):
 		position = Vector2i(data.x, data.y)
 		size = Vector2i(data.w, data.h)
-		flex_layout.layout(data.layout)
+		flex_layout.init(data.layout)
 		resize()
 	
 	func start_drag():
@@ -518,8 +526,6 @@ class FlexWindow:
 var panels : Dictionary = {}
 var flex_layout : FlexLayout
 var subwindows : Array[Window]
-
-var no_auto_layout : bool = true
 
 var overlay : Control
 
@@ -544,16 +550,32 @@ func add(n : String, c : Control):
 	c.set_meta("flex_layout", self)
 	panels[n] = c
 
-func layout(layout = null):
+func init(layout = null):
 	if layout and layout.has("main"):
 		for w in layout.windows:
 			var subwindow = FlexWindow.new(self)
 			subwindows.append(subwindow)
 			subwindow.layout(w)
-		flex_layout.layout(layout.main)
+		flex_layout.init(layout.main)
 	else:
-		flex_layout.layout(layout)
-	no_auto_layout = false
+		flex_layout.init(layout)
+
+func layout():
+	flex_layout.layout()
+	for w in subwindows:
+		w.flex_layout.layout()
+
+func show_panel(panel_name : String, v : bool = true):
+	if v:
+		flex_layout.show_panel(panel_name)
+	else:
+		if panel_name == "Main":
+			return
+		var panel : Control = panels[panel_name]
+		var flex_node = panel.get_meta("flex_node")
+		if flex_node == null:
+			return
+		flex_node.remove(panel)
 
 func serialize() -> Dictionary:
 	var data : Dictionary = {}
@@ -579,5 +601,4 @@ func end_drag():
 		w.end_drag()
 
 func _on_resized():
-	if not no_auto_layout:
-		layout()
+	flex_layout.layout()
