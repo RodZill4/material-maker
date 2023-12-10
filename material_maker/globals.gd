@@ -30,17 +30,13 @@ const DEFAULT_CONFIG : Dictionary = {
 
 
 func _enter_tree():
-	config.load("user://cache.ini")
+	config.load("user://mm_config.ini")
 	for k : String in DEFAULT_CONFIG.keys():
 		if ! config.has_section_key("config", k):
 			config.set_value("config", k, DEFAULT_CONFIG[k])
 
 func _exit_tree():
-	config.save("user://cache.ini")
-
-func _ready():
-	pass # Replace with function body.
-
+	config.save("user://mm_config.ini")
 
 func has_config(key : String) -> bool:
 	return config.has_section_key("config", key)
