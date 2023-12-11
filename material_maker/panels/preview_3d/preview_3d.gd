@@ -22,7 +22,7 @@ var moving = false
 
 signal need_update(me)
 
-const MENU = [
+const MENU : Array[Dictionary] = [
 	{ menu="Model/Select", submenu="model_list" },
 	{ menu="Model/Configure", command="configure_model" },
 	{ menu="Model/Rotate/Off", command="set_rotate_model_speed", command_parameter=0 },

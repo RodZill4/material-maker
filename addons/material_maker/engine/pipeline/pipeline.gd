@@ -267,7 +267,7 @@ func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RI
 		if textures[i].texture:
 			tex = textures[i].texture.get_texture_rid(rd)
 		if ! tex.is_valid():
-			print("Invalid texture")
+			print("Invalid texture "+str(tex))
 		var sampler_uniform : RDUniform = RDUniform.new()
 		sampler_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_SAMPLER_WITH_TEXTURE
 		sampler_uniform.binding = i

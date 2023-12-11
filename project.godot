@@ -43,7 +43,6 @@ Html5="*res://material_maker/html5.gd"
 [debug]
 
 gdscript/warnings/unsafe_cast=true
-gdscript/warnings/unsafe_call_argument=true
 gdscript/warnings/return_value_discarded=false
 gdscript/warnings/unused_class_variable=true
 

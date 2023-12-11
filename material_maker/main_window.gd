@@ -47,7 +47,7 @@ const RECENT_FILES_COUNT = 15
 
 const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light" ]
 
-const MENU = [
+const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
 	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
 	{ menu="File/Load", command="load_project", shortcut="Control+O" },
