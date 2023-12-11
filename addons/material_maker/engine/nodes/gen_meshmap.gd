@@ -10,7 +10,6 @@ var timer : Timer
 var filetime : int = 0
 var current_mesh : Mesh = null
 var current_map : MMTexture = null
-var texture : MMTexture
 
 
 const MESH_MAPS : Array[Dictionary] = [
@@ -94,12 +93,15 @@ func get_parameter_defs() -> Array:
 		{ name="map", type="enum", values=MESH_MAPS, label="Map", default=0 },
 	]
 
+func update_map() -> void:
+	current_map = await MMMapGenerator.get_map(current_mesh, MESH_MAPS[get_parameter("map")].map)
+	notify_output_change(0)
+	mm_deps.dependency_update(get_texture_parameter_name(), current_map, true)
+
 func set_parameter(n : String, v) -> void:
 	super.set_parameter(n, v)
-	if n == "map" and current_mesh:
-		current_map = await MMMapGenerator.get_map(current_mesh, MESH_MAPS[v].map)
-		notify_output_change(0)
-		mm_deps.dependency_update(get_texture_parameter_name(), current_map, true)
+	if n == "map":
+		update_map()
 
 func get_output_defs(_show_hidden : bool = false) -> Array:
 	return [ { type=MESH_MAPS[get_parameter("map")].output_type } ]
@@ -107,10 +109,7 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 func set_current_mesh(m : Mesh) -> void:
 	if current_mesh != m:
 		current_mesh = m
-		if current_mesh:
-			current_map = await MMMapGenerator.get_map(current_mesh, MESH_MAPS[get_parameter("map")].map)
-			notify_output_change(0)
-			mm_deps.dependency_update(get_texture_parameter_name(), current_map, true)
+		update_map()
 
 func get_texture_parameter_name() -> String:
 	var mesh_id : String = "nomesh"

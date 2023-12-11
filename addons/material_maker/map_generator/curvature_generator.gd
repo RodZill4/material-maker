@@ -9,25 +9,38 @@ class_name MMCurvatureGenerator
 const FLT_EPSILON = 1.192092896e-7
 
 
-static func generate(mesh: Mesh) -> Mesh:
+var progress : int = 0
+var progress_total : int = 0
+
+
+func get_progress() -> float:
+	if progress_total == 0:
+		return 0.0
+	return float(progress)/float(progress_total)
+
+func generate(mesh: Mesh) -> Mesh:
 	var b_mesh : MeshDataTool = MeshDataTool.new()
 	if not mesh is ArrayMesh:
 		b_mesh.create_from_surface(mesh.create_outline(0.0), 0)
 	else:
 		b_mesh.create_from_surface(mesh, 0)
 	
+	progress = 0
+	progress_total = b_mesh.get_vertex_count()
+	
 	var num_verts = b_mesh.get_vertex_count()
 	if (num_verts == 0):
 		return Mesh.new()
 	
-	var b_mesh_vertices : Array = []
-	var b_mesh_normals : Array = []
+	var b_mesh_vertices : Array[Vector3] = []
+	var b_mesh_normals : Array[Vector3] = []
 	for i in b_mesh.get_vertex_count():
 		b_mesh_vertices.append(b_mesh.get_vertex(i))
 		b_mesh_normals.append(b_mesh.get_vertex_normal(i))
 	
 	# STEP 1: Find out duplicated vertices and point duplicates to a single
 	#         original vertex.
+	print("Sort")
 	var sorted_vert_indices : Array[int] = []
 	sorted_vert_indices.resize(num_verts)
 	sorted_vert_indices.fill(0)
@@ -38,28 +51,32 @@ static func generate(mesh: Mesh) -> Mesh:
 	
 	# This array stores index of the original vertex for the given vertex
 	# index.
+	print("Find duplicates")
 	var vert_orig_index : Array[int] = []
 	vert_orig_index.resize(num_verts)
 	vert_orig_index.fill(0)
 	for sorted_vert_index in num_verts:
 		var vert_index : int = sorted_vert_indices[sorted_vert_index]
 		var vert_co : Vector3 = b_mesh_vertices[vert_index]
+		var sum : float = vert_co.x + vert_co.y + vert_co.z
 		var found : bool = false
-		for other_sorted_vert_index in range(sorted_vert_index + 1, num_verts):
+		var other_sorted_vert_index : int = sorted_vert_index + 1
+		while other_sorted_vert_index < num_verts:
 			var other_vert_index : int = sorted_vert_indices[other_sorted_vert_index]
 			var other_vert_co : Vector3 = b_mesh_vertices[other_vert_index]
 			# We are too far away now, we wouldn't have duplicate.
-			if (other_vert_co.x + other_vert_co.y + other_vert_co.z) - \
-				(vert_co.x + vert_co.y + vert_co.z) > 3 * FLT_EPSILON:
+			if (other_vert_co.x + other_vert_co.y + other_vert_co.z) - sum > 3 * FLT_EPSILON:
 				break
 			# Found duplicate.
 			if (other_vert_co - vert_co).length_squared() < FLT_EPSILON:
 				found = true
 				vert_orig_index[vert_index] = other_vert_index
 				break
+			other_sorted_vert_index += 1
 	
 		if not found:
 			vert_orig_index[vert_index] = vert_index
+		progress += 1
 	
 	# Make sure we always point to the very first orig vertex.
 	for vert_index in num_verts:
@@ -68,6 +85,7 @@ static func generate(mesh: Mesh) -> Mesh:
 			orig_index = vert_orig_index[orig_index]
 		vert_orig_index[vert_index] = orig_index
 	
+	print("Check edges")
 	var b_mesh_edges : Array = []
 	var known_edges : Dictionary = {}
 	var correct : int = 0
@@ -117,6 +135,7 @@ static func generate(mesh: Mesh) -> Mesh:
 				b_mesh_edges[edge_index][2+slot] = f
 	print("%d %d %d" % [ correct, error1, error2 ])
 	
+	print("Calculate normals")
 	# STEP 2: Calculate vertex normals taking into account their possible
 	#         duplicates which gets "welded" together.
 	var vert_normal : Array[Vector3] = []
@@ -135,6 +154,7 @@ static func generate(mesh: Mesh) -> Mesh:
 		vert_normal[vert_index] = vert_normal[orig_index].normalized()
 	
 	# STEP 3: Calculate mean curvature
+	print("Calculate mean curvature")
 	var mean_curvature_data : Array[float] = []
 	mean_curvature_data.resize(num_verts)
 	mean_curvature_data.fill(0.0)
@@ -155,6 +175,7 @@ static func generate(mesh: Mesh) -> Mesh:
 		mean_curvature_data[v1] -= x * atan2(sinTheta, cosTheta)
 
 	# STEP 4: Walk triangles to calculate Gaussian and mean curvatures
+	print("Calculate Gaussian curvature")
 	var gaussian_angles : Array[float] = []
 	gaussian_angles.resize(num_verts)
 	gaussian_angles.fill(0.0)

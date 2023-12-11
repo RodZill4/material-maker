@@ -5,6 +5,9 @@ class_name MMMapGenerator
 static var mesh_maps : Dictionary = {}
 static var debug_index : int = 0
 
+static var error_texture : MMTexture
+
+
 const SHADERS_PATH : String = "res://addons/material_maker/map_generator"
 const MAP_DEFINITIONS : Dictionary = {
 	position = {
@@ -23,7 +26,42 @@ const MAP_DEFINITIONS : Dictionary = {
 }
 
 
+class DefaultProgress:
+	var text : String
+	var progress : int = 0
+	
+	func set_text(t : String):
+		text = t
+	
+	func set_progress(v : float):
+		if int(v*100.0) > progress:
+			progress = int(v*100.0)
+			print(text+" ("+str(progress)+"%)")
+
+
+class UIProgress:
+	var text : String
+	var progress : int = 0
+	
+	func set_text(t : String):
+		text = t
+	
+	func set_progress(v : float):
+		if int(v*100.0) > progress:
+			progress = int(v*100.0)
+			mm_globals.main_window.set_tip_text(text+" ("+str(progress)+"%)", 0.0 if (progress >= 100) else 1.0)
+
+
 static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture):
+	assert(mesh != null)
+	print("Generating %s map for mesh %s" % [ map, str(mesh) ])
+	var progress
+	if mm_globals.main_window:
+		progress = UIProgress.new()
+	else:
+		progress = DefaultProgress.new()
+	progress.set_text("Generating "+map+" map")
+	progress.set_progress(0)
 	var pixels : int = size/4
 	var map_definition : Dictionary = MAP_DEFINITIONS[map]
 	var mesh_pipeline : MMMeshRenderingPipeline = MMMeshRenderingPipeline.new()
@@ -35,7 +73,13 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
 		"curvature":
-			mesh_pipeline.mesh = MMCurvatureGenerator.generate(mesh)
+			var curvature_generator : MMCurvatureGenerator = MMCurvatureGenerator.new()
+			var thread : Thread = Thread.new()
+			thread.start(curvature_generator.generate.bind(mesh))
+			while thread.is_alive():
+				await mm_globals.get_tree().process_frame
+				progress.set_progress(curvature_generator.get_progress())
+			mesh_pipeline.mesh = thread.wait_to_finish()
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
 		"bvh":
@@ -55,6 +99,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			print("Casting %d rays..." % ray_count)
 			for i in range(ray_count):
+				progress.set_progress(float(i)/ray_count)
 				mesh_pipeline.set_parameter("iteration", i+1)
 				mesh_pipeline.set_parameter("prev_iteration_tex", texture)
 				await mesh_pipeline.render(Vector2i(size, size), 3, texture)
@@ -91,13 +136,30 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			await postprocess_pipeline.render(texture, Vector2i(size, size))
 			#texture.save_to_file("d:/debug_%d.png" % debug_index)
 			debug_index += 1
+		progress.set_progress(1.0)
+
+static var busy : bool = false
 
 static func get_map(mesh : Mesh, map : String) -> MMTexture:
+	if mesh == null:
+		if error_texture == null:
+			error_texture = MMTexture.new()
+			var image : Image = Image.create(1, 1, 0, Image.FORMAT_RGBAH)
+			image.fill(Color(1.0, 0.0, 0.0))
+			error_texture.set_texture(ImageTexture.create_from_image(image))
+		return error_texture
 	if ! mesh_maps.has(mesh):
 		mesh_maps[mesh] = {}
-	if ! mesh_maps[mesh].has(map):
-		var texture : MMTexture = MMTexture.new()
-		mesh_maps[mesh][map] = texture
-		await generate(mesh, map, 2048, texture)
+	while true:
+		if mesh_maps[mesh].has(map):
+			break
+		if not busy:
+			busy = true
+			var texture : MMTexture = MMTexture.new()
+			mesh_maps[mesh][map] = texture
+			await generate(mesh, map, 2048, texture)
+			busy = false
+			break
+		await mm_globals.get_tree().process_frame
 	return mesh_maps[mesh][map] as MMTexture
 		
