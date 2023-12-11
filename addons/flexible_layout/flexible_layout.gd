@@ -258,9 +258,8 @@ class FlexTab:
 		adding = true
 		if fp.has_meta("flex_node"):
 			var current_owner = fp.get_meta("flex_node")
-			if current_owner != null:
-				current_owner.remove(fp)
-			fp.set_meta("flex_node", null)
+			current_owner.remove(fp)
+			fp.remove_meta("flex_node")
 		assert(not fp.has_meta("flex_node"))
 		tabs.add(fp)
 		if fp.get_parent() != flexible_layout.control:
@@ -273,7 +272,7 @@ class FlexTab:
 	func remove(fp : Control):
 		assert(fp.get_meta("flex_node") == self)
 		tabs.erase(fp)
-		fp.set_meta("flex_node", null)
+		fp.remove_meta("flex_node")
 		if not adding and tabs.get_controls().is_empty():
 			tabs.queue_free()
 			parent.get_ref().replace(self, null)
@@ -287,7 +286,11 @@ class FlexTab:
 		tabs.position = rect.position
 		tabs.size = Vector2i(rect.size.x, 0)
 		var tabs_height : int = tabs.get_combined_minimum_size().y
-		for c in tabs.get_controls():
+		for c : Control in tabs.get_controls():
+			c.anchor_left = 0
+			c.anchor_right = 0
+			c.anchor_top = 0
+			c.anchor_bottom = 0
 			c.position = rect.position+Vector2(0, tabs_height)
 			c.size = rect.size-Vector2(0, tabs_height)
 
@@ -314,6 +317,10 @@ class FlexMain:
 	func layout(r : Rect2):
 		#print("Layout FlexNode - "+str(r))
 		rect = r
+		child.anchor_left = 0
+		child.anchor_right = 0
+		child.anchor_top = 0
+		child.anchor_bottom = 0
 		child.position = rect.position
 		child.size = rect.size
 
@@ -391,11 +398,11 @@ class FlexLayout:
 	
 	func is_panel_shown(panel_name : String) -> bool:
 		var panel : Control = main_control.panels[panel_name]
-		return (panel and panel.get_meta("flex_node") != null)
+		return (panel and panel.has_meta("flex_node"))
 	
 	func show_panel(panel_name : String):
 		var panel : Control = main_control.panels[panel_name]
-		if panel.get_meta("flex_node") != null:
+		if panel.has_meta("flex_node"):
 			return
 		if panel_name == "Main":
 			get_flexmain().add(panel)
@@ -572,10 +579,9 @@ func show_panel(panel_name : String, v : bool = true):
 		if panel_name == "Main":
 			return
 		var panel : Control = panels[panel_name]
-		var flex_node = panel.get_meta("flex_node")
-		if flex_node == null:
-			return
-		flex_node.remove(panel)
+		if panel.has_meta("flex_node"):
+			var flex_node = panel.get_meta("flex_node")
+			flex_node.remove(panel)
 
 func serialize() -> Dictionary:
 	var data : Dictionary = {}
