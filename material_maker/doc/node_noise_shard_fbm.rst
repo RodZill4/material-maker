@@ -11,7 +11,7 @@ Inputs
 ++++++
 
 The **Shard FBM Noise** node accepts two inputs, the **Offset Input** to optionally
-drive the **Offset** value with an input and a *Sharpness Map* which affects the sharpness parameter.
+drive the **Offset** value with an input and a **Sharpness Map** which affects the sharpness parameter.
 
 Outputs
 +++++++
