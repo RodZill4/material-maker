@@ -1,7 +1,7 @@
 Blend node
 ~~~~~~~~~~
 
-The **Blend** node blends two or more 3D texture using an optional opacity. It performs a blend operation
+The **Blend** node blends two or more 3D textures using an optional opacity. It performs a blend operation
 defined by the blend mode between the inputs, and mixes the result with the background input
 using the opacity (defines by the *opacity* parameter, or the optional greyscale input).
 
@@ -17,7 +17,7 @@ The **Blend** node accepts three inputs:
 
 * The second input is the first layer.
 
-* The third input is an optional mask that will be use instead of the opacity parameter.
+* The third input is an optional mask that will be used instead of the opacity parameter.
 
 This node is variadic, and more layers and associated masks can be added.
 
