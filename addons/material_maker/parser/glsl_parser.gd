@@ -10,11 +10,11 @@ const REGEXS : Array = [
 	{ type="SYMBOLS", regex="^(<<|>>|&&|\\|\\||^^)=" },
 	{ type="SYMBOLS", regex="^(\\|\\||\\&\\&|\\^\\^|\\+\\+|--)" },
 	{ type="SYMBOLS", regex="^[+-/*\\%<>!&|^]=" },
-	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|?:^]" },
+	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|!?:^]" },
 ]
 
 const KEYWORDS = [  "const", "if", "else", "for", "while", "break", "continue", "return",
-					"in", "out" ]
+					"in", "inout", "out" ]
 
 const TYPES = [ "void", "float", "int", "bool", "vec2", "vec3", "vec4",
 				"bvec2", "bvec3", "bvec4", "ivec2", "ivec3", "ivec4",
