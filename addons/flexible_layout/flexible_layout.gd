@@ -21,6 +21,10 @@ class FlexNode:
 			if parent.get_ref() != null:
 				parent.get_ref().replace(self, null)
 	
+	func get_minimum_size() -> Vector2i:
+		assert(false)
+		return Vector2i(0, 0)
+	
 	func serialize() -> Dictionary:
 		var rv : Dictionary = { type=type, w=rect.size.x, h=rect.size.y, children=[] }
 		for c in get_children():
@@ -65,6 +69,9 @@ class FlexTop:
 	
 	func _init(fl : FlexLayout):
 		super._init(null, fl, "FlexTop")
+	
+	func get_minimum_size() -> Vector2i:
+		return child.get_minimum_size() if child else Vector2i(0, 0)
 	
 	func deserialize(data : Dictionary):
 		super.deserialize(data)
@@ -111,6 +118,22 @@ class FlexSplit:
 			for d in draggers:
 				if is_instance_valid(d):
 					d.queue_free()
+	
+	func get_minimum_size() -> Vector2i:
+		var s : Vector2i
+		if vertical:
+			s = Vector2i(0, (10*children.size()-1))
+			for c in children:
+				var ms : Vector2i = c.get_minimum_size()
+				s.x = max(s.x, ms.x)
+				s.y += ms.y
+		else:
+			s = Vector2i(10*(children.size()-1), 0)
+			for c in children:
+				var ms : Vector2i = c.get_minimum_size()
+				s.x += ms.x
+				s.y = max(s.y, ms.y)
+		return s
 	
 	func serialize() -> Dictionary:
 		var rv : Dictionary = super.serialize()
@@ -210,7 +233,17 @@ class FlexSplit:
 				var width : int = (c.rect.size.x*new_width+(old_width>>1))/old_width
 				c.layout(Rect2(x, r.position.y, width, r.size.y))
 				x += width
-		
+	
+	func start_drag(dragger_index : int, p : int) -> Vector2i:
+		var c1 = children[dragger_index]
+		var c2 = children[dragger_index+1]
+		var min_c1_size : Vector2i = c1.get_minimum_size()
+		var min_c2_size : Vector2i = c2.get_minimum_size()
+		if vertical:
+			return Vector2i(c1.rect.position.y+min_c1_size.y, c2.rect.position.y+c2.rect.size.y-min_c2_size.y-10)
+		else:
+			return Vector2i(c1.rect.position.x+min_c1_size.x, c2.rect.position.x+c2.rect.size.x-min_c2_size.x-10)
+
 	func drag(dragger_index : int, p : int):
 		var c1 = children[dragger_index]
 		var c2 = children[dragger_index+1]
@@ -240,6 +273,15 @@ class FlexTab:
 		if what == NOTIFICATION_PREDELETE:
 			if is_instance_valid(tabs):
 				tabs.queue_free()
+	
+	func get_minimum_size() -> Vector2i:
+		var s : Vector2i = Vector2i(0, 0)
+		for t : Control in tabs.get_controls():
+			var ms : Vector2i = t.get_combined_minimum_size()
+			s.x = max(s.x, ms.x)
+			s.y = max(s.y, ms.y)
+		s.y += tabs.get_combined_minimum_size().y
+		return s
 	
 	func serialize() -> Dictionary:
 		var rv : Dictionary = super.serialize()
@@ -302,6 +344,9 @@ class FlexMain:
 	func _init(p : FlexNode = null, fl : FlexLayout = null):
 		super._init(p, fl)
 		type = "FlexMain"
+	
+	func get_minimum_size() -> Vector2i:
+		return child.get_combined_minimum_size()
 	
 	func deserialize(data : Dictionary):
 		super.deserialize(data)
