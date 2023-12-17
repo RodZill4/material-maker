@@ -75,8 +75,8 @@ var value : MMGradient = null :
 		set_value(new_value)
 @export var embedded : bool = true
 
-var continuous_change = true
-var popup = null
+var continuous_change : bool = true
+var popup : Popup = null
 
 signal updated(value, cc)
 
@@ -160,20 +160,19 @@ func add_cursor(x, color) -> void:
 
 func _gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.button_index == 1 and ev.double_click:
-		if ev.position.y > 15:
+		if embedded and ev.position.y < 15:
+			popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instantiate()
+			add_child(popup)
+			var popup_size : Vector2i = Vector2i(420, 40)
+			popup.popup(Rect2(get_window().position+Vector2i(ev.global_position)-Vector2i(popup_size.x / 2, 0), popup_size))
+			popup.init(value)
+			popup.connect("updated", Callable(self, "set_value_and_update"))
+			popup._on_size_changed()
+		else:
 			var p = clamp(ev.position.x, 0, size.x-GradientCursor.WIDTH)
 			add_cursor(p, get_gradient_color(p))
 			continuous_change = false
 			update_from_value()
-		elif embedded:
-			popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instantiate()
-			add_child(popup)
-			var popup_size = popup.size
-			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
-			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
-			popup.init(value)
-			popup.connect("updated", Callable(self, "set_value_and_update"))
-			popup.connect("popup_hide", Callable(popup, "queue_free"))
 
 # Showing a color picker popup to change a cursor's color
 
