@@ -466,6 +466,9 @@ class FlexLayout:
 		layout()
 	
 	func layout():
+		var rect : Rect2i = control.get_rect()
+		if rect.size.x == 0 or rect.size.y == 0:
+			return
 		if top:
 			top.layout(control.get_rect())
 		main_control.layout_changed.emit()
@@ -551,6 +554,7 @@ class FlexWindow:
 	
 	func serialize() -> Dictionary:
 		var data : Dictionary = {}
+		data.screen = current_screen
 		data.x = position.x
 		data.y = position.y
 		data.w = size.x
@@ -559,6 +563,7 @@ class FlexWindow:
 		return data
 	
 	func init(data : Dictionary):
+		current_screen = data.screen
 		position = Vector2i(data.x, data.y)
 		size = Vector2i(data.w, data.h)
 		flex_layout.init(data.layout)
@@ -597,6 +602,22 @@ func _ready():
 		if c.visible and ! c.has_meta("flexlayout"):
 			add(c.name, c)
 
+func _notification(what):
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			var new_theme = null
+			var control = self
+			while control:
+				if control is Control and control.theme != null:
+					new_theme = control.theme
+					break
+				control = control.get_parent()
+			if new_theme != null:
+				for w in subwindows:
+					for c in w.get_children():
+						if c is Control:
+							c.theme = new_theme
+
 func add(n : String, c : Control):
 	c.name = n
 	c.set_meta("flex_layout", self)
@@ -606,8 +627,8 @@ func init(layout = null):
 	if layout and layout.has("main"):
 		for w in layout.windows:
 			var subwindow = FlexWindow.new(self)
+			subwindow.init(w)
 			subwindows.append(subwindow)
-			subwindow.layout(w)
 		flex_layout.init(layout.main)
 	else:
 		flex_layout.init(layout)
