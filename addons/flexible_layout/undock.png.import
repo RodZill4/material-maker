@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5br5opw6gmyp"
-path="res://.godot/imported/undock.svg-0e462ba8ce32a7b4dbda8774c1ab8185.ctex"
+uid="uid://xuy6dfh1rsne"
+path="res://.godot/imported/undock.png-98438d022061dcd951267842f56b8df4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/flexible_layout/undock.svg"
-dest_files=["res://.godot/imported/undock.svg-0e462ba8ce32a7b4dbda8774c1ab8185.ctex"]
+source_file="res://addons/flexible_layout/undock.png"
+dest_files=["res://.godot/imported/undock.png-98438d022061dcd951267842f56b8df4.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
