@@ -83,6 +83,14 @@ Blending modes
 
 .. |blend_exclusion| image:: images/blend_exclusion.png
 
+.. |blend_hue| image:: images/blend_hue.png
+
+.. |blend_saturation| image:: images/blend_saturation.png
+
+.. |blend_color| image:: images/blend_color.png
+
+.. |blend_value| image:: images/blend_value.png
+
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Blend mode            | Example                       | Description                                                                                                                   |
 +=======================+===============================+===============================================================================================================================+
@@ -123,6 +131,14 @@ Blending modes
 | Hard Mix              | |blend_hard_mix|              | This blend mode multiplies the colors of the two layers, and maps the resulting color to the nearest primary color            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Exclusion             | |blend_exclusion|             | This blend mode is similar to Difference, but it is less intense                                                              |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Hue                   | |blend_hue|                   | This blend mode takes the hue of the bottom layer and combines them with the saturation and value of the top layer            |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Saturation            | |blend_saturation|            | This blend mode takes the saturation of the bottom layer and combines them with the hue and value of the top layer            |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Color                 | |blend_color|                 | This blend mode takes the hue and saturation of the bottom layer and combines them with the value of the top layer            |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Value                 | |blend_value|                 | This blend mode takes the value of the bottom layer and combines them with the hue and saturation of the top layer            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 Notes

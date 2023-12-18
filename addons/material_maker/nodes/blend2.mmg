@@ -6,7 +6,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount1": 0.5,
+		"amount1": 1,
 		"blend_type1": 0
 	},
 	"seed_int": 0,
@@ -61,10 +61,73 @@
 			"",
 			"vec3 blend_exclusion(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
 			"\treturn opacity*vec3(blend_exclusion_f(c1.x, c2.x), blend_exclusion_f(c1.y, c2.y), blend_exclusion_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend_hue(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tvec3 outcol = c2;",
+			"",
+			"\tvec3 hsv, hsv2, tmp;",
+			"\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\tif (hsv2.y != 0.0) {",
+			"\t\thsv = rgb_to_hsv(outcol);",
+			"\t\thsv.x = hsv2.x;",
+			"\t\ttmp = hsv_to_rgb(hsv);",
+			"\t\toutcol = mix(outcol, tmp, opacity);",
+			"\t}",
+			"\treturn outcol;",
+			"}",
+			"",
+			"vec3 blend_saturation(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat facm = 1.0 - opacity;",
+			"",
+			"\tvec3 outcol = c2;",
+			"\tvec3 hsv, hsv2;",
+			"",
+			"\thsv = rgb_to_hsv(outcol);",
+			"",
+			"\tif (hsv.y != 0.0) {",
+			"\t\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\t\thsv.y = facm * hsv.y + opacity * hsv2.y;",
+			"\t\toutcol = hsv_to_rgb(hsv);",
+			"\t}",
+			"\treturn outcol;",
+			"}",
+			"",
+			"vec3 blend_color(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat facm = 1.0 - opacity;",
+			"",
+			"\tvec3 outcol = c2;",
+			"",
+			"\tvec3 hsv, hsv2, tmp;",
+			"\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\tif (hsv2.y != 0.0) {",
+			"\t\thsv = rgb_to_hsv(outcol);",
+			"\t\thsv.x = hsv2.x;",
+			"\t\thsv.y = hsv2.y;",
+			"\t\ttmp = hsv_to_rgb(hsv);",
+			"",
+			"\t\toutcol = mix(outcol, tmp, opacity);",
+			"\t}",
+			"\treturn outcol;",
+			"}",
+			"",
+			"vec3 blend_value(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat facm = 1.0 - opacity;",
+			"",
+			"\tvec3 hsv, hsv2;",
+			"\thsv = rgb_to_hsv(c2);",
+			"\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\thsv.z = facm * hsv.z + opacity * hsv2.z;",
+			"\treturn hsv_to_rgb(hsv);",
 			"}"
 		],
 		"includes": [
-			"blend"
+			"blend",
+			"adjust_hsv"
 		],
 		"inputs": [
 			{
@@ -187,6 +250,22 @@
 					{
 						"name": "Exclusion",
 						"value": "exclusion"
+					},
+					{
+						"name": "Hue",
+						"value": "hue"
+					},
+					{
+						"name": "Saturation",
+						"value": "saturation"
+					},
+					{
+						"name": "Color",
+						"value": "color"
+					},
+					{
+						"name": "Value",
+						"value": "value"
 					}
 				]
 			},
