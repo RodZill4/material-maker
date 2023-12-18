@@ -6,7 +6,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount1": 1,
+		"amount1": 0.5,
 		"blend_type1": 0
 	},
 	"seed_int": 0,
