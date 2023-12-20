@@ -1,7 +1,7 @@
 Color node
 ..........
 
-The **Color** node assigns a color index to the 3D signed distance function it receives as input.
+The **Color** node is variadic and assigns a color index to the 3D signed distance function it receives as input.
 The color index map is generated when rendering the 3D scene using the **Render** node and can be
 used later to assign different materials to different shapes.
 
@@ -11,7 +11,7 @@ used later to assign different materials to different shapes.
 Inputs
 ::::::
 
-The **Color** node accepts 1 input in 3D signed distance function format.
+The **Color** node accepts one or more inputs in 3D signed distance function format.
 
 Outputs
 :::::::
