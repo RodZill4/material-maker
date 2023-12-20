@@ -24,5 +24,5 @@ The **Shape Select** node generates a merged 3D texture.
 Parameters
 ..........
 
-The **Shape Select** node accepts a smoothness parameter that defines the withd of the area
+The **Shape Select** node accepts a smoothness parameter that defines the width of the area
 where both textures are mixed.
