@@ -23,3 +23,5 @@ index.
 	node_3d_texture_rotate
 	node_3d_texture_distort
 	node_3d_texture_uniform
+	node_3d_texture_scale
+	node_3d_texture_translate

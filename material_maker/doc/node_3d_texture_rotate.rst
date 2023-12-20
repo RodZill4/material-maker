@@ -1,7 +1,7 @@
 Rotate node
 ~~~~~~~~~~~
 
-The **Rotate** node applies a rotation to a 3D texture.
+The **Rotate** node is variadic and applies a rotation to a 3D texture.
 
 .. image:: images/node_3d_texture_rotate.png
 	:align: center
@@ -9,12 +9,12 @@ The **Rotate** node applies a rotation to a 3D texture.
 Inputs
 ......
 
-The **Rotate** node inputs a 3D texture.
+The **Rotate** node inputs one or more 3D textures.
 
 Outputs
 .......
 
-The **Rotate** node provides a rotated 3D texture.
+The **Rotate** node provides rotated 3D textures.
 
 Parameters
 ..........
