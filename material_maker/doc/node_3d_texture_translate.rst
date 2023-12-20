@@ -19,7 +19,7 @@ The **Translate** node provides translated 3D textures.
 Parameters
 ..........
 
-The **Translate** node has a X, Y and Z parameters that define the translation around each axis.
+The **Translate** node has a X, Y and Z parameters that define the translation on each axis.
 
 Example images
 ..............
