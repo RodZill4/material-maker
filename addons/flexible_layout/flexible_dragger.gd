@@ -31,7 +31,7 @@ func _on_gui_input(event):
 				drag_position = position.y
 			else:
 				drag_position = position.x
-			drag_limits = flex_split.get_ref().start_drag(dragger_index, position.y)
+			drag_limits = flex_split.get_ref().start_drag(dragger_index, drag_position)
 	elif event is InputEventMouseMotion:
 		if dragging:
 			if vertical:
