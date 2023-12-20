@@ -1,7 +1,7 @@
 Translate node
 ~~~~~~~~~~~~~~
 
-The **Translate** node is variadic and translates a 3D texture.
+The **Translate** node is variadic and translates 3D textures.
 
 .. image:: images/node_3d_texture_translate.png
 	:align: center
