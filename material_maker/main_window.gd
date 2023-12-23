@@ -975,20 +975,22 @@ func get_current_node(graph_edit : MMGraphEdit) -> Node:
 
 func update_preview_2d() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	if graph_edit != null:
-		var previews : Array = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
-		for i in range(2):
-			var preview = graph_edit.get_current_preview(i)
-			var generator : MMGenBase = null
-			var output_index : int = -1
-			if preview != null:
-				generator = preview.generator
-				output_index = preview.output_index
-			if previews[i] != null:
-				previews[i].set_generator(generator, output_index)
-			if i == 0:
-				histogram.set_generator(generator, output_index)
-				projects_panel.preview_2d_background.set_generator(generator, output_index)
+	if not graph_edit:
+		return
+	var previews : Array = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
+	for i in range(2):
+		var preview = graph_edit.get_current_preview(i)
+		var generator : MMGenBase = null
+		var output_index : int = -1
+		if preview == null or preview.generator == null:
+			continue
+		generator = preview.generator
+		output_index = preview.output_index
+		if previews[i] != null:
+			previews[i].set_generator(generator, output_index)
+		if i == 0:
+			histogram.set_generator(generator, output_index)
+			projects_panel.preview_2d_background.set_generator(generator, output_index)
 
 var current_gen_material = null
 func update_preview_3d(previews : Array, _sequential = false) -> void:
