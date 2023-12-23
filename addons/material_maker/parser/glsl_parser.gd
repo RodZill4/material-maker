@@ -10,7 +10,7 @@ const REGEXS : Array = [
 	{ type="SYMBOLS", regex="^(<<|>>|&&|\\|\\||^^)=" },
 	{ type="SYMBOLS", regex="^(\\|\\||\\&\\&|\\^\\^|\\+\\+|--)" },
 	{ type="SYMBOLS", regex="^[+-/*\\%<>!&|^]=" },
-	{ type="SYMBOLS", regex="^[+-/*=<>)(,;\\{\\}.&|!?:^]" },
+	{ type="SYMBOLS", regex="^[+-/*\\%=<>)(,;\\{\\}\\[\\].&|!?:^]" },
 ]
 
 const KEYWORDS = [  "const", "if", "else", "for", "while", "break", "continue", "return",
