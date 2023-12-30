@@ -295,6 +295,8 @@ class FlexTab:
 		super.deserialize(data)
 		for c in data.tabs:
 			add(flexible_layout.main_control.panels[c])
+		if data.has("current"):
+			tabs.set_current(data.current)
 	
 	func add(fp : Control):
 		adding = true
