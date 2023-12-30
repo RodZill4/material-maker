@@ -541,6 +541,7 @@ size_flags_vertical = 3
 color = Color(1, 1, 1, 0)
 
 [node name="BrushView" type="ColorRect" parent="VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D"]
+visible = false
 material = SubResource("5")
 layout_mode = 1
 anchors_preset = 15

@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b27p6dhsoiwp1"]
+[gd_scene load_steps=10 format=3 uid="uid://b27p6dhsoiwp1"]
 
 [ext_resource type="Script" path="res://material_maker/panels/paint/select_mask_dialog.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/tools/obj_loader/obj_loader.gd" id="2"]
+[ext_resource type="Shader" path="res://material_maker/panels/paint/select_mask_dialog.gdshader" id="2_w5qxl"]
 
 [sub_resource type="Shader" id="4"]
 code = "shader_type canvas_item;
@@ -23,15 +24,20 @@ shader_parameter/color = null
 shader_parameter/mm_chunk_size = 1.0
 shader_parameter/mm_chunk_offset = Vector2(0, 0)
 
+[sub_resource type="World3D" id="World3D_j8v88"]
+
 [sub_resource type="BoxMesh" id="1"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y61of"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpkvw"]
+render_priority = 0
+shader = ExtResource("2_w5qxl")
 
 [sub_resource type="Environment" id="6"]
 background_mode = 1
 background_color = Color(0.501961, 0.501961, 0.501961, 1)
 
 [node name="SelectMask" type="Window"]
+size = Vector2i(300, 200)
 script = ExtResource("1")
 genmask_material = SubResource("5")
 
@@ -83,6 +89,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="SubViewport" type="SubViewport" parent="VBoxContainer/HBoxContainer/SubViewportContainer"]
+own_world_3d = true
+world_3d = SubResource("World3D_j8v88")
 handle_input_locally = false
 size = Vector2i(100, 100)
 render_target_update_mode = 4
@@ -92,7 +100,7 @@ render_target_update_mode = 4
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport/MeshPivot"]
 mesh = SubResource("1")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_y61of")
+surface_material_override/0 = SubResource("ShaderMaterial_bpkvw")
 
 [node name="CameraPivot" type="Node3D" parent="VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
@@ -128,6 +136,7 @@ text = "Cancel"
 [node name="ObjLoader" type="Node" parent="."]
 script = ExtResource("2")
 
+[connection signal="size_changed" from="." to="." method="_on_size_changed"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/IdMapFile" to="." method="_on_IdMapFile_pressed"]
 [connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowIdMap" to="." method="_on_Show_item_selected" binds= [0]]

@@ -628,13 +628,13 @@ func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0)
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke)
+	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
 	last_painted_position = pos
 
 var next_paint_to = null
 var next_pressure = null
 
-func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
+func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false, on_mask : bool = false):
 	if !end_of_stroke and painting:
 		# if not available for painting, record a paint order
 		next_paint_to = pos
@@ -659,17 +659,17 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 	}
 	match painting_mode:
 		PAINTING_MODE_VIEW:
-			paint_options.size = view_3d.size
+			paint_options.rect_size = view_3d.size
 		PAINTING_MODE_TEXTURE_FROM_VIEW:
 			var min_size = min(view_3d.size.x, view_3d.size.y)
 			paint_options.texture_center = Vector2(0.5, 0.5)
 			paint_options.texture_scale = 1.0
-			paint_options.size = Vector2(min_size, min_size)
+			paint_options.rect_size = Vector2(min_size, min_size)
 		PAINTING_MODE_TEXTURE:
-			paint_options.size = view_2d.size
+			paint_options.rect_size = view_2d.size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
-	await painter.paint(paint_options, end_of_stroke)
+	await painter.paint(paint_options, end_of_stroke, true, on_mask)
 	previous_position = pos
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -823,7 +823,7 @@ func export_material(export_prefix, profile) -> void:
 # 2D painting
 
 func get_2D_paint_select_texture_sources() -> Array:
-	return [ $Painter, $PaintLayers ]
+	return [ $Painter, $PaintLayers, self ]
 
 func initialize_2D_paint_select():
 	for s in [ $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/ChannelSelect ]:
@@ -845,10 +845,10 @@ func _on_ChannelSelect_item_selected(ID):
 # debug
 
 func debug_get_texture_names():
-	return [ "None" ]
+	return [ "Mask" ]
 
 func debug_get_texture(_ID):
-	return null
+	return mask
 
 func initialize_debug_selects():
 	for s in [ $VSplitContainer/HSplitContainer/Painter/Debug/Select1, $VSplitContainer/HSplitContainer/Painter/Debug/Select2 ]:

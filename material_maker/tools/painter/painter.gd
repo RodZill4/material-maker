@@ -194,8 +194,9 @@ func set_texture_size(s : float):
 		texture_size = s
 		for v in viewports.keys():
 			viewports[v].set_texture_size(s)
-		update_seams_texture()
-		update_tex2view()
+		if mesh:
+			update_seams_texture()
+			update_tex2view()
 
 func update_view(c : Camera3D, t : Transform3D, s : Vector2i):
 	camera = c
@@ -230,7 +231,7 @@ func update_tex2view():
 		t2v_pipeline.mesh = mesh
 		t2v_pipeline.set_parameter("transform", transform)
 		await t2v_pipeline.render(Vector2i(texture_size, texture_size), 3, t2v_texture)
-		texture_to_view_texture = await t2v_texture.get_texture()
+		texture_to_view_texture = t2v_texture.get_texture()
 
 		update_viewport_textures()
 
@@ -273,8 +274,7 @@ func update_brush(update_shaders : bool = false):
 			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.gdshader"
 			var code : String = get_output_code(1)
 			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
-			print(brush_preview_material.shader.code)
-		var v2t_tex = await v2t_texture.get_texture()
+		var v2t_tex = v2t_texture.get_texture()
 		brush_preview_material.set_shader_parameter("rect_size", viewport_size)
 		brush_preview_material.set_shader_parameter("view2tex_tex", v2t_tex)
 		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", mesh_inv_uv_tex)
@@ -303,6 +303,9 @@ func update_brush(update_shaders : bool = false):
 	if update_shaders:
 		for index in viewport_names.size():
 			var viewport_name = viewport_names[index]
+			if not has_channel[viewport_name]:
+				continue
+			print(viewport_name)
 			var viewport = viewports[viewport_name]
 			var shader_file : String = "res://material_maker/tools/painter/shaders/paint.gdshader"
 			var code : String = get_output_code(index+1)
@@ -375,12 +378,16 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 		get_parent().update_procedural_layer()
 	return false
 
-func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true) -> void:
+func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true, on_mask : bool = false) -> void:
 	var active_viewports : Array = []
-	for v in viewports.keys():
-		if has_channel[v]:
-			active_viewports.push_back(v)
-			viewports[v].do_paint(shader_params, end_of_stroke)
+	if on_mask:
+		active_viewports.push_back("mask")
+	else:
+		for v in viewports.keys():
+			if has_channel[v] and v != "mask":
+				active_viewports.push_back(v)
+	for v in active_viewports:
+		viewports[v].do_paint(shader_params, end_of_stroke)
 	var finished : bool = false
 	while ! finished:
 		await get_tree().process_frame
@@ -442,9 +449,35 @@ func save_viewport(v : SubViewport, f : String):
 
 func debug_get_texture_names():
 	if OS.is_debug_build():
-		return [ "View to texture", "Texture to view", "Seams", "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)", "Inv. UV map", "Mesh normal map", "Mesh tangent map" ]
+		return [
+				"View to texture",
+				"Texture to view",
+				"Seams",
+				"Albedo (current layer)",
+				"Albedo stroke (current layer)",
+				"Metallic/Roughness (current layer)",
+				"Metallic/Roughness stroke (current layer)",
+				"Emission (current layer)",
+				"Emission stroke (current layer)",
+				"Normal (current layer)",
+				"Normal stroke (current layer)",
+				"Depth/Occlusion (current layer)",
+				"Depth/Occlusion stroke (current layer)",
+				"Mask (current layer)",
+				"Mask stroke (current layer)",
+				"Mesh position map",
+				"Mesh normal map",
+				"Mesh tangent map"
+			]
 	else:
-		return [ "Albedo (current layer)", "Metallic/Roughness (current layer)", "Emission (current layer)", "Normal (current layer)", "Depth/Occlusion (current layer)", "Mask (current layer)" ]
+		return [
+				"Albedo (current layer)",
+				"Metallic/Roughness (current layer)",
+				"Emission (current layer)",
+				"Normal (current layer)",
+				"Depth/Occlusion (current layer)",
+				"Mask (current layer)"
+			]
 
 # Localization strings
 # tr("View to texture")
@@ -458,31 +491,41 @@ func debug_get_texture_names():
 # tr("Mask (current layer)")
 
 func debug_get_texture(ID):
-	if ! OS.is_debug_build():
-		ID -= 3
-	match ID:
-		0:
+	match debug_get_texture_names()[ID]:
+		"View to texture":
 			return await v2t_texture.get_texture()
-		1:
+		"Texture to view":
 			return await t2v_texture.get_texture()
-		2:
+		"Seams":
 			return mesh_seams_tex
-		3:
+		"Albedo (current layer)":
 			return albedo_viewport.get_texture()
-		4:
+		"Albedo stroke (current layer)":
+			return albedo_viewport.get_stroke_texture()
+		"Metallic/Roughness (current layer)":
 			return mr_viewport.get_texture()
-		5:
+		"Metallic/Roughness stroke (current layer)":
+			return mr_viewport.get_stroke_texture()
+		"Emission (current layer)":
 			return emission_viewport.get_texture()
-		6:
+		"Emission stroke (current layer)":
+			return emission_viewport.get_stroke_texture()
+		"Normal (current layer)":
 			return normal_viewport.get_texture()
-		7:
+		"Normal stroke (current layer)":
+			return normal_viewport.get_stroke_texture()
+		"Depth/Occlusion (current layer)":
 			return do_viewport.get_texture()
-		8:
+		"Depth/Occlusion stroke (current layer)":
+			return do_viewport.get_stroke_texture()
+		"Mask (current layer)":
 			return mask_viewport.get_texture()
-		9:
+		"Mask stroke (current layer)":
+			return mask_viewport.get_stroke_texture()
+		"Mesh position map":
 			return mesh_inv_uv_tex
-		10:
+		"Mesh normal map":
 			return mesh_normal_tex
-		11:
+		"Mesh tangent map":
 			return mesh_tangent_tex
 	return null

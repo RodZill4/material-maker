@@ -125,12 +125,12 @@ func _on_ViewportContainer_gui_input(event):
 			camera_pivot.rotation.x -= 0.01*event.relative.y
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			if event.command:
+			if event.is_command_or_control_pressed():
 				camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
 			else:
 				zoom(1.0 / (1.01 if event.shift_pressed else 1.1))
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			if event.command:
+			if event.is_command_or_control_pressed():
 				camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
 			else:
 				zoom(1.01 if event.shift_pressed else 1.1)
@@ -177,4 +177,7 @@ func ask(parameters : Dictionary) -> String:
 	return result
 
 func _on_VBoxContainer_minimum_size_changed():
-	size = $VBoxContainer.size+Vector2(4, 4)
+	pass
+
+func _on_size_changed():
+	$VBoxContainer.size = size

@@ -56,7 +56,7 @@ func save_layer(path : String) -> Dictionary:
 		if get(c) != null:
 			var file_name : String = "%s_%d.png" % [ c, index ]
 			var file_path : String = path.path_join(file_name)
-			var image : Image = get(c).get_data()
+			var image : Image = get(c).get_image()
 			image.save_png(file_path)
 			layer_data[c] = file_name
 	_save_layer(layer_data)
