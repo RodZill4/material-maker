@@ -239,6 +239,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 		switch = MMGenSwitch,
 		export = MMGenExport,
 		comment = MMGenComment,
+		webcam = MMGenWebcam,
 		debug = MMGenDebug,
 		reroute = MMGenReroute
 	}
