@@ -14,7 +14,6 @@ func find_position_from_target(at_position, target):
 	return POSITIONS[pos_x+3*pos_y]
 
 func _drop_data(at_position, data):
-	at_position /= get_window().content_scale_factor
 	var target = flex_layout.get_flexnode_at(at_position)
 	if target:
 		var destination = find_position_from_target(at_position, target)
@@ -22,7 +21,6 @@ func _drop_data(at_position, data):
 			flex_layout.move_panel(data, target, destination)
 
 func _can_drop_data(at_position, data):
-	at_position /= get_window().content_scale_factor
 	var target = flex_layout.get_flexnode_at(at_position)
 	if target:
 		var rect : Rect2 = target.rect

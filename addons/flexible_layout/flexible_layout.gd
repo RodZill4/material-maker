@@ -582,6 +582,9 @@ class FlexWindow:
 		overlay.queue_free()
 		overlay = null
 
+
+@onready var allow_undock : bool = false
+
 var panels : Dictionary = {}
 var flex_layout : FlexLayout
 var subwindows : Array[Window]
