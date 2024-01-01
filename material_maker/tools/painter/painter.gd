@@ -6,23 +6,15 @@ var texture_size : float = 0
 
 var initialized : bool = false
 
-var v2t_texture : MMTexture
+var v2t_texture : MMTexture = MMTexture.new()
 var v2t_pipeline : MMMeshRenderingPipeline
 
-var t2v_texture : MMTexture
+var t2v_texture : MMTexture = MMTexture.new()
 var t2v_pipeline : MMMeshRenderingPipeline
 
-#@onready var view_to_texture_viewport = $View2Texture
-#@onready var view_to_texture_mesh = $View2Texture/PaintedMesh
-#@onready var view_to_texture_camera = $View2Texture/Camera3D
 var view_to_texture_image : Image
 
-#@onready var texture_to_view_viewport = $Texture2View
-#@onready var texture_to_view_mesh = $Texture2View/PaintedMesh
-var texture_to_view_texture : Texture2D
-#@onready var texture_to_view_postprocess : ShaderMaterial = preload("res://material_maker/tools/painter/shaders/texture2view_postprocess.tres")
-
-var mesh_seams_tex : Texture2D
+var mesh_seams_tex : MMTexture = MMTexture.new()
 
 @onready var albedo_viewport = $AlbedoPaint
 @onready var mr_viewport = $MRPaint
@@ -59,9 +51,9 @@ var pattern_shown : bool = false
 #var brush_textures : Dictionary = {}
 
 var mesh_aabb : AABB
-var mesh_inv_uv_tex : ImageTexture = null
-var mesh_normal_tex : ImageTexture = null
-var mesh_tangent_tex : ImageTexture = null
+var mesh_inv_uv_tex : MMTexture = MMTexture.new()
+var mesh_normal_tex : MMTexture = MMTexture.new()
+var mesh_tangent_tex : MMTexture = MMTexture.new()
 
 const VIEW_TO_TEXTURE_RATIO = 1.0
 
@@ -86,14 +78,12 @@ func _ready():
 	
 	var vertex_shader : String
 	var fragment_shader : String
-	v2t_texture = MMTexture.new()
 	v2t_pipeline = MMMeshRenderingPipeline.new()
 	vertex_shader = load("res://material_maker/tools/painter/shaders/v2t_vertex.tres").text
 	fragment_shader = load("res://material_maker/tools/painter/shaders/v2t_fragment.tres").text
 	v2t_pipeline.add_parameter_or_texture("transform", "mat4x4", Projection())
 	await v2t_pipeline.set_shader(vertex_shader, fragment_shader)
 	
-	t2v_texture = MMTexture.new()
 	t2v_pipeline = MMMeshRenderingPipeline.new()
 	vertex_shader = load("res://material_maker/tools/painter/shaders/t2v_vertex.tres").text
 	fragment_shader = load("res://material_maker/tools/painter/shaders/t2v_fragment.tres").text
@@ -105,28 +95,20 @@ func _ready():
 
 func update_viewport_textures():
 	for v in viewports.keys():
-		viewports[v].set_intermediate_textures(texture_to_view_texture, mesh_seams_tex)
+		viewports[v].set_intermediate_textures(t2v_texture, mesh_seams_tex)
 
 func update_seams_texture(_m : Mesh = null) -> void:
-	var t : MMTexture = MMTexture.new()
-	await MMMapGenerator.generate(mesh, "seams", texture_size, t)
-	mesh_seams_tex = await t.get_texture()
+	await MMMapGenerator.generate(mesh, "seams", texture_size, mesh_seams_tex)
 	update_viewport_textures()
 
 func update_inv_uv_texture(m : Mesh) -> void:
-	var t : MMTexture
 	# position texture
-	t = MMTexture.new()
-	await MMMapGenerator.generate(mesh, "position", texture_size, t)
-	mesh_inv_uv_tex = await t.get_texture()
+	await MMMapGenerator.generate(mesh, "position", texture_size, mesh_inv_uv_tex)
 	# normal texture
-	t = MMTexture.new()
-	await MMMapGenerator.generate(mesh, "normal", texture_size, t)
-	mesh_normal_tex = await t.get_texture()
+	await MMMapGenerator.generate(mesh, "normal", texture_size, mesh_normal_tex)
+
 	# tangent texture
-	t = MMTexture.new()
-	await MMMapGenerator.generate(mesh, "tangent", texture_size, t)
-	mesh_tangent_tex = await t.get_texture()
+	await MMMapGenerator.generate(mesh, "tangent", texture_size, mesh_tangent_tex)
 	mesh_aabb = m.get_aabb()
 
 func set_mesh(m : Mesh):
@@ -231,7 +213,6 @@ func update_tex2view():
 		t2v_pipeline.mesh = mesh
 		t2v_pipeline.set_parameter("transform", transform)
 		await t2v_pipeline.render(Vector2i(texture_size, texture_size), 3, t2v_texture)
-		texture_to_view_texture = t2v_texture.get_texture()
 
 		update_viewport_textures()
 
@@ -274,14 +255,13 @@ func update_brush(update_shaders : bool = false):
 			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.gdshader"
 			var code : String = get_output_code(1)
 			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
-		var v2t_tex = v2t_texture.get_texture()
 		brush_preview_material.set_shader_parameter("rect_size", viewport_size)
-		brush_preview_material.set_shader_parameter("view2tex_tex", v2t_tex)
-		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", mesh_inv_uv_tex)
+		brush_preview_material.set_shader_parameter("view2tex_tex", v2t_texture.get_texture())
+		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", mesh_inv_uv_tex.get_texture())
 		brush_preview_material.set_shader_parameter("mesh_aabb_position", mesh_aabb.position)
 		brush_preview_material.set_shader_parameter("mesh_aabb_size", mesh_aabb.size)
-		brush_preview_material.set_shader_parameter("mesh_normal_tex", mesh_normal_tex)
-		brush_preview_material.set_shader_parameter("mesh_tangent_tex", mesh_tangent_tex)
+		brush_preview_material.set_shader_parameter("mesh_normal_tex", mesh_normal_tex.get_texture())
+		brush_preview_material.set_shader_parameter("mesh_tangent_tex", mesh_tangent_tex.get_texture())
 		brush_preview_material.set_shader_parameter("layer_albedo_tex", get_albedo_texture())
 		brush_preview_material.set_shader_parameter("layer_mr_tex", get_mr_texture())
 		brush_preview_material.set_shader_parameter("layer_emission_tex", get_emission_texture())
@@ -373,7 +353,7 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 		if suffix == "brush":
 			brush_preview_material.set_shader_parameter(parameter_name, value)
 		else:
-			viewports[suffix].paint_material.set_shader_parameter(parameter_name, value)
+			viewports[suffix].paint_material.set_parameter(parameter_name, value)
 	if get_parent().has_method("update_procedural_layer"):
 		get_parent().update_procedural_layer()
 	return false
