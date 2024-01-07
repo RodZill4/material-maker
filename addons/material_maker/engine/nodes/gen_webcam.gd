@@ -14,11 +14,11 @@ class MMCameraTexture:
 		set_webcam(webcam, feed)
 	
 	func set_webcam(webcam : int, feed : int = 0):
-		var camfeed = CameraServer.feeds()[webcam]
-		print(camfeed.get_datatype())
-		texture.camera_feed_id = camfeed.get_id()
-		texture.camera_is_active = true
-		texture.which_feed = feed
+		if CameraServer.feeds().size() > webcam:
+			var camfeed = CameraServer.feeds()[webcam]
+			texture.camera_feed_id = camfeed.get_id()
+			texture.camera_is_active = true
+			texture.which_feed = feed
 
 	func get_texture_rid(target_rd : RenderingDevice) -> RID:
 		return RID()
