@@ -2,8 +2,27 @@ extends MMPipeline
 class_name MMComputeShader
 
 
+class OutputTexture:
+	extends RefCounted
+	
+	var name : String
+	var type : int
+	var writeonly : bool = true
+	var keep : bool = false
+	
+	func _init(n : String, t : int, wo : bool = true, k : bool = false):
+		name = n
+		type = t
+		writeonly = wo
+		keep = k
+	
+	func get_declaration(binding : int) -> String:
+		return "layout(set = 0, binding = %d, %s) restrict uniform%s image2D %s;\n" % [ binding, MMPipeline.TEXTURE_TYPE[type].decl, " writeonly" if writeonly else "", name ]
+
+
+var output_textures : Array[OutputTexture]
+
 var shader : RID
-var texture_type : int
 
 var diff : int
 
@@ -19,11 +38,29 @@ func _init():
 func clear():
 	super.clear()
 
-func set_shader(string : String, tex_type : int, replaces : Dictionary = {}):
-	texture_type = tex_type
+func get_output_texture_declarations() -> String:
+	var texture_declarations : String = ""
+	for ti in output_textures.size():
+		var t : OutputTexture = output_textures[ti]
+		texture_declarations += t.get_declaration(ti)
+	return texture_declarations
+
+func set_shader(string : String, output_texture_type : int, replaces : Dictionary = {}):
+	set_shader_ext(string, [{name="OUTPUT_TEXTURE", type=output_texture_type}], replaces)
+
+func set_shader_ext(string : String, output_textures_desc : Array[Dictionary], replaces : Dictionary = {}):
+	output_textures = []
+	for ot in output_textures_desc:
+		var writeonly : bool = true
+		var keep : bool = false
+		if ot.has("writeonly"):
+			writeonly = ot.writeonly
+		if ot.has("keep"):
+			keep = ot.keep
+		output_textures.append(OutputTexture.new(ot.name, ot.type, writeonly, keep))
+	
 	replaces["@LOCAL_SIZE"] = str(LOCAL_SIZE)
-	replaces["@OUT_TEXTURE_TYPE"] = TEXTURE_TYPE[tex_type].decl
-	replaces["@DECLARATIONS"] = get_uniform_declarations()+"\n"+get_texture_declarations()
+	replaces["@DECLARATIONS"] = get_output_texture_declarations()+"\n"+get_uniform_declarations()+"\n"+get_input_texture_declarations()
 	
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	shader = do_compile_shader(rd, { compute=string }, replaces)
@@ -36,11 +73,7 @@ func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, paramete
 				add_parameter_or_texture(u.name, u.type, u.value, parameters_as_constants)
 				break
 
-func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, is_greyscale : bool = false, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:
-	var tex_type : int = 0 if is_greyscale else 1
-	if is_32_bits:
-		tex_type |= 2
-	
+func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, output_textures_desc : Array[Dictionary], compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:
 	var replaces : Dictionary = {}
 	
 	clear()
@@ -57,7 +90,7 @@ func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGe
 	replaces["@CODE"] = shader_code.code
 	replaces["@OUTPUT_VALUE"] = shader_code.output_values.rgba
 
-	await set_shader(shader_template, tex_type, replaces)
+	await set_shader_ext(shader_template, output_textures_desc, replaces)
 
 func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = []) -> void:
 	var shader_template : String
@@ -69,14 +102,19 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 	
 	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
 	
-	await set_shader_from_shadercode_ext(shader_template, shader_code, shader_code.output_type == "f", is_32_bits, compare_texture, extra_parameters)
+	var output_texture_type : int = 0 if (shader_code.output_type == "f") else 1
+	if is_32_bits:
+		output_texture_type |= 2
+	var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
+	
+	await set_shader_from_shadercode_ext(shader_template, shader_code, output_textures, compare_texture, extra_parameters)
 
 func get_parameters() -> Dictionary:
 	var rv : Dictionary = {}
 	for p in parameters.keys():
 		rv[p] = parameters[p].value
-	for t in texture_indexes.keys():
-		rv[t] = textures[texture_indexes[t]].texture
+	for t in input_texture_indexes.keys():
+		rv[t] = input_textures[input_texture_indexes[t]].texture
 	return rv
 
 func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, uniform_set_0 : RID, uniform_set_1 : RID, uniform_set_2 : RID, uniform_set_4 : RID):
@@ -127,41 +165,61 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		y += h
 
 func render(texture : MMTexture, size : Vector2i) -> bool:
+	return await render_ext([texture], size)
+
+func render_ext(textures : Array[MMTexture], size : Vector2i) -> bool:
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	var rids : RIDs = RIDs.new()
 	var start_time = Time.get_ticks_msec()
 	set_parameter("elapsed_time", 0.001*float(start_time), true)
-	var status = await render_2(rd, texture, size, rids)
+	var status = await render_2(rd, textures, size, rids)
 	rids.free_rids(rd)
 	render_time = Time.get_ticks_msec() - start_time
 	mm_renderer.release_rendering_device(self)
 	return status
 
-func render_2(rd : RenderingDevice, texture : MMTexture, size : Vector2i, rids : RIDs) -> bool:
-	#print("Preparing render")
-	var output_tex : RID = create_output_texture(rd, size, texture_type)
-	if shader.is_valid():
-		var status : bool = await do_render(rd, output_tex, size, rids)
-		if ! status:
-			return false
-	else:
+func render_2(rd : RenderingDevice, textures : Array[MMTexture], size : Vector2i, rids : RIDs) -> bool:
+	if not shader.is_valid():
+		push_warning("Rendering with invalid shader")
 		return false
 	
-	await texture.set_texture_rid(output_tex, size, TEXTURE_TYPE[texture_type].data_format, rd)
+	#print("Preparing render")
+	var output_textures_rids : Array[RID] = []
+	for i in range(textures.size()):
+		#print("Creating texture")
+		var output_texture : OutputTexture = output_textures[i]
+		if output_texture.keep:
+			var texture : MMTexture = textures[i]
+			var texture_rid : RID = texture.get_texture_rid(rd)
+			if texture_rid.is_valid() and texture.texture_size == size and texture.texture_format == TEXTURE_TYPE[output_textures[i].type].data_format:
+				output_textures_rids.append(texture_rid)
+				continue
+		output_textures_rids.append(create_output_texture(rd, size, output_texture.type))
+	
+	var status : bool = await do_render(rd, output_textures_rids, size, rids)
+	if ! status:
+		return false
+	
+	for i in range(textures.size()):
+		#print("Updating texture")
+		textures[i].set_texture_rid(output_textures_rids[i], size, TEXTURE_TYPE[output_textures[i].type].data_format, rd)
 	
 	return true
 
-func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : RIDs) -> bool:
+func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : Vector2i, rids : RIDs) -> bool:
 	var outputs : PackedByteArray
 	
 	diff = 65536
 	
-	time("Create target texture")
-	var output_tex_uniform : RDUniform = RDUniform.new()
-	output_tex_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-	output_tex_uniform.binding = 0
-	output_tex_uniform.add_id(output_tex)
-	var uniform_set_0 : RID = rd.uniform_set_create([output_tex_uniform], shader, 0)
+	time("Create target textures uniforms")
+	var uniform_array : Array[RDUniform] = []
+	for output_texture_rid in output_textures_rids:
+		var output_texture_uniform : RDUniform = RDUniform.new()
+		output_texture_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+		output_texture_uniform.binding = 0
+		output_texture_uniform.add_id(output_texture_rid)
+		uniform_array.append(output_texture_uniform)
+	var uniform_set_0 : RID = rd.uniform_set_create(uniform_array, shader, 0)
 	rids.add(uniform_set_0)
 	
 	time("Create parameters uniforms")
@@ -172,18 +230,16 @@ func do_render(rd : RenderingDevice, output_tex : RID, size : Vector2i, rids : R
 			print("Failed to create valid uniform for parameters")
 			return false
 	
-	time("Create textures uniforms")
-	var uniform_set_2 = RID()
-	if !textures.is_empty():
-		uniform_set_2 = get_texture_uniforms(rd, shader, rids)
-		if ! uniform_set_2.is_valid():
-			print("Failed to create valid uniform for textures")
-			return false
+	time("Create input_textures uniforms")
+	var uniform_set_2 : RID = get_texture_uniforms(rd, shader, rids)
+	if uniform_set_2.get_id() != 0 and not uniform_set_2.is_valid():
+		print("Failed to create valid uniform for input_textures")
+		return false
 	
 	time("Create comparison uniform")
 	var uniform_set_4 = RID()
 	var outputs_buffer : RID
-	if texture_indexes.has("mm_compare"):
+	if input_texture_indexes.has("mm_compare"):
 		outputs = PackedInt32Array([0]).to_byte_array()
 		outputs_buffer = rd.storage_buffer_create(outputs.size(), outputs)
 		rids.add(outputs_buffer)

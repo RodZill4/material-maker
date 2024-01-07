@@ -58,11 +58,17 @@ class RIDs:
 				#push_warning("Freeing RID %s (%s)" % [ str(r), rids[r] ])
 				rd.free_rid(r)
 
+const TEXTURE_TYPE_R16F    : int = 0
+const TEXTURE_TYPE_RGBA16F : int = 1
+const TEXTURE_TYPE_R32F    : int = 2
+const TEXTURE_TYPE_RGBA32F : int = 3
+const TEXTURE_TYPE_DEPTH   : int = 4
 const TEXTURE_TYPE : Array[Dictionary] = [
 	{ decl="r16f", data_format=RenderingDevice.DATA_FORMAT_R16_SFLOAT, image_format=Image.FORMAT_RH, channels=1, bytes_per_channel=2 },
 	{ decl="rgba16f", data_format=RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT, image_format=Image.FORMAT_RGBAH, channels=4, bytes_per_channel=2 },
 	{ decl="r32f", data_format=RenderingDevice.DATA_FORMAT_R32_SFLOAT, image_format=Image.FORMAT_RF, channels=1, bytes_per_channel=4 },
-	{ decl="rgba32f", data_format=RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, image_format=Image.FORMAT_RGBAF, channels=4, bytes_per_channel=4 }
+	{ decl="rgba32f", data_format=RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT, image_format=Image.FORMAT_RGBAF, channels=4, bytes_per_channel=4 },
+	{ decl="r32f", data_format=RenderingDevice.DATA_FORMAT_D32_SFLOAT, image_format=Image.FORMAT_RF, channels=1, bytes_per_channel=4 }
 ]
 
 
@@ -71,10 +77,8 @@ var parameter_values : PackedByteArray
 
 var constants : Dictionary
 
-var texture_indexes : Dictionary
-var textures : Array[InputTexture]
-
-
+var input_texture_indexes : Dictionary
+var input_textures : Array[InputTexture]
 
 var time_current_desc : String = ""
 var time_current_time : int = 0
@@ -90,8 +94,8 @@ func clear():
 	parameters = {}
 	constants = {}
 	parameter_values = PackedByteArray()
-	texture_indexes = {}
-	textures = []
+	input_texture_indexes = {}
+	input_textures = []
 
 func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces : Dictionary) -> RID:
 	var errors : bool = false
@@ -116,10 +120,10 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 
 func add_parameter_or_texture(n : String, t : String, v, parameter_as_constant : bool = false):
 	if t == "sampler2D":
-		if texture_indexes.has(n):
+		if input_texture_indexes.has(n):
 			print("ERROR: Redefining texture "+n)
-		texture_indexes[n] = textures.size()
-		textures.append(InputTexture.new(n, v))
+		input_texture_indexes[n] = input_textures.size()
+		input_textures.append(InputTexture.new(n, v))
 	elif parameter_as_constant:
 		if constants.has(n):
 			print("ERROR: Redefining constant "+n)
@@ -167,9 +171,9 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 							offset += 4
 					return
 		print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, p.type ])
-	elif texture_indexes.has(name):
-		var texture_index : int = texture_indexes[name]
-		textures[texture_index].texture = value
+	elif input_texture_indexes.has(name):
+		var texture_index : int = input_texture_indexes[name]
+		input_textures[texture_index].texture = value
 	elif not silent:
 		print("Cannot assign parameter "+name)
 
@@ -202,23 +206,20 @@ func get_uniform_declarations() -> String:
 			uniform_declarations += "const %s %s = %s;\n" % [ constant.type, c, constant_as_string(constant.value, constant.type) ]
 	return uniform_declarations
 
-func get_texture_declarations() -> String:
+func get_input_texture_declarations() -> String:
 	var texture_declarations : String = ""
-	for ti in textures.size():
-		var t : InputTexture = textures[ti]
+	for ti in input_textures.size():
+		var t : InputTexture = input_textures[ti]
 		texture_declarations += "layout(set = 2, binding = %d) uniform sampler2D %s;\n" % [ ti, t.name ]
 	return texture_declarations
 
-func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, is_framebuffer : bool = false) -> RID:
+func create_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, usage_bits : int):
 	var fmt : RDTextureFormat = RDTextureFormat.new()
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
 	fmt.width = texture_size.x
 	fmt.height = texture_size.y
 	fmt.format = texture_type_struct.data_format
-	if is_framebuffer:
-		fmt.usage_bits =  RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
-	else:
-		fmt.usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	fmt.usage_bits = usage_bits
 	fmt.texture_type = RenderingDevice.TEXTURE_TYPE_2D
 		
 	var view : RDTextureView = RDTextureView.new()
@@ -228,20 +229,17 @@ func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, textur
 
 	return rd.texture_create(fmt, view, [data])
 
-func create_depth_texture(rd : RenderingDevice, texture_size : Vector2i) -> RID:
-	var fmt : RDTextureFormat = RDTextureFormat.new()
-	fmt.width = texture_size.x
-	fmt.height = texture_size.y
-	fmt.format = RenderingDevice.DATA_FORMAT_D32_SFLOAT
-	fmt.usage_bits =  RenderingDevice.TEXTURE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT
-	fmt.texture_type = RenderingDevice.TEXTURE_TYPE_2D
-		
-	var view : RDTextureView = RDTextureView.new()
+func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, is_framebuffer : bool = false) -> RID:
+	var usage_bits : int
+	if is_framebuffer:
+		usage_bits =  RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT
+	else:
+		usage_bits = RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
 	
-	var data = PackedByteArray()
-	data.resize(fmt.height*fmt.width*4)
+	return create_texture(rd, texture_size, texture_type, usage_bits)
 
-	return rd.texture_create(fmt, view, [data])
+func create_depth_texture(rd : RenderingDevice, texture_size : Vector2i) -> RID:
+	return create_texture(rd, texture_size, TEXTURE_TYPE_DEPTH, RenderingDevice.TEXTURE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT)
 
 func get_parameter_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RID:
 	var parameters_buffer : RID = rd.storage_buffer_create(parameter_values.size(), parameter_values)
@@ -255,6 +253,8 @@ func get_parameter_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> 
 	return uniform_set
 
 func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RID:
+	if input_textures.is_empty():
+		return RID()
 	var sampler_state : RDSamplerState = RDSamplerState.new()
 	sampler_state.mag_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
 	sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
@@ -262,10 +262,10 @@ func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RI
 	var sampler : RID = rd.sampler_create(sampler_state)
 	rids.add(sampler, "sampler")
 	var sampler_uniform_array : Array = []
-	for i in textures.size():
+	for i in input_textures.size():
 		var tex : RID
-		if textures[i].texture:
-			tex = textures[i].texture.get_texture_rid(rd)
+		if input_textures[i].texture:
+			tex = input_textures[i].texture.get_texture_rid(rd)
 		if ! tex.is_valid():
 			print("Invalid texture "+str(tex))
 		var sampler_uniform : RDUniform = RDUniform.new()

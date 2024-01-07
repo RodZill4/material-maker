@@ -40,6 +40,9 @@ func get_texture_rid(target_rd : RenderingDevice) -> RID:
 	return rid
 
 func set_texture_rid(new_rid : RID, size : Vector2i, format : RenderingDevice.DataFormat, new_rd : RenderingDevice) -> void:
+	if new_rid == rid:
+		texture_needs_update = true
+		return
 	if rid.is_valid():
 		rd.free_rid(rid)
 	rd = new_rd
