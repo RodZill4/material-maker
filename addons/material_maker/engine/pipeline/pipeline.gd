@@ -20,6 +20,8 @@ class Parameter:
 				size = 4
 			"float":
 				size = 4
+			"vec2":
+				size = 8
 			"vec4":
 				size = 16
 			"mat4x4":
@@ -101,15 +103,13 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 	var errors : bool = false
 	var src : RDShaderSource = RDShaderSource.new()
 	for k in shader_text.keys():
-		for s in replaces.keys():
-			shader_text[k] = shader_text[k].replace(s, replaces[s])
-		src["source_"+k] = shader_text[k]
+		src["source_"+k] = mm_preprocessor.preprocess(shader_text[k], replaces)
 	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
 	var shader : RID = RID()
 	for k in shader_text.keys():
 		if spirv["compile_error_"+k] != "":
 			var ln : int = 0
-			for l in shader_text[k].split("\n"):
+			for l in src["source_"+k].split("\n"):
 				ln += 1
 				print("%4d: %s" % [ ln, l ])
 			print(k.to_upper()+" SHADER ERROR: "+spirv["compile_error_"+k])
@@ -153,6 +153,11 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 				if value is float or value is int:
 					parameter_values.encode_float(p.offset, value)
 					return
+			"vec2":
+				if value is Vector2:
+					parameter_values.encode_float(p.offset,    value.x)
+					parameter_values.encode_float(p.offset+4,  value.y)
+					return
 			"vec4":
 				if value is Color:
 					parameter_values.encode_float(p.offset,    value.r)
@@ -186,7 +191,7 @@ func constant_as_string(value, type : String) -> String:
 func get_uniform_declarations() -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
-	for type in [ "mat4x4", "vec4", "float", "int", "bool" ]:
+	for type in [ "mat4x4", "vec4", "vec2", "float", "int", "bool" ]:
 		for p in parameters.keys():
 			var parameter : Parameter = parameters[p]
 			if parameter.type != type:

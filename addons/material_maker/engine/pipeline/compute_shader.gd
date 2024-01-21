@@ -186,14 +186,14 @@ func render_2(rd : RenderingDevice, textures : Array[MMTexture], size : Vector2i
 	#print("Preparing render")
 	var output_textures_rids : Array[RID] = []
 	for i in range(textures.size()):
-		#print("Creating texture")
 		var output_texture : OutputTexture = output_textures[i]
 		if output_texture.keep:
 			var texture : MMTexture = textures[i]
-			var texture_rid : RID = texture.get_texture_rid(rd)
+			var texture_rid : RID = texture.rid
 			if texture_rid.is_valid() and texture.texture_size == size and texture.texture_format == TEXTURE_TYPE[output_textures[i].type].data_format:
 				output_textures_rids.append(texture_rid)
 				continue
+		print("Creating texture for "+output_texture.name)
 		output_textures_rids.append(create_output_texture(rd, size, output_texture.type))
 	
 	var status : bool = await do_render(rd, output_textures_rids, size, rids)
@@ -213,11 +213,11 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 	
 	time("Create target textures uniforms")
 	var uniform_array : Array[RDUniform] = []
-	for output_texture_rid in output_textures_rids:
+	for i in output_textures_rids.size():
 		var output_texture_uniform : RDUniform = RDUniform.new()
 		output_texture_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-		output_texture_uniform.binding = 0
-		output_texture_uniform.add_id(output_texture_rid)
+		output_texture_uniform.binding = i
+		output_texture_uniform.add_id(output_textures_rids[i])
 		uniform_array.append(output_texture_uniform)
 	var uniform_set_0 : RID = rd.uniform_set_create(uniform_array, shader, 0)
 	rids.add(uniform_set_0)

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://dw68kw0fbwgdv"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_mairc"]
+
+[resource]
+script = ExtResource("1_mairc")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+void main() {
+	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	ivec2 image_size = imageSize(output_image);
+
+	vec4 color = imageLoad(input_image, pixel);
+	imageStore(output_image, pixel, color*modulate);
+}
+"

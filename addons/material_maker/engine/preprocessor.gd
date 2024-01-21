@@ -78,8 +78,8 @@ func extract_ifs(shader : String) -> Array:
 			type = SHARP_ENDIF
 			next_level -= 1
 		else:
-			print(shader.substr(next_sharp, eol-next_sharp))
-			break
+			start = next_sharp + 1
+			continue
 		var condition_value = true
 		if condition != "":
 			if expr.parse(condition) == OK:
@@ -145,10 +145,9 @@ func preprocess(shader : String, defines : Dictionary = {}, include_paths : Arra
 		new_shader = preprocess_includes(shader, include_paths)
 		new_shader = preprocess_macros(new_shader, defines)
 		new_shader = preprocess_ifs(new_shader)
-		if new_shader != shader:
-			shader = new_shader
-		else:
+		if new_shader == shader:
 			break
+		shader = new_shader
 	return shader
 
 func preprocess_file(file_path : String, defines : Dictionary = {}) -> String:

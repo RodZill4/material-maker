@@ -1,0 +1,415 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://c3otq5wuihskx"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_dwprs"]
+
+[resource]
+script = ExtResource("1_dwprs")
+text = "#version 450
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+@MISC_FUNCTIONS
+
+vec2 seams_uv(vec2 uv) {
+	return texture(seams, uv).xy;
+}
+
+/*
+
+uniform bool      texture_space = false;
+uniform vec2      viewport_size;
+uniform vec2      texture_center = vec2(0.5);
+uniform float     texture_scale = 1.0;
+
+uniform sampler2D tex2view_tex;
+uniform float     texture_size = 512.0;
+uniform sampler2D seams : hint_default_white;
+uniform float     seams_multiplier = 256.0;
+uniform sampler2D mesh_normal_tex;
+uniform sampler2D mesh_tangent_tex;
+uniform sampler2D mask_tex;
+uniform sampler2D layer_albedo_tex;
+uniform sampler2D layer_mr_tex;
+uniform sampler2D layer_emission_tex;
+uniform sampler2D layer_depth_tex;
+uniform vec3      view_back;
+uniform vec3      view_right;
+uniform vec3      view_up;
+
+uniform bool      fill              = false;
+uniform bool      reset             = false;
+uniform float     pressure          = 1.0;
+uniform vec2      tilt              = vec2(0.0, 0.0);
+uniform vec2      brush_position         = vec2(0.5, 0.5);
+uniform vec2      brush_previous_position        = vec2(0.5, 0.5);
+uniform float     brush_size        = 0.5;
+uniform float     brush_hardness    = 0.5;
+uniform bool      jitter = true;
+uniform float     jitter_position = 0.0;
+uniform float     jitter_size     = 0.0;
+uniform float     jitter_angle    = 0.0;
+uniform float     jitter_opacity  = 0.0;
+uniform float     stroke_length     = 0.0;
+uniform float     stroke_angle      = 0.0;
+uniform float     stroke_seed       = 0.0;
+uniform float     pattern_scale     = 10.0;
+uniform float     pattern_angle     = 0.0;
+
+#if BRUSH_MODE == \"uv_pattern\"
+uniform vec3      mesh_aabb_position = vec3(-0.5);
+uniform vec3      mesh_aabb_size = vec3(1.0);
+uniform sampler2D mesh_inv_uv_tex;
+#endif
+
+GENERATED_CODE
+
+#if TEXTURE_TYPE == \"paint_nm\"
+vec2 tex2view(vec2 uv, vec2 duv) {
+	vec4 v = texture(tex2view_tex, seams_uv(uv));
+	if (v.w < 0.99) {
+		v = texture(tex2view_tex, seams_uv(duv));
+	}
+	return v.xy;
+}
+
+vec2 dTex2View(vec2 uv, vec2 epsilon) {
+	vec2 returnValue = tex2view(uv+epsilon, uv);
+	returnValue += 0.5*tex2view(uv+2.0*epsilon, uv);
+	returnValue -= tex2view(uv-epsilon, uv);
+	returnValue -= 0.5*tex2view(uv-2.0*epsilon, uv);
+	return normalize(returnValue.xy);
+}
+#endif
+
+void fragment() {
+	// Get UV from seams texture
+	vec2 uv;
+	
+	vec4 screen_color = vec4(0.0); // texture(SCREEN_TEXTURE, UV);
+	vec4 output_color;
+	
+	vec2 view_uv; // position in painting view space
+	vec2 b;
+	vec2 bv;
+	vec2 bs;
+	vec4 tex2view;
+	vec2  jitter_offset = vec2(0.0);
+	float jitter_scale = 1.0;
+	float jitter_rotation = 0.0;
+	float jitter_alpha_scale = 1.0;
+	if (true || jitter) {
+		vec3 r = rand3(vec2(stroke_seed, fract(stroke_length*456.34)));
+		r.y *= 6.28318530718;
+		jitter_offset = jitter_position*r.x*vec2(cos(r.y), sin(r.y));
+		jitter_scale = (2.0*fract(r.z)-1.0)*jitter_size+1.0;
+		r = rand3(r.xz);
+		jitter_rotation = 6.28318530718*(r.x-0.5)*jitter_angle;
+		jitter_alpha_scale = (2.0*fract(r.y)-1.0)*jitter_opacity+1.0;
+	}
+	
+	// Get View position
+	if (texture_space) {
+		uv = UV;
+		tex2view = vec4(1.0);
+		view_uv = uv;
+		float min_size = min(viewport_size.x, viewport_size.y);
+		bs = jitter_scale*vec2(brush_size)/min_size;
+		b = ((brush_position+jitter_offset-0.5*viewport_size)*texture_scale/min_size+texture_center)/bs;
+		bv = ((brush_previous_position-brush_position)*texture_scale/min_size)/bs;
+	} else {
+		uv = seams_uv(UV);
+		tex2view = texture(tex2view_tex, uv);
+		view_uv = tex2view.xy;
+		bs = jitter_scale*vec2(brush_size)/viewport_size;
+		b = (brush_position+jitter_offset)/viewport_size/bs;
+		bv = (brush_previous_position-brush_position)/viewport_size/bs;
+	}
+
+
+
+
+
+
+	// Get distance to brush center
+	vec2 p = view_uv/bs;
+	float x = clamp(dot(p-b, bv)/dot(bv, bv), 0.0, 1.0);
+	// Get position in brush
+	vec2 local_uv = p-(b+x*bv);
+	// TODO: local_uv changes go here
+#if TEXTURE_TYPE == \"paint_mask\" or BRUSH_MODE == \"stamp\"
+	float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
+	float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
+	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	local_uv = texture_rotation*local_uv;
+#endif
+	float brush_value = brush(0.5*local_uv+vec2(0.5), jitter_alpha_scale);
+	
+
+
+
+
+
+#if TEXTURE_TYPE == \"paint_mask\"
+
+	// float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
+	// float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	// local_uv = texture_rotation*local_uv;
+	vec4 color = vec4(1.0)*pattern_function(fract(uv));
+	float a = fill ? 1.0 : brush_value*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+	
+
+	output_color = vec4(color.rgb, max(screen_color.a, a*color.a));
+
+#elif TEXTURE_TYPE == \"paint_mr\"
+
+#if BRUSH_MODE == \"pattern\"
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
+	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(view_uv - vec2(0.5, 0.5)));
+	vec4 color = pattern_function(fract(pattern_uv));
+	
+	vec2 a = fill ? vec2(1.0) : vec2(brush_value)*color.ba*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+#elif BRUSH_MODE == \"stamp\"
+	// float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
+	// float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	// local_uv = texture_rotation*local_uv;
+	vec2 local_uv2 = p-b-bv;
+	local_uv2 = texture_rotation*local_uv2;
+	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
+	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
+	
+	vec2 a = fill ? vec2(1.0) : vec2(stamp_limit.x*stamp_limit.y*brush_value)*color.ba*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+#elif BRUSH_MODE == \"uv_pattern\"
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
+	vec4 color = pattern_function(fract(uv));
+	
+	vec2 a = fill ? vec2(1.0) : vec2(brush_value)*tex2view.z;
+	a *= color.ba;
+	a *= texture(mask_tex, UV).r;
+#endif
+	if (reset) {
+		output_color = vec4(color.xy, a);
+	} else {
+		vec2 alpha_sum = min(max(a, screen_color.ba), a + screen_color.ba);
+		output_color = vec4((color.xy*a+screen_color.xy*(alpha_sum-a))/alpha_sum, alpha_sum);
+	}
+
+#elif TEXTURE_TYPE == \"paint_nm\"
+
+#if BRUSH_MODE == \"pattern\"
+	vec2 epsilon = vec2(1.0/texture_size, 0.0);
+	vec2 tex2view_dx = dTex2View(UV, epsilon);
+	vec2 tex2view_dy = dTex2View(UV, epsilon.yx);
+	mat2 view_mat = inverse(mat2(vec2(tex2view_dx.x, tex2view_dx.y), vec2(tex2view_dy.x, tex2view_dy.y)));
+
+	float pattern_angle_cos = cos(pattern_angle);
+	float pattern_angle_sin = sin(pattern_angle);
+	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+
+	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(view_uv - vec2(0.5, 0.5)));
+	vec4 color = pattern_function(fract(pattern_uv));
+	pattern_angle_cos = cos(-pattern_angle);
+	pattern_angle_sin = sin(-pattern_angle);
+	texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	color.xy = view_mat*(texture_rotation*(color.xy-vec2(0.5)))+vec2(0.5);
+	
+	float a = fill ? 1.0 : brush_value*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+#elif BRUSH_MODE == \"stamp\"
+	vec2 epsilon = vec2(1.0/texture_size, 0.0);
+	vec2 tex2view_dx = dTex2View(UV, epsilon);
+	vec2 tex2view_dy = dTex2View(UV, epsilon.yx);
+	mat2 view_mat = inverse(mat2(vec2(tex2view_dx.x, tex2view_dx.y), vec2(tex2view_dy.x, tex2view_dy.y)));
+
+	// float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
+	// float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	// local_uv = texture_rotation*local_uv;
+	vec2 local_uv2 = p-b-bv;
+	local_uv2 = texture_rotation*local_uv2;
+	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
+	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
+	
+	pattern_angle_cos = cos(-pattern_angle-jitter_rotation);
+	pattern_angle_sin = sin(-pattern_angle-jitter_rotation);
+	texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	color.xy = view_mat*(texture_rotation*(color.xy-vec2(0.5)))+vec2(0.5);
+	
+	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush_value*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+#elif BRUSH_MODE == \"uv_pattern\"
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
+	vec4 color = pattern_function(fract(uv));
+	
+	float a = fill ? 1.0 : brush_value*tex2view.z;
+	a *= color.a;
+	a *= texture(mask_tex, UV).r;
+#endif
+	if (reset) {
+		output_color = vec4(color.xyz, a);
+	} else {
+		float alpha_sum = min(max(a, screen_color.a), a + screen_color.a);
+		output_color = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
+	}
+
+#elif TEXTURE_TYPE == \"paint\"
+
+#if BRUSH_MODE == \"pattern\"
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
+	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(view_uv - vec2(0.5, 0.5)));
+	vec4 color = pattern_function(fract(pattern_uv));
+	
+	float a = fill ? 1.0 : brush_value*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+#elif BRUSH_MODE == \"stamp\"
+	// float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
+	// float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	//local_uv = texture_rotation*local_uv;
+	vec2 local_uv2 = p-b-bv;
+	local_uv2 = texture_rotation*local_uv2;
+	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
+	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
+	
+	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush_value*color.a*tex2view.z;
+	a *= texture(mask_tex, UV).r;
+#elif BRUSH_MODE == \"uv_pattern\"
+	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
+	vec4 color = pattern_function(fract(uv));
+	
+	float a = fill ? 1.0 : brush_value*tex2view.z;
+	a *= color.a;
+	a *= texture(mask_tex, UV).r;
+#endif
+	if (reset) {
+		output_color = vec4(color.xyz, a);
+	} else {
+		float alpha_sum = min(max(a, screen_color.a), a + screen_color.a);
+		output_color = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
+	}
+#endif
+
+
+	//output_color = vec4(brush_position/viewport_size, 0.0, 1.0);
+
+	COLOR = output_color;
+}
+
+*/
+
+DEFINITIONS
+
+void do_paint(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
+	float stroke_alpha = paint_value.a*brush_value;
+	float new_alpha = min(max(stroke_alpha, old_stroke_value.a), stroke_alpha + old_stroke_value.a);
+	new_stroke_value = vec4((paint_value.rgb*stroke_alpha+old_stroke_value.rgb*(new_alpha-stroke_alpha))/new_alpha, new_alpha);
+	float layer_apply_alpha = new_alpha*brush_opacity;
+	float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
+	new_layer_value = vec4((new_stroke_value.xyz*layer_apply_alpha+old_layer_value.xyz*(vec3(layer_alpha_sum)-layer_apply_alpha))/layer_alpha_sum, layer_alpha_sum);
+}
+
+void main() {
+	const float _seed_variation_ = 0.0;
+	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	ivec2 image_size = imageSize(albedo_stroke);
+	vec2 UV = vec2(pixel)/image_size;
+
+	imageStore(depth_occlusion_tex, pixel, vec4(1.0, 1.0, 1.0, 1.0));
+	
+	vec2 uv; // position in texture space, with seams correction
+	vec2 view_uv; // position in painting view space
+	vec2 b;
+	vec2 bv;
+	vec2 bs;
+	vec4 tex2view;
+	vec2  jitter_offset = vec2(0.0);
+	float jitter_scale = 1.0;
+	float jitter_rotation = 0.0;
+	float jitter_alpha_scale = 1.0;
+	if (jitter) {
+		vec3 r = rand3(vec2(stroke_seed, fract(stroke_length*456.34)));
+		r.y *= 6.28318530718;
+		jitter_offset = jitter_position*r.x*vec2(cos(r.y), sin(r.y));
+		jitter_scale = (2.0*fract(r.z)-1.0)*jitter_size+1.0;
+		r = rand3(r.xz);
+		jitter_rotation = 6.28318530718*(r.x-0.5)*jitter_angle;
+		jitter_alpha_scale = (2.0*fract(r.y)-1.0)*jitter_opacity+1.0;
+	}
+	
+	// Get View position
+	if (texture_space) {
+		uv = UV;
+		tex2view = vec4(1.0);
+		view_uv = uv;
+		float min_size = min(viewport_size.x, viewport_size.y);
+		bs = jitter_scale*vec2(brush_size)/min_size;
+		b = ((brush_position+jitter_offset-0.5*viewport_size)*texture_scale/min_size+texture_center)/bs;
+		bv = ((brush_previous_position-brush_position)*texture_scale/min_size)/bs;
+	} else {
+		uv = seams_uv(UV);
+		tex2view = texture(tex2view_tex, uv);
+		if (!fill && tex2view.z < 0.001) {
+			return;
+		}
+		view_uv = tex2view.xy;
+		bs = jitter_scale*vec2(brush_size)/viewport_size;
+		b = (brush_position+jitter_offset)/viewport_size/bs;
+		bv = (brush_previous_position-brush_position)/viewport_size/bs;
+	}
+
+	// Get distance to brush center and calculate Brush UV
+	vec2 p = view_uv/bs;
+	float x = clamp(dot(p-b, bv)/dot(bv, bv), 0.0, 1.0);
+	// Get position in brush
+	vec2 local_uv = p-(b+x*bv);
+	// TODO: local_uv changes go here
+#if TEXTURE_TYPE == \"paint_mask\" or BRUSH_MODE == \"stamp\"
+	float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
+	float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
+	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	local_uv = texture_rotation*local_uv;
+#endif
+	if (!fill && (abs(local_uv.x) > 1.0 || abs(local_uv.y) > 1.0)) {
+		return;
+	}
+	vec2 brush_uv = 0.5*local_uv+vec2(0.5);
+	float brush_value;
+
+	if (fill) {
+		brush_value = 1.0;
+	} else {
+		BRUSH_CODE
+
+		brush_value *= jitter_alpha_scale;
+		brush_value /= max(0.0001, 1.0-brush_hardness);
+
+		if (brush_value <= 0.0001) {
+			return;
+		}
+
+		brush_value = min(brush_value, 1.0);
+	}
+
+	vec2 pattern_uv = brush_uv;
+
+	PATTERN_CODE
+
+	vec4 old_albedo_stroke_value = imageLoad(albedo_stroke, pixel);
+	vec4 old_albedo_layer_value = imageLoad(albedo_layer, pixel);
+	vec4 new_albedo_stroke_value;
+	vec4 new_albedo_layer_value;
+	do_paint(albedo_value, brush_value, old_albedo_stroke_value, old_albedo_layer_value, new_albedo_stroke_value, new_albedo_layer_value);
+	imageStore(albedo_stroke, pixel, new_albedo_stroke_value);
+	imageStore(albedo_layer_next, pixel, new_albedo_layer_value);
+}
+"
