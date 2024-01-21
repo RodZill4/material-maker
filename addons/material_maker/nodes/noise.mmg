@@ -10,30 +10,22 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
-		"code": "",
-		"global": [
-			"float dots(vec2 uv, float size, float density, float seed) {",
-			"\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));",
-			"\tuv /= size;",
-			"\tvec2 point_pos = floor(uv)+vec2(0.5);",
-			"\tfloat color = step(rand(seed2+point_pos), density);",
-			"\treturn color;",
-			"}"
-		],
+		"code": "vec2 $(name_uv)_uv = floor($uv*$size)/$size;",
+		"global": "",
 		"inputs": [
-
+			{
+				"default": "$density",
+				"label": "2:",
+				"name": "density_in",
+				"type": "f"
+			}
 		],
-		"instance": [
-			"",
-			"\t\tfloat $(name)_f(vec2 uv) {",
-			"\t\t\treturn dots(uv, 1.0/$(size), $(density), $(seed));",
-			"\t\t}"
-		],
+		"instance": "",
 		"longdesc": "Generates a grid made of black and white squares",
 		"name": "Noise",
 		"outputs": [
 			{
-				"f": "$(name)_f($(uv))",
+				"f": "step(rand($(name_uv)_uv+vec2($seed)), $density_in($(name_uv)_uv))",
 				"longdesc": "Shows the noise pattern",
 				"shortdesc": "Output",
 				"type": "f"
