@@ -17,8 +17,12 @@ layout(set = 3, binding = 0, std140) restrict buffer MM {
 void main() {
 	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
 	ivec2 image_size = imageSize(output_image);
+	vec2 uv = vec2(pixel)/vec2(image_size);
 
-	vec4 color = imageLoad(input_image, pixel);
-	imageStore(output_image, pixel, color*modulate);
+	vec4 color = modulate;
+	if (use_input_image) {
+		color *= texture(input_image, uv);
+	}
+	imageStore(output_image, pixel, color);
 }
 "

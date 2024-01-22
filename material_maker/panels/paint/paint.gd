@@ -752,15 +752,13 @@ func show_file_dialog(file_mode : FileDialog.FileMode, filter, callback):
 
 func load_project(file_name) -> bool:
 	var f : FileAccess = FileAccess.open(file_name, FileAccess.READ)
-	if f != null:
+	if f == null:
 		return false
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(f.get_as_text())
 	var data = test_json_conv.get_data()
 	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd").new()
-	add_child(obj_loader)
 	var mesh : Mesh = obj_loader.load_obj_file(data.model)
-	obj_loader.queue_free()
 	if mesh == null:
 		return false
 	model_path = data.model

@@ -193,7 +193,7 @@ func render_2(rd : RenderingDevice, textures : Array[MMTexture], size : Vector2i
 			if texture_rid.is_valid() and texture.texture_size == size and texture.texture_format == TEXTURE_TYPE[output_textures[i].type].data_format:
 				output_textures_rids.append(texture_rid)
 				continue
-		print("Creating texture for "+output_texture.name)
+		#print("Creating texture for "+output_texture.name)
 		output_textures_rids.append(create_output_texture(rd, size, output_texture.type))
 	
 	var status : bool = await do_render(rd, output_textures_rids, size, rids)

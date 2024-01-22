@@ -309,22 +309,29 @@ void fragment() {
 
 DEFINITIONS
 
-void do_paint(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
+void do_paint_rgba(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
 	float stroke_alpha = paint_value.a*brush_value;
 	float new_alpha = min(max(stroke_alpha, old_stroke_value.a), stroke_alpha + old_stroke_value.a);
 	new_stroke_value = vec4((paint_value.rgb*stroke_alpha+old_stroke_value.rgb*(new_alpha-stroke_alpha))/new_alpha, new_alpha);
 	float layer_apply_alpha = new_alpha*brush_opacity;
 	float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
-	new_layer_value = vec4((new_stroke_value.xyz*layer_apply_alpha+old_layer_value.xyz*(vec3(layer_alpha_sum)-layer_apply_alpha))/layer_alpha_sum, layer_alpha_sum);
+	new_layer_value = vec4((new_stroke_value.rgb*layer_apply_alpha+old_layer_value.rgb*(layer_alpha_sum-layer_apply_alpha))/layer_alpha_sum, layer_alpha_sum);
+}
+
+void do_paint_ggaa(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
+	vec2 stroke_alpha = paint_value.ba*brush_value;
+	vec2 new_alpha = min(max(stroke_alpha, old_stroke_value.ba), stroke_alpha + old_stroke_value.ba);
+	new_stroke_value = vec4((paint_value.rg*stroke_alpha+old_stroke_value.rg*(new_alpha-stroke_alpha))/new_alpha, new_alpha);
+	vec2 layer_apply_alpha = new_alpha*brush_opacity;
+	vec2 layer_alpha_sum = min(vec2(1.0), layer_apply_alpha + old_layer_value.ba);
+	new_layer_value = vec4((new_stroke_value.rg*layer_apply_alpha+old_layer_value.rg*(layer_alpha_sum-layer_apply_alpha))/layer_alpha_sum, layer_alpha_sum);
 }
 
 void main() {
 	const float _seed_variation_ = 0.0;
 	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
-	ivec2 image_size = imageSize(albedo_stroke);
+	ivec2 image_size = imageSize(GENERATED_IMAGE);
 	vec2 UV = vec2(pixel)/image_size;
-
-	imageStore(depth_occlusion_tex, pixel, vec4(1.0, 1.0, 1.0, 1.0));
 	
 	vec2 uv; // position in texture space, with seams correction
 	vec2 view_uv; // position in painting view space
@@ -403,13 +410,5 @@ void main() {
 	vec2 pattern_uv = brush_uv;
 
 	PATTERN_CODE
-
-	vec4 old_albedo_stroke_value = imageLoad(albedo_stroke, pixel);
-	vec4 old_albedo_layer_value = imageLoad(albedo_layer, pixel);
-	vec4 new_albedo_stroke_value;
-	vec4 new_albedo_layer_value;
-	do_paint(albedo_value, brush_value, old_albedo_stroke_value, old_albedo_layer_value, new_albedo_stroke_value, new_albedo_layer_value);
-	imageStore(albedo_stroke, pixel, new_albedo_stroke_value);
-	imageStore(albedo_layer_next, pixel, new_albedo_layer_value);
 }
 "

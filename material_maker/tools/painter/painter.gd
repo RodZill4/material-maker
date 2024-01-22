@@ -29,7 +29,7 @@ class PaintChannel:
 var paint_channels : Array[PaintChannel] = []
 var paint_textures : Array[MMTexture] = []
 enum {
-	CHANNEL_ALBEDO, CHANNEL_MR, CHANNEL_EMISSION, CHANNEL_NORMAL, CHANNEL_DO, CHANNEL_MASK, CHANNEL_MAX=1 }
+	CHANNEL_ALBEDO, CHANNEL_MR, CHANNEL_EMISSION, CHANNEL_NORMAL, CHANNEL_DO, CHANNEL_MASK, CHANNEL_MAX }
 const PAINT_CHANNELS : Array[Dictionary] = [
 	{
 		name="albedo",
@@ -69,10 +69,9 @@ const PAINT_CHANNELS : Array[Dictionary] = [
 	}
 ]
 
-var depth_occlusion_tex : MMTexture = MMTexture.new()
-
 var init_shader : MMComputeShader = MMComputeShader.new()
-var paint_shader : MMComputeShader = MMComputeShader.new()
+var paint_shader_wrapper : MMShaderCompute = MMShaderCompute.new()
+var paint_shader : MMComputeShader = paint_shader_wrapper.compute_shader
 
 @onready var albedo_viewport = $AlbedoPaint
 @onready var mr_viewport = $MRPaint
@@ -131,8 +130,7 @@ func _ready():
 	#texture_to_view_mesh.get_surface_override_material(0).set_shader_parameter("view2texture", v2t_tex)
 	# Add Texture2ViewWithoutSeams as input to all painted textures
 	mm_deps.create_buffer("painter_%d:brush" % get_instance_id(), self)
-	for v in viewports.keys():
-		mm_deps.create_buffer("painter_%d:%s" % [ get_instance_id(), v ], self)
+	mm_deps.create_buffer("painter_%d:paint" % get_instance_id(), self)
 	
 	var vertex_shader : String
 	var fragment_shader : String
@@ -157,12 +155,6 @@ func _ready():
 	var shader_template : String = load("res://material_maker/tools/painter/shaders/init_copy_shader.tres").text
 	var texture_defs : Array[Dictionary] = [
 		{
-			name="input_image",
-			type=MMPipeline.TEXTURE_TYPE_RGBA16F,
-			writeonly=false,
-			keep=true
-		},
-		{
 			name="output_image",
 			type=MMPipeline.TEXTURE_TYPE_RGBA16F,
 			writeonly=true,
@@ -170,6 +162,8 @@ func _ready():
 		}
 	]
 	init_shader.add_parameter_or_texture("modulate", "vec4", Color(1.0, 1.0, 1.0, 1.0))
+	init_shader.add_parameter_or_texture("use_input_image", "bool", true)
+	init_shader.add_parameter_or_texture("input_image", "sampler2D", null)
 	await init_shader.set_shader_ext(shader_template, texture_defs)
 
 func update_view_textures():
@@ -224,6 +218,15 @@ func calculate_mask(value : float, channel : int) -> Color:
 
 func init_albedo_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture2D = null):
 	albedo_viewport.init(color, texture)
+	var tmp : MMTexture = MMTexture.new()
+	if texture != null:
+		tmp.set_texture(texture)
+	var paint_channel : PaintChannel = get_paint_channel(CHANNEL_ALBEDO)
+	init_shader.set_parameter("modulate", color)
+	init_shader.set_parameter("use_input_image", texture != null)
+	init_shader.set_parameter("input_image", tmp)
+	await init_shader.render_ext([ paint_channel.texture ], Vector2i(texture_size, texture_size))
+	await init_shader.render_ext([ paint_channel.next_texture ], Vector2i(texture_size, texture_size))
 
 func init_mr_texture(color : Color = Color(0.0, 0.0, 0.0, 0.0), texture : Texture2D = null):
 	mr_viewport.init(color, texture)
@@ -423,7 +426,6 @@ func update_brush(update_shaders : bool = false):
 					break
 			if not has_channel:
 				continue
-			print("generating channel "+c.name)
 			# Declare input/output images
 			texture_defs.append({name=c.name+"_layer", type=MMPipeline.TEXTURE_TYPE_RGBA16F, readonly=true, writeonly=false, keep=true})
 			texture_defs.append({name=c.name+"_stroke", type=MMPipeline.TEXTURE_TYPE_RGBA16F, writeonly=false, keep=true})
@@ -439,11 +441,15 @@ func update_brush(update_shaders : bool = false):
 			brush_shader_code.add_globals(pattern_shader_code.globals)
 			paint_shader.set_parameters_from_shadercode(pattern_shader_code, false)
 			pattern_code += pattern_shader_code.code
-			pattern_code += "vec4 %s_value = %s;" % [ c.name, pattern_shader_code.output_values.rgba ]
+			pattern_code += "vec4 %s_value = %s;\n" % [ c.name, pattern_shader_code.output_values.rgba ]
+			pattern_code += "vec4 old_%s_stroke_value = imageLoad(%s_stroke, pixel);\n" % [ c.name, c.name ]
+			pattern_code += "vec4 old_%s_layer_value = imageLoad(%s_layer, pixel);\n" % [ c.name, c.name ]
+			pattern_code += "vec4 new_%s_stroke_value;\n" % [ c.name ]
+			pattern_code += "vec4 new_%s_layer_value;\n" % [ c.name ]
+			pattern_code += "do_paint_%s(%s_value, brush_value, old_%s_stroke_value, old_%s_layer_value, new_%s_stroke_value, new_%s_layer_value);\n" % [ c.type, c.name, c.name, c.name, c.name, c.name ]
+			pattern_code += "imageStore(%s_stroke, pixel, new_%s_stroke_value);\n" % [ c.name, c.name ]
+			pattern_code += "imageStore(%s_layer_next, pixel, new_%s_layer_value);\n" % [ c.name, c.name ]
 			definitions += pattern_shader_code.defs
-		# TODO: remove this when depth painting is fixed
-		texture_defs.append({name="depth_occlusion_tex", type=MMPipeline.TEXTURE_TYPE_RGBA16F, writeonly=true, keep=true})
-		paint_textures.append(depth_occlusion_tex)
 		
 		var global_definitions : String = ""
 		for g in brush_shader_code.globals:
@@ -452,12 +458,14 @@ func update_brush(update_shaders : bool = false):
 		var replaces : Dictionary = {
 			BRUSH_MODE="\""+get_brush_mode()+"\"",
 			TEXTURE_TYPE="\"paint\"",
+			GENERATED_IMAGE=texture_defs[0].name,
 			DEFINITIONS=global_definitions+definitions,
 			BRUSH_CODE=brush_code,
 			PATTERN_CODE=pattern_code
 		}
 		replaces["@MISC_FUNCTIONS"] = load("res://addons/material_maker/shader_functions.tres").text
 		await paint_shader.set_shader_ext(shader_template, texture_defs, replaces)
+		mm_deps.buffer_create_compute_material("painter_%d:paint" % get_instance_id(), paint_shader_wrapper)
 	paint_shader.set_parameter("viewport_size", Vector2(viewport_size))
 	if false:
 		for v in viewports.keys():
@@ -522,18 +530,19 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 		var suffix = buffer_name.right(-(buffer_name.find(":")+1))
 		if suffix == "brush":
 			brush_preview_material.set_shader_parameter(parameter_name, value)
-		else:
+		elif suffix == "paint":
+			var n : String
+			if PARAMETER_RENAMES.has(parameter_name):
+				n = PARAMETER_RENAMES[parameter_name]
+			else:
+				n = parameter_name
+			paint_shader.set_parameter(n, value)
+		elif false:
 			viewports[suffix].paint_material.set_parameter(parameter_name, value)
-	
-	var n : String
-	if PARAMETER_RENAMES.has(parameter_name):
-		n = PARAMETER_RENAMES[parameter_name]
-	else:
-		n = parameter_name
-	paint_shader.set_parameter(n, value)
 	
 	if get_parent().has_method("update_procedural_layer"):
 		get_parent().update_procedural_layer()
+	
 	return false
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true, on_mask : bool = false) -> void:
@@ -552,8 +561,11 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 			n = p
 		paint_shader.set_parameter(n, shader_params[p])
 	await paint_shader.render_ext(paint_textures, Vector2i(texture_size, texture_size))
-	for i in paint_textures.size():
-		paint_textures[i].get_texture()
+	for i in range(paint_textures.size()/3):
+		if OS.is_debug_build():
+			paint_textures[i*3+1].get_texture()
+		paint_textures[i*3+2].get_texture()
+	paint_textures[paint_textures.size()-1].get_texture()
 	if false:
 		for v in active_viewports:
 			viewports[v].do_paint(shader_params, end_of_stroke)
@@ -569,9 +581,10 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 	if end_of_stroke and emit_end_of_stroke:
 		for i in range(paint_textures.size()/3):
 			init_shader.set_parameter("modulate", Color(1.0, 1.0, 1.0, 1.0))
-			await init_shader.render_ext([paint_textures[i*3+2], paint_textures[i*3]], Vector2i(texture_size, texture_size))
+			init_shader.set_parameter("input_texture", paint_textures[i*3+2])
+			await init_shader.render_ext([ paint_textures[i*3] ], Vector2i(texture_size, texture_size))
 			init_shader.set_parameter("modulate", Color(0.0, 0.0, 0.0, 0.0))
-			await init_shader.render_ext([paint_textures[i*3], paint_textures[i*3+1]], Vector2i(texture_size, texture_size))
+			await init_shader.render_ext([ paint_textures[i*3+1] ], Vector2i(texture_size, texture_size))
 
 		var stroke_state = {}
 		for v in active_viewports:
@@ -611,19 +624,19 @@ func get_albedo_texture():
 	return get_paint_channel(CHANNEL_ALBEDO).next_texture.get_texture()
 
 func get_mr_texture():
-	return mr_viewport.get_texture()
+	return get_paint_channel(CHANNEL_MR).next_texture.get_texture()
 
 func get_emission_texture():
-	return emission_viewport.get_texture()
+	return get_paint_channel(CHANNEL_EMISSION).next_texture.get_texture()
 
 func get_normal_texture():
-	return normal_viewport.get_texture()
+	return get_paint_channel(CHANNEL_NORMAL).next_texture.get_texture()
 
 func get_do_texture():
-	return depth_occlusion_tex.get_texture()
+	return get_paint_channel(CHANNEL_DO).next_texture.get_texture()
 
 func get_mask_texture():
-	return mask_viewport.get_texture()
+	return get_paint_channel(CHANNEL_MASK).next_texture.get_texture()
 
 func save_viewport(v : SubViewport, f : String):
 	v.get_texture().get_data().save_png(f)
@@ -684,25 +697,25 @@ func debug_get_texture(ID):
 		"Albedo stroke (current layer)":
 			return get_paint_channel(CHANNEL_ALBEDO).stroke.get_texture()
 		"Metallic/Roughness (current layer)":
-			return mr_viewport.get_texture()
+			return get_paint_channel(CHANNEL_MR).next_texture.get_texture()
 		"Metallic/Roughness stroke (current layer)":
-			return mr_viewport.get_stroke_texture()
+			return get_paint_channel(CHANNEL_MR).stroke.get_texture()
 		"Emission (current layer)":
-			return emission_viewport.get_texture()
+			return get_paint_channel(CHANNEL_EMISSION).next_texture.get_texture()
 		"Emission stroke (current layer)":
-			return emission_viewport.get_stroke_texture()
+			return get_paint_channel(CHANNEL_EMISSION).stroke.get_texture()
 		"Normal (current layer)":
-			return normal_viewport.get_texture()
+			return get_paint_channel(CHANNEL_NORMAL).next_texture.get_texture()
 		"Normal stroke (current layer)":
-			return normal_viewport.get_stroke_texture()
+			return get_paint_channel(CHANNEL_NORMAL).stroke.get_texture()
 		"Depth/Occlusion (current layer)":
-			return do_viewport.get_texture()
+			return get_paint_channel(CHANNEL_DO).next_texture.get_texture()
 		"Depth/Occlusion stroke (current layer)":
-			return do_viewport.get_stroke_texture()
+			return get_paint_channel(CHANNEL_DO).stroke.get_texture()
 		"Mask (current layer)":
-			return mask_viewport.get_texture()
+			return get_paint_channel(CHANNEL_MASK).next_texture.get_texture()
 		"Mask stroke (current layer)":
-			return mask_viewport.get_stroke_texture()
+			return get_paint_channel(CHANNEL_MASK).stroke.get_texture()
 		"Mesh position map":
 			return mesh_position_tex
 		"Mesh normal map":

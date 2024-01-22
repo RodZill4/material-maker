@@ -76,7 +76,7 @@ func resize_layers(size : int, layers_array : Array = layers):
 			if l.get(c) != null:
 				var texture : ImageTexture = l.get(c)
 				var image : Image = Image.new()
-				image.copy_from(texture.get_data())
+				image.copy_from(texture.get_image())
 				image.resize(size, size)
 				texture.set_image(image)
 		resize_layers(size, l.layers)
@@ -167,7 +167,7 @@ func add_layer(layer_type : int = 0) -> void:
 	layer.name = get_unused_layer_name(layers)
 	layer.index = get_unused_layer_index()
 	layer.hidden = false
-	var image : Image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
+	var image : Image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBAH)
 	image.fill(Color(0, 0, 0, 0))
 	for c in layer.get_channels():
 		var texture = ImageTexture.create_from_image(image)
