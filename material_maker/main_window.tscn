@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=19 format=3 uid="uid://xycv1evlfpuf"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]

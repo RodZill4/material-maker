@@ -219,8 +219,10 @@ func _ready() -> void:
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
 		new_material()
-	
+
 	update_menus()
+
+	plugin_ui_loaded.call_deferred()
 
 var menu_update_requested : bool = false
 
@@ -229,6 +231,12 @@ func update_menus() -> void:
 		menu_update_requested = true
 		do_update_menus.call_deferred()
 
+func plugin_ui_loaded():
+	var children = mm_loader.get_children()
+	for child in children:
+		if child.has_method("on_ui_loaded"):
+			child.on_ui_loaded()
+			
 func do_update_menus() -> void:
 	# Create menus
 	var menu_bar_class

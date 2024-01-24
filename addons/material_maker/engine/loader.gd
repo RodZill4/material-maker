@@ -18,6 +18,50 @@ const SHARED_NODES_DIR : String = "user://shared_nodes"
 func _ready()-> void:
 	update_predefined_generators()
 	load_external_export_targets()
+	load_plugins()
+
+func load_plugins():
+	var plugin_dir = DirAccess.open("user://plugins")
+	var any_plugins_loaded = false
+	
+	plugin_dir.list_dir_begin()
+	var plugin_file_name = plugin_dir.get_next()
+	while (plugin_file_name != ""):
+		if plugin_dir.current_is_dir():
+			continue
+		print("Attempting to load plugin: ", plugin_file_name)
+		var result = ProjectSettings.load_resource_pack("user://plugins/" + plugin_file_name)
+		if(result):
+			print("Loaded successfully")
+		else:
+			print("Load failed")
+			
+		any_plugins_loaded = any_plugins_loaded or result
+		plugin_file_name = plugin_dir.get_next()
+		
+	if not any_plugins_loaded:
+		return
+
+	var dir = DirAccess.open("res://mm_plugin")
+		
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	
+	while (file_name != ""):
+		print("Initialising plugin: ", file_name)
+		var plugin_scene = "res://mm_plugin/" + file_name + "/plugin.tscn"
+		print(plugin_scene)
+		file_name = dir.get_next()
+		
+		if dir.current_is_dir():
+			if ResourceLoader.exists(plugin_scene) == false:
+				print("Plugin scene did not exist, this plugin may not be configured correctly")
+				continue
+
+			var plugin = load(plugin_scene) 
+			var plugin_node = plugin.instantiate()
+			add_child(plugin_node)
+
 
 func get_predefined_generators_from_dir(path : String) -> void:
 	var parser
