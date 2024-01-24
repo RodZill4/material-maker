@@ -22,6 +22,9 @@ func _ready()-> void:
 
 func load_plugins():
 	var plugin_dir = DirAccess.open("user://plugins")
+	if not plugin_dir:
+		return
+		
 	var any_plugins_loaded = false
 	
 	plugin_dir.list_dir_begin()
