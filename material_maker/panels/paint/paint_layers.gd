@@ -122,10 +122,10 @@ func select_layer(layer : Layer) -> void:
 	if layer != null:
 		for c in layer.get_channels():
 			if layer.get(c) != null:
-				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
+				await painter_node.init_rgba_texture_by_name(c, Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
-				painter_node.call("init_"+c+"_texture")
-			layer.set(c, painter_node.call("get_"+c+"_texture"))
+				await painter_node.init_rgba_texture_by_name(c)
+			layer.set(c, painter_node.get_texture_by_name(c))
 		emit_signal("layer_selected", layer)
 	selected_layer = layer
 	await get_tree().process_frame
@@ -408,8 +408,7 @@ func load_layers(data_layers : Array, layers_array : Array, path : String, first
 		layer.hidden = l.hidden
 		for c in CHANNELS:
 			if l.has(c):
-				var texture = ImageTexture.new()
-				texture.load(path+"/"+l[c])
+				var texture = ImageTexture.create_from_image(Image.load_from_file(path+"/"+l[c]))
 				layer.set(c, texture)
 		for c in CHANNELS:
 			layer.set(c+"_alpha", l[c+"_alpha"] if l.has(c+"_alpha") else 1.0)

@@ -19,7 +19,7 @@ const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "Stamp", "ColorPick
 
 var current_tool = MODE_FREEHAND_DOTS
 
-var preview_material = null
+var preview_material : StandardMaterial3D = null
 
 var previous_position = null
 var painting = false
@@ -222,8 +222,9 @@ func set_object(o):
 	preview_material.normal_texture = layers.get_normal_map()
 	#preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.heightmap_enabled = true
-	preview_material.depth_deep_parallax = true
-	preview_material.depth_texture = layers.get_depth_texture()
+	preview_material.heightmap_deep_parallax = true
+	preview_material.heightmap_flip_texture = true
+	preview_material.heightmap_texture = layers.get_depth_texture()
 	#preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.ao_enabled = true
 	preview_material.ao_light_affect = 1.0
