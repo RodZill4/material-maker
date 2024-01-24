@@ -6,6 +6,7 @@ var label : String = "Graph"
 var shortdesc = ""
 var longdesc = ""
 var connections = []
+var plugin_data = {}
 
 var editable : bool = false
 
@@ -525,6 +526,7 @@ func _serialize(data: Dictionary) -> Dictionary:
 	data.shortdesc = shortdesc
 	data.longdesc = longdesc
 	data.nodes = []
+	data.plugin_data = plugin_data
 	for c in get_children():
 		data.nodes.append(c.serialize())
 	#data.connections = connections_to_compact(connections)
@@ -538,6 +540,8 @@ func _deserialize(data : Dictionary) -> void:
 		shortdesc = data.shortdesc
 	if data.has("longdesc"):
 		longdesc = data.longdesc
+	if data.has("plugin_data"):
+		plugin_data = data.plugin_data
 	var nodes = data.nodes if data.has("nodes") else []
 	var connection_array : Array = []
 	if data.has("connections"):
