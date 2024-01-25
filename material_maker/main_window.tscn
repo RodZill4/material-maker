@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://xycv1evlfpuf"]
+[gd_scene load_steps=19 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
@@ -141,7 +141,6 @@ layout_mode = 2
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="Layout" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
