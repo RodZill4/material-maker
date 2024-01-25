@@ -18,7 +18,7 @@
 		"global": [
 			"float s(vec2 uv, vec2 A, vec2 B, vec2 C) { return abs(sdBezier(uv, A, B, C).y); }",
 			"float l(vec2 uv, vec2 A, vec2 B) { return sdLine(uv, A, B).x; }",
-			"float box(vec2 p, float r) { p = abs(p) - r; return step(max(p.x,p.y),0.0);}",
+			"float box(vec2 p, float r) { p = abs(p) - r; return step(max(p.x,p.y),0.0); }",
 			"",
 			"vec3 grid(vec2 p, int gs) {",
 			"\tfloat g = float(gs);",
