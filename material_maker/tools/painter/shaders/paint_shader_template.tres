@@ -388,10 +388,10 @@ void main() {
 	// Get position in brush
 	vec2 local_uv = p-(b+x*bv);
 	// TODO: local_uv changes go here
-#if TEXTURE_TYPE == \"paint_mask\" or BRUSH_MODE == \"stamp\"
 	float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
 	float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
 	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+#if TEXTURE_TYPE == \"paint_mask\" or BRUSH_MODE == \"stamp\"
 	local_uv = texture_rotation*local_uv;
 #endif
 	if (!fill && (abs(local_uv.x) > 1.0 || abs(local_uv.y) > 1.0)) {
@@ -415,7 +415,15 @@ void main() {
 		brush_value = min(brush_value, 1.0);
 	}
 
-	vec2 pattern_uv = brush_uv;
+#if BRUSH_MODE == \"stamp\"
+	vec2 pattern_uv = 0.5*texture_rotation*(p-b-bv)+vec2(0.5);
+#elif BRUSH_MODE == \"pattern\"
+	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(view_uv - vec2(0.5, 0.5)));
+#elif BRUSH_MODE == \"uv_pattern\"
+	vec2 pattern_uv = uv;
+#else
+	// unsupported brush mode: BRUSH_MODE
+#endif
 
 	PATTERN_CODE
 }

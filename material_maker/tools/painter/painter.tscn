@@ -1,23 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://d12t30rjvol15"]
+[gd_scene load_steps=2 format=3 uid="uid://d12t30rjvol15"]
 
 [ext_resource type="Script" path="res://material_maker/tools/painter/painter.gd" id="6"]
-[ext_resource type="PackedScene" uid="uid://1g0jkm5gnhbs" path="res://material_maker/tools/painter/painter_viewport.tscn" id="7"]
 
 [node name="Painter" type="Node" groups=["preview"]]
 script = ExtResource("6")
-
-[node name="AlbedoPaint" parent="." instance=ExtResource("7")]
-
-[node name="MRPaint" parent="." instance=ExtResource("7")]
-shader_prefix = "paint_mr"
-
-[node name="EmissionPaint" parent="." instance=ExtResource("7")]
-
-[node name="NormalPaint" parent="." instance=ExtResource("7")]
-shader_prefix = "paint_nm"
-
-[node name="DOPaint" parent="." instance=ExtResource("7")]
-shader_prefix = "paint_mr"
-
-[node name="MaskPaint" parent="." instance=ExtResource("7")]
-shader_prefix = "paint_mask"
