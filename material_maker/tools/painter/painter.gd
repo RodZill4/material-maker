@@ -316,11 +316,18 @@ func update_brush_params(shader_params : Dictionary) -> void:
 		if brush_preview_material != null:
 			brush_preview_material.set_shader_parameter(p, brush_params[p])
 		paint_shader.set_parameter(p, shader_params[p])
+		#print(p+" = "+str(shader_params[p]))
 
 func show_pattern(b):
 	if pattern_shown != b:
 		pattern_shown = b
 		update_brush()
+
+func replace_predefs(s : String) -> String:
+	s = s.replace("mesh_aabb_position", "vec3(%.09f, %.09f, %.09f)" % [ mesh_aabb.position.x, mesh_aabb.position.y, mesh_aabb.position.z ])
+	s = s.replace("mesh_aabb_size", "vec3(%.09f, %.09f, %.09f)" % [ mesh_aabb.size.x, mesh_aabb.size.y, mesh_aabb.size.z ])
+	s = s.replace("mesh_inv_uv_tex", "mesh_%d_position" % [ abs(mesh.get_instance_id()) ])
+	return s
 
 func update_brush(update_shaders : bool = false):
 	#if brush_params.albedo_texture_mode != 2: $Pattern.visible = false
@@ -379,6 +386,9 @@ func update_brush(update_shaders : bool = false):
 		paint_shader.add_parameter_or_texture("texture_scale", "float", 1.0)
 		paint_shader.add_parameter_or_texture("tex2view_tex", "sampler2D", t2v_texture)
 		paint_shader.add_parameter_or_texture("seams", "sampler2D", mesh_seams_tex)
+		paint_shader.add_parameter_or_texture("mesh_%d_position" % [ abs(mesh.get_instance_id()) ], "sampler2D", mesh_position_tex)
+		paint_shader.add_parameter_or_texture("mesh_%d_normal" % [ abs(mesh.get_instance_id()) ], "sampler2D", mesh_normal_tex)
+		paint_shader.add_parameter_or_texture("mesh_%d_tangent" % [ abs(mesh.get_instance_id()) ], "sampler2D", mesh_tangent_tex)
 		paint_shader.add_parameter_or_texture("seams_multiplier", "float", 256.0)
 		
 		paint_shader.add_parameter_or_texture("fill", "bool", false)
@@ -395,6 +405,7 @@ func update_brush(update_shaders : bool = false):
 		
 		paint_shader.add_parameter_or_texture("pattern_angle", "float", 0.0)
 		
+		paint_shader.add_parameter_or_texture("jitter", "bool", true)
 		paint_shader.add_parameter_or_texture("jitter_position", "float", 0.0)
 		paint_shader.add_parameter_or_texture("jitter_size", "float", 0.0)
 		paint_shader.add_parameter_or_texture("jitter_angle", "float", 0.0)
@@ -404,7 +415,6 @@ func update_brush(update_shaders : bool = false):
 		paint_shader.add_parameter_or_texture("stroke_length", "float", 0.0)
 		paint_shader.add_parameter_or_texture("stroke_angle", "float", 0.0)
 		
-		paint_shader.add_parameter_or_texture("jitter", "bool", false)
 		
 		var context : MMGenContext = MMGenContext.new()
 		var brush_shader_code : MMGenBase.ShaderCode = brush_node.get_shader_code("brush_uv", 0, context)
@@ -464,9 +474,9 @@ func update_brush(update_shaders : bool = false):
 			BRUSH_MODE="\""+get_brush_mode()+"\"",
 			TEXTURE_TYPE="\"paint\"",
 			GENERATED_IMAGE=texture_defs[0].name,
-			DEFINITIONS=global_definitions+definitions,
-			BRUSH_CODE=brush_code,
-			PATTERN_CODE=pattern_code
+			DEFINITIONS=replace_predefs(global_definitions+definitions),
+			BRUSH_CODE=replace_predefs(brush_code),
+			PATTERN_CODE=replace_predefs(pattern_code)
 		}
 		replaces["@MISC_FUNCTIONS"] = load("res://addons/material_maker/shader_functions.tres").text
 		await paint_shader.set_shader_ext(shader_template, texture_defs, replaces)

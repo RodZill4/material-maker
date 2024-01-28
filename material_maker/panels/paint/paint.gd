@@ -95,7 +95,6 @@ func _ready():
 	set_physics_process(false)
 	set_current_tool(MODE_FREEHAND_DOTS)
 	initialize_2D_paint_select()
-	initialize_debug_selects()
 	graph_edit.undoredo.disable()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
@@ -143,6 +142,7 @@ func get_remote():
 func update_brush_graph():
 	if brush_graph != graph_edit.top_generator:
 		brush_graph = graph_edit.top_generator
+		brush_graph.set_current_mesh(painted_mesh.mesh)
 		brush_graph.connect("graph_changed", Callable(self, "on_brush_graph_changed"))
 		on_brush_graph_changed()
 
@@ -849,25 +849,6 @@ func debug_get_texture_names():
 func debug_get_texture(_ID):
 	return mask
 
-func initialize_debug_selects():
-	for s in [ $VSplitContainer/HSplitContainer/Painter/Debug/Select1, $VSplitContainer/HSplitContainer/Painter/Debug/Select2 ]:
-		s.clear()
-		var index = 0
-		for p in [ self, $Painter, $PaintLayers ]:
-			for i in p.debug_get_texture_names():
-				s.add_item(i, index)
-				index += 1
-
-func _on_DebugSelect_item_selected(ID, t):
-	var texture = [$VSplitContainer/HSplitContainer/Painter/Debug/Texture1, $VSplitContainer/HSplitContainer/Painter/Debug/Texture2][t]
-	for p in [ self, $Painter, $PaintLayers ]:
-		var textures_count = p.debug_get_texture_names().size()
-		if ID < textures_count:
-			texture.texture = p.debug_get_texture(ID)
-			texture.visible = (texture.texture != null)
-			return
-		ID -= textures_count
-
 # Brush options UI
 
 var ignore_button_toggle : bool = false
@@ -969,3 +950,30 @@ func _on_Painter_end_of_stroke(stroke_state):
 	undoredo.add("Paint Stroke", [undo_command], [redo_command])
 
 
+var last_hsplit_offset : int = 0
+
+func _on_h_split_container_dragged(offset):
+	var hsplit_offset : int = $VSplitContainer/HSplitContainer.size.x - offset
+	if last_hsplit_offset > hsplit_offset and hsplit_offset < 25:
+		$VSplitContainer/HSplitContainer/Painter2D.visible = false
+		$VSplitContainer/HSplitContainer/Painter/Show2DPaint.visible = true
+	last_hsplit_offset = hsplit_offset
+
+func _on_show_2d_paint_pressed():
+	$VSplitContainer/HSplitContainer/Painter2D.visible = true
+	$VSplitContainer/HSplitContainer/Painter/Show2DPaint.visible = false
+	$VSplitContainer/HSplitContainer.split_offset = $VSplitContainer/HSplitContainer.size.x - 100
+
+var last_vsplit_offset : int = 0
+
+func _on_v_split_container_dragged(offset):
+	var vsplit_offset : int = $VSplitContainer.size.y - offset
+	if last_vsplit_offset > vsplit_offset and vsplit_offset < 25:
+		$VSplitContainer/GraphEdit.visible = false
+		$VSplitContainer/HSplitContainer/Painter/ShowBrushGraph.visible = true
+	last_vsplit_offset = vsplit_offset
+
+func _on_show_brush_graph_pressed():
+	$VSplitContainer/GraphEdit.visible = true
+	$VSplitContainer/HSplitContainer/Painter/ShowBrushGraph.visible = false
+	$VSplitContainer.split_offset = $VSplitContainer.size.y - 100

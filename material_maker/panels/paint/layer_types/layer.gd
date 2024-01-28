@@ -42,8 +42,7 @@ func load_layer(data : Dictionary, first_index : int, path : String) -> void:
 	hidden = data.hidden
 	for c in get_channels():
 		if data.has(c):
-			var texture = ImageTexture.new()
-			texture.load(path+"/"+data[c])
+			var texture = ImageTexture.create_from_image(Image.load_from_file(path+"/"+data[c]))
 			set(c, texture)
 	_load_layer(data)
 
