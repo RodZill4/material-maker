@@ -10,6 +10,7 @@ visible = true
 ok_button_text = "Ouvrir"
 file_mode = 0
 access = 2
+show_hidden_files = true
 script = ExtResource("1")
 
 [connection signal="canceled" from="." to="." method="_on_FileDialog_popup_hide"]

@@ -20,16 +20,20 @@ func _on_ModelFile_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.add_filter("*.glb,*.gltf;GLTF file")
 	dialog.add_filter("*.obj;Wavefront OBJ file")
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		set_mesh(files[0])
+	await get_tree().process_frame
+	move_to_foreground()
 
 func set_mesh(file_name : String) -> void:
 	if file_name == mesh_filename:
 		return
 	mesh_filename = file_name
-	var mesh : ArrayMesh = $ObjLoader.load_obj_file(mesh_filename)
+	var obj_loader = load("res://addons/material_maker/mesh_loader/mesh_loader.gd")
+	var mesh : ArrayMesh = obj_loader.load_mesh(mesh_filename)
 	if mesh != null:
 		mesh_instance.mesh = mesh
 		$VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()

@@ -1,8 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://b27p6dhsoiwp1"]
 
 [ext_resource type="Script" path="res://material_maker/panels/paint/select_mask_dialog.gd" id="1"]
-[ext_resource type="Script" path="res://material_maker/tools/obj_loader/obj_loader.gd" id="2"]
+[ext_resource type="Script" path="res://addons/material_maker/mesh_loader/obj_loader.gd" id="2"]
 [ext_resource type="Shader" path="res://material_maker/panels/paint/select_mask_dialog.gdshader" id="2_w5qxl"]
+
 
 [sub_resource type="Shader" id="4"]
 code = "shader_type canvas_item;

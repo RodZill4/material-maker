@@ -1,9 +1,10 @@
-[gd_scene load_steps=36 format=3 uid="uid://qx02gvymgb5o"]
+[gd_scene load_steps=42 format=3 uid="uid://qx02gvymgb5o"]
 
 [ext_resource type="Script" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ftx52hy53io2" path="res://material_maker/panels/paint/export.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5"]
+[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="7_xm5h4"]
 [ext_resource type="PackedScene" uid="uid://d12t30rjvol15" path="res://material_maker/tools/painter/painter.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://drudtoqh4ks4n" path="res://material_maker/panels/paint/paint_layers.tscn" id="13"]
 [ext_resource type="Script" path="res://material_maker/panels/paint/paint.gd" id="16"]
@@ -96,6 +97,26 @@ region = Rect2(128, 224, 32, 32)
 atlas = ExtResource("5")
 region = Rect2(160, 224, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3lbo1"]
+atlas = ExtResource("7_xm5h4")
+region = Rect2(160, 97, 16, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7d2yp"]
+atlas = ExtResource("7_xm5h4")
+region = Rect2(144, 97, 16, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8viu0"]
+atlas = ExtResource("7_xm5h4")
+region = Rect2(160, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_610no"]
+atlas = ExtResource("7_xm5h4")
+region = Rect2(144, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56usa"]
+atlas = ExtResource("7_xm5h4")
+region = Rect2(144, 112, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_knugp"]
 atlas = ExtResource("5")
 region = Rect2(128, 96, 16, 32)
@@ -180,7 +201,7 @@ stretch = true
 [node name="MainView" type="SubViewport" parent="VSplitContainer/HSplitContainer/Painter/View"]
 own_world_3d = true
 handle_input_locally = false
-size = Vector2i(800, 480)
+size = Vector2i(10, 10)
 render_target_update_mode = 4
 
 [node name="CameraPosition" type="Node3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
@@ -348,11 +369,20 @@ layout_mode = 2
 
 [node name="Brush" type="GridContainer" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel"]
 layout_mode = 2
-columns = 2
+columns = 3
 
 [node name="BrushSizeLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
 layout_mode = 2
 text = "Size"
+
+[node name="PressureSize" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Pressure"
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_3lbo1")
+texture_pressed = SubResource("AtlasTexture_7d2yp")
+texture_hover = SubResource("AtlasTexture_7d2yp")
 
 [node name="BrushSize" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource("4")]
 layout_mode = 2
@@ -362,9 +392,34 @@ max_value = 250.0
 step = 1.0
 float_only = true
 
+[node name="BrushAngleLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+layout_mode = 2
+text = "Angle"
+
+[node name="TiltAngle" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Tilt"
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_8viu0")
+texture_pressed = SubResource("AtlasTexture_610no")
+texture_hover = SubResource("AtlasTexture_56usa")
+
+[node name="BrushAngle" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource("4")]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 0.0
+min_value = -180.0
+max_value = 180.0
+step = 1.0
+float_only = true
+
 [node name="BrushSpacingLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
 layout_mode = 2
 text = "Spacing"
+
+[node name="Empty1" type="Control" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+layout_mode = 2
 
 [node name="BrushSpacing" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource("4")]
 layout_mode = 2
@@ -379,6 +434,15 @@ float_only = true
 layout_mode = 2
 text = "Opacity"
 
+[node name="PressureOpacity" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Pressure"
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_3lbo1")
+texture_pressed = SubResource("AtlasTexture_7d2yp")
+texture_hover = SubResource("AtlasTexture_7d2yp")
+
 [node name="BrushOpacity" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource("4")]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -389,6 +453,15 @@ float_only = true
 [node name="BrushHardnessLabel" type="Label" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
 layout_mode = 2
 text = "Hardness"
+
+[node name="PressureHardness" type="TextureButton" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Pressure"
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_3lbo1")
+texture_pressed = SubResource("AtlasTexture_7d2yp")
+texture_hover = SubResource("AtlasTexture_7d2yp")
 
 [node name="BrushHardness" parent="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush" instance=ExtResource("4")]
 layout_mode = 2
@@ -542,7 +615,6 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 1
-scroll_offset = Vector2(0, -308)
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
 
@@ -567,6 +639,7 @@ shader_context_defs = "uniform sampler2D mesh_normal_tex;
 [connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Options/Buttons/Brush" to="." method="_on_Button_toggled" binds= ["Brush"]]
 [connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Options/Buttons/Jitter" to="." method="_on_Button_toggled" binds= ["Jitter"]]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize" to="." method="_on_Brush_value_changed" binds= ["brush_size"]]
+[connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushAngle" to="." method="_on_Brush_value_changed" binds= ["brush_size"]]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness" to="." method="_on_Brush_value_changed" binds= ["brush_hardness"]]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterPosition" to="." method="_on_Brush_value_changed" binds= ["jitter_position"]]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Jitter/JitterSize" to="." method="_on_Brush_value_changed" binds= ["jitter_size"]]

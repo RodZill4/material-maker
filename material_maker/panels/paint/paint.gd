@@ -39,9 +39,9 @@ var remote_node = null
 var brush_parameters : Dictionary = {
 	brush_size = 50.0,
 	brush_hardness = 0.5,
+	pattern_scale = 10.0,
+	pattern_angle = 0.0
 }
-var pattern_scale : float = 10.0
-var pattern_angle : float = 0.0
 
 var idmap_filename : String = ""
 var mask : ImageTexture
@@ -403,10 +403,12 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness.set_value(brush_parameters.brush_hardness)
 			elif ev.is_command_or_control_pressed():
 				reset_stroke()
-				pattern_scale += ev.relative.x*0.1
-				pattern_scale = clamp(pattern_scale, 0.1, 25.0)
-				pattern_angle += fmod(ev.relative.y*0.01, 2.0*PI)
-				painter.update_brush_params( { pattern_scale=pattern_scale, pattern_angle=pattern_angle } )
+				brush_parameters.pattern_scale += ev.relative.x*0.1
+				brush_parameters.pattern_scale = clamp(brush_parameters.pattern_scale, 0.1, 25.0)
+				brush_parameters.pattern_angle = 0.5+(brush_parameters.pattern_angle+ev.relative.y*0.01)/TAU
+				brush_parameters.pattern_angle = TAU*(brush_parameters.pattern_angle-floor(brush_parameters.pattern_angle)-0.5)
+				painter.update_brush_params( { pattern_scale=brush_parameters.pattern_scale, pattern_angle=brush_parameters.pattern_angle } )
+				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushAngle.set_value(brush_parameters.pattern_angle*57.2957795131)
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 				paint(mouse_position, get_pressure(ev), ev.tilt, painting_mode)
 				last_tilt = ev.tilt
@@ -758,8 +760,8 @@ func load_project(file_name) -> bool:
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(f.get_as_text())
 	var data = test_json_conv.get_data()
-	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd").new()
-	var mesh : Mesh = obj_loader.load_obj_file(data.model)
+	var mesh_loader = load("res://addons/material_maker/mesh_loader/mesh_loader.gd").new()
+	var mesh : Mesh = mesh_loader.load_mesh(data.model)
 	if mesh == null:
 		return false
 	model_path = data.model

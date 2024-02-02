@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://cs6b524f2o614"]
+[gd_scene load_steps=7 format=3 uid="uid://cs6b524f2o614"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/new_painter/new_painter.gd" id="2"]
-[ext_resource type="Script" path="res://material_maker/tools/obj_loader/obj_loader.gd" id="3"]
 
 [sub_resource type="World3D" id="World3D_pmwks"]
 
@@ -87,7 +86,7 @@ stretch = true
 own_world_3d = true
 world_3d = SubResource("World3D_pmwks")
 handle_input_locally = false
-size = Vector2i(391, 257)
+size = Vector2i(360, 257)
 render_target_update_mode = 4
 
 [node name="MeshPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
@@ -97,10 +96,10 @@ mesh = SubResource("1")
 skeleton = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
-autoplay = "rotate"
 libraries = {
 "": SubResource("AnimationLibrary_f1y4a")
 }
+autoplay = "rotate"
 
 [node name="CameraPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
@@ -129,9 +128,6 @@ text = "OK"
 custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 text = "Cancel"
-
-[node name="ObjLoader" type="Node" parent="."]
-script = ExtResource("3")
 
 [connection signal="pressed" from="VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile" to="." method="_on_ModelFile_pressed"]
 [connection signal="pressed" from="VBoxContainer/Main/VBoxContainer/GridContainer/ProjectFile" to="." method="_on_ProjectFile_pressed"]
