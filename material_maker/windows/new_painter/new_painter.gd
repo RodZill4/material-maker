@@ -1,6 +1,7 @@
 extends Window
 
-signal return_status(status : Dictionary)
+
+@export var mesh_material : Material
 
 var mesh_filename    = null
 var project_filename = null
@@ -11,6 +12,14 @@ var project_filename = null
 @onready var viewport_container : SubViewportContainer = $VBoxContainer/Main/SubViewportContainer
 @onready var viewport : SubViewport = $VBoxContainer/Main/SubViewportContainer/SubViewport
 @onready var error_label : Label = $VBoxContainer/Main/SubViewportContainer/Error
+
+
+signal return_status(status : Dictionary)
+
+
+func _ready():
+	if mesh_material:
+		mesh_instance.set_surface_override_material(0, mesh_material)
 
 func _on_ViewportContainer_resized():
 	viewport.size = viewport_container.size
@@ -40,17 +49,25 @@ func set_mesh(file_name : String) -> void:
 		button_ok.disabled = false
 		# Initialise project file name
 		set_project(mesh_filename.get_basename()+".mmpp")
+		# Apply the mesh material
+		if mesh_material:
+			mesh_instance.set_surface_override_material(0, mesh_material)
 		# Center the mesh and move the camera to the whole object is visible
 		var aabb : AABB = mesh_instance.get_aabb()
 		mesh_instance.transform.origin = -aabb.position-0.5*aabb.size
 		var d : float = aabb.size.length()
-		camera.transform.origin.z = 0.8*d
+		print(d)
+		camera.transform.origin.z = 0.5*d+0.5
+		camera.near = 0.01
+		camera.far = d
+		# Show errors if any
 		var errors : PackedStringArray = PackedStringArray()
 		if mesh.get_surface_count() > 1:
 			errors.append("Mesh has several surfaces")
 		if mesh.surface_get_format(0) & ArrayMesh.ARRAY_FORMAT_TEX_UV == 0:
 			errors.append("Mesh does not have UVs")
 		error_label.text = "\n".join(errors)
+
 	else:
 		button_ok.disabled = true
 
