@@ -583,7 +583,7 @@ class FlexWindow:
 		overlay = null
 
 
-@onready var allow_undock : bool = false
+@export var allow_undock : bool = false
 
 var panels : Dictionary = {}
 var flex_layout : FlexLayout

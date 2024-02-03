@@ -151,6 +151,7 @@ script = ExtResource("2")
 [node name="FlexibleLayout" parent="VBoxContainer/Layout" instance=ExtResource("6_ygla4")]
 layout_mode = 2
 size_flags_horizontal = 3
+allow_undock = true
 
 [node name="Main" parent="VBoxContainer/Layout/FlexibleLayout" instance=ExtResource("7_ih0ps")]
 layout_mode = 2
