@@ -368,6 +368,7 @@ func update_brush(update_shaders : bool = false):
 		
 		paint_shader.add_parameter_or_texture("fill", "bool", false)
 		paint_shader.add_parameter_or_texture("erase", "bool", false)
+		paint_shader.add_parameter_or_texture("reset", "bool", false)
 		
 		paint_shader.add_parameter_or_texture("brush_position", "vec2", Vector2(0, 0))
 		paint_shader.add_parameter_or_texture("brush_previous_position", "vec2", Vector2(0, 0))
@@ -434,7 +435,7 @@ func update_brush(update_shaders : bool = false):
 			pattern_code += pattern_shader_code.code
 			pattern_code += "vec4 %s_value = %s;\n" % [ c.name, pattern_shader_code.output_values.rgba ]
 			pattern_code += "vec4 old_%s_stroke_value = imageLoad(%s_stroke, pixel);\n" % [ c.name, c.name ]
-			pattern_code += "vec4 old_%s_layer_value = imageLoad(%s_layer, pixel);\n" % [ c.name, c.name ]
+			pattern_code += "vec4 old_%s_layer_value = reset ? vec4(0.0) : imageLoad(%s_layer, pixel);\n" % [ c.name, c.name ]
 			pattern_code += "vec4 new_%s_stroke_value;\n" % [ c.name ]
 			pattern_code += "vec4 new_%s_layer_value;\n" % [ c.name ]
 			pattern_code += "do_paint_%s(%s_value, brush_value, old_%s_stroke_value, old_%s_layer_value, new_%s_stroke_value, new_%s_layer_value);\n" % [ c.type, c.name, c.name, c.name, c.name, c.name ]
@@ -560,7 +561,6 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 			init_shader.set_parameter("use_input_image", false)
 			await init_shader.render_ext([ paint_textures[i*3+1] ], Vector2i(texture_size, texture_size))
 			paint_textures[i*3+1].get_texture()
-
 		var stroke_state = {}
 		for v in active_viewports:
 			pass

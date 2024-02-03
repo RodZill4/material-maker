@@ -22,6 +22,8 @@ class Parameter:
 				size = 4
 			"vec2":
 				size = 8
+			"vec3":
+				size = 16
 			"vec4":
 				size = 16
 			"mat4x4":
@@ -122,8 +124,10 @@ func add_parameter_or_texture(n : String, t : String, v, parameter_as_constant :
 	if t == "sampler2D":
 		if input_texture_indexes.has(n):
 			print("ERROR: Redefining texture "+n)
-		input_texture_indexes[n] = input_textures.size()
-		input_textures.append(InputTexture.new(n, v))
+			input_textures[input_texture_indexes[n]] = InputTexture.new(n, v)
+		else:
+			input_texture_indexes[n] = input_textures.size()
+			input_textures.append(InputTexture.new(n, v))
 	elif parameter_as_constant:
 		if constants.has(n):
 			print("ERROR: Redefining constant "+n)
@@ -154,9 +158,15 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 					parameter_values.encode_float(p.offset, value)
 					return
 			"vec2":
-				if value is Vector2:
+				if value is Vector2 or value is Vector2i:
 					parameter_values.encode_float(p.offset,    value.x)
 					parameter_values.encode_float(p.offset+4,  value.y)
+					return
+			"vec3":
+				if value is Vector3:
+					parameter_values.encode_float(p.offset,    value.x)
+					parameter_values.encode_float(p.offset+4,  value.y)
+					parameter_values.encode_float(p.offset+8,  value.z)
 					return
 			"vec4":
 				if value is Color:
@@ -191,7 +201,7 @@ func constant_as_string(value, type : String) -> String:
 func get_uniform_declarations() -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
-	for type in [ "mat4x4", "vec4", "vec2", "float", "int", "bool" ]:
+	for type in [ "mat4x4", "vec4", "vec3", "vec2", "float", "int", "bool" ]:
 		for p in parameters.keys():
 			var parameter : Parameter = parameters[p]
 			if parameter.type != type:

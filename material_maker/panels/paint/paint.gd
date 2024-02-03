@@ -235,6 +235,7 @@ func set_object(o):
 	# Center camera on  mesh
 	var aabb : AABB = painted_mesh.get_aabb()
 	camera_position.transform.origin = aabb.position+0.5*aabb.size
+	update_camera()
 	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
@@ -686,14 +687,16 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 	if end_of_stroke:
 		stroke_seed = randf()
 
-func update_view():
-	var mesh_instance = painted_mesh
-	var mesh_aabb = mesh_instance.get_aabb()
+func update_camera():
+	var mesh_aabb = painted_mesh.get_aabb()
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
 	var mesh_size = 0.5*mesh_aabb.size.length()
 	var cam_to_center = (camera.global_transform.origin-mesh_center).length()
 	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
 	camera.far = 1.01*(cam_to_center+mesh_size)
+
+func update_view():
+	update_camera()
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
 		painter.update_view(camera, transform, main_view.size)

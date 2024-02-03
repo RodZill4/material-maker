@@ -318,8 +318,12 @@ void do_paint_rgba(vec4 paint_value, float brush_value, vec4 old_stroke_value, v
 	float new_alpha = min(1.0, max(stroke_alpha, old_stroke_value.a));
 	new_stroke_value = vec4(mix(paint_value.rgb, old_stroke_value.rgb, new_alpha-stroke_alpha), new_alpha);
 	float layer_apply_alpha = new_alpha*brush_opacity;
-	float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
-	new_layer_value = vec4(mix(new_stroke_value.rgb, old_layer_value.rgb, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+	if (erase) {
+		new_layer_value = vec4(old_layer_value.rgb, max(0.0, old_layer_value.a-layer_apply_alpha));
+	} else {
+		float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
+		new_layer_value = vec4(mix(new_stroke_value.rgb, old_layer_value.rgb, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+	}
 }
 
 void do_paint_ggaa(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
@@ -331,8 +335,12 @@ void do_paint_ggaa(vec4 paint_value, float brush_value, vec4 old_stroke_value, v
 	vec2 new_alpha = min(vec2(1.0), stroke_alpha + old_stroke_value.ba);
 	new_stroke_value = vec4(mix(paint_value.rg, old_stroke_value.rg, new_alpha-stroke_alpha), new_alpha);
 	vec2 layer_apply_alpha = new_alpha*brush_opacity;
-	vec2 layer_alpha_sum = min(vec2(1.0), layer_apply_alpha + old_layer_value.ba);
-	new_layer_value = vec4(mix(new_stroke_value.rg, old_layer_value.rg, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+	if (erase) {
+		new_layer_value = vec4(old_layer_value.rg, max(vec2(0.0), old_layer_value.ba-layer_apply_alpha));
+	} else {
+		vec2 layer_alpha_sum = min(vec2(1.0), layer_apply_alpha + old_layer_value.ba);
+		new_layer_value = vec4(mix(new_stroke_value.rg, old_layer_value.rg, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+	}
 }
 
 void main() {
