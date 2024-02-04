@@ -125,7 +125,12 @@ func get_items(filter : String, sorted = false) -> Array:
 func save_library_list() -> void:
 	var library_list = []
 	for i in range(2, get_child_count()):
-		library_list.push_back(get_child(i).library_path)
+		var path = get_child(i).library_path
+		
+		# Libraries loaded via a plugin might not have a file path, so we dont need to save it
+		if path != "":
+			library_list.push_back(get_child(i).library_path)
+
 	mm_globals.config.set_value(config_section, "libraries", library_list)
 
 func has_library(path : String) -> bool:
