@@ -21,7 +21,7 @@ Parameters
 ++++++++++
 
 See also `Kuwahara node <https://docs.blender.org/manual/en/4.0/compositing/types/filter/kuwahara.html>`_
-on Blender docs for more details on *Size*, *Uniformity*, *Sharpness* and *Eccentricity*.
+on Blender docs for more details on *Uniformity* and *Eccentricity*.
 
 The **Anisotropic Kuwahara** node accepts the following parameters:
 
@@ -29,7 +29,7 @@ The **Anisotropic Kuwahara** node accepts the following parameters:
 
 *  **Size** of the filter. Higher values can produce more stylized results.
 
-*  **Unifomity** of the image edges' directions.
+*  **Uniformity** of the image edges' directions.
 
 *  **Sharpness** of the edges of the image.
 
