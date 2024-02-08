@@ -88,7 +88,7 @@
 				],
 				"instance": [
 					"/*",
-					"\tGPL-2.0-or-later license",
+					"\tLicense: GPL-2.0-or-later",
 					"\thttps://projects.blender.org/blender/blender/src/branch/main/source/blender/compositor/",
 					"\trealtime_compositor/compositor_kuwahara_anisotropic.glsl",
 					"*/",
@@ -294,7 +294,7 @@
 			"name": "shader_1",
 			"node_position": {
 				"x": -655.199951,
-				"y": 59.305443
+				"y": 58.506279
 			},
 			"parameters": {
 				"size": 9
@@ -314,11 +314,11 @@
 				],
 				"instance": [
 					"/*",
-					"\tGPL-2.0-or-later license",
+					"\tLicense: GPL-2.0-or-later",
 					"\thttps://projects.blender.org/blender/blender/src/branch/main/source/blender",
 					"\t/compositor/realtime_compositor/shaders/compositor_kuwahara_anisotropic_compute_structure_tensor.glsl",
 					"*/",
-					"vec4 $(name)_kuwahara(vec2 uv) {",
+					"vec4 $(name)_structure_tensor(vec2 uv) {",
 					"",
 					"\tfloat o = 1.0/$size;",
 					"",
@@ -346,10 +346,10 @@
 					"\treturn vec4(dxdx, dxdy, dxdy, dydy);",
 					"}"
 				],
-				"name": "dd",
+				"name": "structure_tensor",
 				"outputs": [
 					{
-						"rgba": "$(name)_kuwahara($uv)",
+						"rgba": "$(name)_structure_tensor($uv)",
 						"type": "rgba"
 					}
 				],
@@ -531,8 +531,8 @@
 		{
 			"name": "_3",
 			"node_position": {
-				"x": -845.600037,
-				"y": 204.037643
+				"x": -846.400024,
+				"y": 155.288696
 			},
 			"parameters": {
 				"val": 4
@@ -569,8 +569,8 @@
 		}
 	],
 	"parameters": {
-		"eccentricity": 0.5,
-		"resolution": 10,
+		"eccentricity": 1,
+		"resolution": 9,
 		"sharpness": 1,
 		"size": 6,
 		"uniformity": 4
