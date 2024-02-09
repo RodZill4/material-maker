@@ -1,8 +1,9 @@
 Anisotropic Kuwahara node
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The **Anisotropic Kuwahara** node applies a smoothing filter (while preserving the edges of the image)
-to its input. This can be used to create stylized images with effects similar to painted brushstrokes.
+The **Anisotropic Kuwahara** node applies an edge-preserving smoothing filter to its input
+which better preseves directional features over the classic kuwahara filter.
+This can be used to create stylized images with effects similar to painted brushstrokes.
 
 .. image:: images/node_filter_anisotropic_kuwahara.png
 	:align: center
@@ -21,7 +22,7 @@ Parameters
 ++++++++++
 
 See also `Kuwahara node <https://docs.blender.org/manual/en/4.0/compositing/types/filter/kuwahara.html>`_
-on Blender docs for more details on *Uniformity* and *Eccentricity*.
+on Blender docs for more details on **Uniformity** and **Eccentricity**.
 
 The **Anisotropic Kuwahara** node accepts the following parameters:
 

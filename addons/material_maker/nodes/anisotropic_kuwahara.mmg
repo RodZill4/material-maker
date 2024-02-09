@@ -44,7 +44,7 @@
 		}
 	],
 	"label": "Anisotropic Kuwahara",
-	"longdesc": "Smooths details while preserving edges",
+	"longdesc": "Edge-preserving smoothing filter",
 	"name": "anisotropic_kuwahara",
 	"node_position": {
 		"x": 0,
