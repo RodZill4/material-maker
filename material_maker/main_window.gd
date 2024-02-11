@@ -187,9 +187,15 @@ func _ready() -> void:
 	for a in args:
 		if a.get_extension() == "ptex":
 			do_load_project(get_file_absolute_path(a))
-		elif a.get_extension() == "obj":
+		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
-			var mesh : Mesh = load(mesh_filename)
+			if mesh_filename == "":
+				push_error("Cannot load mesh from '%s' (no such file or directory)" % a)
+				continue
+			var mesh : Mesh = MMMeshLoader.load_mesh(mesh_filename)
+			if mesh == null:
+				push_error("Cannot load mesh from '%s'" % mesh_filename)
+				continue
 			var project_filename : String = mesh_filename.get_basename()+".mmpp"
 			create_paint_project(mesh, mesh_filename, 1024, project_filename)
 	

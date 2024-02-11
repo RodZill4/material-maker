@@ -41,8 +41,7 @@ func set_mesh(file_name : String) -> void:
 	if file_name == mesh_filename:
 		return
 	mesh_filename = file_name
-	var obj_loader = load("res://addons/material_maker/mesh_loader/mesh_loader.gd")
-	var mesh : ArrayMesh = obj_loader.load_mesh(mesh_filename)
+	var mesh : ArrayMesh = MMMeshLoader.load_mesh(mesh_filename)
 	if mesh != null:
 		mesh_instance.mesh = mesh
 		$VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()

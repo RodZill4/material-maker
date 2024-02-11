@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dot3yy7v6xa8g"]
+
+[ext_resource type="Script" path="res://material_maker/panels/paint/collapse_button.gd" id="1_g030h"]
+
+[node name="CollapseButton" type="Button"]
+custom_minimum_size = Vector2(50, 0)
+size_flags_horizontal = 3
+tooltip_text = "Show brush options"
+toggle_mode = true
+text = "Brush"
+script = ExtResource("1_g030h")
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]
