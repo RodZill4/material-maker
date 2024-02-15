@@ -721,7 +721,6 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 func update_camera():
 	var mesh_aabb = painted_mesh.get_aabb()
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
-	print(mesh_center)
 	var mesh_size = mesh_aabb.size.length()
 	var cam_to_center = (camera.global_transform.origin-mesh_center).length()
 	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
