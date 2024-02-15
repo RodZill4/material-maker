@@ -396,7 +396,7 @@ void main() {
 		b = ((brush_position+jitter_offset-0.5*viewport_size)*texture_scale/min_size+texture_center)/bs;
 		bv = ((brush_previous_position-brush_position)*texture_scale/min_size)/bs;
 	} else {
-		uv = UV; //seams_uv(UV);
+		uv = seams_uv(UV);
 		tex2view = texture(tex2view_tex, uv);
 		if (!fill && tex2view.z < 0.001) {
 			return;
