@@ -289,22 +289,26 @@ func _on_Engine_toggled(button_pressed):
 	else:
 		$VSplitContainer/HSplitContainer/Painter/Tools/Engine.tooltip_text = "View space paint engine"
 
+func load_id_map() -> bool:
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	dialog.min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.add_filter("*.png;PNG image file")
+	var files = await dialog.select_files()
+	if files.size() == 1:
+		painter.set_id_map(files[0])
+		if not painter.has_id_map():
+			return false
+	else:
+		return false
+	return true
+
 func set_current_tool(m):
 	var ignore = false
 	if m == MODE_MASK_SELECTOR:
 		if not painter.has_id_map():
-			var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-			dialog.min_size = Vector2(500, 500)
-			dialog.access = FileDialog.ACCESS_FILESYSTEM
-			dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-			dialog.add_filter("*.png;PNG image file")
-			var files = await dialog.select_files()
-			if files.size() == 1:
-				painter.set_id_map(files[0])
-				if not painter.has_id_map():
-					ignore = true
-			else:
-				ignore = true
+			ignore = not await load_id_map()
 	if not ignore:
 		if current_tool == MODE_MASK_SELECTOR:
 			painted_mesh.set_surface_override_material(0, preview_material)
@@ -1024,3 +1028,9 @@ func _on_show_brush_graph_pressed():
 func _on_options_panel_minimum_size_changed():
 	%OptionsPanel.position.x += %OptionsPanel.size.x-%OptionsPanel.get_combined_minimum_size().x
 	%OptionsPanel.size = %OptionsPanel.get_combined_minimum_size()
+
+func _on_mask_selector_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			await load_id_map()
+			set_current_tool(MODE_MASK_SELECTOR)

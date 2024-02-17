@@ -660,6 +660,7 @@ shader_context_defs = "uniform sampler2D mesh_normal_tex;
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/ColorPicker" to="." method="set_current_tool" binds= [4]]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/Fill" to="." method="_on_Fill_pressed"]
 [connection signal="toggled" from="VSplitContainer/HSplitContainer/Painter/Tools/Eraser" to="." method="_on_Eraser_toggled"]
+[connection signal="gui_input" from="VSplitContainer/HSplitContainer/Painter/Tools/MaskSelector" to="." method="_on_mask_selector_gui_input"]
 [connection signal="pressed" from="VSplitContainer/HSplitContainer/Painter/Tools/MaskSelector" to="." method="set_current_tool" binds= [5]]
 [connection signal="minimum_size_changed" from="VSplitContainer/HSplitContainer/Painter/OptionsPanel" to="." method="_on_options_panel_minimum_size_changed"]
 [connection signal="value_changed" from="VSplitContainer/HSplitContainer/Painter/OptionsPanel/VBoxContainer/Brush/BrushSize" to="." method="_on_Brush_value_changed" binds= ["brush_size"]]
