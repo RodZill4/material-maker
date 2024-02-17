@@ -1,7 +1,7 @@
 extends RefCounted
 class_name MMPolygon
 
-var points : Array = [Vector2(0.2, 0.2), Vector2(0.7, 0.4), Vector2(0.4, 0.7)]
+var points : Array[Vector2] = [Vector2(0.2, 0.2), Vector2(0.7, 0.4), Vector2(0.4, 0.7)]
 
 func to_string() -> String:
 	var rv = PackedStringArray()

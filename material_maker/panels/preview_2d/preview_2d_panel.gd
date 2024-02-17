@@ -96,6 +96,9 @@ func setup_controls(filter : String = "") -> void:
 		for c in get_children():
 			if c.has_method("setup_control"):
 				c.setup_control(generator, param_defs)
+			if c.has_method("set_view_rect"):
+				var s : float = min(size.x, size.y)/view_scale
+				c.set_view_rect(0.5*size-center*s, Vector2(s, s))
 
 var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 var local_rotate : float = 0.0
@@ -130,14 +133,8 @@ func update_shader_options() -> void:
 
 func on_resized() -> void:
 	super.on_resized()
-	$Accumulate.size = size
-	$Accumulate/Iteration.position = Vector2(0, 0)
-	$Accumulate/Iteration.size = size
 	material.set_shader_parameter("preview_2d_center", center)
 	material.set_shader_parameter("preview_2d_scale", view_scale)
-	$Accumulate/Iteration.material.set_shader_parameter("preview_2d_center", center)
-	$Accumulate/Iteration.material.set_shader_parameter("preview_2d_scale", view_scale)
-	$Accumulate/Iteration.material.set_shader_parameter("preview_2d_size", size)
 	setup_controls("previous")
 	$Guides.queue_redraw()
 
