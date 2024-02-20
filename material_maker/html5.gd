@@ -6,6 +6,11 @@ extends Node
 signal in_focus
 signal file_loaded(file_name, file_type, file_data)
 
+class JS:
+	func eval(_a, _b):
+		pass
+
+var JavaScript : JS
 
 func _ready() -> void:
 	if OS.get_name() == "HTML5" and OS.has_feature("JavaScript"):
@@ -43,8 +48,8 @@ func _ready() -> void:
 			true
 		)
 
-func _notification(notification: int) -> void:
-	if notification == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+func _notification(notification_id: int) -> void:
+	if notification_id == MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
 		emit_signal("in_focus")
 
 func load_file(accept : String = ""):
@@ -56,9 +61,9 @@ func load_file(accept : String = ""):
 	else:
 		JavaScript.eval("loadFile(\""+accept+"\");", true)
 
-	yield(self, "in_focus")  # Wait until JS prompt is closed
+	await self.in_focus  # Wait until JS prompt is closed
 
-	yield(get_tree().create_timer(0.5), "timeout")  # Give some time for async JS data load
+	await get_tree().create_timer(0.5).timeout  # Give some time for async JS data load
 
 	if JavaScript.eval("canceled;", true):  # If File Dialog closed w/o file
 		return
@@ -69,7 +74,7 @@ func load_file(accept : String = ""):
 		file_data = JavaScript.eval("fileData;", true)
 		if file_data != null:
 			break
-		yield(get_tree().create_timer(1.0), "timeout")  # Need more time to load data
+		await get_tree().create_timer(1.0).timeout  # Need more time to load data
 
 	var file_name = JavaScript.eval("fileName;", true)
 	var file_type = JavaScript.eval("fileType;", true)

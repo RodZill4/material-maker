@@ -1,6 +1,6 @@
 extends OptionButton
 
-export var config_variable : String
+@export var config_variable : String
 
 var locales : Array = []
 

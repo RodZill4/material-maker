@@ -1,4 +1,4 @@
-extends WindowDialog
+extends Window
 
 var project
 
@@ -12,10 +12,10 @@ func edit_settings(p):
 	project = p
 	var settings : Dictionary = project.get_settings()
 	$Margin/VBox/TextureSize/SizeOptionButton.size_value = settings.texture_size
-	$Margin/VBox/PaintEmission.pressed = settings.paint_emission
-	$Margin/VBox/PaintNormal.pressed = settings.paint_normal
-	$Margin/VBox/PaintDepth.pressed = settings.paint_depth
-	$Margin/VBox/Bump/PaintBump.pressed = settings.paint_depth_as_bump
+	$Margin/VBox/PaintEmission.button_pressed = settings.paint_emission
+	$Margin/VBox/PaintNormal.button_pressed = settings.paint_normal
+	$Margin/VBox/PaintDepth.button_pressed = settings.paint_depth
+	$Margin/VBox/Bump/PaintBump.button_pressed = settings.paint_depth_as_bump
 	$Margin/VBox/Bump/BumpStrength.value = settings.bump_strength
 	popup_centered()
 

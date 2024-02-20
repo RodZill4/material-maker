@@ -8,4 +8,4 @@ func _ready():
 
 func _on_resized():
 	pass
-	#material.set_shader_param("widget_size", rect_size)
+	#material.set_shader_parameter("widget_size", size)

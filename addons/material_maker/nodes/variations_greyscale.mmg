@@ -1,4 +1,5 @@
 {
+	"generic_size": 5,
 	"name": "variations_greyscale",
 	"node_position": {
 		"x": 0,
@@ -11,9 +12,10 @@
 		"v4": 0.3,
 		"v5": 0.4
 	},
-	"seed_int": 2872216430,
+	"seed_int": 149537440,
 	"shader_model": {
 		"code": "",
+		"global": "",
 		"inputs": [
 			{
 				"default": "1.0",
@@ -30,33 +32,9 @@
 		"name": "Variations",
 		"outputs": [
 			{
-				"f": "$in.variation($uv, $seed+$v1)",
+				"f": "$in.variation($uv, $seed+$v#)",
 				"longdesc": "Shows a variation of the input",
 				"shortdesc": "Output1",
-				"type": "f"
-			},
-			{
-				"f": "$in.variation($uv, $seed+$v2)",
-				"longdesc": "Shows a variation of the input",
-				"shortdesc": "Output2",
-				"type": "f"
-			},
-			{
-				"f": "$in.variation($uv, $seed+$v3)",
-				"longdesc": "Shows a variation of the input",
-				"shortdesc": "Output3",
-				"type": "f"
-			},
-			{
-				"f": "$in.variation($uv, $seed+$v4)",
-				"longdesc": "Shows a variation of the input",
-				"shortdesc": "Output4",
-				"type": "f"
-			},
-			{
-				"f": "$in.variation($uv, $seed+$v5)",
-				"longdesc": "Shows a variation of the input",
-				"shortdesc": "Output5",
 				"type": "f"
 			}
 		],
@@ -68,55 +46,7 @@
 				"longdesc": "Seed modifier for output 1",
 				"max": 1,
 				"min": 0,
-				"name": "v1",
-				"shortdesc": "Seed modifier",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.1,
-				"label": "",
-				"longdesc": "Seed modifier for output 2",
-				"max": 1,
-				"min": 0,
-				"name": "v2",
-				"shortdesc": "Seed modifier",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.2,
-				"label": "",
-				"longdesc": "Seed modifier for output 3",
-				"max": 1,
-				"min": 0,
-				"name": "v3",
-				"shortdesc": "Seed modifier",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.3,
-				"label": "",
-				"longdesc": "Seed modifier for output 4",
-				"max": 1,
-				"min": 0,
-				"name": "v4",
-				"shortdesc": "Seed modifier",
-				"step": 0.01,
-				"type": "float"
-			},
-			{
-				"control": "None",
-				"default": 0.4,
-				"label": "",
-				"longdesc": "Seed modifier for output 5",
-				"max": 1,
-				"min": 0,
-				"name": "v5",
+				"name": "v#",
 				"shortdesc": "Seed modifier",
 				"step": 0.01,
 				"type": "float"

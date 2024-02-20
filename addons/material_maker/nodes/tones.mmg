@@ -45,12 +45,12 @@
 	"shader_model": {
 		"code": "",
 		"global": [
-			"vec4 adjust_levels(vec4 input, vec4 in_min, vec4 in_mid, vec4 in_max, vec4 out_min, vec4 out_max) {",
-			"\tinput = clamp((input-in_min)/(in_max-in_min), 0.0, 1.0);",
+			"vec4 adjust_levels(vec4 color, vec4 in_min, vec4 in_mid, vec4 in_max, vec4 out_min, vec4 out_max) {",
+			"\tcolor = clamp((color-in_min)/(in_max-in_min), 0.0, 1.0);",
 			"\tin_mid = (in_mid-in_min)/(in_max-in_min);",
-			"\tvec4 dark = step(in_mid, input);",
-			"\tinput = 0.5*mix(input/(in_mid), 1.0+(input-in_mid)/(1.0-in_mid), dark);",
-			"\treturn out_min+input*(out_max-out_min);",
+			"\tvec4 dark = step(in_mid, color);",
+			"\tcolor = 0.5*mix(color/(in_mid), 1.0+(color-in_mid)/(1.0-in_mid), dark);",
+			"\treturn out_min+color*(out_max-out_min);",
 			"}",
 			""
 		],

@@ -1,0 +1,204 @@
+{
+	"connections": [
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "1192_3",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_2",
+			"from_port": 0,
+			"to": "1192_3",
+			"to_port": 1
+		},
+		{
+			"from": "1192_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "1192_3",
+			"from_port": 1,
+			"to": "gen_outputs",
+			"to_port": 1
+		}
+	],
+	"label": "Mesh Curvature",
+	"longdesc": "",
+	"name": "mesh_curvature",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": -399,
+				"y": 90
+			},
+			"parameters": {
+				"map": 0
+			},
+			"seed": 51108,
+			"type": "meshmap"
+		},
+		{
+			"name": "uniform_2",
+			"node_position": {
+				"x": -395.5,
+				"y": 152.5
+			},
+			"parameters": {
+				"map": 1
+			},
+			"seed": 51108,
+			"type": "meshmap"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -798,
+				"y": -53.6666679382324
+			},
+			"parameters": {
+
+			},
+			"ports": [],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 171.5,
+				"y": 42.3333320617676
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "curvature1",
+					"type": "f"
+				},
+				{
+					"name": "curvature2",
+					"type": "f"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -128.333343505859,
+				"y": -110.5
+			},
+			"parameters": {
+				"param0": 0.0009
+			},
+			"seed_int": 0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "ε",
+					"linked_widgets": [
+						{
+							"node": "1192_3",
+							"widget": "epsilon"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "1192_3",
+			"node_position": {
+				"x": -101.722229003906,
+				"y": 53.3611145019531
+			},
+			"parameters": {
+				"epsilon": 0.0009
+			},
+			"seed": 17658,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "position",
+						"type": "rgb"
+					},
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "normal",
+						"type": "rgb"
+					}
+				],
+				"instance": [
+					"float curvature_$(name)(vec2 uv, float epsilon) {",
+					"\tvec2 eps = vec2(epsilon, 0.0);",
+					"\tvec3 dp;",
+					"\tdp = $position(uv+eps)-$position(uv-eps);",
+					"\tfloat curvature = length($normal(uv+eps)-$normal(uv-eps))/max(epsilon, length(dp));",
+					"\tdp = $position(uv+eps)-$position(uv-eps);",
+					"\tcurvature = max(curvature, length($normal(uv+eps.yx)-$normal(uv-eps.yx))/max(epsilon, length(dp)));",
+					"\treturn curvature;",
+					"}",
+					"",
+					"float curvature2_$(name)(vec2 uv, float epsilon) {",
+					"\tvec2 eps = vec2(epsilon, 0.0);",
+					"\tvec3 dp;",
+					"\tdp = $position(uv+eps)-$position(uv-eps);",
+					"\tfloat curvature = dot($normal(uv+eps)-$normal(uv-eps), dp);",
+					"\tdp = $position(uv+eps.yx)-$position(uv-eps.yx);",
+					"\tcurvature = curvature+dot($normal(uv+eps.yx)-$normal(uv-eps.yx), dp);",
+					"\treturn curvature;",
+					"}",
+					""
+				],
+				"name": "Curvature",
+				"outputs": [
+					{
+						"f": "curvature_$(name)($uv, $epsilon)",
+						"type": "f"
+					},
+					{
+						"f": "0.5+curvature2_$(name)($uv, $epsilon)/$epsilon",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.001,
+						"label": "",
+						"max": 0.01,
+						"min": 0,
+						"name": "epsilon",
+						"step": 0.0001,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"param0": 0.0009
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

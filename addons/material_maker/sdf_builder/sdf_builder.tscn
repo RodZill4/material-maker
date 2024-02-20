@@ -1,511 +1,498 @@
-[gd_scene load_steps=64 format=2]
+[gd_scene load_steps=64 format=3 uid="uid://bvsuo5y7vh1y2"]
 
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" type="Script" id=1]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf_builder.gd" type="Script" id=2]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/union.gd" type="Script" id=3]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/box.gd" type="Script" id=4]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/difference.gd" type="Script" id=5]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/intersection.gd" type="Script" id=6]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/smooth_union.gd" type="Script" id=7]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/line.gd" type="Script" id=8]
-[ext_resource path="res://addons/material_maker/sdf_builder/icons/icons.svg" type="Texture" id=9]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/annular.gd" type="Script" id=10]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/elongate.gd" type="Script" id=11]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/round.gd" type="Script" id=12]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/morph.gd" type="Script" id=13]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/ngon.gd" type="Script" id=14]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/bend.gd" type="Script" id=15]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/star.gd" type="Script" id=16]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/mirror.gd" type="Script" id=17]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/flip.gd" type="Script" id=18]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/stairs.gd" type="Script" id=19]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/sphere.gd" type="Script" id=20]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/union.gd" type="Script" id=21]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/box.gd" type="Script" id=22]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/intersection.gd" type="Script" id=23]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/difference.gd" type="Script" id=24]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/smooth_union.gd" type="Script" id=25]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/flip.gd" type="Script" id=26]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/mirror.gd" type="Script" id=27]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/elongate.gd" type="Script" id=28]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/round.gd" type="Script" id=29]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/bend.gd" type="Script" id=30]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/annular.gd" type="Script" id=31]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/morph.gd" type="Script" id=32]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/extrusion.gd" type="Script" id=33]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" type="Script" id=34]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" type="Script" id=35]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/polygon.gd" type="Script" id=36]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf2d/color.gd" type="Script" id=37]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform.gd" type="Script" id=38]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/fbm.gd" type="Script" id=39]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" type="Script" id=40]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/step.gd" type="Script" id=41]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/color.gd" type="Script" id=42]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/pattern.gd" type="Script" id=43]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/blend.gd" type="Script" id=44]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/distort.gd" type="Script" id=45]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/twist.gd" type="Script" id=46]
-[ext_resource path="res://addons/material_maker/sdf_builder/sdf3d/torus.gd" type="Script" id=47]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/uniform_gs.gd" type="Script" id=48]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/deform.gd" type="Script" id=49]
-[ext_resource path="res://addons/material_maker/sdf_builder/tex/brightness_contrast.gd" type="Script" id=50]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/circle.gd" id="1"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/union.gd" id="3"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/box.gd" id="4"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/difference.gd" id="5"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/intersection.gd" id="6"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/smooth_union.gd" id="7"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/line.gd" id="8"]
+[ext_resource type="Texture2D" uid="uid://bep620pac8bkb" path="res://addons/material_maker/sdf_builder/icons/icons.svg" id="9"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/annular.gd" id="10"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/elongate.gd" id="11"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/round.gd" id="12"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/morph.gd" id="13"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/ngon.gd" id="14"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/bend.gd" id="15"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/star.gd" id="16"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/mirror.gd" id="17"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/flip.gd" id="18"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/stairs.gd" id="19"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/sphere.gd" id="20"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/union.gd" id="21"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/box.gd" id="22"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/intersection.gd" id="23"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/difference.gd" id="24"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/smooth_union.gd" id="25"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/flip.gd" id="26"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/mirror.gd" id="27"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/elongate.gd" id="28"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/round.gd" id="29"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/bend.gd" id="30"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/annular.gd" id="31"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/morph.gd" id="32"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/extrusion.gd" id="33"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/revolution.gd" id="34"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/cylinder.gd" id="35"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/polygon.gd" id="36"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf2d/color.gd" id="37"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/uniform.gd" id="38"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/fbm.gd" id="39"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" id="40"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/step.gd" id="41"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/color.gd" id="42"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/pattern.gd" id="43"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/blend.gd" id="44"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/distort.gd" id="45"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/twist.gd" id="46"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/sdf3d/torus.gd" id="47"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/uniform_gs.gd" id="48"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/deform.gd" id="49"]
+[ext_resource type="Script" path="res://addons/material_maker/sdf_builder/tex/brightness_contrast.gd" id="50"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 0, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("9")
+region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 16, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("9")
+region = Rect2(16, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=10]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 128, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="10"]
+atlas = ExtResource("9")
+region = Rect2(128, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=11]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 96, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="11"]
+atlas = ExtResource("9")
+region = Rect2(96, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=12]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 112, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="12"]
+atlas = ExtResource("9")
+region = Rect2(112, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 32, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("9")
+region = Rect2(32, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 48, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("9")
+region = Rect2(48, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=6]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 80, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="6"]
+atlas = ExtResource("9")
+region = Rect2(80, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 64, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("9")
+region = Rect2(64, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=13]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 144, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="13"]
+atlas = ExtResource("9")
+region = Rect2(144, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=7]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 0, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="7"]
+atlas = ExtResource("9")
+region = Rect2(0, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id=8]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 16, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("9")
+region = Rect2(16, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id=9]
-flags = 4
-atlas = ExtResource( 9 )
-region = Rect2( 32, 16, 16, 16 )
+[sub_resource type="AtlasTexture" id="9"]
+atlas = ExtResource("9")
+region = Rect2(32, 16, 16, 16)
 
 [node name="SDFBuilder" type="Node"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="SDF2D" type="Node" parent="."]
 
 [node name="Shape" type="Node" parent="SDF2D"]
 
 [node name="Circle" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 1 )
+script = ExtResource("1")
 item_type = "Circle"
 item_category = "SDF2D"
-icon = SubResource( 1 )
+icon = SubResource("1")
 
 [node name="Box" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 4 )
+script = ExtResource("4")
 item_type = "Box"
 item_category = "SDF2D"
-icon = SubResource( 2 )
+icon = SubResource("2")
 
 [node name="Ellipse" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 4 )
+script = ExtResource("4")
+shape = 4
 item_type = "Ellipse"
 item_category = "SDF2D"
-icon = SubResource( 10 )
-shape = 4
+icon = SubResource("10")
 
 [node name="NGon" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 14 )
+script = ExtResource("14")
 item_type = "NGon"
 item_category = "SDF2D"
-icon = SubResource( 11 )
+icon = SubResource("11")
 
 [node name="Polygon" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 36 )
+script = ExtResource("36")
 item_type = "Polygon"
 item_category = "SDF2D"
 
 [node name="Star" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 16 )
+script = ExtResource("16")
 item_type = "Star"
 item_category = "SDF2D"
-icon = SubResource( 12 )
+icon = SubResource("12")
 
 [node name="IsoscelesTriangle" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 4 )
+script = ExtResource("4")
+shape = 2
 item_type = "IsoTriangle"
 item_category = "SDF2D"
-icon = SubResource( 3 )
-shape = 2
+icon = SubResource("3")
 
 [node name="Rhombus" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 4 )
+script = ExtResource("4")
+shape = 1
 item_type = "Rhombus"
 item_category = "SDF2D"
-icon = SubResource( 4 )
-shape = 1
+icon = SubResource("4")
 
 [node name="Line" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 8 )
+script = ExtResource("8")
 item_type = "Line"
 item_category = "SDF2D"
-icon = SubResource( 6 )
+icon = SubResource("6")
 
 [node name="Tunnel" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 4 )
+script = ExtResource("4")
+shape = 3
 item_type = "Tunnel"
 item_category = "SDF2D"
-icon = SubResource( 5 )
-shape = 3
+icon = SubResource("5")
 
 [node name="Stairs" type="Node" parent="SDF2D/Shape"]
-script = ExtResource( 19 )
+script = ExtResource("19")
 item_type = "Stairs"
 item_category = "SDF2D"
-icon = SubResource( 13 )
+icon = SubResource("13")
 
 [node name="Boolean" type="Node" parent="SDF2D"]
 
 [node name="Union" type="Node" parent="SDF2D/Boolean"]
-script = ExtResource( 3 )
+script = ExtResource("3")
 item_type = "Union"
 item_category = "SDF2D"
-icon = SubResource( 7 )
+icon = SubResource("7")
 
 [node name="Intersection" type="Node" parent="SDF2D/Boolean"]
-script = ExtResource( 6 )
+script = ExtResource("6")
 item_type = "Intersection"
 item_category = "SDF2D"
-icon = SubResource( 8 )
+icon = SubResource("8")
 
 [node name="Difference" type="Node" parent="SDF2D/Boolean"]
-script = ExtResource( 5 )
+script = ExtResource("5")
 item_type = "Difference"
 item_category = "SDF2D"
-icon = SubResource( 9 )
+icon = SubResource("9")
 
 [node name="Smooth" type="Node" parent="SDF2D"]
 
 [node name="Union" type="Node" parent="SDF2D/Smooth"]
-script = ExtResource( 7 )
+script = ExtResource("7")
 item_type = "SmoothUnion"
 item_category = "SDF2D"
 
 [node name="Intersection" type="Node" parent="SDF2D/Smooth"]
-script = ExtResource( 7 )
+script = ExtResource("7")
+op_sign = ""
 item_type = "SmoothIntersection"
 item_category = "SDF2D"
-op_sign = ""
 
 [node name="Alter" type="Node" parent="SDF2D"]
 
 [node name="Flip" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 18 )
+script = ExtResource("18")
 item_type = "Flip"
 item_category = "SDF2D"
 
 [node name="Mirror" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 17 )
+script = ExtResource("17")
 item_type = "Mirror"
 item_category = "SDF2D"
 
 [node name="Elongate" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 11 )
+script = ExtResource("11")
 item_type = "Elongate"
 item_category = "SDF2D"
 
 [node name="Round" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 12 )
+script = ExtResource("12")
 
 [node name="Bend" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 15 )
+script = ExtResource("15")
 item_type = "Bend"
 item_category = "SDF2D"
 
 [node name="Annular" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 10 )
+script = ExtResource("10")
 item_type = "Annular"
 item_category = "SDF2D"
 
 [node name="Morph" type="Node" parent="SDF2D/Alter"]
-script = ExtResource( 13 )
+script = ExtResource("13")
 item_type = "Morph"
 item_category = "SDF2D"
 
 [node name="Color" type="Node" parent="SDF2D"]
 
 [node name="Albedo" type="Node" parent="SDF2D/Color"]
-script = ExtResource( 37 )
-item_type = "Albedo2D"
-item_category = "SDF2D_COLOR"
+script = ExtResource("37")
 channel_name = "albedo"
 type = 2
+item_type = "Albedo2D"
+item_category = "SDF2D_COLOR"
 
 [node name="Metallic" type="Node" parent="SDF2D/Color"]
-script = ExtResource( 37 )
+script = ExtResource("37")
+channel_name = "metallic"
 item_type = "Metallic2D"
 item_category = "SDF2D_COLOR"
-channel_name = "metallic"
 
 [node name="Roughness" type="Node" parent="SDF2D/Color"]
-script = ExtResource( 37 )
+script = ExtResource("37")
+channel_name = "roughness"
 item_type = "Roughness2D"
 item_category = "SDF2D_COLOR"
-channel_name = "roughness"
 
 [node name="Emission" type="Node" parent="SDF2D/Color"]
-script = ExtResource( 37 )
-item_type = "Emission2D"
-item_category = "SDF2D_COLOR"
+script = ExtResource("37")
 channel_name = "emission"
 type = 1
+item_type = "Emission2D"
+item_category = "SDF2D_COLOR"
 
 [node name="SDF3D" type="Node" parent="."]
 
 [node name="Shape" type="Node" parent="SDF3D"]
 
 [node name="Sphere" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 20 )
+script = ExtResource("20")
 item_type = "Sphere"
 item_category = "SDF3D"
 
 [node name="Box" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 22 )
+script = ExtResource("22")
 item_type = "Box3D"
 item_category = "SDF3D"
 
 [node name="Cylinder" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 35 )
+script = ExtResource("35")
 item_type = "Cylinder"
 item_category = "SDF3D"
 
 [node name="Capsule" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 35 )
+script = ExtResource("35")
+shape = 1
 item_type = "Capsule"
 item_category = "SDF3D"
-shape = 1
 
 [node name="Cone" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 35 )
+script = ExtResource("35")
+shape = 3
 item_type = "Cone"
 item_category = "SDF3D"
-shape = 3
 
 [node name="Torus" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 47 )
+script = ExtResource("47")
 item_type = "Torus"
 item_category = "SDF3D"
 
 [node name="Pyramid" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 35 )
+script = ExtResource("35")
+shape = 2
 item_type = "Pyramid"
 item_category = "SDF3D"
-shape = 2
 
 [node name="Ellipsoid" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 22 )
+script = ExtResource("22")
+shape = 1
 item_type = "Ellipsoid"
 item_category = "SDF3D"
-shape = 1
 
 [node name="Octahedron" type="Node" parent="SDF3D/Shape"]
-script = ExtResource( 20 )
+script = ExtResource("20")
+shape = 1
 item_type = "Octahedron"
 item_category = "SDF3D"
-shape = 1
 
 [node name="Generate" type="Node" parent="SDF3D"]
 
 [node name="Extrusion" type="Node" parent="SDF3D/Generate"]
-script = ExtResource( 33 )
+script = ExtResource("33")
 item_type = "Extrusion"
 item_category = "SDF3D"
 
 [node name="Revolution" type="Node" parent="SDF3D/Generate"]
-script = ExtResource( 34 )
+script = ExtResource("34")
 item_type = "Revolution"
 item_category = "SDF3D"
 
 [node name="Boolean" type="Node" parent="SDF3D"]
 
 [node name="Union" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource( 21 )
+script = ExtResource("21")
 item_type = "Union3D"
 item_category = "SDF3D"
 
 [node name="Intersection" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource( 23 )
+script = ExtResource("23")
 item_type = "Intersection3D"
 item_category = "SDF3D"
 
 [node name="Difference" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource( 24 )
+script = ExtResource("24")
 item_type = "Difference3D"
 item_category = "SDF3D"
 
 [node name="Smooth" type="Node" parent="SDF3D"]
 
 [node name="Union" type="Node" parent="SDF3D/Smooth"]
-script = ExtResource( 25 )
+script = ExtResource("25")
 item_type = "SmoothUnion3D"
 item_category = "SDF3D"
 
 [node name="Intersection" type="Node" parent="SDF3D/Smooth"]
-script = ExtResource( 25 )
+script = ExtResource("25")
+op_sign = ""
 item_type = "SmoothIntersection3D"
 item_category = "SDF3D"
-op_sign = ""
 
 [node name="Alter" type="Node" parent="SDF3D"]
 
 [node name="Flip" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 26 )
+script = ExtResource("26")
 item_type = "Flip3D"
 item_category = "SDF3D"
 
 [node name="Mirror" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 27 )
+script = ExtResource("27")
 item_type = "Mirror3D"
 item_category = "SDF3D"
 
 [node name="Elongate" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 28 )
+script = ExtResource("28")
 item_type = "Elongate3D"
 item_category = "SDF3D"
 
 [node name="Round" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 29 )
+script = ExtResource("29")
 item_type = "Round3D"
 item_category = "SDF3D"
 
 [node name="Bend" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 30 )
+script = ExtResource("30")
 item_type = "Bend3D"
 item_category = "SDF3D"
 
 [node name="Annular" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 31 )
+script = ExtResource("31")
 item_type = "Annular3D"
 item_category = "SDF3D"
 
 [node name="Morph" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 32 )
+script = ExtResource("32")
 item_type = "Morph3D"
 item_category = "SDF3D"
 
 [node name="Twist" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 46 )
+script = ExtResource("46")
 item_type = "Twist"
 item_category = "SDF3D"
 
 [node name="Distort" type="Node" parent="SDF3D/Alter"]
-script = ExtResource( 45 )
+script = ExtResource("45")
 item_type = "Distort3D"
 item_category = "SDF3D"
 
 [node name="Color" type="Node" parent="SDF3D"]
 
 [node name="Albedo" type="Node" parent="SDF3D/Color"]
-script = ExtResource( 42 )
-item_type = "Albedo3D"
-item_category = "SDF3D_COLOR"
+script = ExtResource("42")
 channel_name = "albedo"
 type = 2
+item_type = "Albedo3D"
+item_category = "SDF3D_COLOR"
 
 [node name="Metallic" type="Node" parent="SDF3D/Color"]
-script = ExtResource( 42 )
+script = ExtResource("42")
+channel_name = "metallic"
 item_type = "Metallic3D"
 item_category = "SDF3D_COLOR"
-channel_name = "metallic"
 
 [node name="Roughness" type="Node" parent="SDF3D/Color"]
-script = ExtResource( 42 )
+script = ExtResource("42")
+channel_name = "roughness"
 item_type = "Roughness3D"
 item_category = "SDF3D_COLOR"
-channel_name = "roughness"
 
 [node name="Emission" type="Node" parent="SDF3D/Color"]
-script = ExtResource( 42 )
-item_type = "Emission3D"
-item_category = "SDF3D_COLOR"
+script = ExtResource("42")
 channel_name = "emission"
 type = 1
+item_type = "Emission3D"
+item_category = "SDF3D_COLOR"
 
-[node name="Texture" type="Node" parent="."]
+[node name="Texture2D" type="Node" parent="."]
 
-[node name="Generator" type="Node" parent="Texture"]
+[node name="Generator" type="Node" parent="Texture2D"]
 
-[node name="Uniform" type="Node" parent="Texture/Generator"]
-script = ExtResource( 38 )
+[node name="Uniform" type="Node" parent="Texture2D/Generator"]
+script = ExtResource("38")
 item_type = "Uniform"
 item_category = "TEX"
 
-[node name="GreyscaleUniform" type="Node" parent="Texture/Generator"]
-script = ExtResource( 48 )
+[node name="GreyscaleUniform" type="Node" parent="Texture2D/Generator"]
+script = ExtResource("48")
 item_type = "GreyscaleUniform"
 item_category = "TEX"
 
-[node name="Pattern" type="Node" parent="Texture/Generator"]
-script = ExtResource( 43 )
+[node name="Pattern" type="Node" parent="Texture2D/Generator"]
+script = ExtResource("43")
 item_type = "Pattern"
 item_category = "TEX"
 
-[node name="FBM" type="Node" parent="Texture/Generator"]
-script = ExtResource( 39 )
+[node name="FBM" type="Node" parent="Texture2D/Generator"]
+script = ExtResource("39")
 item_type = "FBM"
 item_category = "TEX"
 
-[node name="Filter" type="Node" parent="Texture"]
+[node name="Filter" type="Node" parent="Texture2D"]
 
-[node name="BrightnessContrast" type="Node" parent="Texture/Filter"]
-script = ExtResource( 50 )
+[node name="BrightnessContrast" type="Node" parent="Texture2D/Filter"]
+script = ExtResource("50")
 item_type = "BrightnessContrast"
 item_category = "TEX"
 
-[node name="Step" type="Node" parent="Texture/Filter"]
-script = ExtResource( 41 )
+[node name="Step" type="Node" parent="Texture2D/Filter"]
+script = ExtResource("41")
 item_type = "Step"
 item_category = "TEX"
 
-[node name="SimpleGradient" type="Node" parent="Texture/Filter"]
-script = ExtResource( 40 )
+[node name="SimpleGradient" type="Node" parent="Texture2D/Filter"]
+script = ExtResource("40")
 item_type = "SimpleGradient"
 item_category = "TEX"
 
-[node name="Blend" type="Node" parent="Texture/Filter"]
-script = ExtResource( 44 )
+[node name="Blend" type="Node" parent="Texture2D/Filter"]
+script = ExtResource("44")
 item_type = "Blend"
 item_category = "TEX"
 
-[node name="Deform" type="Node" parent="Texture/Filter"]
-script = ExtResource( 49 )
+[node name="Deform" type="Node" parent="Texture2D/Filter"]
+script = ExtResource("49")
 item_type = "Deform"
 item_category = "TEX"

@@ -1,29 +1,28 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://bb6iar0tbj2qt"]
 
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d.gd" id="1"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+render_priority = 0
+shader = SubResource("1")
 
 [node name="Preview2D" type="ColorRect" groups=["preview"]]
-material = SubResource( 2 )
+material = SubResource("2")
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -695.0
-margin_bottom = -228.0
-rect_min_size = Vector2( 64, 64 )
-rect_clip_content = true
-mouse_filter = 1
+offset_right = -695.0
+offset_bottom = -228.0
 size_flags_horizontal = 0
 size_flags_vertical = 8
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+mouse_filter = 1
+script = ExtResource("1")
 shader = "uniform vec2 preview_2d_size;
 
 void fragment() {

@@ -1,0 +1,162 @@
+[gd_scene load_steps=12 format=3 uid="uid://bnqq3vhwmudkw"]
+
+[ext_resource type="Script" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
+[ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="2_oiaqi"]
+[ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="3_qvj7k"]
+[ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="4_mpinq"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5_1qnqj"]
+[ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="6_mpc0m"]
+
+[sub_resource type="Shader" id="1"]
+resource_local_to_scene = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8fw7q"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("1")
+
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("5_1qnqj")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("5_1qnqj")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("5_1qnqj")
+region = Rect2(96, 64, 32, 31)
+
+[node name="ProjectsPanel" type="Control"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+script = ExtResource("1_m3usq")
+
+[node name="BackgroundPreviews" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_top = 28.0
+
+[node name="Preview2D" parent="BackgroundPreviews" instance=ExtResource("2_oiaqi")]
+visible = false
+material = SubResource("ShaderMaterial_8fw7q")
+layout_mode = 1
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+shader = "uniform vec2 preview_2d_size = vec2(100.0, 100.0);
+const float preview_2d_scale = 1.2;
+const vec2 preview_2d_center = vec2(0.5);
+
+void fragment() {
+	vec2 ratio = preview_2d_size;
+	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	vec4 image = preview_2d(uv);
+	float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+	vec3 image_with_background = mix(vec3(checkerboard), image.xyz, image.a);
+	COLOR = vec4(image_with_background, 1.0);
+}
+"
+
+[node name="Preview3D" parent="BackgroundPreviews" instance=ExtResource("3_qvj7k")]
+visible = false
+layout_mode = 1
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+ui_path = NodePath("../../PreviewUI/Panel/HBoxContainer/Preview3DUI")
+
+[node name="Projects" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_mpinq")
+
+[node name="TabBar" type="TabBar" parent="Projects"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+tab_close_display_policy = 1
+
+[node name="CrashRecoveryTimer" type="Timer" parent="Projects"]
+wait_time = 15.0
+autostart = true
+
+[node name="PreviewUI" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 5.5
+offset_top = -53.5
+offset_right = 335.5
+offset_bottom = -13.5
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Preview2DButton" type="Button" parent="PreviewUI"]
+layout_mode = 2
+tooltip_text = "Show 2D preview"
+toggle_mode = true
+icon = SubResource("3")
+
+[node name="Preview3DButton" type="Button" parent="PreviewUI"]
+layout_mode = 2
+tooltip_text = "Show 3D preview"
+toggle_mode = true
+icon = SubResource("4")
+
+[node name="Panel" type="PanelContainer" parent="PreviewUI"]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PreviewUI/Panel"]
+layout_mode = 2
+
+[node name="SpaceLeft" type="Control" parent="PreviewUI/Panel/HBoxContainer"]
+layout_mode = 2
+
+[node name="ControlView" type="TextureRect" parent="PreviewUI/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("5")
+
+[node name="Preview3DUI" parent="PreviewUI/Panel/HBoxContainer" instance=ExtResource("6_mpc0m")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SpaceRight" type="Control" parent="PreviewUI/Panel/HBoxContainer"]
+layout_mode = 2
+
+[connection signal="resized" from="." to="." method="_on_projects_panel_resized"]
+[connection signal="no_more_tabs" from="Projects" to="." method="_on_projects_no_more_tabs"]
+[connection signal="resized" from="Projects" to="Projects" method="_on_Projects_resized"]
+[connection signal="tab_changed" from="Projects" to="." method="_on_projects_tab_changed"]
+[connection signal="tab_changed" from="Projects/TabBar" to="Projects" method="set_current_tab"]
+[connection signal="tab_close_pressed" from="Projects/TabBar" to="Projects" method="close_tab"]
+[connection signal="timeout" from="Projects/CrashRecoveryTimer" to="Projects" method="_on_CrashRecoveryTimer_timeout"]
+[connection signal="toggled" from="PreviewUI/Preview2DButton" to="." method="show_background_preview_2d"]
+[connection signal="toggled" from="PreviewUI/Preview3DButton" to="." method="show_background_preview_3d"]
+[connection signal="gui_input" from="PreviewUI/Panel/HBoxContainer/ControlView" to="BackgroundPreviews/Preview3D" method="on_gui_input"]

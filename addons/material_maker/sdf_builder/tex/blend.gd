@@ -26,7 +26,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	var tex : String = "vec4(1.0)"
 	var ctxt2 : Dictionary = ctxt.duplicate(true)
 	ctxt2.type = "rgba"
-	if ! scene.children.empty():
+	if ! scene.children.is_empty():
 		tex = mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor).color
 		for i in range(1, scene.children.size(), 2):
 			ctxt2.type = "rgba"

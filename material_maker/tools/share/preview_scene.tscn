@@ -1,81 +1,46 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://cq4jf2i8qyhqw"]
 
-[ext_resource path="res://material_maker/tools/share/hdri/kloofendal_48d_partly_cloudy_1k.exr" type="Texture" id=1]
-
-[sub_resource type="SphereMesh" id=1]
+[sub_resource type="SphereMesh" id="1"]
 radial_segments = 256
 rings = 128
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id="Shader_7peee"]
 code = "shader_type spatial;
-render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-uniform vec4 albedo : hint_color;
-uniform sampler2D texture_albedo : hint_albedo;
-uniform float specular;
-uniform float metallic;
-uniform float roughness : hint_range(0,1);
-uniform float point_size : hint_range(0,128);
-uniform vec3 uv1_scale;
-uniform vec3 uv1_offset;
-uniform vec3 uv2_scale;
-uniform vec3 uv2_offset;
-
-
-void vertex() {
-	UV=UV*uv1_scale.xy+uv1_offset.xy;
-}
-
-
-
 
 void fragment() {
-	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo,base_uv);
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	METALLIC = metallic;
-	ROUGHNESS = roughness;
-	SPECULAR = specular;
+	// Place fragment code here.
 }
 "
 
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
-shader_param/albedo = Color( 0.396078, 0.419608, 0.776471, 1 )
-shader_param/specular = 0.5
-shader_param/metallic = 0.0
-shader_param/roughness = 0.0
-shader_param/point_size = 1.0
-shader_param/uv1_scale = Vector3( 1, 1, 1 )
-shader_param/uv1_offset = Vector3( 0, 0, 0 )
-shader_param/uv2_scale = Vector3( 1, 1, 1 )
-shader_param/uv2_offset = Vector3( 0, 0, 0 )
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rw2ha"]
+render_priority = 0
+shader = SubResource("Shader_7peee")
 
-[sub_resource type="PanoramaSky" id=6]
-panorama = ExtResource( 1 )
+[sub_resource type="Sky" id="6"]
 
-[sub_resource type="Environment" id=5]
+[sub_resource type="Environment" id="5"]
 background_mode = 2
-background_sky = SubResource( 6 )
-ambient_light_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
+sky = SubResource("6")
+ambient_light_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 tonemap_mode = 2
 
-[node name="Spatial" type="Spatial"]
+[node name="Node3D" type="Node3D"]
 
-[node name="Pivot" type="Spatial" parent="."]
-transform = Transform( -0.38692, 0, -0.922113, 0, 1, 0, 0.922113, 0, -0.38692, 0, 0, 0 )
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(-0.38692, 0, -0.922113, 0, 1, 0, 0.922113, 0, -0.38692, 0, 0, 0)
 
-[node name="Sphere" type="MeshInstance" parent="Pivot"]
-transform = Transform( 0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707107, 0, 0, 0 )
-mesh = SubResource( 1 )
+[node name="Sphere" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707107, 0, 0, 0)
+mesh = SubResource("1")
 skeleton = NodePath("../..")
-material/0 = SubResource( 3 )
+surface_material_override/0 = SubResource("ShaderMaterial_rw2ha")
 
-[node name="DirectionalLight" type="DirectionalLight" parent="Pivot"]
-transform = Transform( 0.488265, -0.365119, 0.792645, 0.0168143, 0.912039, 0.409759, -0.872534, -0.186743, 0.451456, 0, 0, 0 )
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Pivot"]
+transform = Transform3D(0.488265, -0.365119, 0.792645, 0.0168143, 0.912039, 0.409759, -0.872534, -0.186743, 0.451456, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Camera" type="Camera" parent="Pivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8 )
+[node name="Camera3D" type="Camera3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 5 )
+environment = SubResource("5")

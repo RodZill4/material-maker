@@ -1,11 +1,11 @@
-extends WindowDialog
+extends Window
 
 
 signal return_status(status)
 
 
 func _ready():
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	_on_MarginContainer_minimum_size_changed()
 
 func _on_LoginButton_pressed():
@@ -14,16 +14,16 @@ func _on_LoginButton_pressed():
 func _on_LoginDialog_popup_hide() -> void:
 	emit_signal("return_status", "cancel")
 
-func ask(user : String, password : String) -> String:
+func ask(user : String, password : String) -> Dictionary:
 	mm_globals.main_window.add_dialog(self)
 	if user != "":
 		$MarginContainer/VBoxContainer/UserName.text = user
-		$MarginContainer/VBoxContainer/SaveUser.pressed = true
+		$MarginContainer/VBoxContainer/SaveUser.button_pressed = true
 	if password != "":
 		$MarginContainer/VBoxContainer/Password.text = password
-		$MarginContainer/VBoxContainer/SavePassword.pressed = true
+		$MarginContainer/VBoxContainer/SavePassword.button_pressed = true
 	popup_centered()
-	var result = yield(self, "return_status")
+	var result = await self.return_status
 	queue_free()
 	if result == "ok":
 		return {
@@ -35,7 +35,7 @@ func ask(user : String, password : String) -> String:
 	return {}
 
 func _on_MarginContainer_minimum_size_changed():
-	rect_size = $MarginContainer.get_minimum_size()
+	size = $MarginContainer.get_minimum_size()
 
 func _on_RegisterButton_pressed():
 	OS.shell_open(MMPaths.WEBSITE_ADDRESS+"/register")

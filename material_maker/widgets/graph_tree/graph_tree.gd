@@ -1,8 +1,8 @@
 extends Popup
 
-signal item_double_clicked(generator)
+signal item_icon_double_clicked(generator)
 
-onready var tree = $Tree
+@onready var tree = $Tree
 
 func init(graph_name : String, generator : MMGenGraph) -> void:
 	tree.clear()
@@ -23,5 +23,5 @@ func fill_item(parent : TreeItem, generator : MMGenGraph) -> void:
 			fill_item(item, c)
 
 func _on_Tree_item_double_clicked() -> void:
-	emit_signal("item_double_clicked", tree.get_selected().get_metadata(0))
+	emit_signal("item_icon_double_clicked", tree.get_selected().get_metadata(0))
 	queue_free()

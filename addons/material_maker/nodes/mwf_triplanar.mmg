@@ -1,0 +1,220 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "mesh_triplanar",
+			"to_port": 0
+		},
+		{
+			"from": "mesh_triplanar",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "mesh_triplanar_2",
+			"to_port": 0
+		},
+		{
+			"from": "mesh_triplanar_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 1
+		},
+		{
+			"from": "mesh_triplanar_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 2
+		},
+		{
+			"from": "mesh_triplanar_4",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 3
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 2,
+			"to": "mesh_triplanar_3",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 3,
+			"to": "mesh_triplanar_4",
+			"to_port": 0
+		}
+	],
+	"label": "Mesh triplanar",
+	"longdesc": "",
+	"name": "mwf_triplanar",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "mesh_triplanar",
+			"node_position": {
+				"x": -314.836975097656,
+				"y": 436.160766601563
+			},
+			"parameters": {
+				"param0": 32
+			},
+			"seed_int": 0,
+			"type": "mesh_triplanar"
+		},
+		{
+			"name": "mesh_triplanar_2",
+			"node_position": {
+				"x": -319.336975097656,
+				"y": 501.160766601563
+			},
+			"parameters": {
+				"param0": 32
+			},
+			"seed_int": 0,
+			"type": "mesh_triplanar"
+		},
+		{
+			"name": "mesh_triplanar_3",
+			"node_position": {
+				"x": -318.336975097656,
+				"y": 566.160766601563
+			},
+			"parameters": {
+				"param0": 32
+			},
+			"seed_int": 0,
+			"type": "mesh_triplanar"
+		},
+		{
+			"name": "mesh_triplanar_4",
+			"node_position": {
+				"x": -318.336975097656,
+				"y": 629.160766601563
+			},
+			"parameters": {
+				"param0": 32
+			},
+			"seed_int": 0,
+			"type": "mesh_triplanar"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -827.336975097656,
+				"y": 506.160766601563
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 4,
+					"name": "port0",
+					"type": "rgb"
+				},
+				{
+					"group_size": 0,
+					"name": "port1",
+					"type": "rgb"
+				},
+				{
+					"group_size": 0,
+					"name": "port2",
+					"type": "rgb"
+				},
+				{
+					"group_size": 0,
+					"name": "port3",
+					"type": "rgb"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -25.8369750976563,
+				"y": 482.160766601563
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 4,
+					"name": "port0",
+					"type": "rgba"
+				},
+				{
+					"group_size": 0,
+					"name": "port1",
+					"type": "rgba"
+				},
+				{
+					"group_size": 0,
+					"name": "port2",
+					"type": "rgba"
+				},
+				{
+					"group_size": 0,
+					"name": "port3",
+					"type": "rgba"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -475.711975097656,
+				"y": 291.160766601563
+			},
+			"parameters": {
+				"param0": 32
+			},
+			"seed_int": 0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "K",
+					"linked_widgets": [
+						{
+							"node": "mesh_triplanar",
+							"widget": "param0"
+						},
+						{
+							"node": "mesh_triplanar_2",
+							"widget": "param0"
+						},
+						{
+							"node": "mesh_triplanar_3",
+							"widget": "param0"
+						},
+						{
+							"node": "mesh_triplanar_4",
+							"widget": "param0"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				}
+			]
+		}
+	],
+	"parameters": {
+		"param0": 32
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

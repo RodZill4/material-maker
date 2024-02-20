@@ -1,8 +1,8 @@
 extends Node
 
-export var item_type : String
-export var item_category : String
-export var icon : Texture
+@export var item_type : String
+@export var item_category : String
+@export var icon : Texture2D
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
 	var output_name = "$(name_uv)_n%d" % scene.index

@@ -1,4 +1,4 @@
-tool
+@tool
 class_name MMPaths
 
 const WEBSITE_ADDRESS : String = "https://www.materialmaker.org"

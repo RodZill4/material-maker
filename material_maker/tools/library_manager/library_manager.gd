@@ -1,12 +1,12 @@
 extends Node
 
-export var base_lib_name : String = ""
-export var base_lib : String = ""
-export var alt_base_lib : String = ""
-export var user_lib_name : String = ""
-export var user_lib : String = ""
-export var sections : PoolStringArray
-export var config_section : String = ""
+@export var base_lib_name : String = ""
+@export var base_lib : String = ""
+@export var alt_base_lib : String = ""
+@export var user_lib_name : String = ""
+@export var user_lib : String = ""
+@export var sections : PackedStringArray
+@export var config_section : String = ""
 
 var section_icons : Dictionary = {}
 var section_colors : Dictionary = {}
@@ -16,19 +16,19 @@ var node_sections : Dictionary = {}
 var disabled_libraries : Array = []
 var disabled_sections : Array = []
 
-export var base_aliases_file_name : String = ""
-export var alt_base_aliases_file_name : String = ""
-export var user_aliases_file_name : String = ""
+@export var base_aliases_file_name : String = ""
+@export var alt_base_aliases_file_name : String = ""
+@export var user_aliases_file_name : String = ""
 var base_item_aliases : Dictionary = {}
 var user_item_aliases : Dictionary = {}
 
 var item_usage : Dictionary
-export var item_usage_file : String = ""
+@export var item_usage_file : String = ""
 
 const LIBRARY = preload("res://material_maker/tools/library_manager/library.gd")
 
 
-signal libraries_changed
+signal libraries_changed()
 
 
 func _ready():
@@ -40,11 +40,10 @@ func _ready():
 func _exit_tree():
 	if item_usage_file == "":
 		return
-	Directory.new().make_dir_recursive(item_usage_file.get_base_dir())
-	var file = File.new()
-	if file.open(item_usage_file, File.WRITE) == OK:
-		file.store_string(JSON.print(item_usage, "\t", true))
-		file.close()
+	DirAccess.open("res://").make_dir_recursive(item_usage_file.get_base_dir())
+	var file = FileAccess.open(item_usage_file, FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify(item_usage, "\t", true))
 
 # Libraries
 
@@ -64,7 +63,7 @@ func init_libraries() -> void:
 	add_child(library)
 	library.generate_node_sections(node_sections)
 	init_section_icons()
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	if mm_globals.config.has_section_key(config_section, "libraries"):
 		for p in mm_globals.config.get_value(config_section, "libraries"):
 			library = LIBRARY.new()
@@ -76,18 +75,19 @@ func init_libraries() -> void:
 	if mm_globals.config.has_section_key(config_section, "disabled_sections"):
 		disabled_sections = mm_globals.config.get_value(config_section, "disabled_sections")
 	emit_signal("libraries_changed")
+	print("Libraries updated ("+name+")")
 
 func compare_item_usage(i1, i2) -> int:
 	var u1 = item_usage[i1.name] if item_usage.has(i1.name) else 0
 	var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
 	return u1 - u2
 
-func get_item(name : String):
+func get_item(item_name : String):
 	for skip_disabled in [ true, false ]:
 		for li in get_child_count():
 			var l = get_child(li)
 			if ! skip_disabled or disabled_libraries.find(l.library_path) == -1:
-				var item = l.get_item(name)
+				var item = l.get_item(item_name)
 				if item != null:
 					return item
 	return null
@@ -134,11 +134,11 @@ func has_library(path : String) -> bool:
 			return true
 	return false
 
-func create_library(path : String, name : String) -> void:
+func create_library(path : String, library_name : String) -> void:
 	if has_library(path):
 		return
 	var library = LIBRARY.new()
-	library.create_library(path, name)
+	library.create_library(path, library_name)
 	add_child(library)
 	save_library_list()
 
@@ -189,18 +189,15 @@ func rename_item_in_library(index : int, old_name : String, new_name : String) -
 	get_child(index).rename_item(old_name, new_name)
 	emit_signal("libraries_changed")
 
-func update_item_icon_in_library(index : int, name : String, icon : Image) -> void:
-	get_child(index).update_item_icon(name, icon)
+func update_item_icon_in_library(index : int, item_name : String, icon : Image) -> void:
+	get_child(index).update_item_icon(item_name, icon)
 	emit_signal("libraries_changed")
 
 # Section icons
 
 func init_section_icons() -> void:
-	var atlas = preload("res://material_maker/icons/icons.tres")
-	var atlas_image = atlas.get_data()
-	if atlas_image == null and atlas is ProxyTexture:
-		atlas_image = atlas.base.get_data()
-	atlas_image.lock()
+	var atlas = load("res://material_maker/icons/icons.tres")
+	var atlas_image = atlas.get_image()
 	for i in sections.size():
 		var x = 128+32*(i%4)
 		var y = 32+32*(i/4)
@@ -209,7 +206,7 @@ func init_section_icons() -> void:
 		texture.region = Rect2(x, y, 32, 32)
 		section_icons[sections[i]] = texture
 		section_colors[sections[i]] = atlas_image.get_pixel(x, y)
-	atlas_image.unlock()
+
 
 func get_sections() -> Array:
 	var section_list : Array = Array()
@@ -218,17 +215,16 @@ func get_sections() -> Array:
 			section_list.push_back(s)
 	return section_list
 
-func get_section_icon(section_name : String) -> Texture:
+func get_section_icon(section_name : String) -> Texture2D:
 	return section_icons[section_name] if section_icons.has(section_name) else null
 
 func get_section_color(section_name : String) -> Color:
-	var color = null
 	if section_colors.has(section_name):
 		return section_colors[section_name]
 	for s in section_colors.keys():
 		if TranslationServer.translate(s) == section_name:
 			return section_colors[s]
-	return color
+	return Color(0.0, 0.0, 0.0, 0.0)
 
 func is_section_enabled(section_name : String) -> bool:
 	return disabled_sections.find(section_name) == -1
@@ -248,24 +244,26 @@ func toggle_section(section_name : String) -> bool:
 
 func init_aliases() -> void:
 	base_item_aliases = load_aliases(base_aliases_file_name)
-	if base_item_aliases.empty():
+	if base_item_aliases.is_empty():
 		base_item_aliases = load_aliases(alt_base_aliases_file_name)
 	user_item_aliases = load_aliases(user_aliases_file_name)
 
 func load_aliases(path : String) -> Dictionary:
 	path = path.replace("root://", MMPaths.get_resource_dir()+"/")
-	var file = File.new()
-	if ! file.open(path, File.READ) == OK:
+	var file = FileAccess.open(path, FileAccess.READ)
+	if file == null:
 		return {}
-	return parse_json(file.get_as_text())
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(file.get_as_text())
+	return test_json_conv.get_data()
 
 func save_aliases() -> void:
 	if user_aliases_file_name == "":
 		return
-	Directory.new().make_dir_recursive(user_aliases_file_name.get_base_dir())
-	var file = File.new()
-	if file.open(user_aliases_file_name, File.WRITE) == OK:
-		file.store_string(JSON.print(user_item_aliases, "\t", true))
+	DirAccess.open("res://").make_dir_recursive(user_aliases_file_name.get_base_dir())
+	var file = FileAccess.open(user_aliases_file_name, FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify(user_item_aliases, "\t", true))
 		file.close()
 
 func get_aliases(item : String) -> String:
@@ -280,17 +278,18 @@ func set_aliases(item : String, aliases : String) -> void:
 	for i in aliases.split(",", false):
 		if list.find(i) == -1:
 			list.push_back(i)
-	aliases = PoolStringArray(list).join(",")
+	aliases = ",".join(PackedStringArray(list))
 	user_item_aliases[item] = aliases
 	save_aliases()
 
 # Sort items by usage in item menu
 
 func init_usage() -> void:
-	var file = File.new()
-	if ! file.open(item_usage_file, File.READ) == OK:
-		return
-	item_usage = parse_json(file.get_as_text())
+	var file = FileAccess.open(item_usage_file, FileAccess.READ)
+	if file != null:
+		var json = JSON.new()
+		if json.parse(file.get_as_text()) == OK:
+			item_usage = json.get_data()
 
 func item_created(item : String) -> void:
 	if item_usage.has(item):

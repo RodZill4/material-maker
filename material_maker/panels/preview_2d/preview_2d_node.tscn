@@ -1,19 +1,20 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://bvqlgi1dn3we2"]
 
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d_node.gd" type="Script" id=2]
+[ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d_node.gd" id="2"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+render_priority = 0
+shader = SubResource("1")
 
-[node name="Preview2D" instance=ExtResource( 1 )]
-material = SubResource( 2 )
+[node name="Preview2D" instance=ExtResource("1")]
+material = SubResource("2")
 mouse_filter = 0
-script = ExtResource( 2 )
+script = ExtResource("2")
 shader = "uniform vec2 preview_2d_size;
 
 void fragment() {
@@ -28,16 +29,11 @@ void fragment() {
 }"
 
 [node name="ContextMenu" type="PopupMenu" parent="." index="0"]
-margin_right = 109.0
-margin_bottom = 52.0
 
-[node name="Export" type="PopupMenu" parent="ContextMenu" index="1"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="Export" type="PopupMenu" parent="ContextMenu" index="3"]
 
-[node name="Reference" type="PopupMenu" parent="ContextMenu" index="2"]
-margin_right = 91.0
-margin_bottom = 88.0
+[node name="Reference" type="PopupMenu" parent="ContextMenu" index="4"]
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]

@@ -1,20 +1,22 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=3 uid="uid://cyoldq2plwsx0"]
 
-[ext_resource path="res://material_maker/windows/export_animation/export_animation.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/widgets/size_option_button/size_option_button.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://material_maker/windows/export_animation/export_animation.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2"]
+[ext_resource type="Script" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="3"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id="2"]
+render_priority = 0
+shader = SubResource("1")
 
-[sub_resource type="Shader" id=3]
+[sub_resource type="Shader" id="3"]
 
-[sub_resource type="ShaderMaterial" id=4]
-shader = SubResource( 3 )
+[sub_resource type="ShaderMaterial" id="4"]
+render_priority = 0
+shader = SubResource("3")
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id="5"]
 code = "shader_type canvas_item;
 
 uniform sampler2D begin;
@@ -27,59 +29,62 @@ void fragment() {
 
 "
 
-[sub_resource type="ViewportTexture" id=6]
-viewport_path = NodePath("VBox/Images/HBox/Begin/Viewport")
+[sub_resource type="ViewportTexture" id="6"]
+viewport_path = NodePath("VBox/Images/HBox/Begin/SubViewport")
 
-[sub_resource type="ViewportTexture" id=7]
-viewport_path = NodePath("VBox/Images/HBox/End/Viewport")
+[sub_resource type="ViewportTexture" id="7"]
+viewport_path = NodePath("VBox/Images/HBox/End/SubViewport")
 
-[sub_resource type="ShaderMaterial" id=8]
+[sub_resource type="ShaderMaterial" id="8"]
 resource_local_to_scene = true
-shader = SubResource( 5 )
-shader_param/begin = SubResource( 6 )
-shader_param/end = SubResource( 7 )
+shader = SubResource("5")
+shader_parameter/begin = SubResource("6")
+shader_parameter/end = SubResource("7")
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id="9"]
 resource_name = "show"
 length = 0.3
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Diff:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ false, true ]
+"values": [false, true]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("Diff:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.1, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Shader" id=10]
-
-[sub_resource type="ShaderMaterial" id=11]
-shader = SubResource( 10 )
-
-[node name="ExportAnimation" type="WindowDialog"]
-margin_right = 785.0
-margin_bottom = 320.0
-window_title = "Export animation"
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kxr6u"]
+_data = {
+"show": SubResource("9")
 }
+
+[sub_resource type="Shader" id="10"]
+
+[sub_resource type="ShaderMaterial" id="11"]
+render_priority = 0
+shader = SubResource("10")
+
+[node name="ExportAnimation" type="Window"]
+title = "Export animation"
+position = Vector2i(0, 36)
+size = Vector2i(750, 300)
+script = ExtResource("1")
 shader = "uniform float mm_chunk_size = 1.0;
 uniform vec2 mm_chunk_offset = vec2(0.0);
 
@@ -88,61 +93,41 @@ void fragment() {
 }"
 
 [node name="VBox" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -114.0
-margin_bottom = -81.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = -114.0
+offset_bottom = -81.0
 
 [node name="Settings" type="HBoxContainer" parent="VBox"]
-margin_right = 786.0
-margin_bottom = 24.0
+layout_mode = 2
 
 [node name="SizeLabel" type="Label" parent="VBox/Settings"]
-margin_top = 5.0
-margin_right = 30.0
-margin_bottom = 19.0
+layout_mode = 2
 text = "Size:"
 
 [node name="Size" type="OptionButton" parent="VBox/Settings"]
-margin_left = 34.0
-margin_right = 134.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 100, 0 )
-focus_neighbour_left = NodePath("../Spritesheet")
-focus_neighbour_right = NodePath("../Begin")
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+focus_neighbor_left = NodePath("../Spritesheet")
+focus_neighbor_right = NodePath("../Begin")
 focus_next = NodePath("../Begin")
 focus_previous = NodePath("../../Buttons/Close")
-script = ExtResource( 3 )
+script = ExtResource("3")
 size_value = 8
 
 [node name="Space1" type="Control" parent="VBox/Settings"]
-margin_left = 138.0
-margin_right = 158.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 20, 0 )
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
 [node name="BeginLabel" type="Label" parent="VBox/Settings"]
-margin_left = 162.0
-margin_top = 5.0
-margin_right = 202.0
-margin_bottom = 19.0
+layout_mode = 2
 text = "Begin:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Begin" parent="VBox/Settings" instance=ExtResource( 2 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 206.0
-margin_right = 264.0
-margin_bottom = 24.0
-focus_neighbour_left = NodePath("../Size")
-focus_neighbour_right = NodePath("../End")
+[node name="Begin" parent="VBox/Settings" instance=ExtResource("2")]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Size")
+focus_neighbor_right = NodePath("../End")
 focus_next = NodePath("../End")
 focus_previous = NodePath("../Size")
 value = 0.0
@@ -150,30 +135,17 @@ max_value = 10.0
 float_only = true
 
 [node name="Space2" type="Control" parent="VBox/Settings"]
-margin_left = 268.0
-margin_right = 288.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 20, 0 )
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
 [node name="EndLabel" type="Label" parent="VBox/Settings"]
-margin_left = 292.0
-margin_top = 5.0
-margin_right = 319.0
-margin_bottom = 19.0
+layout_mode = 2
 text = "End:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="End" parent="VBox/Settings" instance=ExtResource( 2 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 323.0
-margin_right = 381.0
-margin_bottom = 24.0
-focus_neighbour_left = NodePath("../Begin")
-focus_neighbour_right = NodePath("../Images")
+[node name="End" parent="VBox/Settings" instance=ExtResource("2")]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Begin")
+focus_neighbor_right = NodePath("../Images")
 focus_next = NodePath("../Images")
 focus_previous = NodePath("../Begin")
 value = 1.0
@@ -181,30 +153,17 @@ max_value = 10.0
 float_only = true
 
 [node name="Space3" type="Control" parent="VBox/Settings"]
-margin_left = 385.0
-margin_right = 405.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 20, 0 )
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
 [node name="ImagesLabel" type="Label" parent="VBox/Settings"]
-margin_left = 409.0
-margin_top = 5.0
-margin_right = 460.0
-margin_bottom = 19.0
+layout_mode = 2
 text = "Images:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Images" parent="VBox/Settings" instance=ExtResource( 2 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 464.0
-margin_right = 522.0
-margin_bottom = 24.0
-focus_neighbour_left = NodePath("../End")
-focus_neighbour_right = NodePath("../Spritesheet")
+[node name="Images" parent="VBox/Settings" instance=ExtResource("2")]
+layout_mode = 2
+focus_neighbor_left = NodePath("../End")
+focus_neighbor_right = NodePath("../Spritesheet")
 focus_next = NodePath("../Spritesheet")
 focus_previous = NodePath("../End")
 value = 10.0
@@ -214,181 +173,141 @@ step = 1.0
 float_only = true
 
 [node name="Space4" type="Control" parent="VBox/Settings"]
-margin_left = 526.0
-margin_right = 546.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 20, 0 )
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
 [node name="Spritesheet" type="OptionButton" parent="VBox/Settings"]
-margin_left = 550.0
-margin_right = 638.0
-margin_bottom = 24.0
-focus_neighbour_left = NodePath("../Images")
-focus_neighbour_right = NodePath("../Size")
+layout_mode = 2
+focus_neighbor_left = NodePath("../Images")
+focus_neighbor_right = NodePath("../Size")
 focus_next = NodePath("../../Buttons/Export")
 focus_previous = NodePath("../Images")
-text = "PNG files"
-items = [ "PNG files", null, false, 0, null, "1 line spritesheet", null, false, 1, null, "2 lines spritesheet", null, false, 2, null, "4 lines spritesheet", null, false, 4, null, "1 column spritesheet", null, false, 1001, null ]
+item_count = 5
 selected = 0
+popup/item_0/text = "PNG files"
+popup/item_0/id = 0
+popup/item_1/text = "1 line spritesheet"
+popup/item_1/id = 1
+popup/item_2/text = "2 lines spritesheet"
+popup/item_2/id = 2
+popup/item_3/text = "4 lines spritesheet"
+popup/item_3/id = 4
+popup/item_4/text = "1 column spritesheet"
+popup/item_4/id = 1001
 
 [node name="Images" type="MarginContainer" parent="VBox"]
-margin_top = 28.0
-margin_right = 786.0
-margin_bottom = 292.0
-custom_constants/margin_right = 4
-custom_constants/margin_top = 4
-custom_constants/margin_left = 4
-custom_constants/margin_bottom = 4
+layout_mode = 2
 
 [node name="HBox" type="HBoxContainer" parent="VBox/Images"]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 782.0
-margin_bottom = 260.0
-custom_constants/separation = 5
+layout_mode = 2
 
-[node name="Begin" type="ViewportContainer" parent="VBox/Images/HBox"]
-margin_right = 256.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 256, 256 )
+[node name="Begin" type="SubViewportContainer" parent="VBox/Images/HBox"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
 mouse_filter = 2
-input_pass_on_modal_close_click = false
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/Begin"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -33.0
-margin_right = 33.0
-margin_bottom = 14.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_as_outline = 1
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
 text = "First frame"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
-[node name="Viewport" type="Viewport" parent="VBox/Images/HBox/Begin"]
-size = Vector2( 256, 256 )
+[node name="SubViewport" type="SubViewport" parent="VBox/Images/HBox/Begin"]
 handle_input_locally = false
-render_target_update_mode = 0
 gui_disable_input = true
+size = Vector2i(256, 256)
+render_target_update_mode = 4
 
-[node name="Image" type="ColorRect" parent="VBox/Images/HBox/Begin/Viewport"]
-material = SubResource( 2 )
-margin_right = 256.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 256, 256 )
+[node name="Image" type="ColorRect" parent="VBox/Images/HBox/Begin/SubViewport"]
+material = SubResource("2")
+custom_minimum_size = Vector2(256, 256)
+offset_right = 256.0
+offset_bottom = 256.0
+color = Color(0, 0, 0, 1)
 
 [node name="Animated" type="ColorRect" parent="VBox/Images/HBox"]
-material = SubResource( 4 )
-margin_left = 261.0
-margin_right = 517.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 256, 256 )
+material = SubResource("4")
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/Animated"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -33.0
-margin_right = 33.0
-margin_bottom = 14.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_as_outline = 1
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 26.0
+grow_horizontal = 2
 text = "Animation"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Diff" type="ColorRect" parent="VBox/Images/HBox/Animated"]
-modulate = Color( 1, 1, 1, 0 )
-material = SubResource( 8 )
+modulate = Color(1, 1, 1, 0)
+material = SubResource("8")
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/Animated/Diff"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -34.5
-margin_right = 34.5
-margin_bottom = 14.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_as_outline = 1
+offset_left = -34.5
+offset_right = 34.5
+offset_bottom = 14.0
 text = "Difference"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBox/Images/HBox/Animated"]
-anims/show = SubResource( 9 )
+libraries = {
+"": SubResource("AnimationLibrary_kxr6u")
+}
 
 [node name="Timer" type="Timer" parent="VBox/Images/HBox/Animated"]
 one_shot = true
 
-[node name="End" type="ViewportContainer" parent="VBox/Images/HBox"]
-margin_left = 522.0
-margin_right = 778.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 256, 256 )
+[node name="End" type="SubViewportContainer" parent="VBox/Images/HBox"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
 mouse_filter = 2
-input_pass_on_modal_close_click = false
 
 [node name="Label" type="Label" parent="VBox/Images/HBox/End"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -33.0
-margin_right = 36.0
-margin_bottom = 14.0
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
-custom_constants/shadow_offset_x = 1
-custom_constants/shadow_as_outline = 1
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
 text = "Last frame"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
-[node name="Viewport" type="Viewport" parent="VBox/Images/HBox/End"]
-size = Vector2( 256, 256 )
+[node name="SubViewport" type="SubViewport" parent="VBox/Images/HBox/End"]
 handle_input_locally = false
-render_target_update_mode = 0
 gui_disable_input = true
+size = Vector2i(256, 256)
+render_target_update_mode = 4
 
-[node name="Image" type="ColorRect" parent="VBox/Images/HBox/End/Viewport"]
-material = SubResource( 11 )
-margin_right = 256.0
-margin_bottom = 256.0
-rect_min_size = Vector2( 256, 256 )
+[node name="Image" type="ColorRect" parent="VBox/Images/HBox/End/SubViewport"]
+material = SubResource("11")
+custom_minimum_size = Vector2(256, 256)
+offset_right = 256.0
+offset_bottom = 256.0
+color = Color(0, 0, 0, 1)
 
 [node name="Buttons" type="HBoxContainer" parent="VBox"]
-margin_left = 311.0
-margin_top = 296.0
-margin_right = 475.0
-margin_bottom = 316.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Export" type="Button" parent="VBox/Buttons"]
-margin_right = 80.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 80, 0 )
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
 focus_next = NodePath("../Close")
 focus_previous = NodePath("../../Settings/Spritesheet")
 text = "Export"
 
 [node name="Close" type="Button" parent="VBox/Buttons"]
-margin_left = 84.0
-margin_right = 164.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 80, 0 )
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
 focus_next = NodePath("../../Settings/Size")
 focus_previous = NodePath("../Export")
 text = "Close"
 
-[connection signal="popup_hide" from="." to="." method="queue_free"]
+[connection signal="close_requested" from="." to="." method="queue_free"]
 [connection signal="minimum_size_changed" from="VBox" to="." method="_on_VBox_minimum_size_changed"]
 [connection signal="value_changed" from="VBox/Settings/Begin" to="." method="_on_Begin_value_changed"]
 [connection signal="value_changed" from="VBox/Settings/End" to="." method="_on_End_value_changed"]

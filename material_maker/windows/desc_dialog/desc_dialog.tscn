@@ -1,79 +1,54 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dqsbfik7ccygu"]
 
-[ext_resource path="res://material_maker/windows/desc_dialog/desc_dialog.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/desc_dialog/desc_dialog.gd" id="1"]
 
-[node name="WindowDialog" type="WindowDialog"]
-margin_right = 493.0
-margin_bottom = 275.0
-window_title = "Parameter description"
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Window" type="Window"]
+position = Vector2i(0, 36)
+size = Vector2i(300, 150)
+script = ExtResource("1")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 4.0
-margin_right = -4.0
-margin_bottom = -4.0
-custom_constants/separation = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 485.0
-margin_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 115.0
-margin_bottom = 19.0
+layout_mode = 2
 text = "Short Description:"
 
 [node name="ShortDesc" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
-margin_left = 119.0
-margin_right = 485.0
-margin_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LongDesc" type="TextEdit" parent="VBoxContainer"]
-margin_top = 30.0
-margin_right = 485.0
-margin_bottom = 241.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-wrap_enabled = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 247.0
-margin_right = 485.0
-margin_bottom = 267.0
-
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2"]
-margin_right = 304.0
-margin_bottom = 20.0
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.54
+layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="OK" type="Button" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 308.0
-margin_right = 394.0
-margin_bottom = 20.0
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 size_flags_horizontal = 3
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 398.0
-margin_right = 485.0
-margin_bottom = 20.0
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel"
 
-[connection signal="minimum_size_changed" from="." to="." method="_on_WindowDialog_minimum_size_changed"]
-[connection signal="popup_hide" from="." to="." method="_on_WindowDialog_popup_hide"]
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Cancel" to="." method="_on_Cancel_pressed"]

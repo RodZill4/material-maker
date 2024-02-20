@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://gqucl1dthw6d"]
+
+[ext_resource type="Script" path="res://addons/flexible_layout/flexible_overlay.gd" id="1_5tomg"]
+[ext_resource type="Texture2D" uid="uid://c2ljin3axj2sd" path="res://addons/flexible_layout/arrow.svg" id="2_0tnc1"]
+
+[node name="Control" type="ColorRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.501961, 0.501961, 0.501961, 0.501961)
+script = ExtResource("1_5tomg")
+
+[node name="Arrow" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(32, 32)
+texture = ExtResource("2_0tnc1")
+
+[node name="Rect" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.501961)

@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=3 uid="uid://cj6b1r8b6jel3"]
 
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" type="Script" id=3]
+[ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" id="3"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "shader_type spatial;
 render_mode unshaded;
 
@@ -20,46 +20,56 @@ void fragment() {
 	ALBEDO = position;
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-shader_param/aabb_position = null
-shader_param/aabb_size = null
+[sub_resource type="ShaderMaterial" id="2"]
+render_priority = 0
+shader = SubResource("1")
+shader_parameter/aabb_position = null
+shader_parameter/aabb_size = null
 
-[node name="Preview3D" instance=ExtResource( 1 )]
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 0.0
-margin_bottom = 0.0
-rect_min_size = Vector2( 250, 200 )
-script = ExtResource( 3 )
-click_material = SubResource( 2 )
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
+
+[sub_resource type="Sky" id="Sky_wye7d"]
+sky_material = SubResource("PanoramaSkyMaterial_40ogr")
+
+[sub_resource type="Environment" id="Environment_qxxdb"]
+background_mode = 2
+sky = SubResource("Sky_wye7d")
+
+[sub_resource type="World3D" id="World3D_3xlky"]
+environment = SubResource("Environment_qxxdb")
+
+[node name="Preview3D" instance=ExtResource("1")]
+custom_minimum_size = Vector2(250, 200)
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+script = ExtResource("3")
+click_material = SubResource("2")
 
 [node name="MaterialPreview" parent="." index="0"]
-size = Vector2( 1280, 720 )
+world_3d = SubResource("World3D_3xlky")
+size = Vector2i(250, 200)
 
 [node name="TextureRect" type="TextureRect" parent="." index="1"]
 visible = false
-margin_right = 187.0
-margin_bottom = 22.0
+layout_mode = 2
 mouse_filter = 2
-expand = true
+expand_mode = 1
 flip_v = true
 
 [node name="UI" type="PanelContainer" parent="." index="2"]
-margin_right = 14.0
-margin_bottom = 14.0
+layout_mode = 2
 
-[node name="Preview3DUI" parent="UI" index="0" instance=ExtResource( 2 )]
-anchor_right = 0.0
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 194.0
-margin_bottom = 29.0
+[node name="Preview3DUI" parent="UI" index="0" instance=ExtResource("2")]
+layout_mode = 2
 
 [node name="PopupMenu" type="PopupMenu" parent="." index="4"]
-margin_right = 20.0
-margin_bottom = 20.0
-items = [ "Reset center", null, 0, false, false, 0, 0, null, "", false, "Center on clicked surface", null, 0, false, false, 1, 0, null, "", false ]
+item_count = 2
+item_0/text = "Reset center"
+item_0/id = 0
+item_1/text = "Center on clicked surface"
+item_1/id = 1
 
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]

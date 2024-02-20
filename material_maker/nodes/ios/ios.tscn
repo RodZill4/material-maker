@@ -1,11 +1,8 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://d1j47uuqrti7e"]
 
-[ext_resource path="res://material_maker/nodes/ios/ios.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/nodes/ios/ios.gd" id="1"]
 
 [node name="IOs" type="GraphNode"]
-margin_right = 32.0
-margin_bottom = 29.0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = 32.0
+offset_bottom = 29.0
+script = ExtResource("1")

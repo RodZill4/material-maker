@@ -1,18 +1,18 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dn262nq5pxuwx"]
 
-[ext_resource path="res://material_maker/windows/progress_window/progress_window.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/progress_window/progress_window.gd" id="1"]
 
-[node name="ProgressWindow" type="PopupDialog"]
+[node name="ProgressWindow" type="Popup"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -293.0
-margin_top = -163.0
-margin_right = 5.0
-margin_bottom = -98.0
-popup_exclusive = true
-script = ExtResource( 1 )
+offset_left = -293.0
+offset_top = -163.0
+offset_right = 5.0
+offset_bottom = -98.0
+exclusive = true
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -25,21 +25,21 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 291.0
-margin_bottom = 58.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 291.0
+offset_bottom = 58.0
 
 [node name="Step" type="Label" parent="PanelContainer/VBoxContainer"]
-margin_top = 9.0
-margin_right = 284.0
-margin_bottom = 23.0
+offset_top = 9.0
+offset_right = 284.0
+offset_bottom = 23.0
 size_flags_vertical = 6
 text = "Doing this, doing that"
 align = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="PanelContainer/VBoxContainer"]
-margin_top = 37.0
-margin_right = 284.0
-margin_bottom = 51.0
+offset_top = 37.0
+offset_right = 284.0
+offset_bottom = 51.0
 rounded = true
