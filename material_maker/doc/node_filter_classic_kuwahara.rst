@@ -1,7 +1,6 @@
 Classic Kuwahara node
 ~~~~~~~~~~~~~~~~~~~~~
 
-
 The **Classic Kuwahara** node applies a simple edge-preserving smoothing filter to its input.
 
 .. image:: images/node_filter_classic_kuwahara.png
