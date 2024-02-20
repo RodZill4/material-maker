@@ -1,16 +1,16 @@
 extends PopupPanel
 
-var mesh : MeshInstance
+var mesh : MeshInstance3D
 
-func configure_mesh(m : MeshInstance) -> void:
+func configure_mesh(m : MeshInstance3D) -> void:
 	mesh = m
 	$VBoxContainer/UVScale/X.value = mesh.uv_scale.x
 	$VBoxContainer/UVScale/Y.value = mesh.uv_scale.y
 	if mesh.can_tesselate:
-		$VBoxContainer/Tesselated.pressed = mesh.tesselated
+		$VBoxContainer/Tesselated.button_pressed = mesh.tesselated
 	else:
 		$VBoxContainer/Tesselated.disabled = true
-	popup(Rect2(get_global_mouse_position(), get_minimum_size()))
+	popup(Rect2(get_mouse_position(), $VBoxContainer.get_minimum_size()))
 
 func _on_MeshConfiguration_popup_hide():
 	queue_free()

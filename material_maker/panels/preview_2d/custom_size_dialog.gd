@@ -1,4 +1,4 @@
-extends WindowDialog
+extends Window
 
 
 signal close(apply)
@@ -9,7 +9,7 @@ func ask() -> Dictionary:
 	popup_centered()
 	_on_WindowDialog_minimum_size_changed()
 	var rv : Dictionary
-	if yield(self, "close"):
+	if await self.close:
 		rv = { size = Vector2($MarginContainer/VBoxContainer/GridContainer/Width.value, $MarginContainer/VBoxContainer/GridContainer/Height.value) }
 	queue_free()
 	return rv
@@ -25,4 +25,4 @@ func _on_WindowDialog_popup_hide():
 
 
 func _on_WindowDialog_minimum_size_changed():
-	rect_size = $MarginContainer.get_combined_minimum_size()
+	size = $MarginContainer.get_combined_minimum_size()

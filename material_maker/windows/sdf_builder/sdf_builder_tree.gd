@@ -6,9 +6,9 @@ signal drop_item(item, dest, position)
 
 func _ready():
 	set_column_expand(1, false)
-	set_column_min_width(1, 28)
+	set_column_custom_minimum_width(1, 28)
 	set_column_expand(2, false)
-	set_column_min_width(2, 28)
+	set_column_custom_minimum_width(2, 28)
 
 func get_sdf_item_type(item : TreeItem) -> Object:
 	if item == null or not item.has_meta("scene"):
@@ -29,7 +29,7 @@ func get_nearest_parent(item : TreeItem, type : String) -> TreeItem:
 		item = item.get_parent()
 	return item
 
-func get_drag_data(position):
+func _get_drag_data(position):
 	var item : TreeItem = get_item_at_position(position)
 	if item == null:
 		return null
@@ -52,18 +52,17 @@ func get_valid_children_types(parent : TreeItem):
 	var valid_children_types : Array = []
 	var parent_type : Object = get_sdf_item_type(parent)
 	if parent_type == null:
-		var first_child : TreeItem = get_root().get_children()
-		if first_child == null:
+		if get_root().get_children().is_empty():
 			valid_children_types = [ "SDF2D", "SDF3D" ]
 		else:
-			valid_children_types = [ get_sdf_item_type_name(first_child) ]
+			valid_children_types = [ get_sdf_item_type_name(get_root().get_children()[0]) ]
 	elif parent_type.has_method("get_children_types"):
 		valid_children_types = parent_type.get_children_types()
 	else:
 		valid_children_types.push_back(parent_type.item_category)
 	return valid_children_types
 
-func can_drop_data(position, data):
+func _can_drop_data(position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
 		var destination : TreeItem = get_item_at_position(position)
 		if destination != null and get_drop_section_at_position(position) != 0:
@@ -77,15 +76,13 @@ func can_drop_data(position, data):
 
 func get_item_index(item : TreeItem) -> int:
 	var index = 0
-	var i = item.get_parent().get_children()
-	while i != null:
+	for i in item.get_parent().get_children():
 		if i == item:
 			return index
-		i = i.get_next()
 		index += 1
 	return -1
 
-func drop_data(position, data):
+func _drop_data(position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
 		var item = get_item_at_position(position)
 		match get_drop_section_at_position(position):

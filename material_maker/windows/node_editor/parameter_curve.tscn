@@ -1,26 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://ew3gj3j2u7w2"]
 
-[ext_resource path="res://material_maker/widgets/curve_edit/curve_edit.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/windows/node_editor/parameter_curve.gd" type="Script" id=2]
+[ext_resource type="PackedScene" uid="uid://cvv8rhglg3jlm" path="res://material_maker/widgets/curve_edit/curve_edit.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_curve.gd" id="2"]
 
 [node name="curve" type="HBoxContainer"]
-margin_right = 148.0
-margin_bottom = 24.0
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = 148.0
+offset_bottom = 24.0
+script = ExtResource("2")
 
 [node name="LabelDefault" type="Label" parent="."]
-margin_top = 8.0
-margin_right = 50.0
-margin_bottom = 22.0
+layout_mode = 2
 text = "Default:"
 
-[node name="Default" parent="." instance=ExtResource( 1 )]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 54.0
-margin_right = 114.0
-margin_bottom = 30.0
+[node name="Default" parent="." instance=ExtResource("1")]
+layout_mode = 2

@@ -1,28 +1,28 @@
-extends MeshInstance
+extends MeshInstance3D
 
-export var can_tesselate : bool = true
+@export var can_tesselate : bool = true
 
-export var uv_scale : Vector2 = Vector2(1, 1) setget set_uv_scale
-export var tesselated : bool = false setget set_tesselated
+@export var uv_scale : Vector2 = Vector2(1, 1): set = set_uv_scale
+@export var tesselated : bool = false: set = set_tesselated
 
 
 func _ready():
 	var m : ShaderMaterial = ShaderMaterial.new()
 	m.shader = Shader.new()
-	set_surface_material(0, m)
-	m.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
+	set_surface_override_material(0, m)
+	m.set_shader_parameter("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 	update_mesh()
 
 func set_uv_scale(s : Vector2) -> void:
 	if s != uv_scale:
 		uv_scale = s
-		var material = get_surface_material(0)
+		var material = get_surface_override_material(0)
 		if material != null:
-			if material is SpatialMaterial:
+			if material is StandardMaterial3D:
 				material.uv1_scale.x = uv_scale.x
 				material.uv1_scale.y = uv_scale.y
 			elif material is ShaderMaterial:
-				material.set_shader_param("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
+				material.set_shader_parameter("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 
 func set_tesselated(t : bool) -> void:
 	var new_tesselated = t && can_tesselate
@@ -32,7 +32,7 @@ func set_tesselated(t : bool) -> void:
 	update_mesh()
 	# Force material update (this is not need at startup)
 	var parent = self
-	while ! (parent is ViewportContainer):
+	while ! (parent is SubViewportContainer):
 		parent = parent.get_parent()
 	parent.emit_signal("need_update", [ parent ])
 
@@ -42,7 +42,7 @@ func update_mesh() -> void:
 	if tesselated:
 		var tesselation_detail: int = mm_globals.main_window.preview_tesselation_detail
 		match mesh.get_class():
-			"CubeMesh", "PrismMesh":
+			"BoxMesh", "PrismMesh":
 				mesh.subdivide_width = tesselation_detail
 				mesh.subdivide_height = tesselation_detail
 				mesh.subdivide_depth = tesselation_detail
@@ -59,7 +59,7 @@ func update_mesh() -> void:
 				push_error("Unknown tesselated mesh type: %s" % mesh.get_class())
 	else:
 		match mesh.get_class():
-			"CubeMesh", "PrismMesh":
+			"BoxMesh", "PrismMesh":
 				mesh.subdivide_width = 0
 				mesh.subdivide_height = 0
 				mesh.subdivide_depth = 0

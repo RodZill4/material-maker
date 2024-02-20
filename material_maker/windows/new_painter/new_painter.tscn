@@ -1,169 +1,189 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=3 uid="uid://cs6b524f2o614"]
 
-[ext_resource path="res://material_maker/widgets/size_option_button/size_option_button.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/windows/new_painter/new_painter.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/new_painter/new_painter.gd" id="2"]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="Shader" id="Shader_g4gcc"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.2.1.stable's StandardMaterial3D.
 
-[sub_resource type="Animation" id=2]
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo1 : source_color;
+uniform vec4 albedo2 : source_color;
+uniform float roughness : hint_range(0,1);
+uniform float specular;
+uniform float metallic;
+uniform float grid_size;
+
+void vertex() {
+}
+
+void fragment() {
+	ivec2 grid = ivec2(UV*grid_size);
+	ALBEDO = (((grid.x&1)^(grid.y&1)) == 0) ? albedo1.rgb : albedo2.rgb;
+	METALLIC = metallic;
+	ROUGHNESS = roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5x24r"]
+render_priority = 0
+shader = SubResource("Shader_g4gcc")
+shader_parameter/albedo1 = Color(1, 1, 1, 1)
+shader_parameter/albedo2 = Color(0.866667, 0.866667, 0.866667, 1)
+shader_parameter/roughness = 0.8
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/grid_size = 32.0
+
+[sub_resource type="World3D" id="World3D_pmwks"]
+
+[sub_resource type="BoxMesh" id="1"]
+
+[sub_resource type="Animation" id="2"]
 resource_name = "rotate"
 length = 10.0
-loop = true
+loop_mode = 1
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("MeshPivot:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 10 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
+"values": [Vector3(0, 0, 0), Vector3(0, 360, 0)]
 }
 
-[node name="NewPainterWindow" type="WindowDialog"]
-margin_right = 520.0
-margin_bottom = 288.0
-rect_min_size = Vector2( 400, 250 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-window_title = "New paint project"
-resizable = true
-script = ExtResource( 2 )
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_f1y4a"]
+_data = {
+"rotate": SubResource("2")
+}
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_elmmt"]
+
+[sub_resource type="Sky" id="Sky_stx2u"]
+sky_material = SubResource("ProceduralSkyMaterial_elmmt")
+
+[sub_resource type="Environment" id="Environment_gdou5"]
+background_mode = 2
+sky = SubResource("Sky_stx2u")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="NewPainterWindow" type="Window"]
+size = Vector2i(500, 300)
+script = ExtResource("2")
+mesh_material = SubResource("ShaderMaterial_5x24r")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(400, 250)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 400, 250 )
 
 [node name="Main" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 520.0
-margin_bottom = 256.0
+layout_mode = 2
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Main"]
-margin_right = 157.0
-margin_bottom = 256.0
+layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/Main/VBoxContainer"]
-margin_right = 157.0
-margin_bottom = 68.0
+layout_mode = 2
 columns = 2
 
 [node name="ModelFileLabel" type="Label" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
-margin_top = 3.0
-margin_right = 72.0
-margin_bottom = 17.0
+layout_mode = 2
 text = "Model:"
 
 [node name="ModelFile" type="Button" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
-margin_left = 76.0
-margin_right = 157.0
-margin_bottom = 20.0
+layout_mode = 2
 text = "Model file"
 clip_text = true
 
 [node name="ResolutionLabel" type="Label" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
-margin_top = 27.0
-margin_right = 72.0
-margin_bottom = 41.0
+layout_mode = 2
 text = "Resolution:"
 
 [node name="Resolution" type="OptionButton" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
-margin_left = 76.0
-margin_top = 24.0
-margin_right = 157.0
-margin_bottom = 44.0
-script = ExtResource( 1 )
+layout_mode = 2
+script = ExtResource("1")
 min_size = 8
 max_size = 12
 
 [node name="ProjectFileLabel2" type="Label" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
-margin_top = 51.0
-margin_right = 72.0
-margin_bottom = 65.0
+layout_mode = 2
 text = "Project:"
 
 [node name="ProjectFile" type="Button" parent="VBoxContainer/Main/VBoxContainer/GridContainer"]
-margin_left = 76.0
-margin_top = 48.0
-margin_right = 157.0
-margin_bottom = 68.0
+layout_mode = 2
 text = "Project file"
 clip_text = true
 
-[node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer/Main"]
-margin_left = 161.0
-margin_right = 520.0
-margin_bottom = 256.0
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Main"]
+layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
 
-[node name="Viewport" type="Viewport" parent="VBoxContainer/Main/ViewportContainer"]
-size = Vector2( 359, 256 )
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Main/SubViewportContainer"]
+own_world_3d = true
+world_3d = SubResource("World3D_pmwks")
 handle_input_locally = false
-render_target_update_mode = 0
+size = Vector2i(360, 257)
+render_target_update_mode = 4
 
-[node name="MeshPivot" type="Spatial" parent="VBoxContainer/Main/ViewportContainer/Viewport"]
+[node name="MeshPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
 
-[node name="MeshInstance" type="MeshInstance" parent="VBoxContainer/Main/ViewportContainer/Viewport/MeshPivot"]
-mesh = SubResource( 1 )
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport/MeshPivot"]
+cast_shadow = 0
+mesh = SubResource("1")
 skeleton = NodePath("../..")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Main/ViewportContainer/Viewport"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
+libraries = {
+"": SubResource("AnimationLibrary_f1y4a")
+}
 autoplay = "rotate"
-anims/rotate = SubResource( 2 )
 
-[node name="CameraPivot" type="Spatial" parent="VBoxContainer/Main/ViewportContainer/Viewport"]
-transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0 )
+[node name="CameraPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 
-[node name="Camera" type="Camera" parent="VBoxContainer/Main/ViewportContainer/Viewport/CameraPivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5 )
-far = 50.0
+[node name="Camera3D" type="Camera3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport/CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+far = 50.65
 
-[node name="Error" type="Label" parent="VBoxContainer/Main/ViewportContainer"]
-margin_left = 3.0
-margin_top = 3.0
-margin_right = 40.0
-margin_bottom = 14.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+[node name="WorldEnvironment" type="WorldEnvironment" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
+environment = SubResource("Environment_gdou5")
+
+[node name="Light" type="DirectionalLight3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 1, 1)
+light_bake_mode = 0
+
+[node name="Error" type="Label" parent="VBoxContainer/Main/SubViewportContainer"]
+layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 260.0
-margin_right = 520.0
-margin_bottom = 264.0
+layout_mode = 2
 
 [node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 203.0
-margin_top = 268.0
-margin_right = 317.0
-margin_bottom = 288.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="OK" type="Button" parent="VBoxContainer/Buttons"]
-margin_right = 55.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 55, 0 )
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
 disabled = true
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
-margin_left = 59.0
-margin_right = 114.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 55, 0 )
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
 text = "Cancel"
 
-[node name="ObjLoader" type="Node" parent="."]
-script = ExtResource( 3 )
-
-[connection signal="popup_hide" from="." to="." method="_on_NewPainterWindow_popup_hide"]
 [connection signal="pressed" from="VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile" to="." method="_on_ModelFile_pressed"]
 [connection signal="pressed" from="VBoxContainer/Main/VBoxContainer/GridContainer/ProjectFile" to="." method="_on_ProjectFile_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]

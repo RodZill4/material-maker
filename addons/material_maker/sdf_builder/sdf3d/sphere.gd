@@ -1,6 +1,6 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Sphere", "Octahedron") var shape
+@export_enum ("Sphere", "Octahedron") var shape : int
 
 const INCLUDES : Array = [
 	[ "rotate" ],

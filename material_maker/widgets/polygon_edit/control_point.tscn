@@ -1,15 +1,15 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://crupd18xhx3me"]
 
-[ext_resource path="res://material_maker/widgets/polygon_edit/control_point.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/widgets/polygon_edit/control_point.gd" id="1"]
 
 [node name="ControlPoint" type="Control"]
-margin_left = 56.9864
-margin_top = 33.8615
-margin_right = 63.9864
-margin_bottom = 40.8615
-rect_min_size = Vector2( 7, 7 )
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+custom_minimum_size = Vector2(7, 7)
+layout_mode = 3
+anchors_preset = 0
+offset_left = 56.9864
+offset_top = 33.8615
+offset_right = 63.9864
+offset_bottom = 40.8615
+script = ExtResource("1")
+
 [connection signal="gui_input" from="." to="." method="_on_ControlPoint_gui_input"]

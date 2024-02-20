@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://d1orwebscru7s"]
 
-[ext_resource path="res://material_maker/widgets/polygon_edit/polygon_view.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/widgets/polygon_edit/polygon_view.gd" id="1"]
 
 [node name="PolygonView" type="Control"]
-margin_right = 64.0
-margin_bottom = 64.0
+offset_right = 64.0
+offset_bottom = 64.0
 mouse_filter = 2
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -1,19 +1,22 @@
-extends WindowDialog
+extends Window
+
 
 var file_path = ""
 
+
 signal return_info(status)
 
+
 func _ready():
-	$VBoxContainer/GridContainer/FilePickerButton.set_mode(FileDialog.MODE_SAVE_FILE)
+	$VBoxContainer/GridContainer/FilePickerButton.set_mode(FileDialog.FILE_MODE_SAVE_FILE)
 	$VBoxContainer/GridContainer/FilePickerButton.add_filter("*.json;Material Maker library")
 	popup_centered()
 
 func set_value(v) -> void:
 	$VBoxContainer/GridContainer/LineEdit.text = v
 
-func popup_centered(size : Vector2 = Vector2(0, 0)) -> void:
-	.popup_centered(size)
+func popup_centered_(window_size : Vector2i = Vector2i(0, 0)) -> void:
+	super.popup_centered(window_size)
 	$VBoxContainer/GridContainer/LineEdit.grab_focus()
 
 func _on_LineEdit_text_entered(_new_text) -> void:
@@ -34,9 +37,9 @@ func enter_info(value : String = "") -> Dictionary:
 	$VBoxContainer/GridContainer/LineEdit.grab_focus()
 	$VBoxContainer/GridContainer/LineEdit.grab_click_focus()
 	popup_centered()
-	var result = yield(self, "return_info")
+	var result = await self.return_info
 	queue_free()
 	return result
 
 func _on_VBoxContainer_minimum_size_changed():
-	rect_size = $VBoxContainer.rect_size+Vector2(4, 4)
+	size = $VBoxContainer.size+Vector2(4, 4)

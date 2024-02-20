@@ -1,43 +1,33 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://dpaxvlnn2u1f6"]
 
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_3d.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://dpulty2lkvcht" path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" id="2"]
+[ext_resource type="Script" path="res://material_maker/tools/obj_loader/obj_loader.gd" id="3"]
 
-[sub_resource type="World" id=1]
-
-[node name="Preview3D" type="ViewportContainer" groups=["preview"]]
+[node name="Preview3D" type="SubViewportContainer" groups=["preview"]]
+custom_minimum_size = Vector2(200, 200)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-rect_min_size = Vector2( 200, 200 )
-mouse_filter = 1
+offset_left = 4.0
+offset_top = 32.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
-[node name="MaterialPreview" type="Viewport" parent="."]
-size = Vector2( 1272, 684 )
-own_world = true
-world = SubResource( 1 )
+[node name="MaterialPreview" type="SubViewport" parent="."]
 handle_input_locally = false
-msaa = 1
-debanding = true
-render_target_clear_mode = 1
-render_target_update_mode = 3
 physics_object_picking = true
-shadow_atlas_size = 4096
+size = Vector2i(1272, 684)
+render_target_clear_mode = 1
+render_target_update_mode = 4
 
-[node name="Preview3d" parent="MaterialPreview" instance=ExtResource( 2 )]
+[node name="Preview3d" parent="MaterialPreview" instance=ExtResource("2")]
 
 [node name="ObjLoader" type="Node" parent="."]
-script = ExtResource( 3 )
+script = ExtResource("3")
 
 [connection signal="gui_input" from="." to="." method="on_gui_input"]

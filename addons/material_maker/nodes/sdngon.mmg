@@ -16,7 +16,6 @@
 		"code": "",
 		"global": [
 			"float sdNgon(vec2 p, float r, float n) {",
-			"\tfloat PI = 3.1415926535;",
 			"\tp = circle_repeat_transform_2d(p, n);",
 			"\tvec2 d = abs(p)-vec2(r*tan(3.14159265359/n), r);",
 			"\treturn p.y < r ? p.y-r : length(max(d,vec2(0)))+min(max(d.x,d.y),0.0);",

@@ -1,0 +1,203 @@
+{
+	"connections": [
+		{
+			"from": "uniform_2",
+			"from_port": 0,
+			"to": "brush_triplanar",
+			"to_port": 2
+		},
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "brush_triplanar",
+			"to_port": 1
+		},
+		{
+			"from": "brush_triplanar",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "brush_triplanar",
+			"to_port": 0
+		}
+	],
+	"label": "Mesh Triplanar",
+	"longdesc": "",
+	"name": "mesh_triplanar",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "brush_triplanar",
+			"node_position": {
+				"x": -128.5,
+				"y": 14.5
+			},
+			"parameters": {
+				"k": 32
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					},
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "position_map",
+						"type": "rgb"
+					},
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "normal_map",
+						"type": "rgb"
+					}
+				],
+				"instance": [
+					"vec4 triplanar_$(name)(vec2 uv, float k) {",
+					"\tvec3 p = $position_map(uv);",
+					"\tvec3 n = $normal_map(uv);",
+					"",
+					"\t// project+fetch",
+					"\tvec4 x = $in(p.zy);",
+					"\tvec4 y = $in(p.zx);",
+					"\tvec4 z = $in(p.xy);",
+					"",
+					"\t// blend factors",
+					"\tvec3 w = pow(abs(n), vec3(k));",
+					"\t// blend and return",
+					"\treturn (x*w.x + y*w.y + z*w.z) / (w.x + w.y + w.z);",
+					"}",
+					""
+				],
+				"name": "Triplanar",
+				"outputs": [
+					{
+						"rgba": "triplanar_$(name)($uv, $k)",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 1,
+						"label": "",
+						"max": 32,
+						"min": 0,
+						"name": "k",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": -399,
+				"y": 90
+			},
+			"parameters": {
+				"map": 0
+			},
+			"seed": 51108,
+			"type": "meshmap"
+		},
+		{
+			"name": "uniform_2",
+			"node_position": {
+				"x": -395.5,
+				"y": 152.5
+			},
+			"parameters": {
+				"map": 1
+			},
+			"seed": 51108,
+			"type": "meshmap"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -798,
+				"y": -53.6666679382324
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 171.5,
+				"y": 42.3333320617676
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgba"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -327.333343505859,
+				"y": -156.5
+			},
+			"parameters": {
+				"param0": 32
+			},
+			"seed_int": 0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "K",
+					"linked_widgets": [
+						{
+							"node": "brush_triplanar",
+							"widget": "k"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				}
+			]
+		}
+	],
+	"parameters": {
+		"param0": 32
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

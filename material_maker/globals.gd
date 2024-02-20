@@ -2,13 +2,13 @@ extends Node
 
 
 # warning-ignore:unused_class_variable
-onready var menu_manager = $MenuManager
+@onready var menu_manager = $MenuManager
 
 # warning-ignore:unused_class_variable
 var main_window
 
 var config : ConfigFile = ConfigFile.new()
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG : Dictionary = {
 	locale = "",
 	confirm_quit = true,
 	confirm_close_project = true,
@@ -30,17 +30,13 @@ const DEFAULT_CONFIG = {
 
 
 func _enter_tree():
-	config.load("user://cache.ini")
-	for k in DEFAULT_CONFIG.keys():
+	config.load("user://mm_config.ini")
+	for k : String in DEFAULT_CONFIG.keys():
 		if ! config.has_section_key("config", k):
 			config.set_value("config", k, DEFAULT_CONFIG[k])
 
 func _exit_tree():
-	config.save("user://cache.ini")
-
-func _ready():
-	pass # Replace with function body.
-
+	config.save("user://mm_config.ini")
 
 func has_config(key : String) -> bool:
 	return config.has_section_key("config", key)
@@ -65,11 +61,12 @@ func try_parse_palette(hex_values_str : String) -> Dictionary:
 	var n = regex_matches.size()
 	if n < 2:
 		return {}
-	var i = 0
+	var i : int = 0
 	for m in regex_matches:
-		if not m.strings[0].is_valid_html_color():
+		var m_string_0 : String = m.strings[0]
+		if not m_string_0.is_valid_html_color():
 			return {}
-		var color = Color(m.strings[0])
+		var color : Color = Color(m_string_0)
 		points.push_back({
 			pos = (1.0 / (2 * n)) + (float(i) / n),
 			r = color.r,
@@ -101,18 +98,23 @@ func parse_paste_data(data : String):
 		graph = { type="uniform", color={ r=color.r, g=color.g, b=color.b, a=color.a } }
 		type = "color"
 	elif data.left(4) == "http":
-		var http_request = HTTPRequest.new()
+		var http_request : HTTPRequest = HTTPRequest.new()
 		add_child(http_request)
 		var error = http_request.request(data)
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")
 		else:
-			var downloaded_data = yield(http_request, "request_completed")[3].get_string_from_utf8()
-			if not validate_json(downloaded_data):
-				graph = parse_json(downloaded_data)
+			var downloaded_data : String = (await http_request.request_completed)[3].get_string_from_utf8()
+			var test_json_conv : JSON = JSON.new()
+			error = test_json_conv.parse(downloaded_data)
+			if error == OK:
+				graph = test_json_conv.get_data()
 		http_request.queue_free()
-	elif not validate_json(data):
-		graph = parse_json(data)
+	else:
+		var test_json_conv = JSON.new()
+		var error = test_json_conv.parse(data)
+		if error == OK:
+			graph = test_json_conv.get_data()
 	if graph != null and graph is Dictionary:
 		if graph.has("nodes"):
 			if graph.has("type") and graph.type == "graph":
@@ -126,7 +128,7 @@ func parse_paste_data(data : String):
 			graph = null
 	if graph == null or ! graph is Dictionary:
 		var palette = try_parse_palette(data)
-		if not palette.empty():
+		if not palette.is_empty():
 			graph = palette
 			type = "palette"
 		else:

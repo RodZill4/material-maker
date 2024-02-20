@@ -32,7 +32,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 			child = "vec3(0.5)"
 		_:
 			child = "0.5"
-	if ! scene.children.empty():
+	if ! scene.children.is_empty():
 		var child_color_code : Dictionary = mm_sdf_builder.get_color_code(scene.children[0], ctxt, editor)
 		if child_color_code.has("color"):
 			child = child_color_code.color

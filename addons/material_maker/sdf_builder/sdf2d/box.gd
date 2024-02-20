@@ -1,6 +1,8 @@
 extends "res://addons/material_maker/sdf_builder/sdf2d/union.gd"
 
-export(int, "Box", "Rhombus", "IsocelesTriangle", "Tunnel", "Ellipse") var shape
+
+@export_enum("Box", "Rhombus", "IsocelesTriangle", "Tunnel", "Ellipse") var shape : int
+
 
 const INCLUDES : Array = [
 	[ "rotate", "sdbox" ],

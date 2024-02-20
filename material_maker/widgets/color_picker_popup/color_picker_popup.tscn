@@ -1,14 +1,11 @@
-[gd_scene format=2]
+[gd_scene format=3 uid="uid://85acplyebptc"]
 
 [node name="ColorPickerPopup" type="PopupPanel"]
-margin_right = 318.0
-margin_bottom = 470.0
+size = Vector2i(298, 576)
+visible = true
 
 [node name="ColorPicker" type="ColorPicker" parent="."]
-margin_left = 4.0
-margin_top = 4.0
-margin_right = 314.0
-margin_bottom = 466.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 294.0
+offset_bottom = 572.0

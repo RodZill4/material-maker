@@ -11,21 +11,21 @@ func _ready():
 	regex_include.compile("#include\\s+\"([^\"]+)\"")
 
 func test_preprocessor():
-	print(preprocess_file("res://material_maker/tools/painter/shaders/brush.shader", { BRUSH_MODE="\"pattern\"", GENERATED_CODE = "generated code" }))
+	print(preprocess_file("res://material_maker/tools/painter/shaders/brush.gdshader", { BRUSH_MODE="\"pattern\"", GENERATED_CODE = "generated code" }))
 
 func get_file(file_name : String, include_paths : Array = []) -> String:
 	var shader_text = ""
 	var path_list : Array = [ file_name ]
 	for ip in include_paths:
-		path_list.append(ip.plus_file(file_name))
+		path_list.append(ip.path_join(file_name))
 	for p in path_list:
 		if CACHE_SHADER_FILES and shader_files.has(p):
 			shader_text = shader_files[p]
 		else:
-			var file = File.new()
-			if file.open(p, File.READ) == OK:
+			var file = FileAccess.open(p, FileAccess.READ)
+			if file != null:
 				shader_text = file.get_as_text()
-				file.close()
+				file = null
 				shader_files[file_name] = shader_text
 	return shader_text
 
@@ -66,20 +66,20 @@ func extract_ifs(shader : String) -> Array:
 		var line = shader.substr(next_sharp, eol-next_sharp)
 		if line.left(3) == "#if":
 			type = SHARP_IF
-			condition=line.right(3)
+			condition=line.right(-3)
 			level += 1
 			next_level = level
 		elif line.left(5) == "#elif":
 			type = SHARP_ELIF
-			condition=line.right(5)
+			condition=line.right(-5)
 		elif line.left(5) == "#else":
 			type = SHARP_ELSE
 		elif line.left(6) == "#endif":
 			type = SHARP_ENDIF
 			next_level -= 1
 		else:
-			print(shader.substr(next_sharp, eol-next_sharp))
-			break
+			start = next_sharp + 1
+			continue
 		var condition_value = true
 		if condition != "":
 			if expr.parse(condition) == OK:
@@ -145,10 +145,9 @@ func preprocess(shader : String, defines : Dictionary = {}, include_paths : Arra
 		new_shader = preprocess_includes(shader, include_paths)
 		new_shader = preprocess_macros(new_shader, defines)
 		new_shader = preprocess_ifs(new_shader)
-		if new_shader != shader:
-			shader = new_shader
-		else:
+		if new_shader == shader:
 			break
+		shader = new_shader
 	return shader
 
 func preprocess_file(file_path : String, defines : Dictionary = {}) -> String:

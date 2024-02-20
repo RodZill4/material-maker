@@ -1,0 +1,434 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://hp5sit75vyqj"]
+
+[sub_resource type="Shader" id="Shader_ut7pk"]
+code = "shader_type canvas_item;
+const float seed_variation = 0.0;
+varying float elapsed_time;
+
+void vertex() {
+	UV *= vec2(0.76, 0.43);
+	UV += vec2(0.0, 0.2);
+	elapsed_time = TIME;
+}
+float dot2(vec2 x) {
+	return dot(x, x);
+}
+
+float rand(vec2 x) {
+    return fract(cos(mod(dot(x, vec2(13.9898, 8.141)), 3.14)) * 43758.5453);
+}
+
+vec2 rand2(vec2 x) {
+    return fract(cos(mod(vec2(dot(x, vec2(13.9898, 8.141)),
+						      dot(x, vec2(3.4562, 17.398))), vec2(3.14))) * 43758.5453);
+}
+
+vec3 rand3(vec2 x) {
+    return fract(cos(mod(vec3(dot(x, vec2(13.9898, 8.141)),
+							  dot(x, vec2(3.4562, 17.398)),
+                              dot(x, vec2(13.254, 5.867))), vec3(3.14))) * 43758.5453);
+}
+
+vec3 rgb2hsv(vec3 c) {
+	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+	vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
+	vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);
+
+	float d = q.x - min(q.w, q.y);
+	float e = 1.0e-10;
+	return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c) {
+	vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+	vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+	return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+float param_rnd(float minimum, float maximum, float seed) {
+	return minimum+(maximum-minimum)*rand(vec2(seed));
+}
+const float p_o397938794318_CamY = 2.441000000;
+const float p_o397938794318_CamZ = 3.000000000;
+const float p_o397938794318_LookAtX = 0.000000000;
+const float p_o397938794318_LookAtY = 0.000000000;
+const float p_o397938794318_LookAtZ = 0.000000000;
+const float p_o397938794318_CamD = 1.268000000;
+const float p_o397938794318_CamZoom = 1.000000000;
+const float p_o397938794318_Reflection = 0.200000000;
+const float p_o397938794318_Specular = 0.151000000;
+const float p_o397938794318_Pow = 5.324000000;
+const float p_o397938794318_SunX = -4.942000000;
+const float p_o397938794318_SunY = 2.187000000;
+const float p_o397938794318_SunZ = -1.245000000;
+const float p_o397938794318_AmbLight = 0.182000000;
+const float p_o397938794318_AmbOcclusion = 1.000000000;
+const float p_o397938794318_Shadow = 1.000000000;
+const float p_o398140120904_k = 0.450000000;
+const float p_o398156898124_Distort = 0.128000000;
+const float p_o398156898124_Correction = 0.000000000;
+const float p_o398156898124_Bound = 3.000000000;
+const float p_o398106566480_x = 0.000000000;
+const float p_o398106566480_z = 0.000000000;
+const float p_o398123343687_r = 0.500000000;
+const float p_o398224006982_scale = 5.232000000;
+const float p_o398224006982_scale_x = 1.000000000;
+const float p_o398224006982_scale_y = 1.000000000;
+const float p_o398224006982_scale_z = 1.000000000;
+const float p_o397922017101_Position = -0.500000000;
+const float p_o397922017101_Size = 30.000000000;
+
+vec2 sdf3d_smooth_union(vec2 d1, vec2 d2, float k) {
+	float h = clamp(0.5+0.5*(d2.x-d1.x)/k, 0.0, 1.0);
+	return vec2(mix(d2.x, d1.x, h)-k*h*(1.0-h), mix(d2.y, d1.y, step(d1.x, d2.x)));
+}
+
+vec2 sdf3d_smooth_subtraction(vec2 d1, vec2 d2, float k ) {
+	float h = clamp(0.5-0.5*(d2.x+d1.x)/k, 0.0, 1.0);
+	return vec2(mix(d2.x, -d1.x, h )+k*h*(1.0-h), d2.y);
+}
+
+vec2 sdf3d_smooth_intersection(vec2 d1, vec2 d2, float k ) {
+	float h = clamp(0.5-0.5*(d2.x-d1.x)/k, 0.0, 1.0);
+	return vec2(mix(d2.x, d1.x, h)+k*h*(1.0-h), mix(d1.y, d2.y, step(d1.x, d2.x)));
+}
+// https://www.shadertoy.com/view/XsX3zB
+//
+// The MIT License
+// Copyright © 2013 Nikita Miropolskiy
+// 
+// ( license has been changed from CCA-NC-SA 3.0 to MIT
+//
+//   but thanks for attributing your source code when deriving from this sample 
+//   with a following link: https://www.shadertoy.com/view/XsX3zB )
+//
+//
+// if you're looking for procedural noise implementation examples you might 
+// also want to look at the following shaders:
+// 
+// Noise Lab shader by candycat: https://www.shadertoy.com/view/4sc3z2
+//
+// Noise shaders by iq:
+//     Value    Noise 2D, Derivatives: https://www.shadertoy.com/view/4dXBRH
+//     Gradient Noise 2D, Derivatives: https://www.shadertoy.com/view/XdXBRH
+//     Value    Noise 3D, Derivatives: https://www.shadertoy.com/view/XsXfRH
+//     Gradient Noise 3D, Derivatives: https://www.shadertoy.com/view/4dffRH
+//     Value    Noise 2D             : https://www.shadertoy.com/view/lsf3WH
+//     Value    Noise 3D             : https://www.shadertoy.com/view/4sfGzS
+//     Gradient Noise 2D             : https://www.shadertoy.com/view/XdXGW8
+//     Gradient Noise 3D             : https://www.shadertoy.com/view/Xsl3Dl
+//     Simplex  Noise 2D             : https://www.shadertoy.com/view/Msf3WH
+//     Voronoise: https://www.shadertoy.com/view/Xd23Dh
+//
+//
+//
+
+// discontinuous pseudorandom constly distributed in [-0.5, +0.5]^3 */
+vec3 XsX3zB_random3(vec3 c) {
+	float j = 4096.0*sin(dot(c,vec3(17.0, 59.4, 15.0)));
+	vec3 r;
+	r.z = fract(512.0*j);
+	j *= .125;
+	r.x = fract(512.0*j);
+	j *= .125;
+	r.y = fract(512.0*j);
+	return r-0.5;
+}
+
+// skew constants for 3d simplex functions
+const float XsX3zB_F3 =  0.3333333;
+const float XsX3zB_G3 =  0.1666667;
+
+// 3d simplex noise
+float XsX3zB_simplex3d(vec3 p) {
+	 // 1. find current tetrahedron T and it's four vertices
+	 // s, s+i1, s+i2, s+1.0 - absolute skewed (integer) coordinates of T vertices
+	 // x, x1, x2, x3 - unskewed coordinates of p relative to each of T vertices
+	 
+	 // calculate s and x
+	 vec3 s = floor(p + dot(p, vec3(XsX3zB_F3)));
+	 vec3 x = p - s + dot(s, vec3(XsX3zB_G3));
+	 
+	 // calculate i1 and i2
+	 vec3 e = step(vec3(0.0), x - x.yzx);
+	 vec3 i1 = e*(1.0 - e.zxy);
+	 vec3 i2 = 1.0 - e.zxy*(1.0 - e);
+	 	
+	 // x1, x2, x3
+	 vec3 x1 = x - i1 + XsX3zB_G3;
+	 vec3 x2 = x - i2 + 2.0*XsX3zB_G3;
+	 vec3 x3 = x - 1.0 + 3.0*XsX3zB_G3;
+	 
+	 // 2. find four surflets and store them in d
+	 vec4 w, d;
+	 
+	 // calculate surflet weights
+	 w.x = dot(x, x);
+	 w.y = dot(x1, x1);
+	 w.z = dot(x2, x2);
+	 w.w = dot(x3, x3);
+	 
+	 // w fades from 0.6 at the center of the surflet to 0.0 at the margin
+	 w = max(0.6 - w, 0.0);
+	 
+	 // calculate surflet components
+	 d.x = dot(XsX3zB_random3(s), x);
+	 d.y = dot(XsX3zB_random3(s + i1), x1);
+	 d.z = dot(XsX3zB_random3(s + i2), x2);
+	 d.w = dot(XsX3zB_random3(s + 1.0), x3);
+	 
+	 // multiply d by w^4
+	 w *= w;
+	 w *= w;
+	 d *= w;
+	 
+	 // 3. return the sum of the four surflets
+	 return dot(d, vec4(52.0));
+}float Simple_AAcheckedboard2D(vec2 p) {
+    p*=8.0;
+	vec2 w=max(abs(dFdx(p)),abs(dFdy(p)))+1e-5;
+	if (max(w.x,w.y)>1.0) {
+		return mod(floor(p.x)+floor(p.y),2.0);
+	}
+	vec2 i=((1.-abs(2.*fract((p+.5*w)/2.)-1.))-(1.-abs(2.*fract((p-.5*w)/2.)-1.)))/w;
+	return .5-.5*i.x*i.y;
+}vec2 equirectangularMap(vec3 dir) {
+	vec2 longlat = vec2(atan(dir.y,dir.x),acos(dir.z));
+ 	return longlat/vec2(2.0*PI,PI);
+}
+
+
+//Simple HDRI START
+
+//Hash without Sine Dave_Hoskins
+//https://www.shadertoy.com/view/4djSRW 
+float Simple360HDR_hash12(vec2 p)
+{
+	vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+float Simple360HDR_noise(vec2 v){
+  vec2 v1=floor(v);
+  vec2 v2=smoothstep(0.0,1.0,fract(v));
+  float n00=Simple360HDR_hash12(v1);
+  float n01=Simple360HDR_hash12(v1+vec2(0,1));
+  float n10=Simple360HDR_hash12(v1+vec2(1,0));
+  float n11=Simple360HDR_hash12(v1+vec2(1,1));
+  return mix(mix(n00,n01,v2.y),mix(n10,n11,v2.y),v2.x);
+}
+
+float Simple360HDR_noiseOct(vec2 p){
+  return
+    Simple360HDR_noise(p)*0.5+
+    Simple360HDR_noise(p*2.0+13.0)*0.25+
+    Simple360HDR_noise(p*4.0+23.0)*0.15+
+    Simple360HDR_noise(p*8.0+33.0)*0.10+
+    Simple360HDR_noise(p*16.0+43.0)*0.05;
+}
+
+vec3 Simple360HDR_skyColor(vec3 p){
+	vec3 s1=vec3(0.2,0.5,1.0);
+	vec3 s2=vec3(0.1,0.2,0.4)*1.5;
+    vec3 v=(Simple360HDR_noiseOct(p.xz*0.1)-0.5)*vec3(1.0);
+	float d=length(p);
+    return mix(s2+v,s1+v*(12.0/max(d,20.0)),clamp(d*0.1,0.0,1.0));
+}
+
+vec3 Simple360HDR_floorColor(vec3 p){
+    vec3 v=(Simple360HDR_noiseOct(p.xz*0.1)*0.5+0.25)*vec3(0.7,0.5,0.4);
+    return v;
+}
+
+vec3 Simple360HDR_renderHDR360(vec3 rd, vec3 sun){
+    vec3 col;
+	vec3 p;
+	vec3 c;
+	if (rd.y>0.0) {
+        p=rd*(5.0/rd.y);
+        c=Simple360HDR_skyColor(p);
+    } else {
+        p=rd*(-10.0/rd.y);
+        c=Simple360HDR_floorColor(p);
+		c=mix(c,vec3(0.5,0.7,1.0),clamp(1.0-sqrt(-rd.y)*3.0,0.0,1.0));
+	}
+	vec3 skycolor=vec3(0.1,0.45,0.68);
+	float d=length(p);
+	
+	float ds=clamp(dot(sun,rd),0.0,1.0);
+	vec3 sunc=(ds>0.9997?vec3(2.0):vec3(0.0))+pow(ds,512.0)*4.0+pow(ds,128.0)*vec3(0.5)+pow(ds,4.0)*vec3(0.5);
+    if (rd.y>0.0){
+		c+=vec3(0.3)*pow(1.0-abs(rd.y),3.0)*0.7;
+	} 
+    return c+sunc;
+}
+
+vec3 Simple360HDR_make360hdri(vec2 p, vec3 sun){
+    float xPI=3.14159265359;
+    vec2 thetaphi = ((p * 2.0) - vec2(1.0)) * vec2(xPI,xPI/2.0); 
+    vec3 rayDirection = vec3(cos(thetaphi.y) * cos(thetaphi.x), sin(thetaphi.y), cos(thetaphi.y) * sin(thetaphi.x));
+    return Simple360HDR_renderHDR360(rayDirection,sun);
+}
+//Simple HDRI END
+
+float o398156898124_input_sdf(vec3 p, float _seed_variation_) {
+float o398123343687_0_1_sdf3d = length((p-vec3(p_o398106566480_x, (sin(elapsed_time-1.2)-0.4), p_o398106566480_z)))-p_o398123343687_r;
+vec2 o398106566480_0_1_sdf3dc = vec2(o398123343687_0_1_sdf3d, 0.0);
+
+return (o398106566480_0_1_sdf3dc).x;
+}
+vec3 o398156898124_input_tex3d(vec4 p, float _seed_variation_) {
+vec3 o398224006982_0_1_tex3d = vec3(XsX3zB_simplex3d(p.xyz*vec3(p_o398224006982_scale_x,p_o398224006982_scale_y,p_o398224006982_scale_z)*0.5*p_o398224006982_scale))*0.5+0.5;
+
+return o398224006982_0_1_tex3d;
+}
+
+float distort_o398156898124(vec3 uv, float _seed_variation_) {
+    float sdf=o398156898124_input_sdf((uv), 0.0);
+	if (abs(sdf)>(abs(p_o398156898124_Distort)+p_o398156898124_Bound)){
+		return sdf;
+	} else {
+		vec3 s=o398156898124_input_tex3d((vec4(uv,0.0)), 0.0);
+	    return sdf-s.x*p_o398156898124_Distort;
+	}
+}float o397938794318_input_sdf1(vec3 p, float _seed_variation_) {
+float o398156898124_0_1_sdf3d = distort_o398156898124((p), _seed_variation_)/(1.0+abs(p_o398156898124_Distort*p_o398156898124_Correction));
+float o397922017101_0_1_sdf3d = max((p).y-p_o397922017101_Position,length(vec3((p).x,(p).y+p_o397922017101_Position,(p).z))-p_o397922017101_Size);
+vec2 o398140120904_0_1_sdf3dc = sdf3d_smooth_union(vec2(o397922017101_0_1_sdf3d, 0.0), vec2(o398156898124_0_1_sdf3d, 0.0), p_o398140120904_k);
+
+return (o398140120904_0_1_sdf3dc).x;
+}
+vec3 o397938794318_input_tex1(vec4 p, float _seed_variation_) {
+vec3 o397922017101_1_1_tex3d = vec3(Simple_AAcheckedboard2D(p.xz))*0.9+0.1;
+
+return o397922017101_1_1_tex3d;
+}
+
+vec2 input_o397938794318(vec3 p, float _seed_variation_) {
+    vec2 sdf=vec2(999999.0,0.0);
+	float m;
+
+    m=o397938794318_input_sdf1((p), 0.0);
+    if (m<sdf.x){
+	  sdf=vec2(m,1.0);
+	}
+
+    return sdf;
+}
+
+
+vec3 tex_o397938794318(vec3 p,float id, float _seed_variation_) {
+    vec3 t=vec3(0.0);
+
+    if (id>(1.0-0.5)&&id<(1.0+0.5)) {
+	  t=o397938794318_input_tex1((vec4(p,id)), 0.0);
+	}
+
+
+    return t;
+}
+
+
+//tetrahedron normal by PauloFalcao
+//https://www.shadertoy.com/view/XstGDS
+vec3 normal_o397938794318(vec3 p, float _seed_variation_) {  
+  const vec3 e=vec3(0.001,-0.001,0.0);
+  float v1=input_o397938794318(p+e.xyy, _seed_variation_).x;
+  float v2=input_o397938794318(p+e.yyx, _seed_variation_).x;
+  float v3=input_o397938794318(p+e.yxy, _seed_variation_).x;
+  float v4=input_o397938794318(p+e.xxx, _seed_variation_).x;
+  return normalize(vec3(v4+v1-v3-v2,v3+v4-v1-v2,v2+v4-v3-v1));
+}
+
+void march_o397938794318(inout float d,inout vec3 p,inout vec2 dS, vec3 ro, vec3 rd, float _seed_variation_) {
+    for (int i=0; i < 500; i++) {
+    	p = ro + rd*d;
+        dS = input_o397938794318(p, _seed_variation_);
+        d += dS.x;
+        if (d > 50.0 || abs(dS.x) < 0.0001) break;
+    }
+}
+
+//from https://www.shadertoy.com/view/lsKcDD
+float calcAO_o397938794318( in vec3 pos, in vec3 nor , float _seed_variation_) {
+	float occ = 0.0;
+    float sca = 1.0;
+    for( int i=0; i<5; i++ ){
+        float h = 0.001 + 0.25*float(i)/4.0;
+        float d = input_o397938794318( pos + h*nor , _seed_variation_).x;
+        occ += (h-d)*sca;
+        sca *= 0.98;
+    }
+    return clamp( 1.0 - 1.6*occ, 0.0, 1.0 );    
+}
+
+//from https://www.shadertoy.com/view/lsKcDD
+float calcSoftshadow_o397938794318( in vec3 ro, in vec3 rd, in float mint, in float tmax, float _seed_variation_) {
+	float res = 1.0;
+    float t = mint;
+    float ph = 1e10; // big, such that y = 0 on the first iteration
+    for( int i=0; i<32; i++ ){
+		float h = input_o397938794318( ro + rd*t , _seed_variation_).x;
+        res = min( res, 10.0*h/t );
+        t += h;
+        if( res<0.0001 || t>tmax ) break;  
+    }
+    return clamp( res, 0.0, 1.0 );
+}
+
+vec3 raymarch_o397938794318(vec2 uv, float _seed_variation_) {
+    uv-=0.5;
+	vec3 cam=vec3((cos(elapsed_time*0.5)*2.5),p_o397938794318_CamY,p_o397938794318_CamZ)*p_o397938794318_CamZoom;
+	vec3 lookat=vec3(p_o397938794318_LookAtX,p_o397938794318_LookAtY,p_o397938794318_LookAtZ);
+	vec3 ray=normalize(lookat-cam);
+	vec3 cX=normalize(cross(vec3(0.0,1.0,0.0),ray));
+	vec3 cY=normalize(cross(cX,ray));
+	vec3 rd = normalize(ray*p_o397938794318_CamD+cX*uv.x+cY*uv.y);
+	vec3 ro = cam;
+	
+	float d=0.;
+	vec3 p=vec3(0);
+	vec2 dS=vec2(0);
+	march_o397938794318(d,p,dS,ro,rd, _seed_variation_);
+	
+    vec3 color=vec3(0.0);
+	
+	vec3 objColor=tex_o397938794318(p,dS.y, _seed_variation_);
+	
+	vec3 light=normalize(vec3(p_o397938794318_SunX,p_o397938794318_SunY,p_o397938794318_SunZ));
+	if (d<50.0) {
+	    vec3 n=normal_o397938794318(p, _seed_variation_);
+		float l=clamp(dot(-light,-n),0.0,1.0);
+		vec3 ref=normalize(reflect(rd,-n));
+		float r=clamp(dot(ref,light),0.0,1.0);
+		float cAO=mix(1.0,calcAO_o397938794318(p,n, _seed_variation_),p_o397938794318_AmbOcclusion);
+		float shadow=mix(1.0,calcSoftshadow_o397938794318(p,light,0.05,5.0, _seed_variation_),p_o397938794318_Shadow);
+		color=min(vec3(max(shadow,p_o397938794318_AmbLight)),max(l,p_o397938794318_AmbLight))*max(cAO,p_o397938794318_AmbLight)*objColor+pow(r,p_o397938794318_Pow)*p_o397938794318_Specular;
+		//reflection
+		d=0.01;
+		march_o397938794318(d,p,dS,p,ref, _seed_variation_);
+		vec3 objColorRef=vec3(0);
+		if (d<50.0) {
+			objColorRef=tex_o397938794318(p,dS.y, _seed_variation_);
+			n=normal_o397938794318(p, _seed_variation_);
+			l=clamp(dot(-light,-n),0.0,1.0);
+			objColorRef=max(l,p_o397938794318_AmbLight)*objColorRef;
+		} else {
+			objColorRef=Simple360HDR_make360hdri(vec2((equirectangularMap(ref.xzy)).x,-(equirectangularMap(ref.xzy)).y+1.0),normalize(vec3(-p_o397938794318_SunX,p_o397938794318_SunY,-p_o397938794318_SunZ))).xyz;
+		}
+		color=mix(color,objColorRef,p_o397938794318_Reflection);
+	} else {
+		color=Simple360HDR_make360hdri(vec2((equirectangularMap(rd.xzy)).x,-(equirectangularMap(rd.xzy)).y+1.0),normalize(vec3(-p_o397938794318_SunX,p_o397938794318_SunY,-p_o397938794318_SunZ))).xyz;
+	}
+	return color;
+}
+void fragment() {
+float _seed_variation_ = seed_variation;
+vec3 o397938794318_0_1_rgb = raymarch_o397938794318(UV, _seed_variation_);
+COLOR = vec4(o397938794318_0_1_rgb, 1.0);
+}
+"
+
+[resource]
+shader = SubResource("Shader_ut7pk")

@@ -28,7 +28,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	var tex : String
 	var ctxt2 : Dictionary = ctxt.duplicate(true)
 	ctxt2.type = "float"
-	if scene.children.empty():
+	if scene.children.is_empty():
 		tex = "$color1"
 	else:
 		tex = "mix($color1, $color2, "+mm_sdf_builder.get_color_code(scene.children[0], ctxt2, editor).color+")"

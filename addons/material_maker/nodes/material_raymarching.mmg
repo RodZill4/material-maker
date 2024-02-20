@@ -896,7 +896,7 @@
 			"\t\tMETALLIC = $metallic(vec4(p, rm.y));",
 			"\t\tEMISSION = $emission(vec4(p, rm.y));",
 			"$end_generate",
-			"\t\tNORMAL = (INV_CAMERA_MATRIX*WORLD_MATRIX*vec4(n, 0.0)).xyz;",
+			"\t\tNORMAL = (INV_VIEW_MATRIX*vec4(n, 0.0)).xyz;",
 			"\t}",
 			"}",
 			""

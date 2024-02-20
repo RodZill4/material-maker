@@ -39,6 +39,7 @@ func undo() -> void:
 		if parent.has_method("undoredo_post"):
 			parent.undoredo_post(state)
 		performing_action = false
+		mm_globals.main_window.update_menus()
 
 func can_redo() -> bool:
 	return step < stack.size()
@@ -61,6 +62,7 @@ func redo() -> void:
 			parent.undoredo_post(state)
 		step += 1
 		performing_action = false
+		mm_globals.main_window.update_menus()
 
 func compare_actions(a, b):
 	if a == b:
@@ -117,3 +119,4 @@ func add(action_name : String, undo_actions : Array, redo_actions : Array, merge
 			group = undo_redo
 	if OS.is_debug_build():
 		get_node("/root/MainWindow/UndoRedoLabel").show_step(step)
+	mm_globals.main_window.update_menus()

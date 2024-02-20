@@ -1,65 +1,44 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cp2mbbfmrv6sf"]
 
-[ext_resource path="res://material_maker/widgets/render_counter/render_counter.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/widgets/render_counter/render_counter.gd" id="1"]
 
 [node name="RenderCounter" type="HBoxContainer" groups=["render_counter"]]
-margin_right = 158.0
-margin_bottom = 20.0
-script = ExtResource( 1 )
+offset_right = 158.0
+offset_bottom = 20.0
+script = ExtResource("1")
 
 [node name="FpsCounter" type="Label" parent="."]
-margin_bottom = 20.0
+layout_mode = 2
 size_flags_vertical = 1
-valign = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="GpuRam" type="Label" parent="."]
-margin_left = 4.0
-margin_right = 4.0
-margin_bottom = 20.0
-mouse_filter = 0
+layout_mode = 2
 size_flags_vertical = 1
-valign = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
+mouse_filter = 0
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-margin_left = 8.0
-margin_right = 158.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 150, 0 )
-mouse_filter = 2
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
 size_flags_vertical = 1
+mouse_filter = 2
 max_value = 1.0
 value = 1.0
-percent_visible = false
+show_percentage = false
 
 [node name="Label" type="Label" parent="ProgressBar"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
-margin_right = 20.0
-margin_bottom = 20.0
 
 [node name="Renderers" type="PopupMenu" parent="PopupMenu"]
-margin_right = 20.0
-margin_bottom = 20.0
 
 [node name="MaxRenderSize" type="PopupMenu" parent="PopupMenu"]
-margin_right = 20.0
-margin_bottom = 20.0
 
 [node name="MaxBufferSize" type="PopupMenu" parent="PopupMenu"]
-margin_right = 20.0
-margin_bottom = 20.0
 
 [node name="MemUpdateTimer" type="Timer" parent="."]
 autostart = true

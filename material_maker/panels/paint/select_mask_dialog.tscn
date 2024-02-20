@@ -1,15 +1,15 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=10 format=3 uid="uid://b27p6dhsoiwp1"]
 
-[ext_resource path="res://material_maker/panels/paint/select_mask_dialog.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/tools/obj_loader/obj_loader.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://material_maker/panels/paint/select_mask_dialog.gd" id="1"]
+[ext_resource type="Shader" path="res://material_maker/panels/paint/select_mask_dialog.gdshader" id="2_w5qxl"]
 
-[sub_resource type="Shader" id=4]
+[sub_resource type="Shader" id="4"]
 code = "shader_type canvas_item;
 
 uniform sampler2D idmap;
 uniform vec4      color;
-uniform float mm_chunk_size = 1.0;
-uniform vec2 mm_chunk_offset = vec2(0.0);
+uniform float     mm_chunk_size = 1.0;
+uniform vec2      mm_chunk_offset = vec2(0.0);
 
 void fragment() {
 	vec3 id = texture(idmap, mm_chunk_offset+mm_chunk_size*UV).rgb;
@@ -17,187 +17,136 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=5]
-shader = SubResource( 4 )
-shader_param/color = null
-shader_param/mm_chunk_size = 1.0
-shader_param/mm_chunk_offset = Vector2( 0, 0 )
+[sub_resource type="ShaderMaterial" id="5"]
+shader = SubResource("4")
+shader_parameter/color = null
+shader_parameter/mm_chunk_size = 1.0
+shader_parameter/mm_chunk_offset = Vector2(0, 0)
 
-[sub_resource type="ButtonGroup" id=7]
+[sub_resource type="ButtonGroup" id="ButtonGroup_o5o5f"]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="World3D" id="World3D_j8v88"]
 
-[sub_resource type="Shader" id=2]
-code = "shader_type spatial;
-render_mode unshaded;
+[sub_resource type="BoxMesh" id="1"]
 
-uniform sampler2D tex : hint_albedo;
-uniform sampler2D mask : hint_white;
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpkvw"]
+render_priority = 0
+shader = ExtResource("2_w5qxl")
+shader_parameter/mode = 0
 
-void fragment() {
-	vec4 albedo_tex = texture(tex, UV);
-	vec4 mask_tex = texture(mask, UV);
-	ALBEDO = albedo_tex.rgb*vec3(0.1+0.9*mask_tex.r);
-}
-"
-
-[sub_resource type="ShaderMaterial" id=3]
-resource_local_to_scene = true
-shader = SubResource( 2 )
-
-[sub_resource type="Environment" id=6]
+[sub_resource type="Environment" id="6"]
 background_mode = 1
-background_color = Color( 0.501961, 0.501961, 0.501961, 1 )
+background_color = Color(0.501961, 0.501961, 0.501961, 1)
 
-[node name="SelectMask" type="WindowDialog"]
-margin_right = 520.0
-margin_bottom = 288.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-window_title = "Mask from ID map"
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-genmask_material = SubResource( 5 )
+[node name="SelectMask" type="Window"]
+size = Vector2i(300, 200)
+always_on_top = true
+script = ExtResource("1")
+genmask_material = SubResource("5")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = 2.0
-margin_right = -2.0
-margin_bottom = -2.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 516.0
-margin_bottom = 276.0
+layout_mode = 2
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
-margin_right = 136.0
-margin_bottom = 276.0
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_right = 136.0
-margin_bottom = 20.0
+layout_mode = 2
 
 [node name="IdMapLabel" type="Label" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_top = 3.0
-margin_right = 50.0
-margin_bottom = 17.0
+layout_mode = 2
 text = "ID Map:"
 
 [node name="IdMapFile" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
-margin_left = 54.0
-margin_right = 136.0
-margin_bottom = 20.0
+layout_mode = 2
 text = "ID Map file"
 
 [node name="ShowIdMap" type="CheckBox" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 24.0
-margin_right = 136.0
-margin_bottom = 48.0
-group = SubResource( 7 )
+layout_mode = 2
+button_group = SubResource("ButtonGroup_o5o5f")
 text = "Show ID Map"
 
 [node name="ShowMask" type="CheckBox" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 52.0
-margin_right = 136.0
-margin_bottom = 76.0
-group = SubResource( 7 )
+layout_mode = 2
+button_group = SubResource("ButtonGroup_o5o5f")
 text = "Show Mask"
 
 [node name="ShowMix" type="CheckBox" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 52.0
-margin_right = 136.0
-margin_bottom = 76.0
-group = SubResource( 7 )
+layout_mode = 2
+button_group = SubResource("ButtonGroup_o5o5f")
 text = "Show Mix"
 
 [node name="Reset" type="Button" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 80.0
-margin_right = 136.0
-margin_bottom = 100.0
+layout_mode = 2
 text = "Reset Mask"
 
-[node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer/HBoxContainer"]
-margin_left = 140.0
-margin_right = 516.0
-margin_bottom = 276.0
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
 size_flags_horizontal = 3
+stretch = true
 
-[node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ViewportContainer"]
-size = Vector2( 100, 100 )
-own_world = true
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/HBoxContainer/SubViewportContainer"]
+own_world_3d = true
+world_3d = SubResource("World3D_j8v88")
 handle_input_locally = false
-keep_3d_linear = true
-render_target_update_mode = 0
+size = Vector2i(300, 300)
+render_target_update_mode = 4
 
-[node name="MeshPivot" type="Spatial" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
+[node name="MeshPivot" type="Node3D" parent="VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport"]
 
-[node name="MeshInstance" type="MeshInstance" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport/MeshPivot"]
-mesh = SubResource( 1 )
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport/MeshPivot"]
+mesh = SubResource("1")
 skeleton = NodePath("../..")
-material/0 = SubResource( 3 )
+surface_material_override/0 = SubResource("ShaderMaterial_bpkvw")
 
-[node name="CameraPivot" type="Spatial" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport"]
-transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0 )
+[node name="CameraPivot" type="Node3D" parent="VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 
-[node name="Camera" type="Camera" parent="VBoxContainer/HBoxContainer/ViewportContainer/Viewport/CameraPivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5 )
-environment = SubResource( 6 )
+[node name="Camera3D" type="Camera3D" parent="VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport/CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+environment = SubResource("6")
 far = 50.0
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/ViewportContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer/SubViewportContainer"]
 visible = false
-margin_right = 40.0
-margin_bottom = 40.0
-flip_v = true
+layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
-margin_top = 280.0
-margin_right = 516.0
-margin_bottom = 284.0
+visible = false
+layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
-visible = false
-margin_left = 201.0
-margin_top = 264.0
-margin_right = 315.0
-margin_bottom = 284.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="OK" type="Button" parent="VBoxContainer/HBoxContainer2"]
-margin_right = 55.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 55, 0 )
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
 text = "OK"
 
 [node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer2"]
-margin_left = 59.0
-margin_right = 114.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 55, 0 )
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
 text = "Cancel"
 
-[node name="ObjLoader" type="Node" parent="."]
-script = ExtResource( 2 )
-
-[connection signal="popup_hide" from="." to="." method="_on_NewPainterWindow_popup_hide"]
-[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="close_requested" from="." to="." method="_on_OK_pressed"]
+[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_v_box_container_minimum_size_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/IdMapFile" to="." method="_on_IdMapFile_pressed"]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowIdMap" to="." method="_on_Show_item_selected" binds= [ 0 ]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowMask" to="." method="_on_Show_item_selected" binds= [ 1 ]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowMix" to="." method="_on_Show_item_selected" binds= [ 2 ]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowIdMap" to="." method="_on_Show_item_selected" binds= [0]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowMask" to="." method="_on_Show_item_selected" binds= [1]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/VBoxContainer/ShowMix" to="." method="_on_Show_item_selected" binds= [2]]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/VBoxContainer/Reset" to="." method="_on_Reset_pressed"]
-[connection signal="gui_input" from="VBoxContainer/HBoxContainer/ViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
-[connection signal="resized" from="VBoxContainer/HBoxContainer/ViewportContainer" to="." method="_on_ViewportContainer_resized"]
+[connection signal="gui_input" from="VBoxContainer/HBoxContainer/SubViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Cancel" to="." method="_on_Cancel_pressed"]

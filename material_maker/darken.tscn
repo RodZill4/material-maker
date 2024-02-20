@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://cmeh4ewlvp7vx"]
 
-[ext_resource path="res://material_maker/darken.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/darken.gd" id="1"]
 
 [node name="Darken" type="ColorRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [connection signal="resized" from="." to="." method="_on_resized"]

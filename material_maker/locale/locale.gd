@@ -6,21 +6,17 @@ func get_translations_dir() -> String:
 	return LOCALE_DIR
 
 func create_translations_dir():
-	var dir : Directory = Directory.new()
-	dir.make_dir_recursive(LOCALE_DIR)
+	DirAccess.make_dir_absolute(LOCALE_DIR)
 
 func install_translation(fn : String):
 	create_translations_dir()
-	var dir : Directory = Directory.new()
-	if dir.copy(fn, LOCALE_DIR.plus_file(fn.get_file())) == OK:
+	var dir : DirAccess = DirAccess.open("")
+	if dir.copy(fn, LOCALE_DIR+"/"+fn.get_file()) == OK:
 		read_translations()
 
 func uninstall_translation(tn : String):
-	var dir : Directory = Directory.new()
-	if dir.open(LOCALE_DIR) != OK:
-		return
-	for ext in [ "po", "translation", "csv" ]:
-		dir.remove(LOCALE_DIR.plus_file(tn+"."+ext))
+	for ext in [ "po", "position", "csv" ]:
+		DirAccess.remove_absolute(LOCALE_DIR+"/"+tn+"."+ext)
 
 func add_translations(dest : Translation, src : Translation):
 	for m in src.get_message_list():
@@ -28,16 +24,16 @@ func add_translations(dest : Translation, src : Translation):
 
 func read_translations():
 	var translations : Dictionary = {}
-	var dir : Directory = Directory.new()
-	if dir.open(LOCALE_DIR) == OK:
+	var dir : DirAccess = DirAccess.open(LOCALE_DIR)
+	if dir != null:
 		var csv_files : Array = []
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir():
 				match file_name.get_extension():
-					"po", "translation":
-						var t : Translation = load(LOCALE_DIR.plus_file(file_name))
+					"po", "position":
+						var t : Translation = load(LOCALE_DIR+"/"+file_name)
 						if translations.has(t.locale):
 							add_translations(translations[t.locale], t)
 						else:
@@ -47,8 +43,8 @@ func read_translations():
 						csv_files.push_back(file_name)
 			file_name = dir.get_next()
 		for fn in csv_files:
-			var f : File = File.new()
-			if f.open(LOCALE_DIR.plus_file(fn), File.READ) == OK:
+			var f : FileAccess = FileAccess.open(LOCALE_DIR+"/"+fn, FileAccess.READ)
+			if f != null:
 				var l : String = f.get_line()
 				if l.left(2) == "id":
 					var separator = l[2]
@@ -61,11 +57,11 @@ func read_translations():
 							if translations.has(languages[i]):
 								languages[i] = translations[languages[i]]
 							else:
-								var translation : Translation = Translation.new()
-								translation.locale = languages[i]
-								translations[languages[i]] = translation
-								languages[i] = translation
-								TranslationServer.add_translation(translation)
+								var position : Translation = Translation.new()
+								position.locale = languages[i]
+								translations[languages[i]] = position
+								languages[i] = position
+								TranslationServer.add_translation(position)
 					while ! f.eof_reached():
 						l = f.get_line()
 						var strings : Array = l.split(separator)
@@ -73,5 +69,3 @@ func read_translations():
 							for i in range(1, languages.size()):
 								if languages[i] != null:
 									languages[i].add_message(strings[0].replace("\\n", "\n"), strings[i].replace("\\n", "\n"))
-				f.close()
-

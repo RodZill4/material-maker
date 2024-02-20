@@ -24,7 +24,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 
 func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor : bool = false):
 	var child : String
-	if scene.children.empty():
+	if scene.children.is_empty():
 		child = "0.0"
 	else:
 		var ctxt2 : Dictionary = ctxt.duplicate()
