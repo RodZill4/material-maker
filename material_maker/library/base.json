@@ -1811,9 +1811,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -1986,9 +1984,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -2193,9 +2189,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -3576,9 +3570,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -3818,9 +3810,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"type": "ios"
 						},
 						{
@@ -4100,9 +4090,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -4803,9 +4791,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -5263,9 +5249,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -5621,9 +5605,7 @@
 					"parameters": {
 
 					},
-					"ports": [
-
-					],
+					"ports": [],
 					"type": "ios"
 				},
 				{
@@ -6448,9 +6430,7 @@
 			"icon_data": "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",
 			"tree_item": "Miscellaneous/Remote",
 			"type": "remote",
-			"widgets": [
-
-			]
+			"widgets": []
 		},
 		{
 			"icon": "miscellaneous_comment",
@@ -6974,432 +6954,8 @@
 			"type": "fill_to_orientation2"
 		},
 		{
-			"connections": [
-				{
-					"from": "voronoi_3",
-					"from_port": 0,
-					"to": "buffer_5",
-					"to_port": 0
-				},
-				{
-					"from": "voronoi_2",
-					"from_port": 0,
-					"to": "buffer_7",
-					"to_port": 0
-				},
-				{
-					"from": "buffer_7",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "buffer_2",
-					"to_port": 0
-				},
-				{
-					"from": "buffer_2",
-					"from_port": 0,
-					"to": "voronoi_3",
-					"to_port": 0
-				},
-				{
-					"from": "buffer_5",
-					"from_port": 0,
-					"to": "voronoi_2",
-					"to_port": 0
-				}
-			],
-			"icon_data": "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",
-			"label": "HBAO",
-			"longdesc": "",
-			"name": "graph_6",
-			"nodes": [
-				{
-					"name": "voronoi_3",
-					"node_position": {
-						"x": -600.80072,
-						"y": -894.601807
-					},
-					"parameters": {
-						"angleBiasDeg": 15,
-						"depth_scale": 0.08,
-						"intensity": 1,
-						"quality": 4,
-						"radius": 0.1
-					},
-					"seed": 49449,
-					"seed_locked": false,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "0.0",
-								"function": true,
-								"label": "",
-								"name": "in",
-								"type": "f"
-							}
-						],
-						"instance": "//inspired by:\n//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf\n//https://gist.github.com/dotModded/981206ae1f4e760b7348\n//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl\n//radius - radius of influence in screen space\n//angleBiasDeg - ~minimum angle for AO\n//intensity - increase strength of caclulated AO\n//noiseScale - for randomization values\nfloat $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {\n  int samplig_directions = 8;\n  int steps = int($quality);\n\n  float angleBias = 0.0174532925 * angleBiasDeg;\n\n  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);\n  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177\n  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));\n\n\n  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));\n  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));\n  \n  // it should be faster than standard rotation in each iteartion\n  mat2 deltaRotationMatrix = mat2(\n\tvec2(cosMaxRot, -sinMaxROt),\n\tvec2(sinMaxROt, cosMaxRot)\n  );\n  \n  // calculate starting offset, as the smallest step\n  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));\n\n  //randomize angle\n  vec3 sampleNoise\t= rand3(uv * noiseScale);\n  sampleNoise.xy\t  = sampleNoise.xy * 2.0 - vec2(1.0);\n  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), \n\t\t\t\t\t\t\t vec2(sampleNoise.y,  sampleNoise.x));\n  \n  // apply a random rotation to the base step vector\n  offset_uv = rotationMatrix * offset_uv;\n  \n  float jitter = sampleNoise.z;\n  float occlusion = 0.0;\n  \n  for (int i = 0; i < samplig_directions; ++i) {\n\t// incrementally rotate sample direction\n\toffset_uv = deltaRotationMatrix * offset_uv;\n\tfloat oldAngle   = angleBias;\n\tfor (int j = 0; j < steps; ++j) {\n\t  //add jitter & distance to offset UV\n\t  vec2 sample_uv\t = uv + (jitter + float(j)) * offset_uv;\n\t  vec3 s_point\t = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);\n\t  vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok\n\t  // 90 deg - (angle between normal from current point &  sampled tangent)\n\t  //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors\n\t  float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));\n\t  \n\t  if (gamma > oldAngle) {\n\t\tfloat value = sin(gamma) - sin(oldAngle);\n\t\tfloat attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);\n\t\tocclusion += attenuation * value;\n\t\t//occlusion += value;\n\t\toldAngle = gamma;\n\t  }\n\t}\n  }\n  \n  occlusion = 1.0 - occlusion / float(samplig_directions);\n  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);\n}",
-						"longdesc": "A node that generates several images from a tileable voronoi noise",
-						"name": "HBAO",
-						"outputs": [
-							{
-								"f": "$(name)_hbao($uv,$radius, $angleBiasDeg, $intensity, vec2(16.0,16.0))",
-								"longdesc": "A color pattern that assigns a random color to each cell",
-								"shortdesc": "Random color",
-								"type": "f"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 0.01,
-								"label": "Radius",
-								"longdesc": "The scale along the X axis",
-								"max": 1,
-								"min": 0,
-								"name": "radius",
-								"shortdesc": "Scale.x",
-								"step": 0.01,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 30,
-								"label": "Angle Bias",
-								"longdesc": "Angle bias for AO",
-								"max": 90,
-								"min": 0,
-								"name": "angleBiasDeg",
-								"shortdesc": "Angle Bias",
-								"step": 1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0.2,
-								"label": "Intensity",
-								"longdesc": "Change intensity of AO",
-								"max": 5,
-								"min": 0,
-								"name": "intensity",
-								"shortdesc": "Intensity",
-								"step": 0.01,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 1,
-								"label": "Depth Scale",
-								"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
-								"max": 1,
-								"min": 0,
-								"name": "depth_scale",
-								"shortdesc": "Depth Scale",
-								"step": 0.01,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 4,
-								"label": "Steps",
-								"longdesc": "Steps in given direction per ray",
-								"max": 12,
-								"min": 1,
-								"name": "quality",
-								"shortdesc": "Quality",
-								"step": 1,
-								"type": "float"
-							}
-						],
-						"shortdesc": "Voronoi Noise"
-					},
-					"type": "shader"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -1338.030762,
-						"y": -788.080872
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"group_size": 0,
-							"longdesc": "Greyscale heightmap",
-							"name": "input",
-							"shortdesc": "Input",
-							"type": "f"
-						}
-					],
-					"seed": 43798,
-					"seed_locked": false,
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": -902.684204,
-						"y": -327.282288
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"group_size": 0,
-							"longdesc": "",
-							"name": "port0",
-							"shortdesc": "AO",
-							"type": "f"
-						}
-					],
-					"seed": 42623,
-					"seed_locked": false,
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": -1488.979004,
-						"y": -561.71167
-					},
-					"parameters": {
-						"param0": 10,
-						"param1": 0.1,
-						"param2": 15,
-						"param3": 0.08,
-						"param4": 4,
-						"param5": 1
-					},
-					"seed": 58911,
-					"seed_locked": false,
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Size",
-							"linked_widgets": [
-								{
-									"node": "voronoi_2",
-									"widget": "size"
-								},
-								{
-									"node": "buffer_2",
-									"widget": "size"
-								},
-								{
-									"node": "buffer_5",
-									"widget": "size"
-								},
-								{
-									"node": "buffer_7",
-									"widget": "size"
-								}
-							],
-							"name": "param0",
-							"shortdesc": "Size",
-							"type": "linked_control"
-						},
-						{
-							"label": "Radius",
-							"linked_widgets": [
-								{
-									"node": "voronoi_3",
-									"widget": "radius"
-								}
-							],
-							"longdesc": "Affected radius of point in UV size",
-							"name": "param1",
-							"shortdesc": "Radius",
-							"type": "linked_control"
-						},
-						{
-							"label": "Angle Bias",
-							"linked_widgets": [
-								{
-									"node": "voronoi_3",
-									"widget": "angleBiasDeg"
-								}
-							],
-							"longdesc": "Minimum angle on heightmap for AO to occur. Angle is calculated in UV space, where depth (grayscale input) is scaled by \"Depth Scale\" parameter",
-							"name": "param2",
-							"shortdesc": "Angle bias",
-							"type": "linked_control"
-						},
-						{
-							"label": "Depth Scale",
-							"linked_widgets": [
-								{
-									"node": "voronoi_3",
-									"widget": "depth_scale"
-								}
-							],
-							"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
-							"name": "param3",
-							"shortdesc": "Depth Scale",
-							"type": "linked_control"
-						},
-						{
-							"label": "Quality",
-							"linked_widgets": [
-								{
-									"node": "voronoi_3",
-									"widget": "quality"
-								}
-							],
-							"longdesc": "Number of steps per direction sampling",
-							"name": "param4",
-							"shortdesc": "Quality",
-							"type": "linked_control"
-						},
-						{
-							"label": "Intensity",
-							"linked_widgets": [
-								{
-									"node": "voronoi_3",
-									"widget": "intensity"
-								}
-							],
-							"longdesc": "Change intensity of calculated AO",
-							"name": "param5",
-							"shortdesc": "Intensity",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "voronoi_2",
-					"node_position": {
-						"x": -710.111145,
-						"y": -596.459534
-					},
-					"parameters": {
-						"ksigma": 4,
-						"sigma": 3,
-						"size": 10,
-						"threshold": 0.7
-					},
-					"seed": 38722,
-					"seed_locked": false,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "0.0",
-								"function": true,
-								"label": "",
-								"name": "in",
-								"type": "rgba"
-							}
-						],
-						"instance": "//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  Copyright (c) 2018-2019 Michele Morrone\n//  All rights reserved.\n//\n//  https://michelemorrone.eu - https://BrutPitt.com\n//\n//  me@michelemorrone.eu - brutpitt@gmail.com\n//  twitter: @BrutPitt - github: BrutPitt\n//  \n//  https://github.com/BrutPitt/glslSmartDeNoise/\n//\n//  This software is distributed under the terms of the BSD 2-Clause license\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//  smartDeNoise - parameters\n//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n//\n//  sampler2D tex\t - sampler image / texture\n//  vec2 uv\t\t   - actual fragment coord\n//  float sigma  >  0 - sigma Standard Deviation\n//  float kSigma >= 0 - sigma coefficient \n//\t  kSigma * sigma  -->  radius of the circular kernel\n//  float threshold   - edge sharpening threshold \nvec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)\n{\n\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI\n\tfloat INV_PI = 0.31830988618379067153776752674503;\n\tfloat radius = round(kSigma*sigma);\n\tfloat radQ = radius * radius;\n\n\tfloat invSigmaQx2 = .5 / (sigma * sigma);\t  // 1.0 / (sigma^2 * 2.0)\n\tfloat invSigmaQx2PI = INV_PI * invSigmaQx2;\t// 1/(2 * PI * sigma^2)\n\n\tfloat invThresholdSqx2 = .5 / (threshold * threshold);\t // 1.0 / (sigma^2 * 2.0)\n\tfloat invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)\n\n\tvec4 centrPx = $in(uv); \n\n\tfloat zBuff = 0.0;\n\tvec4 aBuff = vec4(0.0);\n\tvec2 size = vec2($size, $size);\n\n\tvec2 d;\n\tfor (d.x=-radius; d.x <= radius; d.x++) {\n\t\tfloat pt = sqrt(radQ-d.x*d.x);\t   // pt = yRadius: have circular trend\n\t\tfor (d.y=-pt; d.y <= pt; d.y++) {\n\t\t\tfloat blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;\n\n\t\t\tvec4 walkPx =  $in(uv+d/size);\n\t\t\tvec4 dC = walkPx-centrPx;\n\t\t\tfloat deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;\n\n\t\t\tzBuff += deltaFactor;\n\t\t\taBuff += deltaFactor*walkPx;\n\t\t}\n\t}\n\treturn aBuff/zBuff;\n}",
-						"longdesc": "A node that generates several images from a tileable voronoi noise",
-						"name": "Denoiser",
-						"outputs": [
-							{
-								"longdesc": "A color pattern that assigns a random color to each cell",
-								"rgba": "$(name)_smartDeNoise($uv, $sigma, $ksigma, $threshold)",
-								"shortdesc": "Random color",
-								"type": "rgba"
-							}
-						],
-						"parameters": [
-							{
-								"default": 10,
-								"first": 0,
-								"label": "size",
-								"last": 12,
-								"longdesc": "The scale along the X axis",
-								"name": "size",
-								"shortdesc": "Scale.x",
-								"type": "size"
-							},
-							{
-								"control": "None",
-								"default": 0.5,
-								"label": "Sigma",
-								"max": 1,
-								"min": 0.005,
-								"name": "sigma",
-								"step": 0.1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0.5,
-								"label": "kSigma",
-								"max": 1,
-								"min": 0,
-								"name": "ksigma",
-								"step": 0.1,
-								"type": "float"
-							},
-							{
-								"control": "None",
-								"default": 0.5,
-								"label": "threshold",
-								"max": 1,
-								"min": 0,
-								"name": "threshold",
-								"step": 0.1,
-								"type": "float"
-							}
-						],
-						"shortdesc": "Voronoi Noise"
-					},
-					"type": "shader"
-				},
-				{
-					"name": "buffer_5",
-					"node_position": {
-						"x": -931.449646,
-						"y": -724.330017
-					},
-					"parameters": {
-						"size": 10
-					},
-					"seed": 6771,
-					"seed_locked": false,
-					"type": "buffer",
-					"version": 1
-				},
-				{
-					"name": "buffer_7",
-					"node_position": {
-						"x": -948.36377,
-						"y": -449.796295
-					},
-					"parameters": {
-						"size": 10
-					},
-					"seed": 16139,
-					"seed_locked": false,
-					"type": "buffer",
-					"version": 1
-				},
-				{
-					"name": "buffer_2",
-					"node_position": {
-						"x": -976.009644,
-						"y": -975.5
-					},
-					"parameters": {
-						"size": 10
-					},
-					"seed": 42465,
-					"seed_locked": false,
-					"type": "buffer",
-					"version": 1
-				}
-			],
+			"icon_data": "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",
+			"name": "hbao",
 			"parameters": {
 				"param0": 10,
 				"param1": 0.1,
@@ -7408,11 +6964,9 @@
 				"param4": 4,
 				"param5": 1
 			},
-			"seed": 6741,
-			"seed_locked": false,
-			"shortdesc": "",
+			"seed_int": 0,
 			"tree_item": "Filter/HBAO",
-			"type": "graph"
+			"type": "hbao"
 		},
 		{
 			"icon_data": "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",
@@ -7433,9 +6987,7 @@
 			"parameters": {
 
 			},
-			"sdf_scene": [
-
-			],
+			"sdf_scene": [],
 			"seed": 0,
 			"seed_locked": false,
 			"tree_item": "Simple/EasySDF",
@@ -7736,6 +7288,16 @@
 			"seed_int": 0,
 			"tree_item": "Pattern/Cairo",
 			"type": "cairo"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAJZJREFUeJzt0EERwDAAw7Cs/Dl3MPSohcDnb9vdw44O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpA+wFQtAF/ACpk+QAAAABJRU5ErkJggg==",
+			"name": "uniform",
+			"parameters": {
+				"map": 0
+			},
+			"seed": 51108,
+			"tree_item": "Miscellaneous/Mesh Map",
+			"type": "meshmap"
 		},
 		{
 			"icon": "simple_sdf_arrow",
