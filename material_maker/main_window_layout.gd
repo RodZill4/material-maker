@@ -50,7 +50,8 @@ func load_panels() -> void:
 func save_config() -> void:
 	var current_config : Dictionary = $FlexibleLayout.serialize()
 	for mode in [ "material", "paint" ]:
-		mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))
+		if layout.has(mode):
+			mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))
 
 func get_panel(n) -> Control:
 	if panels.has(n):

@@ -98,7 +98,7 @@ func _on_Model_item_selected(id) -> void:
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 		for f in MMMeshLoader.get_file_dialog_filters():
-			dialog.add_filter()
+			dialog.add_filter(f)
 		if mm_globals.config.has_section_key("path", "mesh"):
 			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
 		var files = await dialog.select_files()
