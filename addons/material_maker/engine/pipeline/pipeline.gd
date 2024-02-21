@@ -6,12 +6,19 @@ class Parameter:
 	extends RefCounted
 	
 	var type : String
+	var array_size : int
 	var offset : int
 	var size : int
 	var value
 	
 	func _init(t : String, v):
-		type = t
+		var bracket_position = t.find("[")
+		if bracket_position != -1:
+			array_size = t.substr(bracket_position+1, t.find("]", bracket_position+1)).to_int()
+			type = t.left(bracket_position)
+		else:
+			type = t
+			array_size = 0
 		offset = 0
 		match type:
 			"bool":
@@ -157,6 +164,10 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 				if value is float or value is int:
 					parameter_values.encode_float(p.offset, value)
 					return
+				elif value is PackedFloat32Array and value.size() == p.array_size:
+					for i in value.size():
+						parameter_values.encode_float(p.offset+i*4, value[i])
+					return
 			"vec2":
 				if value is Vector2 or value is Vector2i:
 					parameter_values.encode_float(p.offset,    value.x)
@@ -174,6 +185,13 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 					parameter_values.encode_float(p.offset+4,  value.g)
 					parameter_values.encode_float(p.offset+8,  value.b)
 					parameter_values.encode_float(p.offset+12, value.a)
+					return
+				elif value is PackedColorArray and value.size() == p.array_size:
+					for i in value.size():
+						parameter_values.encode_float(p.offset+i*16,    value[i].r)
+						parameter_values.encode_float(p.offset+i*16+4,  value[i].g)
+						parameter_values.encode_float(p.offset+i*16+8,  value[i].b)
+						parameter_values.encode_float(p.offset+i*16+12, value[i].a)
 					return
 			"mat4x4":
 				if value is Projection:
@@ -206,9 +224,15 @@ func get_uniform_declarations() -> String:
 			var parameter : Parameter = parameters[p]
 			if parameter.type != type:
 				continue
-			uniform_declarations += "\t%s %s;\n" % [ parameter.type, p ]
+			var array : String = ""
+			if parameter.array_size > 0:
+				array = "[%d]" % parameter.array_size
+			uniform_declarations += "\t%s %s%s;\n" % [ parameter.type, p, array ]
 			parameter.offset = size
-			size += parameter.size
+			if parameter.array_size == 0:
+				size += parameter.size
+			else:
+				size += parameter.size*parameter.array_size
 	if uniform_declarations != "":
 		uniform_declarations = "layout(set = 1, binding = 0, std430) restrict readonly buffer Parameters {\n"+uniform_declarations+"};\n"
 		parameter_values.resize(size)

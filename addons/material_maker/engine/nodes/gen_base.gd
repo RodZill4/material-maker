@@ -34,22 +34,48 @@ class ShaderUniform:
 	extends RefCounted
 	var name : String
 	var type : String
+	var size : int
 	var value
 	
-	func _init(n : String, t : String, v) -> void:
+	func _init(n : String, t : String, v, s : int = 0) -> void:
 		name = n
 		type = t
+		size = s
 		value = v
 	
-	func to_str(keyword : String = "uniform") -> String:
+	func to_str(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
 		var str_value_assign : String = ""
 		match type:
 			"float":
-				str_value_assign = " = %.9f" % value
+				if value is float:
+					str_value_assign = " = %.9f" % value
+				elif value is PackedFloat32Array and initialize_vectors:
+					str_value_assign = " = float[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign += "%.9f" % v
+					str_value_assign += " )"
 			"vec4":
 				if value is Color:
 					str_value_assign = " = vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
-		return "%s %s %s%s;\n" % [ keyword, type, name, str_value_assign ]
+				elif value is PackedColorArray and initialize_vectors:
+					str_value_assign = " = vec4[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec4(%.9f, %.9f, %.9f, %.9f)" % [ v.r, v.g, v.b, v.a ]
+					str_value_assign += " )"
+		var size_string : String = ""
+		if size > 0:
+			size_string = "[%d]" % size
+		return "%s %s %s%s%s;\n" % [ keyword, type, name, size_string, str_value_assign ]
 
 class ShaderCode:
 	extends RefCounted
@@ -66,20 +92,20 @@ class ShaderCode:
 			if ! g in globals:
 				globals.append(g)
 	
-	func add_uniform(n : String, t : String, v) -> void:
+	func add_uniform(n : String, t : String, v, s : int = 0) -> void:
 		for u in uniforms:
 			if n == u.name:
 				return
-		uniforms.append(ShaderUniform.new(n, t, v))
+		uniforms.append(ShaderUniform.new(n, t, v, s))
 
 	func add_uniforms(uniform_list : Array[ShaderUniform]) -> void:
 		for u in uniform_list:
-			add_uniform(u.name, u.type, u.value)
+			add_uniform(u.name, u.type, u.value, u.size)
 
-	func uniforms_as_strings(keyword : String = "uniform") -> String:
+	func uniforms_as_strings(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
 		var rv : String = ""
 		for u in uniforms:
-			rv += u.to_str(keyword)
+			rv += u.to_str(keyword, initialize_vectors)
 		return rv
 
 var position : Vector2 = Vector2(0, 0)
@@ -265,18 +291,9 @@ func set_parameter(n : String, v) -> void:
 				return
 			elif parameter_def.type == "gradient":
 				if old_value is MMGradient and v is MMGradient and old_value != null:
-					old_value.sort()
-					v.sort()
-					var parameter_changes = {}
-					for i in range(v.points.size()):
-						if i >= old_value.points.size() or v.points[i].v != old_value.points[i].v:
-							var parameter_name = "p_o%d_%s_%d_pos" % [ get_instance_id(), n, i ]
-							parameter_changes[parameter_name] = v.points[i].v
-						if i >= old_value.points.size() or v.points[i].c != old_value.points[i].c:
-							var parameter_name = "p_o%d_%s_%d_col" % [ get_instance_id(), n, i ]
-							parameter_changes[parameter_name] = v.points[i].c
-					mm_deps.dependencies_update(parameter_changes)
-					if old_value.points.size() == v.points.size():
+					if old_value.interpolation == v.interpolation and old_value.points.size() == v.points.size():
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
 						return
 			elif parameter_def.type == "curve":
 				if old_value is MMCurve and v is MMCurve and old_value != null:
