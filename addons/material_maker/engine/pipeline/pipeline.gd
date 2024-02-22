@@ -173,6 +173,11 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 					parameter_values.encode_float(p.offset,    value.x)
 					parameter_values.encode_float(p.offset+4,  value.y)
 					return
+				elif value is PackedVector2Array and value.size() == p.array_size:
+					for i in value.size():
+						parameter_values.encode_float(p.offset+i*8, value[i].x)
+						parameter_values.encode_float(p.offset+i*8+4, value[i].y)
+					return
 			"vec3":
 				if value is Vector3:
 					parameter_values.encode_float(p.offset,    value.x)

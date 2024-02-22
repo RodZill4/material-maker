@@ -295,6 +295,16 @@ func set_parameter(n : String, v) -> void:
 						# Only values changed, no need to regenerate the shader
 						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
 						return
+			elif parameter_def.type == "polyline" or parameter_def.type == "polygon":
+				if old_value is Dictionary:
+					old_value = MMType.deserialize_value(old_value)
+				if v is Dictionary:
+					v = MMType.deserialize_value(v)
+				if old_value is MMPolygon and v is MMPolygon and old_value != null:
+					if old_value.points.size() == v.points.size():
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
+						return
 			elif parameter_def.type == "curve":
 				if old_value is MMCurve and v is MMCurve and old_value != null:
 					var parameter_changes = {}
