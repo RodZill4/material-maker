@@ -455,7 +455,7 @@
 							"widget": "size"
 						}
 					],
-					"longdesc": "Higher values produce more stylized results",
+					"longdesc": "Size of the filter. Higher values produce more stylized results but also increases computation time.",
 					"name": "size",
 					"shortdesc": "Filter Size",
 					"type": "linked_control"
