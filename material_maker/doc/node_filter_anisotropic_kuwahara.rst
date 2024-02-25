@@ -28,7 +28,7 @@ The **Anisotropic Kuwahara** node accepts the following parameters:
 
 *  **Resolution** used to sample the input image.
 
-*  **Size** of the filter. Higher values can produce more stylized results.
+*  **Size** of the filter. Higher values can produce more stylized results, but also slows down the filter.
 
 *  **Uniformity** of the image edges' directions.
 
