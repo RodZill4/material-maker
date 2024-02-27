@@ -3,7 +3,7 @@ Generalized Kuwahara node
 
 The **Generalized Kuwahara** node applies an edge-preserving smoothing filter to its input.
 
-This has better visuals qualities compared to the classic implementation, but is still inferior
+This has better visual qualities compared to the classic implementation, but is still inferior
 to the anisotropic variant at preserving directional details.
 
 .. image:: images/node_filter_generalized_kuwahara.png
