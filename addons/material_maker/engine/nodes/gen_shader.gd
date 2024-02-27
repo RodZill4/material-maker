@@ -787,7 +787,9 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 			if !(value is MMPolygon):
 				value = MMPolygon.new()
 				value.deserialize(parameters[p.name])
-			variables[p.name] = value.get_shader()
+			if generate_declarations:
+				rv.add_uniforms(value.get_parameters(genname+"_"+p.name))
+			variables[p.name] = value.get_shader(genname+"_"+p.name)
 		else:
 			print("ERROR: Unsupported parameter "+p.name+" of type "+p.type)
 
