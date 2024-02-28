@@ -10,7 +10,7 @@ them based on input selection shapes
 Inputs
 ......
 
-The **Shape Select** node accepts two 3D texture inputs:
+The **Shape Select** node accepts two or more 3D texture inputs:
 
 * The default texture, used for all samples that are outside the selection shape
 
