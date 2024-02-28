@@ -23,7 +23,7 @@ The **Cut Sphere** node accepts the following parameters:
 
 * The **Radius** of the sphere.
 
-* The **Amount** node defines the portion of the sphere to be cut.
+* The **Amount** defines the portion of the sphere to be cut.
 
 Example images
 ::::::::::::::
