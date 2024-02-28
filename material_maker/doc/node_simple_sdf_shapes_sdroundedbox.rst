@@ -21,17 +21,17 @@ Parameters
 
 The **sdRoundedBox** node accepts the following parameters:
 
-* **Width** of the rounded box.
+* **Width* of the rounded box.
 
 * **Height** of the rounded box.
 
-* **Bottom Left** corner radius of the rounded box.
+* **Top Left** corner radius of the rounded box.
 
 * **Top Right** corner radius of the rounded box.
 
 * **Bottom Left** corner radius of the rounded box.
 
-* **Top Left** corner radius of the rounded box.
+* **Bottom Right** corner radius of the rounded box.
 
 * Position of the center along X and Y axis
 
