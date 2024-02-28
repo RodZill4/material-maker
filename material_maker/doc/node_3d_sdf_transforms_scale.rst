@@ -1,7 +1,7 @@
 Scale node
 ..........
 
-The **Scale** node is variadic generates 3D signed distance functions of scaled shapes
+The **Scale** node is variadic and generates 3D signed distance functions of scaled shapes
 based on its inputs. If the input shapes are associated to color indexes, the
 scale node applies them to the output.
 
