@@ -19,7 +19,7 @@ The **sdIsoscelesTriangle** node generates a signed distance function for a isos
 Parameters
 ::::::::::
 
-The **sdNGon** node accepts the following parameters:
+The **sdIsoscelesTriangle** node accepts the following parameters:
 
 * **Width** of the isosceles triangle.
 

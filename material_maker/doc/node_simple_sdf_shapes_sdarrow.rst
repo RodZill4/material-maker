@@ -21,7 +21,7 @@ Parameters
 
 The **sdArrow** node accepts the following parameters:
 
-* *X and Y coordinates of both ends of the arrow*.
+* *X* and *Y* position of both ends of the arrow.
 
 * **Ratio** of the arrow head to tail.
 

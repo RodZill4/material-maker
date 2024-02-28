@@ -9,12 +9,12 @@ The **sdHexagram** node generates a signed distance image for a hexagram.
 Inputs
 ::::::
 
-The **sdNGon** node does not accept any input.
+The **sdHexagram** node does not accept any input.
 
 Outputs
 :::::::
 
-The **sdNGon** node generates a signed distance function for a hexagram.
+The **sdHexagram** node generates a signed distance function for a hexagram.
 
 Parameters
 ::::::::::
