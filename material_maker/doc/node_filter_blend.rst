@@ -34,7 +34,8 @@ The **Blend** node has two or more parameters:
 
 * The *blend mode*, that can be one of the following: *Normal*, *Dissolve*, *Multiply*, *Screen*,
   *Overlay*, *Hard Light*, *Soft Light*, *Linear Light*, *Vivid Light*, *Pin Light*, *Burn*, *Dodge*,
-  *Lighten*, *Darken*, *Difference*, *Additive*, *AddSub*, *Hard Mix*, *Exclusion*.
+  *Lighten*, *Darken*, *Difference*, *Additive*, *AddSub*, *Hard Mix*, *Exclusion*, *Hue*, *Saturation*,
+  *Color*, *Value*.
 
 * The *opacity* is used when mixing the result of the blend operation with the background input
   when the corresponding input is not connected. When connected, the opacity channel is
@@ -132,13 +133,13 @@ Blending modes
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Exclusion             | |blend_exclusion|             | This blend mode is similar to Difference, but it is less intense                                                              |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
-| Hue                   | |blend_hue|                   | This blend mode takes the hue of the bottom layer and combines them with the saturation and value of the top layer            |
+| Hue                   | |blend_hue|                   | This blend mode takes the hue of the top layer and combines them with the saturation and value of the bottom layer            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
-| Saturation            | |blend_saturation|            | This blend mode takes the saturation of the bottom layer and combines them with the hue and value of the top layer            |
+| Saturation            | |blend_saturation|            | This blend mode takes the saturation of the top layer and combines them with the hue and value of the bottom layer            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
-| Color                 | |blend_color|                 | This blend mode takes the hue and saturation of the bottom layer and combines them with the value of the top layer            |
+| Color                 | |blend_color|                 | This blend mode takes the hue and saturation of the top layer and combines them with the value of the bottom layer            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
-| Value                 | |blend_value|                 | This blend mode takes the value of the bottom layer and combines them with the hue and saturation of the top layer            |
+| Value                 | |blend_value|                 | This blend mode takes the value of the top layer and combines them with the hue and saturation of the bottom layer            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 Notes
