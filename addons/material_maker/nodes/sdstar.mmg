@@ -53,9 +53,9 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 3,
-				"label": "N",
-				"longdesc": "The number of branches of the star",
+				"default": 6,
+				"label": "Points",
+				"longdesc": "The number of points of the star",
 				"max": 12,
 				"min": 3,
 				"name": "n",
@@ -65,7 +65,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.45,
 				"label": "Radius",
 				"longdesc": "The radius of the star",
 				"max": 1,
@@ -77,7 +77,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.25,
+				"default": 0.5,
 				"label": "Pointiness",
 				"longdesc": "The pointiness of the star",
 				"max": 1,

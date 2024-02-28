@@ -21,7 +21,7 @@ Parameters
 
 The **sdStar** node accepts the following parameters:
 
-* The number of branches of the star.
+* The number of **Points** of the star.
 
 * The **Radius** of the star.
 
