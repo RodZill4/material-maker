@@ -1,7 +1,7 @@
 sdEgg node
 ..........
 
-The **sdNGon** node generates a signed distance image for an egg.
+The **sdEgg** node generates a signed distance image for an egg.
 
 .. image:: images/node_simple_sdf_shapes_sdegg.png
 	:align: center
@@ -21,9 +21,9 @@ Parameters
 
 The **sdEgg** node accepts the following parameters:
 
-* Major **Radius** of the egg.
+* **Radius** of the egg.
 
-* **Small Radius** of the tip of the egg
+* **Pointiness** of the tip of the egg.
 
 * Position of the center along X and Y axis.
 
