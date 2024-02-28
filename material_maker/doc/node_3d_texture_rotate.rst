@@ -19,7 +19,7 @@ The **Rotate** node provides rotated 3D textures.
 Parameters
 ..........
 
-The **Rotate** node has a X, Y and Z parameters that define the rotations around each axis.
+The **Rotate** node has X, Y and Z parameters that define the rotations around each axis.
 
 Example images
 ..............

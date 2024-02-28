@@ -19,7 +19,7 @@ The **Scale** node provides scaled 3D textures.
 Parameters
 ..........
 
-The **Scale** node has a X, Y and Z parameters that define the scaling on each axis.
+The **Scale** node has X, Y and Z parameters that define the scaling on each axis.
 
 Example images
 ..............
