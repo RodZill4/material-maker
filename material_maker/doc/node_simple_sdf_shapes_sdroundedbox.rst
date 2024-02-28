@@ -21,7 +21,7 @@ Parameters
 
 The **sdRoundedBox** node accepts the following parameters:
 
-* **Width* of the rounded box.
+* **Width** of the rounded box.
 
 * **Height** of the rounded box.
 
