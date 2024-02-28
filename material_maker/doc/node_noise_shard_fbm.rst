@@ -25,9 +25,9 @@ The Shard FBM Noise node accepts the following parameters:
 
 * *Sharpness* of the noise
 * *X* and *Y* scale of the first octave noise
-* Number of folds (offsetting the noise negatively and taking the absolute value)
-* Number of iterations
-* Persistance, i.e. the strength of each subsequent iteration
+* Number of *Folds* (offsetting the noise negatively and taking the absolute value)
+* Number of *Iterations*
+* *Persistance*, i.e. the strength of each subsequent iteration
 * *Offset* of the points, can be used to animate the noise
 
 Example images
