@@ -68,7 +68,7 @@
 		}
 	],
 	"label": "Mask to SDF",
-	"longdesc": "",
+	"longdesc": "Generates a signed distance image from an image mask",
 	"name": "sd_mask_to_sdf",
 	"node_position": {
 		"x": 0,
@@ -1269,6 +1269,6 @@
 		"param3": 0
 	},
 	"seed_int": 0,
-	"shortdesc": "",
+	"shortdesc": "Mask to SDF",
 	"type": "graph"
 }
