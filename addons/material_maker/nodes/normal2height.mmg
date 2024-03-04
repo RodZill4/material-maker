@@ -62,7 +62,7 @@
 		}
 	],
 	"label": "Normal to Height",
-	"longdesc": "",
+	"longdesc": "Generates a height map from a normal map in Material Maker's internal format",
 	"name": "normal2height",
 	"node_position": {
 		"x": 0,
@@ -350,6 +350,6 @@
 	},
 	"seed": 0,
 	"seed_locked": false,
-	"shortdesc": "",
+	"shortdesc": "Normal to Height",
 	"type": "graph"
 }
