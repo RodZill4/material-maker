@@ -58,12 +58,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "Generates several octaves of greyscale value noise",
+		"longdesc": "Generates several octaves of greyscale wavelet noise",
 		"name": "Wavelet Noise",
 		"outputs": [
 			{
 				"f": "wavelet_noise($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), $(seed), $frequency, $offset, $type)",
-				"longdesc": "Shows a greyscale value noise",
+				"longdesc": "Shows a greyscale wavelet noise",
 				"shortdesc": "Output",
 				"type": "f"
 			}
@@ -166,7 +166,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "Value Noise"
+		"shortdesc": "Wavelet Noise"
 	},
 	"type": "shader"
 }
