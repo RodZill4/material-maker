@@ -6,10 +6,8 @@
 custom_minimum_size = Vector2(7, 7)
 layout_mode = 3
 anchors_preset = 0
-offset_left = 56.9864
-offset_top = 33.8615
-offset_right = 63.9864
-offset_bottom = 40.8615
+offset_right = 7.0
+offset_bottom = 7.0
 script = ExtResource("1")
 
 [connection signal="gui_input" from="." to="." method="_on_ControlPoint_gui_input"]
