@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://dg0sqlyx7rksh"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_k42h5"]
+
+[resource]
+script = ExtResource("1_k42h5")
+text = ""

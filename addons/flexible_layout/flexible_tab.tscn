@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://e06xegp2tp3f"]
 
 [ext_resource type="Script" path="res://addons/flexible_layout/flexible_tab.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://c5br5opw6gmyp" path="res://addons/flexible_layout/undock.svg" id="2_ln5tf"]
+[ext_resource type="Texture2D" uid="uid://xuy6dfh1rsne" path="res://addons/flexible_layout/undock.png" id="2_nx0qp"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bok24"]
 size = Vector2(16, 16)
@@ -27,14 +27,13 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-text = "Blah"
 
 [node name="Undock" type="TextureButton" parent="Container"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("2_ln5tf")
+texture_normal = ExtResource("2_nx0qp")
 
 [node name="Close" type="TextureButton" parent="Container"]
 visible = false

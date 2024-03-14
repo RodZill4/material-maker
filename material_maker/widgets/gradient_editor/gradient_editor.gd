@@ -75,8 +75,8 @@ var value : MMGradient = null :
 		set_value(new_value)
 @export var embedded : bool = true
 
-var continuous_change = true
-var popup = null
+var continuous_change : bool = true
+var popup : Popup = null
 
 signal updated(value, cc)
 
@@ -129,7 +129,7 @@ func update_from_value() -> void:
 	for c in get_children():
 		if c is GradientCursor:
 			cursors.append(c)
-	if true or cursors.size() != value.points.size():
+	if cursors.size() != value.points.size():
 		value.clear()
 		for c in get_children():
 			if c is GradientCursor:
@@ -139,10 +139,9 @@ func update_from_value() -> void:
 		for i in cursors.size():
 			var c = cursors[i]
 			var p : float = c.position.x/(size.x-GradientCursor.WIDTH)
-			value.points[i].v = p
-			$Gradient.material.set_shader_parameter("p__%d_pos" % i, p)
+			value.set_point_position(i, p)
 			value.points[i].c = c.color
-			$Gradient.material.set_shader_parameter("p__%d_col" % i, c.color)
+		update_shader_parameters()
 	emit_signal("updated", value, continuous_change)
 	continuous_change = true
 
@@ -160,20 +159,19 @@ func add_cursor(x, color) -> void:
 
 func _gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.button_index == 1 and ev.double_click:
-		if ev.position.y > 15:
+		if embedded and ev.position.y < 15:
+			popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instantiate()
+			add_child(popup)
+			var popup_size : Vector2i = Vector2i(420, 40)
+			popup.popup(Rect2(get_window().position+Vector2i(ev.global_position)-Vector2i(popup_size.x / 2, 0), popup_size))
+			popup.init(value)
+			popup.connect("updated", Callable(self, "set_value_and_update"))
+			popup._on_size_changed()
+		else:
 			var p = clamp(ev.position.x, 0, size.x-GradientCursor.WIDTH)
 			add_cursor(p, get_gradient_color(p))
 			continuous_change = false
 			update_from_value()
-		elif embedded:
-			popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instantiate()
-			add_child(popup)
-			var popup_size = popup.size
-			popup.popup(Rect2(ev.global_position, Vector2(0, 0)))
-			popup.set_global_position(ev.global_position-Vector2(popup_size.x / 2, popup_size.y))
-			popup.init(value)
-			popup.connect("updated", Callable(self, "set_value_and_update"))
-			popup.connect("popup_hide", Callable(popup, "queue_free"))
 
 # Showing a color picker popup to change a cursor's color
 
@@ -211,7 +209,13 @@ func update_shader() -> void:
 	shader += value.get_shader("")
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
+	update_shader_parameters()
 
+func update_shader_parameters() -> void:
+	var parameter_values : Dictionary = value.get_parameter_values("")
+	for n in parameter_values.keys():
+		$Gradient.material.set_shader_parameter(n, parameter_values[n])
+	
 func _on_interpolation_pressed():
 	pass
 	#var popup : PopupMenu = $Interpolation.get_popup()

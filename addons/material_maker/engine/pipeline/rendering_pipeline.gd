@@ -9,11 +9,11 @@ var clearColors : PackedColorArray = PackedColorArray([Color.TRANSPARENT])
 
 
 func create_framebuffer(rd : RenderingDevice, texture_rid : RID, depth_rid : RID = RID()) -> RID:
-	var textures : Array[RID] = [ texture_rid ]
+	var framebuffer_textures : Array[RID] = [ texture_rid ]
 	if depth_rid.is_valid():
-		textures.append(depth_rid)
+		framebuffer_textures.append(depth_rid)
 	var framebuffer : RID
-	framebuffer = rd.framebuffer_create(textures)
+	framebuffer = rd.framebuffer_create(framebuffer_textures)
 	return framebuffer
 
 func bind_buffer_uniforms(rd : RenderingDevice, draw_list : int, shader : RID, buffers : Array[PackedByteArray], set : int, rids : RIDs):
@@ -25,7 +25,7 @@ func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, 
 	pass
 
 func set_shader(vertex_source : String, fragment_source : String, replaces : Dictionary = {}):
-	replaces["@DECLARATIONS"] = get_uniform_declarations()+"\n"+get_texture_declarations()
+	replaces["@DECLARATIONS"] = get_uniform_declarations()+"\n"+get_input_texture_declarations()
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	shader = do_compile_shader(rd, { vertex=vertex_source, fragment=fragment_source }, replaces)
 	mm_renderer.release_rendering_device(self)
@@ -76,12 +76,10 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 			print("Failed to create valid uniform for parameters")
 			return false
 	
-	var uniform_set_2 = RID()
-	if !textures.is_empty():
-		uniform_set_2 = get_texture_uniforms(rd, shader, rids)
-		if ! uniform_set_2.is_valid():
-			print("Failed to create valid uniform for textures")
-			return false
+	var uniform_set_2 : RID = get_texture_uniforms(rd, shader, rids)
+	if uniform_set_2.get_id() != 0 and not uniform_set_2.is_valid():
+		print("Failed to create valid uniform for input textures")
+		return false
 	
 	if uniform_set_1.is_valid():
 		rd.draw_list_bind_uniform_set(draw_list, uniform_set_1, 1)

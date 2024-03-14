@@ -1,7 +1,7 @@
 shader_type canvas_item;
 render_mode blend_disabled, unshaded;
 
-uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
+// uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
 uniform bool      texture_space = false;
 uniform vec2      rect_size;
@@ -55,6 +55,7 @@ float brush(vec2 uv, float jo) {
 }
 
 vec2 seams_uv(vec2 uv) {
+	return texture(seams, uv).xy;
 	vec2 seams_value = texture(seams, uv).xy-vec2(0.5);
 	return fract(uv+seams_value*seams_multiplier/texture_size);
 }
@@ -81,6 +82,9 @@ void fragment() {
 	// Get UV from seams texture
 	vec2 uv;
 	
+	vec4 screen_color = vec4(0.0); // texture(SCREEN_TEXTURE, UV);
+	vec4 output_color;
+	
 	vec2 xy;
 	vec2 b;
 	vec2 bv;
@@ -99,6 +103,7 @@ void fragment() {
 		ja = 6.28318530718*(r.x-0.5)*jitter_angle;
 		jo = (2.0*fract(r.y)-1.0)*jitter_opacity+1.0;
 	}
+	
 	// Get View position
 	if (texture_space) {
 		uv = UV;
@@ -121,19 +126,27 @@ void fragment() {
 	float x = clamp(dot(p-b, bv)/dot(bv, bv), 0.0, 1.0);
 	// Get position in brush
 	vec2 local_uv = p-(b+x*bv);
-
-#if TEXTURE_TYPE == "paint_mask"
-
+	// TODO: local_uv changes go here
+#if TEXTURE_TYPE == "paint_mask" or BRUSH_MODE == "stamp"
 	float pattern_angle_cos = cos(pattern_angle+ja);
 	float pattern_angle_sin = sin(pattern_angle+ja);
 	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
 	local_uv = texture_rotation*local_uv;
+#endif
+	float brush_value = brush(0.5*local_uv+vec2(0.5), jo);
+	
+#if TEXTURE_TYPE == "paint_mask"
+
+	// float pattern_angle_cos = cos(pattern_angle+ja);
+	// float pattern_angle_sin = sin(pattern_angle+ja);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	// local_uv = texture_rotation*local_uv;
 	vec4 color = vec4(1.0)*pattern_function(fract(uv));
-	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5), jo)*tex2view.z;
+	float a = fill ? 1.0 : brush_value*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 	
-	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
-	COLOR = vec4(color.rgb, max(screen_color.a, a*color.a));
+
+	output_color = vec4(color.rgb, max(screen_color.a, a*color.a));
 
 #elif TEXTURE_TYPE == "paint_mr"
 
@@ -142,34 +155,33 @@ void fragment() {
 	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(xy - vec2(0.5, 0.5)));
 	vec4 color = pattern_function(fract(pattern_uv));
 	
-	vec2 a = fill ? vec2(1.0) : vec2(brush(0.5*local_uv+vec2(0.5), jo))*color.ba*tex2view.z;
+	vec2 a = fill ? vec2(1.0) : vec2(brush_value)*color.ba*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 #elif BRUSH_MODE == "stamp"
-	float pattern_angle_cos = cos(pattern_angle+ja);
-	float pattern_angle_sin = sin(pattern_angle+ja);
-	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
-	local_uv = texture_rotation*local_uv;
+	// float pattern_angle_cos = cos(pattern_angle+ja);
+	// float pattern_angle_sin = sin(pattern_angle+ja);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	// local_uv = texture_rotation*local_uv;
 	vec2 local_uv2 = p-b-bv;
 	local_uv2 = texture_rotation*local_uv2;
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
 	
-	vec2 a = fill ? vec2(1.0) : vec2(stamp_limit.x*stamp_limit.y*brush(0.5*local_uv+vec2(0.5), jo))*color.ba*tex2view.z;
+	vec2 a = fill ? vec2(1.0) : vec2(stamp_limit.x*stamp_limit.y*brush_value)*color.ba*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 #elif BRUSH_MODE == "uv_pattern"
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec4 color = pattern_function(fract(uv));
 	
-	vec2 a = fill ? vec2(1.0) : vec2(brush(0.5*local_uv+vec2(0.5), jo))*tex2view.z;
+	vec2 a = fill ? vec2(1.0) : vec2(brush_value)*tex2view.z;
 	a *= color.ba;
 	a *= texture(mask_tex, UV).r;
 #endif
-	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (reset) {
-		COLOR = vec4(color.xy, a);
+		output_color = vec4(color.xy, a);
 	} else {
 		vec2 alpha_sum = min(max(a, screen_color.ba), a + screen_color.ba);
-		COLOR = vec4((color.xy*a+screen_color.xy*(alpha_sum-a))/alpha_sum, alpha_sum);
+		output_color = vec4((color.xy*a+screen_color.xy*(alpha_sum-a))/alpha_sum, alpha_sum);
 	}
 
 #elif TEXTURE_TYPE == "paint_nm"
@@ -191,7 +203,7 @@ void fragment() {
 	texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
 	color.xy = view_mat*(texture_rotation*(color.xy-vec2(0.5)))+vec2(0.5);
 	
-	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5), jo)*color.a*tex2view.z;
+	float a = fill ? 1.0 : brush_value*color.a*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 #elif BRUSH_MODE == "stamp"
 	vec2 epsilon = vec2(1.0/texture_size, 0.0);
@@ -199,36 +211,35 @@ void fragment() {
 	vec2 tex2view_dy = dTex2View(UV, epsilon.yx);
 	mat2 view_mat = inverse(mat2(vec2(tex2view_dx.x, tex2view_dx.y), vec2(tex2view_dy.x, tex2view_dy.y)));
 
-	float pattern_angle_cos = cos(pattern_angle+ja);
-	float pattern_angle_sin = sin(pattern_angle+ja);
-	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
-
-	local_uv = texture_rotation*local_uv;
+	// float pattern_angle_cos = cos(pattern_angle+ja);
+	// float pattern_angle_sin = sin(pattern_angle+ja);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	// local_uv = texture_rotation*local_uv;
 	vec2 local_uv2 = p-b-bv;
 	local_uv2 = texture_rotation*local_uv2;
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
+	
 	pattern_angle_cos = cos(-pattern_angle-ja);
 	pattern_angle_sin = sin(-pattern_angle-ja);
 	texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
 	color.xy = view_mat*(texture_rotation*(color.xy-vec2(0.5)))+vec2(0.5);
 	
-	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush(0.5*local_uv+vec2(0.5), jo)*color.a*tex2view.z;
+	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush_value*color.a*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 #elif BRUSH_MODE == "uv_pattern"
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec4 color = pattern_function(fract(uv));
 	
-	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5), jo)*tex2view.z;
+	float a = fill ? 1.0 : brush_value*tex2view.z;
 	a *= color.a;
 	a *= texture(mask_tex, UV).r;
 #endif
-	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (reset) {
-		COLOR = vec4(color.xyz, a);
+		output_color = vec4(color.xyz, a);
 	} else {
 		float alpha_sum = min(max(a, screen_color.a), a + screen_color.a);
-		COLOR = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
+		output_color = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
 	}
 
 #elif TEXTURE_TYPE == "paint"
@@ -238,35 +249,40 @@ void fragment() {
 	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(xy - vec2(0.5, 0.5)));
 	vec4 color = pattern_function(fract(pattern_uv));
 	
-	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5), jo)*color.a*tex2view.z;
+	float a = fill ? 1.0 : brush_value*color.a*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 #elif BRUSH_MODE == "stamp"
-	float pattern_angle_cos = cos(pattern_angle+ja);
-	float pattern_angle_sin = sin(pattern_angle+ja);
-	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
-	local_uv = texture_rotation*local_uv;
+	// float pattern_angle_cos = cos(pattern_angle+ja);
+	// float pattern_angle_sin = sin(pattern_angle+ja);
+	// mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+	//local_uv = texture_rotation*local_uv;
 	vec2 local_uv2 = p-b-bv;
 	local_uv2 = texture_rotation*local_uv2;
 	vec2 stamp_limit = step(abs(local_uv), vec2(1.0));
 	vec4 color = pattern_function(0.5*local_uv2+vec2(0.5));
 	
-	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush(0.5*local_uv+vec2(0.5), jo)*color.a*tex2view.z;
+	float a = fill ? 1.0 : stamp_limit.x*stamp_limit.y*brush_value*color.a*tex2view.z;
 	a *= texture(mask_tex, UV).r;
 #elif BRUSH_MODE == "uv_pattern"
 	mat2 texture_rotation = mat2(vec2(cos(pattern_angle), sin(pattern_angle)), vec2(-sin(pattern_angle), cos(pattern_angle)));
 	vec4 color = pattern_function(fract(uv));
 	
-	float a = fill ? 1.0 : brush(0.5*local_uv+vec2(0.5), jo)*tex2view.z;
+	float a = fill ? 1.0 : brush_value*tex2view.z;
 	a *= color.a;
 	a *= texture(mask_tex, UV).r;
 #endif
-	vec4 screen_color = texture(SCREEN_TEXTURE, UV);
 	if (reset) {
-		COLOR = vec4(color.xyz, a);
+		output_color = vec4(color.xyz, a);
 	} else {
 		float alpha_sum = min(max(a, screen_color.a), a + screen_color.a);
-		COLOR = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
+		output_color = vec4((color.xyz*a+screen_color.xyz*(vec3(alpha_sum)-a))/alpha_sum, alpha_sum);
 	}
-
 #endif
+
+
+	//output_color = vec4(brush_pos/rect_size, 0.0, 1.0);
+
+	COLOR = output_color;
+	
+
 }

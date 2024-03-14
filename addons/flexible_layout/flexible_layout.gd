@@ -21,6 +21,10 @@ class FlexNode:
 			if parent.get_ref() != null:
 				parent.get_ref().replace(self, null)
 	
+	func get_minimum_size() -> Vector2i:
+		assert(false)
+		return Vector2i(0, 0)
+	
 	func serialize() -> Dictionary:
 		var rv : Dictionary = { type=type, w=rect.size.x, h=rect.size.y, children=[] }
 		for c in get_children():
@@ -65,6 +69,9 @@ class FlexTop:
 	
 	func _init(fl : FlexLayout):
 		super._init(null, fl, "FlexTop")
+	
+	func get_minimum_size() -> Vector2i:
+		return child.get_minimum_size() if child else Vector2i(0, 0)
 	
 	func deserialize(data : Dictionary):
 		super.deserialize(data)
@@ -111,6 +118,22 @@ class FlexSplit:
 			for d in draggers:
 				if is_instance_valid(d):
 					d.queue_free()
+	
+	func get_minimum_size() -> Vector2i:
+		var s : Vector2i
+		if vertical:
+			s = Vector2i(0, (10*children.size()-1))
+			for c in children:
+				var ms : Vector2i = c.get_minimum_size()
+				s.x = max(s.x, ms.x)
+				s.y += ms.y
+		else:
+			s = Vector2i(10*(children.size()-1), 0)
+			for c in children:
+				var ms : Vector2i = c.get_minimum_size()
+				s.x += ms.x
+				s.y = max(s.y, ms.y)
+		return s
 	
 	func serialize() -> Dictionary:
 		var rv : Dictionary = super.serialize()
@@ -210,7 +233,17 @@ class FlexSplit:
 				var width : int = (c.rect.size.x*new_width+(old_width>>1))/old_width
 				c.layout(Rect2(x, r.position.y, width, r.size.y))
 				x += width
-		
+	
+	func start_drag(dragger_index : int, p : int) -> Vector2i:
+		var c1 = children[dragger_index]
+		var c2 = children[dragger_index+1]
+		var min_c1_size : Vector2i = c1.get_minimum_size()
+		var min_c2_size : Vector2i = c2.get_minimum_size()
+		if vertical:
+			return Vector2i(c1.rect.position.y+min_c1_size.y, c2.rect.position.y+c2.rect.size.y-min_c2_size.y-10)
+		else:
+			return Vector2i(c1.rect.position.x+min_c1_size.x, c2.rect.position.x+c2.rect.size.x-min_c2_size.x-10)
+
 	func drag(dragger_index : int, p : int):
 		var c1 = children[dragger_index]
 		var c2 = children[dragger_index+1]
@@ -241,6 +274,15 @@ class FlexTab:
 			if is_instance_valid(tabs):
 				tabs.queue_free()
 	
+	func get_minimum_size() -> Vector2i:
+		var s : Vector2i = Vector2i(0, 0)
+		for t : Control in tabs.get_controls():
+			var ms : Vector2i = t.get_combined_minimum_size()
+			s.x = max(s.x, ms.x)
+			s.y = max(s.y, ms.y)
+		s.y += tabs.get_combined_minimum_size().y
+		return s
+	
 	func serialize() -> Dictionary:
 		var rv : Dictionary = super.serialize()
 		rv.tabs = []
@@ -253,6 +295,8 @@ class FlexTab:
 		super.deserialize(data)
 		for c in data.tabs:
 			add(flexible_layout.main_control.panels[c])
+		if data.has("current"):
+			tabs.set_current(data.current)
 	
 	func add(fp : Control):
 		adding = true
@@ -302,6 +346,9 @@ class FlexMain:
 	func _init(p : FlexNode = null, fl : FlexLayout = null):
 		super._init(p, fl)
 		type = "FlexMain"
+	
+	func get_minimum_size() -> Vector2i:
+		return child.get_combined_minimum_size()
 	
 	func deserialize(data : Dictionary):
 		super.deserialize(data)
@@ -421,19 +468,28 @@ class FlexLayout:
 		layout()
 	
 	func layout():
+		var rect : Rect2i = control.get_rect()
+		if rect.size.x == 0 or rect.size.y == 0:
+			return
 		if top:
 			top.layout(control.get_rect())
 		main_control.layout_changed.emit()
 	
-	func move_panel(panel, reference_panel : FlexNode, destination):
+	func move_panel(panel, reference_panel : FlexNode, destination : int, test_only : bool = false) -> bool:
 		var parent_panel : FlexNode = reference_panel.parent.get_ref() as FlexNode
+		# if current container has only 1 tab, it cannot be dropped into or near itself
+		var into_same_tab : bool = false
+		if reference_panel is FlexTab and reference_panel == panel.flex_panel.get_meta("flex_node"):
+			into_same_tab = true
+			if reference_panel.tabs.get_controls().size() == 1:
+				return false
 		var vertical : bool
 		var offset : int
 		var tab : FlexTab = null
 		match destination:
 			0:
-				if not reference_panel is FlexTab:
-					return
+				if not reference_panel is FlexTab or into_same_tab:
+					return false
 				tab = reference_panel
 			1:
 				vertical = true
@@ -448,21 +504,23 @@ class FlexLayout:
 				vertical = true
 				offset = 1
 			_:
-				return
-		if tab == null:
-			var split : FlexSplit
-			if parent_panel is FlexSplit and parent_panel.vertical == vertical:
-				split = parent_panel as FlexSplit
-			else:
-				split = FlexSplit.new(parent_panel, reference_panel.flexible_layout)
-				split.vertical = vertical
-				parent_panel.replace(reference_panel, split)
-				split.insert(reference_panel, 0)
-			tab = FlexTab.new(parent_panel, reference_panel.flexible_layout)
-			var ref_index : int = split.find(reference_panel)
-			split.insert(tab, ref_index+offset, ref_index)
-		tab.add(panel.flex_panel)
-		layout()
+				return false
+		if not test_only:
+			if tab == null:
+				var split : FlexSplit
+				if parent_panel is FlexSplit and parent_panel.vertical == vertical:
+					split = parent_panel as FlexSplit
+				else:
+					split = FlexSplit.new(parent_panel, reference_panel.flexible_layout)
+					split.vertical = vertical
+					parent_panel.replace(reference_panel, split)
+					split.insert(reference_panel, 0)
+				tab = FlexTab.new(parent_panel, reference_panel.flexible_layout)
+				var ref_index : int = split.find(reference_panel)
+				split.insert(tab, ref_index+offset, ref_index)
+			tab.add(panel.flex_panel)
+			layout()
+		return true
 
 	func undock(panel : Control):
 		main_control.subwindows.append(FlexWindow.new(main_control, panel))
@@ -506,6 +564,7 @@ class FlexWindow:
 	
 	func serialize() -> Dictionary:
 		var data : Dictionary = {}
+		data.screen = current_screen
 		data.x = position.x
 		data.y = position.y
 		data.w = size.x
@@ -514,6 +573,10 @@ class FlexWindow:
 		return data
 	
 	func init(data : Dictionary):
+		if data.has("screen"):
+			current_screen = data.screen
+		else:
+			current_screen = 0
 		position = Vector2i(data.x, data.y)
 		size = Vector2i(data.w, data.h)
 		flex_layout.init(data.layout)
@@ -529,6 +592,9 @@ class FlexWindow:
 	func end_drag():
 		overlay.queue_free()
 		overlay = null
+
+
+@export var allow_undock : bool = false
 
 var panels : Dictionary = {}
 var flex_layout : FlexLayout
@@ -552,17 +618,35 @@ func _ready():
 		if c.visible and ! c.has_meta("flexlayout"):
 			add(c.name, c)
 
+func _notification(what):
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			var new_theme = null
+			var control = self
+			while control:
+				if control is Control and control.theme != null:
+					new_theme = control.theme
+					break
+				control = control.get_parent()
+			if new_theme != null:
+				for w in subwindows:
+					for c in w.get_children():
+						if c is Control:
+							c.theme = new_theme
+
 func add(n : String, c : Control):
 	c.name = n
 	c.set_meta("flex_layout", self)
 	panels[n] = c
 
 func init(layout = null):
+	for p in panels.keys():
+		show_panel(p, false)
 	if layout and layout.has("main"):
 		for w in layout.windows:
 			var subwindow = FlexWindow.new(self)
+			subwindow.init(w)
 			subwindows.append(subwindow)
-			subwindow.layout(w)
 		flex_layout.init(layout.main)
 	else:
 		flex_layout.init(layout)

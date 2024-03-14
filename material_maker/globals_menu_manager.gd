@@ -136,9 +136,13 @@ class MenuDisplayServer:
 	func add_item(label: String, id: int = -1, accel : Key = 0 as Key):
 		if accel & KEY_MASK_CTRL:
 			accel = ((accel & ~KEY_MASK_CTRL) | KEY_MASK_META) as Key
-		var key = str(get_instance_id())+","+str(id)
+		var tag = str(get_instance_id())+","+str(id)
 		var callback : Callable = mm_globals.menu_manager.my_callback
-		var index : int = DisplayServer.global_menu_add_item(menu_name, label, callback, callback, key, accel)
+		var index : int = DisplayServer.global_menu_add_item(menu_name, label, callback, callback, tag, accel)
+		if id == -1:
+			id = index
+			tag = str(get_instance_id())+","+str(id)
+			DisplayServer.global_menu_set_item_tag(menu_name, index, tag)
 		indexes[id] = index
 	
 	func add_icon_item(_icon: Texture2D, label: String, id: int = -1, accel: Key = 0 as Key):

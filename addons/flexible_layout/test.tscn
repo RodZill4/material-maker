@@ -17,6 +17,7 @@ script = ExtResource("2")
 [node name="FlexibleLayout" parent="." instance=ExtResource("1")]
 layout_mode = 1
 mouse_filter = 2
+allow_undock = true
 
 [node name="Main" type="ColorRect" parent="FlexibleLayout"]
 layout_mode = 0

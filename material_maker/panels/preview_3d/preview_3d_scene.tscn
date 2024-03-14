@@ -45,10 +45,10 @@ current = true
 fov = 50.0
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
-autoplay = "rotate"
 libraries = {
 "": SubResource("AnimationLibrary_sxr5g")
 }
+autoplay = "rotate"
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 shadow_enabled = true

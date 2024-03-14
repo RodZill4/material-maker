@@ -53,6 +53,9 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
 		var shader_code : String = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.gdshader", variables)
 		material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(material), shader_code)
+		for u in source.uniforms:
+			if u.value:
+				material.set_shader_parameter(u.name, u.value)
 
 var setup_controls_filter : String = ""
 func setup_controls(filter : String = "") -> void:

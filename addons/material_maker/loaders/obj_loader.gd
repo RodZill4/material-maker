@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 
 static func load_obj_file(path : String) -> ArrayMesh:
 	if path == null:

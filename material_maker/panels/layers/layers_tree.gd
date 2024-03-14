@@ -92,9 +92,9 @@ func _drop_data(pos : Vector2, data):
 					print("Cannot move item")
 		_on_layers_changed()
 
-func _on_Tree_button_pressed(item : TreeItem, _column : int, _id : int):
+func _on_Tree_button_pressed(item : TreeItem, _column : int, _id : int, _button_index : int):
 	var layer = item.get_meta("layer")
-	layer.hidden = !layer.hidden
+	layer.hidden = not layer.hidden
 	_on_layers_changed()
 
 func _on_Tree_cell_selected():

@@ -14,8 +14,8 @@ func get_parameters() -> Dictionary:
 func set_parameter(name : String, value):
 	compute_shader.set_parameter(name, value)
 
-func get_texture_type() -> int:
-	return compute_shader.texture_type
+func get_texture_type(index : int = 0) -> int:
+	return compute_shader.output_textures[index].type
 
 func render(texture : MMTexture, size : int) -> bool:
 	return await compute_shader.render(texture, Vector2i(size, size))
