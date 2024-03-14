@@ -867,10 +867,12 @@ func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 					return
 		set_current_preview(0, node)
 	undoredo_move_node_selection_changed = true
+	mm_globals.main_window.update_menus()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 	undoredo_move_node_selection_changed = true
+	mm_globals.main_window.update_menus()
 
 func get_current_preview(slot : int = 0):
 	if locked_preview[slot] != null:

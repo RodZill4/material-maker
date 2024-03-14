@@ -94,11 +94,11 @@ func setup_controls(filter : String = "") -> void:
 		else:
 			param_defs = generator.get_parameter_defs() 
 		for c in get_children():
-			if c.has_method("setup_control"):
-				c.setup_control(generator, param_defs)
 			if c.has_method("set_view_rect"):
 				var s : float = min(size.x, size.y)/view_scale
 				c.set_view_rect(0.5*size-center*s, Vector2(s, s))
+			if c.has_method("setup_control"):
+				c.setup_control(generator, param_defs)
 
 var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 var local_rotate : float = 0.0

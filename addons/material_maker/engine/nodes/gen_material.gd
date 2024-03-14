@@ -175,6 +175,8 @@ func update_external_previews() -> void:
 			p.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
 		for t in preview_texture_dependencies.keys():
 			p.set_shader_parameter(t, preview_texture_dependencies[t])
+		for u in preview_parameters.keys():
+			p.set_shader_parameter(u, preview_parameters[u])
 
 func update() -> void:
 	if preview_material == null:
@@ -184,6 +186,10 @@ func update() -> void:
 	result.shader_code = MMGenBase.remove_constant_declarations(result.shader_code)
 	mm_deps.buffer_create_shader_material(buffer_name_prefix, MMShaderMaterial.new(preview_material), result.shader_code)
 	preview_texture_dependencies = {}
+	for u in result.uniforms:
+		if u.value:
+			preview_material.set_shader_parameter(u.name, u.value)
+			preview_parameters[u.name] = u.value
 	for p in RenderingServer.get_shader_parameter_list(preview_material.shader.get_rid()):
 		if p.hint_string == "Texture2D" and preview_textures.keys().find(p.name) == -1:
 			var value = preview_material.get_shader_parameter(p.name)
@@ -297,7 +303,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 		else:
 			shader_code += l
 			shader_code += "\n"
-	return { shader_code = shader_code }
+	return { shader_code = shader_code, uniforms = rv.uniforms }
 
 func set_3d_previews(previews : Array):
 	external_previews = previews

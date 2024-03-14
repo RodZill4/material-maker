@@ -70,7 +70,10 @@ func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, paramete
 	for u in shader_code.uniforms:
 		for c in [ "\n".join(shader_code.globals), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
 			if c.find(u.name) != -1:
-				add_parameter_or_texture(u.name, u.type, u.value, parameters_as_constants)
+				var type : String = u.type
+				if u.size > 0:
+					type += "[%d]" % u.size
+				add_parameter_or_texture(u.name, type, u.value, parameters_as_constants)
 				break
 
 func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, output_textures_desc : Array[Dictionary], compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:

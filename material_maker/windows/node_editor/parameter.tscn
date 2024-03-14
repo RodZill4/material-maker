@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bg24jri8a0t08"]
+[gd_scene load_steps=17 format=3 uid="uid://bg24jri8a0t08"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://ew3gj3j2u7w2" path="res://material_maker/windows/node_editor/parameter_curve.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://dffueustyojkh" path="res://material_maker/windows/node_editor/parameter_polygon.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dij6o75etamwy" path="res://material_maker/windows/node_editor/parameter_polyline.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://r8sldb05e3fj" path="res://material_maker/windows/node_editor/parameter_splines.tscn" id="13_vf8fr"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2")
@@ -93,9 +94,15 @@ visible = false
 layout_mode = 2
 
 [node name="polygon" parent="Types" instance=ExtResource("11")]
+visible = false
 layout_mode = 2
 
 [node name="polyline" parent="Types" instance=ExtResource("12")]
+visible = false
+layout_mode = 2
+
+[node name="splines" parent="Types" instance=ExtResource("13_vf8fr")]
+visible = false
 layout_mode = 2
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
