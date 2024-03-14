@@ -48,7 +48,7 @@ func load_panels() -> void:
 	$FlexibleLayout.init(layout[current_mode] if layout.has(current_mode) else null)
 
 func save_config() -> void:
-	var current_config : Dictionary = $FlexibleLayout.serialize()
+	layout[current_mode] = $FlexibleLayout.serialize()
 	for mode in [ "material", "paint" ]:
 		if layout.has(mode):
 			mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))

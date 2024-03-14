@@ -22,20 +22,20 @@ func update_controls() -> void:
 		var control_point = preload("res://material_maker/widgets/polygon_edit/control_point.tscn").instantiate()
 		add_child(control_point)
 		control_point.initialize(p)
-		control_point.position = transform_point(p)-control_point.OFFSET
+		control_point.setpos(transform_point(p))
 		control_point.connect("moved", Callable(self, "_on_ControlPoint_moved"))
 		control_point.connect("removed", Callable(self, "_on_ControlPoint_removed"))
 	emit_signal("value_changed", polygon)
 
 func is_editing() -> bool:
 	for c in get_children():
-		if c.moving:
+		if c.is_moving:
 			return true
 	return false
 
 func _on_ControlPoint_moved(index):
 	var control_point = get_child(index)
-	polygon.points[index] = reverse_transform_point(control_point.position+control_point.OFFSET)
+	polygon.points[index] = reverse_transform_point(control_point.getpos())
 	queue_redraw()
 	emit_signal("value_changed", polygon)
 

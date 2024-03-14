@@ -178,6 +178,10 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 						parameter_values.encode_float(p.offset+i*8, value[i].x)
 						parameter_values.encode_float(p.offset+i*8+4, value[i].y)
 					return
+				elif value is PackedFloat32Array and value.size() == 2*p.array_size:
+					for i in value.size():
+						parameter_values.encode_float(p.offset+i*4, value[i])
+					return
 			"vec3":
 				if value is Vector3:
 					parameter_values.encode_float(p.offset,    value.x)
@@ -197,6 +201,10 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 						parameter_values.encode_float(p.offset+i*16+4,  value[i].g)
 						parameter_values.encode_float(p.offset+i*16+8,  value[i].b)
 						parameter_values.encode_float(p.offset+i*16+12, value[i].a)
+					return
+				elif value is PackedFloat32Array and value.size() == 4*p.array_size:
+					for i in value.size():
+						parameter_values.encode_float(p.offset+i*4, value[i])
 					return
 			"mat4x4":
 				if value is Projection:
