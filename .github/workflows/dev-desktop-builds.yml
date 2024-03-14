@@ -16,7 +16,7 @@ on:
         description: 'Generate documentation'     
         type: boolean
         required: true
-        default: 'false'
+        default: 'true'
 
 env:
   GODOT_VERSION: 4.2

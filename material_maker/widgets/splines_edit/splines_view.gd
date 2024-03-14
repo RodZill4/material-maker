@@ -4,8 +4,11 @@ extends Control
 
 @export var draw_area : bool = true
 @export var auto_rescale : bool = true
+@export var draw_control_lines : bool = false
 
-var polygon : MMPolygon
+
+var splines : MMSplines
+var edited : MMSplines.Bezier = null
 
 var draw_size : Vector2 = Vector2(1, 1)
 var draw_offset : Vector2 = Vector2(0, 0)
@@ -17,7 +20,7 @@ func set_closed(c : bool = true):
 	queue_redraw()
 
 func _ready() -> void:
-	polygon = MMPolygon.new()
+	splines = MMSplines.new()
 	connect("resized", Callable(self, "_on_resize"))
 	_on_resize()
 
@@ -32,6 +35,25 @@ func transform_point(p : Vector2) -> Vector2:
 func reverse_transform_point(p : Vector2) -> Vector2:
 	return (p-draw_offset)/draw_size
 
+func draw_bezier(b, color : Color, draw_radius : bool = false):
+	var p1 : Vector2 = transform_point(b.points[0].position)
+	var p2 : Vector2 = transform_point(b.points[1].position)
+	var p3 : Vector2 = transform_point(b.points[2].position)
+	var p4 : Vector2 = transform_point(b.points[3].position)
+	var last_point : Vector2 = p1
+	for i in range(20):
+		var p : Vector2 = p1.bezier_interpolate(p2, p3, p4, float(i+1)/20)
+		draw_line(last_point, p, color)
+		last_point = p
+	if draw_control_lines:
+		draw_line(p1, p2, color)
+		draw_line(p3, p4, color)
+	if draw_radius:
+		draw_arc(p1, b.points[0].width*draw_size.x, 0, TAU, 32, color)
+		draw_arc(p2, b.points[1].width*draw_size.x, 0, TAU, 32, color)
+		draw_arc(p3, b.points[2].width*draw_size.x, 0, TAU, 32, color)
+		draw_arc(p4, b.points[3].width*draw_size.x, 0, TAU, 32, color)
+
 func _draw():
 	var current_theme : Theme = mm_globals.main_window.theme
 	var bg = current_theme.get_stylebox("panel", "Panel").bg_color
@@ -40,11 +62,11 @@ func _draw():
 	var curve_color : Color = bg.lerp(fg, 0.75)
 	if draw_area:
 		draw_rect(Rect2(draw_offset, draw_size), axes_color, false)
-	var tp : Vector2 = transform_point(polygon.points[polygon.points.size()-1 if closed else 0])
-	for p in polygon.points:
-		var tnp = transform_point(p)
-		draw_line(tp, tnp, curve_color)
-		tp = tnp
+	if edited != null:
+		draw_bezier(edited, fg)
+	if splines != null:
+		for b in splines.splines:
+			draw_bezier(b, fg, true)
 
 func _on_resize() -> void:
 	if auto_rescale:

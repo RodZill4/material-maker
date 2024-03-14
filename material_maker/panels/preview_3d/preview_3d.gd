@@ -97,8 +97,8 @@ func _on_Model_item_selected(id) -> void:
 		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		dialog.add_filter("*.glb,*.gltf;GLTF file")
-		dialog.add_filter("*.obj;Wavefront OBJ file")
+		for f in MMMeshLoader.get_file_dialog_filters():
+			dialog.add_filter(f)
 		if mm_globals.config.has_section_key("path", "mesh"):
 			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
 		var files = await dialog.select_files()
@@ -111,8 +111,7 @@ func do_load_custom_mesh(file_path) -> void:
 	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
 	var mesh : Mesh = null
-	var mesh_loader = load("res://addons/material_maker/mesh_loader/mesh_loader.gd")
-	mesh = mesh_loader.load_mesh(file_path)
+	mesh = MMMeshLoader.load_mesh(file_path)
 	if mesh != null:
 		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh

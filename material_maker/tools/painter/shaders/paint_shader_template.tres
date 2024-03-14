@@ -343,11 +343,28 @@ void do_paint_ggaa(vec4 paint_value, float brush_value, vec4 old_stroke_value, v
 	}
 }
 
+void do_paint_111a(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
+	paint_value = clamp(paint_value, vec4(0.0), vec4(1.0));
+	brush_value = clamp(brush_value, 0.0, 1.0);
+	old_stroke_value = clamp(old_stroke_value, vec4(0.0), vec4(1.0));
+	old_layer_value = clamp(old_layer_value, vec4(0.0), vec4(1.0));
+	float stroke_alpha = paint_value.a*brush_value;
+	float new_alpha = min(1.0, max(stroke_alpha, old_stroke_value.a));
+	new_stroke_value.a = new_alpha;
+	float layer_apply_alpha = new_alpha*brush_opacity;
+	float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
+	new_layer_value = vec4(mix(vec3(erase ? 0.0 : 1.0), old_layer_value.rgb, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+}
+
 void main() {
 	const float _seed_variation_ = 0.0;
 	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
 	ivec2 image_size = imageSize(GENERATED_IMAGE);
 	vec2 UV = vec2(pixel)/image_size;
+
+	if (use_id_mask && length(texture(id_map_tex, UV)-id_mask_color) > 0.001) {
+		return;
+	}
 	
 	vec2 uv; // position in texture space, with seams correction
 	vec2 view_uv; // position in painting view space

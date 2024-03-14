@@ -46,9 +46,10 @@ func get_point_position(i : int) -> float:
 
 func set_point_position(i : int, v : float) -> void:
 	points[i].v = v
+	sorted = false
 
 func sort() -> void:
-	if !sorted:
+	if ! sorted:
 		points.sort_custom(Callable(CustomSorter, "compare"))
 		for i in range(points.size()-1):
 			if points[i].v+0.0000005 >= points[i+1].v:
@@ -73,18 +74,28 @@ func get_color(x) -> Color:
 		return Color(0.0, 0.0, 0.0, 1.0)
 
 func get_shader_params(parameter_name : String, attribute : String = "uniform") -> String:
-	sort()
 	var rv = ""
-	for i in range(points.size()):
-		rv += "%s float p_%s_%d_pos = %.09f;\n" % [ attribute, parameter_name, i, points[i].v ]
-		rv += "%s vec4 p_%s_%d_col = vec4(%.09f, %.09f, %.09f, %.09f);\n" % [ attribute, parameter_name, i, points[i].c.r, points[i].c.g, points[i].c.b, points[i].c.a ]
+	for p : MMGenBase.ShaderUniform in get_parameters(parameter_name):
+		rv += p.to_str(attribute)
 	return rv
 
 func get_parameters(parameter_name : String) -> Array[MMGenBase.ShaderUniform]:
 	var rv : Array[MMGenBase.ShaderUniform] = []
+	var parameter_values : Dictionary = get_parameter_values(parameter_name)
+	rv.append(MMGenBase.ShaderUniform.new("p_%s_pos" % parameter_name, "float", parameter_values["p_%s_pos" % parameter_name], points.size()))
+	rv.append(MMGenBase.ShaderUniform.new("p_%s_col" % parameter_name, "vec4", parameter_values["p_%s_col" % parameter_name], points.size()))
+	return rv
+
+func get_parameter_values(parameter_name : String) -> Dictionary:
+	sort()
+	var rv : Dictionary = {}
+	var point_positions : PackedFloat32Array = PackedFloat32Array()
+	var point_colors : PackedColorArray = PackedColorArray()
 	for i in range(points.size()):
-		rv.append(MMGenBase.ShaderUniform.new("p_%s_%d_pos" % [ parameter_name, i ], "float", points[i].v))
-		rv.append(MMGenBase.ShaderUniform.new("p_%s_%d_col" % [ parameter_name, i ], "vec4", points[i].c))
+		point_positions.append(points[i].v)
+		point_colors.append(points[i].c)
+	rv["p_%s_pos" % parameter_name] = point_positions
+	rv["p_%s_col" % parameter_name] = point_colors
 	return rv
 
 # get_color_in_shader
@@ -92,10 +103,10 @@ func gcis(color : Color) -> String:
 	return "vec4(%.9f,%.9f,%.9f,%.9f)" % [color.r, color.g, color.b, color.a]
 
 func pv(parameter_name : String, i : int) -> String:
-	return "p_"+parameter_name+"_"+str(i)+"_pos"
+	return "p_"+parameter_name+"_pos["+str(i)+"]"
 
 func pc(parameter_name : String, i : int) -> String:
-	return "p_"+parameter_name+"_"+str(i)+"_col"
+	return "p_"+parameter_name+"_col["+str(i)+"]"
 
 func get_shader(parameter_name : String) -> String:
 	sort()

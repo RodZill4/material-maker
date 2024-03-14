@@ -41,8 +41,7 @@ func set_mesh(file_name : String) -> void:
 	if file_name == mesh_filename:
 		return
 	mesh_filename = file_name
-	var obj_loader = load("res://addons/material_maker/mesh_loader/mesh_loader.gd")
-	var mesh : ArrayMesh = obj_loader.load_mesh(mesh_filename)
+	var mesh : ArrayMesh = MMMeshLoader.load_mesh(mesh_filename)
 	if mesh != null:
 		mesh_instance.mesh = mesh
 		$VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile.text = mesh_filename.get_file()
@@ -56,7 +55,6 @@ func set_mesh(file_name : String) -> void:
 		var aabb : AABB = mesh_instance.get_aabb()
 		mesh_instance.transform.origin = -aabb.position-0.5*aabb.size
 		var d : float = aabb.size.length()
-		print(d)
 		camera.transform.origin.z = 0.5*d+0.5
 		camera.near = 0.01
 		camera.far = d
@@ -67,7 +65,6 @@ func set_mesh(file_name : String) -> void:
 		if mesh.surface_get_format(0) & ArrayMesh.ARRAY_FORMAT_TEX_UV == 0:
 			errors.append("Mesh does not have UVs")
 		error_label.text = "\n".join(errors)
-
 	else:
 		button_ok.disabled = true
 

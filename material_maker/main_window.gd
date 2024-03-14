@@ -187,9 +187,15 @@ func _ready() -> void:
 	for a in args:
 		if a.get_extension() == "ptex":
 			do_load_project(get_file_absolute_path(a))
-		elif a.get_extension() == "obj":
+		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
-			var mesh : Mesh = load(mesh_filename)
+			if mesh_filename == "":
+				push_error("Cannot load mesh from '%s' (no such file or directory)" % a)
+				continue
+			var mesh : Mesh = MMMeshLoader.load_mesh(mesh_filename)
+			if mesh == null:
+				push_error("Cannot load mesh from '%s'" % mesh_filename)
+				continue
 			var project_filename : String = mesh_filename.get_basename()+".mmpp"
 			create_paint_project(mesh, mesh_filename, 1024, project_filename)
 	
@@ -738,12 +744,11 @@ func edit_select_connected(end1 : String, end2 : String) -> void:
 	var node_list : Array = []
 	for n in graph_edit.get_selected_nodes():
 		node_list.push_back(n.name)
-	print(node_list)
 	while !node_list.is_empty():
 		var new_node_list = []
 		for c in graph_edit.get_connection_list():
 			if c[end1] in node_list:
-				var source = graph_edit.get_node(c[end2])
+				var source = graph_edit.get_node(NodePath(c[end2]))
 				if !source.selected:
 					new_node_list.push_back(c[end2])
 					source.selected = true
@@ -754,14 +759,14 @@ func edit_select_sources_is_disabled() -> bool:
 	return graph_edit == null or graph_edit.get_selected_nodes().is_empty()
 
 func edit_select_sources() -> void:
-	edit_select_connected("to", "from")
+	edit_select_connected("to_node", "from_node")
 
 func edit_select_targets_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	return graph_edit.get_selected_nodes().is_empty() if graph_edit else true
 
 func edit_select_targets() -> void:
-	edit_select_connected("from", "to")
+	edit_select_connected("from_node", "to_node")
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()

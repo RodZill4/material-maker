@@ -22,16 +22,14 @@ const HIDE_PANELS = {
 var panels = {}
 var previous_width : float
 var current_mode : String = "material"
+var layout : Dictionary = {}
 
 
 func _ready() -> void:
 	previous_width = size.x
 
 func toggle_side_panels() -> void:
-	# Toggle side docks' visibility to maximize the space available
-	# for the graph panel. This is useful on smaller displays.
-	$Left.visible = not $Left.visible
-	$SplitRight/Right.visible = not $SplitRight/Right.visible
+	pass
 
 func load_panels() -> void:
 	# Create panels
@@ -44,13 +42,16 @@ func load_panels() -> void:
 		panels[panel.name] = node
 		$FlexibleLayout.add(panel.name, node)
 	var current_config = null
-	if mm_globals.config.has_section_key("layout", "material"):
-		current_config = JSON.parse_string(mm_globals.config.get_value("layout", "material"))
-	$FlexibleLayout.init(current_config)
+	for mode in [ "material", "paint" ]:
+		if mm_globals.config.has_section_key("layout", mode):
+			layout[mode] = JSON.parse_string(mm_globals.config.get_value("layout", mode))
+	$FlexibleLayout.init(layout[current_mode] if layout.has(current_mode) else null)
 
 func save_config() -> void:
-	var current_config : Dictionary = $FlexibleLayout.serialize()
-	mm_globals.config.set_value("layout", "material", JSON.stringify(current_config))
+	layout[current_mode] = $FlexibleLayout.serialize()
+	for mode in [ "material", "paint" ]:
+		if layout.has(mode):
+			mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))
 
 func get_panel(n) -> Control:
 	if panels.has(n):
@@ -70,10 +71,12 @@ func set_panel_visible(panel_name : String, v : bool) -> void:
 	$FlexibleLayout.layout()
 
 func change_mode(m : String) -> void:
+	if m == current_mode:
+		return
+	layout[current_mode] = $FlexibleLayout.serialize()
 	current_mode = m
-	return
-	for p in panels:
-		set_panel_visible(p, !panels[p].get_meta("hidden"))
+	if layout.has(current_mode):
+		$FlexibleLayout.init(layout[current_mode])
 
 func _on_tab_changed(_tab):
 	pass
