@@ -1,7 +1,7 @@
 extends RefCounted
 class_name MMPolygon
 
-var points : Array = [Vector2(0.2, 0.2), Vector2(0.7, 0.4), Vector2(0.4, 0.7)]
+var points : PackedVector2Array = PackedVector2Array([Vector2(0.2, 0.2), Vector2(0.7, 0.4), Vector2(0.4, 0.7)])
 
 func to_string() -> String:
 	var rv = PackedStringArray()
@@ -61,11 +61,25 @@ func get_point(i : int) -> Vector2:
 func set_point(i : int, v : Vector2) -> void:
 	points[i] = v
 
-func get_shader() -> String:
-	var elements : PackedStringArray = PackedStringArray()
-	for p in points:
-		elements.append("vec2(%.9f, %.9f)" % [p.x, p.y])
-	return "{"+", ".join(elements)+"}"
+func get_shader_params(parameter_name : String, attribute : String = "uniform") -> String:
+	var rv = ""
+	for p : MMGenBase.ShaderUniform in get_parameters(parameter_name):
+		rv += p.to_str(attribute)
+	return rv
+
+func get_parameters(parameter_name : String) -> Array[MMGenBase.ShaderUniform]:
+	var rv : Array[MMGenBase.ShaderUniform] = []
+	var parameter_values : Dictionary = get_parameter_values(parameter_name)
+	rv.append(MMGenBase.ShaderUniform.new("p_%s_pos" % parameter_name, "vec2", parameter_values["p_%s_pos" % parameter_name], points.size()))
+	return rv
+
+func get_parameter_values(parameter_name : String) -> Dictionary:
+	var rv : Dictionary = {}
+	rv["p_%s_pos" % parameter_name] = points
+	return rv
+
+func get_shader(parameter_name : String) -> String:
+	return "p_%s_pos" % parameter_name
 
 func serialize() -> Dictionary:
 	var rv = []

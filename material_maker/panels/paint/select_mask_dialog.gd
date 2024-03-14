@@ -4,7 +4,7 @@ extends Window
 
 var idmap_filename : String = ""
 var idmap : ImageTexture
-var mask : ImageTexture
+var mask : MMTexture
 var current_view_mode : int = 0
 
 @onready var mesh_instance : MeshInstance3D = $VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport/MeshPivot/MeshInstance3D
@@ -23,13 +23,6 @@ const CAMERA_FOV_MAX = 90
 
 signal return_status(status)
 
-
-func _ready():
-	pass
-
-func _on_ViewportContainer_resized():
-	if viewport and viewport_container:
-		viewport.size = viewport_container.size
 
 func set_mesh(mesh : Mesh):
 	var material = mesh_instance.get_surface_override_material(0)
@@ -67,41 +60,37 @@ func set_view_mode(index):
 	check_buttons[index].button_pressed = true
 	_on_Show_item_selected(index)
 
-func _on_Show_item_selected(index):
+func _on_Show_item_selected(index : int):
+	var material : ShaderMaterial = mesh_instance.get_surface_override_material(0)
 	current_view_mode = index
-	match current_view_mode:
-		0:
-			mesh_instance.get_surface_override_material(0).set_shader_parameter("tex", idmap)
-			mesh_instance.get_surface_override_material(0).set_shader_parameter("mask", null)
-		1:
-			mesh_instance.get_surface_override_material(0).set_shader_parameter("tex", mask)
-			mesh_instance.get_surface_override_material(0).set_shader_parameter("mask", null)
-		2:
-			mesh_instance.get_surface_override_material(0).set_shader_parameter("tex", idmap)
-			mesh_instance.get_surface_override_material(0).set_shader_parameter("mask", mask)
+	material.set_shader_parameter("tex", idmap)
+	material.set_shader_parameter("mask", mask.get_texture())
+	material.set_shader_parameter("mode", current_view_mode)
 
 func _on_Reset_pressed():
 	var image : Image = Image.new()
 	image.create(16, 16, 0, Image.FORMAT_RGBA8)
 	image.fill(Color(1, 1, 1))
-	mask.set_image(image)
+	mask.get_texture().set_image(image)
+	mask.set_texture(mask.get_texture())
 
 func update_mask_from_mouse_position(mouse_position : Vector2):
 	var texture : ViewportTexture = viewport.get_texture()
 	var showing_mask : bool = ( current_view_mode != 0 )
 	if showing_mask:
 		# Hide viewport while we capture the position
+		var material : ShaderMaterial = mesh_instance.get_surface_override_material(0)
 		var hide_texture : ImageTexture = ImageTexture.new()
 		hide_texture.set_image(viewport.get_texture().get_image())
 		texture_rect.texture = hide_texture
 		texture_rect.visible = true
-		mesh_instance.get_surface_override_material(0).set_shader_parameter("tex", idmap)
-		mesh_instance.get_surface_override_material(0).set_shader_parameter("mask", null)
+		material.set_shader_parameter("tex", idmap)
+		material.set_shader_parameter("mode", 0)
 		await get_tree().process_frame
 		await get_tree().process_frame
 		await get_tree().process_frame
 	var image : Image = texture.get_image()
-	mouse_position.y = viewport.size.y-mouse_position.y
+	mouse_position.y = mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
 	if showing_mask:
 		_on_Show_item_selected(current_view_mode)
@@ -112,7 +101,8 @@ func update_mask_from_mouse_position(mouse_position : Vector2):
 	if renderer == null:
 		return
 	renderer = await renderer.render_material(self, genmask_material, idmap.get_size().x)
-	renderer.copy_to_texture(mask)
+	renderer.copy_to_texture(mask.get_texture())
+	mask.set_texture(mask.get_texture())
 	renderer.release(self)
 
 func zoom(amount : float):
@@ -145,7 +135,7 @@ func _on_NewPainterWindow_popup_hide():
 	await get_tree().process_frame
 	emit_signal("return_status", { idmap_filename=idmap_filename, mask=mask })
 
-func ask(parameters : Dictionary) -> String:
+func ask(parameters : Dictionary) -> Dictionary:
 	set_mesh(parameters.mesh)
 	# Create idmap texture
 	idmap = ImageTexture.new()
@@ -168,7 +158,6 @@ func ask(parameters : Dictionary) -> String:
 		camera_pivot.rotation.x = mm_globals.config.get_value("select_mask_dialog", "ry")
 	set_view_mode(view_mode)
 	popup_centered()
-	_on_ViewportContainer_resized()
 	var result = await self.return_status
 	mm_globals.config.set_value("select_mask_dialog", "view_mode", current_view_mode)
 	mm_globals.config.set_value("select_mask_dialog", "rx", mesh_instance.rotation.y)
@@ -176,8 +165,8 @@ func ask(parameters : Dictionary) -> String:
 	queue_free()
 	return result
 
-func _on_VBoxContainer_minimum_size_changed():
-	pass
-
 func _on_size_changed():
 	$VBoxContainer.size = size
+
+func _on_v_box_container_minimum_size_changed():
+	min_size = $VBoxContainer.get_combined_minimum_size()

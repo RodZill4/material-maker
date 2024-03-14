@@ -13,12 +13,13 @@ const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_m
 
 
 func _ready():
-	pass
+	set_layers(layers)
 
 func set_layers(l) -> void:
 	layers = l
-	tree.layers = l
-	tree.update_from_layers(layers.layers, layers.selected_layer)
+	if layers and tree:
+		tree.layers = l
+		tree.update_from_layers(layers.layers, layers.selected_layer)
 
 func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	layers.select_layer(new_selected.get_meta("layer"))

@@ -7053,6 +7053,20 @@
 			"seed_int": 0,
 			"tree_item": "Filter/Classic Kuwahara",
 			"type": "classic_kuwahara"
+		},
+		{
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAoZJREFUeJztm11ywyAMhHFPBifDN8M3cx9ad1wHgrSsZJLJ95hJ9LMWAstxCB/8yTnnvUPOOXvEsng42fd9Z9hZloUer5kArKRbsMSgC2Cd+JVRIWgCeCd+BRWCIsDdyR8gInyNOCyllFmSD+HnQpRSiuY3cAXMlHgNaTVAAsye/IFEBPUS0JbYndAvVIwx9k5wLTx8IL5VS0CTSAicw4rWpzYOcYCaQCyOrKNCtGIS9QDNjYlF8gy7QzdXknUWY4wjAUrx6EP/mCn5A1QEqAp6RrXb4nF6bMGyM2pflLzGoPaqseIzFUBqx+pqoUtBFHRvbCVNfvRg07NvYVNkWCoAEqDGF2Lv3Aybe+szx9I9WSPUM3r+ED+HzepBiBE4c2u0nBBXlZ3p6kv80itgFHbyPZBj8hGjSoCUUtI6mp0H5UbL3+rqWzVCkyXwSogFWNd17X3HalxmdYtd3amQw0jvt6NIfEseuNaYfglYN15xE7RoQhI05Y/EMHUFWK39MyIBtm3bjON4wCP5EEgCsMsfEZx2v4B0Yai1PwGJGx26iJqgZwNESx+NYeom6AH9wcgId9xsTVUB6G4zMnyhHIRYPcB7/VcFb3XTXgAMkCRG/IegGInNWgEjvl9+HsAQXiyAx06gSYhWdRoHrRJlBVPjPIiRDGWkdJebpkmhw4g76SrUSkoj2Mz8VUKvCq6f3bEM2JxzeNoEa2uuleg7PjMIIdRLu3X09CtgHJoImu/OAryVX//koBVrFqDkz0gVvDvRGq1YX/adIQ2Uv8oizCBC78RnPnq+UwST9wWQILyfK6SUkukbIyge1aCdKbjOA5Zf2BWxrut62GbadQG9k/SaVH94d74BHMNiVElabAQAAAAASUVORK5CYII=",
+			"name": "splines",
+			"parameters": {
+				"splines": {
+					"point_groups": [],
+					"type": "Splines",
+					"values": []
+				}
+			},
+			"seed_int": 0,
+			"tree_item": "Simple/Splines",
+			"type": "splines"
 		}
 	],
 	"name": "Base library"

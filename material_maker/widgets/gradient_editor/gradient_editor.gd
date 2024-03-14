@@ -129,7 +129,7 @@ func update_from_value() -> void:
 	for c in get_children():
 		if c is GradientCursor:
 			cursors.append(c)
-	if true or cursors.size() != value.points.size():
+	if cursors.size() != value.points.size():
 		value.clear()
 		for c in get_children():
 			if c is GradientCursor:
@@ -139,10 +139,9 @@ func update_from_value() -> void:
 		for i in cursors.size():
 			var c = cursors[i]
 			var p : float = c.position.x/(size.x-GradientCursor.WIDTH)
-			value.points[i].v = p
-			$Gradient.material.set_shader_parameter("p__%d_pos" % i, p)
+			value.set_point_position(i, p)
 			value.points[i].c = c.color
-			$Gradient.material.set_shader_parameter("p__%d_col" % i, c.color)
+		update_shader_parameters()
 	emit_signal("updated", value, continuous_change)
 	continuous_change = true
 
@@ -210,7 +209,13 @@ func update_shader() -> void:
 	shader += value.get_shader("")
 	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
 	$Gradient.material.shader.set_code(shader)
+	update_shader_parameters()
 
+func update_shader_parameters() -> void:
+	var parameter_values : Dictionary = value.get_parameter_values("")
+	for n in parameter_values.keys():
+		$Gradient.material.set_shader_parameter(n, parameter_values[n])
+	
 func _on_interpolation_pressed():
 	pass
 	#var popup : PopupMenu = $Interpolation.get_popup()

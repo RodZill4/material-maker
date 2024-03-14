@@ -1,4 +1,7 @@
-extends RefCounted
+class_name MMMeshLoader
+
+static func get_file_dialog_filters() -> Array[String]:
+	return [ "*.glb,*.gltf;GLTF file", "*.obj;Wavefront OBJ file" ]
 
 static func load_gltf_mesh(file_path) -> ArrayMesh:
 	# Contributed by wojtekpil
@@ -33,7 +36,7 @@ static func load_mesh(path : String) -> ArrayMesh:
 		return null
 	var ext : String = path.get_extension()
 	if ext.matchn("obj"):
-		var obj_loader = load("res://addons/material_maker/mesh_loader/obj_loader.gd")
+		var obj_loader = load("res://addons/material_maker/loaders/obj_loader.gd")
 		return obj_loader.load_obj_file(path)
 	elif ext.matchn("glb") or ext.matchn("gltf"):
 		return load_gltf_mesh(path)
