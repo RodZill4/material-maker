@@ -112,10 +112,13 @@ popup/item_3/id = 3
 
 [node name="Value" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = -5.0
-offset_bottom = 15.0
+anchors_preset = -1
+anchor_left = 0.017
+anchor_right = 0.983
+anchor_bottom = 0.656
+offset_left = -0.0400002
+offset_right = 0.0399933
+offset_bottom = 0.00799942
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)

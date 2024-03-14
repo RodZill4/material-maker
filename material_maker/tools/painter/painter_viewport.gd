@@ -13,36 +13,37 @@ extends Node
 @onready var init_material = preload("res://material_maker/tools/painter/shaders/init.tres").duplicate(true)
 @onready var init_channels_material = preload("res://material_maker/tools/painter/shaders/init_channels.tres").duplicate(true)
 
-var paint_material
-var layer_material
-var stroke_material
+var paint_material : MMShaderMaterial
+var layer_material : MMShaderMaterial
+var stroke_material : MMShaderMaterial
 
-var param_tex2view : Texture2D
+var param_tex2view : MMTexture
 var param_mesh_aabb : AABB
-var param_mesh_inv_uv_tex : Texture2D
-var param_mesh_normal_tex : Texture2D
-var param_mesh_tangent_tex : Texture2D
-var param_seams : Texture2D
+var param_mesh_inv_uv_tex : MMTexture
+var param_mesh_normal_tex : MMTexture
+var param_mesh_tangent_tex : MMTexture
+var param_seams : MMTexture
 var param_layer_textures : Dictionary
 var brush_params : Dictionary
 
 var painting : int = 0
 
+func new_shader_material(code : String = "") -> ShaderMaterial:
+	var shader_material : ShaderMaterial = ShaderMaterial.new()
+	shader_material.shader = Shader.new()
+	shader_material.shader.code = code
+	return shader_material
+
 func _ready() -> void:
 	# paint material
-	paint_material = ShaderMaterial.new()
-	paint_material.shader = Shader.new()
+	paint_material = MMShaderMaterial.new(new_shader_material())
 	# layer material in layer viewport
-	layer_material = ShaderMaterial.new()
-	layer_material.shader = Shader.new()
-	layer_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/paint_apply_background.gdshader")
-	layerpaint_layerrect.material = layer_material
+	layer_material = MMShaderMaterial.new(new_shader_material(mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/paint_apply_background.gdshader")))
+	layerpaint_layerrect.material = layer_material.material
 	# stroke material in layer viewport
-	stroke_material = ShaderMaterial.new()
-	stroke_material.shader = Shader.new()
-	stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
-	stroke_material.set_shader_parameter("tex", strokepaint_viewport.get_texture())
-	layerpaint_strokerect.material = stroke_material
+	stroke_material = MMShaderMaterial.new(new_shader_material(mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)))
+	stroke_material.set_parameter("tex", strokepaint_viewport.get_texture())
+	layerpaint_strokerect.material = stroke_material.material
 
 func set_shader_prefix(p):
 	shader_prefix = p
@@ -52,43 +53,48 @@ func set_shader_prefix(p):
 
 func get_paint_material() -> ShaderMaterial:
 	set_paint_shader_params()
-	return paint_material
+	return paint_material.material
 
-func set_intermediate_textures(tex2view : Texture2D, seams : Texture2D):
+func set_intermediate_textures(tex2view : MMTexture, seams : MMTexture):
 	param_tex2view = tex2view
 	param_seams = seams
-	paint_material.set_shader_parameter("tex2view_tex", param_tex2view)
-	paint_material.set_shader_parameter("seams", param_seams)
+	paint_material.set_parameter("tex2view_tex", param_tex2view.get_texture())
+	paint_material.set_parameter("seams", param_seams.get_texture())
 
-func set_mesh_textures(mesh_aabb : AABB, mesh_inv_uv_tex : Texture2D, mesh_normal_tex : Texture2D, mesh_tangent_tex : Texture2D):
+func set_mesh_textures(mesh_aabb : AABB, mesh_inv_uv_tex : MMTexture, mesh_normal_tex : MMTexture, mesh_tangent_tex : MMTexture):
 	param_mesh_aabb = mesh_aabb
 	param_mesh_inv_uv_tex = mesh_inv_uv_tex
 	param_mesh_normal_tex = mesh_normal_tex
 	param_mesh_tangent_tex = mesh_tangent_tex
-	paint_material.set_shader_parameter("mesh_aabb_position", param_mesh_aabb.position)
-	paint_material.set_shader_parameter("mesh_aabb_size", param_mesh_aabb.size)
-	paint_material.set_shader_parameter("mesh_inv_uv_tex", param_mesh_inv_uv_tex)
-	paint_material.set_shader_parameter("mesh_normal_tex", param_mesh_normal_tex)
-	paint_material.set_shader_parameter("mesh_tangent_tex", param_mesh_tangent_tex)
+	paint_material.set_parameter("mesh_aabb_position", param_mesh_aabb.position)
+	paint_material.set_parameter("mesh_aabb_size", param_mesh_aabb.size)
+	paint_material.set_parameter("mesh_inv_uv_tex", param_mesh_inv_uv_tex.get_texture())
+	paint_material.set_parameter("mesh_normal_tex", param_mesh_normal_tex.get_texture())
+	paint_material.set_parameter("mesh_tangent_tex", param_mesh_tangent_tex.get_texture())
 
 func set_layer_textures(textures : Dictionary):
 	for t in textures.keys():
 		param_layer_textures[t] = textures[t]
-		paint_material.set_shader_parameter("layer_"+t+"_tex", param_layer_textures[t])
+		paint_material.set_parameter("layer_"+t+"_tex", param_layer_textures[t])
 
 func set_paint_shader_params():
-	paint_material.set_shader_parameter("tex2view_tex", param_tex2view)
-	paint_material.set_shader_parameter("seams", param_seams)
-	paint_material.set_shader_parameter("mesh_aabb_position", param_mesh_aabb.position)
-	paint_material.set_shader_parameter("mesh_aabb_size", param_mesh_aabb.size)
-	paint_material.set_shader_parameter("mesh_inv_uv_tex", param_mesh_inv_uv_tex)
-	paint_material.set_shader_parameter("mesh_normal_tex", param_mesh_normal_tex)
-	paint_material.set_shader_parameter("mesh_tangent_tex", param_mesh_tangent_tex)
-	paint_material.set_shader_parameter("texture_size", strokepaint_viewport.size.x)
+	if param_tex2view:
+		paint_material.set_parameter("tex2view_tex", param_tex2view.get_texture())
+	if param_seams:
+		paint_material.set_parameter("seams", param_seams.get_texture())
+	paint_material.set_parameter("mesh_aabb_position", param_mesh_aabb.position)
+	paint_material.set_parameter("mesh_aabb_size", param_mesh_aabb.size)
+	if param_mesh_inv_uv_tex:
+		paint_material.set_parameter("mesh_inv_uv_tex", param_mesh_inv_uv_tex.get_texture())
+	if param_mesh_normal_tex:
+		paint_material.set_parameter("mesh_normal_tex", param_mesh_normal_tex.get_texture())
+	if param_mesh_tangent_tex:
+		paint_material.set_parameter("mesh_tangent_tex", param_mesh_tangent_tex.get_texture())
+	paint_material.set_parameter("texture_size", strokepaint_viewport.size.x)
 	for t in param_layer_textures.keys():
-		paint_material.set_shader_parameter("layer_"+t+"_tex", param_layer_textures[t])
+		paint_material.set_parameter("layer_"+t+"_tex", param_layer_textures[t])
 	for p in brush_params.keys():
-		paint_material.set_shader_parameter(p, brush_params[p])
+		paint_material.set_parameter(p, brush_params[p])
 
 func set_texture_size(s : float):
 	var size = Vector2(s, s)
@@ -101,7 +107,7 @@ func set_texture_size(s : float):
 func set_brush(parameters : Dictionary):
 	brush_params = parameters
 	for p in brush_params.keys():
-		paint_material.set_shader_parameter(p, brush_params[p])
+		paint_material.set_parameter(p, brush_params[p])
 
 func get_shader_prefix() -> String:
 	return shader_prefix
@@ -136,7 +142,7 @@ func finish_init():
 	var texture : ImageTexture = ImageTexture.new()
 	texture.set_image(image)
 	
-	layer_material.set_shader_parameter("tex", texture)
+	layer_material.set_parameter("tex", texture)
 	layerpaint_layerrect.visible = true
 	layerpaint_strokerect.visible = false
 	# Cleanup stroke viewport
@@ -154,20 +160,20 @@ func finish_init():
 func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 	var reset = false
 	painting += 1
-	strokepaint_rect.material = paint_material
+	strokepaint_rect.material = paint_material.material
 	layerpaint_strokerect.visible = true
-	stroke_material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
-	stroke_material.set_shader_parameter("tex", strokepaint_viewport.get_texture())
+	stroke_material.material.shader.code = mm_preprocessor.preprocess_file("res://material_maker/tools/painter/shaders/%s_apply.gdshader" % shader_prefix)
+	stroke_material.set_parameter("tex", strokepaint_viewport)
 	for p in shader_params.keys():
 		match p:
 			"brush_opacity":
 				layerpaint_strokerect.color = Color(1.0, 1.0, 1.0, shader_params[p])
 			"erase":
-				stroke_material.set_shader_parameter("erase", shader_params[p])
+				stroke_material.set_parameter("erase", shader_params[p])
 			"reset":
 				reset = shader_params[p]
 			_:
-				paint_material.set_shader_parameter(p, shader_params[p])
+				paint_material.set_parameter(p, shader_params[p])
 	strokepaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	strokepaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE if reset else SubViewport.CLEAR_MODE_NEVER
 	await get_tree().process_frame
@@ -189,7 +195,7 @@ func do_paint(shader_params : Dictionary, end_of_stroke : bool = false):
 			var image = layerpaint_viewport.get_texture().get_image()
 			var texture : ImageTexture = ImageTexture.new()
 			texture.set_image(image)
-			layer_material.set_shader_parameter("tex", texture)
+			layer_material.set_parameter("tex", texture)
 			layerpaint_strokerect.visible = true
 		strokepaint_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
 		strokepaint_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
@@ -204,7 +210,7 @@ func get_texture():
 	return layerpaint_viewport.get_texture()
 
 func get_current_state():
-	return layer_material.get_shader_parameter("tex")
+	return layer_material.material.get_shader_parameter("tex")
 
 func get_stroke_texture():
 	return strokepaint_viewport.get_texture()

@@ -7,25 +7,28 @@
 bg_color = Color(0, 0, 0.25098, 0.752941)
 
 [node name="GradientPopup" type="Popup"]
-offset_right = 632.0
-offset_bottom = 49.0
-size_flags_horizontal = 0
-size_flags_vertical = 0
+size = Vector2i(420, 40)
+visible = true
 script = ExtResource("1")
 
 [node name="Panel" type="Panel" parent="."]
-offset_right = 632.0
-offset_bottom = 49.0
+offset_right = 420.0
+offset_bottom = 40.0
 theme_override_styles/panel = SubResource("1")
 
 [node name="Control" parent="Panel" instance=ExtResource("2")]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -10.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 415.0
+offset_bottom = 37.0
+grow_horizontal = 2
+grow_vertical = 2
 embedded = false
 
 [connection signal="popup_hide" from="." to="." method="_on_GradientPopup_popup_hide"]
+[connection signal="size_changed" from="." to="." method="_on_size_changed"]
 [connection signal="updated" from="Panel/Control" to="." method="_on_Control_updated"]

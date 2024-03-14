@@ -7,7 +7,7 @@ const GENFUNCTIONS : Array = [ "generate_shadertoy", "generate_godot_canvasitem"
 func show_code(s) -> void:
 	src_code = s
 	_on_ShaderType_item_selected(0)
-	if !is_connected("popup_hide", Callable(self, "queue_free")):
+	if ! is_connected("popup_hide", Callable(self, "queue_free")):
 		connect("popup_hide", Callable(self, "queue_free"))
 	popup_centered()
 
@@ -31,7 +31,7 @@ func generate_shadertoy() -> String:
 	code += "\n"
 	code = code.replace("varying float elapsed_time;", "")
 	code = code.replace("void vertex() {\n\telapsed_time = TIME;\n}\n", "")
-	code += src_code.uniforms_as_strings("const")
+	code += src_code.uniforms_as_strings("const", true)
 	code += "\n"
 	if ! src_code.globals.is_empty():
 		for g in src_code.globals:

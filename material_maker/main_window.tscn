@@ -151,6 +151,7 @@ script = ExtResource("2")
 [node name="FlexibleLayout" parent="VBoxContainer/Layout" instance=ExtResource("6_ygla4")]
 layout_mode = 2
 size_flags_horizontal = 3
+allow_undock = true
 
 [node name="Main" parent="VBoxContainer/Layout/FlexibleLayout" instance=ExtResource("7_ih0ps")]
 layout_mode = 2
@@ -228,5 +229,6 @@ libraries = {
 "": SubResource("AnimationLibrary_kxf7t")
 }
 
+[connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/ClipBoardAnalyzer" method="_on_Timer_timeout"]

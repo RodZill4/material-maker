@@ -9,7 +9,7 @@ var generator = null
 var ignore_parameter_change = ""
 
 func _ready():
-	pass
+	set_generator(generator)
 
 func set_generator(g):
 	if g != generator:
@@ -18,9 +18,10 @@ func set_generator(g):
 		generator = g
 		if generator != null:
 			generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
-	for c in parameters.get_children():
-		parameters.remove_child(c)
-		c.free()
+	if parameters:
+		for c in parameters.get_children():
+			parameters.remove_child(c)
+			c.free()
 	controls = {}
 	if generator != null:
 		var parameter_labels = {}

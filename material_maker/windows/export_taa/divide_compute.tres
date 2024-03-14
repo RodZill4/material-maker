@@ -8,7 +8,6 @@ text = "#version 450
 
 layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
 
-layout(set = 0, binding = 0, @OUT_TEXTURE_TYPE) uniform image2D OUTPUT_TEXTURE;
 @DECLARATIONS
 layout(set = 3, binding = 0, std140) restrict buffer MM {
 	int mm_chunk_y;

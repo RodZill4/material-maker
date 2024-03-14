@@ -14,13 +14,13 @@ layout(location = 4) in vec2 uv;
 @DECLARATIONS
 
 void main() {
-	float box = 1.0;
+	float box = 2.0;
 	vec2 epsilon = vec2(0.001);
 	float v = 1.0;
 	if (model_vert.x > 0.0 && model_vert.x < 1.0 && model_vert.y > 0.0 && model_vert.y < 1.0) {
-		for (float dx = -box*epsilon.x; dx <= box*epsilon.x; dx += epsilon.x) {
-			for (float dy = -box*epsilon.y; dy <= box*epsilon.y; dy += epsilon.y) {
-				v = min(v, length(texture(v2t, model_vert.xy+vec2(dx, dy)).xy-uv));
+		for (float dx = -box; dx <= box; dx +=1.0) {
+			for (float dy = -box; dy <= box; dy += 1.0) {
+				v = min(v, length(texture(v2t, model_vert.xy+epsilon*vec2(dx, dy)).xy-uv));
 			}
 		}
 	}
