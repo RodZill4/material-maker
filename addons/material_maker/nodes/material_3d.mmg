@@ -507,7 +507,7 @@
 		],
 		"preview_shader": [
 			"shader_type spatial;",
-			"render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;",
+			"render_mode blend_mix,depth_prepass_alpha,cull_back,diffuse_burley,specular_schlick_ggx;",
 			"",
 			"varying vec3 texcoords_3d;",
 			"",
@@ -515,7 +515,7 @@
 			"",
 			"void vertex() {",
 			"$if $(param:world)",
-			"\ttexcoords_3d = (vec4(VERTEX, 1.0)*WORLD_MATRIX).xyz;",
+			"\ttexcoords_3d = (vec4(VERTEX, 1.0)*MODEL_MATRIX).xyz;",
 			"$else",
 			"\ttexcoords_3d = VERTEX;",
 			"$fi",
