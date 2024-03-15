@@ -5,6 +5,7 @@ extends Control
 @export var draw_area : bool = true
 @export var auto_rescale : bool = true
 @export var draw_control_lines : bool = false
+@export var draw_width : bool = false
 
 
 var splines : MMSplines
@@ -12,12 +13,7 @@ var edited : MMSplines.Bezier = null
 
 var draw_size : Vector2 = Vector2(1, 1)
 var draw_offset : Vector2 = Vector2(0, 0)
-var closed : bool = true
 
-
-func set_closed(c : bool = true):
-	closed = c
-	queue_redraw()
 
 func _ready() -> void:
 	splines = MMSplines.new()
@@ -66,7 +62,7 @@ func _draw():
 		draw_bezier(edited, fg)
 	if splines != null:
 		for b in splines.splines:
-			draw_bezier(b, fg, true)
+			draw_bezier(b, fg, draw_width)
 
 func _on_resize() -> void:
 	if auto_rescale:

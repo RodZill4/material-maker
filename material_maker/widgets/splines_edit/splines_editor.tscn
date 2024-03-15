@@ -29,6 +29,7 @@ script = ExtResource("2_tepru")
 draw_area = true
 auto_rescale = true
 draw_control_lines = false
+draw_width = false
 
 [node name="ControlPoints" type="Control" parent="." index="0"]
 anchors_preset = 0
