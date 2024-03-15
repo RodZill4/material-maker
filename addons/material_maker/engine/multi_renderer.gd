@@ -117,7 +117,7 @@ func request_rendering_device(user) -> RenderingDevice:
 	rendering_device_user = user
 	var scene_tree : SceneTree = get_tree()
 	if scene_tree:
-		await get_tree().process_frame
+		await scene_tree.process_frame
 	return rendering_device
 
 func release_rendering_device(user) -> void:

@@ -72,7 +72,7 @@ func buffer_clear_dependencies(buffer_name : String):
 			assert(dep_index != -1)
 			if dependencies[d].size() == 1:
 				dependencies.erase(d)
-				if dependencies_values.has(d) and ! (dependencies_values[d] is Texture2D):
+				if dependencies_values.has(d) and ! (dependencies_values[d] is MMTexture):
 					dependencies_values.erase(d)
 			else:
 				dependencies[d].remove_at(dep_index)
@@ -221,12 +221,12 @@ func buffer_create_compute_material(buffer_name : String, material : MMShaderBas
 	for p in material.get_parameters().keys():
 		var value = buffer_add_dependency(buffer_name, p)
 		if value != null:
-			material.set_parameter(p, value)
+			await material.set_parameter(p, value)
 	buffers[buffer_name].shader_generations += 1
 
 func buffer_create_shader_material(buffer_name : String, material : MMShaderBase, shader : String):
 	material.set_shader(shader)
-	buffer_create_compute_material(buffer_name, material)
+	await buffer_create_compute_material(buffer_name, material)
 
 func print_stats(object = null):
 	var statuses : Dictionary = {}
