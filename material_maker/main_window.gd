@@ -207,20 +207,18 @@ func _ready() -> void:
 			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			var file_name = dir.get_next()
 			while file_name != "":
-				file_name = dir.get_next()
 				if !dir.current_is_dir() and file_name.get_extension() == "mmcr":
 					files.append("user://unsaved_projects".path_join(file_name))
-					print(file_name)
+				file_name = dir.get_next()
 			if ! files.is_empty():
-				for f in files:
-					var graph_edit = new_graph_panel()
-					graph_edit.load_from_recovery(f)
-					graph_edit.update_tab_title()
-				hierarchy.update_from_graph_edit(get_current_graph_edit())
-				var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
-				dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
-				add_child(dialog)
-				await dialog.ask()
+				var dialog_text : String = "Oops, it seems Material Maker crashed and rescued unsaved work\nLoad %d unsaved projects?" % files.size()
+				var result = await accept_dialog(dialog_text, true)
+				if result == "ok":
+					for f in files:
+						var graph_edit = new_graph_panel()
+						graph_edit.load_from_recovery(f)
+						graph_edit.update_tab_title()
+					hierarchy.update_from_graph_edit(get_current_graph_edit())
 	
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
@@ -1213,9 +1211,8 @@ func accept_dialog(dialog_text : String, cancel_button : bool = false):
 	dialog.dialog_text = dialog_text
 	if cancel_button:
 		dialog.add_cancel_button("Cancel")
-	add_child(dialog)
-	var result = await dialog.ask()
-	return result
+	add_dialog(dialog)
+	return await dialog.ask()
 
 # Current mesh
 
