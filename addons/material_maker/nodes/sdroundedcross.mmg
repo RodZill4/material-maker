@@ -1,41 +1,39 @@
 {
-	"name": "sdisoscelestriangle",
+	"name": "sdroundedcross",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0.0,
-		"cy": 0.2,
-		"height": 0.2,
-		"width": 0.4
+		"cx": 0,
+		"cy": 0,
+		"height": 0.25,
+		"width": 0.45
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": [
-			"float sd_isosceles_triangle(vec2 uv, vec2 size)",
+			"float sdRoundedCross( in vec2 p, in float h )",
 			"{",
-			"\tuv.x = abs(uv.x);",
-			"\tuv.y += size.y; size.y *= 2.0;",
-			"\tvec2 a = uv - size*clamp(dot(uv,size)/dot(size,size), 0.0, 1.0);",
-			"\tvec2 b = uv - size*vec2(clamp(uv.x/size.x, 0.0, 1.0), 1.0);",
-			"\tfloat s = -sign(size.y);",
-			"\tvec2 d = min(vec2(dot(a,a), s*(uv.x*size.y-uv.y*size.x)),",
-			"\t\t\t\t vec2(dot(b,b), s*(uv.y-size.y)));",
-			"\treturn -sqrt(d.x)*sign(d.y);",
+			"\tfloat k = 0.5*(h+1.0/h); // k should be const at modeling time",
+			"\tp = abs(p);",
+			"\treturn ( p.x<1.0 && p.y<p.x*(k-h)+h ) ? ",
+			"\t\t\t k-sqrt(dot2(p-vec2(1,k)))  :",
+			"\t\t   sqrt(min(dot2(p-vec2(0,h)),",
+			"\t\t\t\t\tdot2(p-vec2(1,0))));",
 			"}"
 		],
 		"inputs": [
 
 		],
 		"instance": "",
-		"longdesc": "An Isosceles Triangle described as a signed distance function",
-		"name": "sdIsoscelesTriangle",
+		"longdesc": "A rounded cross described as a signed distance function",
+		"name": "sdRoundedCross",
 		"outputs": [
 			{
-				"longdesc": "The isosceles triangle as a signed distance function",
-				"sdf2d": "sd_isosceles_triangle($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
+				"longdesc": "The rounded cross as a signed distance function",
+				"sdf2d": "sdRoundedCross(($uv - 0.5 - vec2($cx, $cy)) / $width, $height / $width) * $width",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
@@ -43,21 +41,20 @@
 		"parameters": [
 			{
 				"control": "Rect1.x",
-				"default": 0.5,
+				"default": 0.45,
 				"label": "Width",
-				"longdesc": "Width of the isosceles triangle",
+				"longdesc": "Width of the rounded cross",
 				"max": 1,
 				"min": 0,
 				"name": "width",
-				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Height",
-				"longdesc": "Height of the isosceles triangle",
+				"longdesc": "Height of the rounded cross",
 				"max": 1,
 				"min": 0,
 				"name": "height",
@@ -89,7 +86,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdIsoscelesTriangle"
+		"shortdesc": "sdRoundedCross"
 	},
 	"type": "shader"
 }

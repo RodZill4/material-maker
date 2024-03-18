@@ -1,0 +1,144 @@
+{
+	"name": "sdroundedbox",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bottom_left": 0.2,
+		"bottom_right": 0,
+		"center_x": 0,
+		"center_y": 0,
+		"height": 0.25,
+		"top_left": 0,
+		"top_right": 0.2,
+		"width": 0.4
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float sdRoundedBox( in vec2 p, in vec2 b, in vec4 r )",
+			"{",
+			"\tr.xy = (p.x>0.0)?r.xy : r.zw;",
+			"\tr.x  = (p.y>0.0)?r.x  : r.y;",
+			"\tvec2 q = abs(p)-b+r.x;",
+			"\treturn min(max(q.x,q.y),0.0) + length(max(q,0.0)) - r.x;",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A rounded box described as a signed distance function",
+		"name": "sdRoundedBox",
+		"outputs": [
+			{
+				"longdesc": "The rounded box as a signed distance function",
+				"sdf2d": "sdRoundedBox($uv-0.5-vec2($center_x, $center_y), vec2($width, $height), min(vec4($bottom_right, $top_right, $bottom_left, $top_left), min($width, $height)))",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.x",
+				"default": 0.4,
+				"label": "Width",
+				"longdesc": "Width of the rounded box",
+				"max": 1,
+				"min": 0,
+				"name": "width",
+				"shortdesc": "Width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 0.25,
+				"label": "Height",
+				"longdesc": "Height of the rounded box",
+				"max": 1,
+				"min": 0,
+				"name": "height",
+				"shortdesc": "Height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "3:",
+				"longdesc": "Top-left corner radius of the rounded box",
+				"max": 1,
+				"min": 0,
+				"name": "top_left",
+				"shortdesc": "Top-left radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.2,
+				"label": "3:",
+				"longdesc": "Top-right corner radius of the rounded box",
+				"max": 1,
+				"min": 0,
+				"name": "top_right",
+				"shortdesc": "Top-right radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.2,
+				"label": "4:",
+				"longdesc": "Bottom-left corner radius of the rounded box",
+				"max": 1,
+				"min": 0,
+				"name": "bottom_left",
+				"shortdesc": "Bottom-left radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "4:",
+				"longdesc": "Bottom-right corner radius of the rounded box",
+				"max": 1,
+				"min": 0,
+				"name": "bottom_right",
+				"shortdesc": "Bottom-right radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "center_x",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "center_y",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdRoundedBox"
+	},
+	"type": "shader"
+}

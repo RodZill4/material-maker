@@ -1,0 +1,83 @@
+{
+	"name": "sdpie",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": -55.738875,
+		"cx": 0.047466,
+		"cy": -0.006289,
+		"r": 0.393978
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "float aperture_$(name_uv) = radians(abs(mod(450.0 + $a, 360.0) - 180.0));",
+		"global": "float sdPie( in vec2 p, in vec2 c, in float r )\n{\n    p.x = abs(p.x);\n    float l = length(p) - r;\n    float m = length(p-c*clamp(dot(p,c),0.0,r)); // c=sin/cos of aperture\n    return max(l,m*sign(c.y*p.x-c.x*p.y));\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A pie described as a signed distance function",
+		"name": "sdPie",
+		"outputs": [
+			{
+				"longdesc": "The pie as a signed distance function",
+				"sdf2d": "sdPie($uv - 0.5 - vec2($cx, $cy), vec2(sin(aperture_$(name_uv)), cos(aperture_$(name_uv))), $r)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Radius",
+				"longdesc": "The radius of the pie",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.a",
+				"default": 0.5,
+				"label": "Aperture",
+				"longdesc": "The aperture of the sector",
+				"max": 90,
+				"min": -90,
+				"name": "a",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0.2,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": -0.25,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdPie"
+	},
+	"type": "shader"
+}

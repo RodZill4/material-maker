@@ -1,0 +1,83 @@
+{
+	"name": "sdversica",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0,
+		"d": 0.2,
+		"r": 0.5
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float sdVesica(vec2 p, float r, float d)\n{\n    p = abs(p);\n    float b = sqrt(r*r-d*d);\n    return ((p.y-b)*d>p.x*b) ? length(p-vec2(0.0,b))*sign(d) : (length(p-vec2(-d,0.0))-r);\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A versica described as a signed distance function",
+		"name": "sdVersica",
+		"outputs": [
+			{
+				"longdesc": "The versica as a signed distance function",
+				"sdf2d": "sdVesica($uv - 0.5 - vec2($cx, $cy), $r, $r - $d)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.y",
+				"default": 0.6,
+				"label": "Radius",
+				"longdesc": "Radius of the versica",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.x",
+				"default": 0.4,
+				"label": "X Offset",
+				"longdesc": "X offset between the disks",
+				"max": 1,
+				"min": 0,
+				"name": "d",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0.2,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": -0.25,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdVersica"
+	},
+	"type": "shader"
+}
