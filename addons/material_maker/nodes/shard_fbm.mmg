@@ -1,0 +1,190 @@
+{
+	"name": "shard_fbm",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"folds": 0,
+		"iter": 4,
+		"off": 0,
+		"per": 0.5,
+		"sharp": 0.7,
+		"sx": 7,
+		"sy": 7
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// Adapted from https://www.shadertoy.com/view/dlKyWw by @ENDESGA",
+			"",
+			"vec3 hash(vec3 p)",
+			"{",
+			"\tp = vec3(dot(p, vec3(127.1, 311.7, 74.7)), dot(p, vec3(269.5,183.3,246.1)), dot(p, vec3(113.5, 271.9, 124.6)));",
+			"\tp = fract(sin(p) * 43758.5453123);",
+			"\treturn p;",
+			"}",
+			"",
+			"float shard_noise(vec3 p, vec3 size, float sharpness, float seed) {",
+			"\tvec3 ip = floor(p);",
+			"\tvec3 fp = fract(p);",
+			"",
+			"\tfloat v = 0.0, t = 0.0;",
+			"\t",
+			"\tfor (int z = -1; z <= 1; z++) {",
+			"\t\tfor (int y = -2; y <= 2; y++) {",
+			"\t\t\tfor (int x = -2; x <= 2; x++) {",
+			"\t\t\t",
+			"\t\t\t\tvec3 o = vec3(float(x), float(y), float(z));",
+			"\t\t\t\tvec3 io = mod(ip + o, size);",
+			"\t\t\t\tvec3 h = hash(io + seed);",
+			"\t\t\t\tvec3 r = fp - (o + h);",
+			"",
+			"\t\t\t\tfloat w = exp2(-6.283185*dot(r, r));",
+			"\t\t\t\t// tanh deconstruction and optimization by @Xor",
+			"\t\t\t\tfloat s = sharpness * dot(r, hash(io + vec3(11, 31, 47)) - 0.5);",
+			"\t\t\t\tv += w * s*inversesqrt(1.0+s*s);",
+			"\t\t\t\tt += w;",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"\treturn ((v / t) * 0.5) + 0.5;",
+			"}",
+			"",
+			"float fbm_shard(vec3 coord, vec3 size, int folds, int octaves, float persistence, float sharpness, float seed) {",
+			"\tfloat normalize_factor = 0.0;",
+			"\tfloat value = 0.0;",
+			"\tfloat scale = 1.0;",
+			"\tfor (int i = 0; i < octaves; i++) {",
+			"\t\tfloat noise = shard_noise(coord*size, size, sharpness, seed);",
+			"\t\tfor (int f = 0; f < folds; ++f) {",
+			"\t\t\tnoise = abs(2.0*noise-1.0);",
+			"\t\t}",
+			"\t\tvalue += noise * scale;",
+			"\t\tnormalize_factor += scale;",
+			"\t\tsize *= 2.0;",
+			"\t\tscale *= persistence;",
+			"\t}",
+			"\treturn value / normalize_factor;",
+			"}"
+		],
+		"inputs": [
+			{
+				"default": "$sharp",
+				"label": "1:",
+				"longdesc": "Map that affects the sharpness parameter",
+				"name": "sharp_in",
+				"shortdesc": "Sharpness Map",
+				"type": "f"
+			},
+			{
+				"default": "$off",
+				"label": "7:",
+				"longdesc": "An optional input to drive the offset",
+				"name": "offset_in",
+				"shortdesc": "Offset Input",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates noise made of several octaves of shard noise",
+		"name": "Shard FBM Noise",
+		"outputs": [
+			{
+				"f": "fbm_shard(vec3($uv,$offset_in($uv)),vec3($sx,$sy,1.0),int($folds),int($iter),$per,pow(2,$sharp_in($uv)*$sharp*8.0),$seed)",
+				"longdesc": "Greyscale image of the generated noise",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.7,
+				"label": "Sharpness",
+				"longdesc": "Sharpness of the noise",
+				"max": 1,
+				"min": 0,
+				"name": "sharp",
+				"shortdesc": "Sharpness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 7,
+				"label": "Scale X",
+				"longdesc": "Scale of the first octave along the X axis",
+				"max": 32,
+				"min": 1,
+				"name": "sx",
+				"shortdesc": "Scale.x",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 7,
+				"label": "Scale Y",
+				"longdesc": "Scale of the first octave along the Y axis",
+				"max": 32,
+				"min": 1,
+				"name": "sy",
+				"shortdesc": "Scale.y",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Folds",
+				"longdesc": "Number of times the noise is folded",
+				"max": 5,
+				"min": 0,
+				"name": "folds",
+				"shortdesc": "Folds",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4,
+				"label": "Iterations",
+				"longdesc": "Number of noise octaves",
+				"max": 8,
+				"min": 1,
+				"name": "iter",
+				"shortdesc": "Octaves",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Persistence",
+				"longdesc": "Persistence between two consecutive octaves",
+				"max": 1,
+				"min": 0,
+				"name": "per",
+				"shortdesc": "Persistence",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Offset",
+				"longdesc": "Offsets the points of the noise, can be used to animate the noise with \"$time\"",
+				"max": 1,
+				"min": 0,
+				"name": "off",
+				"shortdesc": "Offset",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Fractional Brownian Motion Noise"
+	},
+	"type": "shader"
+}
