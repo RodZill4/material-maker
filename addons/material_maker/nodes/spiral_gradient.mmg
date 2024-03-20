@@ -46,6 +46,7 @@
 		],
 		"instance": "",
 		"name": "Spiral Gradient",
+		"shortdesc": "Spiral Gradient",
 		"outputs": [
 			{
 				"longdesc": "Number of repetitions of the gradient",

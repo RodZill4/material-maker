@@ -48,6 +48,8 @@
 		],
 		"instance": "",
 		"name": "Smooth MinMax",
+		"longdesc": "Performs a smooth minimum/maximum math operation between its inputs",
+		"shortdesc": "Smooth MinMax",
 		"outputs": [
 			{
 				"f": "$(name_uv)_clamp_$clamp",

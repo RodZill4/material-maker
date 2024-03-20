@@ -36,6 +36,7 @@
 		],
 		"instance": "",
 		"name": "Radial Gradient",
+		"shortdesc": "Radial Gradient",
 		"outputs": [
 			{
 				"longdesc": "An image showing the gradient",

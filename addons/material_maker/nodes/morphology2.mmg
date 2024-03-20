@@ -98,7 +98,7 @@
 		}
 	],
 	"label": "Morphology",
-	"longdesc": "",
+	"longdesc": "Applies a morphology dilation or erosion on its input",
 	"name": "morphology2",
 	"node_position": {
 		"x": 0,
@@ -603,6 +603,6 @@
 		"resolution": 10
 	},
 	"seed_int": 0,
-	"shortdesc": "",
+	"shortdesc": "Morphology",
 	"type": "graph"
 }

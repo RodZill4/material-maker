@@ -44,7 +44,7 @@
 		}
 	],
 	"label": "Fast Blur",
-	"longdesc": "",
+	"longdesc": "Applies an approximated gaussian blur",
 	"name": "fast_blur",
 	"node_position": {
 		"x": 0,
@@ -265,6 +265,6 @@
 		"param3": 1
 	},
 	"seed_int": 0,
-	"shortdesc": "",
+	"shortdesc": "Fast Blur",
 	"type": "graph"
 }

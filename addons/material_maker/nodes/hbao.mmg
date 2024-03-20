@@ -38,7 +38,7 @@
 		}
 	],
 	"label": "HBAO",
-	"longdesc": "",
+	"longdesc": "Generates a horizon based ambient occlusion texture from a height map",
 	"name": "hbao",
 	"node_position": {
 		"x": 0,
@@ -562,6 +562,6 @@
 		"param5": 1
 	},
 	"seed": 6741,
-	"shortdesc": "",
+	"shortdesc": "Horizon Based Ambient Occulusion",
 	"type": "graph"
 }

@@ -36,6 +36,7 @@
 		],
 		"instance": "",
 		"name": "Circular Gradient",
+		"shortdesc": "Circular Gradient",
 		"outputs": [
 			{
 				"longdesc": "Number of repetitions of the gradient",
