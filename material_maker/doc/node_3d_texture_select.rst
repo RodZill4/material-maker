@@ -1,8 +1,8 @@
 Select node
 ~~~~~~~~~~~
 
-The **Select** node merges two 3D textures by assigning all samples to its first
-input except those whose color index match the color parameter.
+The **Select** node assigns one or more 3D textures based on
+samples whose color index match the color parameter.
 
 .. image:: images/node_3d_texture_select.png
 	:align: center
@@ -10,10 +10,13 @@ input except those whose color index match the color parameter.
 Inputs
 ......
 
-The **Select** node accepts two 3D texture inputs:
+The **Select** node accepts two or more 3D texture inputs:
 
-* the default texture, used for all samples that don't match the color parameter
-* the selected texture that is assigned to all samples that match
+* The default texture, used for all samples that don't match the color parameter.
+
+* Selected texture that is assigned to all samples that match.
+
+This node is variadic, and more inputs with associated color indicies can be added.
 
 Outputs
 .......
@@ -23,7 +26,8 @@ The **Select** node generates a merged 3D texture.
 Parameters
 ..........
 
-The **Select** node does accepts 2 parameters:
+The **Select** node accepts 2 parameters:
 
-* a color index that is compared with the color index of each sample
-* a tolerance value  used when comparing the color parameter with the sample's color index
+* A color index that is compared with the color index of each sample
+
+* A tolerance value used when comparing the color parameter with the sample's color index

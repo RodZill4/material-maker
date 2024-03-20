@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "tex3d_rotate",
 	"node_position": {
 		"x": 0,
@@ -41,8 +42,8 @@
 				"default": "vec3(1.0)",
 				"label": "",
 				"longdesc": "The input 3D texture",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "tex3d"
 			}
 		],
@@ -52,8 +53,8 @@
 		"outputs": [
 			{
 				"longdesc": "The rotated 3D texture",
-				"shortdesc": "Output",
-				"tex3d": "$in(vec4(tex3d_rotate($uv.xyz, -vec3($ax, $ay, $az)*0.01745329251), $uv.w))",
+				"shortdesc": "Output#",
+				"tex3d": "$in#(vec4(tex3d_rotate($uv.xyz, -vec3($ax, $ay, $az)*0.01745329251), $uv.w))",
 				"type": "tex3d"
 			}
 		],

@@ -1,8 +1,8 @@
 Shape Select node
 ~~~~~~~~~~~~~~~~~
 
-The **Shape Select** node merges two 3D textures by assigning all samples to its first
-input except those that are outside the input selection shape.
+The **Shape Select** merges two or more 3D textures by assigning
+them based on input selection shapes
 
 .. image:: images/node_3d_texture_select_shape.png
 	:align: center
@@ -10,11 +10,15 @@ input except those that are outside the input selection shape.
 Inputs
 ......
 
-The **Shape Select** node accepts two 3D texture inputs:
+The **Shape Select** node accepts two or more 3D texture inputs:
 
-* the default texture, used for all samples that are inside the selection shape
-* the selected texture that is assigned to all samples that are outside the selection shape
-* the shape where the first input is applied
+* The default texture, used for all samples that are outside the selection shape
+
+* The selected texture that is assigned to all samples that are inside the selection shape
+
+* The shape where the first input is applied
+
+This node is variadic, and more inputs and associated selection shapes can be added.
 
 Outputs
 .......
@@ -24,5 +28,5 @@ The **Shape Select** node generates a merged 3D texture.
 Parameters
 ..........
 
-The **Shape Select** node accepts a smoothness parameter that defines the withd of the area
-where both textures are mixed.
+The **Shape Select** node accepts a smoothness parameter that defines the width of the area
+where textures are mixed.

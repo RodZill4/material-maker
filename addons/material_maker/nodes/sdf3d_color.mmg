@@ -1,11 +1,12 @@
 {
+	"generic_size": 1,
 	"name": "sdf3d_color",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"c": 0.5
+		"c1": 0.5
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -16,8 +17,8 @@
 				"default": "0.0",
 				"label": "",
 				"longdesc": "The input 3D object",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "sdf3d"
 			}
 		],
@@ -27,8 +28,8 @@
 		"outputs": [
 			{
 				"longdesc": "The colored 3D object",
-				"sdf3dc": "vec2($in($uv), $c)",
-				"shortdesc": "Output",
+				"sdf3dc": "vec2($in#($uv), $c#)",
+				"shortdesc": "Output#",
 				"type": "sdf3dc"
 			}
 		],
@@ -40,7 +41,7 @@
 				"longdesc": "The color index to be assigned",
 				"max": 1,
 				"min": 0,
-				"name": "c",
+				"name": "c#",
 				"shortdesc": "Color",
 				"step": 0.01,
 				"type": "float"
