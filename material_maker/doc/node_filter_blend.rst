@@ -34,7 +34,8 @@ The **Blend** node has two or more parameters:
 
 * The *blend mode*, that can be one of the following: *Normal*, *Dissolve*, *Multiply*, *Screen*,
   *Overlay*, *Hard Light*, *Soft Light*, *Linear Light*, *Vivid Light*, *Pin Light*, *Burn*, *Dodge*,
-  *Lighten*, *Darken*, *Difference*, *Additive*, *AddSub*, *Hard Mix*, *Exclusion*.
+  *Lighten*, *Darken*, *Difference*, *Additive*, *AddSub*, *Hard Mix*, *Exclusion*, *Hue*, *Saturation*,
+  *Color*, *Value*.
 
 * The *opacity* is used when mixing the result of the blend operation with the background input
   when the corresponding input is not connected. When connected, the opacity channel is
@@ -83,6 +84,14 @@ Blending modes
 
 .. |blend_exclusion| image:: images/blend_exclusion.png
 
+.. |blend_hue| image:: images/blend_hue.png
+
+.. |blend_saturation| image:: images/blend_saturation.png
+
+.. |blend_color| image:: images/blend_color.png
+
+.. |blend_value| image:: images/blend_value.png
+
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Blend mode            | Example                       | Description                                                                                                                   |
 +=======================+===============================+===============================================================================================================================+
@@ -123,6 +132,14 @@ Blending modes
 | Hard Mix              | |blend_hard_mix|              | This blend mode multiplies the colors of the two layers, and maps the resulting color to the nearest primary color            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 | Exclusion             | |blend_exclusion|             | This blend mode is similar to Difference, but it is less intense                                                              |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Hue                   | |blend_hue|                   | This blend mode takes the hue of the top layer and combines them with the saturation and value of the bottom layer            |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Saturation            | |blend_saturation|            | This blend mode takes the saturation of the top layer and combines them with the hue and value of the bottom layer            |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Color                 | |blend_color|                 | This blend mode takes the hue and saturation of the top layer and combines them with the value of the bottom layer            |
++-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
+| Value                 | |blend_value|                 | This blend mode takes the value of the top layer and combines them with the hue and saturation of the bottom layer            |
 +-----------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------+
 
 Notes
