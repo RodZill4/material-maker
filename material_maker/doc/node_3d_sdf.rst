@@ -43,6 +43,11 @@ Shapes
 	node_3d_sdf_shapes_torus
 	node_3d_sdf_shapes_plane
 	node_3d_sdf_shapes_angle
+	node_3d_sdf_shapes_link
+	node_3d_sdf_shapes_hex_prism
+	node_3d_sdf_shapes_cut_sphere
+	node_3d_sdf_shapes_box_frame
+	node_3d_sdf_shapes_solid_angle
 
 Operators
 +++++++++

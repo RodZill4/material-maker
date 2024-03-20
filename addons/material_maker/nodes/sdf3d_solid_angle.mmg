@@ -1,0 +1,70 @@
+{
+	"name": "sdf3d_solid_angle",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"a": 90,
+		"r": 0.4
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// The MIT License",
+			"// Copyright © 2019 Inigo Quilez",
+			"// source: https://www.shadertoy.com/view/wtjSDW",
+			"float sdSolidAngle(vec3 p, float a, float ra)",
+			"{",
+			"\tvec2 c = vec2(sin(a),cos(a));",
+			"\tvec2 q = vec2( length(p.xz), p.y );",
+			"\tfloat l = length(q) - ra;",
+			"\tfloat m = length(q - c*clamp(dot(q,c),0.0,ra) );",
+			"\treturn max(l,m*sign(c.y*q.x-c.x*q.y));",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates a solid angle as a signed distance field",
+		"name": "Solid Angle",
+		"outputs": [
+			{
+				"longdesc": "Shows the solid angle",
+				"sdf3d": "sdSolidAngle($uv,clamp($a,0.0,360.0)*0.008725,$r)",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 90,
+				"label": "Angle",
+				"longdesc": "Apex angle of the solid angle",
+				"max": 360,
+				"min": 0,
+				"name": "a",
+				"shortdesc": "Apex Angle",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.4,
+				"label": "Radius",
+				"longdesc": "Radius of the sphere",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Solid Angle"
+	},
+	"type": "shader"
+}

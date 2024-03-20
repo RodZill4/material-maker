@@ -1,0 +1,111 @@
+{
+	"name": "x",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"r": 0,
+		"sx": 0.3,
+		"sy": 0.25,
+		"sz": 0.25,
+		"t": 0.04
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// The MIT License",
+			"// Copyright © 2020 Inigo Quilez",
+			"// source: https://www.shadertoy.com/view/3ljcRh",
+			"float sdBoxFrame(vec3 p, vec3 b, float e)",
+			"{",
+			"\t   p = abs(p)-b;",
+			"  vec3 q = abs(p+e)-e;",
+			"",
+			"  return min(min(",
+			"\t  length(max(vec3(p.x,q.y,q.z),0.0))+min(max(p.x,max(q.y,q.z)),0.0),",
+			"\t  length(max(vec3(q.x,p.y,q.z),0.0))+min(max(q.x,max(p.y,q.z)),0.0)),",
+			"\t  length(max(vec3(q.x,q.y,p.z),0.0))+min(max(q.x,max(q.y,p.z)),0.0));",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates a rounded box frame as a signed distance function",
+		"name": "Box Frame",
+		"outputs": [
+			{
+				"longdesc": "Shows the rounded box frame",
+				"sdf3d": "sdBoxFrame($uv,vec3($sx,$sy,$sz),$t)-$r",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.x",
+				"default": 0.3,
+				"label": "Size X",
+				"longdesc": "Size of the box frame along the X axis",
+				"max": 1,
+				"min": 0,
+				"name": "sx",
+				"shortdesc": "Size.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 0.25,
+				"label": "Size Y",
+				"longdesc": "Size of the box frame along the Y axis",
+				"max": 1,
+				"min": 0,
+				"name": "sy",
+				"shortdesc": "Size.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.25,
+				"label": "Size Z",
+				"longdesc": "Size of the box frame along the Z axis",
+				"max": 1,
+				"min": 0,
+				"name": "sz",
+				"shortdesc": "Size.z",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.4,
+				"label": "Thickness",
+				"longdesc": "Thickness of the box frame",
+				"max": 1,
+				"min": 0,
+				"name": "t",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Radius",
+				"longdesc": "Radius of the rounded box frame",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Box Frame"
+	},
+	"type": "shader"
+}

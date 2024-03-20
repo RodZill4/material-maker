@@ -1,0 +1,80 @@
+{
+	"name": "link",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"R": 0.15,
+		"le": 0.19,
+		"r": 0.07
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// The MIT License",
+			"// Copyright © 2019 Inigo Quilez",
+			"// source: https://www.shadertoy.com/view/wlXSD7",
+			"float sdLink(vec3 p, float le, float r1, float r2)",
+			"{",
+			"  vec3 q = vec3( p.x, max(abs(p.y)-le,0.0), p.z );",
+			"  return length(vec2(length(q.xy)-r1,q.z)) - r2;",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates a link as a signed distance function",
+		"name": "Link",
+		"outputs": [
+			{
+				"longdesc": "Shows the link",
+				"sdf3d": "sdLink($uv,$le,$R,$r)",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.y",
+				"default": 0.19,
+				"label": "Length",
+				"longdesc": "Length of the link",
+				"max": 1,
+				"min": 0,
+				"name": "le",
+				"shortdesc": "Length",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.15,
+				"label": "Major Radius",
+				"longdesc": "Major radius of the link",
+				"max": 1,
+				"min": 0,
+				"name": "R",
+				"shortdesc": "Major Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius11.r",
+				"default": 0.07,
+				"label": "Minor Radius",
+				"longdesc": "Minor radius of the link",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Minor Radius",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Link"
+	},
+	"type": "shader"
+}
