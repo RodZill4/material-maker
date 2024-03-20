@@ -4622,7 +4622,7 @@ msgid "Gaussian blur"
 msgstr ""
 
 #: res://addons/material_maker/nodes/gaussian_blur.mmg
-msgid "Applys a gaussian blur on its input"
+msgid "Applies a gaussian blur on its input"
 msgstr ""
 
 #: res://addons/material_maker/nodes/gaussian_blur.mmg
@@ -8015,7 +8015,7 @@ msgid "Slope blur"
 msgstr ""
 
 #: res://addons/material_maker/nodes/slope_blur.mmg
-msgid "Applys a blur effect on its input, following slopes of an input height map"
+msgid "Applies a blur effect on its input, following slopes of an input height map"
 msgstr ""
 
 #: res://addons/material_maker/nodes/slope_blur.mmg

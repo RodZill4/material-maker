@@ -617,7 +617,7 @@ Square|方形
 The generated output UV map, to be connected to a Custom UV node|生成的输出 UV 贴图，连接到自定义 UV 节点
 Gaussian Blur|高斯模糊
 Gaussian blur|高斯模糊
-Applys a gaussian blur on its input|对其输入应用高斯模糊
+Applies a gaussian blur on its input|对其输入应用高斯模糊
 Apply the blur filter horizontally, vertically of in both directions|水平、垂直或双向应用模糊滤镜
 Gaussian blur X|高斯模糊 X
 Gaussian blur Y|高斯模糊 Y
@@ -1200,7 +1200,7 @@ Shows a greyscale image of a sine wave|显示正弦波的灰度图像
 Skew|倾斜
 Slope Blur|斜坡模糊
 Slope blur|坡度模糊
-Applys a blur effect on its input, following slopes of an input height map|按照输入高度图的斜率对其输入应用模糊效果
+Applies a blur effect on its input, following slopes of an input height map|按照输入高度图的斜率对其输入应用模糊效果
 A height map whose slopes control the strength and direction of the blur filter|高度图，其斜率控制模糊过滤器的强度和方向
 Smooth Curvature|平滑曲率
 Creates a smooth curvature map from a height map|从高度图创建平滑曲率图
