@@ -1,7 +1,7 @@
 Rotate node
 .............
 
-The **Rotate** node generates a signed distance image obtained by rotating its input.
+The **Rotate** node is variadic and generates signed distance images obtained by rotating its inputs.
 
 .. image:: images/node_simple_sdf_transforms_rotate.png
 	:align: center
@@ -9,13 +9,13 @@ The **Rotate** node generates a signed distance image obtained by rotating its i
 Inputs
 ::::::
 
-The **Rotate** node accepts a single input in signed distance function format.
+The **Rotate** node accepts one or more inputs in signed distance function format.
 
 Outputs
 :::::::
 
-The **Rotate** node generates a signed distance function of the
-rotated shape.
+The **Rotate** node generates a signed distance functions of the
+rotated shapes.
 
 Parameters
 ::::::::::

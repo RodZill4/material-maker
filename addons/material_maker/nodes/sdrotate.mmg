@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "sdrotate",
 	"node_position": {
 		"x": 0,
@@ -27,8 +28,8 @@
 				"default": "0.0",
 				"label": "",
 				"longdesc": "The input shape, defined as a signed distance function",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "sdf2d"
 			}
 		],
@@ -38,8 +39,8 @@
 		"outputs": [
 			{
 				"longdesc": "The rotated shape",
-				"sdf2d": "$in(sdf2d_rotate($uv, $a*0.01745329251))",
-				"shortdesc": "Output",
+				"sdf2d": "$in#(sdf2d_rotate($uv, $a*0.01745329251))",
+				"shortdesc": "Output#",
 				"type": "sdf2d"
 			}
 		],
