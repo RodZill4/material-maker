@@ -18,7 +18,9 @@ func get_flex_layout():
 func _draw():
 	var is_current : bool = (get_index() == get_parent().get_parent().current)
 	draw_style_box(get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "TabBar"), Rect2(Vector2(), size))
+	$Container/ButtonSeparator.visible = is_current
 	$Container/Undock.visible = is_current and get_flex_layout().main_control.allow_undock
+	$Container/UndockSeparator.visible = is_current
 	$Container/Close.visible = is_current
 
 func _on_undock_pressed():
