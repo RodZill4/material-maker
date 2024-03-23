@@ -154,7 +154,7 @@
 					},
 					{
 						"name": "dot(A, B)",
-						"value": "vec3(dot($in1(uv),$in2($uv)))"
+						"value": "vec3(dot($in1($uv),$in2($uv)))"
 					},
 					{
 						"name": "cross(A, B)",
