@@ -9,11 +9,19 @@
 		"sy": 0.25,
 		"sz": 0.25
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "// The MIT License, Copyright © 2019 Inigo Quilez\n// source: https://www.shadertoy.com/view/tdS3DG\nfloat sdEllipsoid(vec3 p, vec3 r)  {\n    float k0 = length(p/r);\n    float k1 = length(p/(r*r));\n    return k0*(k0-1.0)/k1;\n}\n",
+		"global": [
+			"// The MIT License, Copyright © 2019 Inigo Quilez",
+			"// source: https://www.shadertoy.com/view/tdS3DG",
+			"float sdEllipsoid(vec3 p, vec3 r)  {",
+			"\tfloat k0 = length(p/r);",
+			"\tfloat k1 = length(p/(r*r));",
+			"\treturn k0*(k0-1.0)/k1;",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

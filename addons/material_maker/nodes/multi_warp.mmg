@@ -51,6 +51,7 @@
 				"param2": 15,
 				"param3": 0
 			},
+			"seed": 27075,
 			"type": "remote",
 			"widgets": [
 				{
@@ -140,7 +141,8 @@
 					"type": "f"
 				}
 			],
-			"seed_value": 91624,
+			"seed": 91624,
+			"seed_locked": true,
 			"type": "ios"
 		},
 		{
@@ -161,6 +163,7 @@
 					"type": "rgba"
 				}
 			],
+			"seed": 30896,
 			"type": "ios"
 		},
 		{
@@ -175,7 +178,8 @@
 				"quality": 15,
 				"size": 10
 			},
-			"seed_value": -47470,
+			"seed": -47470,
+			"seed_locked": true,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -195,7 +199,25 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec3 $(name)_fct(vec2 uv) {\n\tfloat dx = 1.0/$size;\n    float v = 0.0;\n\tvec2 slope = vec2(0.0);\n\tint iterations = int(ceil($intensity * $quality));\n\titerations = max(1, iterations);\n\tvec2 it_uv = uv;\n\tvec3 pt_value = $in(uv);\n\tvec3 rv = vec3(0.0);\n\tfor(int i = 0;i<iterations;i++){\n\t\tv = $heightmap(it_uv);\n\t\tslope = vec2($heightmap(it_uv+vec2(dx, 0.0))-v, $heightmap(it_uv+vec2(0.0, dx))-v) * 2.0;\n\t\tit_uv += slope * $intensity * $intensity / float(iterations);\n\t\trv += $mode;\n\t}\n\treturn rv/float(iterations);\n}",
+				"instance": [
+					"vec3 $(name)_fct(vec2 uv) {",
+					"\tfloat dx = 1.0/$size;",
+					"\tfloat v = 0.0;",
+					"\tvec2 slope = vec2(0.0);",
+					"\tint iterations = int(ceil($intensity * $quality));",
+					"\titerations = max(1, iterations);",
+					"\tvec2 it_uv = uv;",
+					"\tvec3 pt_value = $in(uv);",
+					"\tvec3 rv = vec3(0.0);",
+					"\tfor(int i = 0;i<iterations;i++){",
+					"\t\tv = $heightmap(it_uv);",
+					"\t\tslope = vec2($heightmap(it_uv+vec2(dx, 0.0))-v, $heightmap(it_uv+vec2(0.0, dx))-v) * 2.0;",
+					"\t\tit_uv += slope * $intensity * $intensity / float(iterations);",
+					"\t\trv += $mode;",
+					"\t}",
+					"\treturn rv/float(iterations);",
+					"}"
+				],
 				"name": "Multi Warp",
 				"outputs": [
 					{
@@ -265,6 +287,7 @@
 			"parameters": {
 				"size": 10
 			},
+			"seed": 36539,
 			"type": "buffer",
 			"version": 1
 		},
@@ -277,6 +300,7 @@
 			"parameters": {
 				"size": 10
 			},
+			"seed": -2294,
 			"type": "buffer",
 			"version": 1
 		}
@@ -287,6 +311,7 @@
 		"param2": 15,
 		"param3": 0
 	},
+	"seed_int": 0,
 	"shortdesc": "Multi Warp",
 	"type": "graph"
 }

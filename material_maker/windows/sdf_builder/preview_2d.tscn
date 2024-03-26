@@ -1,9 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://bf5k7ed5a8ny1"]
 
-[ext_resource path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" type="PackedScene" id=1]
-[ext_resource path="res://material_maker/windows/sdf_builder/preview_2d.gd" type="Script" id=2]
+[ext_resource type="PackedScene" uid="uid://b7x7yqgsurxhv" path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/preview_2d.gd" id="2"]
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id="2"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -12,41 +12,49 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id="3"]
 resource_local_to_scene = true
-shader = SubResource( 2 )
+shader = SubResource("2")
 
-[sub_resource type="Shader" id=4]
+[sub_resource type="Shader" id="4"]
 resource_local_to_scene = true
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id="5"]
 resource_local_to_scene = true
-shader = SubResource( 4 )
+render_priority = 0
+shader = SubResource("4")
 
-[node name="Preview2D" instance=ExtResource( 1 )]
-material = SubResource( 3 )
-script = ExtResource( 2 )
+[node name="Preview2D" instance=ExtResource("1")]
+material = SubResource("3")
+script = ExtResource("2")
 shader_accumulate = ""
 shader_divide = ""
 
-[node name="ContextMenu" parent="." index="15"]
-items = [ "Reset view", null, 0, false, false, 0, 0, null, "", false ]
-
-[node name="View" parent="ContextMenu" index="0"]
-items = [ "Extend", null, 2, true, false, 0, 0, null, "", false, "Repeat", null, 2, false, false, 1, 0, null, "", false, "Clamp", null, 2, false, false, 2, 0, null, "", false, "Temporal AA", null, 2, false, false, 3, 0, null, "", false ]
+[node name="View" parent="ContextMenu" index="3"]
+item_count = 4
 
 [node name="Iteration" parent="Accumulate" index="0"]
-material = SubResource( 5 )
+material = SubResource("5")
 
 [node name="UI" type="HBoxContainer" parent="." index="17"]
-margin_right = 40.0
-margin_bottom = 40.0
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="View" type="OptionButton" parent="UI" index="0"]
-margin_right = 106.0
-margin_bottom = 40.0
-text = "SDF+Albedo"
-items = [ "SDF+Albedo", null, false, 0, null, "SDF", null, false, 1, null, "Albedo", null, false, 2, null, "Metallic", null, false, 3, null, "Roughness", null, false, 4, null, "Emission", null, false, 5, null ]
-selected = 0
+layout_mode = 2
+item_count = 6
+popup/item_0/text = "SDF+Albedo"
+popup/item_0/id = 0
+popup/item_1/text = "SDF"
+popup/item_1/id = 1
+popup/item_2/text = "Albedo"
+popup/item_2/id = 2
+popup/item_3/text = "Metallic"
+popup/item_3/id = 3
+popup/item_4/text = "Roughness"
+popup/item_4/id = 4
+popup/item_5/text = "Emission"
+popup/item_5/id = 5
 
 [connection signal="item_selected" from="UI/View" to="." method="_on_View_item_selected"]

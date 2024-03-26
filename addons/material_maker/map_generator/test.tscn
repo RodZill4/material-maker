@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://boy8werx31h7b"]
+
+[ext_resource type="Script" path="res://addons/material_maker/map_generator/test.gd" id="1_h34mq"]
+
+[node name="test" type="TextureRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 2
+script = ExtResource("1_h34mq")
+
+[node name="Maps" type="OptionButton" parent="."]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 20.0
+
+[connection signal="item_selected" from="Maps" to="." method="_on_maps_item_selected"]

@@ -1,5 +1,5 @@
 {
-	"name": "fill_to_random_grey",
+	"name": "fill_to_random_grey2",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -7,6 +7,7 @@
 	"parameters": {
 		"edgecolor": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec4 $(name_uv)_bb = $in($uv);",
 		"global": "",

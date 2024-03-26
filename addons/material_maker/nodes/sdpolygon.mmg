@@ -23,13 +23,34 @@
 			"type": "Polygon"
 		}
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
 		"inputs": [
 
 		],
-		"instance": "float sdPolygon_$(name)(vec2 p) {\n\tvec2 v[] = $polygon;\n\tint l = v.length();\n    float d = dot(p-v[0],p-v[0]);\n    float s = 1.0;\n\tint j = l-1;\n    for(int i=0; i<l; i++)\n    {\n        vec2 e = v[j] - v[i];\n        vec2 w =    p - v[i];\n        vec2 b = w - e*clamp( dot(w,e)/dot(e,e), 0.0, 1.0 );\n        d = min( d, dot(b,b) );\n        bvec3 c = bvec3(p.y>=v[i].y,p.y<v[j].y,e.x*w.y>e.y*w.x);\n        if( all(c) || all(not(c)) ) s*=-1.0;\n\t\tj=i;\n    }\n    return s*sqrt(d);\n}\n",
+		"instance": [
+			"float sdPolygon_$(name)(vec2 p) {",
+			"\tvec2 v[] = $polygon;",
+			"\tint l = v.length();",
+			"\tfloat d = dot(p-v[0],p-v[0]);",
+			"\tfloat s = 1.0;",
+			"\tint j = l-1;",
+			"\tfor(int i=0; i<l; i++)",
+			"\t{",
+			"\t\tvec2 e = v[j] - v[i];",
+			"\t\tvec2 w =\tp - v[i];",
+			"\t\tvec2 b = w - e*clamp( dot(w,e)/dot(e,e), 0.0, 1.0 );",
+			"\t\td = min( d, dot(b,b) );",
+			"\t\tbvec3 c = bvec3(p.y>=v[i].y,p.y<v[j].y,e.x*w.y>e.y*w.x);",
+			"\t\tif( all(c) || all(not(c)) ) s*=-1.0;",
+			"\t\tj=i;",
+			"\t}",
+			"\treturn s*sqrt(d);",
+			"}",
+			""
+		],
 		"longdesc": "A polygon as a signed distance function",
 		"name": "sdPolygon",
 		"outputs": [

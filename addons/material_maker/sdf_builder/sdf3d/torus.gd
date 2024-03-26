@@ -1,6 +1,6 @@
 extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
 
-export(int, "Cylinder", "Capsule", "Pyramid", "Cone") var shape
+@export_enum ("Cylinder", "Capsule", "Pyramid", "Cone") var shape : int
 
 func _ready():
 	pass # Replace with function body.
@@ -13,7 +13,7 @@ func get_parameter_defs():
 		{ label="Rotation.x", name="angle_x", type="float", min=-180.0, max=180.0, step=0.01, default=0.0 },
 		{ label="Rotation.y", name="angle_y", type="float", min=-180.0, max=180.0, step=0.01, default=0.0 },
 		{ label="Rotation.z", name="angle_z", type="float", min=-180.0, max=180.0, step=0.01, default=0.0 },
-		{ label="Axis", name="axis", type="enum", "values":[{ name="X", value="zxy" }, { name="Y", value="xyz" }, { name="Z", value="yzx" }], default=0 },
+		{ label="Axis", name="axis", type="enum", values=[{ name="X", value="zxy" }, { name="Y", value="xyz" }, { name="Z", value="yzx" }], default=0 },
 		{ label="Scale", name="scale", type="float", min=-1.0, max=1.0, step=0.01, default=1.0 },
 		{ label="Radius1", name="R", type="float", min=0.0, max=1.0, step=0.01, default=0.5 },
 		{ label="Radius2", name="r", type="float", min=0.0, max=1.0, step=0.01, default=0.1 }

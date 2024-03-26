@@ -116,8 +116,7 @@
 				"mipmap": false,
 				"size": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 2
 		},
@@ -130,8 +129,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "invert"
 		},
 		{
@@ -144,8 +142,7 @@
 				"d": 0.05,
 				"s": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -158,7 +155,27 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec2 $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat dx = floor($d/e)*e;\n\tfloat v = 0.0;\n\tfloat bestuv_x = uv.x;\n\tfor (float x = 0.0; x < dx; x += e) {\n\t\tfloat c = $in(uv+vec2(x, 0.0));\n\t\tif (c > v) {\n\t\t\tv = c;\n\t\t\tbestuv_x = uv.x+x;\n\t\t}\n\t\tc = $in(uv-vec2(x, 0.0));\n\t\tif (c > v) {\n\t\t\tv = c;\n\t\t\tbestuv_x = uv.x-x;\n\t\t}\n\t}\n\treturn vec2(v, bestuv_x);\n}",
+				"instance": [
+					"vec2 $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat dx = floor($d/e)*e;",
+					"\tfloat v = 0.0;",
+					"\tfloat bestuv_x = uv.x;",
+					"\tfor (float x = 0.0; x < dx; x += e) {",
+					"\t\tfloat c = $in(uv+vec2(x, 0.0));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_x = uv.x+x;",
+					"\t\t}",
+					"\t\tc = $in(uv-vec2(x, 0.0));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_x = uv.x-x;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec2(v, bestuv_x);",
+					"}"
+				],
 				"name": "Morphology Dilation 1 X",
 				"outputs": [
 					{
@@ -199,8 +216,7 @@
 				"d": 0.05,
 				"s": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -226,7 +242,37 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "vec3 $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat dx = floor($d/e)*e;\n\tfloat v = 0.0;\n\tvec2 bestuv = uv;\n\tfor (float x = 0.0; x < dx; x += e) {\n\t\tvec2 input = $inx(uv+vec2(0.0, x)).xy;\n\t\tif (v < input.x && $d >= length(vec2(input.y-uv.x, x))) {\n\t\t\tv = input.x;\n\t\t\tbestuv = vec2(input.y, uv.y+x);\n\t\t}\n\t\tinput = $inx(uv-vec2(0.0, x)).xy;\n\t\tif (v < input.x && $d >= length(vec2(input.y-uv.x, x))) {\n\t\t\tv = input.x;\n\t\t\tbestuv = vec2(input.y, uv.y-x);\n\t\t}\n\t\tinput = $iny(uv+vec2(x, 0.0)).xy;\n\t\tif (v < input.x && $d >= length(vec2(input.y-uv.y, x))) {\n\t\t\tv = input.x;\n\t\t\tbestuv = vec2(uv.x+x, input.y);\n\t\t}\n\t\tinput = $iny(uv-vec2(x, 0.0)).xy;\n\t\tif (v < input.x && $d >= length(vec2(input.y-uv.y, x))) {\n\t\t\tv = input.x;\n\t\t\tbestuv = vec2(uv.x-x, input.y);\n\t\t}\n\t}\n\treturn vec3(v, bestuv);\n}",
+				"instance": [
+					"vec3 $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat dx = floor($d/e)*e;",
+					"\tfloat v = 0.0;",
+					"\tvec2 bestuv = uv;",
+					"\tfor (float x = 0.0; x < dx; x += e) {",
+					"\t\tvec2 input_dist = $inx(uv+vec2(0.0, x)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.x, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(input_dist.y, uv.y+x);",
+					"\t\t}",
+					"\t\tinput_dist = $inx(uv-vec2(0.0, x)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.x, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(input_dist.y, uv.y-x);",
+					"\t\t}",
+					"\t\tinput_dist = $iny(uv+vec2(x, 0.0)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.y, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(uv.x+x, input_dist.y);",
+					"\t\t}",
+					"\t\tinput_dist = $iny(uv-vec2(x, 0.0)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.y, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(uv.x-x, input_dist.y);",
+					"\t\t}",
+					"\t}",
+					"\treturn vec3(v, bestuv);",
+					"}"
+				],
 				"name": "Morphology Dilation 2",
 				"outputs": [
 					{
@@ -266,8 +312,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "pack_2x32_to_4x16"
 		},
 		{
@@ -281,8 +326,7 @@
 				"mipmap": false,
 				"size": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 2
 		},
@@ -295,8 +339,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "pack_4x16_to_2x32"
 		},
 		{
@@ -310,8 +353,7 @@
 				"outputs": 1,
 				"source": 0
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "switch"
 		},
 		{
@@ -325,8 +367,7 @@
 				"operation": 0,
 				"resolution": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -421,8 +462,7 @@
 					"type": "rgb"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -440,8 +480,7 @@
 					"type": "rgba"
 				}
 			],
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "ios"
 		},
 		{
@@ -453,8 +492,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "pack_2x32_to_4x16"
 		},
 		{
@@ -468,8 +506,7 @@
 				"mipmap": false,
 				"size": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 2
 		},
@@ -482,8 +519,7 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "pack_4x16_to_2x32"
 		},
 		{
@@ -496,8 +532,7 @@
 				"d": 0.05,
 				"s": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -510,7 +545,27 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec2 $(name)_dilate(vec2 uv) {\n\tfloat e = 1.0/$s;\n\tfloat dy = floor($d/e)*e;\n\tfloat v = 0.0;\n\tfloat bestuv_y = uv.y;\n\tfor (float y = 0.0; y < dy; y += e) {\n\t\tfloat c = $in(uv+vec2(0.0, y));\n\t\tif (c > v) {\n\t\t\tv = c;\n\t\t\tbestuv_y = uv.y+y;\n\t\t}\n\t\tc = $in(uv-vec2(0.0, y));\n\t\tif (c > v) {\n\t\t\tv = c;\n\t\t\tbestuv_y = uv.y-y;\n\t\t}\n\t}\n\treturn vec2(v, bestuv_y);\n}",
+				"instance": [
+					"vec2 $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat dy = floor($d/e)*e;",
+					"\tfloat v = 0.0;",
+					"\tfloat bestuv_y = uv.y;",
+					"\tfor (float y = 0.0; y < dy; y += e) {",
+					"\t\tfloat c = $in(uv+vec2(0.0, y));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_y = uv.y+y;",
+					"\t\t}",
+					"\t\tc = $in(uv-vec2(0.0, y));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_y = uv.y-y;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec2(v, bestuv_y);",
+					"}"
+				],
 				"name": "Morphology Dilation 1 Y",
 				"outputs": [
 					{
@@ -547,8 +602,7 @@
 		"operation": 0,
 		"resolution": 10
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "",
 	"type": "graph"
 }

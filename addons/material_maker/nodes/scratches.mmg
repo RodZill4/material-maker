@@ -12,14 +12,45 @@
 		"waviness": 0.3,
 		"width": 0.4
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"longdesc": "Draws white scratches on a black background",
-		"global": "float scratch(vec2 uv, vec2 size, float waviness, float angle, float randomness, vec2 seed) {\n\tfloat subdivide = floor(1.0/size.x);\n\tfloat cut = size.x*subdivide;\n\tuv *= subdivide;\n\tvec2 r1 = rand2(floor(uv)+seed);\n\tvec2 r2 = rand2(r1);\n\tuv = fract(uv);\n\tvec2 border = 10.0*min(fract(uv), 1.0-fract(uv));\n\tuv = 2.0*uv-vec2(1.0);\n\tfloat a = 6.28318530718*(angle+(r1.x-0.5)*randomness);\n\tfloat c = cos(a);\n\tfloat s = sin(a);\n\tuv = vec2(c*uv.x+s*uv.y, s*uv.x-c*uv.y);\n\tuv.y += 2.0*r1.y-1.0;\n\tuv.y += 0.5*waviness*cos(2.0*uv.x+6.28318530718*r2.y);\n\tuv.x /= cut;\n\tuv.y /= subdivide*size.y;\n\treturn min(border.x, border.y)*(1.0-uv.x*uv.x)*max(0.0, 1.0-1000.0*uv.y*uv.y);\n}\n\nfloat scratches(vec2 uv, int layers, vec2 size, float waviness, float angle, float randomness, vec2 seed) {\n\tfloat v = 0.0;\n\tfor (int i = 0; i < layers; ++i) {\n\t\tseed = rand2(seed);\n\t\tv = max(v, scratch(fract(uv+seed), size, waviness, angle/360.0, randomness, seed));\n\t}\n\treturn v;\n}\n",
+		"global": [
+			"float scratch(vec2 uv, vec2 size, float waviness, float angle, float randomness, vec2 seed) {",
+			"\tfloat subdivide = floor(1.0/size.x);",
+			"\tfloat cut = size.x*subdivide;",
+			"\tuv *= subdivide;",
+			"\tvec2 r1 = rand2(floor(uv)+seed);",
+			"\tvec2 r2 = rand2(r1);",
+			"\tuv = fract(uv);",
+			"\tvec2 border = 10.0*min(fract(uv), 1.0-fract(uv));",
+			"\tuv = 2.0*uv-vec2(1.0);",
+			"\tfloat a = 6.28318530718*(angle+(r1.x-0.5)*randomness);",
+			"\tfloat c = cos(a);",
+			"\tfloat s = sin(a);",
+			"\tuv = vec2(c*uv.x+s*uv.y, s*uv.x-c*uv.y);",
+			"\tuv.y += 2.0*r1.y-1.0;",
+			"\tuv.y += 0.5*waviness*cos(2.0*uv.x+6.28318530718*r2.y);",
+			"\tuv.x /= cut;",
+			"\tuv.y /= subdivide*size.y;",
+			"\treturn min(border.x, border.y)*(1.0-uv.x*uv.x)*max(0.0, 1.0-1000.0*uv.y*uv.y);",
+			"}",
+			"",
+			"float scratches(vec2 uv, int layers, vec2 size, float waviness, float angle, float randomness, vec2 seed) {",
+			"\tfloat v = 0.0;",
+			"\tfor (int i = 0; i < layers; ++i) {",
+			"\t\tseed = rand2(seed);",
+			"\t\tv = max(v, scratch(fract(uv+seed), size, waviness, angle/360.0, randomness, seed));",
+			"\t}",
+			"\treturn v;",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],
 		"instance": "",
+		"longdesc": "Draws white scratches on a black background",
 		"name": "Scratches",
 		"outputs": [
 			{

@@ -29,7 +29,7 @@ func set_model_data(data, remaining_group_size = 0) -> int:
 	return int(max(remaining_group_size-1, 0))
 
 func get_model_data() -> Dictionary:
-	var data = { type=mm_io_types.type_names[$Type.selected], mm_io_types.type_names[$Type.selected]:$Value.text }
+	var data = { "type":mm_io_types.type_names[$Type.selected], mm_io_types.type_names[$Type.selected]:$Value.text }
 	if $Description.short_description != "":
 		data.shortdesc = $Description.short_description
 	if $Description.long_description != "":

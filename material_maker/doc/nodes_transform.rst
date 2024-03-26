@@ -26,3 +26,4 @@ The transform nodes are nodes that affect the geometry of their input.
 	node_transform_morphology
 	node_transform_slope
 	node_transform_swirl
+	node_transform_spherize

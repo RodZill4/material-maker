@@ -8,8 +8,12 @@
 		"amount": 0.05,
 		"mode": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_slope = $(name)_slope($uv);\nvec2 $(name_uv)_warp = $mode;",
+		"code": [
+			"vec2 $(name_uv)_slope = $(name)_slope($uv);",
+			"vec2 $(name_uv)_warp = $mode;"
+		],
 		"global": "",
 		"inputs": [
 			{
@@ -30,7 +34,12 @@
 				"type": "f"
 			}
 		],
-		"instance": "vec2 $(name)_slope(vec2 uv) {\n    vec2 e = vec2(0.001, 0.0);\n    return 0.5*vec2($d(uv+e)-$d(uv-e), $d(uv+e.yx)-$d(uv-e.yx))/e.x;\n}",
+		"instance": [
+			"vec2 $(name)_slope(vec2 uv) {",
+			"\tvec2 e = vec2(0.001, 0.0);",
+			"\treturn 0.5*vec2($d(uv+e)-$d(uv-e), $d(uv+e.yx)-$d(uv-e.yx))/e.x;",
+			"}"
+		],
 		"longdesc": "Warps its input according to a heightmap",
 		"name": "Warp",
 		"outputs": [

@@ -1,0 +1,236 @@
+[gd_scene load_steps=11 format=3 uid="uid://cwjtvrgb2al2x"]
+
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://lt2wnsnw4af6" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
+
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("1")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="9"]
+atlas = ExtResource("1")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="7"]
+atlas = ExtResource("1")
+region = Rect2(48, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("1")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("1")
+region = Rect2(48, 160, 16, 16)
+
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("1")
+region = Rect2(32, 0, 16, 16)
+
+[node name="ExportEditor" type="Window"]
+title = "Material Export Editor"
+script = ExtResource("2")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Export" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Create" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "New export target"
+icon = SubResource("2")
+
+[node name="Load" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "Load export target from file"
+icon = SubResource("9")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+text = "Export target:"
+
+[node name="Option" type="OptionButton" parent="MarginContainer/VBoxContainer/Export"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Rename" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "Rename export target"
+icon = SubResource("3")
+
+[node name="External" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "Store as separate file"
+toggle_mode = true
+icon = SubResource("7")
+
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "Save to file"
+icon = SubResource("8")
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+
+[node name="Duplicate" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "Duplicate export target"
+icon = SubResource("4")
+
+[node name="Delete" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+tooltip_text = "Delete export target"
+icon = SubResource("5")
+
+[node name="Space" type="Control" parent="MarginContainer/VBoxContainer/Export"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="ExtensionLabel" type="Label" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+text = "Main file extension:"
+
+[node name="ExtensionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Export"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TabBar" type="TabContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Files" type="ItemList" parent="MarginContainer/VBoxContainer/TabBar/Files"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="File" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabBar/Files"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Common" type="GridContainer" parent="MarginContainer/VBoxContainer/TabBar/Files/File"]
+layout_mode = 2
+columns = 2
+
+[node name="LabelName" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+text = "Name:"
+
+[node name="name" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelPromptOverwrite" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+text = "Prompt overwrite:"
+
+[node name="prompt_overwrite" type="CheckBox" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+
+[node name="LabelCondition" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+text = "Condition:"
+
+[node name="conditions" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelType" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+text = "Type:"
+
+[node name="type" type="OptionButton" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LabelExpression" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+layout_mode = 2
+text = "Output:"
+
+[node name="expression" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" instance=ExtResource("3")]
+layout_mode = 2
+
+[node name="template" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File"]
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_default_cursor_shape = 0
+
+[node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar"]
+visible = false
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_default_cursor_shape = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Apply"
+
+[node name="OK" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "OK"
+
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="minimum_size_changed" from="MarginContainer" to="." method="_on_MarginContainer_minimum_size_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Create" to="." method="_on_Create_Export_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Load" to="." method="_on_Load_Export_pressed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/Export/Option" to="." method="select_export"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Rename" to="." method="_on_Rename_Export_pressed"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/Export/External" to="." method="_on_External_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Save" to="." method="_on_Save_Export_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Duplicate" to="." method="_on_Duplicate_Export_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Export/Delete" to="." method="_on_Delete_Export_pressed"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/Export/ExtensionEdit" to="." method="_on_ExportExtensionEdit_focus_exited"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/Export/ExtensionEdit" to="." method="_on_ExportExtensionEdit_text_entered"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/TabBar/Files/Files" to="." method="_on_Files_gui_input"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabBar/Files/Files" to="." method="select_file"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/name" to="." method="_on_name_focus_exited"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/name" to="." method="_on_name_text_entered"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/prompt_overwrite" to="." method="_on_prompt_overwrite_toggled"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/conditions" to="." method="_on_conditions_text_entered"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/type" to="." method="_on_type_item_selected"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/expression" to="." method="_on_expression_focus_exited"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/expression" to="." method="_on_expression_text_entered"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Files/File/template" to="." method="_on_template_focus_exited"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Custom Script" to="." method="_on_Custom_Script_focus_exited"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

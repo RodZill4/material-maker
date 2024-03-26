@@ -1,6 +1,6 @@
 extends HBoxContainer
 
-onready var default = $Default
+@onready var default = $Default
 
 func get_model_data() -> Dictionary:
 	return {

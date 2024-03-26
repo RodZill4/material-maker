@@ -1,20 +1,20 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://cqbpreij2q13u"]
 
-[ext_resource path="res://material_maker/widgets/size_option_button/size_option_button.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/widgets/float_edit/float_edit.tscn" type="PackedScene" id=2]
-[ext_resource path="res://material_maker/panels/paint/paint_project_settings.gd" type="Script" id=3]
+[ext_resource type="Script" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2"]
+[ext_resource type="Script" path="res://material_maker/panels/paint/paint_project_settings.gd" id="3"]
 
-[node name="PaintProjectSettings" type="WindowDialog"]
+[node name="PaintProjectSettings" type="Window"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -171.0
-margin_top = -86.0
-margin_right = 69.0
-margin_bottom = 85.0
+offset_left = -171.0
+offset_top = -86.0
+offset_right = 69.0
+offset_bottom = 85.0
 window_title = "Paint project settings"
-script = ExtResource( 3 )
+script = ExtResource("3")
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -22,109 +22,109 @@ __meta__ = {
 [node name="Margin" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/margin_right = 2
-custom_constants/margin_top = 2
-custom_constants/margin_left = 2
-custom_constants/margin_bottom = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_bottom = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBox" type="VBoxContainer" parent="Margin"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 238.0
-margin_bottom = 169.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 238.0
+offset_bottom = 169.0
 
 [node name="TextureSize" type="HBoxContainer" parent="Margin/VBox"]
-margin_right = 236.0
-margin_bottom = 20.0
+offset_right = 236.0
+offset_bottom = 20.0
 
 [node name="Label" type="Label" parent="Margin/VBox/TextureSize"]
-margin_top = 3.0
-margin_right = 82.0
-margin_bottom = 17.0
-text = "Texture size:"
+offset_top = 3.0
+offset_right = 82.0
+offset_bottom = 17.0
+text = "Texture2D size:"
 
 [node name="SizeOptionButton" type="OptionButton" parent="Margin/VBox/TextureSize"]
-margin_left = 86.0
-margin_right = 115.0
-margin_bottom = 20.0
-script = ExtResource( 1 )
+offset_left = 86.0
+offset_right = 115.0
+offset_bottom = 20.0
+script = ExtResource("1")
 min_size = 8
 max_size = 12
 
 [node name="PaintEmission" type="CheckBox" parent="Margin/VBox"]
-margin_top = 24.0
-margin_right = 122.0
-margin_bottom = 48.0
+offset_top = 24.0
+offset_right = 122.0
+offset_bottom = 48.0
 size_flags_horizontal = 0
 text = "Paint Emission"
 
 [node name="PaintNormal" type="CheckBox" parent="Margin/VBox"]
-margin_top = 52.0
-margin_right = 111.0
-margin_bottom = 76.0
+offset_top = 52.0
+offset_right = 111.0
+offset_bottom = 76.0
 size_flags_horizontal = 0
 text = "Paint Normal"
 
 [node name="PaintDepth" type="CheckBox" parent="Margin/VBox"]
-margin_top = 80.0
-margin_right = 103.0
-margin_bottom = 104.0
+offset_top = 80.0
+offset_right = 103.0
+offset_bottom = 104.0
 size_flags_horizontal = 0
 text = "Paint Depth"
 
 [node name="Bump" type="HBoxContainer" parent="Margin/VBox"]
-margin_top = 108.0
-margin_right = 236.0
-margin_bottom = 132.0
+offset_top = 108.0
+offset_right = 236.0
+offset_bottom = 132.0
 
 [node name="PaintBump" type="CheckBox" parent="Margin/VBox/Bump"]
-margin_right = 157.0
-margin_bottom = 24.0
+offset_right = 157.0
+offset_bottom = 24.0
 text = "Normals from depth"
 
-[node name="BumpStrength" parent="Margin/VBox/Bump" instance=ExtResource( 2 )]
+[node name="BumpStrength" parent="Margin/VBox/Bump" instance=ExtResource("2")]
 anchor_left = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 161.0
-margin_right = 219.0
-margin_bottom = 24.0
+offset_left = 161.0
+offset_right = 219.0
+offset_bottom = 24.0
 step = 0.01
 float_only = true
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
-margin_top = 136.0
-margin_right = 236.0
-margin_bottom = 140.0
+offset_top = 136.0
+offset_right = 236.0
+offset_bottom = 140.0
 
 [node name="Buttons" type="HBoxContainer" parent="Margin/VBox"]
-margin_left = 24.0
-margin_top = 144.0
-margin_right = 212.0
-margin_bottom = 164.0
+offset_left = 24.0
+offset_top = 144.0
+offset_right = 212.0
+offset_bottom = 164.0
 size_flags_horizontal = 4
 
 [node name="Apply" type="Button" parent="Margin/VBox/Buttons"]
-margin_right = 60.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_right = 60.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2(60, 0)
 text = "Apply"
 
 [node name="OK" type="Button" parent="Margin/VBox/Buttons"]
-margin_left = 64.0
-margin_right = 124.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_left = 64.0
+offset_right = 124.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2(60, 0)
 text = "OK"
 
 [node name="Cancel" type="Button" parent="Margin/VBox/Buttons"]
-margin_left = 128.0
-margin_right = 188.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 60, 0 )
+offset_left = 128.0
+offset_right = 188.0
+offset_bottom = 20.0
+custom_minimum_size = Vector2(60, 0)
 text = "Cancel"
 
 [connection signal="popup_hide" from="." to="." method="queue_free"]

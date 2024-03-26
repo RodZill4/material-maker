@@ -1,6 +1,6 @@
 extends HBoxContainer
 
-export var target : NodePath = ".."
+@export var target : NodePath = ".."
 var target_node
 
 func _ready() -> void:

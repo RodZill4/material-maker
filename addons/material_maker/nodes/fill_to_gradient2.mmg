@@ -1,5 +1,5 @@
 {
-	"name": "fill_to_gradient",
+	"name": "fill_to_gradient2",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -31,11 +31,24 @@
 		"r_rotate": 180,
 		"rotate": 0
 	},
-	"seed": 0.243785,
-	"seed_locked": false,
+	"seed_int": 1047048602,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 gradient_uv(vec2 uv, float rotate, float rnd_rotate, float rnd_offset, vec2 seed) {\n\tseed = rand2(seed);\n\tuv -= vec2(0.5);\n\tfloat angle = (rotate + (seed.x * 2.0 - 1.0) * rnd_rotate) * 0.01745329251;\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);\n\tuv.x += seed.y * rnd_offset;\n\tuv /= sqrt(2.0); // square root of 2 is the diagonal of a 1x1 square, to ensure full coverate of gradient\n\tuv += vec2(0.5);\n\treturn clamp(uv, vec2(0.0), vec2(1.0));\n}\n",
+		"global": [
+			"vec2 gradient_uv(vec2 uv, float rotate, float rnd_rotate, float rnd_offset, vec2 seed) {",
+			"\tseed = rand2(seed);",
+			"\tuv -= vec2(0.5);",
+			"\tfloat angle = (rotate + (seed.x * 2.0 - 1.0) * rnd_rotate) * 0.01745329251;",
+			"\tfloat ca = cos(angle);",
+			"\tfloat sa = sin(angle);",
+			"\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);",
+			"\tuv.x += seed.y * rnd_offset;",
+			"\tuv /= sqrt(2.0); // square root of 2 is the diagonal of a 1x1 square, to ensure full coverate of gradient",
+			"\tuv += vec2(0.5);",
+			"\treturn clamp(uv, vec2(0.0), vec2(1.0));",
+			"}",
+			""
+		],
 		"includes": [
 			"fill_to_uv"
 		],
@@ -50,7 +63,23 @@
 				"type": "fill"
 			}
 		],
-		"instance": "vec4 $(name)_multiple_gradients(vec2 uv) {\n\tvec4 bb = $in(fract(uv));\n\tvec3 custom_uv = fill_to_uv_$mode(uv, bb, float($seed));\n\tfloat rnd =  float($seed)+custom_uv.z;\n\n\tvec4 value = vec4(1.0);\n\tfor( int i = 0; i < int($layers); i++) {\n\t\tvec2 grad_uv = gradient_uv(custom_uv.xy, $rotate, $r_rotate, $r_offset, vec2(custom_uv.z, $seed + float(i)));\n\t\tvec4 gradient = $grad(grad_uv.x);\n\t\t//if (grad_uv.x > 0.99999)\n\t\t//\tgradient = $grad(0.0);\n\t\tvalue = min(value, gradient);\n\t}\n\treturn value;\n}",
+		"instance": [
+			"vec4 $(name)_multiple_gradients(vec2 uv) {",
+			"\tvec4 bb = $in(fract(uv));",
+			"\tvec3 custom_uv = fill_to_uv_$mode(uv, bb, float($seed));",
+			"\tfloat rnd =  float($seed)+custom_uv.z;",
+			"",
+			"\tvec4 value = vec4(1.0);",
+			"\tfor( int i = 0; i < int($layers); i++) {",
+			"\t\tvec2 grad_uv = gradient_uv(custom_uv.xy, $rotate, $r_rotate, $r_offset, vec2(custom_uv.z, $seed + float(i)));",
+			"\t\tvec4 gradient = $grad(grad_uv.x);",
+			"\t\t//if (grad_uv.x > 0.99999)",
+			"\t\t//\tgradient = $grad(0.0);",
+			"\t\tvalue = min(value, gradient);",
+			"\t}",
+			"\treturn value;",
+			"}"
+		],
 		"longdesc": "A fill companion node that generated an gradients on each filled area",
 		"name": "Fill to Gradient",
 		"outputs": [

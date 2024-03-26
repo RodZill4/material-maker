@@ -1,15 +1,15 @@
 extends "res://material_maker/panels/paint/layer_types/layer.gd"
 
 # warning-ignore:unused_class_variable
-var albedo : Texture
+var albedo : Texture2D
 # warning-ignore:unused_class_variable
-var mr : Texture
+var mr : Texture2D
 # warning-ignore:unused_class_variable
-var emission : Texture
+var emission : Texture2D
 # warning-ignore:unused_class_variable
-var normal : Texture
+var normal : Texture2D
 # warning-ignore:unused_class_variable
-var do : Texture
+var do : Texture2D
 
 # warning-ignore:unused_class_variable
 var albedo_alpha : float = 1.0
@@ -45,7 +45,7 @@ func get_layer_type() -> int:
 	return LAYER_PAINT
 
 func duplicate():
-	var layer = .duplicate()
+	var layer = super.duplicate()
 	for c in get_expanded_channels():
 		layer.set(c+"_alpha", get(c+"_alpha"))
 	return layer
@@ -74,7 +74,7 @@ func update_color_rects(channel : String, parent_alpha : float = 1.0) -> void:
 	var alpha = parent_alpha * get(channel+"_alpha")
 	for cr in get(channel+"_color_rects"):
 		if cr.material is ShaderMaterial:
-			cr.material.set_shader_param("modulate", alpha)
+			cr.material.set_shader_parameter("modulate", alpha)
 		else:
 			cr.modulate.a = alpha
 	for l in layers:

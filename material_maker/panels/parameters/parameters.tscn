@@ -1,19 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://vkh00fjvl0py"]
 
-[ext_resource path="res://material_maker/panels/parameters/parameters.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/panels/parameters/parameters.gd" id="1"]
 
 [node name="BrushParams" type="ScrollContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_min_size = Vector2( 200, 250 )
+custom_minimum_size = Vector2(200, 250)
 size_flags_horizontal = 3
 scroll_horizontal_enabled = false
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Parameters" type="GridContainer" parent="."]
-margin_right = 1280.0
+offset_right = 1280.0
 size_flags_horizontal = 3
 columns = 2

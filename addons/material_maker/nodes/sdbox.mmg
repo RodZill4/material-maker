@@ -10,11 +10,15 @@
 		"h": 0.2,
 		"w": 0.3
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sd_box(vec2 uv, vec2 size) {\n\tvec2 d = abs(uv)-size;\n\treturn length(max(d, vec2(0)))+min(max(d.x, d.y), 0.0);\n}",
+		"global": [
+			"float sd_box(vec2 uv, vec2 size) {",
+			"\tvec2 d = abs(uv)-size;",
+			"\treturn length(max(d, vec2(0)))+min(max(d.x, d.y), 0.0);",
+			"}"
+		],
 		"inputs": [
 
 		],

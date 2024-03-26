@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "translate",
 	"node_position": {
 		"x": 0,
@@ -8,6 +9,7 @@
 		"translate_x": 0,
 		"translate_y": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -15,9 +17,9 @@
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
-				"longdesc": "The input image",
-				"name": "i",
-				"shortdesc": "Input",
+				"longdesc": "An input image",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			}
 		],
@@ -26,9 +28,9 @@
 		"name": "Translate",
 		"outputs": [
 			{
-				"longdesc": "Shows the translated image",
-				"rgba": "$i($uv-vec2($translate_x, $translate_y))",
-				"shortdesc": "Output",
+				"longdesc": "Shows a translated image",
+				"rgba": "$i#($uv-vec2($translate_x, $translate_y))",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],

@@ -7,11 +7,31 @@
 	"parameters": {
 
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_angle = 6.28318530718*($map($uv).y-0.5);\nvec2 $(name_uv)_uv = matmap_uv($uv, $(name_uv)_angle, $map($uv).z);\n",
-		"global": "vec2 matmap_uv(vec2 uv, float angle, float seed) {\n\tuv -= vec2(0.5);\n\tvec2 rv;\n\trv.x = uv.x*cos(angle)+uv.y*sin(angle);\n\trv.y = -uv.x*sin(angle)+uv.y*cos(angle);\n\treturn fract(rv + rand2(vec2(seed)));\n}\n\nvec3 matmap_rotate_nm(vec3 input, float angle) {\n\tvec2 uv = input.xy - vec2(0.5);\n\tvec2 rv;\n\trv.x = uv.x*cos(angle)+uv.y*sin(angle);\n\trv.y = -uv.x*sin(angle)+uv.y*cos(angle);\n\treturn vec3(rv + vec2(0.5), input.z);\n}\n",
+		"code": [
+			"float $(name_uv)_angle = 6.28318530718*($map($uv).y-0.5);",
+			"vec2 $(name_uv)_uv = matmap_uv($uv, $(name_uv)_angle, $map($uv).z);",
+			""
+		],
+		"global": [
+			"vec2 matmap_uv(vec2 uv, float angle, float seed) {",
+			"\tuv -= vec2(0.5);",
+			"\tvec2 rv;",
+			"\trv.x = uv.x*cos(angle)+uv.y*sin(angle);",
+			"\trv.y = -uv.x*sin(angle)+uv.y*cos(angle);",
+			"\treturn fract(rv + rand2(vec2(seed)));",
+			"}",
+			"",
+			"vec3 matmap_rotate_nm(vec3 input_nm, float angle) {",
+			"\tvec2 uv = input_nm.xy - vec2(0.5);",
+			"\tvec2 rv;",
+			"\trv.x = uv.x*cos(angle)+uv.y*sin(angle);",
+			"\trv.y = -uv.x*sin(angle)+uv.y*cos(angle);",
+			"\treturn vec3(rv + vec2(0.5), input_nm.z);",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec3(1.0, 0.5, 0.0)",

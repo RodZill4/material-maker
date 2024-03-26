@@ -1,12 +1,14 @@
 extends Node
 
+
 const CHANNELS = [ "albedo", "metallic", "roughness", "emission", "normal", "occlusion", "depth" ]
+
 
 func _ready():
 	var graph = MMGenGraph.new()
 	graph.name = "graph"
 	add_child(graph)
-	var material = mm_loader.create_gen({ name="material", type="material" })
+	var material = await mm_loader.create_gen({ name="material", type="material" })
 	graph.add_child(material)
 	for i in CHANNELS.size():
 		if CHANNELS[i] == null:
@@ -22,7 +24,8 @@ func setup_material(material_textures : Dictionary) -> void:
 		if c == null:
 			continue
 		var channel_node = graph.get_node(c)
-		channel_node.texture.create_from_image(material_textures[c].get_data())
+		channel_node.texture.set_image(material_textures[c].get_image())
+		mm_deps.dependency_update("o%d_tex" % channel_node.get_instance_id(), channel_node.texture)
 	graph.get_node("material").all_sources_changed()
 
 

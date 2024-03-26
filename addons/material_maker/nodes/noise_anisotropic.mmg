@@ -10,9 +10,27 @@
 		"scale_y": 256,
 		"smoothness": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float anisotropic(vec2 uv, vec2 size, float seed, float smoothness, float interpolation) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n\t\n\tvec2 xy = floor(uv*size);\n\tvec2 offset = vec2(rand(seed2 + xy.y), 0.0);\n\tvec2 xy_offset = floor(uv * size + offset );\n    float f0 = rand(seed2+mod(xy_offset, size));\n    float f1 = rand(seed2+mod(xy_offset+vec2(1.0, 0.0), size));\n\tfloat mixer = clamp( (fract(uv.x*size.x+offset.x) -.5) / smoothness + 0.5, 0.0, 1.0 );\n    float smooth_mix = smoothstep(0.0, 1.0, mixer);\n\tfloat linear = mix(f0, f1, mixer);\n\tfloat smoothed = mix(f0, f1, smooth_mix);\n\t\n    return mix(linear, smoothed, interpolation);\n}\n",
+		"global": [
+			"float anisotropic(vec2 uv, vec2 size, float seed, float smoothness, float interpolation) {",
+			"\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));",
+			"\t",
+			"\tvec2 xy = floor(uv*size);",
+			"\tvec2 offset = vec2(rand(seed2 + xy.y), 0.0);",
+			"\tvec2 xy_offset = floor(uv * size + offset );",
+			"\tfloat f0 = rand(seed2+mod(xy_offset, size));",
+			"\tfloat f1 = rand(seed2+mod(xy_offset+vec2(1.0, 0.0), size));",
+			"\tfloat mixer = clamp( (fract(uv.x*size.x+offset.x) -.5) / smoothness + 0.5, 0.0, 1.0 );",
+			"\tfloat smooth_mix = smoothstep(0.0, 1.0, mixer);",
+			"\tfloat linear = mix(f0, f1, mixer);",
+			"\tfloat smoothed = mix(f0, f1, smooth_mix);",
+			"\t",
+			"\treturn mix(linear, smoothed, interpolation);",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

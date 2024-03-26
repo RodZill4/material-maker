@@ -1,12 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "switch",
-			"to_port": 0
-		},
-		{
 			"from": "edge_detect_1",
 			"from_port": 0,
 			"to": "gen_outputs",
@@ -19,28 +13,28 @@
 			"to_port": 0
 		},
 		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "pack_2x32_to_4x16_3",
-			"to_port": 0
-		},
-		{
-			"from": "pack_2x32_to_4x16_3",
-			"from_port": 0,
-			"to": "buffer",
-			"to_port": 0
-		},
-		{
-			"from": "buffer",
-			"from_port": 0,
-			"to": "pack_4x16_to_2x32_3",
-			"to_port": 0
-		},
-		{
-			"from": "pack_4x16_to_2x32_3",
+			"from": "buffer_2",
 			"from_port": 0,
 			"to": "switch",
 			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "ensure_greyscale",
+			"to_port": 0
+		},
+		{
+			"from": "ensure_greyscale",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
 		}
 	],
 	"label": "Normal Map",
@@ -52,24 +46,10 @@
 	},
 	"nodes": [
 		{
-			"name": "buffer",
-			"node_position": {
-				"x": -695.663818,
-				"y": -44.39386
-			},
-			"parameters": {
-				"lod": 0,
-				"size": 10
-			},
-			"seed": -32011,
-			"seed_locked": false,
-			"type": "buffer"
-		},
-		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -802.910156,
-				"y": -293.916687
+				"x": -802.91015625,
+				"y": -293.916687011719
 			},
 			"parameters": {
 				"buffer": 1,
@@ -78,7 +58,6 @@
 				"strength": 1
 			},
 			"seed": 56582,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -98,11 +77,11 @@
 					"label": "",
 					"linked_widgets": [
 						{
-							"node": "buffer",
+							"node": "edge_detect_1",
 							"widget": "size"
 						},
 						{
-							"node": "edge_detect_1",
+							"node": "buffer_2",
 							"widget": "size"
 						}
 					],
@@ -158,8 +137,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -445.663818,
-				"y": 75.047363
+				"x": -458.663818359375,
+				"y": 73.04736328125
 			},
 			"parameters": {
 
@@ -174,14 +153,13 @@
 				}
 			],
 			"seed": -6314,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1094.910156,
-				"y": 74.047363
+				"x": -1147.91015625,
+				"y": 77.9473648071289
 			},
 			"parameters": {
 
@@ -202,8 +180,8 @@
 		{
 			"name": "switch",
 			"node_position": {
-				"x": -675.5,
-				"y": 110.297363
+				"x": -683.5,
+				"y": 141.29736328125
 			},
 			"parameters": {
 				"choices": 2,
@@ -211,14 +189,13 @@
 				"source": 1
 			},
 			"seed": -53264,
-			"seed_locked": false,
 			"type": "switch"
 		},
 		{
 			"name": "edge_detect_1",
 			"node_position": {
-				"x": -674.092529,
-				"y": 211.868774
+				"x": -691.092529296875,
+				"y": 239.868774414063
 			},
 			"parameters": {
 				"algo": 0,
@@ -226,7 +203,6 @@
 				"size": 10
 			},
 			"seed": -11547,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -239,7 +215,46 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec3 nm_$name(vec2 uv, float amount, float size) {\n\tvec3 e = vec3(1.0/size, -1.0/size, 0);\n\tvec2 rv;\n\tif ($algo == 0) {\n\t\trv = vec2(1.0, -1.0)*$in(uv+e.xy);\n\t\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);\n\t\trv += vec2(1.0, 1.0)*$in(uv+e.xx);\n\t\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);\n\t\trv += vec2(2.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\t\trv *= size*amount/128.0;\n\t} else if ($algo == 1) {\n\t\trv = vec2(3.0, -3.0)*$in(uv+e.xy);\n\t\trv += vec2(-3.0, 3.0)*$in(uv-e.xy);\n\t\trv += vec2(3.0, 3.0)*$in(uv+e.xx);\n\t\trv += vec2(-3.0, -3.0)*$in(uv-e.xx);\n\t\trv += vec2(10.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-10.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 10.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -10.0)*$in(uv-e.zx);\n\t\trv *= size*amount/512.0;\n\t} else if ($algo == 2) {\n\t\trv = vec2(2.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\t\trv *= size*amount/64.0;\n\t} else {\n\t\trv = vec2(1.0, 0.0)*$in(uv+e.xz);\n\t\trv += vec2(0.0, 1.0)*$in(uv+e.zx);\n\t\trv += vec2(-1.0, -1.0)*$in(uv);\n\t\trv *= size*amount/20.0;\n\t}\n\treturn vec3(0.5)+0.5*normalize(vec3(rv, -1.0));\n}\n",
+				"instance": [
+					"vec3 nm_$name(vec2 uv, float amount, float size) {",
+					"\tvec3 e = vec3(1.0/size, -1.0/size, 0);",
+					"\tvec2 rv;",
+					"\tif ($algo == 0) {",
+					"\t\trv = vec2(1.0, -1.0)*$in(uv+e.xy);",
+					"\t\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);",
+					"\t\trv += vec2(1.0, 1.0)*$in(uv+e.xx);",
+					"\t\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);",
+					"\t\trv += vec2(2.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);",
+					"\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);",
+					"\t\trv *= size*amount/128.0;",
+					"\t} else if ($algo == 1) {",
+					"\t\trv = vec2(3.0, -3.0)*$in(uv+e.xy);",
+					"\t\trv += vec2(-3.0, 3.0)*$in(uv-e.xy);",
+					"\t\trv += vec2(3.0, 3.0)*$in(uv+e.xx);",
+					"\t\trv += vec2(-3.0, -3.0)*$in(uv-e.xx);",
+					"\t\trv += vec2(10.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(-10.0, 0.0)*$in(uv-e.xz);",
+					"\t\trv += vec2(0.0, 10.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(0.0, -10.0)*$in(uv-e.zx);",
+					"\t\trv *= size*amount/512.0;",
+					"\t} else if ($algo == 2) {",
+					"\t\trv = vec2(2.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);",
+					"\t\trv += vec2(0.0, 2.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(0.0, -2.0)*$in(uv-e.zx);",
+					"\t\trv *= size*amount/64.0;",
+					"\t} else {",
+					"\t\trv = vec2(1.0, 0.0)*$in(uv+e.xz);",
+					"\t\trv += vec2(0.0, 1.0)*$in(uv+e.zx);",
+					"\t\trv += vec2(-1.0, -1.0)*$in(uv);",
+					"\t\trv *= size*amount/20.0;",
+					"\t}",
+					"\treturn vec3(0.5)+0.5*normalize(vec3(rv, -1.0));",
+					"}",
+					""
+				],
 				"name": "Normal map",
 				"outputs": [
 					{
@@ -295,30 +310,32 @@
 			"type": "shader"
 		},
 		{
-			"name": "pack_2x32_to_4x16_3",
+			"name": "buffer_2",
 			"node_position": {
-				"x": -695.7901,
-				"y": -104.091614
+				"x": -702.5,
+				"y": -27.0291137695313
 			},
 			"parameters": {
-
+				"f32": true,
+				"filter": true,
+				"mipmap": false,
+				"size": 10
 			},
-			"seed": 0,
-			"seed_locked": false,
-			"type": "pack_1x32_to_2x16"
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
 		},
 		{
-			"name": "pack_4x16_to_2x32_3",
+			"name": "ensure_greyscale",
 			"node_position": {
-				"x": -698.7901,
-				"y": 46.908386
+				"x": -703.5,
+				"y": -84.9617156982422
 			},
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
-			"type": "pack_2x16_to_1x32"
+			"seed_int": 0,
+			"type": "ensure_greyscale"
 		}
 	],
 	"parameters": {
@@ -327,8 +344,7 @@
 		"size": 10,
 		"strength": 1
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Normal map",
 	"type": "graph"
 }

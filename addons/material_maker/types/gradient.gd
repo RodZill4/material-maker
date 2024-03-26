@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 class_name MMGradient
 
 class Point:
@@ -17,10 +17,10 @@ var interpolation = 1
 var sorted = true
 
 func to_string() -> String:
-	var rv = PoolStringArray()
+	var rv = PackedStringArray()
 	for p in points:
 		rv.append("("+str(p.v)+","+str(p.c)+")")
-	return rv.join(",")
+	return ",".join(rv)
 
 func duplicate() -> Object:
 	var copy = get_script().new()
@@ -46,10 +46,11 @@ func get_point_position(i : int) -> float:
 
 func set_point_position(i : int, v : float) -> void:
 	points[i].v = v
+	sorted = false
 
 func sort() -> void:
-	if !sorted:
-		points.sort_custom(CustomSorter, "compare")
+	if ! sorted:
+		points.sort_custom(Callable(CustomSorter, "compare"))
 		for i in range(points.size()-1):
 			if points[i].v+0.0000005 >= points[i+1].v:
 				points[i+1].v = points[i].v+0.000001
@@ -72,78 +73,95 @@ func get_color(x) -> Color:
 	else:
 		return Color(0.0, 0.0, 0.0, 1.0)
 
-func get_shader_params(name : String, attribute : String = "uniform") -> String:
-	sort()
+func get_shader_params(parameter_name : String, attribute : String = "uniform") -> String:
 	var rv = ""
+	for p : MMGenBase.ShaderUniform in get_parameters(parameter_name):
+		rv += p.to_str(attribute)
+	return rv
+
+func get_parameters(parameter_name : String) -> Array[MMGenBase.ShaderUniform]:
+	var rv : Array[MMGenBase.ShaderUniform] = []
+	var parameter_values : Dictionary = get_parameter_values(parameter_name)
+	rv.append(MMGenBase.ShaderUniform.new("p_%s_pos" % parameter_name, "float", parameter_values["p_%s_pos" % parameter_name], points.size()))
+	rv.append(MMGenBase.ShaderUniform.new("p_%s_col" % parameter_name, "vec4", parameter_values["p_%s_col" % parameter_name], points.size()))
+	return rv
+
+func get_parameter_values(parameter_name : String) -> Dictionary:
+	sort()
+	var rv : Dictionary = {}
+	var point_positions : PackedFloat32Array = PackedFloat32Array()
+	var point_colors : PackedColorArray = PackedColorArray()
 	for i in range(points.size()):
-		rv += "%s float p_%s_%d_pos = %.09f;\n" % [ attribute, name, i, points[i].v ]
-		rv += "%s vec4 p_%s_%d_col = vec4(%.09f, %.09f, %.09f, %.09f);\n" % [ attribute, name, i, points[i].c.r, points[i].c.g, points[i].c.b, points[i].c.a ]
+		point_positions.append(points[i].v)
+		point_colors.append(points[i].c)
+	rv["p_%s_pos" % parameter_name] = point_positions
+	rv["p_%s_col" % parameter_name] = point_colors
 	return rv
 
 # get_color_in_shader
-func gcis(color) -> String:
+func gcis(color : Color) -> String:
 	return "vec4(%.9f,%.9f,%.9f,%.9f)" % [color.r, color.g, color.b, color.a]
 
-func pv(name : String, i : int) -> String:
-	return "p_"+name+"_"+str(i)+"_pos"
+func pv(parameter_name : String, i : int) -> String:
+	return "p_"+parameter_name+"_pos["+str(i)+"]"
 
-func pc(name : String, i : int) -> String:
-	return "p_"+name+"_"+str(i)+"_col"
+func pc(parameter_name : String, i : int) -> String:
+	return "p_"+parameter_name+"_col["+str(i)+"]"
 
-func get_shader(name) -> String:
+func get_shader(parameter_name : String) -> String:
 	sort()
 	var shader
-	shader  = "vec4 "+name+"_gradient_fct(float x) {\n"
+	shader  = "vec4 "+parameter_name+"_gradient_fct(float x) {\n"
 	match interpolation:
 		0:
 			if points.size() > 0:
-				shader += "  if (x < 0.5*(%s+%s)) {\n" % [ pv(name, 0), pv(name, 1) ]
-				shader += "    return "+pc(name, 0)+";\n"
+				shader += "  if (x < 0.5*(%s+%s)) {\n" % [ pv(parameter_name, 0), pv(parameter_name, 1) ]
+				shader += "    return "+pc(parameter_name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(1, s):
-					shader += "  } else if (x < 0.5*(%s+%s)) {\n" % [ pv(name, i), pv(name, i+1) ]
-					shader += "    return "+pc(name, i)+";\n"
+					shader += "  } else if (x < 0.5*(%s+%s)) {\n" % [ pv(parameter_name, i), pv(parameter_name, i+1) ]
+					shader += "    return "+pc(parameter_name, i)+";\n"
 				shader += "  }\n"
-				shader += "  return "+pc(name, s)+";\n"
+				shader += "  return "+pc(parameter_name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
 		1, 2:
 			if points.size() > 0:
-				shader += "  if (x < %s) {\n" % pv(name, 0)
-				shader += "    return "+pc(name, 0)+";\n"
+				shader += "  if (x < %s) {\n" % pv(parameter_name, 0)
+				shader += "    return "+pc(parameter_name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(s):
-					shader += "  } else if (x < %s) {\n" % pv(name, i+1)
+					shader += "  } else if (x < %s) {\n" % pv(parameter_name, i+1)
 					var function = "(" if interpolation == 1 else "0.5-0.5*cos(3.14159265359*"
-					shader += "    return mix(%s, %s, %s(x-%s)/(%s-%s)));\n" % [ pc(name, i), pc(name, i+1), function, pv(name, i), pv(name, i+1), pv(name, i) ]
+					shader += "    return mix(%s, %s, %s(x-%s)/(%s-%s)));\n" % [ pc(parameter_name, i), pc(parameter_name, i+1), function, pv(parameter_name, i), pv(parameter_name, i+1), pv(parameter_name, i) ]
 				shader += "  }\n"
-				shader += "  return "+pc(name, s)+";\n"
+				shader += "  return "+pc(parameter_name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
 		3:
 			if points.size() > 0:
-				shader += "  if (x < %s) {\n" % pv(name, 0)
-				shader += "    return "+pc(name, 0)+";\n"
+				shader += "  if (x < %s) {\n" % pv(parameter_name, 0)
+				shader += "    return "+pc(parameter_name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(s):
-					shader += "  } else if (x < %s) {\n" % pv(name, i+1)
-					var dx : String = "(x-%s)/(%s-%s)" % [ pv(name, i), pv(name, i+1), pv(name, i) ]
-					var b : String = "mix(%s, %s, %s)" % [ pc(name, i), pc(name, i+1), dx ]
+					shader += "  } else if (x < %s) {\n" % pv(parameter_name, i+1)
+					var dx : String = "(x-%s)/(%s-%s)" % [ pv(parameter_name, i), pv(parameter_name, i+1), pv(parameter_name, i) ]
+					var b : String = "mix(%s, %s, %s)" % [ pc(parameter_name, i), pc(parameter_name, i+1), dx ]
 					if i > 0:
-						var a : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(name, i-1), pc(name, i), pv(name, i-1), pv(name, i), pv(name, i-1) ]
+						var a : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(parameter_name, i-1), pc(parameter_name, i), pv(parameter_name, i-1), pv(parameter_name, i), pv(parameter_name, i-1) ]
 						if i < s-1:
-							var c : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(name, i+1), pc(name, i+2), pv(name, i+1), pv(name, i+2), pv(name, i+1) ]
+							var c : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(parameter_name, i+1), pc(parameter_name, i+2), pv(parameter_name, i+1), pv(parameter_name, i+2), pv(parameter_name, i+1) ]
 							var ac : String = "mix("+a+", "+c+", 0.5-0.5*cos(3.14159265359*"+dx+"))"
 							shader += "    return 0.5*("+b+" + "+ac+");\n"
 						else:
 							shader += "    return mix("+a+", "+b+", 0.5+0.5*"+dx+");\n"
 					elif i < s-1:
-						var c : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(name, i+1), pc(name, i+2), pv(name, i+1), pv(name, i+2), pv(name, i+1) ]
+						var c : String = "mix(%s, %s, (x-%s)/(%s-%s))" % [ pc(parameter_name, i+1), pc(parameter_name, i+2), pv(parameter_name, i+1), pv(parameter_name, i+2), pv(parameter_name, i+1) ]
 						shader += "    return mix("+c+", "+b+", 1.0-0.5*"+dx+");\n"
 					else:
 						shader += "    return "+b+";\n"
 				shader += "  }\n"
-				shader += "  return "+pc(name, s)+";\n"
+				shader += "  return "+pc(parameter_name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
 		_:

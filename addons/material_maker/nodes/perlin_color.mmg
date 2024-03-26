@@ -10,9 +10,33 @@
 		"scale_x": 4,
 		"scale_y": 4
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec3 perlin_color(vec2 uv, vec2 size, int iterations, float persistence, float seed) {\n\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));\n    vec3 rv = vec3(0.0);\n    float coef = 1.0;\n    float acc = 0.0;\n    for (int i = 0; i < iterations; ++i) {\n    \tvec2 step = vec2(1.0)/size;\n\t\tvec2 xy = floor(uv*size);\n        vec3 f0 = rand3(seed2+mod(xy, size));\n        vec3 f1 = rand3(seed2+mod(xy+vec2(1.0, 0.0), size));\n        vec3 f2 = rand3(seed2+mod(xy+vec2(0.0, 1.0), size));\n        vec3 f3 = rand3(seed2+mod(xy+vec2(1.0, 1.0), size));\n        vec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));\n        rv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);\n        acc += coef;\n        size *= 2.0;\n        coef *= persistence;\n    }\n    \n    return rv / acc;\n}\n",
+		"global": [
+			"vec3 perlin_color(vec2 uv, vec2 size, int iterations, float persistence, float seed) {",
+			"\tvec2 seed2 = rand2(vec2(seed, 1.0-seed));",
+			"\tvec3 rv = vec3(0.0);",
+			"\tfloat coef = 1.0;",
+			"\tfloat acc = 0.0;",
+			"\tfor (int i = 0; i < iterations; ++i) {",
+			"\t\tvec2 step = vec2(1.0)/size;",
+			"\t\tvec2 xy = floor(uv*size);",
+			"\t\tvec3 f0 = rand3(seed2+mod(xy, size));",
+			"\t\tvec3 f1 = rand3(seed2+mod(xy+vec2(1.0, 0.0), size));",
+			"\t\tvec3 f2 = rand3(seed2+mod(xy+vec2(0.0, 1.0), size));",
+			"\t\tvec3 f3 = rand3(seed2+mod(xy+vec2(1.0, 1.0), size));",
+			"\t\tvec2 mixval = smoothstep(0.0, 1.0, fract(uv*size));",
+			"\t\trv += coef * mix(mix(f0, f1, mixval.x), mix(f2, f3, mixval.x), mixval.y);",
+			"\t\tacc += coef;",
+			"\t\tsize *= 2.0;",
+			"\t\tcoef *= persistence;",
+			"\t}",
+			"\t",
+			"\treturn rv / acc;",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],

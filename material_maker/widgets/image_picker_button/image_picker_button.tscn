@@ -1,15 +1,24 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://csobd8p72hgfx"]
 
-[ext_resource path="res://material_maker/widgets/image_picker_button/image_picker_button.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://material_maker/widgets/image_picker_button/image_picker_button.gd" id="2"]
 
 [node name="ImagePicker" type="TextureButton"]
-margin_right = 64.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
-rect_clip_content = true
-expand = true
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+ignore_texture_size = true
 stretch_mode = 5
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0

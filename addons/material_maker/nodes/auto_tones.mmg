@@ -1,24 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "graph",
-			"from_port": 0,
-			"to": "tones_map",
-			"to_port": 1
-		},
-		{
-			"from": "graph",
-			"from_port": 1,
-			"to": "tones_map",
-			"to_port": 2
-		},
-		{
-			"from": "gen_inputs",
-			"from_port": 0,
-			"to": "graph",
-			"to_port": 0
-		},
-		{
 			"from": "gen_inputs",
 			"from_port": 0,
 			"to": "tones_map",
@@ -29,6 +11,54 @@
 			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 0,
+			"to": "decompose",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "14423",
+			"to_port": 0
+		},
+		{
+			"from": "14423",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 0,
+			"to": "tones_map",
+			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 1,
+			"to": "tones_map",
+			"to_port": 2
 		}
 	],
 	"label": "Auto Tones",
@@ -40,240 +70,21 @@
 	},
 	"nodes": [
 		{
-			"connections": [
-				{
-					"from": "combine",
-					"from_port": 0,
-					"to": "iterate_buffer",
-					"to_port": 0
-				},
-				{
-					"from": "decompose",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "decompose",
-					"from_port": 1,
-					"to": "gen_outputs",
-					"to_port": 1
-				},
-				{
-					"from": "iterate_buffer",
-					"from_port": 0,
-					"to": "decompose",
-					"to_port": 0
-				},
-				{
-					"from": "iterate_buffer",
-					"from_port": 1,
-					"to": "14423",
-					"to_port": 0
-				},
-				{
-					"from": "14423",
-					"from_port": 0,
-					"to": "iterate_buffer",
-					"to_port": 1
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "combine",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "combine",
-					"to_port": 1
-				}
-			],
-			"label": "Find Min Max",
-			"longdesc": "",
-			"name": "graph",
-			"node_position": {
-				"x": 1105.399902,
-				"y": -179.398849
-			},
-			"nodes": [
-				{
-					"name": "14423",
-					"node_position": {
-						"x": 344,
-						"y": 217
-					},
-					"parameters": {
-						"size": 10
-					},
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.0)",
-								"function": true,
-								"label": "",
-								"name": "in",
-								"type": "rgb"
-							}
-						],
-						"instance": "vec3 $(name)_compare(vec2 uv, float size) {\n\tfloat iter = $in(uv).b;\n\tsize = size / pow(2.0, (iter * 100.0) );\n\titer += 0.01;\n\tfloat pixel_offset = 1.0 / size;\n\tvec2 half_res_uv = floor(uv * size / 2.0) / size * 2.0 + pixel_offset / 2.0;\n\tvec3 values[4];\n\tvalues[0] = $in(half_res_uv);\n\tvalues[1] = $in(half_res_uv + vec2(pixel_offset, 0.0));\n\tvalues[2] = $in(half_res_uv + vec2(0.0, pixel_offset));\n\tvalues[3] = $in(half_res_uv + vec2(pixel_offset, pixel_offset));\n\t\n\tfloat lowest = 1.0;\n\tfloat highest = 0.0;\n\t\n\tfor (int i = 0; i < 4; i++) {\n\t\tlowest = values[i].r < lowest ? values[i].r : lowest;\n\t\thighest = values[i].g > highest ? values[i].g : highest;\n\t}\n\t\n\treturn vec3( lowest, highest , iter);\n}",
-						"name": "Compare Neighbor",
-						"outputs": [
-							{
-								"rgb": "$(name)_compare($uv, $size)",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-							{
-								"default": 10,
-								"first": 1,
-								"label": "",
-								"last": 13,
-								"name": "size",
-								"type": "size"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "iterate_buffer",
-					"node_position": {
-						"x": 328,
-						"y": 63
-					},
-					"parameters": {
-						"filter": false,
-						"iterations": 13,
-						"mipmap": false,
-						"size": 10
-					},
-					"seed_value": 29168,
-					"type": "iterate_buffer"
-				},
-				{
-					"name": "combine",
-					"node_position": {
-						"x": 376,
-						"y": -75
-					},
-					"parameters": {
-
-					},
-					"type": "combine"
-				},
-				{
-					"name": "decompose",
-					"node_position": {
-						"x": 605,
-						"y": 64
-					},
-					"parameters": {
-
-					},
-					"type": "decompose"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -199,
-						"y": 23
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"group_size": 0,
-							"longdesc": "",
-							"name": "in",
-							"shortdesc": "In",
-							"type": "f"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 831,
-						"y": 42
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"group_size": 0,
-							"longdesc": "",
-							"name": "min",
-							"shortdesc": "Min",
-							"type": "f"
-						},
-						{
-							"group_size": 0,
-							"longdesc": "",
-							"name": "max",
-							"shortdesc": "Max",
-							"type": "f"
-						}
-					],
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": 248.399994,
-						"y": -292
-					},
-					"parameters": {
-						"param0": 10
-					},
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "Size",
-							"linked_widgets": [
-								{
-									"node": "iterate_buffer",
-									"widget": "size"
-								},
-								{
-									"node": "14423",
-									"widget": "size"
-								}
-							],
-							"name": "param0",
-							"type": "linked_control"
-						}
-					]
-				}
-			],
-			"parameters": {
-				"param0": 10
-			},
-			"shortdesc": "",
-			"type": "graph"
-		},
-		{
 			"name": "tones_map",
 			"node_position": {
-				"x": 1142.528442,
-				"y": -88.26989
+				"x": 1552.52844238281,
+				"y": -98.2698974609375
 			},
 			"parameters": {
 
 			},
+			"seed": -54302,
 			"shader_model": {
 				"code": "",
 				"global": "",
 				"inputs": [
 					{
-						"default": "vec4(0.5 ,0.5, 0.5, 1.0)",
+						"default": "0.5",
 						"label": "",
 						"longdesc": "The input image",
 						"name": "in",
@@ -304,9 +115,7 @@
 						"type": "f"
 					}
 				],
-				"parameters": [
-
-				],
+				"parameters": [],
 				"shortdesc": "Tones map"
 			},
 			"type": "shader"
@@ -314,8 +123,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": 665.528564,
-				"y": -136.535721
+				"x": 439.528564453125,
+				"y": -98.5357208251953
 			},
 			"parameters": {
 
@@ -329,13 +138,14 @@
 					"type": "f"
 				}
 			],
+			"seed": -55041,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 1425.400024,
-				"y": -135.535721
+				"x": 1747.40002441406,
+				"y": -97.5357208251953
 			},
 			"parameters": {
 
@@ -349,38 +159,152 @@
 					"type": "f"
 				}
 			],
+			"seed": -15114,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": 1024.664307,
-				"y": -298.400757
+				"x": 979.664306640625,
+				"y": -181.400756835938
 			},
 			"parameters": {
-				"param0": 10
+				"size": 11
 			},
+			"seed": -32042,
 			"type": "remote",
 			"widgets": [
 				{
 					"label": "",
 					"linked_widgets": [
 						{
-							"node": "graph",
-							"widget": "param0"
+							"node": "iterate_buffer",
+							"widget": "size"
+						},
+						{
+							"node": "14423",
+							"widget": "size"
 						}
 					],
-					"longdesc": "Buffers are used to find the mininum and maximum values for the input image. If the input has small details a higher resolution buffer might be needed to capture precise min and max values.\n\nNote: The output itself will not be buffered.",
-					"name": "param0",
-					"shortdesc": "Size",
+					"name": "size",
 					"type": "linked_control"
 				}
 			]
+		},
+		{
+			"name": "decompose",
+			"node_position": {
+				"x": 1355.62927246094,
+				"y": -50.0531921386719
+			},
+			"parameters": {
+
+			},
+			"seed": 35843,
+			"type": "decompose"
+		},
+		{
+			"name": "combine",
+			"node_position": {
+				"x": 907.629272460938,
+				"y": -50.0531921386719
+			},
+			"parameters": {
+
+			},
+			"seed": -46531,
+			"type": "combine"
+		},
+		{
+			"name": "iterate_buffer",
+			"node_position": {
+				"x": 1077.62927246094,
+				"y": -50.0531921386719
+			},
+			"parameters": {
+				"autostop": false,
+				"f32": false,
+				"filter": false,
+				"iterations": 13,
+				"mipmap": false,
+				"shrink": true,
+				"size": 11
+			},
+			"seed": 29168,
+			"seed_locked": true,
+			"type": "iterate_buffer"
+		},
+		{
+			"name": "14423",
+			"node_position": {
+				"x": 1087.62927246094,
+				"y": 164.946807861328
+			},
+			"parameters": {
+				"size": 11
+			},
+			"seed": 53617,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": [
+					"vec3 $(name)_compare(vec2 uv, float size) {",
+					"\tfloat iter = $in(uv).b;",
+					"\tsize = size / pow(2.0, (iter * 100.0) );",
+					"\titer += 0.01;",
+					"\tfloat pixel_offset = 1.0 / size;",
+					"\tvec2 half_res_uv = floor(uv * size / 2.0) / size * 2.0 + pixel_offset / 2.0;",
+					"\tvec3 values[4];",
+					"\tvalues[0] = $in(half_res_uv);",
+					"\tvalues[1] = $in(half_res_uv + vec2(pixel_offset, 0.0));",
+					"\tvalues[2] = $in(half_res_uv + vec2(0.0, pixel_offset));",
+					"\tvalues[3] = $in(half_res_uv + vec2(pixel_offset, pixel_offset));",
+					"\t",
+					"\tfloat lowest = 1.0;",
+					"\tfloat highest = 0.0;",
+					"\t",
+					"\tfor (int i = 0; i < 4; i++) {",
+					"\t\tlowest = values[i].r < lowest ? values[i].r : lowest;",
+					"\t\thighest = values[i].g > highest ? values[i].g : highest;",
+					"\t}",
+					"\t",
+					"\treturn vec3( lowest, highest , iter);",
+					"}"
+				],
+				"name": "Compare Neighbor",
+				"outputs": [
+					{
+						"rgb": "$(name)_compare($uv, $size)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10,
+						"first": 1,
+						"label": "",
+						"last": 13,
+						"name": "size",
+						"type": "size"
+					}
+				]
+			},
+			"type": "shader"
 		}
 	],
 	"parameters": {
-		"param0": 10
+		"size": 11
 	},
+	"seed_int": 0,
 	"shortdesc": "Auto Tones",
 	"type": "graph"
 }

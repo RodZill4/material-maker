@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://r8sldb05e3fj"]
+
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_splines.gd" id="1_ggp8y"]
+[ext_resource type="PackedScene" uid="uid://xbjjnhowjc15" path="res://material_maker/widgets/splines_edit/splines_edit.tscn" id="2_k1xv0"]
+
+[node name="splines" type="HBoxContainer"]
+offset_right = 148.0
+offset_bottom = 24.0
+script = ExtResource("1_ggp8y")
+
+[node name="LabelDefault" type="Label" parent="."]
+layout_mode = 2
+text = "Default:"
+
+[node name="Default" parent="." instance=ExtResource("2_k1xv0")]
+layout_mode = 2

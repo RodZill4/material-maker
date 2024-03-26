@@ -35,10 +35,19 @@
 		"style": 1,
 		"width": 0.01
 	},
-	"seed_value": 65353,
+	"seed": 65353,
+	"seed_locked": true,
 	"shader_model": {
 		"code": "",
-		"global": "float draw_profile_fill(vec2 uv, float y, float dy, float w) {\n\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*(1.0-uv.y-y)/w, 0.0, 1.0);\n}\n\nfloat draw_profile_curve(vec2 uv, float y, float dy, float w) {\n\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*abs(1.0-uv.y-y)/w, 0.0, 1.0);\n}",
+		"global": [
+			"float draw_profile_fill(vec2 uv, float y, float dy, float w) {",
+			"\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*(1.0-uv.y-y)/w, 0.0, 1.0);",
+			"}",
+			"",
+			"float draw_profile_curve(vec2 uv, float y, float dy, float w) {",
+			"\treturn 1.0-clamp(sin(1.57079632679-atan(dy))*abs(1.0-uv.y-y)/w, 0.0, 1.0);",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "dot($gradient($uv.x).xyz, vec3(1.0/3.0))",

@@ -1,4 +1,5 @@
 {
+	"generic_size": 4,
 	"name": "mwf_mix_maps",
 	"node_position": {
 		"x": 0,
@@ -7,50 +8,35 @@
 	"parameters": {
 
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "",
-		"global": "vec3 matmap_mix(vec3 in1, vec3 in2) {\n\tfloat is_in1 = step(in2.x, in1.x);\n\t//return vec3(max(in1.x, in2.x), in1.yz*is_in1+in2.yz*(1.0-is_in1));\n\treturn vec3(max(in1.x, in2.x), mix(in2.yz, in1.yz, is_in1));\n}",
+		"code": [
+			"vec3 $(name_uv)_out = vec3(-1.0);",
+			"#for",
+			"vec3 $(name_uv)_in# = $in#($uv);",
+			"if ($(name_uv)_in#.x > $(name_uv)_out.x) {",
+			"\t$(name_uv)_out = $(name_uv)_in#;",
+			"}",
+			"#end"
+		],
+		"global": "",
 		"inputs": [
 			{
 				"default": "vec3(0.0)",
 				"label": "",
-				"longdesc": "The first workflow map",
-				"name": "in1",
-				"shortdesc": "Input1",
-				"type": "rgb"
-			},
-			{
-				"default": "vec3(0.0)",
-				"label": "",
-				"longdesc": "The second workflow map",
-				"name": "in2",
-				"shortdesc": "Input2",
-				"type": "rgb"
-			},
-			{
-				"default": "vec3(0.0)",
-				"label": "",
-				"longdesc": "The third input map",
-				"name": "in3",
-				"shortdesc": "Input3",
-				"type": "rgb"
-			},
-			{
-				"default": "vec3(0.0)",
-				"label": "",
-				"longdesc": "The fourth input map",
-				"name": "in4",
-				"shortdesc": "Input4",
+				"longdesc": "An input map",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "rgb"
 			}
 		],
 		"instance": "",
-		"longdesc": "Mixes up to 4 workflow maps, to be used with the same base material",
+		"longdesc": "Mixes several workflow maps, to be used with the same base material",
 		"name": "Mix maps",
 		"outputs": [
 			{
 				"longdesc": "Generates a merged workflow map",
-				"rgb": "matmap_mix(matmap_mix($in1($uv), $in2($uv)), matmap_mix($in3($uv), $in4($uv)))",
+				"rgb": "$(name_uv)_out",
 				"shortdesc": "Output",
 				"type": "rgb"
 			}

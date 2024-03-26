@@ -6,12 +6,18 @@
 	},
 	"parameters": {
 		"amount": -0.175,
-		"amout": 0,
-		"direction": 0,
-		"offset": 0.730769
+		"direction": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"global": "vec2 uvskew_h(vec2 uv, float amount) {\n\treturn vec2(uv.x+amount*(uv.y-0.5), uv.y);\n}\nvec2 uvskew_v(vec2 uv, float amount) {\n\treturn vec2(uv.x, uv.y+amount*(uv.x-0.5));\n}",
+		"global": [
+			"vec2 uvskew_h(vec2 uv, float amount) {",
+			"\treturn vec2(uv.x+amount*(uv.y-0.5), uv.y);",
+			"}",
+			"vec2 uvskew_v(vec2 uv, float amount) {",
+			"\treturn vec2(uv.x, uv.y+amount*(uv.x-0.5));",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv, 0, 1)",

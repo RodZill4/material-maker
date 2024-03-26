@@ -1,6 +1,6 @@
 [gd_resource type="AtlasTexture" load_steps=2 format=2]
 
-[ext_resource path="res://material_maker/theme/dark/curve_presets.svg" type="Texture" id=1]
+[ext_resource path="res://material_maker/theme/dark/curve_presets.svg" type="Texture2D" id=1]
 
 [resource]
 flags = 4

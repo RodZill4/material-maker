@@ -6,19 +6,18 @@ var favorites : Array = []
 signal open_directory(dirpath)
 
 func _ready():
+	var json = JSON.new()
 	if mm_globals.config.has_section_key("file_dialog", "recents"):
-		var parse_result = JSON.parse(mm_globals.config.get_value("file_dialog", "recents"))
-		if parse_result != null:
-			recents = parse_result.result
+		if json.parse(mm_globals.config.get_value("file_dialog", "recents")) == OK:
+			recents = json.data
 	if mm_globals.config.has_section_key("file_dialog", "favorites"):
-		var parse_result = JSON.parse(mm_globals.config.get_value("file_dialog", "favorites"))
-		if parse_result != null:
-			favorites = parse_result.result
+		if json.parse(mm_globals.config.get_value("file_dialog", "favorites")) == OK:
+			favorites = json.data
 	update_lists()
 
 func _exit_tree():
-	mm_globals.config.set_value("file_dialog", "recents", JSON.print(recents))
-	mm_globals.config.set_value("file_dialog", "favorites", JSON.print(favorites))
+	mm_globals.config.set_value("file_dialog", "recents", JSON.stringify(recents))
+	mm_globals.config.set_value("file_dialog", "favorites", JSON.stringify(favorites))
 
 func add_recent(file_path : String):
 	if recents.find(file_path) != -1:
@@ -32,10 +31,10 @@ func add_favorite(file_path : String):
 		update_lists()
 
 func my_basename(s : String) -> String:
-	var slash_pos : int = s.find_last("/")
+	var slash_pos : int = s.rfind("/")
 	if slash_pos == -1 or slash_pos+1 == s.length():
 		return s
-	return s.right(slash_pos+1)
+	return s.right(-(slash_pos+1))
 
 func update_lists():
 	$FavList.clear()
@@ -54,13 +53,13 @@ func _on_RecentList_item_activated(index):
 	emit_signal("open_directory", $RecentList.get_item_tooltip(index))
 
 func _on_FavList_gui_input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
-		if ! $FavList.get_selected_items().empty():
-			favorites.remove($FavList.get_selected_items()[0])
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
+		if ! $FavList.get_selected_items().is_empty():
+			favorites.remove_at($FavList.get_selected_items()[0])
 			update_lists()
 
 func _on_RecentList_gui_input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_DELETE:
-		if ! $RecentList.get_selected_items().empty():
-			recents.remove($RecentList.get_selected_items()[0])
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
+		if ! $RecentList.get_selected_items().is_empty():
+			recents.remove_at($RecentList.get_selected_items()[0])
 			update_lists()

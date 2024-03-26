@@ -68,6 +68,7 @@
 				"filter": false,
 				"iterations": 50,
 				"mipmap": false,
+				"shrink": false,
 				"size": 8
 			},
 			"seed": 29168,
@@ -93,7 +94,6 @@
 				}
 			],
 			"seed": 58064,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -115,7 +115,6 @@
 				}
 			],
 			"seed": -4244,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
@@ -128,7 +127,6 @@
 				"size": 8
 			},
 			"seed": 52136,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
@@ -168,7 +166,6 @@
 				"s": 8
 			},
 			"seed": 11778,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -188,7 +185,50 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "vec4 $(name)_fill(vec2 uv) {\n\tvec4 ref_color = $colors(uv);\n\tfloat size = $s;\n\tint iterations = min(int(size), 1024);\n\tvec4 color = $in(fract(uv));\n\tif (color.z+color.w < 1.0/size) {\n\t\treturn vec4(0.0);\n\t}\n\tvec2 offsets[4] = { vec2(1.0, 1.0), vec2(-1.0, 1.0), vec2(-1.0, -1.0), vec2(1.0, -1.0) };\n\tvec2 mult_base = vec2(1.0, 0.0);\n\tfor (int o = 0; o < 4; ++o) {\n\t\tvec2 offset = offsets[o]/size;\n\t\tvec2 mult = mult_base;\n\t\tfor (int d = 0; d < 2; ++d) {\n\t\t\tvec2 uv2 = uv;\n\t\t\tint l = 0;\n\t\t\tfor (int i = 1; i < iterations; i += 1) {\n\t\t\t\tuv2 += offset*mult;\n\t\t\t\tvec4 color2 = $in(fract(uv2));\n\t\t\t\tif (ref_color != $colors(fract(uv2))) {\n\t\t\t\t\tif (l < 1) {\n\t\t\t\t\t\tmult = mult.yx;\n\t\t\t\t\t\tl += 1;\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tl = 0;\n\t\t\t\tvec2 p1 = color.xy+floor(uv-color.xy);\n\t\t\t\tvec2 p2 = color2.xy+floor(uv2-color2.xy);\n\t\t\t\tvec2 p = min(p1, p2);\n\t\t\t\tvec2 s = max(p1+color.zw, p2+color2.zw)-p;\n\t\t\t\tcolor = mix(vec4(0.0, 0.0, 1.0, 1.0), vec4(fract(p), s), step(s.xyxy, vec4(1.0)));\n\t\t\t}\n\t\t\tmult = mult_base.yx;\n\t\t}\n\t}\n\treturn floor(color*size)/size;\n}\n",
+				"instance": [
+					"vec4 $(name)_fill(vec2 uv) {",
+					"\tvec4 ref_color = $colors(uv);",
+					"\tfloat size = $s;",
+					"\tint iterations = min(int(size), 1024);",
+					"\tvec4 color = $in(fract(uv));",
+					"\tif (color.z+color.w < 1.0/size) {",
+					"\t\treturn vec4(0.0);",
+					"\t}",
+					"\tvec2 offsets[4] = { vec2(1.0, 1.0), vec2(-1.0, 1.0), vec2(-1.0, -1.0), vec2(1.0, -1.0) };",
+					"\tvec2 mult_base = vec2(1.0, 0.0);",
+					"\tfor (int o = 0; o < 4; ++o) {",
+					"\t\tvec2 offset = offsets[o]/size;",
+					"\t\tvec2 mult = mult_base;",
+					"\t\tfor (int d = 0; d < 2; ++d) {",
+					"\t\t\tvec2 uv2 = uv;",
+					"\t\t\tint l = 0;",
+					"\t\t\tfor (int i = 1; i < iterations; i += 1) {",
+					"\t\t\t\tvec2 uv2_save = uv2;",
+					"\t\t\t\tuv2 += offset*mult;",
+					"\t\t\t\tvec4 color2 = $in(fract(uv2));",
+					"\t\t\t\tif (ref_color != $colors(fract(uv2))) {",
+					"\t\t\t\t\tif (l < 1) {",
+					"\t\t\t\t\t\tmult = mult.yx;",
+					"\t\t\t\t\t\tl += 1;",
+					"\t\t\t\t\t\tuv2 = uv2_save;",
+					"\t\t\t\t\t\tcontinue;",
+					"\t\t\t\t\t}",
+					"\t\t\t\t\tbreak;",
+					"\t\t\t\t}",
+					"\t\t\t\tl = 0;",
+					"\t\t\t\tvec2 p1 = color.xy+floor(uv-color.xy);",
+					"\t\t\t\tvec2 p2 = color2.xy+floor(uv2-color2.xy);",
+					"\t\t\t\tvec2 p = min(p1, p2);",
+					"\t\t\t\tvec2 s = max(p1+color.zw, p2+color2.zw)-p;",
+					"\t\t\t\tcolor = mix(vec4(0.0, 0.0, 1.0, 1.0), vec4(fract(p), s), step(s.xyxy, vec4(1.0)));",
+					"\t\t\t}",
+					"\t\t\tmult = mult_base.yx;",
+					"\t\t}",
+					"\t}",
+					"\treturn floor(color*size)/size;",
+					"}",
+					""
+				],
 				"name": "Fill iterate",
 				"outputs": [
 					{
@@ -219,7 +259,6 @@
 				"s": 8
 			},
 			"seed": 24315,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -261,11 +300,9 @@
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shader_model": {
 				"code": "",
-				"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
 				"inputs": [
 					{
 						"default": "1.0",
@@ -299,8 +336,7 @@
 				"mipmap": false,
 				"size": 8
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"type": "buffer",
 			"version": 2
 		}
@@ -308,8 +344,7 @@
 	"parameters": {
 		"size": 8
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shortdesc": "Fill from colors",
 	"type": "graph"
 }

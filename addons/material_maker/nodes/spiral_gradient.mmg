@@ -1,5 +1,5 @@
 {
-	"name": "spiral",
+	"name": "spiral_gradient",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -29,11 +29,18 @@
 		"perspective": 0.285821,
 		"use_perspective": true
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 position_$(name_uv) = $uv - 0.5;\nfloat length_$(name_uv) = length(position_$(name_uv));\nfloat spiral_$(name_uv) = (1.0 + sin(($use_perspective ? (($perspective * 6.0) / length_$(name_uv)) : (length_$(name_uv) / ($perspective / 6.0))) + (circular_gradient(position_$(name_uv)) * 6.28318530718 * $amount))) / 2.0;",
-		"global": "float circular_gradient(vec2 uv) {\n  return fract(0.15915494309 * atan(uv.x, uv.y));\n}",
+		"code": [
+			"vec2 position_$(name_uv) = $uv - 0.5;",
+			"float length_$(name_uv) = length(position_$(name_uv));",
+			"float spiral_$(name_uv) = (1.0 + sin(($use_perspective ? (($perspective * 6.0) / length_$(name_uv)) : (length_$(name_uv) / ($perspective / 6.0))) + (circular_gradient(position_$(name_uv)) * 6.28318530718 * $amount))) / 2.0;"
+		],
+		"global": [
+			"float circular_gradient(vec2 uv) {",
+			"  return fract(0.15915494309 * atan(uv.x, uv.y));",
+			"}"
+		],
 		"inputs": [
 
 		],

@@ -9,9 +9,34 @@
 		"saturation": 1,
 		"value": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec4 $(name_uv)_rbga = $in($(uv));\nvec3 $(name_uv)_hsv = rgb_to_hsv($(name_uv)_rbga.rgb);\n$(name_uv)_hsv.x += $(hue);\n$(name_uv)_hsv.y = clamp($(name_uv)_hsv.y*$(saturation), 0.0, 1.0);\n$(name_uv)_hsv.z = clamp($(name_uv)_hsv.z*$(value), 0.0, 1.0);\n\t",
-		"global": "vec3 rgb_to_hsv(vec3 c) {\n\tvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\n\tvec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);\n\tvec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);\n\n\tfloat d = q.x - min(q.w, q.y);\n\tfloat e = 1.0e-10;\n\treturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\n\nvec3 hsv_to_rgb(vec3 c) {\n\tvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\n\tvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\n\treturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}\n",
+		"code": [
+			"vec4 $(name_uv)_rbga = $in($(uv));",
+			"vec3 $(name_uv)_hsv = rgb_to_hsv($(name_uv)_rbga.rgb);",
+			"$(name_uv)_hsv.x += $(hue);",
+			"$(name_uv)_hsv.y = clamp($(name_uv)_hsv.y*$(saturation), 0.0, 1.0);",
+			"$(name_uv)_hsv.z = clamp($(name_uv)_hsv.z*$(value), 0.0, 1.0);",
+			"\t"
+		],
+		"global": [
+			"vec3 rgb_to_hsv(vec3 c) {",
+			"\tvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);",
+			"\tvec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);",
+			"\tvec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);",
+			"",
+			"\tfloat d = q.x - min(q.w, q.y);",
+			"\tfloat e = 1.0e-10;",
+			"\treturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);",
+			"}",
+			"",
+			"vec3 hsv_to_rgb(vec3 c) {",
+			"\tvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);",
+			"\tvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);",
+			"\treturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv.x, $uv.y, 0.0, 1.0)",

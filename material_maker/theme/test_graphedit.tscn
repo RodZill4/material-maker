@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfmqik1lo46ib"]
+
+[ext_resource type="PackedScene" uid="uid://dj08rlr43tqxj" path="res://material_maker/nodes/reroute/reroute.tscn" id="1_cuyn0"]
+
+[node name="TestGraphedit" type="GraphEdit"]
+custom_minimum_size = Vector2(600, 300)
+anchors_preset = -1
+anchor_right = 599.0
+anchor_bottom = 300.0
+offset_left = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="GraphNode" type="GraphNode" parent="."]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 150.0
+offset_right = 250.0
+offset_bottom = 281.0
+mouse_filter = 1
+position_offset = Vector2(26, 150)
+resizable = true
+title = "Blah"
+
+[node name="GraphNode2" type="GraphNode" parent="."]
+layout_mode = 0
+offset_left = 312.0
+offset_top = 43.0
+offset_right = 536.0
+offset_bottom = 174.0
+mouse_filter = 1
+position_offset = Vector2(312, 43)
+resizable = true
+selected = true
+title = "Blah"
+
+[node name="reroute" parent="." instance=ExtResource("1_cuyn0")]
+layout_mode = 0
+offset_left = 163.0
+offset_top = 48.0
+offset_right = 223.0
+offset_bottom = 127.0
+mouse_filter = 1
+position_offset = Vector2(163, 48)

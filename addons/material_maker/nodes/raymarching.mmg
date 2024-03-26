@@ -7,10 +7,12 @@
 	"parameters": {
 
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_d = raymarch_$name($uv);\n",
+		"code": [
+			"vec2 $(name_uv)_d = raymarch_$name($uv);",
+			""
+		],
 		"global": "",
 		"inputs": [
 			{
@@ -23,7 +25,46 @@
 				"type": "sdf3dc"
 			}
 		],
-		"instance": "vec2 raymarch_$name(vec2 uv) {\n\tvec3 ro = vec3(uv-vec2(0.5), 1.0);\n\tvec3 rd = vec3(0.0, 0.0, -1.0);\n\tfloat dO = 0.0;\n\tfloat c = 0.0;\n    for (int i=0; i < 100; i++) {\n    \tvec3 p = ro + rd*dO;\n        vec2 dS = $sdf(p);\n        dO += dS.x;\n\n        if (dO >= 1.0) {\n\t\t\tbreak;\n\t\t} else if (abs(dS.x) < 0.0001) {\n\t\t\tc = dS.y;\n\t\t\tbreak;\n\t\t}\n    }\n    \n    return vec2(dO, c);\n}\n\nvec3 normal_$name(vec3 p) {\n\tif (p.z <= 0.0) {\n\t\treturn vec3(0.0, 0.0, -1.0);\n\t}\n\n\tfloat d = $sdf(p).x;\n    float e = .001;\n    \n    vec3 n = d - vec3(\n        $sdf(p-vec3(e, 0.0, 0.0)).x,\n        $sdf(p-vec3(0.0, e, 0.0)).x,\n        $sdf(p-vec3(0.0, 0.0, e)).x);\n    \n    return vec3(-1.0, -1.0, -1.0)*normalize(n);\n}\n\n",
+		"instance": [
+			"vec2 raymarch_$name(vec2 uv) {",
+			"\tvec3 ro = vec3(uv-vec2(0.5), 1.0);",
+			"\tvec3 rd = vec3(0.0, 0.0, -1.0);",
+			"\tfloat dO = 0.0;",
+			"\tfloat c = 0.0;",
+			"\tfor (int i=0; i < 100; i++) {",
+			"\t\tvec3 p = ro + rd*dO;",
+			"\t\tvec2 dS = $sdf(p);",
+			"\t\tdO += dS.x;",
+			"",
+			"\t\tif (dO >= 1.0) {",
+			"\t\t\tbreak;",
+			"\t\t} else if (abs(dS.x) < 0.0001) {",
+			"\t\t\tc = dS.y;",
+			"\t\t\tbreak;",
+			"\t\t}",
+			"\t}",
+			"\t",
+			"\treturn vec2(dO, c);",
+			"}",
+			"",
+			"vec3 normal_$name(vec3 p) {",
+			"\tif (p.z <= 0.0) {",
+			"\t\treturn vec3(0.0, 0.0, -1.0);",
+			"\t}",
+			"",
+			"\tfloat d = $sdf(p).x;",
+			"\tfloat e = .001;",
+			"\t",
+			"\tvec3 n = d - vec3(",
+			"\t\t$sdf(p-vec3(e, 0.0, 0.0)).x,",
+			"\t\t$sdf(p-vec3(0.0, e, 0.0)).x,",
+			"\t\t$sdf(p-vec3(0.0, 0.0, e)).x);",
+			"\t",
+			"\treturn vec3(-1.0, -1.0, -1.0)*normalize(n);",
+			"}",
+			"",
+			""
+		],
 		"longdesc": "Raymarches a 3D object (described as signed distance function with optional color index) to render a heightmap, a normal map and a color index map.",
 		"name": "Render",
 		"outputs": [

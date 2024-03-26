@@ -1,16 +1,16 @@
-extends Spatial
+extends Node3D
 
 
-export var thumb_size := 32
-export var show_names := true
+@export var thumb_size := 32
+@export var show_names := true
 
 
 func _ready() -> void:
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 
 	var objects := $Objects
 	var material: Material = preload("res://material_maker/panels/preview_3d/thumbnails/generation/thumbnail_mesh.material")
-	var viewport: Viewport = $ThumbnailGeneration
+	var viewport: SubViewport = $ThumbnailGeneration
 	var name_label := $ThumbnailGeneration/VBoxContainer/CenterContainer/Name
 
 	viewport.size = Vector2(thumb_size, thumb_size)
@@ -25,7 +25,7 @@ func _ready() -> void:
 		if use_default_material:
 			c.material_override = material
 
-		yield(get_tree(), "idle_frame") # render
+		await get_tree().process_frame # render
 
 		viewport.get_texture().get_data().save_png("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % c.name)
 		print("Generated %s.png" % c.name)

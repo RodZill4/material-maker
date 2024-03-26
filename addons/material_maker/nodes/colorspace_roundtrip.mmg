@@ -1,0 +1,395 @@
+{
+	"connections": [
+		{
+			"from": "convert_colorspace",
+			"from_port": 0,
+			"to": "decompose",
+			"to_port": 0
+		},
+		{
+			"from": "combine",
+			"from_port": 0,
+			"to": "convert_colorspace_2",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "convert_colorspace",
+			"to_port": 0
+		},
+		{
+			"from": "convert_colorspace_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "decompose",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 1,
+			"to": "gen_outputs",
+			"to_port": 2
+		},
+		{
+			"from": "decompose",
+			"from_port": 2,
+			"to": "gen_outputs",
+			"to_port": 3
+		},
+		{
+			"from": "decompose",
+			"from_port": 3,
+			"to": "gen_outputs",
+			"to_port": 4
+		},
+		{
+			"from": "decompose",
+			"from_port": 0,
+			"to": "shader_1",
+			"to_port": 0
+		},
+		{
+			"from": "shader_1",
+			"from_port": 0,
+			"to": "combine",
+			"to_port": 0
+		},
+		{
+			"from": "decompose",
+			"from_port": 1,
+			"to": "shader_1",
+			"to_port": 1
+		},
+		{
+			"from": "decompose",
+			"from_port": 2,
+			"to": "shader_1",
+			"to_port": 2
+		},
+		{
+			"from": "decompose",
+			"from_port": 3,
+			"to": "shader_1",
+			"to_port": 3
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "shader_1",
+			"to_port": 4
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 2,
+			"to": "shader_1",
+			"to_port": 5
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 3,
+			"to": "shader_1",
+			"to_port": 6
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 4,
+			"to": "shader_1",
+			"to_port": 7
+		},
+		{
+			"from": "shader_1",
+			"from_port": 1,
+			"to": "combine",
+			"to_port": 1
+		},
+		{
+			"from": "shader_1",
+			"from_port": 2,
+			"to": "combine",
+			"to_port": 2
+		},
+		{
+			"from": "shader_1",
+			"from_port": 3,
+			"to": "combine",
+			"to_port": 3
+		}
+	],
+	"label": "Colorspace Roundtrip",
+	"longdesc": "",
+	"name": "colorspace_roundtrip",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "convert_colorspace_2",
+			"node_position": {
+				"x": -220,
+				"y": -120
+			},
+			"parameters": {
+				"colorspace": 0,
+				"direction": 1
+			},
+			"seed_int": 0,
+			"type": "convert_colorspace"
+		},
+		{
+			"name": "convert_colorspace",
+			"node_position": {
+				"x": -600,
+				"y": -120
+			},
+			"parameters": {
+				"colorspace": 0,
+				"direction": 0
+			},
+			"seed_int": 0,
+			"type": "convert_colorspace"
+		},
+		{
+			"name": "combine",
+			"node_position": {
+				"x": -160,
+				"y": 220
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "combine"
+		},
+		{
+			"name": "decompose",
+			"node_position": {
+				"x": -600,
+				"y": 40
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "decompose"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1040,
+				"y": 60
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "RGBA input",
+					"name": "Input",
+					"shortdesc": "Input",
+					"type": "rgba"
+				},
+				{
+					"longdesc": "First channel of the working colorspace",
+					"name": "X",
+					"shortdesc": "X",
+					"type": "f"
+				},
+				{
+					"longdesc": "Second channel of the working colorspace",
+					"name": "Y",
+					"shortdesc": "Y",
+					"type": "f"
+				},
+				{
+					"longdesc": "Third channel of the working colorspace",
+					"name": "Z",
+					"shortdesc": "Z",
+					"type": "f"
+				},
+				{
+					"longdesc": "Alpha channel, unmodified by the colorspace conversion",
+					"name": "Alpha",
+					"shortdesc": "Alpha",
+					"type": "f"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 80,
+				"y": 60
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "RGBA output",
+					"name": "Output",
+					"shortdesc": "Output",
+					"type": "rgba"
+				},
+				{
+					"longdesc": "First channel of the working colorspace",
+					"name": "X",
+					"shortdesc": "X",
+					"type": "f"
+				},
+				{
+					"longdesc": "Second channel of the working colorspace",
+					"name": "Y",
+					"shortdesc": "Y",
+					"type": "f"
+				},
+				{
+					"longdesc": "Third channel of the working colorspace",
+					"name": "Z",
+					"shortdesc": "Z",
+					"type": "f"
+				},
+				{
+					"longdesc": "Alpha channel, unmodified by the colorspace conversion",
+					"name": "Alpha",
+					"shortdesc": "Alpha",
+					"type": "f"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -560,
+				"y": -340
+			},
+			"parameters": {
+				"param0": 0
+			},
+			"seed_int": 0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "RGB <->",
+					"linked_widgets": [
+						{
+							"node": "convert_colorspace",
+							"widget": "colorspace"
+						},
+						{
+							"node": "convert_colorspace_2",
+							"widget": "colorspace"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "shader_1",
+			"node_position": {
+				"x": -360,
+				"y": 220
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "in1_default",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "in2_default",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "in3_default",
+						"type": "f"
+					},
+					{
+						"default": "1.0",
+						"label": "",
+						"name": "in4_default",
+						"type": "f"
+					},
+					{
+						"default": "$in1_default($uv)",
+						"label": "",
+						"name": "in1_optional",
+						"type": "f"
+					},
+					{
+						"default": "$in2_default($uv)",
+						"label": "",
+						"name": "in2_optional",
+						"type": "f"
+					},
+					{
+						"default": "$in3_default($uv)",
+						"label": "",
+						"name": "in3_optional",
+						"type": "f"
+					},
+					{
+						"default": "$in4_default($uv)",
+						"label": "",
+						"name": "in4_optional",
+						"type": "f"
+					}
+				],
+				"instance": "",
+				"name": "Default Port",
+				"outputs": [
+					{
+						"f": "$in1_optional($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$in2_optional($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$in3_optional($uv)",
+						"type": "f"
+					},
+					{
+						"f": "$in4_optional($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"param0": 0
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

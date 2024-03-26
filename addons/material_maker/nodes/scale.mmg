@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "scale",
 	"node_position": {
 		"x": 0,
@@ -10,16 +11,24 @@
 		"scale_x": 1,
 		"scale_y": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 scale(vec2 uv, vec2 center, vec2 scale) {\n\tuv -= center;\n\tuv /= scale;\n\tuv += center;\n    return uv;\n}",
+		"global": [
+			"vec2 scale(vec2 uv, vec2 center, vec2 scale) {",
+			"\tuv -= center;",
+			"\tuv /= scale;",
+			"\tuv += center;",
+			"\treturn uv;",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
-				"longdesc": "The input image",
-				"name": "i",
-				"shortdesc": "Input",
+				"longdesc": "An input image",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			}
 		],
@@ -28,9 +37,9 @@
 		"name": "Scale",
 		"outputs": [
 			{
-				"longdesc": "Shows the scaled image",
-				"rgba": "$i(scale($uv, vec2(0.5+$cx, 0.5+$cy), vec2($scale_x, $scale_y)))",
-				"shortdesc": "Output",
+				"longdesc": "Shows a scaled image",
+				"rgba": "$i#(scale($uv, vec2(0.5+$cx, 0.5+$cy), vec2($scale_x, $scale_y)))",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],

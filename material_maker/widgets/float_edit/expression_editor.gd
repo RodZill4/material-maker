@@ -1,25 +1,25 @@
-extends WindowDialog
+extends Window
 
 var object : Object = null
 var method : String
 var extra_parameters : Array = []
 var accept_empty : bool = false
 
-onready var editor = $MarginContainer/VBoxContainer/TextEdit
-onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
+@onready var editor = $MarginContainer/VBoxContainer/TextEdit
+@onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 
 func _ready():
 	pass # Replace with function body.
 
-func edit_parameter(object_name : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
+func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
 	object = o
 	method = m
 	extra_parameters = ep
 	accept_empty = ae
-	window_title = "Expression editor - "+object_name
+	title = wt
 	editor.text = value
 	popup_centered()
-	editor.cursor_set_column(editor.text.length())
+	editor.set_caret_column(editor.text.length())
 	editor.grab_focus()
 
 func _on_Apply_pressed():
@@ -37,7 +37,7 @@ func _on_Cancel_pressed():
 
 func _on_TextEdit_gui_input(event):
 	if event is InputEventKey and event.pressed:
-		match event.scancode:
+		match event.keycode:
 			KEY_ENTER:
 				_on_OK_pressed()
 			KEY_ESCAPE:

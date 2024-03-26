@@ -10,6 +10,7 @@
 		"out_max": 1,
 		"out_min": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -29,7 +30,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the generated remapped image",
-				"rgba": "vec4(vec3($out_min)+($in($uv).rgb-vec3($in_min))*vec3(($out_max-$out_min)/($in_max-$in_min)), $in($uv).a)",
+				"rgba": "vec4(vec3($out_min)+($in($uv).rgb-vec3($in_min))*vec3(($out_max-($out_min))/($in_max-($in_min))), $in($uv).a)",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}

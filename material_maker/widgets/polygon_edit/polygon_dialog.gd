@@ -1,14 +1,20 @@
-extends WindowDialog
+extends Window
 
-export var closed : bool = true setget set_closed
+
+@export var closed : bool = true: set = set_closed
 var previous_value
+
 
 signal polygon_changed(polygon)
 signal return_polygon(polygon)
 
+
+func _ready():
+	min_size = $VBoxContainer.get_combined_minimum_size()
+
 func set_closed(c : bool = true):
 	closed = c
-	window_title = "Edit polygon" if closed else "Edit polyline"
+	title = "Edit polygon" if closed else "Edit polyline"
 	$VBoxContainer/EditorContainer/PolygonEditor.set_closed(closed)
 
 func _on_CurveDialog_popup_hide():
@@ -20,11 +26,11 @@ func _on_OK_pressed():
 func _on_Cancel_pressed():
 	emit_signal("return_polygon", previous_value)
 
-func edit_polygon(polygon : MMPolygon) -> Array:
+func edit_polygon(polygon : MMPolygon) -> Dictionary:
 	previous_value = polygon.duplicate()
 	$VBoxContainer/EditorContainer/PolygonEditor.set_polygon(polygon)
 	popup_centered()
-	var result = yield(self, "return_polygon")
+	var result = await self.return_polygon
 	queue_free()
 	return { value=result, previous_value=previous_value }
 

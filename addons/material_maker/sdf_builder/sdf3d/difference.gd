@@ -31,7 +31,7 @@ func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : boo
 	var first : bool = true
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
-		if not data2.empty():
+		if not data2.is_empty():
 			data.parameters.append_array(data2.parameters)
 			if data2.has("code"):
 				data.code += data2.code

@@ -9,11 +9,35 @@
 		"rotate": 0,
 		"scale": 0,
 		"sx": 1,
-		"sy": 1
+		"sy": 1,
+		"variations": false
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_map = $map($uv);\nfloat $(name_uv)_rnd =  float($seed)+$(name_uv)_map.z;\n",
-		"global": "vec2 get_from_tileset(float count, float seed, vec2 uv) {\n\treturn clamp((uv+floor(rand2(vec2(seed))*count))/count, vec2(0.0), vec2(1.0));\n}\n\nvec2 custom_uv_transform(vec2 uv, vec2 cst_scale, float rnd_rotate, float rnd_scale, vec2 seed) {\n\tseed = rand2(seed);\n\tuv -= vec2(0.5);\n\tfloat angle = (seed.x * 2.0 - 1.0) * rnd_rotate;\n\tfloat ca = cos(angle);\n\tfloat sa = sin(angle);\n\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);\n\tuv *= (seed.y-0.5)*2.0*rnd_scale+1.0;\n\tuv /= cst_scale;\n\tuv += vec2(0.5);\n\treturn uv;\n}\n",
+		"code": [
+			"vec3 $(name_uv)_map = $map($uv);",
+			"float $(name_uv)_rnd =  float($seed)+$(name_uv)_map.z;",
+			""
+		],
+		"global": [
+			"vec2 get_from_tileset(float count, float seed, vec2 uv) {",
+			"\treturn clamp((uv+floor(rand2(vec2(seed))*count))/count, vec2(0.0), vec2(1.0));",
+			"}",
+			"",
+			"vec2 custom_uv_transform(vec2 uv, vec2 cst_scale, float rnd_rotate, float rnd_scale, vec2 seed) {",
+			"\tseed = rand2(seed);",
+			"\tuv -= vec2(0.5);",
+			"\tfloat angle = (seed.x * 2.0 - 1.0) * rnd_rotate;",
+			"\tfloat ca = cos(angle);",
+			"\tfloat sa = sin(angle);",
+			"\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);",
+			"\tuv *= (seed.y-0.5)*2.0*rnd_scale+1.0;",
+			"\tuv /= cst_scale;",
+			"\tuv += vec2(0.5);",
+			"\treturn uv;",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec4(1.0)",

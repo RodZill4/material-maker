@@ -26,8 +26,13 @@
 		},
 		"r": 0.2
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);\n",
+		"code": [
+			"vec3 $(name_uv)_p = $uv;",
+			"$(name_uv)_p.$axis -= clamp($(name_uv)_p.$axis, -$l, $l);",
+			""
+		],
 		"global": "",
 		"inputs": [
 

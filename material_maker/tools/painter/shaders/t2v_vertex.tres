@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://dkspwovqj6rd2"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_35c8v"]
+
+[resource]
+script = ExtResource("1_35c8v")
+text = "#version 450
+
+layout(location = 2) out vec3 model_vert;
+layout(location = 3) out vec3 normal;
+layout(location = 4) out vec2 uv;
+
+layout(binding = 0, std430) buffer restrict readonly Positions {
+	float positions[];
+};
+layout(binding = 1, std430) buffer restrict readonly AABB {
+	float aabb[];
+};
+layout(binding = 2, std430) buffer restrict readonly Normals {
+	float normals[];
+};
+layout(binding = 3, std430) buffer restrict readonly Tangents {
+	float tangents[];
+};
+layout(binding = 4, std430) buffer restrict readonly UVs {
+	vec2 uvs[];
+};
+
+@DECLARATIONS
+
+void main() {
+	vec4 position = transform*vec4(positions[3*gl_VertexIndex], positions[3*gl_VertexIndex+1], positions[3*gl_VertexIndex+2], 1.0);
+	normal = vec3(normals[3*gl_VertexIndex], normals[3*gl_VertexIndex+1], normals[3*gl_VertexIndex+2]);
+	uv = uvs[gl_VertexIndex];
+	position /= position.w;
+	position.y = -position.y;
+    model_vert = 0.5*position.xyz+vec3(0.5);
+	gl_Position = vec4(2.0*uv-vec2(1.0), 0.0, 1.0);
+}
+"

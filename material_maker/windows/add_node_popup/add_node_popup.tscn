@@ -1,11 +1,18 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=3 uid="uid://clw8sb0p8webl"]
 
-[ext_resource path="res://material_maker/windows/add_node_popup/add_node_popup.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/windows/add_node_popup/quick_button.tscn" type="PackedScene" id=2]
-[ext_resource path="res://rodz_labs_logo.png" type="Texture" id=3]
-[ext_resource path="res://material_maker/windows/add_node_popup/list.gd" type="Script" id=4]
+[ext_resource type="Script" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="3"]
+[ext_resource type="Script" path="res://material_maker/windows/add_node_popup/list.gd" id="4"]
 
-[sub_resource type="Shader" id=11]
+[sub_resource type="GDScript" id="GDScript_t3c2p"]
+script/source = "extends PanelContainer
+
+func _draw() -> void:
+	draw_rect(Rect2(0, 0, size.x, size.y), Color(1, 0.56, 0.56, 1), false, 2)
+"
+
+[sub_resource type="Shader" id="11"]
 code = "shader_type canvas_item;
 
 uniform bool disabled = false;
@@ -20,49 +27,49 @@ void fragment() {
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
 
-[sub_resource type="ShaderMaterial" id=13]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_88qrb"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=14]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwply"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h5yl4"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=16]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xysbp"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=17]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2fcwt"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=18]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7flh"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="Shader" id=19]
+[sub_resource type="Shader" id="19"]
 code = "shader_type canvas_item;
 
 uniform bool disabled = false;
@@ -77,140 +84,116 @@ void fragment() {
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s5pxd"]
 resource_local_to_scene = true
-shader = SubResource( 19 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("19")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=20]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_irmk8"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
-[sub_resource type="ShaderMaterial" id=21]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nyf2o"]
 resource_local_to_scene = true
-shader = SubResource( 11 )
-shader_param/disabled = false
-shader_param/brightness = 0.8
-shader_param/tex = ExtResource( 3 )
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = ExtResource("3")
 
 [node name="AddNodePopup" type="Popup"]
+size = Vector2i(248, 400)
 visible = true
-margin_top = 4.0
-margin_right = 266.0
-margin_bottom = 372.0
-mouse_filter = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(0, 400)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = SubResource("GDScript_t3c2p")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 259.0
-margin_bottom = 361.0
+layout_mode = 2
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-margin_right = 252.0
-margin_bottom = 24.0
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button1" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 13 )
+[node name="Button1" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_88qrb")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Miscellaneous/Reroute"
 
-[node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 14 )
-margin_left = 28.0
-margin_right = 52.0
+[node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_wwply")
+layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Simple/Shape"
+default_library_item = "Simple/Shape3D"
 
-[node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 15 )
-margin_left = 56.0
-margin_right = 80.0
+[node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_h5yl4")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Noise/FBM"
 
-[node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 16 )
-margin_left = 85.0
-margin_right = 109.0
+[node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_xysbp")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Colorize"
 
-[node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 17 )
-margin_left = 113.0
-margin_right = 137.0
+[node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_2fcwt")
+layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Transform"
+default_library_item = "Transform3D"
 
-[node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 18 )
-margin_left = 142.0
-margin_right = 166.0
+[node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_l7flh")
+layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Transform/Tiler"
+default_library_item = "Transform3D/Tiler"
 
-[node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 12 )
-margin_left = 170.0
-margin_right = 194.0
+[node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_s5pxd")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Blend"
 
-[node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 20 )
-margin_left = 199.0
-margin_right = 223.0
+[node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_irmk8")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Math"
 
-[node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource( 2 )]
-material = SubResource( 21 )
-margin_left = 227.0
-margin_right = 251.0
+[node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_nyf2o")
+layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Normal map"
 
 [node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer"]
-margin_top = 28.0
-margin_right = 252.0
-margin_bottom = 52.0
-rect_min_size = Vector2( 0, 20 )
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 size_flags_horizontal = 3
-clear_button_enabled = true
 placeholder_text = "Search..."
+clear_button_enabled = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 56.0
-margin_right = 252.0
-margin_bottom = 354.0
+layout_mode = 2
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="List" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
-margin_right = 252.0
-margin_bottom = 298.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_constants/separation = 0
-script = ExtResource( 4 )
+script = ExtResource("4")
 
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button1" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button2" to="." method="add_node"]

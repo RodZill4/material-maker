@@ -10,6 +10,7 @@
 		"out_g": 4,
 		"out_r": 2
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

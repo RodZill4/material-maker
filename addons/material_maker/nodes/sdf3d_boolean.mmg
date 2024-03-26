@@ -7,10 +7,22 @@
 	"parameters": {
 		"op": 0
 	},
-	"seed_value": 60292,
+	"seed": 60292,
+	"seed_locked": true,
 	"shader_model": {
 		"code": "",
-		"global": "vec2 sdf3dc_union(vec2 a, vec2 b) {\n\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));\n}\nvec2 sdf3dc_sub(vec2 a, vec2 b) {\n\treturn vec2(max(-a.x, b.x), a.y);\n}\nvec2 sdf3dc_inter(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));\n}\n",
+		"global": [
+			"vec2 sdf3dc_union(vec2 a, vec2 b) {",
+			"\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));",
+			"}",
+			"vec2 sdf3dc_sub(vec2 a, vec2 b) {",
+			"\treturn vec2(max(-a.x, b.x), a.y);",
+			"}",
+			"vec2 sdf3dc_inter(vec2 a, vec2 b) {",
+			"\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "vec2(100.0, 0.0)",

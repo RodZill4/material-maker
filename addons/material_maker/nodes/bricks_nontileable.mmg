@@ -15,9 +15,20 @@
 		"row_offset": 0.5,
 		"rows": 6
 	},
+	"seed_int": 0,
 	"shader_model": {
-		"code": "vec4 $(name_uv)_rect = bricks_$pattern($uv, vec2($columns, $rows), $repeat, $row_offset);\nvec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)));\n",
-		"global": "vec3 brick_infinite_random_color(vec2 bmin, vec2 bmax, float seed) {\n\tvec2 center = 0.5*(bmin + bmax);\n\treturn rand3(center + vec2(seed));\n}\n",
+		"code": [
+			"vec4 $(name_uv)_rect = bricks_$pattern($uv, vec2($columns, $rows), $repeat, $row_offset);",
+			"vec4 $(name_uv) = brick($uv, $(name_uv)_rect.xy, $(name_uv)_rect.zw, $mortar*$mortar_map($uv), $round*$round_map($uv), max(0.001, $bevel*$bevel_map($uv)));",
+			""
+		],
+		"global": [
+			"vec3 brick_infinite_random_color(vec2 bmin, vec2 bmax, float seed) {",
+			"\tvec2 center = 0.5*(bmin + bmax);",
+			"\treturn rand3(center + vec2(seed));",
+			"}",
+			""
+		],
 		"includes": [
 			"bricks"
 		],

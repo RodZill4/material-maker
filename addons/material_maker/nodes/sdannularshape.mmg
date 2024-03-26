@@ -8,9 +8,18 @@
 		"r": 0.1,
 		"ripples": 1
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float sdRipples(float d, float w, int r) {\n\tfor (int i = 0; i < r; ++i) {\n\t\td = abs(d)-w;\n\t}\n\treturn d;\n}\n",
+		"global": [
+			"float sdRipples(float d, float w, int r) {",
+			"\tfor (int i = 0; i < r; ++i) {",
+			"\t\td = abs(d)-w;",
+			"\t}",
+			"\treturn d;",
+			"}",
+			""
+		],
 		"inputs": [
 			{
 				"default": "0.0",

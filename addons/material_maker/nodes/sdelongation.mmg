@@ -5,17 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"bevel": 0,
-		"cx": 0,
-		"cy": 0,
-		"h": 0.08,
-		"k": 0.15,
-		"op": 0,
-		"r": 0.08,
-		"w": 0.28,
 		"x": 0,
 		"y": 0
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

@@ -82,12 +82,15 @@
 				"y": -249.817047
 			},
 			"parameters": {
+				"autostop": false,
 				"filter": false,
 				"iterations": 30,
 				"mipmap": false,
+				"shrink": false,
 				"size": 10
 			},
-			"seed_value": 29168,
+			"seed": 29168,
+			"seed_locked": true,
 			"type": "iterate_buffer"
 		},
 		{
@@ -100,6 +103,7 @@
 				"distance": 0,
 				"size": 10
 			},
+			"seed": -4110,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -112,7 +116,36 @@
 						"type": "rgb"
 					}
 				],
-				"instance": "vec3 $(name)_jump_flood(vec2 uv, float size) {\n\tivec2 int_uv = ivec2(uv * size);\n\tfloat best_distance = 9999.9;\n\tvec2 best_coord;\n\tfloat iter = $in(uv).b;\n\titer += 0.01;\n\tfloat step_width = size / 4.0 / (iter * 100.0);\n\t\n\tfor (int x = -1; x <= 1; x++) {\n\t\tfor (int y = -1; y <= 1; y++) {\n\t\t\tivec2 offsetUV = int_uv + ivec2(x, y) * int(step_width);\n\t\t\tvec2 float_uv = vec2(offsetUV) / size;\n\t\t\tvec2 offset_pos = $in(float_uv).rg;\n\t\t\t\n\t\t\tif (offset_pos.x != 0.0 && offset_pos.y != 0.0) {\n\t\t\t\tvec2 diff = offset_pos - uv;\n\t\t\t\t//float dist = dot(diff, diff);\n\t\t\t\t$distance\n\t\t\t\tif (dist < best_distance) {\n\t\t\t\t\tbest_distance = dist;\n\t\t\t\t\tbest_coord = offset_pos;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t\n\treturn vec3(best_coord, iter);\n}",
+				"instance": [
+					"vec3 $(name)_jump_flood(vec2 uv, float size) {",
+					"\tivec2 int_uv = ivec2(uv * size);",
+					"\tfloat best_distance = 9999.9;",
+					"\tvec2 best_coord;",
+					"\tfloat iter = $in(uv).b;",
+					"\titer += 0.01;",
+					"\tfloat step_width = size / 4.0 / (iter * 100.0);",
+					"\t",
+					"\tfor (int x = -1; x <= 1; x++) {",
+					"\t\tfor (int y = -1; y <= 1; y++) {",
+					"\t\t\tivec2 offsetUV = int_uv + ivec2(x, y) * int(step_width);",
+					"\t\t\tvec2 float_uv = vec2(offsetUV) / size;",
+					"\t\t\tvec2 offset_pos = $in(float_uv).rg;",
+					"\t\t\t",
+					"\t\t\tif (offset_pos.x != 0.0 && offset_pos.y != 0.0) {",
+					"\t\t\t\tvec2 diff = offset_pos - uv;",
+					"\t\t\t\t//float dist = dot(diff, diff);",
+					"\t\t\t\t$distance",
+					"\t\t\t\tif (dist < best_distance) {",
+					"\t\t\t\t\tbest_distance = dist;",
+					"\t\t\t\t\tbest_coord = offset_pos;",
+					"\t\t\t\t}",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\t",
+					"\treturn vec3(best_coord, iter);",
+					"}"
+				],
 				"name": "Jump Flood",
 				"outputs": [
 					{
@@ -162,6 +195,7 @@
 			"parameters": {
 
 			},
+			"seed": 45955,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -198,6 +232,7 @@
 				"threshold": 0.4,
 				"width": 1
 			},
+			"seed": 50217,
 			"type": "edge_detect"
 		},
 		{
@@ -210,6 +245,7 @@
 				"distance": 0,
 				"tiled": false
 			},
+			"seed": -16657,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -229,7 +265,20 @@
 						"type": "f"
 					}
 				],
-				"instance": "float $(name)_distance(vec2 uv, bool tiled) {\n\tif (tiled) {\n\t\tuv = fract(uv);\n\t}\n\tvec2 custom_uv = $in(uv).xy;\n\tvec2 diff = custom_uv != vec2(0.0) ? custom_uv - uv : vec2(1.0);\n\t$distance\n\tif (!tiled) {\n\t\tuv = clamp(uv, 0.0, 1.0);\n\t}\n\treturn $mask(uv) < 0.5 ? distance : -distance;\n}",
+				"instance": [
+					"float $(name)_distance(vec2 uv, bool tiled) {",
+					"\tif (tiled) {",
+					"\t\tuv = fract(uv);",
+					"\t}",
+					"\tvec2 custom_uv = $in(uv).xy;",
+					"\tvec2 diff = custom_uv != vec2(0.0) ? custom_uv - uv : vec2(1.0);",
+					"\t$distance",
+					"\tif (!tiled) {",
+					"\t\tuv = clamp(uv, 0.0, 1.0);",
+					"\t}",
+					"\treturn $mask(uv) < 0.5 ? distance : -distance;",
+					"}"
+				],
 				"name": "Calculate Distance",
 				"outputs": [
 					{
@@ -286,6 +335,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 23391,
 			"type": "ios"
 		},
 		{
@@ -306,6 +356,7 @@
 					"type": "sdf2d"
 				}
 			],
+			"seed": -35133,
 			"type": "ios"
 		},
 		{
@@ -320,6 +371,7 @@
 				"param2": false,
 				"param3": 0
 			},
+			"seed": 46252,
 			"type": "remote",
 			"widgets": [
 				{
@@ -404,6 +456,7 @@
 			"parameters": {
 				"size": 10
 			},
+			"seed": 7085,
 			"type": "buffer",
 			"version": 1
 		},
@@ -418,6 +471,7 @@
 				"value": 0.5,
 				"width": 0
 			},
+			"seed": 48280,
 			"type": "tones_step"
 		},
 		{
@@ -429,8 +483,12 @@
 			"parameters": {
 				"tiled": false
 			},
+			"seed": -56216,
 			"shader_model": {
-				"code": "vec3 $(name_uv)_in = $in(fract($uv));\nvec3 $(name_uv)_tiled = $(name_uv)_in.xy != vec2(0.0) ? $(name_uv)_in + vec3(floor($uv), 0.0) : $(name_uv)_in;",
+				"code": [
+					"vec3 $(name_uv)_in = $in(fract($uv));",
+					"vec3 $(name_uv)_tiled = $(name_uv)_in.xy != vec2(0.0) ? $(name_uv)_in + vec3(floor($uv), 0.0) : $(name_uv)_in;"
+				],
 				"global": "",
 				"inputs": [
 					{
@@ -586,12 +644,15 @@
 						"y": -259.215881
 					},
 					"parameters": {
+						"autostop": false,
 						"filter": false,
 						"iterations": 30,
 						"mipmap": false,
+						"shrink": false,
 						"size": 9
 					},
-					"seed_value": 29168,
+					"seed": 29168,
+					"seed_locked": true,
 					"type": "iterate_buffer"
 				},
 				{
@@ -604,6 +665,7 @@
 						"distance": 0,
 						"size": 9
 					},
+					"seed": 26197,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -616,7 +678,38 @@
 								"type": "rgb"
 							}
 						],
-						"instance": "vec3 $(name)_jump_flood(vec2 uv, float size) {\n\tivec2 int_uv = ivec2(uv * size);\n\tfloat best_distance = 9999.9;\n\tvec2 best_coord;\n\tfloat iter = $in(uv).b;\n\titer += 0.01;\n\tfloat step_width = size / 4.0 / (iter * 100.0);\n\t\n\tfor (int x = -1; x <= 1; x++) {\n\t\tfor (int y = -1; y <= 1; y++) {\n\t\t\tivec2 offsetUV = int_uv + ivec2(x, y) * int(step_width);\n\t\t\tvec2 float_uv = vec2(offsetUV) / size;\n\t\t\tvec2 offset_pos = $in(float_uv).rg;\n\t\t\t\n\t\t\tif (offset_pos.x != 0.0 && offset_pos.y != 0.0) {\n\t\t\t\tvec2 diff = offset_pos - uv;\n\t\t\t\t//float dist = dot(diff, diff);\n\t\t\t\t//float dist = abs(diff.x) + abs(diff.y);\n\t\t\t\t//float dist = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);\n\t\t\t\t$distance\n\t\t\t\tif (dist < best_distance) {\n\t\t\t\t\tbest_distance = dist;\n\t\t\t\t\tbest_coord = offset_pos;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t\n\treturn vec3(best_coord, iter);\n}",
+						"instance": [
+							"vec3 $(name)_jump_flood(vec2 uv, float size) {",
+							"\tivec2 int_uv = ivec2(uv * size);",
+							"\tfloat best_distance = 9999.9;",
+							"\tvec2 best_coord;",
+							"\tfloat iter = $in(uv).b;",
+							"\titer += 0.01;",
+							"\tfloat step_width = size / 4.0 / (iter * 100.0);",
+							"\t",
+							"\tfor (int x = -1; x <= 1; x++) {",
+							"\t\tfor (int y = -1; y <= 1; y++) {",
+							"\t\t\tivec2 offsetUV = int_uv + ivec2(x, y) * int(step_width);",
+							"\t\t\tvec2 float_uv = vec2(offsetUV) / size;",
+							"\t\t\tvec2 offset_pos = $in(float_uv).rg;",
+							"\t\t\t",
+							"\t\t\tif (offset_pos.x != 0.0 && offset_pos.y != 0.0) {",
+							"\t\t\t\tvec2 diff = offset_pos - uv;",
+							"\t\t\t\t//float dist = dot(diff, diff);",
+							"\t\t\t\t//float dist = abs(diff.x) + abs(diff.y);",
+							"\t\t\t\t//float dist = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);",
+							"\t\t\t\t$distance",
+							"\t\t\t\tif (dist < best_distance) {",
+							"\t\t\t\t\tbest_distance = dist;",
+							"\t\t\t\t\tbest_coord = offset_pos;",
+							"\t\t\t\t}",
+							"\t\t\t}",
+							"\t\t}",
+							"\t}",
+							"\t",
+							"\treturn vec3(best_coord, iter);",
+							"}"
+						],
 						"name": "Jump Flood",
 						"outputs": [
 							{
@@ -666,6 +759,7 @@
 					"parameters": {
 
 					},
+					"seed": 45954,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -702,6 +796,7 @@
 						"threshold": 0.4,
 						"width": 1
 					},
+					"seed": 50217,
 					"type": "edge_detect"
 				},
 				{
@@ -714,6 +809,7 @@
 						"distance": 0,
 						"length": 0.1
 					},
+					"seed": -11869,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -733,7 +829,21 @@
 								"type": "f"
 							}
 						],
-						"instance": "float $(name)_distance(vec2 uv, float length) {\n\tvec2 custom_uv = $in(fract(uv)).xy;\n\tvec2 diff = custom_uv != vec2(0.0) ? custom_uv - fract(uv) : vec2(1.0);\n\t//float distance = length(diff);\n\t//float distance = abs(diff.x) + abs(diff.y);\n\t//float distance = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);\n\t$distance\n\tif (length >= 0.0) {\n\t\treturn $mask(uv) < 0.5 ? clamp(1.0 - (distance / length), 0.0, 1.0) : 1.0;\n\t} else {\n\t\treturn $mask(uv) > 0.5 ? clamp((distance / -length), 0.0, 1.0) : 0.0;\n\t}\n}",
+						"instance": [
+							"float $(name)_distance(vec2 uv, float length) {",
+							"\tvec2 custom_uv = $in(fract(uv)).xy;",
+							"\tvec2 diff = custom_uv != vec2(0.0) ? custom_uv - fract(uv) : vec2(1.0);",
+							"\t//float distance = length(diff);",
+							"\t//float distance = abs(diff.x) + abs(diff.y);",
+							"\t//float distance = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);",
+							"\t$distance",
+							"\tif (length >= 0.0) {",
+							"\t\treturn $mask(uv) < 0.5 ? clamp(1.0 - (distance / length), 0.0, 1.0) : 1.0;",
+							"\t} else {",
+							"\t\treturn $mask(uv) > 0.5 ? clamp((distance / -length), 0.0, 1.0) : 0.0;",
+							"\t}",
+							"}"
+						],
 						"name": "Calculate Distance",
 						"outputs": [
 							{
@@ -801,6 +911,7 @@
 							"type": "rgb"
 						}
 					],
+					"seed": 26605,
 					"type": "ios"
 				},
 				{
@@ -821,6 +932,7 @@
 							"type": "rgb"
 						}
 					],
+					"seed": -38622,
 					"type": "ios"
 				},
 				{
@@ -836,6 +948,7 @@
 						"param3": 0,
 						"param4": 30
 					},
+					"seed": -26654,
 					"type": "remote",
 					"widgets": [
 						{
@@ -929,6 +1042,7 @@
 					"parameters": {
 						"size": 9
 					},
+					"seed": 48330,
 					"type": "buffer",
 					"version": 1
 				},
@@ -943,6 +1057,7 @@
 						"value": 0.5,
 						"width": 0
 					},
+					"seed": 42366,
 					"type": "tones_step"
 				},
 				{
@@ -954,8 +1069,12 @@
 					"parameters": {
 						"tiled": true
 					},
+					"seed": -16485,
 					"shader_model": {
-						"code": "vec3 $(name_uv)_in = $in(fract($uv));\nvec3 $(name_uv)_tiled = $(name_uv)_in.xy != vec2(0.0) ? $(name_uv)_in + vec3(floor($uv), 0.0) : $(name_uv)_in;",
+						"code": [
+							"vec3 $(name_uv)_in = $in(fract($uv));",
+							"vec3 $(name_uv)_tiled = $(name_uv)_in.xy != vec2(0.0) ? $(name_uv)_in + vec3(floor($uv), 0.0) : $(name_uv)_in;"
+						],
 						"global": "",
 						"inputs": [
 							{
@@ -994,6 +1113,7 @@
 					"parameters": {
 
 					},
+					"seed": -48141,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1040,8 +1160,13 @@
 					"parameters": {
 						"fill": 0
 					},
+					"seed": -2130,
 					"shader_model": {
-						"code": "float $(name_uv)_dist = $distance($uv);\nvec3 $(name_uv)_color = mix($source(fract($uv)), $fill_raw(fract($uv)), float( $(name_uv)_dist != 0.0 ) );\nvec3 $(name_uv)_mix = mix($(name_uv)_color * $(name_uv)_dist, $(name_uv)_color, $fill);",
+						"code": [
+							"float $(name_uv)_dist = $distance($uv);",
+							"vec3 $(name_uv)_color = mix($source(fract($uv)), $fill_raw(fract($uv)), float( $(name_uv)_dist != 0.0 ) );",
+							"vec3 $(name_uv)_mix = mix($(name_uv)_color * $(name_uv)_dist, $(name_uv)_color, $fill);"
+						],
 						"global": "",
 						"inputs": [
 							{
@@ -1098,6 +1223,7 @@
 					"parameters": {
 
 					},
+					"seed": 18837,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1131,6 +1257,7 @@
 				"param3": 0,
 				"param4": 30
 			},
+			"seed": -39294,
 			"shortdesc": "",
 			"type": "graph"
 		}
@@ -1141,6 +1268,7 @@
 		"param2": false,
 		"param3": 0
 	},
+	"seed_int": 0,
 	"shortdesc": "",
 	"type": "graph"
 }

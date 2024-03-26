@@ -110,6 +110,7 @@
 				"filter": false,
 				"iterations": 50,
 				"mipmap": false,
+				"shrink": false,
 				"size": 8
 			},
 			"seed": 29168,
@@ -264,8 +265,10 @@
 			},
 			"seed_int": 0,
 			"shader_model": {
-				"code": "vec4 $(name_uv)_v = $in($(uv));\nvec2 $(name_uv)_a = 1.0-step(vec2(1.0), $(name_uv)_v.zw);",
-				"global": "float shape_circle(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float distance = length(uv);\n    return clamp((1.0-distance/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_polygon(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y)+3.14159265359;\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = atan(uv.x, uv.y);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_curved_star(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = max(edge, 1.0e-8);\n    float angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);\n    float slice = 6.28318530718/sides;\n    return clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);\n}\n\nfloat shape_rays(vec2 uv, float sides, float size, float edge) {\n    uv = 2.0*uv-1.0;\n\tedge = 0.5*max(edge, 1.0e-8)*size;\n\tfloat slice = 6.28318530718/sides;\n    float angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;\n    return clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);\n}\n\n",
+				"code": [
+					"vec4 $(name_uv)_v = $in($(uv));",
+					"vec2 $(name_uv)_a = 1.0-step(vec2(1.0), $(name_uv)_v.zw);"
+				],
 				"inputs": [
 					{
 						"default": "vec4(0.0)",
@@ -361,7 +364,21 @@
 			"seed": 50297,
 			"shader_model": {
 				"code": "",
-				"global": "float dilate_distance_euclidian(float x, float y, float d) {\n\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);\n}\n\nfloat dilate_distance_manhattan(float x, float y, float d) {\n\treturn 1.0-(abs(1.0-x)+abs(y)/d);\n}\n\nfloat dilate_distance_chebyshev(float x, float y, float d) {\n\treturn 1.0-max(abs(1.0-x), abs(y)/d);\n}\n\n",
+				"global": [
+					"float dilate_distance_euclidian(float x, float y, float d) {",
+					"\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);",
+					"}",
+					"",
+					"float dilate_distance_manhattan(float x, float y, float d) {",
+					"\treturn 1.0-(abs(1.0-x)+abs(y)/d);",
+					"}",
+					"",
+					"float dilate_distance_chebyshev(float x, float y, float d) {",
+					"\treturn 1.0-max(abs(1.0-x), abs(y)/d);",
+					"}",
+					"",
+					""
+				],
 				"includes": [
 					"pack_1x32_to_2x16"
 				],
@@ -374,7 +391,30 @@
 						"type": "rgba"
 					}
 				],
-				"instance": "vec3 $(name)_distance_v(vec2 uv) {\n\tvec2 e = vec2(0.0, 1.0/$s);\n\tint steps = int($s*$d);\n\tvec3 p = vec3(pack_4x16_to_2x32($in(uv)), uv.y);\n\tfor (int i = 0; i < steps; ++i) {\n\t\tvec2 dx = float(i)*e;\n\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(uv+dx)), (uv+dx).y);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t\tp2 = vec3(pack_4x16_to_2x32($in(uv-dx)), (uv-dx).y);\n\t\tif (p2.x > p.x) {\n\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);\n\t\t\tp = mix(p, p2, step(p.x, p2.x));\n\t\t}\n\t}\n\treturn p;\n}\n",
+				"instance": [
+					"vec3 $(name)_distance_v(vec2 uv) {",
+					"\tvec2 e = vec2(0.0, 1.0/$s);",
+					"\tint steps = int($s*$d);",
+					"\tvec3 p = vec3(pack_4x16_to_2x32($in(uv)), uv.y);",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tvec2 dx = float(i)*e;",
+					"\t\tvec2 uv2 = fract(uv+dx);",
+					"\t\tvec3 p2 = vec3(pack_4x16_to_2x32($in(uv2)), uv2.y);",
+					"\t\tif (p2.x > p.x) {",
+					"\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t}",
+					"\t\tuv2 = fract(uv-dx);",
+					"\t\tp2 = vec3(pack_4x16_to_2x32($in(uv2)), uv2.y);",
+					"\t\tif (p2.x > p.x) {",
+					"\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t}",
+					"\t}",
+					"\treturn p;",
+					"}",
+					""
+				],
 				"name": "Dilate pass 2",
 				"outputs": [
 					{
@@ -452,7 +492,28 @@
 						"type": "f"
 					}
 				],
-				"instance": "vec3 $(name)_distance_h(vec2 uv) {\n\tvec2 e = vec2(1.0/$s, 0.0);\n\tint steps = int($s*$d);\n\tfloat rv = 0.0;\n\tvec2 source_uv;\n\tfor (int i = 0; i < steps; ++i) {\n\t\tsource_uv = uv+float(i)*e;\n\t\tif ($in(source_uv) > 0.5) {\n\t\t\trv = 1.0-float(i)*e.x/$d;\n\t\t\tbreak;\n\t\t}\n\t\tsource_uv = uv-float(i)*e;\n\t\tif ($in(source_uv) > 0.5) {\n\t\t\trv = 1.0-float(i)*e.x/$d;\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn vec3(rv, source_uv);\n}\n",
+				"instance": [
+					"vec3 $(name)_distance_h(vec2 uv) {",
+					"\tvec2 e = vec2(1.0/$s, 0.0);",
+					"\tint steps = int($s*$d);",
+					"\tfloat rv = 0.0;",
+					"\tvec2 source_uv;",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tsource_uv = uv+float(i)*e;",
+					"\t\tif ($in(source_uv) > 0.5) {",
+					"\t\t\trv = 1.0-float(i)*e.x/$d;",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t\tsource_uv = uv-float(i)*e;",
+					"\t\tif ($in(source_uv) > 0.5) {",
+					"\t\t\trv = 1.0-float(i)*e.x/$d;",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec3(rv, source_uv);",
+					"}",
+					""
+				],
 				"name": "Dilate pass 1",
 				"outputs": [
 					{

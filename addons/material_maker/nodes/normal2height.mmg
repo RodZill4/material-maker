@@ -1,0 +1,355 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "normal2height_base",
+			"to_port": 1
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "normal2height_base",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "edge_detect_1",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "edge_detect_1",
+			"to_port": 1
+		},
+		{
+			"from": "edge_detect_1",
+			"from_port": 0,
+			"to": "normal2height_base",
+			"to_port": 2
+		},
+		{
+			"from": "normal2height_base",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "normal2height_base",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "normal2height_base",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "normal2height_simple_2",
+			"to_port": 0
+		},
+		{
+			"from": "normal2height_simple_2",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		}
+	],
+	"label": "Normal to Height",
+	"longdesc": "",
+	"name": "normal2height",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": 188.669312,
+				"y": -219.641479
+			},
+			"parameters": {
+				"filter": false,
+				"mipmap": false,
+				"size": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "edge_detect_1",
+			"node_position": {
+				"x": 178.169312,
+				"y": -111.062531
+			},
+			"parameters": {
+				"amount": 25,
+				"size": 10
+			},
+			"seed": -11547,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "n",
+						"type": "rgb"
+					}
+				],
+				"instance": "vec3 nm_compare_$name(vec2 uv, float amount, float size) {\n\tvec3 e = vec3(1.0/size, -1.0/size, 0);\n\tvec2 rv;\n\trv = vec2(1.0, -1.0)*$in(uv+e.xy);\n\trv += vec2(-1.0, 1.0)*$in(uv-e.xy);\n\trv += vec2(1.0, 1.0)*$in(uv+e.xx);\n\trv += vec2(-1.0, -1.0)*$in(uv-e.xx);\n\trv += vec2(2.0, 0.0)*$in(uv+e.xz);\n\trv += vec2(-2.0, 0.0)*$in(uv-e.xz);\n\trv += vec2(0.0, 2.0)*$in(uv+e.zx);\n\trv += vec2(0.0, -2.0)*$in(uv-e.zx);\n\trv *= size*40.0/amount/128.0;\n\treturn vec3(0.5)+0.5*normalize(vec3(rv, -1.0));\n}\n",
+				"name": "Normal map compare",
+				"outputs": [
+					{
+						"f": "length(nm_compare_$name($uv, $amount, $size)-$n($uv))",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 4,
+						"label": "",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 25,
+						"label": "",
+						"max": 50,
+						"min": 0,
+						"name": "amount",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "normal2height_base",
+			"node_position": {
+				"x": 182.669312,
+				"y": 0.358521
+			},
+			"parameters": {
+				"scale": 25,
+				"size": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "$center_height",
+						"function": true,
+						"label": "",
+						"name": "h",
+						"type": "f"
+					},
+					{
+						"default": "vec3(0.5)",
+						"function": true,
+						"label": "",
+						"name": "nm",
+						"type": "rgb"
+					},
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "q",
+						"type": "f"
+					}
+				],
+				"instance": "float height_$name(vec2 uv) {\n\tfloat height = 0.0;\n\tfloat sum = 0.0;\n\tfor (int dx = -5; dx <= 5; ++dx) {\n\t\tfor (int dy = -5; dy <= 5; ++dy) {\n\t\t\tvec2 d = vec2(float(dx), float(dy));\n\t\t\tvec2 p = uv+d/$size;\n\t\t\tfloat h = $h(p);\n\t\t\tfloat w = max(1.0-50.0*$q(p), 0.01)/(1.0+dot(d,d));\n\t\t\th -= $scale*dot(d/$size, $nm(p).xy-vec2(0.5));\n\t\t\theight += w*h;\n\t\t\tsum += w;\n\t\t}\n\t}\n\treturn height/sum;\n}\n",
+				"name": "Normal to Height Fix",
+				"outputs": [
+					{
+						"f": "height_$name($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10,
+						"first": 6,
+						"label": "",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 20,
+						"label": "",
+						"max": 50,
+						"min": 0,
+						"name": "scale",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": 87.169312,
+				"y": -477.0625
+			},
+			"parameters": {
+				"param0": 25,
+				"param1": 0.5,
+				"param2": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "edge_detect_1",
+							"widget": "size"
+						},
+						{
+							"node": "normal2height_base",
+							"widget": "size"
+						},
+						{
+							"node": "normal2height_simple_2",
+							"widget": "size"
+						}
+					],
+					"name": "param2",
+					"type": "linked_control"
+				},
+				{
+					"label": "Base Height",
+					"linked_widgets": [
+						{
+							"node": "normal2height_simple_2",
+							"widget": "center_height"
+						}
+					],
+					"name": "param1",
+					"type": "linked_control"
+				},
+				{
+					"label": "Strength",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_1",
+							"widget": "amount"
+						},
+						{
+							"node": "normal2height_base",
+							"widget": "scale"
+						},
+						{
+							"node": "normal2height_simple_2",
+							"widget": "scale"
+						}
+					],
+					"name": "param0",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -267.830688,
+				"y": -196.470093
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "",
+					"name": "normal",
+					"shortdesc": "NormalMap",
+					"type": "rgb"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 488.669312,
+				"y": -227.470093
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "Height map generated from normals",
+					"name": "height",
+					"shortdesc": "Height",
+					"type": "f"
+				}
+			],
+			"seed": 0,
+			"seed_locked": false,
+			"type": "ios"
+		},
+		{
+			"name": "normal2height_simple_2",
+			"node_position": {
+				"x": 173.906769,
+				"y": -331.184387
+			},
+			"parameters": {
+				"center_height": 0.5,
+				"scale": 25,
+				"size": 10
+			},
+			"seed": 0,
+			"seed_locked": false,
+			"type": "normal2height_simple"
+		}
+	],
+	"parameters": {
+		"param0": 25,
+		"param1": 0.5,
+		"param2": 10
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shortdesc": "",
+	"type": "graph"
+}

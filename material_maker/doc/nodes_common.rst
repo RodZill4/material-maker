@@ -50,7 +50,7 @@ output slot will have a circle around it, and clicking it again will hide the pr
 Inputs
 ^^^^^^
 
-Inputs are images the node will transform (if any). An input is always connected to at most
+Inputs (if any) can have the same types as outputs. An input is always connected to at most
 one output. Inputs generally have a default value that is used when it is not connected.
 
 Parameters
@@ -153,6 +153,22 @@ parents and will have the same seed in all variations.
 
 Subgraphs also have their seed and transmit it to their children unless not configured to
 do so, or the children's seeds are frozen.
+
+Variadic nodes
+^^^^^^^^^^^^^^
+
+Nodes can have a variable number of inputs, parameters and outputs depending on the
+context.
+
+.. image:: images/variadic_node.png
+	:align: center
+
+Such nodes have a specific icon in their title bar. Clicking tht icon with the left mouse
+button will increase their variadic size, and the right mouse button will show a menu
+with the minimum size (depending on current connections) and a few other choices.
+
+The variadic size of the node in the number of instances of its variadic parameters
+and ports.
 
 Modifying nodes
 ^^^^^^^^^^^^^^^

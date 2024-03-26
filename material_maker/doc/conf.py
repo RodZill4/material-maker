@@ -20,11 +20,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Material Maker'
-copyright = '2018-2022, Rodolphe Suescun'
+copyright = '2018-2023, Rodolphe Suescun'
 author = 'Rodolphe Suescun'
 
 # The short X.Y version
-version = '1.1'
+version = '1.4'
 # The full version, including alpha/beta/rc tags
 release = ''
 

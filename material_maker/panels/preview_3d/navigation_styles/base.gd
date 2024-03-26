@@ -7,11 +7,11 @@ const CAMERA_DISTANCE_MAX = 150.0
 const CAMERA_FOV_MIN = 10
 const CAMERA_FOV_MAX = 90
 
-var parent: ViewportContainer
+var parent: SubViewportContainer
 var mouse_start_position: Vector2 = Vector2.ZERO
 
 
-func _init(parent: ViewportContainer) -> void:
+func _init(parent: SubViewportContainer) -> void:
 	self.parent = parent
 
 

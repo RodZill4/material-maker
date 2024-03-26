@@ -1,14 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://dj08rlr43tqxj"]
 
-[ext_resource path="res://material_maker/nodes/reroute/reroute.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/nodes/reroute/reroute.gd" id="1"]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id="1"]
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id="2"]
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -18,10 +18,10 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[sub_resource type="Theme" id=3]
-GraphNode/colors/close_color = Color( 0, 0, 0, 1 )
-GraphNode/colors/resizer_color = Color( 0, 0, 0, 1 )
-GraphNode/colors/title_color = Color( 0, 0, 0, 1 )
+[sub_resource type="Theme" id="3"]
+GraphNode/colors/close_color = Color(0, 0, 0, 1)
+GraphNode/colors/resizer_color = Color(0, 0, 0, 1)
+GraphNode/colors/title_color = Color(0, 0, 0, 1)
 GraphNode/constants/close_offset = 0
 GraphNode/constants/port_offset = 0
 GraphNode/constants/separation = 0
@@ -32,32 +32,37 @@ GraphNode/icons/port = null
 GraphNode/icons/resizer = null
 GraphNode/styles/breakpoint = null
 GraphNode/styles/comment = null
-GraphNode/styles/commentfocus = null
+GraphNode/styles/comment_focus = null
 GraphNode/styles/defaultfocus = null
 GraphNode/styles/defaultframe = null
-GraphNode/styles/frame = SubResource( 1 )
+GraphNode/styles/frame = SubResource("1")
 GraphNode/styles/position = null
-GraphNode/styles/selectedframe = SubResource( 2 )
+GraphNode/styles/selected_frame = SubResource("2")
 
-[node name="reroute" type="GraphNode"]
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
-theme = SubResource( 3 )
-custom_constants/port_offset = 0
+[node name="Reroute" type="GraphNode"]
+clip_children = 2
+custom_minimum_size = Vector2(24, 24)
+offset_right = 24.0
+offset_bottom = 24.0
+theme = SubResource("3")
 slot/0/left_enabled = true
 slot/0/left_type = 42
-slot/0/left_color = Color( 1, 1, 1, 1 )
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
 slot/0/right_enabled = true
 slot/0/right_type = 42
-slot/0/right_color = Color( 1, 1, 1, 1 )
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1")
 
-[node name="Foo" type="Control" parent="."]
-margin_right = 24.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 24, 24 )
+[node name="Contents" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
 mouse_filter = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

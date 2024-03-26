@@ -8,6 +8,7 @@
 		"angle": 0,
 		"height": 0.5
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

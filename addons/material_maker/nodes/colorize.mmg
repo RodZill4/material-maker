@@ -26,6 +26,7 @@
 			"type": "Gradient"
 		}
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

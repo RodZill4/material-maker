@@ -7,6 +7,7 @@
 	"parameters": {
 		"r": 0.15
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec2 $(name_uv)_v = $in($uv);",
 		"global": "",

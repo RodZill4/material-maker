@@ -1,42 +1,42 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://d3e5alurdf5ys"]
 
-[ext_resource path="res://material_maker/windows/file_dialog/left_panel.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://material_maker/windows/file_dialog/left_panel.gd" id="1"]
 
 [node name="LeftPanel" type="VBoxContainer"]
-margin_right = 40.0
-margin_bottom = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
 size_flags_vertical = 3
-script = ExtResource( 1 )
+script = ExtResource("1")
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="RecentLabel" type="Label" parent="."]
-margin_right = 100.0
-margin_bottom = 14.0
+offset_right = 100.0
+offset_bottom = 14.0
 text = "Recent"
 
 [node name="RecentList" type="ItemList" parent="."]
-margin_top = 18.0
-margin_right = 100.0
-margin_bottom = 18.0
-rect_min_size = Vector2( 100, 0 )
+offset_top = 18.0
+offset_right = 100.0
+offset_bottom = 18.0
+custom_minimum_size = Vector2(100, 0)
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="FavLabel" type="Label" parent="."]
-margin_top = 22.0
-margin_right = 100.0
-margin_bottom = 36.0
+offset_top = 22.0
+offset_right = 100.0
+offset_bottom = 36.0
 text = "Favorite"
 
 [node name="FavList" type="ItemList" parent="."]
-margin_top = 40.0
-margin_right = 100.0
-margin_bottom = 40.0
-rect_min_size = Vector2( 100, 0 )
+offset_top = 40.0
+offset_right = 100.0
+offset_bottom = 40.0
+custom_minimum_size = Vector2(100, 0)
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false

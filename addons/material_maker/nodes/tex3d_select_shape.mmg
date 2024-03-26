@@ -7,8 +7,7 @@
 	"parameters": {
 		"d": 0
 	},
-	"seed": 0,
-	"seed_locked": false,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",

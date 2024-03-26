@@ -1,119 +1,93 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=10 format=3 uid="uid://bavx4h3o65uam"]
 
-[ext_resource path="res://material_maker/panels/layers/layers_tree.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/panels/layers/layers.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
+[ext_resource type="Script" path="res://material_maker/panels/layers/layers_tree.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/panels/layers/layers.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 32, 160, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("3")
+region = Rect2(32, 160, 16, 16)
 
-[sub_resource type="AtlasTexture" id=2]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 48, 160, 16, 16 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("3")
+region = Rect2(48, 160, 16, 16)
 
-[sub_resource type="AtlasTexture" id=3]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 64, 160, 16, 16 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("3")
+region = Rect2(64, 160, 16, 16)
 
-[sub_resource type="AtlasTexture" id=4]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 80, 160, 16, 16 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("3")
+region = Rect2(80, 160, 16, 16)
 
-[sub_resource type="AtlasTexture" id=5]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 96, 160, 16, 16 )
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("3")
+region = Rect2(96, 160, 16, 16)
 
-[sub_resource type="AtlasTexture" id=6]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="6"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 16, 16)
 
 [node name="Layers" type="VBoxContainer"]
-margin_right = 150.0
-margin_bottom = 224.0
-script = ExtResource( 2 )
+offset_right = 150.0
+offset_bottom = 224.0
+script = ExtResource("2")
 
 [node name="Buttons" type="HBoxContainer" parent="."]
-margin_right = 150.0
-margin_bottom = 16.0
+layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Add" type="TextureButton" parent="Buttons"]
-margin_right = 21.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource( 1 )
-expand = true
+texture_normal = SubResource("1")
 stretch_mode = 3
 
 [node name="Duplicate" type="TextureButton" parent="Buttons"]
-margin_left = 25.0
-margin_right = 47.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource( 2 )
-expand = true
+texture_normal = SubResource("2")
 stretch_mode = 3
 
 [node name="Remove" type="TextureButton" parent="Buttons"]
-margin_left = 51.0
-margin_right = 72.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource( 3 )
-expand = true
+texture_normal = SubResource("3")
 stretch_mode = 3
 
 [node name="Up" type="TextureButton" parent="Buttons"]
-margin_left = 76.0
-margin_right = 98.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource( 4 )
-expand = true
+texture_normal = SubResource("4")
 stretch_mode = 3
 
 [node name="Down" type="TextureButton" parent="Buttons"]
-margin_left = 102.0
-margin_right = 124.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource( 5 )
-expand = true
+texture_normal = SubResource("5")
 stretch_mode = 3
 
 [node name="Config" type="TextureButton" parent="Buttons"]
-margin_left = 128.0
-margin_right = 150.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 0, 16 )
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = SubResource( 6 )
-expand = true
+texture_normal = SubResource("6")
 stretch_mode = 3
 
 [node name="Tree" type="Tree" parent="."]
-margin_top = 20.0
-margin_right = 150.0
-margin_bottom = 224.0
-rect_min_size = Vector2( 150, 200 )
-focus_mode = 0
+custom_minimum_size = Vector2(150, 200)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+focus_mode = 0
 columns = 2
 hide_root = true
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [connection signal="pressed" from="Buttons/Add" to="." method="_on_Add_pressed"]
 [connection signal="pressed" from="Buttons/Duplicate" to="." method="_on_Duplicate_pressed"]
@@ -121,7 +95,7 @@ script = ExtResource( 1 )
 [connection signal="pressed" from="Buttons/Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Buttons/Down" to="." method="_on_Down_pressed"]
 [connection signal="pressed" from="Buttons/Config" to="." method="_on_Config_pressed"]
-[connection signal="button_pressed" from="Tree" to="Tree" method="_on_Tree_button_pressed"]
+[connection signal="button_clicked" from="Tree" to="Tree" method="_on_Tree_button_pressed"]
 [connection signal="cell_selected" from="Tree" to="Tree" method="_on_Tree_cell_selected"]
 [connection signal="gui_input" from="Tree" to="Tree" method="_on_Tree_gui_input"]
 [connection signal="item_edited" from="Tree" to="Tree" method="_on_Tree_item_edited"]

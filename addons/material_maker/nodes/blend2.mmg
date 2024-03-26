@@ -1,0 +1,209 @@
+{
+	"generic_size": 1,
+	"name": "blend2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount1": 0.5,
+		"blend_type1": 0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec4 $(name_uv)_b = $b($uv);",
+			"vec4 $(name_uv)_l;",
+			"float $(name_uv)_a;",
+			"#for",
+			"$(name_uv)_l = $l#($uv);",
+			"$(name_uv)_a = $amount#*$a#($uv);",
+			"$(name_uv)_b = vec4(blend_$blend_type#($uv, $(name_uv)_l.rgb, $(name_uv)_b.rgb, $(name_uv)_a*$(name_uv)_l.a), min(1.0, $(name_uv)_b.a+$(name_uv)_a*$(name_uv)_l.a));",
+			"#end",
+			""
+		],
+		"global": [
+			"float blend_linear_light_f(float c1, float c2) {",
+			"\treturn (c1 + 2.0 * c2) - 1.0;",
+			"}",
+			"",
+			"vec3 blend_linear_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"return opacity*vec3(blend_linear_light_f(c1.x, c2.x), blend_linear_light_f(c1.y, c2.y), blend_linear_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend_vivid_light_f(float c1, float c2) {",
+			"\treturn (c1 < 0.5) ? 1.0 - (1.0 - c2) / (2.0 * c1) : c2 / (2.0 * (1.0 - c1));",
+			"}",
+			"",
+			"vec3 blend_vivid_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend_vivid_light_f(c1.x, c2.x), blend_vivid_light_f(c1.y, c2.y), blend_vivid_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend_pin_light_f( float c1, float c2) {",
+			"\treturn (2.0 * c1 - 1.0 > c2) ? 2.0 * c1 - 1.0 : ((c1 < 0.5 * c2) ? 2.0 * c1 : c2);",
+			"}",
+			"",
+			"vec3 blend_pin_light(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend_pin_light_f(c1.x, c2.x), blend_pin_light_f(c1.y, c2.y), blend_pin_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend_hard_mix_f(float c1, float c2) {",
+			"\treturn floor(c1 + c2);",
+			"}",
+			"",
+			"vec3 blend_hard_mix(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\t\treturn opacity*vec3(blend_hard_mix_f(c1.x, c2.x), blend_hard_mix_f(c1.y, c2.y), blend_hard_mix_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend_exclusion_f(float c1, float c2) {",
+			"\treturn c1 + c2 - 2.0 * c1 * c2;",
+			"}",
+			"",
+			"vec3 blend_exclusion(vec2 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend_exclusion_f(c1.x, c2.x), blend_exclusion_f(c1.y, c2.y), blend_exclusion_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}"
+		],
+		"includes": [
+			"blend"
+		],
+		"inputs": [
+			{
+				"default": "vec4($uv.x, 1.0, 1.0, 1.0)",
+				"label": "Background",
+				"longdesc": "The background input",
+				"name": "b",
+				"shortdesc": "Background",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(1.0, $uv.y, 1.0, 1.0)",
+				"label": "Layer#",
+				"longdesc": "A layer input",
+				"name": "l#",
+				"shortdesc": "Layer#",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"label": "Opacity#",
+				"longdesc": "An optional opacity mask",
+				"name": "a#",
+				"shortdesc": "Mask#",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Blends its input, using an optional mask",
+		"name": "Blend",
+		"outputs": [
+			{
+				"longdesc": "Shows the result of the blend operation",
+				"rgba": "$(name_uv)_b",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0,
+				"label": "2:",
+				"longdesc": "The algorithm used to blend the inputs",
+				"name": "blend_type#",
+				"shortdesc": "Blend mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Normal",
+						"value": "normal"
+					},
+					{
+						"name": "Dissolve",
+						"value": "dissolve"
+					},
+					{
+						"name": "Multiply",
+						"value": "multiply"
+					},
+					{
+						"name": "Screen",
+						"value": "screen"
+					},
+					{
+						"name": "Overlay",
+						"value": "overlay"
+					},
+					{
+						"name": "Hard Light",
+						"value": "hard_light"
+					},
+					{
+						"name": "Soft Light",
+						"value": "soft_light"
+					},
+					{
+						"name": "Burn",
+						"value": "burn"
+					},
+					{
+						"name": "Dodge",
+						"value": "dodge"
+					},
+					{
+						"name": "Lighten",
+						"value": "lighten"
+					},
+					{
+						"name": "Darken",
+						"value": "darken"
+					},
+					{
+						"name": "Difference",
+						"value": "difference"
+					},
+					{
+						"name": "Additive",
+						"value": "additive"
+					},
+					{
+						"name": "AddSub",
+						"value": "addsub"
+					},
+					{
+						"name": "Linear Light",
+						"value": "linear_light"
+					},
+					{
+						"name": "Vivid Light",
+						"value": "vivid_light"
+					},
+					{
+						"name": "Pin Light",
+						"value": "pin_light"
+					},
+					{
+						"name": "Hard Mix",
+						"value": "hard_mix"
+					},
+					{
+						"name": "Exclusion",
+						"value": "exclusion"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "3:",
+				"longdesc": "The opacity of the blend operation",
+				"max": 1,
+				"min": 0,
+				"name": "amount#",
+				"shortdesc": "Opacity",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Blend"
+	},
+	"type": "shader"
+}

@@ -1,12 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "voronoi_3",
-			"from_port": 0,
-			"to": "buffer_5",
-			"to_port": 0
-		},
-		{
 			"from": "buffer_7",
 			"from_port": 0,
 			"to": "gen_outputs",
@@ -27,11 +21,17 @@
 		{
 			"from": "buffer_5",
 			"from_port": 0,
-			"to": "denoiser",
+			"to": "voronoi_2",
 			"to_port": 0
 		},
 		{
-			"from": "denoiser",
+			"from": "voronoi_3",
+			"from_port": 0,
+			"to": "buffer_5",
+			"to_port": 0
+		},
+		{
+			"from": "voronoi_2",
 			"from_port": 0,
 			"to": "buffer_7",
 			"to_port": 0
@@ -48,8 +48,8 @@
 		{
 			"name": "voronoi_3",
 			"node_position": {
-				"x": -600.80072,
-				"y": -894.601807
+				"x": -600.800720214844,
+				"y": -894.601806640625
 			},
 			"parameters": {
 				"angleBiasDeg": 15,
@@ -59,7 +59,6 @@
 				"radius": 0.1
 			},
 			"seed": 49449,
-			"seed_locked": false,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -72,7 +71,82 @@
 						"type": "f"
 					}
 				],
-				"instance": "//inspired by:\n//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf\n//https://gist.github.com/dotModded/981206ae1f4e760b7348\n//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl\n//radius - radius of influence in screen space\n//angleBiasDeg - ~minimum angle for AO\n//intensity - increase strength of caclulated AO\n//noiseScale - for randomization values\nfloat $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {\n  int samplig_directions = 8;\n  int steps = int($quality);\n\n  float angleBias = 0.0174532925 * angleBiasDeg;\n\n  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);\n  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177\n  vec3 c_normal = normalize(cross(dFdx(c_point), dFdy(c_point)));\n\n\n  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));\n  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));\n  \n  // it should be faster than standard rotation in each iteartion\n  mat2 deltaRotationMatrix = mat2(\n    vec2(cosMaxRot, -sinMaxROt),\n    vec2(sinMaxROt, cosMaxRot)\n  );\n  \n  // calculate starting offset, as the smallest step\n  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));\n\n  //randomize angle\n  vec3 sampleNoise    = rand3(uv * noiseScale);\n  sampleNoise.xy      = sampleNoise.xy * 2.0 - vec2(1.0);\n  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), \n                             vec2(sampleNoise.y,  sampleNoise.x));\n  \n  // apply a random rotation to the base step vector\n  offset_uv = rotationMatrix * offset_uv;\n  \n  float jitter = sampleNoise.z;\n  float occlusion = 0.0;\n  \n  for (int i = 0; i < samplig_directions; ++i) {\n    // incrementally rotate sample direction\n    offset_uv = deltaRotationMatrix * offset_uv;\n    float oldAngle   = angleBias;\n    for (int j = 0; j < steps; ++j) {\n      //add jitter & distance to offset UV\n      vec2 sample_uv     = uv + (jitter + float(j)) * offset_uv;\n      vec3 s_point     = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);\n      vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok\n      // 90 deg - (angle between normal from current point &  sampled tangent)\n      //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors\n      float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));\n      \n      if (gamma > oldAngle) {\n        float value = sin(gamma) - sin(oldAngle);\n        float attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);\n        occlusion += attenuation * value;\n\t\t//occlusion += value;\n        oldAngle = gamma;\n      }\n    }\n  }\n  \n  occlusion = 1.0 - occlusion / float(samplig_directions);\n  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);\n}",
+				"instance": [
+					"//inspired by:",
+					"//http://developer.download.nvidia.com/presentations/2008/SIGGRAPH/HBAO_SIG08b.pdf",
+					"//https://gist.github.com/dotModded/981206ae1f4e760b7348",
+					"//https://github.com/scanberg/hbao/blob/master/resources/shaders/hbao_full_frag.glsl",
+					"//radius - radius of influence in screen space",
+					"//angleBiasDeg - ~minimum angle for AO",
+					"//intensity - increase strength of caclulated AO",
+					"//noiseScale - for randomization values",
+					"float $(name)_hbao(vec2 uv, float radius, float angleBiasDeg, float intensity, vec2 noiseScale) {",
+					"  int samplig_directions = 8;",
+					"  int steps = int($quality);",
+					"",
+					"  float angleBias = 0.0174532925 * angleBiasDeg;",
+					"  vec2 epsilon = vec2(0.001, 0.0);",
+					"",
+					"  vec3 c_point = vec3(uv*2.0 - 1.0, $in(uv)*$depth_scale);",
+					"  vec2 uvpdx = uv+epsilon;",
+					"  vec2 uvpdy = uv+epsilon.yx;",
+					"  vec3 c_point_pdx = vec3(uvpdx*2.0 - 1.0, $in(uvpdx)*$depth_scale);",
+					"  vec3 c_point_pdy = vec3(uvpdy*2.0 - 1.0, $in(uvpdy)*$depth_scale);",
+					"  //fun with dfdx & dfdy - https://community.khronos.org/t/getting-the-normal-with-dfdx-and-dfdy/70177",
+					"  vec3 c_normal = normalize(cross(c_point_pdx-c_point, c_point_pdy-c_point));",
+					"",
+					"",
+					"  float cosMaxRot = cos(6.28318530718 / float(samplig_directions));",
+					"  float sinMaxROt = sin(6.28318530718 / float(samplig_directions));",
+					"  ",
+					"  // it should be faster than standard rotation in each iteartion",
+					"  mat2 deltaRotationMatrix = mat2(",
+					"\tvec2(cosMaxRot, -sinMaxROt),",
+					"\tvec2(sinMaxROt, cosMaxRot)",
+					"  );",
+					"  ",
+					"  // calculate starting offset, as the smallest step",
+					"  vec2 offset_uv = vec2(1.0, 0.0) * (radius /float(steps));",
+					"",
+					"  //randomize angle",
+					"  vec3 sampleNoise\t= rand3(uv * noiseScale);",
+					"  sampleNoise.xy\t  = sampleNoise.xy * 2.0 - vec2(1.0);",
+					"  mat2 rotationMatrix = mat2(vec2(sampleNoise.x, -sampleNoise.y), ",
+					"\t\t\t\t\t\t\t vec2(sampleNoise.y,  sampleNoise.x));",
+					"  ",
+					"  // apply a random rotation to the base step vector",
+					"  offset_uv = rotationMatrix * offset_uv;",
+					"  ",
+					"  float jitter = sampleNoise.z;",
+					"  float occlusion = 0.0;",
+					"  ",
+					"  for (int i = 0; i < samplig_directions; ++i) {",
+					"\t// incrementally rotate sample direction",
+					"\toffset_uv = deltaRotationMatrix * offset_uv;",
+					"\tfloat oldAngle   = angleBias;",
+					"\tfor (int j = 0; j < steps; ++j) {",
+					"\t  //add jitter & distance to offset UV",
+					"\t  vec2 sample_uv\t = uv + (jitter + float(j)) * offset_uv;",
+					"\t  vec3 s_point\t = vec3(sample_uv*2.0 - 1.0, $in(sample_uv)*$depth_scale);",
+					"\t  vec3 sample_tan  = (s_point - c_point); //not sure if correct, but looks ok",
+					"\t  // 90 deg - (angle between normal from current point &  sampled tangent)",
+					"\t  //https://math.stackexchange.com/questions/654315/how-to-convert-a-dot-product-of-two-vectors-to-the-angle-between-the-vectors",
+					"\t  float gamma = 1.57079632679 - acos(dot(c_normal, normalize(sample_tan)));",
+					"\t  ",
+					"\t  if (gamma > oldAngle) {",
+					"\t\tfloat value = sin(gamma) - sin(oldAngle);",
+					"\t\tfloat attenuation = clamp(1.0 - pow(length(sample_tan.xy)/radius, 2.0), 0.0, 1.0);",
+					"\t\tocclusion += attenuation * value;",
+					"\t\t//occlusion += value;",
+					"\t\toldAngle = gamma;",
+					"\t  }",
+					"\t}",
+					"  }",
+					"  ",
+					"  occlusion = 1.0 - occlusion / float(samplig_directions);",
+					"  return clamp(pow(occlusion, 1.0 + intensity), 0.0, 1.0);",
+					"}"
+				],
 				"longdesc": "A node that generates several images from a tileable voronoi noise",
 				"name": "HBAO",
 				"outputs": [
@@ -152,8 +226,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1338.030762,
-				"y": -788.080872
+				"x": -1338.03076171875,
+				"y": -788.080871582031
 			},
 			"parameters": {
 
@@ -168,14 +242,13 @@
 				}
 			],
 			"seed": 43798,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -902.684204,
-				"y": -327.282288
+				"x": -902.684204101563,
+				"y": -327.282287597656
 			},
 			"parameters": {
 
@@ -190,14 +263,13 @@
 				}
 			],
 			"seed": 42623,
-			"seed_locked": false,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -1488.979004,
-				"y": -561.71167
+				"x": -1488.97900390625,
+				"y": -561.711669921875
 			},
 			"parameters": {
 				"param0": 10,
@@ -208,12 +280,15 @@
 				"param5": 1
 			},
 			"seed": 58911,
-			"seed_locked": false,
 			"type": "remote",
 			"widgets": [
 				{
 					"label": "Size",
 					"linked_widgets": [
+						{
+							"node": "voronoi_2",
+							"widget": "size"
+						},
 						{
 							"node": "buffer_2",
 							"widget": "size"
@@ -299,62 +374,183 @@
 			]
 		},
 		{
+			"name": "voronoi_2",
+			"node_position": {
+				"x": -718.111145019531,
+				"y": -642.459533691406
+			},
+			"parameters": {
+				"ksigma": 4,
+				"sigma": 3,
+				"size": 10,
+				"threshold": 0.7
+			},
+			"seed": 38722,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					}
+				],
+				"instance": [
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//  Copyright (c) 2018-2019 Michele Morrone",
+					"//  All rights reserved.",
+					"//",
+					"//  https://michelemorrone.eu - https://BrutPitt.com",
+					"//",
+					"//  me@michelemorrone.eu - brutpitt@gmail.com",
+					"//  twitter: @BrutPitt - github: BrutPitt",
+					"//  ",
+					"//  https://github.com/BrutPitt/glslSmartDeNoise/",
+					"//",
+					"//  This software is distributed under the terms of the BSD 2-Clause license",
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//  smartDeNoise - parameters",
+					"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+					"//",
+					"//  sampler2D tex\t - sampler image / texture",
+					"//  vec2 uv\t\t   - actual fragment coord",
+					"//  float sigma  >  0 - sigma Standard Deviation",
+					"//  float kSigma >= 0 - sigma coefficient ",
+					"//\t  kSigma * sigma  -->  radius of the circular kernel",
+					"//  float threshold   - edge sharpening threshold ",
+					"vec4 $(name)_smartDeNoise(vec2 uv, float sigma, float kSigma, float threshold)",
+					"{",
+					"\tfloat INV_SQRT_OF_2PI = 0.39894228040143267793994605993439; // 1.0/SQRT_OF_2PI",
+					"\tfloat INV_PI = 0.31830988618379067153776752674503;",
+					"\tfloat radius = round(kSigma*sigma);",
+					"\tfloat radQ = radius * radius;",
+					"",
+					"\tfloat invSigmaQx2 = .5 / (sigma * sigma);\t  // 1.0 / (sigma^2 * 2.0)",
+					"\tfloat invSigmaQx2PI = INV_PI * invSigmaQx2;\t// 1/(2 * PI * sigma^2)",
+					"",
+					"\tfloat invThresholdSqx2 = .5 / (threshold * threshold);\t // 1.0 / (sigma^2 * 2.0)",
+					"\tfloat invThresholdSqrt2PI = INV_SQRT_OF_2PI / threshold;   // 1.0 / (sqrt(2*PI) * sigma^2)",
+					"",
+					"\tvec4 centrPx = $in(uv); ",
+					"",
+					"\tfloat zBuff = 0.0;",
+					"\tvec4 aBuff = vec4(0.0);",
+					"\tvec2 size = vec2($size, $size);",
+					"",
+					"\tvec2 d;",
+					"\tfor (d.x=-radius; d.x <= radius; d.x++) {",
+					"\t\tfloat pt = sqrt(radQ-d.x*d.x);\t   // pt = yRadius: have circular trend",
+					"\t\tfor (d.y=-pt; d.y <= pt; d.y++) {",
+					"\t\t\tfloat blurFactor = exp( -dot(d , d) * invSigmaQx2 ) * invSigmaQx2PI;",
+					"",
+					"\t\t\tvec4 walkPx =  $in(uv+d/size);",
+					"\t\t\tvec4 dC = walkPx-centrPx;",
+					"\t\t\tfloat deltaFactor = exp( -dot(dC, dC) * invThresholdSqx2) * invThresholdSqrt2PI * blurFactor;",
+					"",
+					"\t\t\tzBuff += deltaFactor;",
+					"\t\t\taBuff += deltaFactor*walkPx;",
+					"\t\t}",
+					"\t}",
+					"\treturn aBuff/zBuff;",
+					"}"
+				],
+				"longdesc": "A node that generates several images from a tileable voronoi noise",
+				"name": "Denoiser",
+				"outputs": [
+					{
+						"longdesc": "A color pattern that assigns a random color to each cell",
+						"rgba": "$(name)_smartDeNoise($uv, $sigma, $ksigma, $threshold)",
+						"shortdesc": "Random color",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10,
+						"first": 0,
+						"label": "size",
+						"last": 12,
+						"longdesc": "The scale along the X axis",
+						"name": "size",
+						"shortdesc": "Scale.x",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sigma",
+						"max": 1,
+						"min": 0.005,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "kSigma",
+						"max": 1,
+						"min": 0,
+						"name": "ksigma",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "threshold",
+						"max": 1,
+						"min": 0,
+						"name": "threshold",
+						"step": 0.1,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Voronoi Noise"
+			},
+			"type": "shader"
+		},
+		{
 			"name": "buffer_5",
 			"node_position": {
-				"x": -931.449646,
-				"y": -724.330017
+				"x": -931.449645996094,
+				"y": -724.330017089844
 			},
 			"parameters": {
 				"size": 10
 			},
 			"seed": 6771,
-			"seed_locked": false,
 			"type": "buffer",
 			"version": 1
 		},
 		{
 			"name": "buffer_7",
 			"node_position": {
-				"x": -948.36377,
-				"y": -449.796295
+				"x": -948.36376953125,
+				"y": -449.796295166016
 			},
 			"parameters": {
 				"size": 10
 			},
 			"seed": 16139,
-			"seed_locked": false,
 			"type": "buffer",
 			"version": 1
 		},
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -976.009644,
+				"x": -976.009643554688,
 				"y": -975.5
 			},
 			"parameters": {
 				"size": 10
 			},
 			"seed": 42465,
-			"seed_locked": false,
 			"type": "buffer",
 			"version": 1
-		},
-		{
-			"name": "denoiser",
-			"node_position": {
-				"x": -711,
-				"y": -632
-			},
-			"parameters": {
-				"param0": 10,
-				"param1": 3,
-				"param2": 4,
-				"param3": 0.7
-			},
-			"seed": 0,
-			"seed_locked": false,
-			"type": "denoiser"
 		}
 	],
 	"parameters": {
@@ -366,7 +562,6 @@
 		"param5": 1
 	},
 	"seed": 6741,
-	"seed_locked": false,
 	"shortdesc": "",
 	"type": "graph"
 }

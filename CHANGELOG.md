@@ -1,18 +1,106 @@
+# Material Maker 1.3
+
+# General
+
+- Updated interface to the website to login and upload assets without the need
+  of a web browser
+- Added custom nodes sharing on the website (connect to the website and right
+  click a custom node to share it)
+- Added support for the $rndi (that returns a random integer value) parameter
+  expression function (contributed by Arnklit)
+- Added an option in the 2D Preview panel to export non square textures
+
+## Nodes
+
+- Added a Random Weave node (contributed by Arnklit)
+- Added variations controls to all SDF repeat (2D and 3D, grid and circle)
+  nodes (contributed by Arnklit)
+- Updated the Normal Blend node to make it variadic (contributed by Arnklit)
+- Added Cairo tiles node
+- Added a Spherize node (contributed by williamchange)
+
+# Bug Fixes
+
+- Fixed an update problem in the Iterate Buffer node
+- Fixed a NaN problem in the sdArc node (contributed by myaaaaaaaaa)
+- Fixed a problem where the recovery file was not deleted when closing a tab
+- Fixed an export problem in the Painting tool
+- Fixed a problem with the Fill nodes where areas could leak though corners
+
+# Miscellaneous
+
+- Material Maker is now based on Godot 3.5.2
+
+# Material Maker 1.2p1
+
+# New features
+
+- Added Unreal Engine 5 export targets that generate a Python script for UE5 to
+  build automatically the generated material (it's necessary to setup a path for
+  Python in UE, this is described in the documentation)
+
+# Bug Fixes
+
+- Fixed several small problems in the Export Editor window
+- Fixed a problem that caused the 3D preview to update incorrectly
+- Fixed a problem in the Tones Map node that could cause incorrect shader code generation
+- Fixed a problem in the animation export tool that occurred when exporting graphs with buffers
+- Fixed Histogram panel (not updating correctly) and improved histogram rendering
+- Updated the Math nodes to improve parameters consistency (contributed by williamchange)
+- Fixed a bug that caused Material Maker to crash when entering an expression as parameter in the Text node
+
 # Material Maker 1.2
 
 ## General
 
-- Added a dependency manager to avoid useless renders
+- Added a dependency manager that handles all parameter changes, buffers and previews to
+  avoid useless renders (myaaaaaaaaa helped hunting and fixing memory leaks on this).
+- Material export has been updated:
+  - custom export targets can now be added to predefined **Material** nodes,
+  - a new **Export again** menu item has been added to repeat the last export operation.
+- Unsaved projects are now rescued when Material Maker crashes and automatically reopened
+  at startup.
 
 ## Nodes
 
+- Shader nodes can now be variadic, i.e. have a number of parameters, inputs and outputs that
+  are repeated. A new icon in the node titlebar shows the variadic aspect and can be used to
+  increase or decrease the number of occurences of those parameters and ports.
+  A few nodes have been updated accordingly, so **Blend** now supports several layers,
+  **Transform** can apply to several channels and workflow nodes can mix more raw materials.
+- A new **Normal to Height** node has been added.
+- Parameters have been added to the **Image** node to keep the image's aspect ratio (contributed
+  by myaaaaaaaaa).
+- New colorspace related nodes have been added, such as **Colorspace Roundtrip** that
+  make it possible to perform computations in other colorspaces (contributed
+  by myaaaaaaaaa).
+- The **Fast Blur** node now has high pass and sharpened outputs (contributed
+  by myaaaaaaaaa).
+- A snap operation has been added to **Math** nodes (contributed by williamchange).
+- The **Blend** node now has additional modes: Linear Light, Vivid Light, Pin Light, Hard Mix
+  and Exclusion (contributed by paddy-exe).
+- The interpolation code has been improved in the 3D FBM node (contributed by Arnklit).
+- The random color output of the **Triangle Voronoi** node, that did not always tile, depending
+  on the scale parameters, has been fixed (contributed by williamchange).
+- The **Dilate** node can now create (optionally) a non-tileable result.
+
 ## Miscellaneous
 
-- Added an experimental HTML5 version
+- An [experimental HTML5](https://www.materialmaker.org/public/mm_web/) version has been added.
+  Although it has a lot of limitations, it is a good way of trying Material Maker without
+  installing it.
+- Self-connections of subgraphs are now allowed if they don't form a loop, and loop
+  detection has been optimized (contributed by myaaaaaaaaa).
+- The .mmg format (used for predefined nodes) has been modified to be more Version Control
+  System friendly (contributed by myaaaaaaaaa).
 
 ## Fixes, optimizations
 
-- Fixed alignment of inputs in the Uneven Bricks 2 node (contributed by Arnklit)
+- Files are now removed from the recent projects list when they fail to load (contributed by Arnklit).
+- The **Comment** node now selects correctly its children, regardless of the current zoom level (contributed
+  by Zhibade).
+- The alignment of inputs in the Uneven Bricks 2 node has been fixed (contributed by Arnklit).
+- Command line exporting has been fixed (contributed by myaaaaaaaaa).
 
 # Material Maker 1.1
 

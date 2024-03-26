@@ -1,281 +1,195 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=9 format=3 uid="uid://cbpg2wtvf7fc1"]
 
-[ext_resource path="res://material_maker/windows/node_editor/node_editor.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/windows/node_editor/node_editor_item_list.gd" type="Script" id=2]
-[ext_resource path="res://material_maker/icons/icons.tres" type="Texture" id=3]
-[ext_resource path="res://material_maker/widgets/desc_button/desc_button.tscn" type="PackedScene" id=4]
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor.gd" id="1"]
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor_item_list.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="5_l5uxq"]
 
-[sub_resource type="AtlasTexture" id=1]
-flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 48, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("3")
+region = Rect2(48, 0, 16, 16)
 
-[sub_resource type="DynamicFontData" id=2]
-font_path = "res://material_maker/fonts/hack.ttf"
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_g2tsy"]
+number_color = Color(0.341176, 0.352941, 1, 1)
+symbol_color = Color(0.768627, 0.776471, 0, 1)
+function_color = Color(0.792157, 0, 0.796078, 1)
+member_variable_color = Color(0, 0.639216, 0.635294, 1)
 
-[sub_resource type="DynamicFont" id=3]
-size = 12
-font_data = SubResource( 2 )
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_062tj"]
+number_color = Color(0.341176, 0.352941, 1, 1)
+symbol_color = Color(0.768627, 0.776471, 0, 1)
+function_color = Color(0.792157, 0, 0.796078, 1)
+member_variable_color = Color(0, 0.639216, 0.635294, 1)
 
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0, 0, 0, 0.768627 )
-
-[node name="NodeEditor" type="WindowDialog"]
-margin_right = 950.0
-margin_bottom = 450.0
-rect_min_size = Vector2( 950, 450 )
-popup_exclusive = true
-window_title = "Node Editor"
-resizable = true
-script = ExtResource( 1 )
+[node name="NodeEditor" type="Window"]
+title = "Node Editor"
+initial_position = 2
+size = Vector2i(950, 450)
+exclusive = true
+script = ExtResource("1")
 
 [node name="Sizer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Tabs" type="TabContainer" parent="Sizer"]
-margin_right = 950.0
-margin_bottom = 426.0
+[node name="TabBar" type="TabContainer" parent="Sizer"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tab_align = 0
 
-[node name="General" type="VBoxContainer" parent="Sizer/Tabs"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+[node name="General" type="VBoxContainer" parent="Sizer/TabBar"]
+layout_mode = 2
 
-[node name="Name" type="HBoxContainer" parent="Sizer/Tabs/General"]
-margin_right = 942.0
-margin_bottom = 24.0
+[node name="Name" type="HBoxContainer" parent="Sizer/TabBar/General"]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LabelName" type="Label" parent="Sizer/Tabs/General/Name"]
-margin_top = 5.0
-margin_right = 42.0
-margin_bottom = 19.0
+[node name="LabelName" type="Label" parent="Sizer/TabBar/General/Name"]
+layout_mode = 2
 text = "Name:"
 
-[node name="Name" type="LineEdit" parent="Sizer/Tabs/General/Name"]
-margin_left = 46.0
-margin_right = 246.0
-margin_bottom = 24.0
-rect_min_size = Vector2( 200, 0 )
+[node name="Name" type="LineEdit" parent="Sizer/TabBar/General/Name"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 
-[node name="Description" parent="Sizer/Tabs/General/Name" instance=ExtResource( 4 )]
-margin_left = 250.0
-margin_right = 278.0
-margin_bottom = 24.0
+[node name="Description" parent="Sizer/TabBar/General/Name" instance=ExtResource("4")]
+layout_mode = 2
 description_type = "Node"
 
-[node name="LabelParameters" type="Label" parent="Sizer/Tabs/General"]
-margin_top = 28.0
-margin_right = 942.0
-margin_bottom = 42.0
+[node name="LabelParameters" type="Label" parent="Sizer/TabBar/General"]
+layout_mode = 2
 text = "Parameters:"
 
-[node name="Parameters" type="ScrollContainer" parent="Sizer/Tabs/General"]
-margin_top = 46.0
-margin_right = 942.0
-margin_bottom = 207.0
+[node name="Parameters" type="ScrollContainer" parent="Sizer/TabBar/General"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
-[node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/General/Parameters"]
-margin_right = 942.0
-margin_bottom = 22.0
+[node name="Sizer" type="VBoxContainer" parent="Sizer/TabBar/General/Parameters"]
+layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="AddParameter" type="Button" parent="Sizer/Tabs/General/Parameters/Sizer"]
-margin_right = 28.0
-margin_bottom = 22.0
+[node name="AddParameter" type="Button" parent="Sizer/TabBar/General/Parameters/Sizer"]
+layout_mode = 2
 size_flags_horizontal = 0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
 
-[node name="LabelInputs" type="Label" parent="Sizer/Tabs/General"]
-margin_top = 211.0
-margin_right = 942.0
-margin_bottom = 225.0
+[node name="LabelInputs" type="Label" parent="Sizer/TabBar/General"]
+layout_mode = 2
 text = "Inputs:"
 
-[node name="Inputs" type="ScrollContainer" parent="Sizer/Tabs/General"]
-margin_top = 229.0
-margin_right = 942.0
-margin_bottom = 390.0
+[node name="Inputs" type="ScrollContainer" parent="Sizer/TabBar/General"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
-[node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/General/Inputs"]
-margin_right = 942.0
-margin_bottom = 22.0
+[node name="Sizer" type="VBoxContainer" parent="Sizer/TabBar/General/Inputs"]
+layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="AddInput" type="Button" parent="Sizer/Tabs/General/Inputs/Sizer"]
-margin_right = 28.0
-margin_bottom = 22.0
+[node name="AddInput" type="Button" parent="Sizer/TabBar/General/Inputs/Sizer"]
+layout_mode = 2
 size_flags_horizontal = 0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
 
-[node name="Outputs" type="VBoxContainer" parent="Sizer/Tabs"]
+[node name="Outputs" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+layout_mode = 2
 
-[node name="LabelOutputs" type="Label" parent="Sizer/Tabs/Outputs"]
-margin_right = 825.0
-margin_bottom = 14.0
+[node name="LabelOutputs" type="Label" parent="Sizer/TabBar/Outputs"]
+layout_mode = 2
 text = "Outputs:"
 
-[node name="Outputs" type="ScrollContainer" parent="Sizer/Tabs/Outputs"]
-margin_top = 18.0
-margin_right = 825.0
-margin_bottom = 338.0
+[node name="Outputs" type="ScrollContainer" parent="Sizer/TabBar/Outputs"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
-[node name="Sizer" type="VBoxContainer" parent="Sizer/Tabs/Outputs/Outputs"]
-margin_right = 825.0
-margin_bottom = 22.0
+[node name="Sizer" type="VBoxContainer" parent="Sizer/TabBar/Outputs/Outputs"]
+layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="AddOutput" type="Button" parent="Sizer/Tabs/Outputs/Outputs/Sizer"]
-margin_right = 28.0
-margin_bottom = 22.0
+[node name="AddOutput" type="Button" parent="Sizer/TabBar/Outputs/Outputs/Sizer"]
+layout_mode = 2
 size_flags_horizontal = 0
-icon = SubResource( 1 )
+icon = SubResource("1")
 flat = true
 
-[node name="Main Code" type="TextEdit" parent="Sizer/Tabs"]
+[node name="Main Code" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-mouse_default_cursor_shape = 0
-custom_fonts/font = SubResource( 3 )
-syntax_highlighting = true
-show_line_numbers = true
+layout_mode = 2
 
-[node name="Instance Functions" type="TextEdit" parent="Sizer/Tabs"]
+[node name="Instance Functions" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-mouse_default_cursor_shape = 0
-custom_fonts/font = SubResource( 3 )
-syntax_highlighting = true
-show_line_numbers = true
+layout_mode = 2
+syntax_highlighter = SubResource("CodeHighlighter_g2tsy")
 
-[node name="Global Functions" type="VBoxContainer" parent="Sizer/Tabs"]
+[node name="Global Functions" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+layout_mode = 2
 
-[node name="Includes" type="HBoxContainer" parent="Sizer/Tabs/Global Functions"]
-margin_right = 942.0
-margin_bottom = 24.0
+[node name="Includes" type="HBoxContainer" parent="Sizer/TabBar/Global Functions"]
+layout_mode = 2
 
-[node name="LabelIncludes" type="Label" parent="Sizer/Tabs/Global Functions/Includes"]
-margin_top = 5.0
-margin_right = 59.0
-margin_bottom = 19.0
+[node name="LabelIncludes" type="Label" parent="Sizer/TabBar/Global Functions/Includes"]
+layout_mode = 2
 text = "Includes:"
 
-[node name="Includes" type="LineEdit" parent="Sizer/Tabs/Global Functions/Includes"]
-margin_left = 63.0
-margin_right = 942.0
-margin_bottom = 24.0
+[node name="Includes" type="LineEdit" parent="Sizer/TabBar/Global Functions/Includes"]
+layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Functions" type="TextEdit" parent="Sizer/Tabs/Global Functions"]
-margin_top = 28.0
-margin_right = 942.0
-margin_bottom = 390.0
-mouse_default_cursor_shape = 0
+[node name="Functions" parent="Sizer/TabBar/Global Functions" instance=ExtResource("5_l5uxq")]
+layout_mode = 2
 size_flags_vertical = 3
-custom_colors/safe_line_number_color = Color( 1, 0, 0, 1 )
-custom_colors/brace_mismatch_color = Color( 1, 0, 0, 1 )
-custom_colors/executing_line_color = Color( 1, 0, 0, 1 )
-custom_fonts/font = SubResource( 3 )
-syntax_highlighting = true
-show_line_numbers = true
-minimap_draw = true
+syntax_highlighter = SubResource("CodeHighlighter_062tj")
 
-[node name="ErrorLabel" type="Label" parent="Sizer/Tabs/Global Functions/Functions"]
+[node name="ErrorLabel" type="Label" parent="Sizer/TabBar/Global Functions/Functions"]
 visible = false
+layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 2.0
-margin_top = -17.0
-margin_right = -2.0
-margin_bottom = -7.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_styles/normal = SubResource( 4 )
+offset_left = 2.0
+offset_top = -17.0
+offset_right = -2.0
+offset_bottom = 6.0
 clip_text = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Sizer"]
-margin_left = 366.0
-margin_top = 430.0
-margin_right = 584.0
-margin_bottom = 450.0
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Apply" type="Button" parent="Sizer/HBoxContainer"]
-margin_right = 70.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Apply"
 
 [node name="OK" type="Button" parent="Sizer/HBoxContainer"]
-margin_left = 74.0
-margin_right = 144.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "OK"
 
 [node name="Cancel" type="Button" parent="Sizer/HBoxContainer"]
-margin_left = 148.0
-margin_right = 218.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 70, 0 )
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
 text = "Cancel"
 
-[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="Sizer" to="." method="_on_Sizer_minimum_size_changed"]
-[connection signal="pressed" from="Sizer/Tabs/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
-[connection signal="pressed" from="Sizer/Tabs/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
-[connection signal="pressed" from="Sizer/Tabs/Outputs/Outputs/Sizer/AddOutput" to="." method="_on_AddOutput_pressed"]
-[connection signal="text_changed" from="Sizer/Tabs/Global Functions/Functions" to="." method="_on_Functions_text_changed"]
+[connection signal="pressed" from="Sizer/TabBar/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
+[connection signal="pressed" from="Sizer/TabBar/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
+[connection signal="pressed" from="Sizer/TabBar/Outputs/Outputs/Sizer/AddOutput" to="." method="_on_AddOutput_pressed"]
+[connection signal="text_changed" from="Sizer/TabBar/Global Functions/Functions" to="." method="_on_Functions_text_changed"]
 [connection signal="pressed" from="Sizer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="Sizer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="Sizer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

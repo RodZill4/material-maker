@@ -12,12 +12,13 @@ class Preview:
 
 
 # warning-ignore:unused_class_variable
-export(String, MULTILINE) var shader_context_defs : String = ""
+@export var shader_context_defs : String = "" # (String, MULTILINE)
 
 var node_factory = null
 
-var save_path = null setget set_save_path
+var save_path = null: set = set_save_path
 var need_save : bool = false
+var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
 
 var top_generator = null
@@ -27,13 +28,13 @@ const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
-onready var node_popup = get_node("/root/MainWindow/AddNodePopup")
-onready var timer : Timer = $Timer
+@onready var node_popup : Popup = get_node("/root/MainWindow/AddNodePopup")
+@onready var timer : Timer = $Timer
 
-onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
-onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
+@onready var subgraph_ui : HBoxContainer = $GraphUI/SubGraphUI
+@onready var button_transmits_seed : Button = $GraphUI/SubGraphUI/ButtonTransmitsSeed
 
-onready var undoredo = $UndoRedo
+@onready var undoredo = $UndoRedo
 var undoredo_move_node_selection_changed : bool = true
 
 signal save_path_changed
@@ -51,16 +52,17 @@ func _ready() -> void:
 
 func _exit_tree():
 	save_config()
+	remove_crash_recovery_file()
 
 func load_config():
 	if mm_globals.has_config("graphedit_use_snap"):
-		use_snap = mm_globals.get_config("graphedit_use_snap")
+		snapping_enabled = mm_globals.get_config("graphedit_use_snap")
 	if mm_globals.has_config("graphedit_snap_distance"):
-		snap_distance = mm_globals.get_config("graphedit_snap_distance")
+		snapping_distance = mm_globals.get_config("graphedit_snap_distance")
 
 func save_config():
-	mm_globals.set_config("graphedit_use_snap", use_snap)
-	mm_globals.set_config("graphedit_snap_distance", snap_distance)
+	mm_globals.set_config("graphedit_use_snap", snapping_enabled)
+	mm_globals.set_config("graphedit_snap_distance", snapping_distance)
 
 func _on_GraphEdit_visibility_changed():
 	if is_visible_in_tree():
@@ -78,8 +80,9 @@ func do_zoom(factor : float):
 	accept_event()
 	var old_zoom : float = zoom
 	zoom *= factor
-	var position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
-	call_deferred("set_scroll_ofs", scroll_offset+((zoom/old_zoom)-1.0)*old_zoom*position)
+	var global_mouse_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
+	await get_tree().process_frame
+	scroll_offset += (zoom/old_zoom-1.0)*old_zoom*global_mouse_position
 
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
@@ -89,7 +92,8 @@ func get_nodes_under_mouse() -> Array:
 	for c in get_children():
 		if c is GraphNode:
 			var rect : Rect2 = c.get_global_rect()
-			rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+			var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+			rect = Rect2(rect.position, rect.size*transform_scale)
 			if rect.has_point(get_global_mouse_position()):
 				array.push_back(c)
 	return array
@@ -97,34 +101,37 @@ func get_nodes_under_mouse() -> Array:
 func process_port_click(pressed : bool):
 	for c in get_nodes_under_mouse():
 		var rect : Rect2 = c.get_global_rect()
-		var pos = get_global_mouse_position()-rect.position
-		rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
-		var output_count : int = c.get_connection_output_count()
+		var pos : Vector2 = get_global_mouse_position()-rect.position
+		var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+		rect = Rect2(rect.position, rect.size*transform_scale)
+		var output_count : int = c.get_output_port_count()
 		if output_count > 0:
-			var scale = c.get_global_transform().get_scale()
-			var output_1 : Vector2 = c.get_connection_output_position(0)-5*scale
-			var output_2 : Vector2 = c.get_connection_output_position(output_count-1)+5*scale
+			var output_1 : Vector2 = c.get_output_port_position(0)-5*transform_scale
+			var output_2 : Vector2 = c.get_output_port_position(output_count-1)+5*transform_scale
 			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 			if in_output:
 				for i in range(output_count):
-					if (c.get_connection_output_position(i)-pos).length() < 5*scale.x:
+					if (c.get_output_port_position(i)-pos).length() < 5*transform_scale.x:
 						if pressed:
 							port_click_node = c
 							port_click_port_index = i
 						elif port_click_node == c and port_click_port_index == i:
-							set_current_preview(1 if Input.is_key_pressed(KEY_SHIFT) else 0, port_click_node, port_click_port_index, Input.is_key_pressed(KEY_CONTROL))
+							var is_shift_pressed : bool = Input.is_key_pressed(KEY_SHIFT)
+							var is_control_pressed : bool = Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META)
+							set_current_preview(1 if is_shift_pressed else 0, port_click_node, port_click_port_index, is_control_pressed)
 							port_click_port_index = -1
 						return
 
 func _gui_input(event) -> void:
 	if (
 		event.is_action_pressed("ui_library_popup")
-		and not Input.is_key_pressed(KEY_CONTROL)
+		and not Input.is_key_pressed(KEY_CTRL)
 		and get_global_rect().has_point(get_global_mouse_position())
 	):
 		# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 		# with the Ctrl + Space shortcut.
-		node_popup.rect_global_position = get_global_mouse_position()
+		accept_event()
+		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
@@ -134,114 +141,132 @@ func _gui_input(event) -> void:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
 		# reverted to default GraphEdit behavior
-		if false and event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+		if false and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
 			if event.control:
 				event.control = false
-			elif !event.shift:
+			elif !event.shift_pressed:
 				event.control = true
 				do_zoom(1.1)
-		elif false and event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+		elif false and event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.is_pressed():
 			if event.control:
 				event.control = false
-			elif !event.shift:
+			elif !event.shift_pressed:
 				event.control = true
 				do_zoom(1.0/1.1)
-		elif event.button_index == BUTTON_RIGHT and event.is_pressed():
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
-				var rect = c.get_global_rect()
-				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				var rect : Rect2 = c.get_global_rect()
+				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+				rect = Rect2(rect.position, rect.size*transform_scale)
 				if rect.has_point(get_global_mouse_position()):
-					if c.has_method("get_input_slot"):
-						var slot = c.get_input_slot(get_global_mouse_position()-c.rect_global_position)
-						if slot >= 0:
-							# Tell the node its connector was clicked
-							if c.has_method("on_clicked_input"):
-								c.on_clicked_input(slot, Input.is_key_pressed(KEY_SHIFT))
-								return
-					if c.has_method("get_output_slot"):
-						var slot = c.get_output_slot(get_global_mouse_position()-c.rect_global_position)
-						if slot >= 0:
-							# Tell the node its connector was clicked
-							if c.has_method("on_clicked_output"):
-								c.on_clicked_output(slot, Input.is_key_pressed(KEY_SHIFT))
-								return
+					print("Node: "+c.name)
+					if c.has_method("get_slot_from_position"):
+						var slot = c.get_slot_from_position(get_global_mouse_position())
+						match slot.type:
+							"input":
+								# Tell the node its connector was clicked
+								if c.has_method("on_clicked_input"):
+									c.on_clicked_input(slot.index, Input.is_key_pressed(KEY_SHIFT))
+									return
+							"output":
+								# Tell the node its connector was clicked
+								if c.has_method("on_clicked_output"):
+									c.on_clicked_output(slot.index, Input.is_key_pressed(KEY_SHIFT))
+									return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
-			node_popup.rect_global_position = get_global_mouse_position()
+			node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 			node_popup.show_popup()
 		else:
-			if event.button_index == BUTTON_LEFT:
-				if event.doubleclick:
-					if get_nodes_under_mouse().empty():
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				if event.double_click:
+					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
 				else:
 					process_port_click(event.is_pressed())
 			call_deferred("check_previews")
 	elif event is InputEventKey:
 		if event.pressed:
-			var scancode_with_modifiers = event.get_scancode_with_modifiers()
+			var scancode_with_modifiers = event.get_keycode_with_modifiers()
 			match scancode_with_modifiers:
 				KEY_DELETE,KEY_BACKSPACE:
 					remove_selection()
 				KEY_LEFT:
-					scroll_offset.x -= 0.5*rect_size.x
+					scroll_offset.x -= 0.5*size.x
 					accept_event()
 				KEY_RIGHT:
-					scroll_offset.x += 0.5*rect_size.x
+					scroll_offset.x += 0.5*size.x
 					accept_event()
 				KEY_UP:
-					scroll_offset.y -= 0.5*rect_size.y
+					scroll_offset.y -= 0.5*size.y
 					accept_event()
 				KEY_DOWN:
-					scroll_offset.y += 0.5*rect_size.y
+					scroll_offset.y += 0.5*size.y
 					accept_event()
-		match event.get_scancode():
-			KEY_SHIFT, KEY_CONTROL, KEY_ALT:
+		match event.get_keycode():
+			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
 				for c in get_children():
 					if c.has_method("set_slot_tip_text"):
 						var rect = c.get_global_rect()
-						rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+						var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+						rect = Rect2(rect.position, rect.size*transform_scale)
 						if rect.has_point(get_global_mouse_position()):
-							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.rect_global_position)
+							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
 	elif event is InputEventMouseMotion:
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
 				var rect = c.get_global_rect()
-				rect = Rect2(rect.position, rect.size*c.get_global_transform().get_scale())
+				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
+				rect = Rect2(rect.position, rect.size*transform_scale)
 				if rect.has_point(get_global_mouse_position()):
-					var rel_pos : Vector2 = get_global_mouse_position()-c.rect_global_position
-					var slot : Dictionary = c.get_slot_from_position(rel_pos)
-					hint_tooltip = c.get_slot_tooltip(rel_pos, slot)
-					found_tip = found_tip or c.set_slot_tip_text(rel_pos, slot)
+					var mouse_pos : Vector2 = get_global_mouse_position()
+					var slot : Dictionary = c.get_slot_from_position(mouse_pos)
+					tooltip_text = c.get_slot_tooltip(mouse_pos, slot)
+					found_tip = found_tip or c.set_slot_tip_text(mouse_pos, slot)
 					break
 				else:
 					c.clear_connection_labels()
 		if !found_tip:
-			var rect = get_global_rect()
-			rect = Rect2(rect.position, rect.size*get_global_transform().get_scale())
+			var rect : Rect2 = get_global_rect()
+			var transform_scale : Vector2 = Vector2(1, 1) # get_global_transform().get_scale()
+			rect = Rect2(rect.position, rect.size*transform_scale)
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
-		if c.to == node and c.to_port == port:
-			return { node=c.from, slot=c.from_port }
+		if c.to_node == node and c.to_port == port:
+			return { node=c.from_node, slot=c.from_port }
 	return {}
 
-func offset_from_global_position(global_position) -> Vector2:
-	return (scroll_offset + global_position - rect_global_position) / zoom
+func offset_from_global_position(global_pos) -> Vector2:
+	return (scroll_offset + global_pos - global_position) / zoom
 
 func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
-	node.connect("close_request", self, "remove_node", [ node ])
+	node.connect("delete_request", Callable(self, "remove_node").bind(node))
 
-func connect_node(from : String, from_slot : int, to : String, to_slot : int):
+func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
+	var from_node : MMGraphNodeMinimal = get_node(from)
+	var to_node : MMGraphNodeMinimal = get_node(to)
+	var from_gen = from_node.generator
+	var to_gen = to_node.generator
+	if generator.connect_children(from_gen, from_slot, to_gen, to_slot):
+		super.connect_node(from, from_slot, to, to_slot)
+		send_changed_signal()
+		for n in [ from_node, to_node ]:
+			if n.has_method("on_connections_changed"):
+				n.on_connections_changed()
+		return true
+	return false
+
+func on_connect_node(from : String, from_slot : int, to : String, to_slot : int):
 	var from_node : MMGraphNodeMinimal = get_node(from)
 	var to_node : MMGraphNodeMinimal = get_node(to)
 	var connect_count = 1
@@ -254,11 +279,11 @@ func connect_node(from : String, from_slot : int, to : String, to_slot : int):
 	var disconnect_list : Array = []
 	for i in range(connect_count):
 		if generator.connect_children(from_node.generator, from_slot+i, to_node.generator, to_slot+i):
-			var disconnect = get_source(to, to_slot+i)
-			if !disconnect.empty():
-				.disconnect_node(disconnect.node, disconnect.slot, to, to_slot+i)
-				disconnect_list.push_back({from=get_node(disconnect.node).generator.name, from_port=disconnect.slot, to=get_node(to).generator.name, to_port=to_slot+i})
-			.connect_node(from, from_slot+i, to, to_slot+i)
+			var disconnect_source = get_source(to, to_slot+i)
+			if !disconnect_source.is_empty():
+				super.disconnect_node(disconnect_source.node, disconnect_source.slot, to, to_slot+i)
+				disconnect_list.push_back({from=get_node(NodePath(disconnect_source.node)).generator.name, from_port=disconnect_source.slot, to=get_node(NodePath(to)).generator.name, to_port=to_slot+i})
+			super.connect_node(from, from_slot+i, to, to_slot+i)
 			connect_list.push_back({from=get_node(from).generator.name, from_port=from_slot+i, to=get_node(to).generator.name, to_port=to_slot+i})
 			connected = true
 	if connected:
@@ -283,7 +308,7 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 	var from_gen = from_node.generator
 	var to_gen = to_node.generator
 	if generator.disconnect_children(from_gen, from_slot, to_gen, to_slot):
-		.disconnect_node(from, from_slot, to, to_slot)
+		super.disconnect_node(from, from_slot, to, to_slot)
 		send_changed_signal()
 		for n in [ from_node, to_node ]:
 			if n.has_method("on_connections_changed"):
@@ -291,7 +316,7 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 		return true
 	return false
 
-func disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
+func on_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
 	var from_gen = get_node(from).generator
 	var to_gen = get_node(to).generator
 	if do_disconnect_node(from, from_slot, to, to_slot):
@@ -307,9 +332,9 @@ func disconnect_node(from : String, from_slot : int, to : String, to_slot : int)
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
 	for c in removed_connections:
-		.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		super.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	for c in added_connections:
-		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 
 func remove_node(node) -> void:
 	var prev = generator.serialize()
@@ -326,8 +351,8 @@ func do_remove_node(node) -> void:
 	if generator.remove_generator(node.generator):
 		var node_name = node.name
 		for c in get_connection_list():
-			if c.from == node_name or c.to == node_name:
-				do_disconnect_node(c.from, c.from_port, c.to, c.to_port)
+			if c.from_node == node_name or c.to_node == node_name:
+				do_disconnect_node(c.from_node, c.from_port, c.to_node, c.to_port)
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
@@ -340,7 +365,7 @@ func update_tab_title() -> void:
 		return
 	var title = "[unnamed]"
 	if save_path != null:
-		title = save_path.right(save_path.rfind("/")+1)
+		title = save_path.right(-(save_path.rfind("/")+1))
 	if need_save:
 		title += " *"
 	if get_parent().has_method("set_tab_title"):
@@ -350,17 +375,14 @@ func set_need_save(ns = true) -> void:
 	if ns != need_save:
 		need_save = ns
 		update_tab_title()
-	if save_path != null:
-		if ns:
-			need_save_crash_recovery = true
-		else:
-			need_save_crash_recovery = false
+	need_save_crash_recovery = true
 
 func set_save_path(path) -> void:
 	if path != save_path:
 		remove_crash_recovery_file()
 		need_save_crash_recovery = false
 		save_path = path
+		save_crash_recovery_path = save_path+".mmcr"
 		update_tab_title()
 		emit_signal("save_path_changed", self, path)
 
@@ -376,17 +398,27 @@ func clear_view() -> void:
 func crash_recovery_save() -> void:
 	if !need_save_crash_recovery:
 		return
+	# don't save if there's only a single node
+	if top_generator.get_child_count() < 2:
+		return
+	if save_crash_recovery_path == "":
+		if not DirAccess.dir_exists_absolute("user://unsaved_projects"):
+			DirAccess.make_dir_recursive_absolute("user://unsaved_projects")
+		var i : int = 0
+		while true:
+			save_crash_recovery_path = "user://unsaved_projects/unsaved_%03d.mmcr" % i
+			if not FileAccess.file_exists(save_crash_recovery_path):
+				break
+			i += 1
 	var data = top_generator.serialize()
-	var file = File.new()
-	if file.open(save_path+".mmcr", File.WRITE) == OK:
-		file.store_string(JSON.print(data))
-		file.close()
+	var file : FileAccess = FileAccess.open(save_crash_recovery_path, FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify(data))
 		need_save_crash_recovery = false
 
 func remove_crash_recovery_file() -> void:
-	if save_path != null:
-		var dir = Directory.new()
-		dir.remove(save_path+".mmcr")
+	if save_crash_recovery_path != "":
+		DirAccess.remove_absolute(save_crash_recovery_path)
 
 # Center view
 
@@ -395,19 +427,19 @@ func center_view() -> void:
 	var node_count = 0
 	for c in get_children():
 		if c is GraphNode:
-			center += c.offset + 0.5*c.rect_size
+			center += c.position_offset + 0.5*c.size
 			node_count += 1
 	if node_count > 0:
 		center /= node_count
-		scroll_offset = center - 0.5*rect_size
+		scroll_offset = center - 0.5*size
 
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
-		generator.disconnect("connections_changed", self, "on_connections_changed")
+		generator.disconnect("connections_changed", Callable(self, "on_connections_changed"))
 	clear_view()
 	generator = g
 	if generator != null:
-		generator.connect("connections_changed", self, "on_connections_changed")
+		generator.connect("connections_changed", Callable(self, "on_connections_changed"))
 	update_graph(generator.get_children(), generator.connections)
 	subgraph_ui.visible = generator != top_generator
 	subgraph_ui.get_node("Label").text = generator.label
@@ -417,7 +449,7 @@ func update_view(g) -> void:
 	center_view()
 	if generator.get_parent() is MMGenGraph:
 		button_transmits_seed.visible = true
-		button_transmits_seed.pressed = generator.transmits_seed
+		button_transmits_seed.button_pressed = generator.transmits_seed
 	else:
 		button_transmits_seed.visible = false
 	emit_signal("view_updated", generator)
@@ -442,12 +474,12 @@ func update_graph(generators, connections) -> Array:
 		node.do_set_position(g.position)
 		rv.push_back(node)
 	for c in connections:
-		.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	return rv
 
-func new_material(init_nodes = {nodes=[{name="Material", type="material","parameters":{"size":11}}], connections=[]}) -> void:
+func new_material(init_nodes = {nodes=[{name="Material", type="material",parameters={size=11}}], connections=[]}) -> void:
 	clear_material()
-	top_generator = mm_loader.create_gen(init_nodes)
+	top_generator = await mm_loader.create_gen(init_nodes)
 	if top_generator != null:
 		add_child(top_generator)
 		move_child(top_generator, 0)
@@ -465,27 +497,27 @@ func get_free_name(type) -> String:
 		i += 1
 	return ""
 
-func do_create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
+func do_create_nodes(data, nodes_position : Vector2 = Vector2(0, 0)) -> Array:
 	if !data is Dictionary:
 		return []
 	if data.has("type"):
 		data = { nodes=[data], connections=[] }
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
-		var new_stuff = mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, position)
+		var new_stuff = await mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, nodes_position)
 		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
 		return return_value
 	return []
 
-func create_nodes(data, position : Vector2 = Vector2(0, 0)) -> Array:
+func create_nodes(data, nodes_position : Vector2 = Vector2(0, 0)) -> Array:
 	var prev = generator.serialize().duplicate(true)
-	var nodes = do_create_nodes(data, position)
-	if !nodes.empty():
+	var nodes = await do_create_nodes(data, nodes_position)
+	if !nodes.is_empty():
 		var next = generator.serialize()
 		undoredo_create_step("Add and connect nodes", generator.get_hier_name(), prev, next)
 	return nodes
 
 func create_gen_from_type(gen_name) -> void:
-	create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*rect_size)
+	await create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*size)
 
 func set_new_generator(new_generator) -> void:
 	clear_material()
@@ -507,22 +539,20 @@ func find_buffers(g) -> int:
 func load_file(filename) -> bool:
 	var rescued = false
 	var new_generator = null
-	var file = File.new()
-	if filename != null and file.file_exists(filename+".mmcr"):
-		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instance()
+	var recovery_path = filename+".mmcr"
+	if filename != null and FileAccess.file_exists(recovery_path):
+		var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = "Rescue file for "+filename.get_file()+" was found.\nLoad it?"
-		dialog.get_ok().text = "Rescue"
-		dialog.add_cancel("Load "+filename.get_file())
+		dialog.get_ok_button().text = "Rescue"
+		dialog.add_button("Load "+filename.get_file(), true, "load")
 		add_child(dialog)
-		var result = dialog.ask()
-		while result is GDScriptFunctionState:
-			result = yield(result, "completed")
+		var result = await dialog.ask()
 		if result == "ok":
-			new_generator = mm_loader.load_gen(filename+".mmcr")
+			new_generator = await mm_loader.load_gen(recovery_path)
 	if new_generator != null:
 		rescued = true
 	else:
-		new_generator = mm_loader.load_gen(filename)
+		new_generator = await mm_loader.load_gen(filename)
 	if new_generator != null:
 		set_save_path(filename)
 		set_new_generator(new_generator)
@@ -533,20 +563,31 @@ func load_file(filename) -> bool:
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
 		add_child(dialog)
-		dialog.window_title = "Load failed!"
+		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
-		dialog.connect("popup_hide", dialog, "queue_free")
+		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false
 
 func load_from_data(filename, data) -> bool:
-	var json = parse_json(data)
+	var test_json_conv = JSON.new()
+	test_json_conv.parse(data)
+	var json = test_json_conv.get_data()
 	if json != null:
-		var new_generator = mm_loader.create_gen(json)
+		var new_generator = await mm_loader.create_gen(json)
 		if new_generator != null:
 			set_save_path(filename)
 			set_new_generator(new_generator)
 			return true
+	return false
+
+func load_from_recovery(filename) -> bool:
+	save_crash_recovery_path = filename
+	var new_generator = await mm_loader.load_gen(save_crash_recovery_path)
+	if new_generator != null:
+		set_new_generator(new_generator)
+		set_need_save(true)
+		return true
 	return false
 
 # Save
@@ -556,34 +597,27 @@ func save() -> bool:
 	if save_path != null:
 		status = save_file(save_path)
 	else:
-		status = save_as()
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
+		status = await save_as()
 	return status
 
 func save_as() -> bool:
 	if OS.get_name() == "HTML5":
-		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instance()
+		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 		add_child(dialog)
-		var status = dialog.enter_text("Save", "Select a file name", save_path.get_file() if save_path != null else "")
-		while status is GDScriptFunctionState:
-			status = yield(status, "completed")
+		var status = await dialog.enter_text("Save", "Select a file name", save_path.get_file() if save_path != null else "")
 		if status.ok:
 			if save_file(status.text.get_file().get_basename()+".ptex"):
 				top_generator.emit_signal("hierarchy_changed")
 	else:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instance()
-		add_child(dialog)
-		dialog.rect_min_size = Vector2(500, 500)
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.mode = FileDialog.MODE_SAVE_FILE
+		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		var main_window = mm_globals.main_window
 		if mm_globals.config.has_section_key("path", "project"):
 			dialog.current_dir = mm_globals.config.get_value("path", "project")
-		var files = dialog.select_files()
-		while files is GDScriptFunctionState:
-			files = yield(files, "completed")
+		var files = await dialog.select_files()
 		if files.size() == 1:
 			if save_file(files[0]):
 				main_window.add_recent(save_path)
@@ -597,12 +631,11 @@ func save_file(filename) -> bool:
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
 	if OS.get_name() == "HTML5":
-		JavaScript.download_buffer(JSON.print(data, "\t", true).to_ascii(), filename)
+		JavaScriptBridge.download_buffer(JSON.stringify(data, "\t", true).to_ascii_buffer(), filename)
 	else:
-		var file = File.new()
-		if file.open(filename, File.WRITE) == OK:
-			file.store_string(JSON.print(data, "\t", true))
-			file.close()
+		var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
+		if file != null:
+			file.store_string(JSON.stringify(data, "\t", true))
 		else:
 			return false
 	set_save_path(filename)
@@ -622,9 +655,7 @@ func get_material_node() -> MMGenMaterial:
 func export_material(export_prefix, profile) -> void:
 	for g in top_generator.get_children():
 		if g.has_method("export_material"):
-			var result = g.export_material(export_prefix, profile)
-			while result is GDScriptFunctionState:
-				result = yield(result, "completed")
+			await g.export_material(export_prefix, profile)
 
 
 # Cut / copy / paste / duplicate
@@ -647,24 +678,24 @@ func remove_selection() -> void:
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
-	if nodes.empty():
+	if nodes.is_empty():
 		for c in get_children():
 			if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
 				nodes.append(c)
-	if nodes.empty():
+	if nodes.is_empty():
 		return {}
 	var center = Vector2(0, 0)
 	for n in nodes:
-		center += n.offset+0.5*n.rect_size
+		center += n.position_offset+0.5*n.size
 	center /= nodes.size()
 	for n in nodes:
 		var s = n.generator.serialize()
-		var p = n.offset-center
+		var p = n.position_offset-center
 		s.node_position = { x=p.x, y=p.y }
 		data.nodes.append(s)
 	for c in get_connection_list():
-		var from = get_node(c.from)
-		var to = get_node(c.to)
+		var from = get_node(NodePath(c.from_node))
+		var to = get_node(NodePath(c.to_node))
 		if from != null and from.selected and to != null and to.selected:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name
@@ -683,31 +714,29 @@ func cut() -> void:
 	remove_selection()
 
 func copy() -> void:
-	OS.clipboard = to_json(serialize_selection())
+	DisplayServer.clipboard_set(JSON.stringify(serialize_selection()))
 
 func do_paste(data) -> void:
-	var position = scroll_offset+0.5*rect_size
-	if Rect2(Vector2(0, 0), rect_size).has_point(get_local_mouse_position()):
-		position = offset_from_global_position(get_global_transform().xform(get_local_mouse_position()))
+	var node_position = scroll_offset+0.5*size
+	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
+		node_position = offset_from_global_position(get_global_mouse_position())
 	for c in get_children():
 		if c is GraphNode:
 			c.selected = false
-	var new_nodes = create_nodes(data, position)
+	var new_nodes = await create_nodes(data, node_position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true
 
 func paste() -> void:
-	var data : String = OS.clipboard.strip_edges()
-	var parsed_data = mm_globals.parse_paste_data(data)
-	while parsed_data is GDScriptFunctionState:
-		parsed_data = yield(parsed_data, "completed")
+	var data : String = DisplayServer.clipboard_get().strip_edges()
+	var parsed_data = await mm_globals.parse_paste_data(data)
 	if parsed_data.graph != null:
 		var graph = parsed_data.graph
 		if graph is Dictionary and graph.has("type") and graph.type == "graph":
 			var main_window = mm_globals.main_window
 			var graph_edit = main_window.new_graph_panel()
-			var new_generator = mm_loader.create_gen(graph)
+			var new_generator = await mm_loader.create_gen(graph)
 			if new_generator:
 				graph_edit.set_new_generator(new_generator)
 				main_window.hierarchy.update_from_graph_edit(graph_edit)
@@ -746,10 +775,10 @@ func do_send_changed_signal() -> void:
 
 # Drag and drop
 
-func can_drop_data(_position, data) -> bool:
+func _can_drop_data(_position, data) -> bool:
 	return typeof(data) == TYPE_COLOR or typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
 
-func drop_data(position, data) -> void:
+func _drop_data(node_position, data) -> void:
 	if typeof(data) == TYPE_DICTIONARY and data.has("tree_item"):
 		get_node("/root/MainWindow/NodeLibraryManager").item_created(data.tree_item)
 	# The following mitigates the SpinBox problem (captures mouse while dragging)
@@ -760,7 +789,7 @@ func drop_data(position, data) -> void:
 	elif typeof(data) == TYPE_DICTIONARY and data.has("type") and data.type == "Gradient" and data.has("points"):
 		do_paste({type="colorize", gradient=data})
 	else:
-		create_nodes(data, offset_from_global_position(get_global_transform().xform(position)))
+		create_nodes(data, offset_from_global_position(get_global_transform() * node_position))
 
 func on_ButtonUp_pressed() -> void:
 	if generator != top_generator and generator.get_parent() is MMGenGraph:
@@ -784,11 +813,11 @@ func create_subgraph() -> void:
 
 
 func _on_ButtonShowTree_pressed() -> void:
-	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instance()
+	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instantiate()
 	add_child(graph_tree)
 	graph_tree.init("Top", top_generator)
-	graph_tree.connect("item_double_clicked", self, "edit_subgraph")
-	graph_tree.connect("popup_hide", graph_tree, "queue_free")
+	graph_tree.connect("item_icon_double_clicked", Callable(self, "edit_subgraph"))
+	graph_tree.connect("popup_hide", Callable(graph_tree, "queue_free"))
 	graph_tree.popup_centered()
 
 func edit_subgraph(g : MMGenGraph) -> void:
@@ -808,30 +837,42 @@ func highlight_connections() -> void:
 	if highlighting_connections:
 		return
 	highlighting_connections = true
-	while Input.is_mouse_button_pressed(BUTTON_LEFT):
-		yield(get_tree(), "idle_frame")
+	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		await get_tree().process_frame
 	for c in get_connection_list():
-		set_connection_activity(c.from, c.from_port, c.to, c.to_port, 1.0 if get_node(c.from).selected or get_node(c.to).selected else 0.0)
+		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphNode) -> void:
-	if node.comment:
+	# TODO: Rewrite that comment node related feature
+	if false: # node.comment:
+		# Need to account for zoom level when checking for contained nodes within comment
+		var current_zoom = get_zoom()
+		var node_rect = node.get_rect()
+		node_rect.size = node_rect.size * current_zoom
+		
 		for c in get_children():
-			if c is GraphNode and c != node and node.get_rect().encloses(c.get_rect()):
-				c.selected = true
+			if c is GraphNode and c != node:
+				var c_rect = c.get_rect()
+				c_rect.size = c_rect.size * current_zoom
+				
+				if node_rect.encloses(c_rect):
+					c.selected = true
 	else:
 		highlight_connections()
-		yield(get_tree(), "idle_frame")
+		await get_tree().process_frame
 		if current_preview[0] != null:
 			for n in get_selected_nodes():
 				if n.generator == current_preview[0].generator:
 					return
 		set_current_preview(0, node)
 	undoredo_move_node_selection_changed = true
+	mm_globals.main_window.update_menus()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 	undoredo_move_node_selection_changed = true
+	mm_globals.main_window.update_menus()
 
 func get_current_preview(slot : int = 0):
 	if locked_preview[slot] != null:
@@ -857,11 +898,11 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 		current_preview[slot] = preview
 	emit_signal("preview_changed", self)
 	if is_instance_valid(node):
-		node.update()
+		node.queue_redraw()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
 			if c is GraphNode and (c.generator == old_preview or c.generator == old_locked_preview):
-				c.update()
+				c.queue_redraw()
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually  dragged
@@ -869,7 +910,7 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	if node == null:
 		return
 	# Request the popup
-	node_popup.rect_global_position = get_global_mouse_position()
+	node_popup.position = get_screen_transform()*get_local_mouse_position()
 	var slot_type
 	if connect_output:
 		slot_type = mm_io_types.types[node.generator.get_input_defs()[slot_index].type].slot_type
@@ -878,15 +919,15 @@ func request_popup(node_name : String , slot_index : int, _release_position : Ve
 	node_popup.show_popup(node_name, slot_index, slot_type, connect_output)
 
 func check_previews() -> void:
-	var preview_changed : bool = false
+	var preview_has_changed : bool = false
 	for i in PREVIEW_COUNT:
 		if current_preview[i] != null and ! is_instance_valid(current_preview[i].generator):
 			current_preview[i] = null
-			preview_changed = true
+			preview_has_changed = true
 		if locked_preview[i] != null and ! is_instance_valid(locked_preview[i].generator):
 			locked_preview[i] = null
-			preview_changed = true
-	if preview_changed:
+			preview_has_changed = true
+	if preview_has_changed:
 		emit_signal("preview_changed", self)
 
 func on_drop_image_file(file_name : String) -> void:
@@ -925,10 +966,10 @@ func undoredo_command(command : Dictionary) -> void:
 	match command.type:
 		"add_to_graph":
 			var parent_generator = get_node_from_hier_name(command.parent)
-			var position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
+			var node_position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
 			var generators = command.generators if command.has("generators") else []
 			var connections = command.connections if command.has("connections") else []
-			var new_stuff = mm_loader.add_to_gen_graph(parent_generator, generators, connections, position)
+			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, connections, node_position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:
@@ -942,7 +983,7 @@ func undoredo_command(command : Dictionary) -> void:
 				parent_generator.disconnect_children_by_name(c.from, c.from_port, c.to, c.to_port)
 			if generator == parent_generator:
 				for c in command.connections:
-					.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
+					super.disconnect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 		"remove_generators":
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for n in command.generators:
@@ -975,6 +1016,13 @@ func undoredo_command(command : Dictionary) -> void:
 			var g = get_node_from_hier_name(command.node)
 			for p in command.params.keys():
 				g.set_parameter(p, MMType.deserialize_value(command.params[p]))
+		"setgenericsize":
+			var g = get_node_from_hier_name(command.node)
+			g.set_generic_size(command.size)
+			if g.get_parent() == generator:
+				if has_node("node_"+g.name):
+					var node = get_node("node_"+g.name)
+					node.update_node()
 		"setseed":
 			var g = get_node_from_hier_name(command.node)
 			g.set_seed(command.seed)
@@ -1037,7 +1085,7 @@ func set_node_parameters(node, parameters : Dictionary):
 		if parameters[p] != prev_value:
 			node.set_parameter(p, MMType.deserialize_value(parameters[p]))
 		prev_params[p] = prev_value
-	if ! prev_params.empty():
+	if ! prev_params.is_empty():
 		var undo_action = { type="setparams", node=hier_name, params=prev_params }
 		var redo_action = { type="setparams", node=hier_name, params=parameters }
 		undoredo.add("Set parameters values", [undo_action], [redo_action], true)
@@ -1095,7 +1143,7 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 					if pi.hash() != ni.hash():
 						var child_path = pin if parent_path == "" else parent_path+"/"+pin
 						var step_actions = undoredo_step_actions(child_path, pi, ni, false)
-						if step_actions.empty():
+						if step_actions.is_empty():
 							undo_remove_nodes.push_back(pin)
 							undo_add_nodes.push_back(pi)
 							redo_remove_nodes.push_back(pin)
@@ -1151,21 +1199,21 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 						var ncp = nc[ncpn]
 						undo_remove_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=ncn, to_port=ncpn})
 						redo_add_connections.push_back({ from=ncp.from, from_port=ncp.from_port, to=ncn, to_port=ncpn})
-			if ! undo_remove_connections.empty():
+			if ! undo_remove_connections.is_empty():
 				undo_actions.push_back({ type="remove_connections", parent=parent_path, connections=undo_remove_connections })
-			if ! redo_remove_connections.empty():
+			if ! redo_remove_connections.is_empty():
 				redo_actions.push_back({ type="remove_connections", parent=parent_path, connections=redo_remove_connections })
-			if ! undo_remove_nodes.empty():
+			if ! undo_remove_nodes.is_empty():
 				undo_actions.push_back({ type="remove_generators", parent=parent_path, generators=undo_remove_nodes })
-			if ! redo_remove_nodes.empty():
+			if ! redo_remove_nodes.is_empty():
 				redo_actions.push_back({ type="remove_generators", parent=parent_path, generators=redo_remove_nodes })
-			if ! undo_update_nodes.empty():
+			if ! undo_update_nodes.is_empty():
 				undo_actions.append_array(undo_update_nodes)
-			if ! redo_update_nodes.empty():
+			if ! redo_update_nodes.is_empty():
 				redo_actions.append_array(redo_update_nodes)
-			if ! undo_add_nodes.empty() or ! undo_add_connections.empty():
+			if ! undo_add_nodes.is_empty() or ! undo_add_connections.is_empty():
 				undo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=undo_add_nodes, connections=undo_add_connections })
-			if ! redo_add_nodes.empty() or ! redo_add_connections.empty():
+			if ! redo_add_nodes.is_empty() or ! redo_add_connections.is_empty():
 				redo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=redo_add_nodes, connections=redo_add_connections })
 		"remote","ios":
 			var generator_path = parent_path.left(parent_path.rfind("/"))
@@ -1186,7 +1234,7 @@ func undoredo_create_step(action_name : String, parent_path : String, prev : Dic
 		print("Incorrect call for undoredo_create_step")
 		return
 	var step_actions = undoredo_step_actions(parent_path, prev, next)
-	if step_actions.has("undo_actions") && step_actions.has("redo_actions") && ! step_actions.undo_actions.empty() and ! step_actions.redo_actions.empty():
+	if step_actions.has("undo_actions") && step_actions.has("redo_actions") && ! step_actions.undo_actions.is_empty() and ! step_actions.redo_actions.is_empty():
 		undoredo.add(action_name, step_actions.undo_actions, step_actions.redo_actions, false)
 
 # Node change propagation
@@ -1224,34 +1272,34 @@ func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 	var new_connections = []
 	var removed : bool = false
 	for c in get_connection_list():
-		if c.to == node.name and c.to_port == port_index:
-			var from_node = get_node(c.from)
+		if c.to_node == node.name and c.to_port == port_index:
+			var from_node = get_node(NodePath(c.from_node))
 			if from_node.generator is MMGenReroute:
 				var source = null
 				for c2 in get_connection_list():
-					if c2.to == c.from:
-						source = {from=c2.from,from_port=c2.from_port}
-						do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
+					if c2.to_node == c.from_node:
+						source = {from=c2.from_node,from_port=c2.from_port}
+						do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
 				if source != null:
 					for c2 in get_connection_list():
-						if c2.from == c.from:
-							do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
-							new_connections.push_back({from=get_node(source.from).generator.name, from_port=source.from_port, to=get_node(c2.to).generator.name, to_port=c2.to_port})
-							#connect_node(source.from, source.from_port, c2.to, c2.to_port)
+						if c2.from_node == c.from_node:
+							do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
+							new_connections.push_back({from=get_node(NodePath(source.from)).generator.name, from_port=source.from_port, to=get_node(NodePath(c2.to_node)).generator.name, to_port=c2.to_port})
+							#connect_node(source.from, source.from_port, c2.to_node, c2.to_port)
 					do_remove_node(from_node)
-					if !new_connections.empty():
+					if !new_connections.is_empty():
 						do_create_nodes({nodes=[], connections=new_connections})
 				removed = true
 			break
 	if ! removed:
-		var scale = node.get_global_transform().get_scale()
-		var port_position = node.offset+node.get_connection_input_position(port_index)/scale
+		var global_scale = Vector2(1, 1) # node.get_global_transform().get_scale()
+		var port_position = node.position_offset+node.get_input_port_position(port_index)/global_scale
 		var reroute_position = port_position+Vector2(-74, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		for c2 in get_connection_list():
-			if c2.to == node.name and c2.to_port == port_index:
-				do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
-				new_connections.push_back({from=get_node(c2.from).generator.name, from_port=c2.from_port, to="reroute", to_port=0})
+			if c2.to_node == node.name and c2.to_port == port_index:
+				do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
+				new_connections.push_back({from=get_node(NodePath(c2.from_node)).generator.name, from_port=c2.from_port, to="reroute", to_port=0})
 		new_connections.push_back({from="reroute", from_port=0, to=node.generator.name, to_port=port_index})
 		do_create_nodes({nodes=[reroute_node], connections=new_connections})
 	var next = generator.serialize()
@@ -1262,29 +1310,29 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 	var reroutes : bool = false
 	var destinations = []
 	for c in get_connection_list():
-		if c.from == node.name and c.from_port == port_index:
-			var to_node = get_node(c.to)
+		if c.from_node == node.name and c.from_port == port_index:
+			var to_node = get_node(NodePath(c.to_node))
 			if to_node.generator is MMGenReroute:
 				reroutes = true
 				var reroute_connections = []
 				for c2 in get_connection_list():
-					if c2.from == c.to:
-						do_disconnect_node(c2.from, c2.from_port, c2.to, c2.to_port)
-						reroute_connections.push_back({ from=node.generator.name, from_port=port_index, to=get_node(c2.to).generator.name, to_port=c2.to_port })
-				if !reroute_connections.empty():
+					if c2.from_node == c.to_node:
+						do_disconnect_node(c2.from_node, c2.from_port, c2.to_node, c2.to_port)
+						reroute_connections.push_back({ from=node.generator.name, from_port=port_index, to=get_node(NodePath(c2.to_node)).generator.name, to_port=c2.to_port })
+				if !reroute_connections.is_empty():
 					do_create_nodes({nodes=[], connections=reroute_connections})
 				do_remove_node(to_node)
 			else:
 				destinations.push_back(c.duplicate())
 	if !reroutes:
-		var scale = node.get_global_transform().get_scale()
-		var port_position = node.offset+node.get_connection_output_position(port_index)/scale
+		var global_scale = Vector2(1, 1) # node.get_global_transform().get_scale()
+		var port_position = node.position_offset+node.get_output_port_position(port_index)/global_scale
 		var reroute_position = port_position+Vector2(50, -12)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		var reroute_connections = [ { from=node.generator.name, from_port=port_index, to="reroute", to_port=0 }]
 		for d in destinations:
-			do_disconnect_node(d.from, d.from_port, d.to, d.to_port)
-			reroute_connections.push_back({ from="reroute", from_port=0, to=get_node(d.to).generator.name, to_port=d.to_port })
+			do_disconnect_node(d.from_node, d.from_port, d.to_node, d.to_port)
+			reroute_connections.push_back({ from="reroute", from_port=0, to=get_node(NodePath(d.to_node)).generator.name, to_port=d.to_port })
 		do_create_nodes({nodes=[ reroute_node ],connections=reroute_connections})
 	var next = generator.serialize()
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)

@@ -57,6 +57,7 @@
 				"param2": 1.5,
 				"param3": 1
 			},
+			"seed": 29771,
 			"type": "remote",
 			"widgets": [
 				{
@@ -131,6 +132,7 @@
 					"type": "f"
 				}
 			],
+			"seed": 23454,
 			"type": "ios"
 		},
 		{
@@ -151,6 +153,7 @@
 					"type": "f"
 				}
 			],
+			"seed": -23559,
 			"type": "ios"
 		},
 		{
@@ -163,6 +166,7 @@
 				"amount": 1,
 				"blend_type": 11
 			},
+			"seed": -19731,
 			"type": "blend"
 		},
 		{
@@ -193,7 +197,8 @@
 					"type": "Gradient"
 				}
 			},
-			"seed_value": 33856,
+			"seed": 33856,
+			"seed_locked": true,
 			"type": "colorize"
 		},
 		{
@@ -205,6 +210,7 @@
 			"parameters": {
 				"g": 1.5
 			},
+			"seed": 42159,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -278,6 +284,7 @@
 						"quality": 1,
 						"sigma": 20
 					},
+					"seed": -37618,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -290,7 +297,26 @@
 								"type": "rgba"
 							}
 						],
-						"instance": "vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {\n    vec4 O = vec4(0.0);\n\tfloat samples = sigma * 4.0; \n\tint LOD = max(0, int(log2(float(samples)))-quality-2);\n\tint sLOD = 1 << LOD;\n    int s = max(1, int(samples/float(sLOD)));\n\tfloat sum = 0.0;\n    for (int i = 0; i < s*s; i++) {\n        vec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);\n\t\tvec2 dd = d / sigma;\n\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);\n        O += g * textureLod($in.texture, uv + scale * d, float(LOD));\n\t\tsum += g;\n    }\n    \n    return O / sum;\n}\n",
+						"instance": [
+							"vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {",
+							"\tvec4 O = vec4(0.0);",
+							"\tfloat samples = sigma * 4.0; ",
+							"\tint LOD = max(0, int(log2(float(samples)))-quality-2);",
+							"\tint sLOD = 1 << LOD;",
+							"\tint s = max(1, int(samples/float(sLOD)));",
+							"\tfloat sum = 0.0;",
+							"\tfor (int i = 0; i < s*s; i++) {",
+							"\t\tvec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);",
+							"\t\tvec2 dd = d / sigma;",
+							"\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);",
+							"\t\tO += g * textureLod($in.texture, uv + scale * d, float(LOD));",
+							"\t\tsum += g;",
+							"\t}",
+							"\t",
+							"\treturn O / sum;",
+							"}",
+							""
+						],
 						"name": "Fast Blur",
 						"outputs": [
 							{
@@ -332,6 +358,7 @@
 					"parameters": {
 						"size": 11
 					},
+					"seed": -48026,
 					"type": "buffer",
 					"version": 1
 				},
@@ -351,6 +378,7 @@
 							"type": "f"
 						}
 					],
+					"seed": -11967,
 					"type": "ios"
 				},
 				{
@@ -369,6 +397,7 @@
 							"type": "rgba"
 						}
 					],
+					"seed": 45717,
 					"type": "ios"
 				},
 				{
@@ -382,6 +411,7 @@
 						"param1": 20,
 						"param2": 1
 					},
+					"seed": 57528,
 					"type": "remote",
 					"widgets": [
 						{
@@ -425,6 +455,7 @@
 				"param1": 20,
 				"param2": 1
 			},
+			"seed": 57642,
 			"shortdesc": "",
 			"type": "graph"
 		}
@@ -435,6 +466,7 @@
 		"param2": 1.5,
 		"param3": 1
 	},
+	"seed_int": 0,
 	"shortdesc": "Occlusion",
 	"type": "graph"
 }

@@ -1,7 +1,7 @@
 extends Node
 
 
-export(NodePath) var painter = null
+@export var painter : NodePath = NodePath("")
 
 
 var shaders = []
@@ -10,20 +10,20 @@ var texture_size = 0
 var layers : Array = []
 var selected_layer : Layer
 
-onready var albedo = $Albedo
-onready var metallic = $Metallic
-onready var roughness = $Roughness
-onready var emission = $Emission
-onready var normal = $Normal
-onready var normal_map = $NormalMap
-onready var depth = $Depth
-onready var occlusion = $Occlusion
-onready var painter_node = get_node(painter) if painter != null else null
+@onready var albedo = $Albedo
+@onready var metallic = $Metallic
+@onready var roughness = $Roughness
+@onready var emission = $Emission
+@onready var normal = $Normal
+@onready var normal_map = $NormalMap
+@onready var depth = $Depth
+@onready var occlusion = $Occlusion
+@onready var painter_node = get_node(painter) if painter != NodePath("") else null
 
-onready var nm_material : ShaderMaterial = $NormalMap/Rect.get_material()
+@onready var nm_material : ShaderMaterial = $NormalMap/Rect.get_material()
 var generate_nm : bool = true
 
-onready var layers_pane = mm_globals.main_window.layout.get_panel("Layers")
+@onready var layers_pane = mm_globals.main_window.layout.get_panel("Layers")
 
 const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
 const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")
@@ -46,23 +46,19 @@ func set_texture_size(s : float):
 	texture_size = s
 	var size = Vector2(s, s)
 	var selected_layer_save = selected_layer
-	var result = select_layer(null)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	await select_layer(null)
 	resize_layers(s)
 	for vp in [ albedo, metallic, roughness, emission, normal, depth, occlusion, normal_map ]:
 		vp.size = size
 		for c in vp.get_children():
-			c.rect_size = size
+			c.size = size
 	
-	nm_material.set_shader_param("epsilon", 1/s)
+	nm_material.set_shader_parameter("epsilon", 1/s)
 	#nm_material.set_shader_param("depth_tex", depth.get_texture())
 	#nm_material.set_shader_param("seams", painter_node.mesh_seams_tex)
 	
 	painter_node.set_texture_size(s)
-	select_layer(selected_layer_save)
-	while result is GDScriptFunctionState:
-		result = yield(result, "completed")
+	await select_layer(selected_layer_save)
 	_on_Painter_painted()
 
 func find_parent_array(layer : Layer, layer_array : Array = layers):
@@ -80,9 +76,9 @@ func resize_layers(size : int, layers_array : Array = layers):
 			if l.get(c) != null:
 				var texture : ImageTexture = l.get(c)
 				var image : Image = Image.new()
-				image.copy_from(texture.get_data())
+				image.copy_from(texture.get_image())
 				image.resize(size, size)
-				texture.create_from_image(image)
+				texture.set_image(image)
 		resize_layers(size, l.layers)
 
 func get_albedo_texture():
@@ -107,7 +103,7 @@ func get_depth_texture():
 func get_occlusion_texture():
 	return occlusion.get_texture()
 
-func _on_Tree_selection_changed(old_selected : TreeItem, new_selected : TreeItem) -> void:
+func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	select_layer(new_selected.get_meta("layer"))
 
 func select_layer(layer : Layer) -> void:
@@ -117,29 +113,30 @@ func select_layer(layer : Layer) -> void:
 		painter_node = get_node(painter)
 	if selected_layer != null:
 		for c in selected_layer.get_channels():
-			var old_texture : Texture = selected_layer.get(c)
+			var old_texture : Texture2D = selected_layer.get(c)
 			var new_texture = ImageTexture.new()
 			if old_texture != null:
-				new_texture.create_from_image(old_texture.get_data())
+				new_texture.set_image(old_texture.get_image())
 			selected_layer.set(c, new_texture)
+	selected_layer = layer
 	if layer != null:
 		for c in layer.get_channels():
 			if layer.get(c) != null:
-				painter_node.call("init_"+c+"_texture", Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
+				await painter_node.init_rgba_texture_by_name(c, Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
-				painter_node.call("init_"+c+"_texture")
-			layer.set(c, painter_node.call("get_"+c+"_texture"))
+				await painter_node.init_rgba_texture_by_name(c)
+			layer.set(c, painter_node.get_texture_by_name(c))
 		emit_signal("layer_selected", layer)
 	selected_layer = layer
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
 	_on_layers_changed()
 
-func get_unused_layer_name(layers_array : Array) -> String:
+func get_unused_layer_name(_layers_array : Array) -> String:
 	return "New layer"
 
 func layer_index_is_used(index : int, layers_array : Array) -> bool:
@@ -170,12 +167,10 @@ func add_layer(layer_type : int = 0) -> void:
 	layer.name = get_unused_layer_name(layers)
 	layer.index = get_unused_layer_index()
 	layer.hidden = false
-	var image : Image = Image.new()
-	image.create(texture_size, texture_size, false, Image.FORMAT_RGBA8)
+	var image : Image = Image.create(texture_size, texture_size, false, Image.FORMAT_RGBAH)
 	image.fill(Color(0, 0, 0, 0))
 	for c in layer.get_channels():
-		var texture = ImageTexture.new()
-		texture.create_from_image(image)
+		var texture = ImageTexture.create_from_image(image)
 		layer.set(c, texture)
 	layers_array.push_front(layer)
 	select_layer(layer)
@@ -192,7 +187,7 @@ func remove_layer(layer : Layer) -> void:
 	layers_array.erase(layer)
 	if need_reselect:
 		selected_layer = null
-		if !layers.empty():
+		if !layers.is_empty():
 			select_layer(layers[0])
 			return
 	_on_layers_changed()
@@ -260,10 +255,10 @@ func get_shaders(mask_count : int) -> Dictionary:
 		var metallic_shader : Shader = Shader.new()
 		var roughness_shader : Shader = Shader.new()
 		var albedomask_shader : Shader = Shader.new()
-		var shader_prefix = "shader_type canvas_item;\nrender_mode blend_mix;\nuniform sampler2D input_tex : hint_albedo;\nuniform float modulate = 1.0;\n"
+		var shader_prefix = "shader_type canvas_item;\nrender_mode blend_mix;\nuniform sampler2D input_tex : source_color;\nuniform float modulate = 1.0;\n"
 		var shader_modulate = "modulate"
 		for i in mc:
-			shader_prefix += "uniform sampler2D mask%d_tex : hint_albedo;\n" % i;
+			shader_prefix += "uniform sampler2D mask%d_tex : source_color;\n" % i;
 			shader_modulate += "*texture(mask%d_tex, UV).r" % i;
 		shader_prefix += "void fragment() {\n	vec4 tex = texture(input_tex, UV);\n"
 		albedo_shader.code = shader_prefix+"	COLOR=vec4(tex.rgb, tex.a*"+shader_modulate+");\n}"
@@ -275,102 +270,102 @@ func get_shaders(mask_count : int) -> Dictionary:
 
 func apply_masks(material : ShaderMaterial, masks : Array) -> void:
 	for i in range(masks.size()):
-		material.set_shader_param("mask%d_tex" % i, masks[i])
+		material.set_shader_parameter("mask%d_tex" % i, masks[i])
 
 func update_layers_renderer(visible_layers : Array) -> void:
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		while viewport.get_child_count() > 0:
 			viewport.remove_child(viewport.get_child(0))
-	var texture_rect : TextureRect
 	var color_rect : ColorRect
 	color_rect = ColorRect.new()
-	color_rect.rect_size = normal.size
+	color_rect.size = normal.size
 	color_rect.color = Color(0.5, 0.5, 0)
 	normal.add_child(color_rect)
 	color_rect = ColorRect.new()
-	color_rect.rect_size = normal.size
+	color_rect.size = normal.size
 	color_rect.color = Color(1.0, 1.0, 1.0)
 	occlusion.add_child(color_rect)
 	for lm in visible_layers:
 		var l = lm.layer
 		var m = lm.masks
 		var layer_shaders = get_shaders(m.size())
+		# TODO: factor the code below
 		# albedo
 		color_rect = ColorRect.new()
-		color_rect.rect_size = albedo.size
+		color_rect.size = albedo.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.albedo
-		color_rect.material.set_shader_param("input_tex", l.albedo)
-		color_rect.material.set_shader_param("modulate", l.albedo_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.albedo)
+		color_rect.material.set_shader_parameter("modulate", l.albedo_alpha)
 		apply_masks(color_rect.material, m)
 		l.albedo_color_rects = [ color_rect ]
 		albedo.add_child(color_rect)
 		# metallic
 		color_rect = ColorRect.new()
-		color_rect.rect_size = metallic.size
+		color_rect.size = metallic.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.metallic
-		color_rect.material.set_shader_param("input_tex", l.mr)
-		color_rect.material.set_shader_param("modulate", l.metallic_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.mr)
+		color_rect.material.set_shader_parameter("modulate", l.metallic_alpha)
 		apply_masks(color_rect.material, m)
 		l.metallic_color_rects = [ color_rect ]
 		metallic.add_child(color_rect)
 		# roughness
 		color_rect = ColorRect.new()
-		color_rect.rect_size = roughness.size
+		color_rect.size = roughness.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.roughness
-		color_rect.material.set_shader_param("input_tex", l.mr)
-		color_rect.material.set_shader_param("modulate", l.roughness_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.mr)
+		color_rect.material.set_shader_parameter("modulate", l.roughness_alpha)
 		apply_masks(color_rect.material, m)
 		l.roughness_color_rects = [ color_rect ]
 		roughness.add_child(color_rect)
 		# emission
 		color_rect = ColorRect.new()
-		color_rect.rect_size = emission.size
+		color_rect.size = emission.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.albedomask
-		color_rect.material.set_shader_param("input_tex", l.albedo)
-		color_rect.material.set_shader_param("modulate", l.albedo_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.albedo)
+		color_rect.material.set_shader_parameter("modulate", l.albedo_alpha)
 		apply_masks(color_rect.material, m)
 		l.albedo_color_rects.push_back(color_rect)
 		emission.add_child(color_rect)
 		color_rect = ColorRect.new()
-		color_rect.rect_size = emission.size
+		color_rect.size = emission.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.albedo
-		color_rect.material.set_shader_param("input_tex", l.emission)
-		color_rect.material.set_shader_param("modulate", l.emission_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.emission)
+		color_rect.material.set_shader_parameter("modulate", l.emission_alpha)
 		apply_masks(color_rect.material, m)
 		l.emission_color_rects = [ color_rect ]
 		emission.add_child(color_rect)
 		# normal
 		color_rect = ColorRect.new()
-		color_rect.rect_size = normal.size
+		color_rect.size = normal.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.albedo
-		color_rect.material.set_shader_param("input_tex", l.normal)
-		color_rect.material.set_shader_param("modulate", l.normal_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.normal)
+		color_rect.material.set_shader_parameter("modulate", l.normal_alpha)
 		apply_masks(color_rect.material, m)
 		l.normal_color_rects = [ color_rect ]
 		normal.add_child(color_rect)
 		# depth
 		color_rect = ColorRect.new()
-		color_rect.rect_size = depth.size
+		color_rect.size = depth.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.metallic
-		color_rect.material.set_shader_param("input_tex", l.do)
-		color_rect.material.set_shader_param("modulate", l.depth_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.do)
+		color_rect.material.set_shader_parameter("modulate", l.depth_alpha)
 		apply_masks(color_rect.material, m)
 		l.depth_color_rects = [ color_rect ]
 		depth.add_child(color_rect)
 		# occlusion
 		color_rect = ColorRect.new()
-		color_rect.rect_size = occlusion.size
+		color_rect.size = occlusion.size
 		color_rect.material = ShaderMaterial.new()
 		color_rect.material.shader = layer_shaders.roughness
-		color_rect.material.set_shader_param("input_tex", l.do)
-		color_rect.material.set_shader_param("modulate", l.occlusion_alpha)
+		color_rect.material.set_shader_parameter("input_tex", l.do)
+		color_rect.material.set_shader_parameter("modulate", l.occlusion_alpha)
 		apply_masks(color_rect.material, m)
 		l.occlusion_color_rects = [ color_rect ]
 		occlusion.add_child(color_rect)
@@ -380,12 +375,12 @@ func set_normal_options(paint_normal, paint_depth_as_bump, bump_strength):
 	if paint_normal:
 		generate_nm = true
 		if paint_depth_as_bump:
-			nm_material.set_shader_param("bump_strength", bump_strength)
+			nm_material.set_shader_parameter("bump_strength", bump_strength)
 		else:
-			nm_material.set_shader_param("bump_strength", 0.0)
+			nm_material.set_shader_parameter("bump_strength", 0.0)
 	elif paint_depth_as_bump:
 		generate_nm = true
-		nm_material.set_shader_param("bump_strength", 1.0)
+		nm_material.set_shader_parameter("bump_strength", 1.0)
 	else:
 		generate_nm = false
 	_on_Painter_painted()
@@ -395,9 +390,9 @@ func load(data : Dictionary, file_name : String):
 	layers.clear()
 	load_layers(data.layers, layers, dir_name)
 	_on_layers_changed()
-	if !layers.empty():
+	if !layers.is_empty():
 		for i in range(32):
-			yield(get_tree(), "idle_frame")
+			await get_tree().process_frame
 		select_layer(layers[0])
 
 func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
@@ -413,8 +408,7 @@ func load_layers(data_layers : Array, layers_array : Array, path : String, first
 		layer.hidden = l.hidden
 		for c in CHANNELS:
 			if l.has(c):
-				var texture = ImageTexture.new()
-				texture.load(path+"/"+l[c])
+				var texture = ImageTexture.create_from_image(Image.load_from_file(path+"/"+l[c]))
 				layer.set(c, texture)
 		for c in CHANNELS:
 			layer.set(c+"_alpha", l[c+"_alpha"] if l.has(c+"_alpha") else 1.0)
@@ -425,21 +419,18 @@ func load_layers(data_layers : Array, layers_array : Array, path : String, first
 
 func save(file_name : String) -> Dictionary:
 	var dir_name = file_name.left(file_name.rfind("."))
-	var dir = Directory.new()
-	dir.make_dir(dir_name)
+	DirAccess.make_dir_absolute(dir_name)
 	var data = {}
 	data.layers = Layer.save_layers(layers, dir_name)
 	return data
 
 func _on_Painter_painted():
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
-		viewport.render_target_update_mode = Viewport.UPDATE_ONCE
-		viewport.update_worlds()
+		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	if generate_nm:
-		yield(get_tree(), "idle_frame")
-		yield(get_tree(), "idle_frame")
-		normal_map.render_target_update_mode = Viewport.UPDATE_ONCE
-		normal_map.update_worlds()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		normal_map.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 # debug
 

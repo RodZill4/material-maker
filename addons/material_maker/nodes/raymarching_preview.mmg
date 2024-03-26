@@ -7,6 +7,7 @@
 	"parameters": {
 
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -19,7 +20,41 @@
 				"type": "sdf3d"
 			}
 		],
-		"instance": "float calcdist_$name(vec3 p) {\n    return min($sdf(p), p.z);\n}\n\nfloat raymarch_$name(vec3 ro, vec3 rd) {\n\tfloat d=0.0;\n\tfor (int i = 0; i < 50; i++) {\n\t\tvec3 p = ro + rd*d;\n\t\tfloat dstep = calcdist_$name(p);\n\t\td += dstep;\n\t\tif (dstep < 0.0001) break;\n\t}\n\treturn d;\n}\n\nvec3 normal_$name(vec3 p) {\n\tfloat d = calcdist_$name(p);\n\tfloat e = .0001;\n\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));\n\treturn normalize(n);\n}\n\nvec3 render_$name(vec2 uv) {\n\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));\n\tvec3 n = normal_$name(p);\n\tvec3 l = vec3(5.0, 5.0, 10.0);\n\tvec3 ld = normalize(l-p);\n\tfloat o = step(p.z, 0.001);\n\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);\n\tfloat light = 0.3+0.7*dot(n, ld)*shadow;\n\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;\n}\n",
+		"instance": [
+			"float calcdist_$name(vec3 p) {",
+			"\treturn min($sdf(p), p.z);",
+			"}",
+			"",
+			"float raymarch_$name(vec3 ro, vec3 rd) {",
+			"\tfloat d=0.0;",
+			"\tfor (int i = 0; i < 50; i++) {",
+			"\t\tvec3 p = ro + rd*d;",
+			"\t\tfloat dstep = calcdist_$name(p);",
+			"\t\td += dstep;",
+			"\t\tif (dstep < 0.0001) break;",
+			"\t}",
+			"\treturn d;",
+			"}",
+			"",
+			"vec3 normal_$name(vec3 p) {",
+			"\tfloat d = calcdist_$name(p);",
+			"\tfloat e = .0001;",
+			"\tvec3 n = d - vec3(calcdist_$name(p-vec3(e, 0.0, 0.0)), calcdist_$name(p-vec3(0.0, e, 0.0)), calcdist_$name(p-vec3(0.0, 0.0, e)));",
+			"\treturn normalize(n);",
+			"}",
+			"",
+			"vec3 render_$name(vec2 uv) {",
+			"\tvec3 p = vec3(uv, 2.0-raymarch_$name(vec3(uv, 2.0), vec3(0.0, 0.0, -1.0)));",
+			"\tvec3 n = normal_$name(p);",
+			"\tvec3 l = vec3(5.0, 5.0, 10.0);",
+			"\tvec3 ld = normalize(l-p);",
+			"\tfloat o = step(p.z, 0.001);",
+			"\tfloat shadow = 1.0-0.75*step(raymarch_$name(l, -ld), length(l-p)-0.01);",
+			"\tfloat light = 0.3+0.7*dot(n, ld)*shadow;",
+			"\treturn vec3(0.8+0.2*o, 0.8+0.2*o, 1.0)*light;",
+			"}",
+			""
+		],
 		"name": "Preview",
 		"outputs": [
 			{

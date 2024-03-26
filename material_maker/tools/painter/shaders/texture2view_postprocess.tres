@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cjnuf88jrvrjl"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
 
 uniform sampler2D input_tex;
@@ -21,8 +21,8 @@ void fragment() {
 "
 
 [resource]
-shader = SubResource( 1 )
-shader_param/seams_multiplier = 256.0
-shader_param/texture_size = null
-shader_param/mm_chunk_size = 1.0
-shader_param/mm_chunk_offset = Vector2( 0, 0 )
+shader = SubResource("1")
+shader_parameter/seams_multiplier = 256.0
+shader_parameter/texture_size = null
+shader_parameter/mm_chunk_size = 1.0
+shader_parameter/mm_chunk_offset = Vector2(0, 0)

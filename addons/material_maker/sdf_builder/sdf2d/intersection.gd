@@ -20,7 +20,7 @@ func shape_and_children_code(scene : Dictionary, data : Dictionary, uv : String 
 	var first : bool = true
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, "%s_p" % output_name, editor)
-		if not data2.empty():
+		if not data2.is_empty():
 			data.parameters.append_array(data2.parameters)
 			data.code += data2.code
 			if first:

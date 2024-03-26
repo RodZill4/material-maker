@@ -8,9 +8,26 @@
 		"shape": 0,
 		"size": 4
 	},
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"global": "float truchet1(vec2 uv, vec2 seed) {\n    vec2 i = floor(uv);\n    vec2 f = fract(uv)-vec2(0.5);\n    return 1.0-abs(abs((2.0*step(rand(i+seed), 0.5)-1.0)*f.x+f.y)-0.5);\n}\n\nfloat truchet2(vec2 uv, vec2 seed) {\n    vec2 i = floor(uv);\n    vec2 f = fract(uv);\n    float random = step(rand(i+seed), 0.5);\n    f.x *= 2.0*random-1.0;\n    f.x += 1.0-random;\n    return 1.0-min(abs(length(f)-0.5), abs(length(1.0-f)-0.5));\n}\n",
+		"global": [
+			"float truchet1(vec2 uv, vec2 seed) {",
+			"\tvec2 i = floor(uv);",
+			"\tvec2 f = fract(uv)-vec2(0.5);",
+			"\treturn 1.0-abs(abs((2.0*step(rand(i+seed), 0.5)-1.0)*f.x+f.y)-0.5);",
+			"}",
+			"",
+			"float truchet2(vec2 uv, vec2 seed) {",
+			"\tvec2 i = floor(uv);",
+			"\tvec2 f = fract(uv);",
+			"\tfloat random = step(rand(i+seed), 0.5);",
+			"\tf.x *= 2.0*random-1.0;",
+			"\tf.x += 1.0-random;",
+			"\treturn 1.0-min(abs(length(f)-0.5), abs(length(1.0-f)-0.5));",
+			"}",
+			""
+		],
 		"inputs": [
 
 		],
