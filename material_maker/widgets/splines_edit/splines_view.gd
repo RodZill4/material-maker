@@ -62,7 +62,7 @@ func _draw():
 		draw_bezier(edited, fg)
 	if splines != null:
 		for b in splines.splines:
-			draw_bezier(b, fg, draw_width)
+			draw_bezier(b, curve_color, draw_width)
 
 func _on_resize() -> void:
 	if auto_rescale:
