@@ -6,7 +6,6 @@
 offset_right = 124.0
 offset_bottom = 49.0
 title = "Debug"
-show_close = true
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(0, 1, 0, 0.501961)

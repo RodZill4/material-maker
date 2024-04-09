@@ -294,6 +294,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.size_value = p.first if !p.has("default") else p.default
 	elif p.type == "enum":
 		control = OptionButton.new()
+		control.fit_to_longest_item = false
 		for i in range(p.values.size()):
 			var value = p.values[i]
 			control.add_item(value.name)
