@@ -1,0 +1,72 @@
+{
+	"name": "height_blend_levels",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"vec4 hbl_adjust_levels(vec4 i, vec4 in_min, vec4 in_mid, vec4 in_max, vec4 out_min, vec4 out_max) {",
+			"\ti = clamp((i-in_min)/(in_max-in_min), 0.0, 1.0);",
+			"\tin_mid = (in_mid-in_min)/(in_max-in_min);",
+			"\tvec4 dark = step(in_mid, i);",
+			"\ti = 0.5*mix(i/(in_mid), 1.0+(i-in_mid)/(1.0-in_mid), dark);",
+			"\treturn out_min+i*(out_max-out_min);",
+			"}",
+			""
+		],
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "input",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "in_max",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.5)",
+				"label": "",
+				"name": "in_mid",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in_min",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(1.0)",
+				"label": "",
+				"name": "out_max",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "out_min",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"name": "Levels",
+		"outputs": [
+			{
+				"rgba": "hbl_adjust_levels($input($uv), $in_min($uv), $in_mid($uv), $in_max($uv), $out_min($uv), $out_max($uv))",
+				"type": "rgba"
+			}
+		],
+		"parameters": []
+	},
+	"type": "shader"
+}
