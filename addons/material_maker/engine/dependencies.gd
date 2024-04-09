@@ -6,7 +6,8 @@ class Buffer:
 		Invalidated,
 		Updating,
 		UpdatingInvalidated,
-		Updated
+		Updated,
+		Error
 	}
 	
 	var name : String
@@ -17,7 +18,7 @@ class Buffer:
 	var renders : int
 	var shader_generations : int
 	
-	const STATUS = ["Invalidated","Updating","UpdatingInvalidated","Updated"]
+	const STATUS = ["Invalidated","Updating","UpdatingInvalidated","Updated","Error"]
 	
 	func _init(n : String, o : Object = null):
 		name = n
@@ -194,7 +195,7 @@ func do_update():
 					buffer.status = Buffer.Updating
 					var status = await buffer.object.on_dep_update_buffer(b)
 					if status is bool and ! status:
-						buffer.status = Buffer.Invalidated
+						buffer.status = Buffer.Error
 		if reset_stats:
 			render_queue_size = invalidated_buffers
 			reset_stats = false
@@ -225,8 +226,8 @@ func buffer_create_compute_material(buffer_name : String, material : MMShaderBas
 	buffers[buffer_name].shader_generations += 1
 
 func buffer_create_shader_material(buffer_name : String, material : MMShaderBase, shader : String):
-	material.set_shader(shader)
-	await buffer_create_compute_material(buffer_name, material)
+	if await material.set_shader(shader):
+		await buffer_create_compute_material(buffer_name, material)
 
 func print_stats(object = null):
 	var statuses : Dictionary = {}

@@ -77,9 +77,17 @@ class ShaderUniform:
 			size_string = "[%d]" % size
 		return "%s %s %s%s%s;\n" % [ keyword, type, name, size_string, str_value_assign ]
 
+class GlobalDefs:
+	var code : String
+	var source : String
+
+	func _init(c, s):
+		code = c
+		source = s
+
 class ShaderCode:
 	extends RefCounted
-	var globals : Array[String] = []
+	var globals : Array[GlobalDefs] = []
 	var uniforms : Array[ShaderUniform] = []
 	var defs : String = ""
 	var code : String = ""
@@ -87,10 +95,25 @@ class ShaderCode:
 	var output_type : String = ""
 	var output_values : Dictionary = {}
 	
-	func add_globals(new_globals : Array[String]) -> void:
+	func add_global(new_global : String, source: String, index : int = -1) -> void:
+		for eg in globals:
+			if new_global == eg.code:
+				return
+		if index == -1:
+			globals.append(GlobalDefs.new(new_global, source))
+		else:
+			globals.insert(index, GlobalDefs.new(new_global, source))
+	
+	func add_globals(new_globals : Array[GlobalDefs]) -> void:
 		for g in new_globals:
-			if ! g in globals:
-				globals.append(g)
+			add_global(g.code, g.source)
+	
+	func get_globals_string() -> String:
+		var rv : String = ""
+		for g in globals:
+			rv += "// #globals: %s\n" % g.source
+			rv += g.code+"\n"
+		return rv
 	
 	func add_uniform(n : String, t : String, v, s : int = 0) -> void:
 		for u in uniforms:
@@ -396,7 +419,7 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	code += src_code.uniforms_as_strings()
 	code += "\n"
 	for g in src_code.globals:
-		code += g
+		code += g.code
 		code += "\n"
 	var shader_code = src_code.defs
 	if src_code.output_type != "":
@@ -450,13 +473,12 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 		if rv.code.find(variable_name) != -1:
 			found = true
 		for g in rv.globals:
-			if g.find(variable_name) != -1:
+			if g.code.find(variable_name) != -1:
 				found = true
 				break
 		if found:
 			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
-			if rv.globals.find(declaration) == -1:
-				rv.globals.push_front(declaration)
+			rv.add_global(declaration, "global_parameters_declaration", 0)
 	if mm_io_types.types.has(rv.output_type):
 		if mm_io_types.types[rv.output_type].has("convert"):
 			for c in mm_io_types.types[rv.output_type].convert:

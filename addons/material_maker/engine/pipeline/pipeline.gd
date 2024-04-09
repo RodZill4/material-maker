@@ -116,15 +116,19 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 	var spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(src)
 	var shader : RID = RID()
 	for k in shader_text.keys():
-		if spirv["compile_error_"+k] != "":
+		var error : String = spirv["compile_error_"+k]
+		if error != "":
+			mm_renderer.shader_error_handler.on_error(error, src["source_"+k])
 			var ln : int = 0
 			for l in src["source_"+k].split("\n"):
 				ln += 1
 				print("%4d: %s" % [ ln, l ])
-			print(k.to_upper()+" SHADER ERROR: "+spirv["compile_error_"+k])
+			print(k.to_upper()+" SHADER ERROR: "+error)
 			errors = true
 	if ! errors:
 		shader = rd.shader_create_from_spirv(spirv)
+		if not shader.is_valid():
+			print("Error creating shader from spirv")
 	return shader
 
 func add_parameter_or_texture(n : String, t : String, v, parameter_as_constant : bool = false):

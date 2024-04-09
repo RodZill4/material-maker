@@ -18,12 +18,15 @@ var max_buffer_size = 0
 var rendering_device : RenderingDevice
 var rendering_device_user = null
 
+var shader_error_handler
+
 
 signal free_renderer()
 signal free_rendering_device
 
 
 func _ready() -> void:
+	shader_error_handler = load("res://addons/material_maker/engine/shader_error_handler.gd").new()
 	common_shader = "varying float elapsed_time;
 
 void vertex() {

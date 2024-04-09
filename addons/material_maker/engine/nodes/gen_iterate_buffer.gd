@@ -30,7 +30,7 @@ func _ready():
 		"o%d_input_init" % get_instance_id(),
 		"o%d_input_loop" % get_instance_id(),
 		"o%d_loop_tex" % get_instance_id(),
-		"o%d_tex" % get_instance_id()
+		"o%d_it_tex" % get_instance_id()
 	]
 	iteration_param_name = "o%d_iteration" % get_instance_id()
 	mm_deps.create_buffer(buffer_names[3], self)
@@ -148,8 +148,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	if buffer_name == buffer_names[3]:
+		print("Cannot update %s" % buffer_name)
 		return false
-	if false and is_rendering:
+	if is_rendering:
+		print("Already rendering %s" % buffer_name)
 		return false
 	
 	is_rendering = true
@@ -167,6 +169,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		is_rendering = false
+		print("Bad iteration")
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
@@ -180,11 +183,14 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 			size = 4
 	
 	var status : bool = await shader_compute.render(texture, size)
+	if not status:
+		print("Error while rendering %s" % buffer_name)
 	
 	is_rendering = false
 	
 	if check_current_iteration != current_iteration:
 		mm_deps.dependency_update(buffer_name, texture, true)
+		print("Iteration mismatch for  %s" % buffer_name)
 		return false
 	
 	#todo texture.flags = 0

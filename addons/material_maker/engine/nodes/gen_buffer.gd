@@ -103,15 +103,17 @@ func do_update_shader() -> void:
 	var f32 = false
 	if version == VERSION_COMPLEX:
 		f32 = get_parameter("f32")
-	await shader_compute.set_shader_from_shadercode(source, f32)
-	var new_is_greyscale = ((shader_compute.get_texture_type() & 1) == 0)
-	if new_is_greyscale != is_greyscale:
-		is_greyscale = new_is_greyscale
-		notify_output_change(0)
-		if version == VERSION_OLD:
-			notify_output_change(1)
-	mm_deps.buffer_create_compute_material("o%d_tex" % get_instance_id(), shader_compute)
-	mm_deps.update()
+	if await shader_compute.set_shader_from_shadercode(source, f32):
+		var new_is_greyscale = ((shader_compute.get_texture_type() & 1) == 0)
+		if new_is_greyscale != is_greyscale:
+			is_greyscale = new_is_greyscale
+			notify_output_change(0)
+			if version == VERSION_OLD:
+				notify_output_change(1)
+		mm_deps.buffer_create_compute_material("o%d_tex" % get_instance_id(), shader_compute)
+		mm_deps.update()
+	else:
+		print("buffer is invalid")
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if value != null:
@@ -125,7 +127,9 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if status:
 		rendering_time = shader_compute.get_render_time()
 		self.rendering_time_updated.emit(rendering_time)
-	mm_deps.dependency_update(buffer_name, texture, true)
+		mm_deps.dependency_update(buffer_name, texture, true)
+	else:
+		print("Failed to update buffer")
 	return status
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:

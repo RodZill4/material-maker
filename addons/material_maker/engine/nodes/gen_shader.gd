@@ -720,10 +720,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		if shader_model_preprocessed.has("includes"):
 			for i in shader_model_preprocessed.includes:
 				var g = mm_loader.get_predefined_global(i)
-				if g != "" and rv.globals.find(g) == -1:
-					rv.globals.push_back(g)
-		if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
-			rv.globals.push_back(shader_model_preprocessed.global)
+				if g != "":
+					rv.add_global(g, i)
+		if shader_model_preprocessed.has("global"):
+			rv.add_global(shader_model_preprocessed.global, get_hier_name())
 		if shader_model_preprocessed.has("instance"):
 			rv.defs += replace_variables(shader_model_preprocessed.instance, variables, rv, context)
 	# Add inline code
@@ -732,7 +732,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		var genname_uv : String = genname+"_"+str(context.get_variant(self, uv))
 		variables["name_uv"] = genname_uv
 		if variant_index == -1:
-			rv.code += replace_variables(shader_model_preprocessed.code, variables, rv, context)
+			var code : String = replace_variables(shader_model_preprocessed.code, variables, rv, context)
+			if code != "":
+				rv.code += "\n// #code: %s\n" % get_hier_name()
+				rv.code += code
 	# Add output_code
 	var variant_string = uv+","+str(output_index)
 	var variant_index = context.get_variant(self, variant_string)
@@ -745,6 +748,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			var expression = replace_variables(output[f].replace("@NOCODE", ""), variables, rv, context)
 			var variable_name : String = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
 			if assign_output:
+				rv.code += "// #output%d: %s\n" % [ output_index, get_hier_name() ]
 				rv.code += "%s %s = %s;\n" % [ mm_io_types.types[f].type, variable_name, expression ]
 			rv.output_values[f] = variable_name
 	rv.output_type = output.type
