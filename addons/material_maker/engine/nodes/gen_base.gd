@@ -46,6 +46,19 @@ class ShaderUniform:
 	func to_str(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
 		var str_value_assign : String = ""
 		match type:
+			"int":
+				if value is int:
+					str_value_assign = " = %d" % value
+				elif value is PackedInt32Array and initialize_vectors:
+					str_value_assign = " = int[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign += "%d" % v
+					str_value_assign += " )"
 			"float":
 				if value is float:
 					str_value_assign = " = %.9f" % value
