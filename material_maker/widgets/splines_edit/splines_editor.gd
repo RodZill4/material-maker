@@ -233,8 +233,10 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 				generator = g
 				parameter_name = p.name
 				value_changed.connect(self.control_update_parameter)
-			if not is_editing():
-				set_splines(MMType.deserialize_value(g.get_parameter(p.name)))
+				if not is_editing():
+					set_splines(MMType.deserialize_value(g.get_parameter(p.name)))
+			elif not is_editing():
+				update_control_positions()
 			need_hide = false
 			break
 	if need_hide:

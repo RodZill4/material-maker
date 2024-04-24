@@ -99,6 +99,7 @@ func _gui_input(event : InputEvent) -> void:
 			if event.double_click:
 				await get_tree().process_frame
 				select_all()
+				accept_event()
 			else:
 				last_position = event.position.x
 				start_position = last_position
