@@ -221,6 +221,13 @@ func get_globals__(texture_name : String) -> Array[String]:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float o%d_tex_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, get_instance_id() 	, pow(2, get_parameter("size")), get_instance_id() ]
 	return [ texture_globals ]
 
+func get_adjusted_uv(uv : String) -> String:
+	if not get_parameter("filter"):
+		var genname = "o"+str(get_instance_id())
+		return "((floor(%s * %s_tex_size)+vec2(0.5))/%s_tex_size)" % [ uv, genname, genname ]
+	else:
+		return uv
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
 	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0, "_tex" if output_index == 0 else "_loop_tex")

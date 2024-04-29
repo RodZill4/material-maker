@@ -164,6 +164,10 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 				if value is int:
 					parameter_values.encode_s32(p.offset, value)
 					return
+				elif value is PackedInt32Array and value.size() == p.array_size:
+					for i in value.size():
+						parameter_values.encode_s32(p.offset+i*4, value[i])
+					return
 			"float":
 				if value is float or value is int:
 					parameter_values.encode_float(p.offset, value)

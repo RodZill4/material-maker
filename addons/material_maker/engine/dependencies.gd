@@ -44,8 +44,8 @@ signal render_queue_empty
 func create_buffer(buffer_name : String, object : Object = null):
 	buffers[buffer_name] = Buffer.new(buffer_name, object)
 	buffer_invalidate(buffer_name)
-	if object is Node and not object.is_connected("tree_exiting", Callable(self, "delete_buffers_from_object")):
-		object.connect("tree_exiting", Callable(self, "delete_buffers_from_object").bind(object))
+	if object is Node and not object.is_connected("tree_exiting", self.delete_buffers_from_object.bind(object)):
+		object.connect("tree_exiting", self.delete_buffers_from_object.bind(object))
 
 func delete_buffer(buffer_name : String):
 	buffer_clear_dependencies(buffer_name)
@@ -190,7 +190,7 @@ func do_update():
 			var buffer : Buffer = buffers[b]
 			if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
 				invalidated_buffers += 1
-			if buffer.status == Buffer.Invalidated && buffer.pending_dependencies == 0:
+			if (buffer.status == Buffer.Invalidated or buffer.status == Buffer.UpdatingInvalidated) and buffer.pending_dependencies == 0:
 				if buffer.object.has_method("on_dep_update_buffer"):
 					buffer.status = Buffer.Updating
 					var status = await buffer.object.on_dep_update_buffer(b)

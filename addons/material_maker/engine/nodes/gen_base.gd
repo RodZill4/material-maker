@@ -462,14 +462,6 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = mm_renderer.generate_shader(source)
 	return { shader=shader, output_type=output_type }
 
-func render_expression(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
-	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.shader
-	var output_type : String = output_shader.output_type
-	var renderer = await mm_renderer.request(object)
-	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
-	return renderer
-
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
 	var shader : String = output_shader.shader
@@ -477,6 +469,21 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	var renderer = await mm_renderer.request(object)
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
+
+func render_output(output_index : int, size : int) -> Image:
+	var context : MMGenContext = MMGenContext.new()
+	var source : ShaderCode = get_shader_code("uv", output_index, context)
+	var shader_compute : MMShaderCompute = MMShaderCompute.new()
+	var shader_status : bool = await shader_compute.set_shader_from_shadercode(source, false)
+	var image : Image
+	if shader_status:
+		var texture : MMTexture = MMTexture.new()
+		var status = await shader_compute.render(texture, size)
+		if status:
+			image = (await texture.get_texture()).get_image()
+	else:
+		image = Image.new()
+	return image
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var rv = _get_shader_code(uv, output_index, context)

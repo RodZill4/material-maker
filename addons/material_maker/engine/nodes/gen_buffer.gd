@@ -103,14 +103,15 @@ func do_update_shader() -> void:
 	var f32 = false
 	if version == VERSION_COMPLEX:
 		f32 = get_parameter("f32")
-	if await shader_compute.set_shader_from_shadercode(source, f32):
+	var shader_status : bool = await shader_compute.set_shader_from_shadercode(source, f32)
+	if shader_status:
 		var new_is_greyscale = ((shader_compute.get_texture_type() & 1) == 0)
 		if new_is_greyscale != is_greyscale:
 			is_greyscale = new_is_greyscale
 			notify_output_change(0)
 			if version == VERSION_OLD:
 				notify_output_change(1)
-		mm_deps.buffer_create_compute_material("o%d_tex" % get_instance_id(), shader_compute)
+		await mm_deps.buffer_create_compute_material("o%d_tex" % get_instance_id(), shader_compute)
 		mm_deps.update()
 	else:
 		print("buffer is invalid")
@@ -131,6 +132,13 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		print("Failed to update buffer")
 	return status
+
+func get_adjusted_uv(uv : String) -> String:
+	if version == VERSION_COMPLEX and not get_parameter("filter"):
+		var genname = "o"+str(get_instance_id())
+		return "((floor(%s * %s_tex_size)+vec2(0.5))/%s_tex_size)" % [ uv, genname, genname ]
+	else:
+		return uv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
