@@ -587,6 +587,16 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 			if generate_declarations:
 				rv.add_uniforms(value.get_parameters(genname+"_"+p.name))
 			variables[p.name] = value.get_shader(genname+"_"+p.name)
+		elif p.type == "pixels":
+			var g = parameters[p.name]
+			if !(g is MMPixels):
+				g = MMPixels.new()
+				g.deserialize(parameters[p.name])
+			if generate_declarations:
+				rv.add_uniforms(g.get_parameters(genname+"_"+p.name))
+				rv.defs += g.get_shader(genname+"_"+p.name)
+			variables[p.name] = genname+"_"+p.name+"_pixels_fct"
+			variables[p.name+"_size"] = genname+"_"+p.name+"_size"
 		else:
 			print("ERROR: Unsupported parameter "+p.name+" of type "+p.type)
 
