@@ -1,0 +1,311 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "shader_1",
+			"to_port": 0
+		},
+		{
+			"from": "shader_1",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Classic Kuwahara",
+	"longdesc": "Simple edge-preserving smoothing filter",
+	"name": "classic_kuwahara",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -723.910156,
+				"y": -199.916687
+			},
+			"parameters": {
+				"buffer": 0,
+				"resolution": 10,
+				"size": 6
+			},
+			"seed": 56582,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "shader_1",
+							"widget": "s"
+						}
+					],
+					"longdesc": "Resolution used to sample the input",
+					"name": "resolution",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "shader_1",
+							"widget": "size"
+						}
+					],
+					"longdesc": "Size of the filter",
+					"name": "size",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"False": [
+							{
+								"node": "switch",
+								"value": 0,
+								"widget": "source"
+							}
+						],
+						"True": [
+							{
+								"node": "switch",
+								"value": 1,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Buffer",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						}
+					],
+					"longdesc": "When set, a buffer is used to sample the input before the kuwahara filter",
+					"name": "buffer",
+					"shortdesc": "Buffer",
+					"type": "config_control"
+				}
+			]
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -379.663818,
+				"y": 17.047363
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Filtered Image",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "rgb"
+				}
+			],
+			"seed": -6314,
+			"type": "ios"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -981.910156,
+				"y": 31.047363
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0,
+					"longdesc": "Input image",
+					"name": "in",
+					"shortdesc": "Input",
+					"type": "rgb"
+				}
+			],
+			"seed": 12483,
+			"seed_locked": true,
+			"type": "ios"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -621.5,
+				"y": 133.297363
+			},
+			"parameters": {
+				"choices": 2,
+				"outputs": 1,
+				"source": 0
+			},
+			"seed": -53264,
+			"type": "switch"
+		},
+		{
+			"name": "shader_1",
+			"node_position": {
+				"x": -599.996094,
+				"y": 16.618835
+			},
+			"parameters": {
+				"s": 10,
+				"size": 6
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": [
+					"// License: GPLv3 / Jan Eric Kyprianidis <www.kyprianidis.com>",
+					"// Source: https://code.google.com/archive/p/gpuakf/",
+					"vec3 $(name)_classic_kuwahara(vec2 uv, int radius) {",
+					"\tfloat n = float((radius + 1) * (radius + 1));",
+					"\tvec3 col = vec3(0.0);",
+					"",
+					"\tvec3 m[4];",
+					"\tvec3 s[4];",
+					"\tfor (int k = 0; k < 4; ++k) {",
+					"\t  m[k] = vec3(0.0);",
+					"\t  s[k] = vec3(0.0);",
+					"\t}",
+					"",
+					"\tfor (int j = -radius; j <= 0; ++j)  {",
+					"\t\tfor (int i = -radius; i <= 0; ++i)  {",
+					"\t\t   vec3 c = $in(uv + vec2(float(i),float(j)) * 1.0/$s).rgb;",
+					"\t\t   m[0] += c;",
+					"\t\t   s[0] += c * c;",
+					"\t\t}",
+					"\t}",
+					"",
+					"\tfor (int j = -radius; j <= 0; ++j)  {",
+					"\t\tfor (int i = 0; i <= radius; ++i)  {",
+					"\t\t\tvec3 c = $in(uv + vec2(float(i),float(j)) * 1.0/$s).rgb;",
+					"\t\t\tm[1] += c;",
+					"\t\t\ts[1] += c * c;",
+					"\t\t}",
+					"\t}",
+					"",
+					"\tfor (int j = 0; j <= radius; ++j)  {",
+					"\t\tfor (int i = 0; i <= radius; ++i)  {",
+					"\t\t   vec3 c = $in(uv + vec2(float(i),float(j)) * 1.0/$s).rgb;",
+					"\t\t   m[2] += c;",
+					"\t\t   s[2] += c * c;",
+					"\t\t}",
+					"\t}",
+					"",
+					"\tfor (int j = 0; j <= radius; ++j)  {",
+					"\t\tfor (int i = -radius; i <= 0; ++i)  {",
+					"\t\t\tvec3 c = $in(uv + vec2(float(i),float(j)) * 1.0/$s).rgb;",
+					"\t\t\tm[3] += c;",
+					"\t\t\ts[3] += c * c;",
+					"\t\t}",
+					"\t}",
+					"",
+					"\tfloat min_sigma2 = 1e+2;",
+					"\tfor (int k = 0; k < 4; ++k) {",
+					"\t\tm[k] /= n;",
+					"\t\ts[k] = abs(s[k] / n - m[k] * m[k]);",
+					"",
+					"\t\tfloat sigma2 = s[k].r + s[k].g + s[k].b;",
+					"\t\tif (sigma2 < min_sigma2) {",
+					"\t\t\tmin_sigma2 = sigma2;",
+					"\t\t\tcol = m[k];",
+					"\t\t}",
+					"\t}",
+					"\treturn col;",
+					"}"
+				],
+				"name": "classic_kuwahara",
+				"outputs": [
+					{
+						"rgb": "$(name)_classic_kuwahara($uv, int(max($size,0.0)))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10,
+						"first": 4,
+						"label": "",
+						"last": 13,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 6,
+						"label": "Size",
+						"longdesc": "Size of the filter",
+						"max": 100,
+						"min": 1,
+						"name": "size",
+						"shortdesc": "Size",
+						"step": 1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -878.496094,
+				"y": 140.618835
+			},
+			"parameters": {
+				"size": 10
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 1
+		}
+	],
+	"parameters": {
+		"buffer": 0,
+		"resolution": 10,
+		"size": 6
+	},
+	"seed_int": 0,
+	"shortdesc": "Classic Kuwahara Filter",
+	"type": "graph"
+}

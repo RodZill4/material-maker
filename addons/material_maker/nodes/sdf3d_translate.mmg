@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "sdf3d_translate",
 	"node_position": {
 		"x": 0,
@@ -18,8 +19,8 @@
 				"default": "vec2(100.0, 0.0)",
 				"label": "",
 				"longdesc": "The input object as a signed distance function",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "sdf3dc"
 			}
 		],
@@ -29,8 +30,8 @@
 		"outputs": [
 			{
 				"longdesc": "The translated object",
-				"sdf3dc": "$in($uv-vec3($x, $y, $z))",
-				"shortdesc": "Output",
+				"sdf3dc": "$in#($uv-vec3($x, $y, $z))",
+				"shortdesc": "Output#",
 				"type": "sdf3dc"
 			}
 		],
