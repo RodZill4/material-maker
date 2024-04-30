@@ -3,11 +3,10 @@
 [ext_resource type="Script" path="res://material_maker/windows/accept_dialog/accept_dialog.gd" id="1"]
 
 [node name="AcceptDialog" type="AcceptDialog"]
-offset_right = 95.0
-offset_bottom = 58.0
-window_title = "Alert"
+always_on_top = true
 script = ExtResource("1")
 
+[connection signal="canceled" from="." to="." method="_on_AcceptDialog_popup_hide"]
+[connection signal="close_requested" from="." to="." method="_on_AcceptDialog_popup_hide"]
 [connection signal="confirmed" from="." to="." method="_on_AcceptDialog_confirmed"]
 [connection signal="custom_action" from="." to="." method="_on_AcceptDialog_custom_action"]
-[connection signal="popup_hide" from="." to="." method="_on_AcceptDialog_popup_hide"]
