@@ -1,7 +1,7 @@
 ApplyMap node
 ~~~~~~~~~~~~~
 
-The **ApplyMap** node applys a map to a simple material by adjusting its orientation and offset,
+The **ApplyMap** node applies a map to a simple material by adjusting its orientation and offset,
 and outputs the modified map and the height information.
 
 .. image:: images/node_workflow_applymap.png
