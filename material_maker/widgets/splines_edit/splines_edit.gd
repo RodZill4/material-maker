@@ -1,7 +1,7 @@
 extends Control
 
 
-var value = null: set = set_value
+var value = null : set = set_value
 
 
 signal updated(splines, old_value)
@@ -27,3 +27,14 @@ func _on_SplinesEdit_pressed():
 func on_value_changed(v) -> void:
 	set_value(v)
 	emit_signal("updated", v.duplicate(), null)
+
+func _get_drag_data(_position):
+	return value.duplicate()
+
+func _can_drop_data(_position, data) -> bool:
+	return data is MMSplines
+
+func _drop_data(_position, data) -> void:
+	var old_splines : MMSplines = value
+	value = data
+	emit_signal("updated", value, old_splines)

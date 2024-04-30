@@ -14,7 +14,6 @@ offset_bottom = 141.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 title = "Tones"
-show_close = true
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(0, 0.396078, 1, 1)
@@ -59,6 +58,17 @@ layout_mode = 2
 [node name="Mode" type="OptionButton" parent="Bar"]
 layout_mode = 2
 size_flags_horizontal = 3
+item_count = 5
+popup/item_0/text = "Luminance"
+popup/item_0/id = 0
+popup/item_1/text = "Red"
+popup/item_1/id = 1
+popup/item_2/text = "Green"
+popup/item_2/id = 2
+popup/item_3/text = "Blue"
+popup/item_3/id = 3
+popup/item_4/text = "Alpha"
+popup/item_4/id = 4
 
 [node name="Auto" type="TextureButton" parent="Bar"]
 layout_mode = 2

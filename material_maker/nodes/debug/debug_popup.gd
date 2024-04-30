@@ -35,7 +35,7 @@ func generate_shadertoy() -> String:
 	code += "\n"
 	if ! src_code.globals.is_empty():
 		for g in src_code.globals:
-			code += g
+			code += g.code
 	var code_defs = src_code.defs
 	code += code_defs
 	code += "\n"

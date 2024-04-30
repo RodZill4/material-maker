@@ -45,10 +45,10 @@ func get_output_texture_declarations() -> String:
 		texture_declarations += t.get_declaration(ti)
 	return texture_declarations
 
-func set_shader(string : String, output_texture_type : int, replaces : Dictionary = {}):
-	set_shader_ext(string, [{name="OUTPUT_TEXTURE", type=output_texture_type}], replaces)
+func set_shader(string : String, output_texture_type : int, replaces : Dictionary = {}) -> bool:
+	return await set_shader_ext(string, [{name="OUTPUT_TEXTURE", type=output_texture_type}], replaces)
 
-func set_shader_ext(string : String, output_textures_desc : Array[Dictionary], replaces : Dictionary = {}):
+func set_shader_ext(string : String, output_textures_desc : Array[Dictionary], replaces : Dictionary = {}) -> bool:
 	output_textures = []
 	for ot in output_textures_desc:
 		var writeonly : bool = true
@@ -65,10 +65,11 @@ func set_shader_ext(string : String, output_textures_desc : Array[Dictionary], r
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	shader = do_compile_shader(rd, { compute=string }, replaces)
 	mm_renderer.release_rendering_device(self)
+	return shader.is_valid()
 
 func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, parameters_as_constants : bool = false):
 	for u in shader_code.uniforms:
-		for c in [ "\n".join(shader_code.globals), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
+		for c in [ shader_code.get_globals_string(), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
 			if c.find(u.name) != -1:
 				var type : String = u.type
 				if u.size > 0:
@@ -76,7 +77,7 @@ func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, paramete
 				add_parameter_or_texture(u.name, type, u.value, parameters_as_constants)
 				break
 
-func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, output_textures_desc : Array[Dictionary], compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> void:
+func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGenBase.ShaderCode, output_textures_desc : Array[Dictionary], compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = [], parameters_as_constants : bool = false) -> bool:
 	var replaces : Dictionary = {}
 	
 	clear()
@@ -88,14 +89,14 @@ func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGe
 		add_parameter_or_texture("mm_compare", "sampler2D", compare_texture)
 	
 	replaces["@COMMON_SHADER_FUNCTIONS"] = preload("res://addons/material_maker/shader_functions.tres").text
-	replaces["@GLOBALS"] = "\n".join(shader_code.globals)
+	replaces["@GLOBALS"] = shader_code.get_globals_string()
 	replaces["@DEFINITIONS"] = shader_code.defs
 	replaces["@CODE"] = shader_code.code
 	replaces["@OUTPUT_VALUE"] = shader_code.output_values.rgba
 
-	await set_shader_ext(shader_template, output_textures_desc, replaces)
+	return await set_shader_ext(shader_template, output_textures_desc, replaces)
 
-func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = []) -> void:
+func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, compare_texture : MMTexture = null, extra_parameters : Array[Dictionary] = []) -> bool:
 	var shader_template : String
 	
 	if compare_texture:
@@ -110,7 +111,7 @@ func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits :
 		output_texture_type |= 2
 	var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
 	
-	await set_shader_from_shadercode_ext(shader_template, shader_code, output_textures, compare_texture, extra_parameters)
+	return await set_shader_from_shadercode_ext(shader_template, shader_code, output_textures, compare_texture, extra_parameters)
 
 func get_parameters() -> Dictionary:
 	var rv : Dictionary = {}
@@ -201,6 +202,7 @@ func render_2(rd : RenderingDevice, textures : Array[MMTexture], size : Vector2i
 	
 	var status : bool = await do_render(rd, output_textures_rids, size, rids)
 	if ! status:
+		push_warning("Rendering failed")
 		return false
 	
 	for i in range(textures.size()):
@@ -230,13 +232,13 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 	if parameter_values.size() > 0:
 		uniform_set_1 = get_parameter_uniforms(rd, shader, rids)
 		if ! uniform_set_1.is_valid():
-			print("Failed to create valid uniform for parameters")
+			push_warning("Failed to create valid uniform for parameters")
 			return false
 	
 	time("Create input_textures uniforms")
 	var uniform_set_2 : RID = get_texture_uniforms(rd, shader, rids)
 	if uniform_set_2.get_id() != 0 and not uniform_set_2.is_valid():
-		print("Failed to create valid uniform for input_textures")
+		push_warning("Failed to create valid uniform for input_textures")
 		return false
 	
 	time("Create comparison uniform")

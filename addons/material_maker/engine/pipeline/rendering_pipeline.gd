@@ -24,11 +24,12 @@ func bind_buffer_uniforms(rd : RenderingDevice, draw_list : int, shader : RID, b
 func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, rids : RIDs):
 	pass
 
-func set_shader(vertex_source : String, fragment_source : String, replaces : Dictionary = {}):
+func set_shader(vertex_source : String, fragment_source : String, replaces : Dictionary = {}) -> bool:
 	replaces["@DECLARATIONS"] = get_uniform_declarations()+"\n"+get_input_texture_declarations()
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
 	shader = do_compile_shader(rd, { vertex=vertex_source, fragment=fragment_source }, replaces)
 	mm_renderer.release_rendering_device(self)
+	return shader.is_valid()
 
 func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
 	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
