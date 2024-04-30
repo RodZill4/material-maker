@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://vcq44hndctlj"]
+
+[ext_resource type="Script" path="res://material_maker/widgets/pixels_edit/pixels_edit.gd" id="1_dnpuf"]
+[ext_resource type="PackedScene" uid="uid://cceel6sqaceu6" path="res://material_maker/widgets/pixels_edit/pixels_view.tscn" id="2_p1086"]
+
+[node name="PixelsEdit" type="Button"]
+custom_minimum_size = Vector2(32, 32)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1280.0
+offset_right = -1248.0
+offset_bottom = -688.0
+focus_mode = 1
+script = ExtResource("1_dnpuf")
+
+[node name="PixelsView" parent="." instance=ExtResource("2_p1086")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="." to="." method="_on_PixelsEdit_pressed"]

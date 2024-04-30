@@ -15,16 +15,20 @@ layout(location = 4) in vec2 uv;
 
 void main() {
 	float box = 2.0;
-	vec2 epsilon = vec2(0.001);
+	vec2 epsilon = vec2(1.0)/viewport_size;
 	float v = 1.0;
-	if (model_vert.x > 0.0 && model_vert.x < 1.0 && model_vert.y > 0.0 && model_vert.y < 1.0) {
+	vec4 pos = transform*vec4(model_vert, 1.0);
+	pos /= pos.w;
+	pos.y = -pos.y;
+	vec3 mv = pos.xyz*0.5+vec3(0.5);
+	if (mv.x > 0.0 && mv.x < 1.0 && mv.y > 0.0 && mv.y < 1.0) {
 		for (float dx = -box; dx <= box; dx +=1.0) {
 			for (float dy = -box; dy <= box; dy += 1.0) {
-				v = min(v, length(texture(v2t, model_vert.xy+epsilon*vec2(dx, dy)).xy-uv));
+				v = min(v, length(texture(v2t, mv.xy+epsilon*vec2(dx, dy)).xy-uv));
 			}
 		}
 	}
-	v = clamp(1.0-100.0*v, 0.0, 1.0);
-	outColor = vec4(model_vert.xy, v, 1.0);
+	v = clamp(1.0-20.0*v, 0.0, 1.0);
+	outColor = vec4(mv.xy, v, 1.0);
 }
 "

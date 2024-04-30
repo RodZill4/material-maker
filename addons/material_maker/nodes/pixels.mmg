@@ -1,0 +1,81 @@
+{
+	"name": "pixels",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"pixels": {
+			"bpp": 1,
+			"h": 4,
+			"pl": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				}
+			],
+			"px": [
+				0
+			],
+			"type": "Pixels",
+			"w": 4
+		}
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [],
+		"instance": "",
+		"longdesc": "Draws a uniform greyscale image",
+		"name": "Pixels",
+		"outputs": [
+			{
+				"longdesc": "A uniform image of the selected value",
+				"rgba": "$pixels(ivec2(floor(vec2(float($pixels_size.x), float($pixels_size.y))*$uv)))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"bpp": 1,
+					"h": 8,
+					"pl": [
+						{
+							"a": 1,
+							"b": 0.5,
+							"g": 0.5,
+							"r": 0.5
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"r": 1
+						}
+					],
+					"px": [
+						42,
+						42
+					],
+					"type": "Pixels",
+					"w": 8
+				},
+				"label": "",
+				"name": "pixels",
+				"type": "pixels"
+			}
+		]
+	},
+	"type": "shader"
+}
