@@ -30,7 +30,7 @@ func _ready():
 		"o%d_input_init" % get_instance_id(),
 		"o%d_input_loop" % get_instance_id(),
 		"o%d_loop_tex" % get_instance_id(),
-		"o%d_tex" % get_instance_id()
+		"o%d_it_tex" % get_instance_id()
 	]
 	iteration_param_name = "o%d_iteration" % get_instance_id()
 	mm_deps.create_buffer(buffer_names[3], self)
@@ -148,8 +148,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	if buffer_name == buffer_names[3]:
+		print("Cannot update %s" % buffer_name)
 		return false
-	if false and is_rendering:
+	if is_rendering:
+		print("Already rendering %s" % buffer_name)
 		return false
 	
 	is_rendering = true
@@ -167,6 +169,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		is_rendering = false
+		print("Bad iteration")
 		return false
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
@@ -180,11 +183,14 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 			size = 4
 	
 	var status : bool = await shader_compute.render(texture, size)
+	if not status:
+		print("Error while rendering %s" % buffer_name)
 	
 	is_rendering = false
 	
 	if check_current_iteration != current_iteration:
 		mm_deps.dependency_update(buffer_name, texture, true)
+		print("Iteration mismatch for  %s" % buffer_name)
 		return false
 	
 	#todo texture.flags = 0
@@ -214,6 +220,13 @@ func set_current_iteration(i : int) -> void:
 func get_globals__(texture_name : String) -> Array[String]:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float o%d_tex_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, get_instance_id() 	, pow(2, get_parameter("size")), get_instance_id() ]
 	return [ texture_globals ]
+
+func get_adjusted_uv(uv : String) -> String:
+	if not get_parameter("filter"):
+		var genname = "o"+str(get_instance_id())
+		return "((floor(%s * %s_tex_size)+vec2(0.5))/%s_tex_size)" % [ uv, genname, genname ]
+	else:
+		return uv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())

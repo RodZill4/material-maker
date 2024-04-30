@@ -20,6 +20,7 @@ uniform float     pattern_scale   = 10.0;
 uniform float     pattern_angle   = 0.0;
 uniform float     pattern_alpha   = 0.0;
 uniform float     pressure        = 1.0;
+uniform vec2      tilt            = vec2(0.0, 0.0);
 
 uniform sampler2D view2tex_tex;
 uniform vec3      mesh_aabb_position = vec3(-0.5);

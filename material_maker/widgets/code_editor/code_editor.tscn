@@ -18,11 +18,98 @@ grow_vertical = 2
 mouse_default_cursor_shape = 0
 theme_override_fonts/font = ExtResource("1_o6uhb")
 theme_override_font_sizes/font_size = 12
+minimap_draw = true
+syntax_highlighter = SubResource("CodeHighlighter_cib74")
 highlight_all_occurrences = true
 highlight_current_line = true
 draw_tabs = true
-syntax_highlighter = SubResource("CodeHighlighter_cib74")
-minimap_draw = true
+gutters_draw_line_numbers = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 script = ExtResource("2_b3eoo")
+
+[node name="Find" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Find"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Find/HBoxContainer"]
+layout_mode = 2
+
+[node name="FindControls" type="HBoxContainer" parent="Find/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FindString" type="LineEdit" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+placeholder_text = "Find"
+
+[node name="CaseSensitive" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+layout_mode = 2
+toggle_mode = true
+text = "aB"
+
+[node name="Word" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+layout_mode = 2
+toggle_mode = true
+text = "Word"
+
+[node name="FindOccurrences" type="Label" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+
+[node name="Previous" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+layout_mode = 2
+text = "^"
+
+[node name="Next" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+layout_mode = 2
+text = "v"
+
+[node name="Close" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
+layout_mode = 2
+text = "x"
+
+[node name="ReplaceControls" type="HBoxContainer" parent="Find/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ReplaceString" type="LineEdit" parent="Find/HBoxContainer/VBoxContainer/ReplaceControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+placeholder_text = "Replace"
+
+[node name="ReplaceCurrent" type="Button" parent="Find/HBoxContainer/VBoxContainer/ReplaceControls"]
+layout_mode = 2
+text = "RC"
+
+[node name="ReplaceAll" type="Button" parent="Find/HBoxContainer/VBoxContainer/ReplaceControls"]
+layout_mode = 2
+text = "RA"
+
+[node name="UpdateFind" type="Timer" parent="."]
+autostart = true
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="text_changed" from="Find/HBoxContainer/VBoxContainer/FindControls/FindString" to="." method="_on_find_string_changed"]
+[connection signal="pressed" from="Find/HBoxContainer/VBoxContainer/FindControls/Previous" to="." method="_on_previous_pressed"]
+[connection signal="pressed" from="Find/HBoxContainer/VBoxContainer/FindControls/Next" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="Find/HBoxContainer/VBoxContainer/FindControls/Close" to="." method="_on_close_pressed"]
+[connection signal="text_changed" from="Find/HBoxContainer/VBoxContainer/ReplaceControls/ReplaceString" to="." method="_on_find_string_changed"]
+[connection signal="pressed" from="Find/HBoxContainer/VBoxContainer/ReplaceControls/ReplaceCurrent" to="." method="_on_replace_current_pressed"]
+[connection signal="pressed" from="Find/HBoxContainer/VBoxContainer/ReplaceControls/ReplaceAll" to="." method="_on_replace_all_pressed"]
+[connection signal="timeout" from="UpdateFind" to="." method="update_find_occurrences"]

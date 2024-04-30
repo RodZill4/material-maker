@@ -402,12 +402,12 @@ func crash_recovery_save() -> void:
 	if top_generator.get_child_count() < 2:
 		return
 	if save_crash_recovery_path == "":
-		if DirAccess.dir_exists_absolute("user://unsaved_projects"):
+		if not DirAccess.dir_exists_absolute("user://unsaved_projects"):
 			DirAccess.make_dir_recursive_absolute("user://unsaved_projects")
 		var i : int = 0
 		while true:
 			save_crash_recovery_path = "user://unsaved_projects/unsaved_%03d.mmcr" % i
-			if ! FileAccess.file_exists(save_crash_recovery_path):
+			if not FileAccess.file_exists(save_crash_recovery_path):
 				break
 			i += 1
 	var data = top_generator.serialize()
@@ -867,10 +867,12 @@ func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 					return
 		set_current_preview(0, node)
 	undoredo_move_node_selection_changed = true
+	mm_globals.main_window.update_menus()
 
 func _on_GraphEdit_node_unselected(_node):
 	highlight_connections()
 	undoredo_move_node_selection_changed = true
+	mm_globals.main_window.update_menus()
 
 func get_current_preview(slot : int = 0):
 	if locked_preview[slot] != null:

@@ -323,9 +323,7 @@ func _on_PopupMenu_index_pressed(index):
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
 			if current_node == null:
 				return
-			var result = await current_node.generator.render(self, 0, 64, true)
-			var image : Image = result.get_image()
-			result.release(self)
+			var image : Image = await current_node.generator.render_output(0, 64)
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
 		2: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)

@@ -13,12 +13,13 @@ const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_m
 
 
 func _ready():
-	pass
+	set_layers(layers)
 
 func set_layers(l) -> void:
 	layers = l
-	tree.layers = l
-	tree.update_from_layers(layers.layers, layers.selected_layer)
+	if layers and tree:
+		tree.layers = l
+		tree.update_from_layers(layers.layers, layers.selected_layer)
 
 func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	layers.select_layer(new_selected.get_meta("layer"))
@@ -30,7 +31,7 @@ func _on_Add_pressed():
 	menu.connect("id_pressed", Callable(self, "_on_add_layer_menu"))
 	menu.connect("id_pressed", Callable(menu, "queue_free"))
 	menu.connect("popup_hide", Callable(menu, "queue_free"))
-	menu.popup(Rect2(Vector2(button_rect.position.x, button_rect.end.y), menu.get_minimum_size()))
+	menu.popup(Rect2(Vector2(button_rect.position.x, button_rect.end.y), Vector2(0, 0)))
 
 func _on_add_layer_menu(id):
 	layers.add_layer(id)

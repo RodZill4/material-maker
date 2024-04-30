@@ -145,7 +145,7 @@ func update_value(control : Cursor, value : float) -> void:
 	get_parent().send_changed_signal()
 
 func _on_Auto_pressed():
-	var histogram = $Histogram.get_histogram_texture().get_data()
+	var histogram = $Histogram.get_histogram_texture().get_image()
 	var in_min : int = -1
 	var in_mid : int = -1
 	var in_mid_value : float = 0
@@ -172,6 +172,6 @@ func _on_Auto_pressed():
 			if in_mid_value < value:
 				in_mid = i
 				in_mid_value = value
-	cursor_in_min.update_value(in_min/(histogram_size-1))
-	cursor_in_mid.update_value(in_mid/(histogram_size-1))
-	cursor_in_max.update_value(in_max/(histogram_size-1))
+	cursor_in_min.update_value(float(in_min)/float(histogram_size-1))
+	cursor_in_mid.update_value(float(in_mid)/float(histogram_size-1))
+	cursor_in_max.update_value(float(in_max)/float(histogram_size-1))

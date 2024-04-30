@@ -30,7 +30,6 @@ func _ready() -> void:
 			if ! volume_option is OptionButton:
 				volume_option = null
 
-
 func get_full_current_dir() -> String:
 	var prefix = ""
 	if volume_option != null and volume_option.visible:

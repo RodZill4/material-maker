@@ -1,5 +1,8 @@
 extends VBoxContainer
 
+
+@export var mask_selection_material_template : ShaderMaterial
+
 var settings : Dictionary = {
 	texture_size=0,
 	paint_emission=true,
@@ -9,17 +12,19 @@ var settings : Dictionary = {
 	bump_strength=0.5
 }
 
-const MODE_FREEHAND_DOTS = 0
-const MODE_FREEHAND_LINE = 1
-const MODE_LINE          = 2
-const MODE_STAMP         = 3
-const MODE_COLOR_PICKER  = 4
-const MODE_COUNT         = 5
-const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "Stamp", "ColorPicker" ]
+const MODE_FREEHAND_DOTS  = 0
+const MODE_FREEHAND_LINE  = 1
+const MODE_LINE           = 2
+const MODE_STAMP          = 3
+const MODE_COLOR_PICKER   = 4
+const MODE_MASK_SELECTOR  = 5
+const MODE_COUNT          = 6
+const MODE_NAMES : Array = [ "FreeDots", "FreeLine", "Line", "Stamp", "ColorPicker", "MaskSelector" ]
 
 var current_tool = MODE_FREEHAND_DOTS
 
-var preview_material = null
+var preview_material : StandardMaterial3D = null
+var mask_selection_material : ShaderMaterial = null
 
 var previous_position = null
 var painting = false
@@ -39,12 +44,12 @@ var remote_node = null
 var brush_parameters : Dictionary = {
 	brush_size = 50.0,
 	brush_hardness = 0.5,
+	pattern_scale = 10.0,
+	pattern_angle = 0.0
 }
-var pattern_scale : float = 10.0
-var pattern_angle : float = 0.0
 
 var idmap_filename : String = ""
-var mask : ImageTexture
+var mask : MMTexture = MMTexture.new()
 
 @onready var view_3d = $VSplitContainer/HSplitContainer/Painter/View
 @onready var main_view = $VSplitContainer/HSplitContainer/Painter/View/MainView
@@ -68,10 +73,10 @@ var brush_view_3d_shown : bool = false
 @onready var brush_view_2d = $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/Texture2D/BrushView
 var brush_view_2d_shown = false
 
-@onready var brush_size_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize
-@onready var brush_hardness_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness
-@onready var brush_opacity_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity
-@onready var brush_spacing_control : Control = $VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSpacing
+@onready var brush_size_control : Control = %BrushSize
+@onready var brush_spacing_control : Control = %BrushSpacing
+@onready var brush_opacity_control : Control = %BrushOpacity
+@onready var brush_hardness_control : Control = %BrushHardness
 
 var last_motion_position : Vector2
 var last_motion_vector : Vector2 = Vector2(0, 0)
@@ -95,7 +100,6 @@ func _ready():
 	set_physics_process(false)
 	set_current_tool(MODE_FREEHAND_DOTS)
 	initialize_2D_paint_select()
-	initialize_debug_selects()
 	graph_edit.undoredo.disable()
 	graph_edit.node_factory = get_node("/root/MainWindow/NodeFactory")
 	graph_edit.new_material({nodes=[{name="Brush", type="brush"}], connections=[]})
@@ -103,11 +107,12 @@ func _ready():
 	call_deferred("update_brush")
 	set_environment(0)
 	# Create white mask
-	mask = ImageTexture.new()
+	var mask_texture : ImageTexture = ImageTexture.new()
 	var image = Image.new()
 	image = Image.create(16, 16, 0, Image.FORMAT_RGBA8)
 	image.fill(Color(1, 1, 1))
-	mask.set_image(image)
+	mask_texture.set_image(image)
+	mask.set_texture(mask_texture)
 
 
 func update_tab_title() -> void:
@@ -143,6 +148,7 @@ func get_remote():
 func update_brush_graph():
 	if brush_graph != graph_edit.top_generator:
 		brush_graph = graph_edit.top_generator
+		brush_graph.set_current_mesh(painted_mesh.mesh)
 		brush_graph.connect("graph_changed", Callable(self, "on_brush_graph_changed"))
 		on_brush_graph_changed()
 
@@ -161,9 +167,9 @@ func project_selected() -> void:
 
 func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
-	brush_node.connect("parameter_changed", Callable(self, "on_brush_changed"))
+	brush_node.parameter_changed.connect(self.on_brush_changed)
 	painter.set_brush_preview_material(brush_view_3d.material)
-	painter.set_brush_node(graph_edit.generator.get_node("Brush"))
+	painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
 
 func set_brush(data) -> void:
 	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
@@ -222,8 +228,9 @@ func set_object(o):
 	preview_material.normal_texture = layers.get_normal_map()
 	#preview_material.normal_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.heightmap_enabled = true
-	preview_material.depth_deep_parallax = true
-	preview_material.depth_texture = layers.get_depth_texture()
+	preview_material.heightmap_deep_parallax = true
+	preview_material.heightmap_flip_texture = true
+	preview_material.heightmap_texture = layers.get_depth_texture()
 	#preview_material.depth_texture.flags = Texture2D.FLAGS_DEFAULT
 	preview_material.ao_enabled = true
 	preview_material.ao_light_affect = 1.0
@@ -234,6 +241,7 @@ func set_object(o):
 	# Center camera on  mesh
 	var aabb : AABB = painted_mesh.get_aabb()
 	camera_position.transform.origin = aabb.position+0.5*aabb.size
+	update_camera()
 	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
@@ -281,10 +289,39 @@ func _on_Engine_toggled(button_pressed):
 	else:
 		$VSplitContainer/HSplitContainer/Painter/Tools/Engine.tooltip_text = "View space paint engine"
 
+func load_id_map() -> bool:
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	dialog.min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.add_filter("*.png;PNG image file")
+	var files = await dialog.select_files()
+	if files.size() == 1:
+		painter.set_id_map(files[0])
+		if not painter.has_id_map():
+			return false
+	else:
+		return false
+	return true
+
 func set_current_tool(m):
-	current_tool = m
+	#preview_material.albedo_texture = painter.t2v_texture.get_texture()
+	var ignore = false
+	if m == MODE_MASK_SELECTOR:
+		if not painter.has_id_map():
+			ignore = not await load_id_map()
+	if not ignore:
+		if current_tool == MODE_MASK_SELECTOR:
+			painted_mesh.set_surface_override_material(0, preview_material)
+		current_tool = m
+		if current_tool == MODE_MASK_SELECTOR:
+			mask_selection_material = mask_selection_material_template.duplicate()
+			mask_selection_material.set_shader_parameter("id_map", painter.get_id_map())
+			mask_selection_material.set_shader_parameter("id_selected", false)
+			painted_mesh.set_surface_override_material(0, mask_selection_material)
+			painter.unset_id_mask()
 	for i in range(MODE_COUNT):
-		tools.get_node(MODE_NAMES[i]).button_pressed = (i == m)
+		tools.get_node(MODE_NAMES[i]).button_pressed = (i == current_tool)
 
 func _on_Fill_pressed():
 	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
@@ -294,13 +331,6 @@ func _on_Fill_pressed():
 
 func _on_Eraser_toggled(button_pressed):
 	view_3d.mouse_default_cursor_shape = Control.CURSOR_CROSS if button_pressed else Control.CURSOR_POINTING_HAND
-
-func _on_MaskSelector_pressed():
-	var dialog = load("res://material_maker/panels/paint/select_mask_dialog.tscn").instantiate()
-	add_child(dialog)
-	var result = await dialog.ask({ mesh=painted_mesh.mesh, idmap_filename=idmap_filename, mask=mask })
-	if result != null and result.has("idmap_filename"):
-		idmap_filename = result.idmap_filename
 
 func _physics_process(delta):
 	camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
@@ -350,6 +380,20 @@ const PAINTING_MODE_TEXTURE_FROM_VIEW = 2
 
 var stamp_center : Vector2
 
+func painter_update_brush_params(paint_params : Dictionary) -> void:
+	for k in paint_params.keys():
+		match k:
+			"brush_size":
+				if %PressureSize.button_pressed:
+					paint_params.brush_size *= next_pressure
+			"brush_opacity":
+				if %PressureOpacity.button_pressed:
+					paint_params.brush_opacity *= next_pressure
+			"brush_hardness":
+				if %PressureHardness.button_pressed:
+					paint_params.brush_hardness *= next_pressure
+	painter.update_brush_params(paint_params)
+
 func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VIEW):
 	var mouse_position : Vector2
 	var dont_paint : bool = false
@@ -362,19 +406,20 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			else:
 				mouse_position *= min(view_3d.size.x, view_3d.size.y)
 	if ev is InputEventMouseMotion:
+		var pressure = get_pressure(ev)
 		var pos_delta = mouse_position-last_motion_position
 		stroke_length += pos_delta.length()
 		pos_delta = pos_delta*0.75+last_motion_vector*0.75
 		stroke_angle = atan2(pos_delta.y, pos_delta.x)*180/PI
 		last_motion_position = mouse_position
 		last_motion_vector = pos_delta
-		painter.update_brush_params( { pressure=get_pressure(ev), stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
-		if current_tool == MODE_COLOR_PICKER:
+		painter_update_brush_params( { pressure=pressure, stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
+		if current_tool == MODE_COLOR_PICKER or current_tool == MODE_MASK_SELECTOR:
 			show_brush(null, null)
 		elif current_tool == MODE_LINE:
 			if previous_position != null:
 				var direction = mouse_position-previous_position
-				painter.update_brush_params( { pattern_angle=-atan2(direction.y, direction.x) } )
+				painter_update_brush_params( { pattern_angle=-atan2(direction.y, direction.x) } )
 			if dont_paint:
 				show_brush(null, null)
 			else:
@@ -383,7 +428,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			var stamp_offset = mouse_position - stamp_center
 			var stamp_size = stamp_offset.length()
 			var stamp_angle = -stamp_offset.angle()
-			painter.update_brush_params( { brush_size=stamp_size, pattern_angle=stamp_angle } )
+			painter_update_brush_params( { brush_size=stamp_size, pattern_angle=stamp_angle } )
 			show_brush(stamp_center, stamp_center)
 		else:
 			if dont_paint:
@@ -392,29 +437,33 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				show_brush(mouse_position, mouse_position)
 		if ev.button_mask & MOUSE_BUTTON_MASK_LEFT != 0:
 			if ev.shift_pressed:
+				next_pressure = 1.0
 				reset_stroke()
 				brush_parameters.brush_size += ev.relative.x*0.1
 				brush_parameters.brush_size = clamp(brush_parameters.brush_size, 0.0, 250.0)
 				brush_parameters.brush_hardness += ev.relative.y*0.01
 				brush_parameters.brush_hardness = clamp(brush_parameters.brush_hardness, 0.0, 1.0)
-				painter.update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
-				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushSize.set_value(brush_parameters.brush_size)
-				$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushHardness.set_value(brush_parameters.brush_hardness)
+				painter_update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
+				%BrushSize.set_value(brush_parameters.brush_size)
+				%BrushHardness.set_value(brush_parameters.brush_hardness)
 			elif ev.is_command_or_control_pressed():
+				next_pressure = 1.0
 				reset_stroke()
-				pattern_scale += ev.relative.x*0.1
-				pattern_scale = clamp(pattern_scale, 0.1, 25.0)
-				pattern_angle += fmod(ev.relative.y*0.01, 2.0*PI)
-				painter.update_brush_params( { pattern_scale=pattern_scale, pattern_angle=pattern_angle } )
+				brush_parameters.pattern_scale += ev.relative.x*0.1
+				brush_parameters.pattern_scale = clamp(brush_parameters.pattern_scale, 0.1, 25.0)
+				brush_parameters.pattern_angle = 0.5+(brush_parameters.pattern_angle+ev.relative.y*0.01)/TAU
+				brush_parameters.pattern_angle = TAU*(brush_parameters.pattern_angle-floor(brush_parameters.pattern_angle)-0.5)
+				painter_update_brush_params( { pattern_scale=brush_parameters.pattern_scale, pattern_angle=brush_parameters.pattern_angle } )
+				%BrushAngle.set_value(brush_parameters.pattern_angle*57.2957795131)
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
-				paint(mouse_position, get_pressure(ev), ev.tilt, painting_mode)
+				paint(mouse_position, pressure, ev.tilt, painting_mode)
 				last_tilt = ev.tilt
-			elif ev.relative.length_squared() > 50:
-				get_pressure(ev)
+			painter_update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
 		else:
 			reset_stroke()
 		painter.update_brush()
 	elif ev is InputEventMouseButton:
+		var pressure = get_pressure(ev)
 		if !ev.is_command_or_control_pressed() and !ev.shift_pressed:
 			if ev.button_index == MOUSE_BUTTON_LEFT:
 				if ev.pressed:
@@ -422,19 +471,21 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 					previous_position = mouse_position
 					if current_tool == MODE_STAMP:
 						stamp_center = mouse_position
-						painter.update_brush_params( { brush_size=0 } )
+						painter_update_brush_params( { brush_size=0 } )
 						show_brush(stamp_center, stamp_center)
 				elif current_tool == MODE_STAMP:
-					paint(stamp_center, get_pressure(ev), last_tilt, painting_mode, true)
+					paint(stamp_center, pressure, last_tilt, painting_mode, true)
 				elif current_tool == MODE_COLOR_PICKER:
-					pick_color(ev.position)
+					pick_color(ev.position, false)
+				elif current_tool == MODE_MASK_SELECTOR:
+					pick_color(ev.position, true)
 				else:
 					if current_tool == MODE_LINE:
 						var angle = 0
 						if previous_position != null:
 							var direction = mouse_position-previous_position
 							angle = -atan2(direction.y, direction.x)
-						painter.update_brush_params( { pattern_angle=angle } )
+						painter_update_brush_params( { pattern_angle=angle } )
 						painter.update_brush()
 					else:
 						last_painted_position = mouse_position+Vector2(brush_spacing_control.value, brush_spacing_control.value)
@@ -568,14 +619,19 @@ func do_update_procedural_layer() -> void:
 var saved_brush = null
 
 func _on_PaintLayers_layer_selected(layer):
+	var brush_updated : bool = false
 	if layer.get_layer_type() == Layer.LAYER_PROC:
 		if saved_brush == null:
 			saved_brush = $VSplitContainer/GraphEdit.top_generator.serialize()
 		if ! layer.material.is_empty():
 			set_brush(layer.material)
+			brush_updated = true
 	elif saved_brush != null:
 		set_brush(saved_brush)
 		saved_brush = null
+		brush_updated = true
+	if not brush_updated:
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
 
 var brush_changed_scheduled : bool = false
 
@@ -628,13 +684,13 @@ func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0)
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke)
+	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
 	last_painted_position = pos
 
 var next_paint_to = null
 var next_pressure = null
 
-func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
+func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false, on_mask : bool = false):
 	if !end_of_stroke and painting:
 		# if not available for painting, record a paint order
 		next_paint_to = pos
@@ -647,29 +703,31 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		texture_space=(painting_mode != PAINTING_MODE_VIEW),
 		brush_pos=pos,
 		brush_ppos=previous_position,
-		brush_opacity=$VSplitContainer/HSplitContainer/Painter/Options/OptionsPanel/Brush/BrushOpacity.value,
+		brush_size=%BrushSize.value*pressure if %PressureSize.button_pressed else %BrushSize.value,
+		brush_opacity=%BrushOpacity.value*pressure if %PressureOpacity.button_pressed else %BrushOpacity.value,
 		stroke_length=stroke_length,
 		stroke_angle=stroke_angle,
 		stroke_seed=stroke_seed,
-		erase=eraser_button.pressed,
+		erase=eraser_button.button_pressed,
 		pressure=pressure,
 		tilt=tilt,
 		mask_tex=mask,
+		use_mask=true,
 		fill=false
 	}
 	match painting_mode:
 		PAINTING_MODE_VIEW:
-			paint_options.size = view_3d.size
+			paint_options.rect_size = view_3d.size
 		PAINTING_MODE_TEXTURE_FROM_VIEW:
 			var min_size = min(view_3d.size.x, view_3d.size.y)
 			paint_options.texture_center = Vector2(0.5, 0.5)
 			paint_options.texture_scale = 1.0
-			paint_options.size = Vector2(min_size, min_size)
+			paint_options.rect_size = Vector2(min_size, min_size)
 		PAINTING_MODE_TEXTURE:
-			paint_options.size = view_2d.size
+			paint_options.rect_size = view_2d.size
 			paint_options.texture_center = view_2d_center
 			paint_options.texture_scale = view_2d_scale
-	await painter.paint(paint_options, end_of_stroke)
+	await painter.paint(paint_options, end_of_stroke, true, on_mask)
 	previous_position = pos
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -683,56 +741,65 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 	if end_of_stroke:
 		stroke_seed = randf()
 
-func update_view():
-	var mesh_instance = painted_mesh
-	var mesh_aabb = mesh_instance.get_aabb()
+func update_camera():
+	var mesh_aabb = painted_mesh.get_aabb()
 	var mesh_center = mesh_aabb.position+0.5*mesh_aabb.size
-	var mesh_size = 0.5*mesh_aabb.size.length()
+	var mesh_size = mesh_aabb.size.length()
 	var cam_to_center = (camera.global_transform.origin-mesh_center).length()
 	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
 	camera.far = 1.01*(cam_to_center+mesh_size)
+
+func update_view():
+	update_camera()
 	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
 	if painter != null:
-		painter.update_view(camera, transform, main_view.size)
+		painter.update_view(camera.get_camera_projection(), transform, main_view.size)
 		# DEBUG: show tex2view texture on model
 		#for i in range(10):
 		#	await get_tree().process_frame
 		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
-	_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
+	#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
 
 func _on_resized():
 	call_deferred("update_view")
 
 # Pick color
 
-func pick_color(pick_position : Vector2):
-	if remote_node == null:
+func pick_color(pick_position : Vector2, id_map : bool):
+	if not id_map and remote_node == null:
 		return
 	
 	var uv : Vector2 = painter.view_to_texture(pick_position)
-	var colors = {}
-	var albedo_image = layers.get_albedo_texture().get_image()
-	colors["Albedo"] = albedo_image.get_pixelv(uv*Vector2(albedo_image.get_size()))
-	
-	var metallic_image = layers.get_metallic_texture().get_image()
-	colors["Metallic"] = metallic_image.get_pixelv(uv*Vector2(metallic_image.get_size())).r
-	
-	var roughness_image = layers.get_roughness_texture().get_image()
-	colors["Roughness"] = roughness_image.get_pixelv(uv*Vector2(roughness_image.get_size())).r
+	if id_map:
+		var id_map_image = painter.get_id_map().get_image()
+		var id_color : Color = id_map_image.get_pixelv(uv*Vector2(id_map_image.get_size()))
+		mask_selection_material.set_shader_parameter("id_selected", true)
+		mask_selection_material.set_shader_parameter("id", id_color)
+		painter.set_id_mask(id_color)
+	else:
+		var colors = {}
+		var albedo_image = layers.get_albedo_texture().get_image()
+		colors["Albedo"] = albedo_image.get_pixelv(uv*Vector2(albedo_image.get_size()))
+		
+		var metallic_image = layers.get_metallic_texture().get_image()
+		colors["Metallic"] = metallic_image.get_pixelv(uv*Vector2(metallic_image.get_size())).r
+		
+		var roughness_image = layers.get_roughness_texture().get_image()
+		colors["Roughness"] = roughness_image.get_pixelv(uv*Vector2(roughness_image.get_size())).r
 
-	var emission_image = layers.get_emission_texture().get_image()
-	colors["Emission"] = emission_image.get_pixelv(uv*Vector2(emission_image.get_size()))
+		var emission_image = layers.get_emission_texture().get_image()
+		colors["Emission"] = emission_image.get_pixelv(uv*Vector2(emission_image.get_size()))
 
-	var depth_image = layers.get_depth_texture().get_image()
-	colors["Depth"] = depth_image.get_pixelv(uv*Vector2(depth_image.get_size())).r
-	
-	var occlusion_image = layers.get_occlusion_texture().get_image()
-	colors["Occlusion"] = occlusion_image.get_pixelv(uv*Vector2(occlusion_image.get_size())).r
+		var depth_image = layers.get_depth_texture().get_image()
+		colors["Depth"] = depth_image.get_pixelv(uv*Vector2(depth_image.get_size())).r
+		
+		var occlusion_image = layers.get_occlusion_texture().get_image()
+		colors["Occlusion"] = occlusion_image.get_pixelv(uv*Vector2(occlusion_image.get_size())).r
 
-	for p in remote_node.get_parameter_defs():
-		if colors.has(p.label):
-			remote_node.set_parameter(p.name, colors[p.label])
+		for p in remote_node.get_parameter_defs():
+			if colors.has(p.label):
+				remote_node.set_parameter(p.name, colors[p.label])
 
 # Load/save
 
@@ -752,15 +819,12 @@ func show_file_dialog(file_mode : FileDialog.FileMode, filter, callback):
 
 func load_project(file_name) -> bool:
 	var f : FileAccess = FileAccess.open(file_name, FileAccess.READ)
-	if f != null:
+	if f == null:
 		return false
 	var test_json_conv = JSON.new()
 	test_json_conv.parse(f.get_as_text())
 	var data = test_json_conv.get_data()
-	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd").new()
-	add_child(obj_loader)
-	var mesh : Mesh = obj_loader.load_obj_file(data.model)
-	obj_loader.queue_free()
+	var mesh : Mesh = MMMeshLoader.load_mesh(data.model)
 	if mesh == null:
 		return false
 	model_path = data.model
@@ -823,7 +887,7 @@ func export_material(export_prefix, profile) -> void:
 # 2D painting
 
 func get_2D_paint_select_texture_sources() -> Array:
-	return [ $Painter, $PaintLayers ]
+	return [ $Painter, $PaintLayers, self ]
 
 func initialize_2D_paint_select():
 	for s in [ $VSplitContainer/HSplitContainer/Painter2D/VBoxContainer/ChannelSelect ]:
@@ -845,29 +909,10 @@ func _on_ChannelSelect_item_selected(ID):
 # debug
 
 func debug_get_texture_names():
-	return [ "None" ]
+	return [ "Mask" ]
 
 func debug_get_texture(_ID):
-	return null
-
-func initialize_debug_selects():
-	for s in [ $VSplitContainer/HSplitContainer/Painter/Debug/Select1, $VSplitContainer/HSplitContainer/Painter/Debug/Select2 ]:
-		s.clear()
-		var index = 0
-		for p in [ self, $Painter, $PaintLayers ]:
-			for i in p.debug_get_texture_names():
-				s.add_item(i, index)
-				index += 1
-
-func _on_DebugSelect_item_selected(ID, t):
-	var texture = [$VSplitContainer/HSplitContainer/Painter/Debug/Texture1, $VSplitContainer/HSplitContainer/Painter/Debug/Texture2][t]
-	for p in [ self, $Painter, $PaintLayers ]:
-		var textures_count = p.debug_get_texture_names().size()
-		if ID < textures_count:
-			texture.texture = p.debug_get_texture(ID)
-			texture.visible = (texture.texture != null)
-			return
-		ID -= textures_count
+	return mask
 
 # Brush options UI
 
@@ -896,7 +941,7 @@ func _on_Button_toggled(button_pressed : bool, button : String):
 func _on_Brush_value_changed(value, brush_parameter):
 	brush_parameters[brush_parameter] = value
 	var params_update : Dictionary = { brush_parameter:value }
-	painter.update_brush_params(params_update)
+	painter_update_brush_params(params_update)
 
 func set_environment(index) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
@@ -970,3 +1015,41 @@ func _on_Painter_end_of_stroke(stroke_state):
 	undoredo.add("Paint Stroke", [undo_command], [redo_command])
 
 
+var last_hsplit_offset : int = 0
+
+func _on_h_split_container_dragged(offset):
+	var hsplit_offset : int = $VSplitContainer/HSplitContainer.size.x - offset
+	if last_hsplit_offset > hsplit_offset and hsplit_offset < 25:
+		$VSplitContainer/HSplitContainer/Painter2D.visible = false
+		$VSplitContainer/HSplitContainer/Painter/Show2DPaint.visible = true
+	last_hsplit_offset = hsplit_offset
+
+func _on_show_2d_paint_pressed():
+	$VSplitContainer/HSplitContainer/Painter2D.visible = true
+	$VSplitContainer/HSplitContainer/Painter/Show2DPaint.visible = false
+	$VSplitContainer/HSplitContainer.split_offset = $VSplitContainer/HSplitContainer.size.x - 100
+
+var last_vsplit_offset : int = 0
+
+func _on_v_split_container_dragged(offset):
+	var vsplit_offset : int = $VSplitContainer.size.y - offset
+	if last_vsplit_offset > vsplit_offset and vsplit_offset < 25:
+		$VSplitContainer/GraphEdit.visible = false
+		$VSplitContainer/HSplitContainer/Painter/ShowBrushGraph.visible = true
+	last_vsplit_offset = vsplit_offset
+
+func _on_show_brush_graph_pressed():
+	$VSplitContainer/GraphEdit.visible = true
+	$VSplitContainer/HSplitContainer/Painter/ShowBrushGraph.visible = false
+	$VSplitContainer.split_offset = $VSplitContainer.size.y - 100
+
+
+func _on_options_panel_minimum_size_changed():
+	%OptionsPanel.position.x += %OptionsPanel.size.x-%OptionsPanel.get_combined_minimum_size().x
+	%OptionsPanel.size = %OptionsPanel.get_combined_minimum_size()
+
+func _on_mask_selector_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			await load_id_map()
+			set_current_tool(MODE_MASK_SELECTOR)

@@ -23,7 +23,7 @@ func _notification(what : int) -> void:
 func get_texture_rid(target_rd : RenderingDevice) -> RID:
 	if ! rid.is_valid():
 		var image : Image = texture.get_image()
-		if image == null:
+		if image == null or image.get_width() == 0 or image.get_height() == 0:
 			print("No image for texture %s" % str(texture))
 			image = Image.create(1, 1, false, Image.FORMAT_RH)
 			texture_format = RenderingDevice.DATA_FORMAT_R16_SFLOAT
@@ -40,6 +40,9 @@ func get_texture_rid(target_rd : RenderingDevice) -> RID:
 	return rid
 
 func set_texture_rid(new_rid : RID, size : Vector2i, format : RenderingDevice.DataFormat, new_rd : RenderingDevice) -> void:
+	if new_rid == rid:
+		texture_needs_update = true
+		return
 	if rid.is_valid():
 		rd.free_rid(rid)
 	rd = new_rd
@@ -54,7 +57,7 @@ func get_texture() -> Texture2D:
 			# Use Texture2DRD
 			texture = Texture2DRD.new()
 			texture.texture_rd_rid = rid
-		else:
+		elif rd and rid.is_valid():
 			var byte_data : PackedByteArray = rd.texture_get_data(rid, 0)
 			var image_format : Image.Format
 			match texture_format:
@@ -77,22 +80,24 @@ func set_texture(new_texture : ImageTexture) -> void:
 	texture = new_texture
 	texture_size = texture.get_size()
 	var image : Image = texture.get_image()
-	match image.get_format():
-		Image.FORMAT_RF:
-			texture_format = RenderingDevice.DATA_FORMAT_R32_SFLOAT
-		Image.FORMAT_RGBAF:
-			texture_format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
-		Image.FORMAT_RH:
-			texture_format = RenderingDevice.DATA_FORMAT_R16_SFLOAT
-		Image.FORMAT_RGBAH:
-			texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
-		Image.FORMAT_RGBA8:
-			texture_format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
-		_:
-			print("Unsupported texture format "+str(image.get_format()))
-			image.convert(Image.FORMAT_RGBAH)
-			texture.set_image(image)
-			texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
+	if image:
+		match image.get_format():
+			Image.FORMAT_RF:
+				texture_format = RenderingDevice.DATA_FORMAT_R32_SFLOAT
+			Image.FORMAT_RGBAF:
+				texture_format = RenderingDevice.DATA_FORMAT_R32G32B32A32_SFLOAT
+			Image.FORMAT_RH:
+				texture_format = RenderingDevice.DATA_FORMAT_R16_SFLOAT
+			Image.FORMAT_RGBAH:
+				texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
+			#Image.FORMAT_RGBA8:
+			#	texture_format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
+			_:
+				print("Unsupported texture format "+str(image.get_format()))
+				image.convert(Image.FORMAT_RGBAH)
+				texture.set_image(image)
+				texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
+		texture_size = image.get_size()
 	if rid.is_valid():
 		rd.free_rid(rid)
 	rid = RID()

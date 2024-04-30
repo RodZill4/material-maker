@@ -95,6 +95,7 @@ script = ExtResource("1")
 [connection signal="pressed" from="Buttons/Up" to="." method="_on_Up_pressed"]
 [connection signal="pressed" from="Buttons/Down" to="." method="_on_Down_pressed"]
 [connection signal="pressed" from="Buttons/Config" to="." method="_on_Config_pressed"]
+[connection signal="button_clicked" from="Tree" to="Tree" method="_on_Tree_button_pressed"]
 [connection signal="cell_selected" from="Tree" to="Tree" method="_on_Tree_cell_selected"]
 [connection signal="gui_input" from="Tree" to="Tree" method="_on_Tree_gui_input"]
 [connection signal="item_edited" from="Tree" to="Tree" method="_on_Tree_item_edited"]
