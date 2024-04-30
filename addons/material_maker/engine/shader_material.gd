@@ -12,8 +12,9 @@ func _init(m : ShaderMaterial = null):
 	if material.shader == null:
 		material.shader = Shader.new()
 
-func set_shader(shader : String) -> void:
+func set_shader(shader : String) -> bool:
 	material.shader.code = shader
+	return true
 
 func get_parameters() -> Dictionary:
 	var rv : Dictionary = {}
