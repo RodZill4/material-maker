@@ -29,12 +29,9 @@ layout(binding = 4, std430) buffer restrict readonly UVs {
 @DECLARATIONS
 
 void main() {
-	vec4 position = transform*vec4(positions[3*gl_VertexIndex], positions[3*gl_VertexIndex+1], positions[3*gl_VertexIndex+2], 1.0);
+    model_vert = vec3(positions[3*gl_VertexIndex], positions[3*gl_VertexIndex+1], positions[3*gl_VertexIndex+2]);
 	normal = vec3(normals[3*gl_VertexIndex], normals[3*gl_VertexIndex+1], normals[3*gl_VertexIndex+2]);
 	uv = uvs[gl_VertexIndex];
-	position /= position.w;
-	position.y = -position.y;
-    model_vert = 0.5*position.xyz+vec3(0.5);
 	gl_Position = vec4(2.0*uv-vec2(1.0), 0.0, 1.0);
 }
 "

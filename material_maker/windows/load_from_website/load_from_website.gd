@@ -92,7 +92,7 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 				update_thumbnails()
 			else:
 				thumbnail_update_thread = Thread.new()
-				thumbnail_update_thread.start(Callable(self,"update_thumbnails").bind(null), 0)
+				thumbnail_update_thread.start(self.update_thumbnails.bind(null))
 			var result = await self.return_asset
 			queue_free()
 			return result

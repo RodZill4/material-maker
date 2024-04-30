@@ -81,5 +81,5 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 			value_changed.disconnect(self.control_update_parameter)
 		generator = null
 
-func control_update_parameter(value : MMPolygon):
+func control_update_parameter(_value : MMPolygon):
 	generator.set_parameter(parameter_name, polygon.serialize())

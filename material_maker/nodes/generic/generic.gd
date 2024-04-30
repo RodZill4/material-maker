@@ -155,6 +155,10 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			var splines : MMSplines = MMSplines.new()
 			splines.deserialize(v)
 			o.value = splines
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/pixels_edit/pixels_edit.tscn":
+			var pixels : MMPixels = MMPixels.new()
+			pixels.deserialize(v)
+			o.value = pixels
 		else:
 			print("unsupported widget "+str(o))
 
@@ -202,6 +206,8 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("updated",Callable(object,"_on_polygon_changed").bind( o.name ))
 		elif o is Button and o.scene_file_path == "res://material_maker/widgets/splines_edit/splines_edit.tscn":
 			o.connect("updated",Callable(object,"_on_splines_changed").bind( o.name ))
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/pixels_edit/pixels_edit.tscn":
+			o.connect("updated",Callable(object,"_on_pixels_changed").bind( o.name ))
 		else:
 			print("unsupported widget "+str(o))
 
@@ -260,6 +266,9 @@ func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
 	
 func _on_splines_changed(new_splines, old_value, variable : String) -> void:
 	set_generator_parameter_ext(variable, new_splines, MMType.serialize_value(old_value))
+	
+func _on_pixels_changed(new_pixels, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_pixels, MMType.serialize_value(old_value))
 
 static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
 	var tooltip : String
@@ -294,6 +303,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.size_value = p.first if !p.has("default") else p.default
 	elif p.type == "enum":
 		control = OptionButton.new()
+		control.fit_to_longest_item = false
 		for i in range(p.values.size()):
 			var value = p.values[i]
 			control.add_item(value.name)
@@ -316,6 +326,8 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.set_closed(false)
 	elif p.type == "splines":
 		control = preload("res://material_maker/widgets/splines_edit/splines_edit.tscn").instantiate()
+	elif p.type == "pixels":
+		control = preload("res://material_maker/widgets/pixels_edit/pixels_edit.tscn").instantiate()
 	elif p.type == "string":
 		control = LineEdit.new()
 		control.custom_minimum_size.x = 80
