@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"cx": 0,
-		"cy": 0,
-		"h": 0.3,
-		"w": 0.3
+		"cx": 0.0,
+		"cy": 0.2,
+		"height": 0.2,
+		"width": 0.4
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -30,12 +30,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "An isoceles triangle described as a signed distance function",
-		"name": "sdIsocelesTriangle",
+		"longdesc": "An Isosceles Triangle described as a signed distance function",
+		"name": "sdIsoscelesTriangle",
 		"outputs": [
 			{
-				"longdesc": "The generated signed distance function",
-				"sdf2d": "sd_isosceles_triangle($uv-vec2($cx+0.5, $cy+0.5), vec2($w, $h))",
+				"longdesc": "The isosceles triangle as a signed distance function",
+				"sdf2d": "sd_isosceles_triangle($uv - 0.5 + vec2(0.0, $height) - vec2($cx, $cy), vec2($width, $height * 2.0))",
 				"shortdesc": "Output",
 				"type": "sdf2d"
 			}
@@ -45,23 +45,22 @@
 				"control": "Rect1.x",
 				"default": 0.5,
 				"label": "Width",
-				"longdesc": "The width of the triangle",
+				"longdesc": "Width of the isosceles triangle",
 				"max": 1,
 				"min": 0,
-				"name": "w",
+				"name": "width",
 				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "Rect1.y",
-				"default": 1,
+				"default": 0.5,
 				"label": "Height",
-				"longdesc": "The height of the triangle",
+				"longdesc": "Height of the isosceles triangle",
 				"max": 1,
 				"min": 0,
-				"name": "h",
-				"shortdesc": "Height",
+				"name": "height",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -69,9 +68,9 @@
 				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
-				"longdesc": "The position of the center of the triangle on the X axis",
-				"max": 1,
-				"min": -1,
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
 				"name": "cx",
 				"shortdesc": "Center.x",
 				"step": 0.01,
@@ -81,16 +80,16 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
-				"longdesc": "The position of the center of the triangle on the Y axis",
-				"max": 1,
-				"min": -1,
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
 				"name": "cy",
 				"shortdesc": "Center.y",
 				"step": 0.01,
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdIsocelesTriangle"
+		"shortdesc": "sdIsoscelesTriangle"
 	},
 	"type": "shader"
 }

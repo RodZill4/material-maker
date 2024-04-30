@@ -33,17 +33,17 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the distorted image",
-				"rgba": "clamp(mix($in#($(name_uv)_co-($(name_uv)_co-$uv)/(sqrt($r-$(name_uv)_f)*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f)),0.0,1.0)",
+				"rgba": "mix($in#($(name_uv)_co-($(name_uv)_co-$uv)/(sqrt(abs($r-$(name_uv)_f))*max($a,0.0)+1.0)),$in#($uv),step($r,$(name_uv)_f))",
 				"shortdesc": "Output#",
 				"type": "rgba"
 			},
 			{
-				"f": "clamp(step($(name_uv)_f,$r),0.0,1.0)",
+				"f": "step($(name_uv)_f,$r)",
 				"shortdesc": "Mask",
 				"type": "f"
 			},
 			{
-				"f": "clamp($r-$(name_uv)_f,0.0,1.0)",
+				"f": "$r-$(name_uv)_f",
 				"shortdesc": "Falloff",
 				"type": "f"
 			}
@@ -74,7 +74,7 @@
 				"type": "float"
 			},
 			{
-				"control": "None",
+				"control": "P1.x",
 				"default": 0,
 				"label": "Center X",
 				"longdesc": "Location of the sphere center",
@@ -86,7 +86,7 @@
 				"type": "float"
 			},
 			{
-				"control": "None",
+				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
 				"longdesc": "Location of the sphere center",

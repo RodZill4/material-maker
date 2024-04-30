@@ -1,39 +1,46 @@
 {
+	"generic_size": 1,
 	"name": "tex3d_select_shape",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"d": 0
+		"d1": 0
 	},
 	"seed_int": 0,
 	"shader_model": {
-		"code": "",
+		"code": [
+			"vec3 $(name_uv)_b = $b($uv);",
+			"",
+			"#for",
+			"$(name_uv)_b = mix($i#($uv), $(name_uv)_b, clamp($shape#($uv.xyz)/max($d#, 0.0001), 0.0, 1.0));",
+			"#end"
+		],
 		"global": "",
 		"inputs": [
 			{
 				"default": "vec3(0.5)",
 				"label": "",
-				"longdesc": "The 3D texture associated to the specified color index",
-				"name": "in1",
-				"shortdesc": "Input1",
+				"longdesc": "The 3D texture(s) outside the input selection shapes",
+				"name": "b",
+				"shortdesc": "Background",
 				"type": "tex3d"
 			},
 			{
 				"default": "vec3(0.5)",
 				"label": "",
-				"longdesc": "The 3D texture(s) associated to other color indices",
-				"name": "in2",
-				"shortdesc": "Input2",
+				"longdesc": "The 3D texture associated to the selection shape",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "tex3d"
 			},
 			{
 				"default": "0.0",
 				"label": "",
-				"longdesc": "The shape in which input1 is applied",
-				"name": "shape",
-				"shortdesc": "Shape",
+				"longdesc": "The shape in which Input# is applied",
+				"name": "shape#",
+				"shortdesc": "Shape#",
 				"type": "sdf3d"
 			}
 		],
@@ -44,20 +51,20 @@
 			{
 				"longdesc": "The merged 3D texture",
 				"shortdesc": "Output",
-				"tex3d": "mix($in1($uv), $in2($uv), clamp($shape($uv.xyz)/max($d, 0.0001), 0.0, 1.0))",
+				"tex3d": "$(name_uv)_b",
 				"type": "tex3d"
 			}
 		],
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.5,
-				"label": "Smoothness",
-				"longdesc": "The width of the transition area between both textures",
+				"default": 0.01,
+				"label": "3:Smoothness",
+				"longdesc": "The width of the transition area between textures",
 				"max": 1,
 				"min": 0,
-				"name": "d",
-				"shortdesc": "Smoothness",
+				"name": "d#",
+				"shortdesc": "Smoothness#",
 				"step": 0.01,
 				"type": "float"
 			}

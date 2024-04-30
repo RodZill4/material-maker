@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "sdf3d_scale_xyz",
 	"node_position": {
 		"x": 0,
@@ -12,15 +13,15 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
-		"code": "vec2 $(name_uv)_in = $in(($uv)/vec3($sx*$s,$sy*$s,$sz*$s));",
+		"code": "",
 		"global": "",
 		"inputs": [
 			{
 				"default": "vec2(100.0, 0.0)",
 				"label": "",
 				"longdesc": "The input object as a signed distance function",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "sdf3dc"
 			}
 		],
@@ -30,8 +31,8 @@
 		"outputs": [
 			{
 				"longdesc": "The scaled object",
-				"sdf3dc": "vec2($(name_uv)_in.x*min(min($sx*$s,$sy*$s),$sz*$s), $(name_uv)_in.y)",
-				"shortdesc": "Output",
+				"sdf3dc": "vec2($in#(($uv)/vec3($sx*$s,$sy*$s,$sz*$s)).x*min(min($sx*$s,$sy*$s),$sz*$s), $in#(($uv)/vec3($sx*$s,$sy*$s,$sz*$s)).y)",
+				"shortdesc": "Output#",
 				"type": "sdf3dc"
 			}
 		],

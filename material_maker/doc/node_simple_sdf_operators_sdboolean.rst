@@ -10,7 +10,9 @@ intersection or difference) of its inputs.
 Inputs
 ::::::
 
-The **sdBoolean** node accepts 2 inputs in signed distance function format.
+The **sdBoolean** node accepts two or more inputs in signed distance function format.
+
+This node is variadic, and more shapes can be added.
 
 Outputs
 :::::::

@@ -1,0 +1,95 @@
+{
+	"name": "sdparallelogram",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0.0,
+		"cy": 0.0,
+		"height": 0.4,
+		"skew": 0.1,
+		"width": 0.3
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "",
+		"global": "float sdParallelogram( in vec2 p, float wi, float he, float sk )\n{\n    vec2 e = vec2(-sk,he);\n    p = (p.y<0.0)?-p:p;\n    vec2  w = p - e; w.x -= clamp(w.x,-wi,wi);\n    vec2  d = vec2(dot(w,w), -w.y);\n    float s = p.x*e.y - p.y*e.x;\n    p = (s<0.0)?-p:p;\n    vec2  v = p - vec2(wi,0); v -= e*clamp(dot(v,e)/dot(e,e),-1.0,1.0);\n    d = min( d, vec2(dot(v,v), wi*he-abs(s)));\n    return sqrt(d.x)*sign(-d.y);\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A parallelogram described as a signed distance function",
+		"name": "sdParallelogram",
+		"outputs": [
+			{
+				"longdesc": "The parallelogram as a signed distance function",
+				"sdf2d": "sdParallelogram($uv - 0.5 - vec2($cx, $cy), $width, $height, $skew)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Rect1.x",
+				"default": 0.5,
+				"label": "Width",
+				"longdesc": "Width of the parallelogram",
+				"max": 1,
+				"min": 0,
+				"name": "width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Rect1.y",
+				"default": 0.5,
+				"label": "Height",
+				"longdesc": "Height of the parallelogram",
+				"max": 1,
+				"min": 0,
+				"name": "height",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.5,
+				"label": "Skew",
+				"longdesc": "Amount of skew of the parallelogram",
+				"max": 1,
+				"min": 0,
+				"name": "skew",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdParallelogram"
+	},
+	"type": "shader"
+}

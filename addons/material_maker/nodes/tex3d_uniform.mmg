@@ -1,0 +1,52 @@
+{
+	"name": "tex3d_uniform",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"color": {
+			"a": 1,
+			"b": 1,
+			"g": 0,
+			"r": 1,
+			"type": "Color"
+		}
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Draws a uniform 3D texture",
+		"name": "Uniform",
+		"outputs": [
+			{
+				"longdesc": "A uniform 3D texture of the selected color",
+				"shortdesc": "Output",
+				"tex3d": "$(color).rgb",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "",
+				"longdesc": "Color of the uniform 3D texture",
+				"name": "color",
+				"shortdesc": "Color",
+				"type": "color"
+			}
+		],
+		"shortdesc": "TEX3D Uniform"
+	},
+	"type": "shader"
+}
