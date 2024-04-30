@@ -46,6 +46,19 @@ class ShaderUniform:
 	func to_str(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
 		var str_value_assign : String = ""
 		match type:
+			"int":
+				if value is int:
+					str_value_assign = " = %d" % value
+				elif value is PackedInt32Array and initialize_vectors:
+					str_value_assign = " = int[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign += "%d" % v
+					str_value_assign += " )"
 			"float":
 				if value is float:
 					str_value_assign = " = %.9f" % value
@@ -77,9 +90,17 @@ class ShaderUniform:
 			size_string = "[%d]" % size
 		return "%s %s %s%s%s;\n" % [ keyword, type, name, size_string, str_value_assign ]
 
+class GlobalDefs:
+	var code : String
+	var source : String
+
+	func _init(c, s):
+		code = c
+		source = s
+
 class ShaderCode:
 	extends RefCounted
-	var globals : Array[String] = []
+	var globals : Array[GlobalDefs] = []
 	var uniforms : Array[ShaderUniform] = []
 	var defs : String = ""
 	var code : String = ""
@@ -87,10 +108,25 @@ class ShaderCode:
 	var output_type : String = ""
 	var output_values : Dictionary = {}
 	
-	func add_globals(new_globals : Array[String]) -> void:
+	func add_global(new_global : String, source: String, index : int = -1) -> void:
+		for eg in globals:
+			if new_global == eg.code:
+				return
+		if index == -1:
+			globals.append(GlobalDefs.new(new_global, source))
+		else:
+			globals.insert(index, GlobalDefs.new(new_global, source))
+	
+	func add_globals(new_globals : Array[GlobalDefs]) -> void:
 		for g in new_globals:
-			if ! g in globals:
-				globals.append(g)
+			add_global(g.code, g.source)
+	
+	func get_globals_string() -> String:
+		var rv : String = ""
+		for g in globals:
+			rv += "// #globals: %s\n" % g.source
+			rv += g.code+"\n"
+		return rv
 	
 	func add_uniform(n : String, t : String, v, s : int = 0) -> void:
 		for u in uniforms:
@@ -396,7 +432,7 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	code += src_code.uniforms_as_strings()
 	code += "\n"
 	for g in src_code.globals:
-		code += g
+		code += g.code
 		code += "\n"
 	var shader_code = src_code.defs
 	if src_code.output_type != "":
@@ -426,14 +462,6 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = mm_renderer.generate_shader(source)
 	return { shader=shader, output_type=output_type }
 
-func render_expression(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
-	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.shader
-	var output_type : String = output_shader.output_type
-	var renderer = await mm_renderer.request(object)
-	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
-	return renderer
-
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
 	var shader : String = output_shader.shader
@@ -441,6 +469,21 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	var renderer = await mm_renderer.request(object)
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
+
+func render_output(output_index : int, size : int) -> Image:
+	var context : MMGenContext = MMGenContext.new()
+	var source : ShaderCode = get_shader_code("uv", output_index, context)
+	var shader_compute : MMShaderCompute = MMShaderCompute.new()
+	var shader_status : bool = await shader_compute.set_shader_from_shadercode(source, false)
+	var image : Image
+	if shader_status:
+		var texture : MMTexture = MMTexture.new()
+		var status = await shader_compute.render(texture, size)
+		if status:
+			image = (await texture.get_texture()).get_image()
+	else:
+		image = Image.new()
+	return image
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var rv = _get_shader_code(uv, output_index, context)
@@ -450,13 +493,12 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 		if rv.code.find(variable_name) != -1:
 			found = true
 		for g in rv.globals:
-			if g.find(variable_name) != -1:
+			if g.code.find(variable_name) != -1:
 				found = true
 				break
 		if found:
 			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
-			if rv.globals.find(declaration) == -1:
-				rv.globals.push_front(declaration)
+			rv.add_global(declaration, "global_parameters_declaration", 0)
 	if mm_io_types.types.has(rv.output_type):
 		if mm_io_types.types[rv.output_type].has("convert"):
 			for c in mm_io_types.types[rv.output_type].convert:

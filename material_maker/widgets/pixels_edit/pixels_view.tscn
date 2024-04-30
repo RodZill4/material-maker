@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cceel6sqaceu6"]
+
+[ext_resource type="Script" path="res://material_maker/widgets/pixels_edit/pixels_view.gd" id="1_2fiic"]
+
+[node name="PixelsView" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 64.0
+offset_bottom = 64.0
+mouse_filter = 2
+script = ExtResource("1_2fiic")

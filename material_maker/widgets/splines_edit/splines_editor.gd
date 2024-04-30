@@ -24,6 +24,7 @@ func _draw():
 
 func set_splines(p : MMSplines) -> void:
 	splines = p
+	selected_control_points = []
 	queue_redraw()
 	update_controls()
 
@@ -132,8 +133,7 @@ func _on_offset_value_changed(value):
 var creating : int = 0
 var last_spline : int = -1
 
-func _on_SplinesEditor_gui_input(event : InputEvent):
-	var handled : bool = false
+func handle_draw_mode(event : InputEvent) -> bool:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			var new_point_position = reverse_transform_point(get_local_mouse_position())
@@ -157,10 +157,10 @@ func _on_SplinesEditor_gui_input(event : InputEvent):
 							edited = null
 							creating = 0
 							last_spline = -1
-							handled = true
 						else:
 							edited.points[1].position = new_point_position
 							creating = 2
+							return true
 					3:
 						edited.points[2].position = 2*edited.points[3].position - new_point_position
 						var spline_index : int = splines.add_bezier(edited)
@@ -172,18 +172,19 @@ func _on_SplinesEditor_gui_input(event : InputEvent):
 						new_spline.points[1].position = new_point_position
 						edited = new_spline
 						creating = 2
-			handled = true
+						return true
 		elif event.button_index == MOUSE_BUTTON_RIGHT and edited != null:
 			edited = null
 			creating = 0
 			last_spline = -1
-			handled = true
-		if handled:
-			# Unselect all control points
-			for c in control_points.get_children():
-				c.select(false)
-			selected_control_points = []
-			update_controls()
+		else:
+			return false
+		# Unselect all control points
+		for c in control_points.get_children():
+			c.select(false)
+		selected_control_points = []
+		update_controls()
+		return true
 	elif event is InputEventMouseMotion:
 		var new_point_position = reverse_transform_point(get_local_mouse_position())
 		match creating:
@@ -191,22 +192,33 @@ func _on_SplinesEditor_gui_input(event : InputEvent):
 				edited.points[1].position = new_point_position
 				edited.points[2].position = new_point_position
 				edited.points[3].position = new_point_position
-				handled = true
+				return true
 			2:
 				edited.points[2].position = new_point_position
 				edited.points[3].position = new_point_position
-				handled = true
+				return true
 			3:
 				edited.points[2].position = 2*edited.points[3].position - new_point_position
-				handled = true
-	if handled:
-		queue_redraw()
-	else:
-		unhandled_event.emit(event)
+				return true
+	return false
+
+func handle_select_mode(event : InputEvent) -> bool:
+	return false
+
+func _on_SplinesEditor_gui_input(event : InputEvent):
+	if %DrawMode.button_pressed:
+		if handle_draw_mode(event):
+			queue_redraw()
+			return
+	elif %DrawMode.button_pressed:
+		if handle_select_mode(event):
+			queue_redraw()
+			return
+	unhandled_event.emit(event)
 
 func _on_resize() -> void:
 	super._on_resize()
-	update_controls()
+	update_control_positions()
 
 
 var generator : MMGenBase = null
@@ -221,9 +233,10 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 				generator = g
 				parameter_name = p.name
 				value_changed.connect(self.control_update_parameter)
-				set_closed(p.type == "splines")
-			if not is_editing():
-				set_splines(MMType.deserialize_value(g.get_parameter(p.name)))
+				if not is_editing():
+					set_splines(MMType.deserialize_value(g.get_parameter(p.name)))
+			elif not is_editing():
+				update_control_positions()
 			need_hide = false
 			break
 	if need_hide:
