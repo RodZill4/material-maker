@@ -11,7 +11,9 @@ boolean node applies them to the output.
 Inputs
 ::::::
 
-The **Boolean** node accepts 2 inputs in 3D signed distance function format.
+The **Boolean** node accepts two or more inputs in 3D signed distance function format.
+
+This node is variadic, and more shapes can be added.
 
 Outputs
 :::::::
