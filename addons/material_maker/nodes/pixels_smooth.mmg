@@ -1,0 +1,89 @@
+{
+	"name": "pixels_smooth",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"pixels": {
+			"bpp": 1,
+			"h": 4,
+			"pl": [
+				{
+					"a": 1,
+					"b": 0,
+					"g": 0,
+					"r": 0
+				},
+				{
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				}
+			],
+			"px": [
+				0
+			],
+			"type": "Pixels",
+			"w": 4
+		}
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec2 $(name_uv)_size = vec2(float($pixels_size.x), float($pixels_size.y));",
+			"ivec2 $(name_uv)_floor = ivec2(floor($(name_uv)_size*$uv-vec2(0.5, 0.5)));",
+			"vec2 $(name_uv)_fract = fract($(name_uv)_size*$uv-vec2(0.5, 0.5));",
+			"vec4 $(name_uv)_color0 = $pixels($(name_uv)_floor);",
+			"vec4 $(name_uv)_color1 = $pixels($(name_uv)_floor+ivec2(1, 0));",
+			"vec4 $(name_uv)_color2 = $pixels($(name_uv)_floor+ivec2(0, 1));",
+			"vec4 $(name_uv)_color3 = $pixels($(name_uv)_floor+ivec2(1, 1));"
+		],
+		"global": "",
+		"inputs": [],
+		"instance": "",
+		"longdesc": "Draws a uniform greyscale image",
+		"name": "Smooth Pixels",
+		"outputs": [
+			{
+				"longdesc": "A uniform image of the selected value",
+				"rgba": "mix(mix($(name_uv)_color0, $(name_uv)_color1, $(name_uv)_fract.x), mix($(name_uv)_color2, $(name_uv)_color3, $(name_uv)_fract.x), $(name_uv)_fract.y)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"bpp": 1,
+					"h": 8,
+					"pl": [
+						{
+							"a": 1,
+							"b": 0.5,
+							"g": 0.5,
+							"r": 0.5
+						},
+						{
+							"a": 1,
+							"b": 1,
+							"g": 1,
+							"r": 1
+						}
+					],
+					"px": [
+						42,
+						42
+					],
+					"type": "Pixels",
+					"w": 8
+				},
+				"label": "",
+				"name": "pixels",
+				"type": "pixels"
+			}
+		]
+	},
+	"type": "shader"
+}

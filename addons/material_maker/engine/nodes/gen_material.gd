@@ -107,13 +107,21 @@ func set_shader_model(data: Dictionary) -> void:
 	super.set_shader_model(data)
 	update()
 
+var update_scheduled : bool = false
+
 func update_shaders() -> void:
+	if update_scheduled:
+		return
+	update_scheduled = true
+	await get_tree().process_frame
+	update_scheduled = false
 	for t in preview_textures.keys():
-		preview_textures[t].shader_compute = MMShaderCompute.new()
+		var preview_texture : Dictionary = preview_textures[t]
+		preview_texture.shader_compute = MMShaderCompute.new()
 		var context : MMGenContext = MMGenContext.new()
-		var source : ShaderCode = get_shader_code("uv", preview_textures[t].output, context)
-		await preview_textures[t].shader_compute.set_shader_from_shadercode(source, false)
-		mm_deps.buffer_create_compute_material(preview_textures[t].buffer, preview_textures[t].shader_compute)
+		var source : ShaderCode = get_shader_code("uv", preview_texture.output, context)
+		await preview_texture.shader_compute.set_shader_from_shadercode(source, false)
+		mm_deps.buffer_create_compute_material(preview_texture.buffer, preview_texture.shader_compute)
 	mm_deps.update()
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
@@ -262,7 +270,8 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				new_code += subst_code+"\n"
 				var definitions : String = ""
 				for d in rv.globals:
-					definitions += d+"\n"
+					definitions += "// #globals: %s\n" % d.source
+					definitions += d.code+"\n"
 				definitions += rv.defs+"\n"
 				shader_code += apply_gen_options(new_code, gen_options, custom_options, definitions)
 				generating = false
@@ -286,7 +295,8 @@ func process_shader(shader_text : String, custom_script : String = ""):
 	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
 	definitions += rv.uniforms_as_strings()
 	for d in rv.globals:
-		definitions += d+"\n"
+		definitions += "// #globals: %s\n" % d.source
+		definitions += d.code+"\n"
 	definitions += rv.defs+"\n"
 	
 	shader_text = shader_code

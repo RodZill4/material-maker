@@ -35,7 +35,7 @@ func _exit_tree():
 func get_image_texture() -> ImageTexture:
 	return $ViewportImage/ColorRect.material.get_shader_parameter("tex")
 
-func get_histogram_texture() -> ImageTexture:
+func get_histogram_texture() -> Texture2D:
 	return $Control.material.get_shader_parameter("tex")
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
