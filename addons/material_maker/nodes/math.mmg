@@ -82,10 +82,6 @@
 						"value": "log($in1($uv))"
 					},
 					{
-						"name": "log(A, B)",
-						"value": "log($in1($uv))/log($in2($uv))"
-					},
-					{
 						"name": "log2(A)",
 						"value": "log2($in1($uv))"
 					},
@@ -205,6 +201,10 @@
 						"name": "degrees(A)",
 						"value": "degrees($in1($uv))"
 					},
+					{
+						"name": "log(A, B)",
+						"value": "log($in1($uv))/log($in2($uv))"
+					}
 				]
 			},
 			{
