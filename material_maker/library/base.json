@@ -866,7 +866,7 @@
 				"c": 0.5
 			},
 			"tree_item": "3D/SDF/Color",
-			"type": "sdf3d_color"
+			"type": "sdf3d_color_v"
 		},
 		{
 			"icon": "3d_sdf_shapes_sphere",
@@ -1163,7 +1163,7 @@
 				"v": 1
 			},
 			"tree_item": "3D/Texture/Select",
-			"type": "tex3d_select"
+			"type": "tex3d_select_v"
 		},
 		{
 			"icon": "3d_texture_from2d",
@@ -1215,7 +1215,7 @@
 				"blend_type": 0
 			},
 			"tree_item": "3D/Texture/Blend",
-			"type": "tex3d_blend"
+			"type": "tex3d_blend_v"
 		},
 		{
 			"icon": "3d_texture_colorize",
