@@ -1,32 +1,41 @@
 {
+	"generic_size": 1,
 	"name": "tex3d_select",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"t": 0.01,
-		"v": 0.5
+		"t1": 0.01,
+		"v1": 1
 	},
 	"seed_int": 0,
 	"shader_model": {
-		"code": "float $(name_uv)_d = ($uv.w-$v)/$t;",
+		"code": [
+			"vec3 $(name_uv)_b = $b($uv);",
+			"float $(name_uv)_d = 0.0;",
+			"",
+			"#for",
+			"$(name_uv)_d = ($uv.w-$v#)/$t#;",
+			"$(name_uv)_b = mix($(name_uv)_b, $i#($uv), clamp(1.0-$(name_uv)_d*$(name_uv)_d, 0.0, 1.0));",
+			"#end"
+		],
 		"global": "",
 		"inputs": [
 			{
 				"default": "vec3(0.5)",
 				"label": "",
-				"longdesc": "The 3D texture associated to the specified color index",
-				"name": "in1",
-				"shortdesc": "Input1",
+				"longdesc": "The 3D texture(s) associated to other color indices",
+				"name": "b",
+				"shortdesc": "Background",
 				"type": "tex3d"
 			},
 			{
 				"default": "vec3(0.5)",
 				"label": "",
-				"longdesc": "The 3D texture(s) associated to other color indices",
-				"name": "in2",
-				"shortdesc": "Input2",
+				"longdesc": "The 3D texture associated to the specified color index",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "tex3d"
 			}
 		],
@@ -37,31 +46,31 @@
 			{
 				"longdesc": "The merged 3D texture",
 				"shortdesc": "Output",
-				"tex3d": "mix($in1($uv), $in2($uv), clamp(1.0-$(name_uv)_d*$(name_uv)_d, 0.0, 1.0))",
+				"tex3d": "$(name_uv)_b",
 				"type": "tex3d"
 			}
 		],
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.5,
-				"label": "Value",
+				"default": 1,
+				"label": "2:Value",
 				"longdesc": "The value of the selected color index",
 				"max": 1,
 				"min": 0,
-				"name": "v",
-				"shortdesc": "Value",
+				"name": "v#",
+				"shortdesc": "Value#",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
 				"control": "None",
-				"default": 0.1,
-				"label": "Tolerance",
+				"default": 0.01,
+				"label": "2:",
 				"longdesc": "The tolerance used when comparing color indices",
 				"max": 1,
 				"min": 0.01,
-				"name": "t",
+				"name": "t#",
 				"shortdesc": "Tolerance",
 				"step": 0.001,
 				"type": "float"
