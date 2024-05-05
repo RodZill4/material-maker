@@ -623,7 +623,7 @@ func replace_input_new(input_name : String, suffix : String, parameters : String
 		if suffix == "variation":
 			return function_name+parameters
 		else:
-			return function_name+"("+parameters+", 0.0)"
+			return function_name+"("+parameters+", _seed_variation_)"
 	var source_rv : ShaderCode = source.generator.get_shader_code(parameters, source.output_index, context)
 	rv.add_uniforms(source_rv.uniforms)
 	rv.defs += source_rv.defs
@@ -708,7 +708,7 @@ func get_common_replace_variables(uv : String, rv : ShaderCode) -> Dictionary:
 	if seed_locked:
 		variables["seed"] = "seed_"+genname
 	else:
-		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
+		variables["seed"] = "(seed_"+genname+"+_seed_variation_)"
 	variables["node_id"] = str(get_instance_id())
 	return variables
 
