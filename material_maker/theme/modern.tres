@@ -67,18 +67,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjl7l"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.0901961, 0.0941176, 0.105882, 1)
-border_color = Color(0.1, 0.115, 0.155, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-corner_detail = 4
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62l4s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
 content_margin_left = 28.0
@@ -270,7 +259,7 @@ Button/styles/pressed = SubResource("StyleBoxFlat_rxikb")
 GraphEdit/colors/grid_major = Color(0.137255, 0.141176, 0.152941, 1)
 GraphEdit/colors/grid_minor = Color(0.137255, 0.141176, 0.152941, 1)
 GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_pxlc8")
-GraphEdit/styles/panel = SubResource("StyleBoxFlat_hjl7l")
+GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
 GraphNode/colors/title_color = Color(0.87451, 0.878431, 0.886275, 1)
 GraphNode/styles/panel = SubResource("StyleBoxFlat_uwck0")
 GraphNode/styles/panel_selected = SubResource("StyleBoxFlat_ryqkj")
