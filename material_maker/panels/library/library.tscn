@@ -54,14 +54,12 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FilterLabel" type="Label" parent="Library/Filter"]
-layout_mode = 2
-text = "Filter:"
-
 [node name="Filter" type="LineEdit" parent="Library/Filter"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"MM_FilterLineEdit"
+placeholder_text = "Filter"
 clear_button_enabled = true
 
 [node name="Tree" type="Tree" parent="Library"]

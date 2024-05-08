@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=35 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=38 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -152,6 +152,35 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.266667, 0.278431, 0.301961, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mv8c7"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snnso"]
 content_margin_left = 7.0
 content_margin_top = 5.0
@@ -265,11 +294,31 @@ corner_detail = 1
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7bw33"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yr2c2"]
-content_margin_left = 8.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7p6f"]
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.266667, 0.278431, 0.301961, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e18lx"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5l5s"]
 content_margin_left = 3.0
@@ -308,6 +357,9 @@ GraphNodeTitleLabel/fonts/font = SubResource("FontVariation_na26k")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_s437y")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_k7e83")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
+MM_FilterLineEdit/base_type = &"LineEdit"
+MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
+MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")
 MM_FlexibleTab/base_type = &"TabBar"
 MM_FlexibleTab/constants/separation = 3
 MM_FlexibleTab/styles/tab_selected = SubResource("StyleBoxFlat_snnso")
@@ -356,6 +408,7 @@ ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_7bw33")
 ReroutePreview/styles/titlebar_selected = SubResource("StyleBoxEmpty_7bw33")
 Tree/constants/draw_guides = 0
 Tree/constants/draw_relationship_lines = 0
-Tree/styles/panel = SubResource("StyleBoxEmpty_yr2c2")
+Tree/styles/focus = SubResource("StyleBoxFlat_d7p6f")
+Tree/styles/panel = SubResource("StyleBoxFlat_e18lx")
 Tree/styles/selected = SubResource("StyleBoxFlat_x5l5s")
 Tree/styles/selected_focus = SubResource("StyleBoxFlat_x5l5s")
