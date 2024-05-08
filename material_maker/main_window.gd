@@ -224,6 +224,9 @@ func _ready() -> void:
 		await get_tree().process_frame
 		new_material()
 	
+	size = get_window().size
+	position = Vector2.ZERO
+	set_anchors_preset(Control.PRESET_FULL_RECT)
 	update_menus()
 
 var menu_update_requested : bool = false
