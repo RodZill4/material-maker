@@ -16,8 +16,8 @@ func get_flex_layout():
 	return flex_tab.flexible_layout
 
 func _draw():
-	var is_current : bool = (get_index() == get_parent().get_parent().current)
-	draw_style_box(get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "TabBar"), Rect2(Vector2(), size))
+	var is_current: bool = (get_index() == get_parent().get_parent().current)
+	add_theme_stylebox_override("panel", get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "MM_FlexibleTab"))
 	$Container/Undock.visible = is_current and get_flex_layout().main_control.allow_undock
 	$Container/Close.visible = is_current
 
