@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=32 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=33 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -159,12 +159,22 @@ content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uujf1"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.117647, 0.121569, 0.133333, 1)
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dscxc"]
 content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
 content_margin_bottom = 6.0
-bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
+bg_color = Color(0.117647, 0.121569, 0.133333, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fq0uc"]
 content_margin_left = 3.0
@@ -282,6 +292,8 @@ LineEdit/styles/normal = SubResource("StyleBoxFlat_k7e83")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
+MM_PanelBackground/base_type = &"PanelContainer"
+MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")
 Panel/styles/panel = SubResource("StyleBoxFlat_dscxc")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")

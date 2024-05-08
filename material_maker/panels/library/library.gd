@@ -1,5 +1,4 @@
-extends VBoxContainer
-
+extends Control
 
 @export var library_manager_name = ""
 
@@ -9,11 +8,10 @@ var expanded_items : Array = []
 
 var category_buttons = {}
 
-@onready var tree : Tree = $Tree
-@onready var libraries_button : MenuButton = $HBoxContainer/Libraries
-@onready var filter_line_edit : LineEdit = $Filter/Filter
-@onready var item_menu : PopupMenu = $ItemMenu
-#onready var dir_menu : PopupMenu = $DirMenu
+@onready var tree : Tree = %Tree
+@onready var libraries_button : MenuButton = %Libraries
+@onready var filter_line_edit : LineEdit = %Filter
+@onready var item_menu : PopupMenu = %ItemMenu
 
 
 const MENU_CREATE_LIBRARY : int = 1000
@@ -33,7 +31,7 @@ func _ready() -> void:
 		var texture : Texture2D = library_manager.get_section_icon(s)
 		button.name = s
 		button.texture_normal = texture
-		$SectionButtons.add_child(button)
+		%SectionButtons.add_child(button)
 		category_buttons[s] = button
 		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
 		button.connect("gui_input", self._on_Section_Button_event.bind(s))
