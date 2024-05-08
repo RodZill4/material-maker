@@ -10,7 +10,7 @@ size = Vector2(16, 16)
 offset_right = 41.0
 offset_bottom = 26.0
 size_flags_horizontal = 0
-size_flags_vertical = 0
+size_flags_vertical = 8
 theme_type_variation = &"MM_FlexibleTab"
 script = ExtResource("1")
 

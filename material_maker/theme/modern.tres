@@ -153,18 +153,18 @@ corner_radius_bottom_left = 4
 corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snnso"]
-content_margin_left = 5.0
+content_margin_left = 7.0
 content_margin_top = 5.0
-content_margin_right = 5.0
+content_margin_right = 7.0
 content_margin_bottom = 5.0
 bg_color = Color(0.117647, 0.121569, 0.133333, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exib0"]
-content_margin_left = 5.0
+content_margin_left = 7.0
 content_margin_top = 5.0
-content_margin_right = 5.0
+content_margin_right = 7.0
 content_margin_bottom = 5.0
 bg_color = Color(0.168627, 0.176471, 0.192157, 1)
 corner_radius_top_left = 5

@@ -6,6 +6,7 @@ var flex_panel : Control
 
 func _ready():
 	$Container/Close.texture_normal = get_theme_icon("close", "TabBar")
+	_draw()
 
 func init(fp : Control):
 	flex_panel = fp
