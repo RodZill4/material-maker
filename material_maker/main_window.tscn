@@ -91,13 +91,20 @@ _data = {
 "show": SubResource("7")
 }
 
-[node name="MainWindow" type="Panel" groups=["preview"]]
+[node name="MainWindow" type="PanelContainer" groups=["preview"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -146.0
+offset_top = -21.0
+offset_right = 146.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("10")
+theme_type_variation = &"MM_MainBackground"
 script = ExtResource("1")
 
 [node name="NodeLibraryManager" type="Node" parent="."]
@@ -126,13 +133,7 @@ config_section = "brush_lib"
 [node name="EnvironmentManager" parent="." instance=ExtResource("13")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 6.0
-offset_top = 6.0
-offset_right = -6.0
-offset_bottom = -6.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -215,12 +216,7 @@ visible = false
 
 [node name="UndoRedoLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -82.5
-offset_right = 82.5
-offset_bottom = 22.0
+layout_mode = 2
 text = "Undo/Redo action added"
 script = SubResource("6")
 

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=31 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=32 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -152,6 +152,13 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqwm5"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dscxc"]
 content_margin_left = 6.0
 content_margin_top = 6.0
@@ -273,6 +280,8 @@ GraphNodeTitleLabel/fonts/font = SubResource("FontVariation_na26k")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_s437y")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_k7e83")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
+MM_MainBackground/base_type = &"PanelContainer"
+MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
 Panel/styles/panel = SubResource("StyleBoxFlat_dscxc")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")

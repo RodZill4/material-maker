@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 
 var quitting : bool = false
 
@@ -141,7 +141,7 @@ func _ready() -> void:
 			get_window().position = mm_globals.config.get_value("window", "position")
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
-	
+			
 	# Restore the theme
 	var theme_name : String = "default"
 	if mm_globals.config.has_section_key("window", "theme"):
