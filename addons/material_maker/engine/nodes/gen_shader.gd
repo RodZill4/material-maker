@@ -523,7 +523,7 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 	if has_randomness():
 		if generate_declarations:
 			rv.add_uniform("seed_%s" % genname, "float", get_seed())
-		variables.seed = "(seed_%s+_seed_variation_)" % genname
+		variables.seed = "(seed_%s+fract(_seed_variation_))" % genname
 	for p in shader_model_preprocessed.parameters:
 		if p.type == "float":
 			if parameters[p.name] is float:
@@ -680,6 +680,8 @@ func replace_variables(string : String, variables : Dictionary, rv : ShaderCode,
 			if replace_with.has("has_parameters") and replace_with.has_parameters and string_end[0] == "(":
 				var parameters_end : int = find_matching_parenthesis(string_end, 0)
 				function_parameters = string_end.left(parameters_end+1)
+				if function_parameters[1] == "(" and find_matching_parenthesis(function_parameters, 1) == function_parameters.length()-2:
+					function_parameters = function_parameters.left(-1).right(-1)
 				#print("Parameters: "+function_parameters)
 				string_end = string_end.right(-parameters_end-1)
 			string += replace_with.replace_callable.call(variable, function_suffix, function_parameters, variables, rv, context)
@@ -708,7 +710,7 @@ func get_common_replace_variables(uv : String, rv : ShaderCode) -> Dictionary:
 	if seed_locked:
 		variables["seed"] = "seed_"+genname
 	else:
-		variables["seed"] = "(seed_"+genname+"+_seed_variation_)"
+		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
 	variables["node_id"] = str(get_instance_id())
 	return variables
 
@@ -758,7 +760,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 			var expression = replace_variables(output[f].replace("@NOCODE", ""), variables, rv, context)
 			var variable_name : String = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
 			if assign_output:
-				rv.code += "// #output%d: %s\n" % [ output_index, get_hier_name() ]
+				rv.code += "\n// #output%d: %s\n" % [ output_index, get_hier_name() ]
 				rv.code += "%s %s = %s;\n" % [ mm_io_types.types[f].type, variable_name, expression ]
 			rv.output_values[f] = variable_name
 	rv.output_type = output.type
