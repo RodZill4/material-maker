@@ -212,13 +212,17 @@ func _ready() -> void:
 				file_name = dir.get_next()
 			if ! files.is_empty():
 				var dialog_text : String = "Oops, it seems Material Maker crashed and rescued unsaved work\nLoad %d unsaved projects?" % files.size()
-				var result = await accept_dialog(dialog_text, true)
-				if result == "ok":
-					for f in files:
-						var graph_edit = new_graph_panel()
-						graph_edit.load_from_recovery(f)
-						graph_edit.update_tab_title()
-					hierarchy.update_from_graph_edit(get_current_graph_edit())
+				var result = await accept_dialog(dialog_text, true, [ { label="Delete them!", action="delete" } ])
+				match result:
+					"ok":
+						for f in files:
+							var graph_edit = new_graph_panel()
+							graph_edit.load_from_recovery(f)
+							graph_edit.update_tab_title()
+						hierarchy.update_from_graph_edit(get_current_graph_edit())
+					"delete":
+						for f in files:
+							DirAccess.remove_absolute(f)
 	
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
@@ -1206,11 +1210,13 @@ func add_dialog(dialog : Window):
 
 # Accept dialog
 
-func accept_dialog(dialog_text : String, cancel_button : bool = false):
+func accept_dialog(dialog_text : String, cancel_button : bool = false, extra_buttons : Array[Dictionary] = []):
 	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 	dialog.dialog_text = dialog_text
 	if cancel_button:
 		dialog.add_cancel_button("Cancel")
+	for b in extra_buttons:
+		dialog.add_button(b.label, b.right if b.has("right") else false, b.action)
 	add_dialog(dialog)
 	return await dialog.ask()
 
