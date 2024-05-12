@@ -1,7 +1,7 @@
 Shear node
 ~~~~~~~~~~
 
-The **Shear** node is variadic and bend inputs along te X or Y axis.
+The **Shear** node is variadic and bends inputs along te X or Y axis.
 
 .. image:: images/node_transform_shear.png
 	:align: center
