@@ -1,7 +1,7 @@
 Circle Map node
 ~~~~~~~~~~~~~~~
 
-The **Circle Map** node maps an input image in a circle into the output.
+The **Circle Map** node is variadic and map input images in a circle into the outputs.
 
 .. image:: images/node_transform_circlemap.png
 	:align: center
@@ -9,12 +9,12 @@ The **Circle Map** node maps an input image in a circle into the output.
 Inputs
 ++++++
 
-The **Circle Map** node accepts a single RGBA input.
+The **Circle Map** node accepts one or more RGBA inputs.
 
 Outputs
 +++++++
 
-The **Circle Map** node outputs the deformed image.
+The **Circle Map** node outputs the deformed images.
 
 Parameters
 ++++++++++

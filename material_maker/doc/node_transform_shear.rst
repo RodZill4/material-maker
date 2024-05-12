@@ -1,7 +1,7 @@
 Shear node
 ~~~~~~~~~~
 
-The **Shear** node bends its input along te X or Y axis.
+The **Shear** node is variadic and bend inputs along te X or Y axis.
 
 .. image:: images/node_transform_shear.png
 	:align: center
@@ -9,12 +9,12 @@ The **Shear** node bends its input along te X or Y axis.
 Inputs
 ++++++
 
-The **Shear** node accepts a single RGBA input.
+The **Shear** node accepts one or more RGBA inputs.
 
 Outputs
 +++++++
 
-The **Shear** node outputs the shear stressed image as RGBA.
+The **Shear** node outputs the shear stressed images as RGBA.
 
 Parameters
 ++++++++++
