@@ -39,7 +39,7 @@ layout_mode = 2
 
 [node name="SettingsButton" type="TextureButton" parent="UI/Settings" index="0"]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 0
 texture_normal = SubResource("AtlasTexture_01pt6")
 
 [node name="SettingsPanel" type="PanelContainer" parent="UI/Settings" index="1"]
