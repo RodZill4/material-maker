@@ -12,32 +12,32 @@ func set_pixels(p : MMPixels) -> void:
 	pixels = p
 	queue_redraw()
 	update_color_buttons()
-	$Settings/PanelContainer.visible = false
+	%SettingsPanel.visible = false
 
 func update_color_buttons() -> void:
 	var palette_size : int = pixels.palette.size()
-	var button_count : int = $Colors.get_child_count()
+	var button_count : int = %Colors.get_child_count()
 	if palette_size < button_count:
 		while button_count > palette_size:
 			button_count -= 1
-			var color_button : Node = $Colors.get_child(button_count)
-			$Colors.remove_child(color_button)
+			var color_button : Node = %Colors.get_child(button_count)
+			%Colors.remove_child(color_button)
 			color_button.free()
-	elif palette_size > $Colors.get_child_count():
-		while $Colors.get_child_count() < palette_size:
+	elif palette_size > %Colors.get_child_count():
+		while %Colors.get_child_count() < palette_size:
 			var color_button : ColorPickerButton = ColorPickerButton.new()
 			color_button.custom_minimum_size = Vector2i(16, 16)
 			color_button.toggle_mode = true
 			color_button.button_mask = MOUSE_BUTTON_MASK_RIGHT
-			$Colors.add_child(color_button)
+			%Colors.add_child(color_button)
 			color_button.focus_entered.connect(self.set_current_color.bind(button_count))
 			color_button.color_changed.connect(self.set_palette_color.bind(button_count))
 			button_count += 1
 	for ci in palette_size:
-		$Colors.get_child(ci).color = pixels.palette[ci]
+		%Colors.get_child(ci).color = pixels.palette[ci]
 	if current_color < 0 or current_color >= palette_size:
 		current_color = 0
-		#$Colors.get_child(current_color).set_focus() = 
+		#%Colors.get_child(current_color).set_focus() = 
 
 func set_current_color(c : int) -> void:
 	current_color = c
@@ -91,7 +91,7 @@ func control_update_parameter(_value : MMPixels):
 	generator.set_parameter(parameter_name, pixels.serialize())
 
 func _on_settings_button_pressed():
-	var settings_panel : Control = $Settings/PanelContainer
+	var settings_panel : Control = %SettingsPanel
 	settings_panel.visible = not settings_panel.visible
 	if settings_panel.visible:
 		%Width.value = float(pixels.size.x)
