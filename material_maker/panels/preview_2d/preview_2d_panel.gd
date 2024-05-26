@@ -87,18 +87,58 @@ func setup_controls(filter : String = "") -> void:
 		filter = setup_controls_filter
 	else:
 		setup_controls_filter = filter
-	var param_defs = []
 	if is_instance_valid(generator):
+		var param_defs = []
 		if filter != "":
 			param_defs = generator.get_filtered_parameter_defs(filter)
 		else:
-			param_defs = generator.get_parameter_defs() 
+			param_defs = generator.get_parameter_defs()
+		var float_param_defs = []
+		var complex_param_defs = []
+		for p in param_defs:
+			if p.type == "polygon" or  p.type == "polyline" or  p.type == "splines" or  p.type == "pixels":
+				complex_param_defs.append(p)
+			else:
+				float_param_defs.append(p)
 		for c in get_children():
 			if c.has_method("set_view_rect"):
 				var s : float = min(size.x, size.y)/view_scale
 				c.set_view_rect(0.5*size-center*s, Vector2(s, s))
+			if c == $PolygonEditor or c == $SplinesEditor or c == $PixelsEditor:
+				continue
 			if c.has_method("setup_control"):
-				c.setup_control(generator, param_defs)
+				c.setup_control(generator, float_param_defs)
+		var edited_parameter : Array = []
+		match complex_param_defs.size():
+			0:
+				$ComplexParameters.clear()
+				$ComplexParameters.visible = false
+			1:
+				edited_parameter = [complex_param_defs[0]]
+				$ComplexParameters.clear()
+				$ComplexParameters.visible = false
+			_:
+				if $ComplexParameters.item_count == complex_param_defs.size():
+					var changed : bool = false
+					for i in $ComplexParameters.item_count:
+						if $ComplexParameters.get_item_text(i) != complex_param_defs[i].name:
+							changed = true
+					if not changed:
+						return
+				edited_parameter = [complex_param_defs[0]]
+				$ComplexParameters.clear()
+				for i in range(complex_param_defs.size()):
+					$ComplexParameters.add_item(complex_param_defs[i].name, i)
+					$ComplexParameters.set_item_metadata(i, complex_param_defs[i])
+				$ComplexParameters.selected = 0
+				$ComplexParameters.visible = true
+		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor ]:
+			e.setup_control(generator, edited_parameter)
+
+func _on_complex_parameters_item_selected(index):
+	var parameter = $ComplexParameters.get_item_metadata(index)
+	for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor ]:
+		e.setup_control(generator, [ parameter ])
 
 var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 var local_rotate : float = 0.0

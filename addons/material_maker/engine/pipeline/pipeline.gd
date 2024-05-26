@@ -118,7 +118,7 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 	for k in shader_text.keys():
 		var error : String = spirv["compile_error_"+k]
 		if error != "":
-			mm_renderer.shader_error_handler.on_error(error, src["source_"+k])
+			mm_renderer.shader_error_handler.on_error(src["source_"+k], error)
 			var ln : int = 0
 			for l in src["source_"+k].split("\n"):
 				ln += 1

@@ -229,6 +229,8 @@ func _ready() -> void:
 		new_material()
 	
 	update_menus()
+	
+	mm_logger.message("Material Maker "+ProjectSettings.get_setting("application/config/actual_release"))
 
 var menu_update_requested : bool = false
 
@@ -989,7 +991,7 @@ func update_preview_2d() -> void:
 		var preview = graph_edit.get_current_preview(i)
 		var generator : MMGenBase = null
 		var output_index : int = -1
-		if preview == null or preview.generator == null:
+		if preview == null or not is_instance_valid(preview.generator):
 			continue
 		generator = preview.generator
 		output_index = preview.output_index

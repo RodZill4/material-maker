@@ -491,6 +491,8 @@ func update_node() -> void:
 				if result:
 					index = result.get_string(1).to_int()-1
 					label = result.get_string(2)
+				elif label.substr(0, 2) == "-:":
+					label = label.right(-2)
 				else:
 					index += 1
 				var hsizer : HBoxContainer
