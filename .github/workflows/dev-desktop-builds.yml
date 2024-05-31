@@ -2,21 +2,21 @@ name: "dev-desktop-builds"
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
     inputs:
       sign_macos:
-        description: 'Sign macOS version'     
+        description: "Sign macOS version"
         type: boolean
         required: true
-        default: 'false'
+        default: "false"
       gen_doc:
-        description: 'Generate documentation'     
+        description: "Generate documentation"
         type: boolean
         required: true
-        default: 'true'
+        default: "true"
 
 env:
   GODOT_VERSION: 4.2
@@ -195,7 +195,11 @@ jobs:
         run: |
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
-        run: hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
+        run: |
+          #hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker material_maker_${{ env.MM_RELEASE }}.dmg
+          wget https://github.com/create-dmg/create-dmg/archive/refs/tags/v1.2.2.zip
+          unzip v1.2.2.zip
+          create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background splash_screen/backgrounds/pavel_oliva_vintage_luggage.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg ./build/mac
       - name: Notarizing ✍️
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         env:

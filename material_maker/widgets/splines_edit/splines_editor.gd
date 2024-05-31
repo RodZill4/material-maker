@@ -29,25 +29,30 @@ func set_splines(p : MMSplines) -> void:
 	update_controls()
 
 func update_controls() -> void:
-	for c in control_points.get_children():
-		c.queue_free()
+	var i : int = 0
 	for si in range(splines.splines.size()):
 		for pi in range(4):
 			if splines.is_linked(si, pi):
 				continue
 			var p : Vector2 = splines.splines[si].points[pi].position
-			var control_point = preload("res://material_maker/widgets/polygon_edit/control_point.tscn").instantiate()
-			if pi == 1 or pi == 2:
-				control_point.circle = true
-			control_point.selectable = true
-			if selected_control_points.find(si*4+pi) != -1:
-				control_point.select()
-			control_points.add_child(control_point)
+			var control_point
+			if i < control_points.get_child_count():
+				control_point = control_points.get_child(i)
+			else:
+				control_point = preload("res://material_maker/widgets/polygon_edit/control_point.tscn").instantiate()
+				control_point.selectable = true
+				control_points.add_child(control_point)
+			control_point.circle = (pi == 1 or pi == 2)
+			control_point.select(selected_control_points.find(si*4+pi) != -1)
 			control_point.initialize(p, self)
 			control_point.setpos(transform_point(p))
 			control_point.set_meta("point", splines.get_point_index(si, pi))
 			control_point.moved.connect(self._on_ControlPoint_moved)
 			control_point.selected.connect(self._on_ControlPoint_selected)
+			i += 1
+	while i < control_points.get_child_count():
+		control_points.get_child(i).queue_free()
+		i += 1
 	emit_signal("value_changed", splines)
 
 func update_control_positions() -> void:
@@ -216,13 +221,17 @@ func _on_SplinesEditor_gui_input(event : InputEvent):
 			return
 	unhandled_event.emit(event)
 
-func _on_resize() -> void:
-	super._on_resize()
+func _on_resized() -> void:
+	super._on_resized()
 	update_control_positions()
 
 
 var generator : MMGenBase = null
 var parameter_name : String
+
+func set_view_rect(do : Vector2, ds : Vector2):
+	super.set_view_rect(do, ds)
+	update_control_positions()
 
 func setup_control(g : MMGenBase, param_defs : Array) -> void:
 	var need_hide : bool = true

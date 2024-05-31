@@ -22,41 +22,40 @@ draw_area = true
 auto_rescale = true
 alpha = 1.0
 
-[node name="Colors" type="GridContainer" parent="." index="0"]
-layout_mode = 0
+[node name="UI" type="HBoxContainer" parent="." index="0"]
+layout_mode = 1
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="Colors" type="GridContainer" parent="UI" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 2
 
-[node name="Settings" type="VBoxContainer" parent="." index="1"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -16.0
-offset_bottom = 16.0
-grow_horizontal = 0
-
-[node name="SettingsButton" type="TextureButton" parent="Settings" index="0"]
+[node name="Settings" type="VBoxContainer" parent="UI" index="1"]
 layout_mode = 2
-size_flags_horizontal = 8
+
+[node name="SettingsButton" type="TextureButton" parent="UI/Settings" index="0"]
+layout_mode = 2
+size_flags_horizontal = 0
 texture_normal = SubResource("AtlasTexture_01pt6")
 
-[node name="PanelContainer" type="PanelContainer" parent="Settings" index="1"]
+[node name="SettingsPanel" type="PanelContainer" parent="UI/Settings" index="1"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="Settings/PanelContainer" index="0"]
+[node name="GridContainer" type="GridContainer" parent="UI/Settings/SettingsPanel" index="0"]
 layout_mode = 2
 columns = 2
 
-[node name="WidthLabel" type="Label" parent="Settings/PanelContainer/GridContainer" index="0"]
+[node name="WidthLabel" type="Label" parent="UI/Settings/SettingsPanel/GridContainer" index="0"]
 layout_mode = 2
 text = "Width:"
 
-[node name="Width" parent="Settings/PanelContainer/GridContainer" index="1" instance=ExtResource("4_ymoey")]
+[node name="Width" parent="UI/Settings/SettingsPanel/GridContainer" index="1" instance=ExtResource("4_ymoey")]
 unique_name_in_owner = true
 layout_mode = 2
 text = "8"
@@ -66,11 +65,11 @@ max_value = 32.0
 step = 1.0
 float_only = true
 
-[node name="HeightLabel" type="Label" parent="Settings/PanelContainer/GridContainer" index="2"]
+[node name="HeightLabel" type="Label" parent="UI/Settings/SettingsPanel/GridContainer" index="2"]
 layout_mode = 2
 text = "Height:"
 
-[node name="Height" parent="Settings/PanelContainer/GridContainer" index="3" instance=ExtResource("4_ymoey")]
+[node name="Height" parent="UI/Settings/SettingsPanel/GridContainer" index="3" instance=ExtResource("4_ymoey")]
 unique_name_in_owner = true
 layout_mode = 2
 text = "8"
@@ -80,11 +79,11 @@ max_value = 32.0
 step = 1.0
 float_only = true
 
-[node name="BPPLabel" type="Label" parent="Settings/PanelContainer/GridContainer" index="4"]
+[node name="BPPLabel" type="Label" parent="UI/Settings/SettingsPanel/GridContainer" index="4"]
 layout_mode = 2
 text = "BPP:"
 
-[node name="BPP" parent="Settings/PanelContainer/GridContainer" index="5" instance=ExtResource("4_ymoey")]
+[node name="BPP" parent="UI/Settings/SettingsPanel/GridContainer" index="5" instance=ExtResource("4_ymoey")]
 unique_name_in_owner = true
 layout_mode = 2
 text = "1"
@@ -95,4 +94,4 @@ step = 1.0
 float_only = true
 
 [connection signal="gui_input" from="." to="." method="_on_PixelsEditor_gui_input"]
-[connection signal="pressed" from="Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="UI/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]

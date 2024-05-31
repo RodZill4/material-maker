@@ -69,7 +69,7 @@ func set_shader_ext(string : String, output_textures_desc : Array[Dictionary], r
 
 func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, parameters_as_constants : bool = false):
 	for u in shader_code.uniforms:
-		for c in [ shader_code.get_globals_string(), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
+		for c in [ shader_code.get_globals_string(shader_code.defs+shader_code.code+shader_code.output_values.rgba), shader_code.defs, shader_code.code, shader_code.output_values.rgba ]:
 			if c.find(u.name) != -1:
 				var type : String = u.type
 				if u.size > 0:
@@ -89,7 +89,7 @@ func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGe
 		add_parameter_or_texture("mm_compare", "sampler2D", compare_texture)
 	
 	replaces["@COMMON_SHADER_FUNCTIONS"] = preload("res://addons/material_maker/shader_functions.tres").text
-	replaces["@GLOBALS"] = shader_code.get_globals_string()
+	replaces["@GLOBALS"] = shader_code.get_globals_string(shader_code.defs+shader_code.code+shader_code.output_values.rgba)
 	replaces["@DEFINITIONS"] = shader_code.defs
 	replaces["@CODE"] = shader_code.code
 	replaces["@OUTPUT_VALUE"] = shader_code.output_values.rgba

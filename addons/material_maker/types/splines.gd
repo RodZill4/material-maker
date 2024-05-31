@@ -61,7 +61,10 @@ func get_point_index(s : int, p : int) -> int:
 	return (s << 2) + p
 
 func get_point_by_index(i : int) -> SplinesPoint:
-	return splines[i >> 2].points[i & 3]
+	if (i >> 2) < splines.size():
+		return splines[i >> 2].points[i & 3]
+	else:
+		return SplinesPoint.new()
 
 func add_bezier(b : Bezier) -> int:
 	var rv : int = splines.size()

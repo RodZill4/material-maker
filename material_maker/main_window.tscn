@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=20 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://clw8sb0p8webl" path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://bnqq3vhwmudkw" path="res://material_maker/projects_panel.tscn" id="7_ih0ps"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="8"]
+[ext_resource type="Script" path="res://material_maker/console.gd" id="8_1tb00"]
 [ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
 [ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
 [ext_resource type="PackedScene" uid="uid://cp2mbbfmrv6sf" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
@@ -13,6 +14,10 @@
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
 [ext_resource type="Script" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
+
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("8")
+region = Rect2(96, 128, 16, 16)
 
 [sub_resource type="GDScript" id="9"]
 script/source = "extends HBoxContainer
@@ -42,10 +47,6 @@ func _on_Timer_timeout():
 			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
 	tooltip_text = hint
 "
-
-[sub_resource type="AtlasTexture" id="8"]
-atlas = ExtResource("8")
-region = Rect2(32, 128, 16, 16)
 
 [sub_resource type="GDScript" id="6"]
 script/source = "extends Label
@@ -162,6 +163,18 @@ offset_top = 4.0
 offset_right = 263.0
 offset_bottom = 32.0
 
+[node name="Console" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("8_1tb00")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Console"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+scroll_following = true
+
 [node name="StatusBar" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
@@ -174,11 +187,21 @@ scroll_active = false
 
 [node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/Tip"]
 
+[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+tooltip_text = "Show console"
+texture_normal = SubResource("8")
+
+[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar"]
+layout_mode = 2
+
 [node name="Share" parent="VBoxContainer/StatusBar" instance=ExtResource("12")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar"]
 layout_mode = 2
 
 [node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
@@ -202,7 +225,7 @@ texture = ExtResource("15")
 wait_time = 0.5
 autostart = true
 
-[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar"]
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/StatusBar"]
 layout_mode = 2
 
 [node name="RenderCounter" parent="VBoxContainer/StatusBar" instance=ExtResource("11")]
@@ -226,5 +249,7 @@ libraries = {
 }
 
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
+[connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
+[connection signal="pressed" from="VBoxContainer/StatusBar/ConsoleButton" to="VBoxContainer/Console" method="toggle"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/ClipBoardAnalyzer" method="_on_Timer_timeout"]

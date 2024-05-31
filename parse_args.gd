@@ -8,4 +8,5 @@ func _ready():
 		scene = load("res://material_maker/main_window.tscn")
 	else:
 		scene = load("res://splash_screen/splash_screen.tscn")
+	await get_tree().process_frame
 	get_tree().change_scene_to_packed(scene)

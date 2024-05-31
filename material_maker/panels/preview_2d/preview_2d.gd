@@ -1,7 +1,7 @@
 extends ColorRect
 
-@export var shader_context_defs : String = "" # (String, MULTILINE)
-@export var shader : String = "" # (String, MULTILINE)
+@export_multiline var shader_context_defs : String = "" # (String, MULTILINE)
+@export_multiline var shader : String = "" # (String, MULTILINE)
 
 var generator : MMGenBase = null
 var output : int = 0
@@ -40,11 +40,13 @@ func update_export_menu() -> void:
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.output_type, template)
 
-func do_update_material(source, target_material : ShaderMaterial, template):
+func do_update_material(source, target_material : ShaderMaterial, template : String):
 	if source.output_type == "":
 		return
 	is_greyscale = source.output_type == "f"
 	# Update shader
+	if template.find("TIME") != -1:
+		print("Template has time") # This should not happen
 	var code = generate_preview_shader(source, template)
 	await mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(target_material), code)
 	for u in source.uniforms:

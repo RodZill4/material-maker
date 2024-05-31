@@ -33,9 +33,7 @@ func generate_shadertoy() -> String:
 	code = code.replace("void vertex() {\n\telapsed_time = TIME;\n}\n", "")
 	code += src_code.uniforms_as_strings("const", true)
 	code += "\n"
-	if ! src_code.globals.is_empty():
-		for g in src_code.globals:
-			code += g.code
+	code += src_code.get_globals_string(src_code.defs+src_code.code)
 	var code_defs = src_code.defs
 	code += code_defs
 	code += "\n"
@@ -60,9 +58,7 @@ func generate_godot_canvasitem() -> String:
 	code += mm_renderer.common_shader
 	code += src_code.uniforms_as_strings()
 	code += "\n"
-	if ! src_code.globals.is_empty():
-		for g in src_code.globals:
-			code += g
+	code += src_code.get_globals_string(src_code.defs+src_code.code)
 	code += src_code.defs
 	code += "\n"
 	code += "void fragment() {\n"
@@ -84,9 +80,7 @@ func generate_godot_spatial() -> String:
 	code += "\n"
 	code += src_code.uniforms_as_strings()
 	code += "\n"
-	if ! src_code.globals.is_empty():
-		for g in src_code.globals:
-			code += g
+	code += src_code.get_globals_string(src_code.defs+src_code.code)
 	code += src_code.defs
 	code += "\n"
 	code += "void fragment() {\n"
