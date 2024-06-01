@@ -770,8 +770,8 @@ func get_shader_model_for_edit():
 			edit_shader_model.exports[e].external = true
 	return edit_shader_model
 
-func edit(node) -> void:
-	do_edit(node, load("res://material_maker/windows/material_editor/material_editor.tscn"))
+func edit(node, tab : String = "") -> void:
+	do_edit(node, load("res://material_maker/windows/material_editor/material_editor.tscn"), tab)
 
 func edit_export_targets(node) -> void:
 	do_edit(node, load("res://material_maker/windows/material_editor/export_editor.tscn"))

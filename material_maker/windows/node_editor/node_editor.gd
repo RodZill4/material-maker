@@ -97,6 +97,16 @@ func get_model_data() -> Dictionary:
 			data.outputs.append(o.get_model_data())
 	return data
 
+func show_tab(tab : String):
+	if tab.left(6) == "output":
+		$Sizer/TabBar.current_tab = 1
+	elif tab == "main":
+		$Sizer/TabBar.current_tab = 2
+	elif tab == "instance":
+		$Sizer/TabBar.current_tab = 3
+	elif tab == "globals":
+		$Sizer/TabBar.current_tab = 4
+
 func _on_AddParameter_pressed() -> void:
 	add_item(parameter_list, ParameterEditor)
 	parameter_list.update_up_down_buttons()

@@ -48,7 +48,7 @@ func _on_rich_text_label_meta_clicked(meta):
 	match data.type:
 		"nodesection":
 			generator = instance_from_id(data.nodeid.right(-1).to_int())
-			generator.edit(self)
+			generator.edit(self, data.section)
 
 func update_shader_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
