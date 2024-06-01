@@ -789,7 +789,7 @@ func _deserialize(data : Dictionary) -> void:
 func get_shader_model_for_edit():
 	return shader_model
 
-func do_edit(node, edit_window_scene : PackedScene) -> void:
+func do_edit(node, edit_window_scene : PackedScene, tab : String = "") -> void:
 	if shader_model != null:
 		var edit_window = edit_window_scene.instantiate()
 		mm_globals.main_window.add_dialog(edit_window)
@@ -797,6 +797,8 @@ func do_edit(node, edit_window_scene : PackedScene) -> void:
 		edit_window.connect("node_changed", Callable(node, "update_shader_generator"))
 		edit_window.connect("popup_hide", Callable(edit_window, "queue_free"))
 		edit_window.popup_centered()
+		if tab != "":
+			edit_window.show_tab(tab)
 
-func edit(node) -> void:
-	do_edit(node, load("res://material_maker/windows/node_editor/node_editor.tscn"))
+func edit(node, tab : String = "") -> void:
+	do_edit(node, load("res://material_maker/windows/node_editor/node_editor.tscn"), tab)
