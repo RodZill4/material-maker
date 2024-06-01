@@ -302,14 +302,12 @@ control_type = 2
 [node name="ContextMenu" type="PopupMenu" parent="." index="18"]
 item_count = 1
 item_0/text = "Reset view"
-item_0/id = 0
 
 [node name="View" type="PopupMenu" parent="ContextMenu" index="3"]
 item_count = 5
 item_0/text = "Extend"
 item_0/checkable = 2
 item_0/checked = true
-item_0/id = 0
 item_1/text = "Repeat"
 item_1/checkable = 2
 item_1/id = 1
@@ -359,6 +357,16 @@ material = SubResource("6")
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="ComplexParameters" type="OptionButton" parent="." index="20"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -32.0
+offset_bottom = 20.0
+grow_horizontal = 0
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="unhandled_event" from="PolygonEditor" to="." method="_on_gui_input"]
@@ -371,3 +379,4 @@ offset_bottom = 40.0
 [connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
 [connection signal="id_pressed" from="ContextMenu/PostProcess" to="." method="_on_PostProcess_id_pressed"]
+[connection signal="item_selected" from="ComplexParameters" to="." method="_on_complex_parameters_item_selected"]
