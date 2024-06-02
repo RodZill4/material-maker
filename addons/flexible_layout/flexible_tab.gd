@@ -6,7 +6,7 @@ var flex_panel : Control
 
 func _ready():
 	$Container/Close.texture_normal = get_theme_icon("close", "TabBar")
-	_draw()
+	update()
 
 func init(fp : Control):
 	flex_panel = fp
@@ -16,7 +16,7 @@ func get_flex_layout():
 	var flex_tab = get_parent().get_parent().get_flex_tab()
 	return flex_tab.flexible_layout
 
-func _draw():
+func update():
 	var is_current: bool = (get_index() == get_parent().get_parent().current)
 	add_theme_stylebox_override("panel", get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "MM_FlexibleTab"))
 	$Container/Undock.visible = is_current and get_flex_layout().main_control.allow_undock
@@ -36,5 +36,3 @@ func _gui_input(event):
 
 func _get_drag_data(_position):
 	return preload("res://addons/flexible_layout/flexible_layout.gd").PanelInfo.new(flex_panel)
-
-

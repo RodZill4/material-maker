@@ -50,7 +50,7 @@ func set_current(c : int):
 	current = c
 	for i in range($Tabs.get_child_count()):
 		$Tabs.get_child(i).flex_panel.visible = (i == current)
-		$Tabs.get_child(i).queue_redraw()
+		$Tabs.get_child(i).update()
 
 func _on_resized():
 	#print("%s: %s - %s" % [ str(self), str(position), str(size) ])
