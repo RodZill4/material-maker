@@ -91,23 +91,21 @@ func get_nodes_under_mouse() -> Array:
 	var array : Array = []
 	for c in get_children():
 		if c is GraphNode:
-			var rect : Rect2 = c.get_global_rect()
-			var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-			rect = Rect2(rect.position, rect.size*transform_scale)
+			var rect : Rect2 = get_padded_node_rect(c)
 			if rect.has_point(get_global_mouse_position()):
 				array.push_back(c)
 	return array
 
 func process_port_click(pressed : bool):
 	for c in get_nodes_under_mouse():
-		var rect : Rect2 = c.get_global_rect()
-		var pos : Vector2 = get_global_mouse_position()-rect.position
+		#var rect : Rect2 = c.get_global_rect()
+		var pos : Vector2 = c.get_local_mouse_position()#get_global_mouse_position()-rect.position
 		var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-		rect = Rect2(rect.position, rect.size*transform_scale)
+		#rect = Rect2(rect.position, rect.size*transform_scale)
 		var output_count : int = c.get_output_port_count()
 		if output_count > 0:
-			var output_1 : Vector2 = c.get_output_port_position(0)-5*transform_scale
-			var output_2 : Vector2 = c.get_output_port_position(output_count-1)+5*transform_scale
+			var output_1 : Vector2 = c.get_output_port_position(0)-8*transform_scale
+			var output_2 : Vector2 = c.get_output_port_position(output_count-1)+8*transform_scale
 			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 			if in_output:
 				for i in range(output_count):
