@@ -263,10 +263,10 @@ func _on_curve_changed(new_curve, old_value, variable : String) -> void:
 
 func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
 	set_generator_parameter_ext(variable, new_polygon, MMType.serialize_value(old_value))
-	
+
 func _on_splines_changed(new_splines, old_value, variable : String) -> void:
 	set_generator_parameter_ext(variable, new_splines, MMType.serialize_value(old_value))
-	
+
 func _on_pixels_changed(new_pixels, old_value, variable : String) -> void:
 	set_generator_parameter_ext(variable, new_pixels, MMType.serialize_value(old_value))
 
@@ -359,7 +359,11 @@ func restore_preview_widget() -> void:
 			preview.shader_context_defs = get_parent().shader_context_defs
 			preview_timer.one_shot = true
 			preview_timer.connect("timeout", Callable(self, "do_update_preview"))
-			preview.add_child(preview_timer)
+		if preview_timer.get_parent():
+			preview_timer.get_parent().remove_child(preview_timer)
+		if preview.get_parent():
+			preview.get_parent().remove_child(preview)
+		preview.add_child(preview_timer)
 		var child_count = get_child_count()
 		var preview_parent = get_child(child_count-1)
 		while preview_parent is Container:
@@ -376,21 +380,20 @@ func restore_preview_widget() -> void:
 func update_preview() -> void:
 	if generator == null or generator.preview == -1:
 		return
-	preview_disconnect()
-	preview_timer.start(0.2)
+	if preview and not preview.is_inside_tree():
+		restore_preview_widget()
+	if preview_timer.is_inside_tree():
+		preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	if !preview.is_inside_tree():
-		restore_preview_widget()
 	preview.set_generator(generator, generator.preview, true)
-	var pos = Vector2(0, 0)
-	var parent = preview.get_parent()
-	while parent != self:
-		pos += parent.position
-		parent = parent.get_parent()
-	preview.position = Vector2(18, 24)-pos
-	preview.size = size-Vector2(38, 28)
-	preview_connect()
+
+	var scale_modifier: float = get_global_transform().get_scale().x
+	var titlebar_stylebox :=  get_theme_stylebox("titlebar", "GraphNode")
+	var title_bar_height := get_titlebar_hbox().size.y +titlebar_stylebox.content_margin_bottom+titlebar_stylebox.content_margin_top
+	var margin: int = 8
+	preview.global_position = Vector2(margin, title_bar_height+margin)*scale_modifier + global_position
+	preview.size = size - Vector2.ONE*margin*2 - Vector2(0,title_bar_height)
 	preview.visible = true
 
 func update_title() -> void:
@@ -614,7 +617,6 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if ! with_shift:
 		if generator.preview == index:
 			generator.preview = -1
-			preview_disconnect()
 		else:
 			generator.preview = index
 			update_preview()
@@ -623,54 +625,23 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 		return true
 	return false
 
-func preview_connect_node(node) -> void:
-	if !node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
-		if node is Popup:
-			node.connect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.connect("popup_hide",Callable(self,"on_mouse_exited"))
+
+func _input(_event:InputEvent) -> void:
+	if not generator.minimized and preview:
+		var rect := get_global_rect()
+		var margin := 8
+		rect.position += Vector2.ONE*margin
+		rect.size -= Vector2.ONE*margin*2
+		if rect.has_point(get_global_mouse_position()):
+			preview.visible = false
 		else:
-			node.connect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.connect("mouse_exited",Callable(self,"on_mouse_exited"))
-		for child in node.get_children():
-			preview_connect_node(child)
+			var preview_parent = preview.get_parent()
+			# Fake move of preview in hierarchy, so it's shown in front of whatever
+			# control that has been created recently
+			if preview_parent:
+				preview_parent.move_child(preview, preview_parent.get_child_count()-1)
+			preview.visible = true
 
-func preview_disconnect_node(node) -> void:
-	if node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
-		if node is Popup:
-			node.disconnect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.disconnect("popup_hide",Callable(self,"on_mouse_exited"))
-		else:
-			node.disconnect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.disconnect("mouse_exited",Callable(self,"on_mouse_exited"))
-		for child in node.get_children():
-			preview_disconnect_node(child)
-
-func preview_connect() -> void:
-	if !get_tree().is_connected("node_added",Callable(self,"on_node_added")):
-		get_tree().connect("node_added",Callable(self,"on_node_added"))
-	preview_connect_node(self)
-
-func preview_disconnect() -> void:
-	if get_tree().is_connected("node_added",Callable(self,"on_node_added")):
-		get_tree().disconnect("node_added",Callable(self,"on_node_added"))
-	preview_disconnect_node(self)
-
-func on_node_added(n : Node):
-	#print("Adding "+str(n)+", parent = "+str(n.get_parent()))
-	if n is Control and is_ancestor_of(n):
-		preview_connect_node(n)
-
-func on_mouse_entered():
-	if !generator.minimized:
-		preview.visible = false
-
-func on_mouse_exited():
-	if !generator.minimized:
-		var preview_parent = preview.get_parent()
-		# Fake move of preview in hierarchy, so it's shown in front of whatever
-		# control that has been created recently
-		preview_parent.move_child(preview, preview_parent.get_child_count()-1)
-		preview.visible = true
 
 func update_from_locale() -> void:
 	update_title()

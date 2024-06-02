@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=44 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=45 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -226,6 +226,17 @@ content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.0401277, 0.0432053, 0.0493515, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k2ns1"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uujf1"]
 content_margin_left = 6.0
 content_margin_top = 6.0
@@ -436,6 +447,7 @@ MM_FlexibleTab/base_type = &"TabBar"
 MM_FlexibleTab/constants/separation = 3
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
+MM_NodePortGroup/styles/panel = SubResource("StyleBoxFlat_k2ns1")
 MM_PanelBackground/base_type = &"PanelContainer"
 MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")
 MM_ProjectsBackground/base_type = &"Panel"

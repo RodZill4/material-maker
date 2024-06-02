@@ -5,7 +5,7 @@ class_name MMGraphEdit
 class Preview:
 	var generator
 	var output_index : int
-	
+
 	func _init(g, i : int = 0):
 		generator = g
 		output_index = i
@@ -157,9 +157,7 @@ func _gui_input(event) -> void:
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
-				var rect : Rect2 = c.get_global_rect()
-				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-				rect = Rect2(rect.position, rect.size*transform_scale)
+				var rect = get_padded_node_rect(c)
 				if rect.has_point(get_global_mouse_position()):
 					print("Node: "+c.name)
 					if c.has_method("get_slot_from_position"):
@@ -210,18 +208,14 @@ func _gui_input(event) -> void:
 				var found_tip : bool = false
 				for c in get_children():
 					if c.has_method("set_slot_tip_text"):
-						var rect = c.get_global_rect()
-						var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-						rect = Rect2(rect.position, rect.size*transform_scale)
+						var rect = get_padded_node_rect(c)
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
 	elif event is InputEventMouseMotion:
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
-				var rect = c.get_global_rect()
-				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-				rect = Rect2(rect.position, rect.size*transform_scale)
+				var rect = get_padded_node_rect(c)
 				if rect.has_point(get_global_mouse_position()):
 					var mouse_pos : Vector2 = get_global_mouse_position()
 					var slot : Dictionary = c.get_slot_from_position(mouse_pos)
@@ -231,11 +225,17 @@ func _gui_input(event) -> void:
 				else:
 					c.clear_connection_labels()
 		if !found_tip:
-			var rect : Rect2 = get_global_rect()
-			var transform_scale : Vector2 = Vector2(1, 1) # get_global_transform().get_scale()
-			rect = Rect2(rect.position, rect.size*transform_scale)
+			var rect = get_global_rect()
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
+
+func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
+	var rect : Rect2 = graph_node.get_global_rect()
+	var padding := 8 * graph_node.get_global_transform().get_scale().x
+	rect.position.x -= padding
+	rect.size.x += padding*2
+	return Rect2(rect.position, rect.size)
+
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -850,12 +850,12 @@ func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 		var current_zoom = get_zoom()
 		var node_rect = node.get_rect()
 		node_rect.size = node_rect.size * current_zoom
-		
+
 		for c in get_children():
 			if c is GraphNode and c != node:
 				var c_rect = c.get_rect()
 				c_rect.size = c_rect.size * current_zoom
-				
+
 				if node_rect.encloses(c_rect):
 					c.selected = true
 	else:
@@ -1260,7 +1260,7 @@ func get_propagation_targets(source : MMGenGraph, parent : MMGenGraph = null) ->
 func propagate_node_changes(source : MMGenGraph) -> void:
 	for c in get_propagation_targets(source):
 		c.apply_diff_from(source)
-	
+
 	var main_window = mm_globals.main_window
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)
