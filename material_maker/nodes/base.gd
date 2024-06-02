@@ -137,7 +137,7 @@ func _draw() -> void:
 			var conn_pos1 = get_input_port_position(i)
 			# warning-ignore:narrowing_conversion
 			var conn_pos2 = get_input_port_position(min(i+inputs[i].group_size-1, inputs.size()-1))
-			draw_line(conn_pos1, conn_pos2, color)
+			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
@@ -159,7 +159,7 @@ func _draw() -> void:
 # warning-ignore:narrowing_conversion
 			var conn_pos1 = get_output_port_position(i)
 			var conn_pos2 = get_output_port_position(min(i+outputs[i].group_size-1, outputs.size()-1))
-			draw_line(conn_pos1, conn_pos2, color)
+			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 		var j = -1
 		if i == preview_port[0]:
 			j = 0
@@ -177,6 +177,12 @@ func _draw() -> void:
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
 		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
+
+func draw_portgroup_stylebox(first_port:Vector2, last_port:Vector2) -> void:
+	var width := 12
+	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * width
+	var stylebox_size: Vector2 = Vector2(width, last_port.y - first_port.y + width)
+	draw_style_box(get_theme_stylebox("panel", "MM_NodePortGroup"), Rect2(stylebox_position, stylebox_size))
 
 func set_generator(g) -> void:
 	super.set_generator(g)
@@ -283,7 +289,7 @@ func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
 			if input_def.has("longdesc"):
 				return MMGraphNodeBase.wrap_string(TranslationServer.translate(input_def.longdesc))
 		"output":
-			
+
 			var output_def = generator.get_output_defs()[io.index]
 			if output_def.has("longdesc"):
 				return MMGraphNodeBase.wrap_string(TranslationServer.translate(output_def.longdesc))
