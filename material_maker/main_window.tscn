@@ -96,10 +96,10 @@ _data = {
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -146.0
+offset_left = -160.0
 offset_top = -21.0
-offset_right = 146.0
-offset_bottom = 22.0
+offset_right = 160.0
+offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -179,10 +179,11 @@ scroll_following = true
 layout_mode = 2
 
 [node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar"]
-custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 bbcode_enabled = true
+fit_content = true
 scroll_active = false
 
 [node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/Tip"]

@@ -120,7 +120,7 @@ corner_detail = 4
 
 [sub_resource type="FontVariation" id="FontVariation_na26k"]
 base_font = ExtResource("1_hqoqt")
-variation_embolden = 2.0
+variation_embolden = 1.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2221"]
 content_margin_left = 3.0
