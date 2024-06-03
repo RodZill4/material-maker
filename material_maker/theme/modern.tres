@@ -120,7 +120,7 @@ corner_detail = 4
 
 [sub_resource type="FontVariation" id="FontVariation_na26k"]
 base_font = ExtResource("1_hqoqt")
-variation_embolden = 1.5
+variation_embolden = 0.8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2221"]
 content_margin_left = 3.0
@@ -227,15 +227,13 @@ content_margin_bottom = 10.0
 bg_color = Color(0.0401277, 0.0432053, 0.0493515, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k2ns1"]
-draw_center = false
+bg_color = Color(0.8, 0.8, 0.8, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uujf1"]
 content_margin_left = 6.0
@@ -427,8 +425,8 @@ GraphNode/styles/titlebar = SubResource("StyleBoxFlat_imqse")
 GraphNode/styles/titlebar_selected = SubResource("StyleBoxFlat_ru0kh")
 GraphNodeTitleLabel/colors/font_outline_color = Color(0.168627, 0.176471, 0.192157, 1)
 GraphNodeTitleLabel/colors/font_shadow_color = Color(0.168627, 0.176471, 0.192157, 1)
-GraphNodeTitleLabel/constants/outline_size = 2
-GraphNodeTitleLabel/constants/shadow_outline_size = 2
+GraphNodeTitleLabel/constants/outline_size = 4
+GraphNodeTitleLabel/constants/shadow_outline_size = 4
 GraphNodeTitleLabel/fonts/font = SubResource("FontVariation_na26k")
 ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
 ItemList/styles/hovered = SubResource("StyleBoxFlat_m2221")
@@ -447,6 +445,7 @@ MM_FlexibleTab/base_type = &"TabBar"
 MM_FlexibleTab/constants/separation = 3
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
+MM_NodePortGroup/constants/width = 4
 MM_NodePortGroup/styles/panel = SubResource("StyleBoxFlat_k2ns1")
 MM_PanelBackground/base_type = &"PanelContainer"
 MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")

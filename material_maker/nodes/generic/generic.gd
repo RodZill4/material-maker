@@ -43,7 +43,7 @@ func _draw() -> void:
 	super._draw()
 	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
 		var conn_pos = get_output_port_position(generator.preview)
-		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_theme_color("title_color"))
+		draw_circle(conn_pos, 6, get_theme_color("title_color"), false, 0.8, true)
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)

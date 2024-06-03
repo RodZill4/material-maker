@@ -51,6 +51,7 @@ static func wrap_string(s : String, l : int = 50) -> String:
 
 func _ready() -> void:
 	super._ready()
+	_notification(NOTIFICATION_THEME_CHANGED)
 	gui_input.connect(self._on_gui_input)
 	update.call_deferred()
 
@@ -125,6 +126,32 @@ func update():
 		buffer_button.texture_normal = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
 		buffer_button.tooltip_text = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
 
+var portgroup_width : int
+var portgroup_stylebox : StyleBox
+
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		portgroup_width = get_theme_constant("width", "MM_NodePortGroup")
+		portgroup_stylebox = get_theme_stylebox("panel", "MM_NodePortGroup")
+		queue_redraw()
+
+func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
+	if left:
+		var inputs = generator.get_input_defs()
+		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
+			var conn_pos1 = get_input_port_position(slot_index)
+			# warning-ignore:narrowing_conversion
+			var conn_pos2 = get_input_port_position(min(slot_index+inputs[slot_index].group_size-1, inputs.size()-1))
+			draw_portgroup_stylebox(conn_pos1, conn_pos2)
+	else:
+		var outputs = generator.get_output_defs()
+		if slot_index < outputs.size() and outputs[slot_index].has("group_size") and outputs[slot_index].group_size > 1:
+			# warning-ignore:narrowing_conversion
+			var conn_pos1 = get_output_port_position(slot_index)
+			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
+			draw_portgroup_stylebox(conn_pos1, conn_pos2)
+	draw_circle(position, 5, color, true, -1, true)
+
 func _draw() -> void:
 	var color : Color = get_theme_color("title_color")
 	# warning-ignore:narrowing_conversion
@@ -133,11 +160,6 @@ func _draw() -> void:
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
-		if inputs[i].has("group_size") and inputs[i].group_size > 1:
-			var conn_pos1 = get_input_port_position(i)
-			# warning-ignore:narrowing_conversion
-			var conn_pos2 = get_input_port_position(min(i+inputs[i].group_size-1, inputs.size()-1))
-			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
@@ -155,11 +177,6 @@ func _draw() -> void:
 		preview_port[1] = -1
 		preview_locked[0] = preview_locked[0] || preview_locked[1]
 	for i in range(outputs.size()):
-		if outputs[i].has("group_size") and outputs[i].group_size > 1:
-# warning-ignore:narrowing_conversion
-			var conn_pos1 = get_output_port_position(i)
-			var conn_pos2 = get_output_port_position(min(i+outputs[i].group_size-1, outputs.size()-1))
-			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 		var j = -1
 		if i == preview_port[0]:
 			j = 0
@@ -178,11 +195,10 @@ func _draw() -> void:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
 		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
 
-func draw_portgroup_stylebox(first_port:Vector2, last_port:Vector2) -> void:
-	var width := 12
-	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * width
-	var stylebox_size: Vector2 = Vector2(width, last_port.y - first_port.y + width)
-	draw_style_box(get_theme_stylebox("panel", "MM_NodePortGroup"), Rect2(stylebox_position, stylebox_size))
+func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
+	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * portgroup_width
+	var stylebox_size: Vector2 = Vector2(portgroup_width, last_port.y - first_port.y + portgroup_width)
+	draw_style_box(portgroup_stylebox, Rect2(stylebox_position, stylebox_size))
 
 func set_generator(g) -> void:
 	super.set_generator(g)
