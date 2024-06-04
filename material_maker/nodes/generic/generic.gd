@@ -39,11 +39,21 @@ func generic_button_create_popup():
 	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
 	popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 
+var portpreview_radius : float
+var portpreview_color : Color
+var portpreview_width : float
+
+func on_theme_changed() -> void:
+	portpreview_radius = get_theme_constant("portpreview_radius", "GraphNode")
+	portpreview_color = get_theme_color("portpreview_color", "GraphNode")
+	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
+	super.on_theme_changed()
+
 func _draw() -> void:
 	super._draw()
 	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
 		var conn_pos = get_output_port_position(generator.preview)
-		draw_circle(conn_pos, 6, get_theme_color("title_color"), false, 0.8, true)
+		draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)

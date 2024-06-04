@@ -126,14 +126,17 @@ func update():
 		buffer_button.texture_normal = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
 		buffer_button.tooltip_text = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
 
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		on_theme_changed()
+
 var portgroup_width : int
 var portgroup_stylebox : StyleBox
 
-func _notification(what : int) -> void:
-	if what == NOTIFICATION_THEME_CHANGED:
-		portgroup_width = get_theme_constant("width", "MM_NodePortGroup")
-		portgroup_stylebox = get_theme_stylebox("panel", "MM_NodePortGroup")
-		queue_redraw()
+func on_theme_changed() -> void:
+	portgroup_width = get_theme_constant("width", "MM_NodePortGroup")
+	portgroup_stylebox = get_theme_stylebox("panel", "MM_NodePortGroup")
+	queue_redraw()
 
 func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
 	if left:
