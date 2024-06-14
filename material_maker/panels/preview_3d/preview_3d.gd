@@ -1,10 +1,5 @@
 extends SubViewportContainer
 
-const CAMERA_DISTANCE_MIN = 0.5
-const CAMERA_DISTANCE_MAX = 150.0
-const CAMERA_FOV_MIN = 10
-const CAMERA_FOV_MAX = 90
-
 @export var ui_path : NodePath = "UI/Preview3DUI"
 
 @onready var objects_pivot = $MaterialPreview/Preview3d/ObjectsPivot
@@ -16,9 +11,8 @@ const CAMERA_FOV_MAX = 90
 @onready var sun = $MaterialPreview/Preview3d/Sun
 
 var ui
-var trigger_on_right_click = true
-
-var moving = false
+var navigation_style: NavigationStyle3D
+var initial_camera_stand_transform: Transform3D
 
 signal need_update(me)
 
@@ -36,11 +30,14 @@ const MENU : Array[Dictionary] = [
 	{ menu="Model/Generate map/Bent Normals", submenu="generate_bent_normals_map" },
 	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
 	{ menu="Environment/Select", submenu="environment_list" },
-	{ menu="Environment/Tonemap", submenu="tonemap_list" }
+	{ menu="Environment/Tonemap", submenu="tonemap_list" },
+	{ menu="Environment/Navigation", submenu="navigation_styles_list" },
 ]
 
-
-var _mouse_start_position : Vector2 = Vector2.ZERO
+var NAVIGATION_STYLES: Dictionary = {
+	"Classic": ClassicNavigationStyle3D,
+	"Turntable": TurntableNavigationStyle3D,
+}
 
 
 func _enter_tree():
@@ -54,6 +51,11 @@ func _ready() -> void:
 	update_menu()
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
 	_on_Environment_item_selected(0)
+	
+	var config_navigation_style = NAVIGATION_STYLES.keys()[mm_globals.get_config("ui_3d_preview_navigation_style")]
+	navigation_style = NAVIGATION_STYLES[config_navigation_style].new(self)
+	initial_camera_stand_transform = camera_stand.get_global_transform()
+	
 	# Required for supersampling to work.
 	# $MaterialPreview.get_texture().flags = Texture2D.FLAG_FILTER
 	# $MaterialPreview.connect("size_changed",Callable(self,"_on_material_preview_size_changed"))
@@ -61,6 +63,9 @@ func _ready() -> void:
 	# attempts to read the setting before the configuration file is loaded.
 	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
+
+func _process(delta: float) -> void:
+	navigation_style.handle_process(delta)
 
 func update_menu():
 	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
@@ -90,6 +95,16 @@ func create_menu_tonemap_list(menu : MMMenuManager.MenuBase) -> void:
 		if i == tonemap_mode:
 			menu.set_item_checked(i, true)
 	menu.connect_id_pressed(self._on_Tonemaps_item_selected)
+
+func create_menu_navigation_styles_list(menu : MMMenuManager.MenuBase) -> void:
+	var config_navigation_style : int = mm_globals.get_config("ui_3d_preview_navigation_style")
+	var labels = NAVIGATION_STYLES.keys()
+	menu.clear()
+	for i in labels.size():
+		menu.add_radio_check_item(labels[i], i)
+		if i == config_navigation_style:
+			menu.set_item_checked(i, true)
+	menu.connect_id_pressed(self._on_NavigationStyles_item_selected)
 
 func _on_Model_item_selected(id) -> void:
 	if id == objects.get_child_count()-1:
@@ -138,6 +153,12 @@ func _on_Tonemaps_item_selected(id) -> void:
 	environment.tonemap_mode = id
 	update_menu.call_deferred()
 
+func _on_NavigationStyles_item_selected(id) -> void:
+	mm_globals.set_config("ui_3d_preview_navigation_style", id)
+	camera_stand.set_global_transform(initial_camera_stand_transform)
+	navigation_style = NAVIGATION_STYLES.values()[id].new(self)
+	update_menu.call_deferred()
+
 func _on_material_preview_size_changed() -> void:
 	pass
 	# Apply supersampling to the new viewport size.
@@ -166,80 +187,8 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	preview_material.set_shader_parameter(parameter_name, value)
 	return false
 
-func zoom(amount : float):
-	camera.position.z = clamp(camera.position.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
-
 func on_gui_input(event) -> void:
-	if event is InputEventPanGesture:
-		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
-		var camera_basis = camera.global_transform.basis
-		var camera_rotation : Vector2 = event.delta
-		camera_stand.rotate(camera_basis.x.normalized(), -camera_rotation.y)
-		camera_stand.rotate(camera_basis.y.normalized(), -camera_rotation.x)
-	elif event is InputEventMagnifyGesture:
-		zoom(1.0/event.factor)
-	elif event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
-			# Don't stop rotating the preview on mouse wheel usage (zoom change).
-			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
-		match event.button_index:
-			MOUSE_BUTTON_WHEEL_UP:
-				if event.is_command_or_control_pressed():
-					camera.fov = clamp(camera.fov + 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
-				else:
-					zoom(1.0 / (1.01 if event.shift_pressed else 1.1))
-			MOUSE_BUTTON_WHEEL_DOWN:
-				if event.is_command_or_control_pressed():
-					camera.fov = clamp(camera.fov - 1, CAMERA_FOV_MIN, CAMERA_FOV_MAX)
-				else:
-					zoom(1.01 if event.shift_pressed else 1.1)
-			MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT:
-				var mask : int = Input.get_mouse_button_mask()
-				var lpressed : bool = (mask & MOUSE_BUTTON_MASK_LEFT) != 0
-				var rpressed : bool = (mask & MOUSE_BUTTON_MASK_RIGHT) != 0
-
-				if event.pressed and lpressed != rpressed: # xor
-					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-					_mouse_start_position = event.global_position/get_window().content_scale_factor
-					moving = true
-				elif not lpressed and not rpressed:
-					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
-					get_viewport().warp_mouse(_mouse_start_position)
-					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-					moving = false
-				if event.button_index == MOUSE_BUTTON_RIGHT:
-					if event.pressed:
-						trigger_on_right_click = true
-					elif trigger_on_right_click:
-						trigger_on_right_click = false
-						on_right_click()
-	elif moving and event is InputEventMouseMotion:
-		trigger_on_right_click = false
-		if event.pressure != 0.0:
-			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		var motion = event.relative
-		if motion.length() > 200:
-			return
-		if Input.is_key_pressed(KEY_ALT):
-			zoom(1.0+motion.y*0.01)
-		else:
-			motion *= 0.01
-			if abs(motion.y) > abs(motion.x):
-				motion.x = 0
-			else:
-				motion.y = 0
-			var camera_basis = camera.global_transform.basis
-			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CTRL) else 1 if Input.is_key_pressed(KEY_SHIFT) else 0
-			if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-				objects_pivot.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
-				objects_pivot.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
-				if objects_rotation != 1:
-					camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
-					camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
-			elif event.button_mask & MOUSE_BUTTON_MASK_RIGHT:
-				objects_pivot.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
-				if objects_rotation != 1:
-					camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
+	navigation_style.handle_input(event)
 
 func on_right_click():
 	pass
