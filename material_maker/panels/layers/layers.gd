@@ -67,19 +67,3 @@ func _on_Config_pressed():
 		var popup = preload("res://material_maker/panels/layers/layer_config_popup.tscn").instantiate()
 		add_child(popup)
 		popup.configure_layer(layers, current.get_meta("layer"))
-
-
-func _on_Tree_button_pressed(item: TreeItem, column: int, id: int, mouse_button_index: int) -> void:
-	pass # Replace with function body.
-
-
-func _on_Tree_cell_selected() -> void:
-	pass # Replace with function body.
-
-
-func _on_Tree_item_edited() -> void:
-	pass # Replace with function body.
-
-
-func _on_Tree_gui_input(event: InputEvent) -> void:
-	pass # Replace with function body.

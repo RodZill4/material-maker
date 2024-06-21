@@ -169,7 +169,8 @@ func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
 	brush_node.parameter_changed.connect(self.on_brush_changed)
 	painter.set_brush_preview_material(brush_view_3d.material)
-	painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+	if layers.selected_layer:
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
 
 func set_brush(data) -> void:
 	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
@@ -606,12 +607,10 @@ var procedural_update_changed_scheduled : bool = false
 func update_procedural_layer() -> void:
 	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
-		for i in range(10):
-			await get_tree().process_frame
-		do_update_procedural_layer()
+		await do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
-	painter.fill(false, true, false)
+	await painter.fill(false, true, false)
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
 	procedural_update_changed_scheduled = false
@@ -844,11 +843,12 @@ func load_project(file_name) -> bool:
 	initialize_layers_history()
 	return true
 
-func save():
+func save() -> bool:
 	if save_path != null:
 		do_save_project(save_path)
 	else:
 		save_as()
+	return true
 
 func save_as():
 	show_file_dialog(FileDialog.FILE_MODE_SAVE_FILE, "*.mmpp;Model painter project", "do_save_project")

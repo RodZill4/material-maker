@@ -228,7 +228,7 @@ stretch = true
 [node name="MainView" type="SubViewport" parent="VSplitContainer/HSplitContainer/Painter/View"]
 own_world_3d = true
 handle_input_locally = false
-size = Vector2i(10, 10)
+size = Vector2i(800, 480)
 render_target_update_mode = 4
 
 [node name="CameraPosition" type="Node3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
@@ -643,9 +643,11 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 1
+scroll_offset = Vector2(0, -308)
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
 
+[connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
 [connection signal="dragged" from="VSplitContainer" to="." method="_on_v_split_container_dragged"]
 [connection signal="dragged" from="VSplitContainer/HSplitContainer" to="." method="_on_h_split_container_dragged"]

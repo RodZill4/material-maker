@@ -133,7 +133,6 @@ class ShaderCode:
 			add_global(g.code, g.source)
 	
 	func get_globals_string(code : String = "") -> String:
-		assert(code != "")
 		var rv : String = ""
 		if true:
 			var reverse_globals : Array[GlobalDefs] = globals.duplicate()
