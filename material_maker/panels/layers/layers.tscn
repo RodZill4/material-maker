@@ -94,6 +94,7 @@ size_flags_vertical = 3
 focus_mode = 0
 columns = 2
 hide_root = true
+select_mode = 1
 script = ExtResource("1")
 
 [connection signal="pressed" from="Layers/Buttons/Add" to="." method="_on_Add_pressed"]
@@ -106,4 +107,5 @@ script = ExtResource("1")
 [connection signal="cell_selected" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_cell_selected"]
 [connection signal="gui_input" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_gui_input"]
 [connection signal="item_edited" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_item_edited"]
+[connection signal="item_selected" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_cell_selected"]
 [connection signal="selection_changed" from="Layers/Tree" to="." method="_on_Tree_selection_changed"]
