@@ -38,6 +38,7 @@ func load_library(path : String, ro : bool = false, raw_data : String = "") -> b
 		read_only = ro
 		for i in data.lib:
 			library_items_by_name[i.tree_item] = i
+			i['display_name'] = i.tree_item.get_slice('/', i.tree_item.get_slice_count('/') - 1)
 			var texture : ImageTexture = ImageTexture.new()
 			var image : Image = Image.new()
 			if i.has("icon_data"):

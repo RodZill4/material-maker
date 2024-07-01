@@ -6,14 +6,12 @@
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bok24"]
 size = Vector2(16, 16)
 
-[node name="Tab" type="MarginContainer"]
+[node name="Tab" type="PanelContainer"]
 offset_right = 41.0
 offset_bottom = 26.0
 size_flags_horizontal = 0
-size_flags_vertical = 0
-mouse_filter = 0
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_right = 3
+size_flags_vertical = 8
+theme_type_variation = &"MM_FlexibleTab"
 script = ExtResource("1")
 
 [node name="Container" type="HBoxContainer" parent="."]

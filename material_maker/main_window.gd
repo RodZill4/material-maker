@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 
 var quitting : bool = false
 
@@ -45,7 +45,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
-const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light" ]
+const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light", "Modern"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -141,7 +141,7 @@ func _ready() -> void:
 			get_window().position = mm_globals.config.get_value("window", "position")
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
-	
+			
 	# Restore the theme
 	var theme_name : String = "default"
 	if mm_globals.config.has_section_key("window", "theme"):
@@ -228,6 +228,9 @@ func _ready() -> void:
 		await get_tree().process_frame
 		new_material()
 	
+	size = get_window().size
+	position = Vector2.ZERO
+	set_anchors_preset(Control.PRESET_FULL_RECT)
 	update_menus()
 	
 	mm_logger.message("Material Maker "+ProjectSettings.get_setting("application/config/actual_release"))

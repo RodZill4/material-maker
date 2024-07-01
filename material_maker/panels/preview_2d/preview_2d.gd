@@ -97,7 +97,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 var refreshing_generator : bool = false
 func on_parameter_changed(n : String, v) -> void:
 	if n == "__output_changed__" and output == v:
-		if ! refreshing_generator:
+		if ! refreshing_generator and is_inside_tree():
 			refreshing_generator = true
 			await get_tree().process_frame
 			set_generator(generator, output, true)

@@ -451,9 +451,9 @@ func debug_get_texture(ID):
 		0:
 			return get_albedo_texture()
 		1:
-			return $Metallic.get_texture()
+			return get_metallic_texture()
 		2:
-			return $Roughness.get_texture()
+			return get_roughness_texture()
 		3:
 			return get_emission_texture()
 		4:
