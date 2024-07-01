@@ -20,8 +20,8 @@ on:
 
 env:
   GODOT_VERSION: 4.3
-  GODOT_SUB: beta1
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.3-beta1
+  GODOT_SUB: beta2
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.3-beta2
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
@@ -93,17 +93,17 @@ jobs:
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Upload Documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: documentation
           path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
       - name: Upload Linux Artifact 🚀
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
@@ -210,7 +210,7 @@ jobs:
           xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
           xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos_snapshot
           path: ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
