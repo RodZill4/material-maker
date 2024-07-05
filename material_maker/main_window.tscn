@@ -15,39 +15,6 @@
 [ext_resource type="Script" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
 
-[sub_resource type="AtlasTexture" id="8"]
-atlas = ExtResource("8")
-region = Rect2(96, 128, 16, 16)
-
-[sub_resource type="GDScript" id="9"]
-script/source = "extends HBoxContainer
-
-
-const PASTE_TYPE_ICON : Dictionary = {
-	none=preload(\"res://material_maker/icons/paste_none.tres\"),
-	color=preload(\"res://material_maker/icons/paste_none.tres\"),
-	palette=preload(\"res://material_maker/icons/paste_palette.tres\"),
-	newgraph=preload(\"res://material_maker/icons/paste_newgraph.tres\"),
-	graph=preload(\"res://material_maker/icons/paste_graph.tres\")
-}
-
-func _on_Timer_timeout():
-	var data : String = DisplayServer.clipboard_get().strip_edges()
-	var parsed_data = await mm_globals.parse_paste_data(data)
-	$Contents.texture = PASTE_TYPE_ICON[parsed_data.type]
-	var hint : String
-	match parsed_data.type:
-		\"none\",\"color\":
-			hint = \"The clipboard cannot be pasted\"
-		\"palette\":
-			hint = \"The clipboard contains a color palette and can be pasted\\ninto a graph view as a colorize node\"
-		\"newgraph\":
-			hint = \"The clipboard can be pasted as a new graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
-		\"graph\":
-			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
-	tooltip_text = hint
-"
-
 [sub_resource type="GDScript" id="6"]
 script/source = "extends Label
 
@@ -91,6 +58,39 @@ tracks/1/keys = {
 _data = {
 "show": SubResource("7")
 }
+
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("8")
+region = Rect2(96, 128, 16, 16)
+
+[sub_resource type="GDScript" id="9"]
+script/source = "extends HBoxContainer
+
+
+const PASTE_TYPE_ICON : Dictionary = {
+	none=preload(\"res://material_maker/icons/paste_none.tres\"),
+	color=preload(\"res://material_maker/icons/paste_none.tres\"),
+	palette=preload(\"res://material_maker/icons/paste_palette.tres\"),
+	newgraph=preload(\"res://material_maker/icons/paste_newgraph.tres\"),
+	graph=preload(\"res://material_maker/icons/paste_graph.tres\")
+}
+
+func _on_Timer_timeout():
+	var data : String = DisplayServer.clipboard_get().strip_edges()
+	var parsed_data = await mm_globals.parse_paste_data(data)
+	$Contents.texture = PASTE_TYPE_ICON[parsed_data.type]
+	var hint : String
+	match parsed_data.type:
+		\"none\",\"color\":
+			hint = \"The clipboard cannot be pasted\"
+		\"palette\":
+			hint = \"The clipboard contains a color palette and can be pasted\\ninto a graph view as a colorize node\"
+		\"newgraph\":
+			hint = \"The clipboard can be pasted as a new graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
+		\"graph\":
+			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
+	tooltip_text = hint
+"
 
 [node name="MainWindow" type="PanelContainer" groups=["preview"]]
 anchors_preset = 15
@@ -192,6 +192,19 @@ scroll_active = false
 
 [node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/Tip"]
 
+[node name="UndoRedoLabel" type="Label" parent="VBoxContainer/StatusBar/HBox"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Undo/Redo action added"
+script = SubResource("6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/StatusBar/HBox/UndoRedoLabel"]
+libraries = {
+"": SubResource("AnimationLibrary_kxf7t")
+}
+
 [node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -241,17 +254,6 @@ script = ExtResource("9")
 
 [node name="AddNodePopup" parent="." instance=ExtResource("7")]
 visible = false
-
-[node name="UndoRedoLabel" type="Label" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Undo/Redo action added"
-script = SubResource("6")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UndoRedoLabel"]
-libraries = {
-"": SubResource("AnimationLibrary_kxf7t")
-}
 
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
 [connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]

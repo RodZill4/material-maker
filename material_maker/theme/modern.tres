@@ -192,9 +192,9 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
-content_margin_top = 5.0
+content_margin_top = 2.0
 content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_bottom = 2.0
 bg_color = Color(0.168627, 0.176471, 0.192157, 1)
 border_width_left = 1
 border_width_top = 1
@@ -209,9 +209,9 @@ corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mv8c7"]
 content_margin_left = 10.0
-content_margin_top = 5.0
+content_margin_top = 2.0
 content_margin_right = 10.0
-content_margin_bottom = 5.0
+content_margin_bottom = 2.0
 bg_color = Color(0.168627, 0.176471, 0.192157, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
@@ -407,7 +407,7 @@ Button/styles/hover = SubResource("StyleBoxFlat_2qiie")
 Button/styles/normal = SubResource("StyleBoxFlat_rxikb")
 Button/styles/pressed = SubResource("StyleBoxFlat_rxikb")
 GraphEdit/colors/grid_major = Color(0.137255, 0.141176, 0.152941, 1)
-GraphEdit/colors/grid_minor = Color(0.104085, 0.107345, 0.117127, 1)
+GraphEdit/colors/grid_minor = Color(0.137255, 0.141176, 0.152941, 1)
 GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_pxlc8")
 GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
 GraphNode/colors/portpreview_color = Color(0.89059, 0.89059, 0.89059, 1)
