@@ -29,6 +29,7 @@ func update():
 		add_theme_stylebox_override("panel", get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "MM_FlexibleTab"))
 		$Container/Undock.visible = is_current and get_flex_layout().main_control.allow_undock
 		$Container/Close.visible = is_current
+		$Container/Label.add_theme_color_override("font_color", get_theme_color("font_selected_color" if is_current else "font_unselected_color", "MM_FlexibleTab") )
 		updating = false
 
 func _on_undock_pressed():
