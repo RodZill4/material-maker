@@ -63,7 +63,7 @@ func get_value() -> String:
 func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 	if v is int:
 		v = float(v)
-
+	
 	if v is float:
 		float_value = v
 		if get_decimal_places(v) < _step_decimals:
@@ -79,8 +79,10 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 		if v.is_valid_float():
 			if get_decimal_places(float(v)) < _step_decimals:
 				v = v.pad_decimals(_step_decimals)
+			$Slider.value = float(v)
+		else:
+			$Slider.value = min_value
 		$Edit.text = v
-		$Slider.value = min_value
 		if notify:
 			emit_signal("value_changed", v)
 			emit_signal("value_changed_undo", v, merge_undos)
@@ -132,6 +134,19 @@ func _gui_input(event: InputEvent) -> void:
 				if not event.pressed:
 					mode = Modes.EDITING
 					accept_event()
+		
+			if event.is_command_or_control_pressed() and $Edit.text.is_valid_float() and event.pressed:
+				var amount := step
+				if is_equal_approx(step, 0.01):
+					amount = 0.1
+				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+					set_value(max(float($Edit.text)-amount, min_value), true, true)
+					accept_event()
+				elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+					set_value(min(float($Edit.text)+amount, max_value), true, true)
+					accept_event()
+					
+
 
 	if mode == Modes.SLIDING:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -148,7 +163,7 @@ func _gui_input(event: InputEvent) -> void:
 			var current_step := step
 
 			if event.is_command_or_control_pressed():
-				delta *= 0.2
+				delta *= 2
 			elif event.shift_pressed:
 				delta *= 0.2
 			if event.alt_pressed:
@@ -182,9 +197,7 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func _on_edit_focus_exited() -> void:
-	if mode == Modes.EDITING:
-		set_value($Edit.text)
-		mode = Modes.IDLE
+	_on_edit_text_submitted($Edit.text)
 
 
 func _on_edit_text_submitted(new_text: String) -> void:
@@ -198,6 +211,8 @@ func _on_edit_text_submitted(new_text: String) -> void:
 		if abs(float_value-new_value) > 0.00001:
 			float_value = new_value
 			set_value(float_value, true)
+		else:
+			set_value(float_value)
 	elif float_only or new_text == "":
 		set_value(float_value, true)
 	else:
