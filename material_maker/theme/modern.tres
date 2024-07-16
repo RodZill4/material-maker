@@ -70,21 +70,21 @@ corner_detail = 4
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62l4s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
-content_margin_left = 28.0
+content_margin_left = 10.0
 content_margin_top = 4.0
-content_margin_right = 28.0
+content_margin_right = 10.0
 content_margin_bottom = 4.0
-bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryqkj"]
-content_margin_left = 28.0
+content_margin_left = 10.0
 content_margin_top = 4.0
-content_margin_right = 28.0
+content_margin_right = 10.0
 content_margin_bottom = 4.0
-bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
 border_width_left = 1
 border_width_right = 1
 border_width_bottom = 1
