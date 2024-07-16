@@ -39,21 +39,7 @@ func generic_button_create_popup():
 	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
 	popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 
-var portpreview_radius : float
-var portpreview_color : Color
-var portpreview_width : float
 
-func on_theme_changed() -> void:
-	portpreview_radius = get_theme_constant("portpreview_radius", "GraphNode")
-	portpreview_color = get_theme_color("portpreview_color", "GraphNode")
-	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
-	super.on_theme_changed()
-
-func _draw() -> void:
-	super._draw()
-	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
-		var conn_pos = get_output_port_position(generator.preview)
-		draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)
@@ -375,13 +361,21 @@ func restore_preview_widget() -> void:
 			preview.get_parent().remove_child(preview)
 		preview.add_child(preview_timer)
 		var child_count = get_child_count()
-		var preview_parent = get_child(child_count-1)
-		while preview_parent is Container:
-			child_count = preview_parent.get_child_count()
-			preview_parent = preview_parent.get_child(child_count-1)
-		if preview_parent == null:
+		#var preview_parent = get_child(child_count-1)
+		#while preview_parent is Container:
+			#child_count = preview_parent.get_child_count()
+			#preview_parent = preview_parent.get_child(child_count-1)
+		#if preview_parent == null:
+			#preview_parent = Control.new()
+			#get_child(get_child_count()-1).add_child(preview_parent)
+		#preview_parent.add_child(preview)
+		var preview_parent: Control = null
+		if has_node("PreviewParent"):
+			preview_parent = get_node("PreviewParent")
+		else:
 			preview_parent = Control.new()
-			get_child(get_child_count()-1).add_child(preview_parent)
+			preview_parent.name = "PreviewParent"
+			add_child(preview_parent)
 		preview_parent.add_child(preview)
 		preview.visible = false
 		update_preview()
