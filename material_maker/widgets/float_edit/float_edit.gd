@@ -119,16 +119,6 @@ func _gui_input(event: InputEvent) -> void:
 				modifiers = get_modifiers(event)
 
 		if event is InputEventMouseButton:
-			# Handle Right Click (Expression Editor)
-			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and !float_only:
-				var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
-				add_child(expression_editor)
-				expression_editor.edit_parameter(
-					"Expression editor - " + name,
-					$Edit.text, self,
-					"set_value_from_expression_editor")
-				accept_event()
-
 			# Handle Edit-Click (on button up!)
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if not event.pressed:
@@ -188,11 +178,23 @@ func _gui_input(event: InputEvent) -> void:
 
 			set_value(v, true, true)
 			accept_event()
-
+	
 	if mode == Modes.EDITING:
 		if event.is_action("ui_accept"):
 			set_value($Edit.text)
 			mode = Modes.IDLE
+
+	if mode == Modes.EDITING or mode == Modes.IDLE:
+		if event is InputEventMouseButton:
+			# Handle Right Click (Expression Editor)
+			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and !float_only:
+				var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
+				add_child(expression_editor)
+				expression_editor.edit_parameter(
+					"Expression editor - " + name,
+					$Edit.text, self,
+					"set_value_from_expression_editor")
+				accept_event()
 
 
 
@@ -217,8 +219,6 @@ func _on_edit_text_submitted(new_text: String) -> void:
 		set_value(float_value, true)
 	else:
 		set_value(new_text, true)
-
-
 
 
 func get_decimal_places(v: float) -> int:
