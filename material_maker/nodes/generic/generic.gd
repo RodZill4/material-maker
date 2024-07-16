@@ -521,6 +521,9 @@ func update_node() -> void:
 					var label_widget = Label.new()
 					label_widget.text = label
 					label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+					label_widget.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+					label_widget.custom_minimum_size.x = 100
+					label_widget.theme_type_variation = "MM_NodePropertyLabel"
 					hsizer.add_child(label_widget)
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
