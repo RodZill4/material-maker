@@ -182,9 +182,10 @@ func _draw() -> void:
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
 	for i in range(2):
-		if get_parent().locked_preview[i] != null and get_parent().locked_preview[i].generator == generator:
-			preview_port[i] = get_parent().locked_preview[i].output_index
-			preview_locked[i] = true
+		if get_parent().locked_preview[i] != null:
+			if get_parent().locked_preview[i].generator == generator:
+				preview_port[i] = get_parent().locked_preview[i].output_index
+				preview_locked[i] = true
 		elif get_parent().current_preview[i] != null and get_parent().current_preview[i].generator == generator:
 			preview_port[i] = get_parent().current_preview[i].output_index
 	if preview_port[0] == preview_port[1]:
