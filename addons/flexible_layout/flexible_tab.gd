@@ -1,9 +1,11 @@
 extends Container
 
+# Represents a single tab within a MM_FlexibleLayout.
+# Use Theme Overrides or Theme Files to style it.
 
 var flex_panel : Control
-var updating : bool = false
 
+var updating : bool = false
 
 func _ready():
 	$Container/Close.texture_normal = get_theme_icon("close", "TabBar")
@@ -22,15 +24,6 @@ func get_flex_layout():
 	var flex_tab = get_parent().get_parent().get_flex_tab()
 	return flex_tab.flexible_layout
 
-<<<<<<< HEAD
-func _draw():
-	var is_current : bool = (get_index() == get_parent().get_parent().current)
-	draw_style_box(get_theme_stylebox("tab_selected" if is_current else "tab_unselected", "TabBar"), Rect2(Vector2(), size))
-	$Container/ButtonSeparator.visible = is_current
-	$Container/Undock.visible = is_current and get_flex_layout().main_control.allow_undock
-	$Container/UndockSeparator.visible = is_current
-	$Container/Close.visible = is_current
-=======
 func update():
 	if not updating:
 		updating = true
@@ -39,7 +32,6 @@ func update():
 		$Container/Undock.visible = is_current and get_flex_layout().main_control.allow_undock
 		$Container/Close.visible = is_current
 		updating = false
->>>>>>> upstream/master
 
 func _on_undock_pressed():
 	get_flex_layout().undock(flex_panel)
