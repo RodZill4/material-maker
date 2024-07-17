@@ -21,7 +21,7 @@ var float_value: float = 0.5
 		_step_decimals = get_decimal_places(v)
 		$Slider.step = v
 
-# For display. Will always show at least as many decimal places as step.
+# For display. Will always show at least this many decimal places as step.
 var _step_decimals := 2
 
 @export var float_only: bool = false
@@ -33,9 +33,6 @@ var modifiers: int
 var from_lower_bound: bool = false
 var from_upper_bound: bool = false
 
-@onready var slider = $Slider
-@onready var cursor = $Slider/Cursor
-
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
 
@@ -44,6 +41,7 @@ var mode := Modes.IDLE:
 	set(m):
 		mode = m
 		if mode == Modes.EDITING:
+			$Edit.editable = true
 			$Edit.mouse_filter = MOUSE_FILTER_STOP
 			$Edit.grab_focus()
 			$Edit.select_all()
@@ -51,9 +49,10 @@ var mode := Modes.IDLE:
 			$Edit.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			$Slider.value = min_value
 		else:
+			$Edit.editable = false
 			$Edit.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			$Edit.mouse_filter = MOUSE_FILTER_IGNORE
-			grab_focus()
+		update()
 
 
 func get_value() -> String:
@@ -117,7 +116,12 @@ func _gui_input(event: InputEvent) -> void:
 				from_lower_bound = float_value <= min_value
 				from_upper_bound = float_value >= max_value
 				modifiers = get_modifiers(event)
-
+		
+		if event.is_action("ui_accept") and event.pressed:
+			mode = Modes.EDITING
+			accept_event()
+			return
+		
 		if event is InputEventMouseButton:
 			# Handle Edit-Click (on button up!)
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -139,8 +143,6 @@ func _gui_input(event: InputEvent) -> void:
 				elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
 					set_value(min(float($Edit.text)+amount, max_value), true, true)
 					accept_event()
-					
-
 
 	if mode == Modes.SLIDING:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -182,16 +184,11 @@ func _gui_input(event: InputEvent) -> void:
 
 			set_value(v, true, true)
 			accept_event()
-	
-	if mode == Modes.EDITING:
-		if event.is_action("ui_accept"):
-			set_value($Edit.text)
-			mode = Modes.IDLE
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
 		if event is InputEventMouseButton:
 			# Handle Right Click (Expression Editor)
-			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and !float_only:
+			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and not float_only:
 				var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
 				add_child(expression_editor)
 				expression_editor.edit_parameter(
@@ -201,9 +198,16 @@ func _gui_input(event: InputEvent) -> void:
 				accept_event()
 
 
+func _on_edit_focus_entered() -> void:
+	$Edit.queue_redraw()
+	if mode == Modes.IDLE:
+		mode = Modes.EDITING
+
 
 func _on_edit_focus_exited() -> void:
-	_on_edit_text_submitted($Edit.text)
+	$Edit.queue_redraw()
+	if mode == Modes.EDITING:
+		_on_edit_text_submitted($Edit.text)
 
 
 func _on_edit_text_submitted(new_text: String) -> void:
@@ -227,3 +231,32 @@ func _on_edit_text_submitted(new_text: String) -> void:
 
 func get_decimal_places(v: float) -> int:
 	return (str(v)+".").split(".")[1].length()
+
+
+func _notification(what):
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			update()
+
+
+func update() -> void:
+	var is_hovered := Rect2(Vector2(), size).has_point(get_local_mouse_position()) or mode == Modes.SLIDING
+	$Slider.add_theme_stylebox_override("fill", get_theme_stylebox("fill_hover" if is_hovered else "fill_normal"))
+	$Slider.add_theme_stylebox_override("background", get_theme_stylebox("hover" if is_hovered else "normal"))
+	
+	$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
+	$Edit.queue_redraw()
+
+
+func _ready() -> void:
+	update()
+
+func _on_mouse_entered() -> void:
+	update()
+
+func _on_mouse_exited() -> void:
+	update()
+
+func _on_edit_draw() -> void:
+	if get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() ==  $Edit:
+		$Edit.draw_style_box(get_theme_stylebox("focus"), Rect2(Vector2(), size))
