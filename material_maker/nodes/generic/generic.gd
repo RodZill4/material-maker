@@ -484,6 +484,7 @@ func update_node() -> void:
 		index = -1
 		var previous_focus = null
 		var first_focus = null
+		var labels := []
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -514,9 +515,7 @@ func update_node() -> void:
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label
-					label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-					label_widget.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-					label_widget.custom_minimum_size.x = 100
+					labels.append(label_widget)
 					label_widget.theme_type_variation = "MM_NodePropertyLabel"
 					hsizer.add_child(label_widget)
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
@@ -528,6 +527,13 @@ func update_node() -> void:
 				else:
 					first_focus = control
 				previous_focus = control
+		
+		var label_max_width = labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		label_max_width = min(100, label_max_width)
+		for label in labels:
+			label.custom_minimum_size.x = label_max_width
+			label.size.x = label_max_width
+			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
 			first_focus.focus_previous = previous_focus.get_path()
@@ -567,6 +573,7 @@ func update_node() -> void:
 		size = Vector2(96, 96)
 	# Preview
 	restore_preview_widget()
+
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
