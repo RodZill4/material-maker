@@ -453,6 +453,7 @@ MM_FlexibleTab/constants/separation = 3
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
 MM_NodeFloatEdit/base_type = &"ProgressBar"
+MM_NodeFloatEdit/font_sizes/font_size = 15
 MM_NodeFloatEdit/fonts/font = SubResource("FontVariation_80ifi")
 MM_NodeFloatEdit/styles/background = SubResource("StyleBoxFlat_3llvn")
 MM_NodeFloatEdit/styles/fill = SubResource("StyleBoxFlat_3c753")
