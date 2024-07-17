@@ -1,9 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://b08bcbwwosrrk"]
+[gd_scene load_steps=10 format=3 uid="uid://b08bcbwwosrrk"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_a4o1g"]
 [ext_resource type="Script" path="res://material_maker/widgets/splines_edit/splines_editor.gd" id="2_tepru"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3_lfcdr"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4_2po4g"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_66qgq"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_w4n15"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t30sn"]
 atlas = ExtResource("3_lfcdr")
@@ -47,18 +51,35 @@ offset_bottom = 26.0
 [node name="HSizer" type="HBoxContainer" parent="Buttons" index="0"]
 layout_mode = 2
 
-[node name="DeleteControlPoints" type="Button" parent="Buttons/HSizer" index="0"]
+[node name="DrawMode" type="Button" parent="Buttons/HSizer" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_66qgq")
+text = "D"
+
+[node name="SelectMode" type="Button" parent="Buttons/HSizer" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_w4n15")
+text = "S"
+
+[node name="Spacer1" type="Control" parent="Buttons/HSizer" index="2"]
+layout_mode = 2
+
+[node name="DeleteControlPoints3" type="Button" parent="Buttons/HSizer" index="3"]
 layout_mode = 2
 icon = SubResource("AtlasTexture_t30sn")
 
-[node name="Spacer1" type="Control" parent="Buttons/HSizer" index="1"]
+[node name="Spacer2" type="Control" parent="Buttons/HSizer" index="4"]
 layout_mode = 2
 
-[node name="UnlinkControlPoints" type="Button" parent="Buttons/HSizer" index="2"]
+[node name="UnlinkControlPoints" type="Button" parent="Buttons/HSizer" index="5"]
 layout_mode = 2
 icon = SubResource("AtlasTexture_b45mn")
 
-[node name="LinkControlPoints" type="Button" parent="Buttons/HSizer" index="3"]
+[node name="LinkControlPoints" type="Button" parent="Buttons/HSizer" index="6"]
 layout_mode = 2
 icon = SubResource("AtlasTexture_3lo2j")
 
@@ -114,7 +135,7 @@ step = 0.01
 float_only = true
 
 [connection signal="gui_input" from="." to="." method="_on_SplinesEditor_gui_input"]
-[connection signal="pressed" from="Buttons/HSizer/DeleteControlPoints" to="." method="_on_delete_control_points_pressed"]
+[connection signal="pressed" from="Buttons/HSizer/DeleteControlPoints3" to="." method="_on_delete_control_points_pressed"]
 [connection signal="pressed" from="Buttons/HSizer/UnlinkControlPoints" to="." method="_on_unlink_control_points_pressed"]
 [connection signal="pressed" from="Buttons/HSizer/LinkControlPoints" to="." method="_on_link_control_points_pressed"]
 [connection signal="pressed" from="Editors/HSizer/Progressive" to="." method="queue_redraw"]

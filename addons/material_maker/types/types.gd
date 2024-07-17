@@ -29,6 +29,10 @@ static func deserialize_value(data):
 				var splines = MMSplines.new()
 				splines.deserialize(data)
 				return splines
+			elif data.type == "Pixels":
+				var splines = MMPixels.new()
+				splines.deserialize(data)
+				return splines
 		elif data.has("r") and data.has("g") and data.has("b") and data.has("a"):
 			return Color(data.r, data.g, data.b, data.a)
 	# in previous releases, Gradients were serialized as arrays

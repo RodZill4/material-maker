@@ -1,5 +1,4 @@
-extends VBoxContainer
-
+extends Control
 
 @export var library_manager_name = ""
 
@@ -9,11 +8,10 @@ var expanded_items : Array = []
 
 var category_buttons = {}
 
-@onready var tree : Tree = $Tree
-@onready var libraries_button : MenuButton = $HBoxContainer/Libraries
-@onready var filter_line_edit : LineEdit = $Filter/Filter
-@onready var item_menu : PopupMenu = $ItemMenu
-#onready var dir_menu : PopupMenu = $DirMenu
+@onready var tree : Tree = %Tree
+@onready var libraries_button : MenuButton = %Libraries
+@onready var filter_line_edit : LineEdit = %Filter
+@onready var item_menu : PopupMenu = %ItemMenu
 
 
 const MENU_CREATE_LIBRARY : int = 1000
@@ -33,7 +31,7 @@ func _ready() -> void:
 		var texture : Texture2D = library_manager.get_section_icon(s)
 		button.name = s
 		button.texture_normal = texture
-		$SectionButtons.add_child(button)
+		%SectionButtons.add_child(button)
 		category_buttons[s] = button
 		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
 		button.connect("gui_input", self._on_Section_Button_event.bind(s))
@@ -323,9 +321,7 @@ func _on_PopupMenu_index_pressed(index):
 			var current_node = main_window.get_current_node(main_window.get_current_graph_edit())
 			if current_node == null:
 				return
-			var result = await current_node.generator.render(self, 0, 64, true)
-			var image : Image = result.get_image()
-			result.release(self)
+			var image : Image = await current_node.generator.render_output(0, 64)
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
 		2: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)

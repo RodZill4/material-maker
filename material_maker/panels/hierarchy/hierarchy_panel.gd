@@ -1,8 +1,8 @@
-extends VBoxContainer
+extends Control
 
 @export var preview : int = 0 # (int, 0, 3)
 
-@onready var tree = $Tree
+@onready var tree = %Tree
 
 var default_texture : ImageTexture = null
 var current_graph_edit = null
@@ -21,7 +21,7 @@ func _ready() -> void:
 	default_image.fill(Color(0.0, 0.0, 0.0, 0.0))
 	default_texture = ImageTexture.new()
 	default_texture.set_image(default_image)
-	$HBoxContainer/PreviewMenu.get_popup().connect("id_pressed",Callable(self,"_on_PreviewMenu_id_pressed"))
+	%PreviewMenu.get_popup().connect("id_pressed",Callable(self,"_on_PreviewMenu_id_pressed"))
 
 func update_from_graph_edit(graph_edit) -> void:
 	if tree == null:

@@ -1,9 +1,9 @@
 Scale XYZ node
 ..............
 
-The **Scale XYZ** node generates a 3D signed distance function of a scaled shape
-based on its input in a non uniform way. 
-The result shape is no longer a correct signed distance function, but can be used for many operations like ray marching.
+The **Scale XYZ** node is variadic and generates 3D signed distance functions of scaled shapes
+based on its inputs in a non uniform way. 
+The result shapes are no longer correct signed distance functions, but can be used for many operations like ray marching.
 
 .. image:: images/node_3d_sdf_transforms_scale_xyz.png
 	:align: center

@@ -1,16 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://clw8sb0p8webl"]
+[gd_scene load_steps=15 format=3 uid="uid://clw8sb0p8webl"]
 
 [ext_resource type="Script" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="3"]
-[ext_resource type="Script" path="res://material_maker/windows/add_node_popup/list.gd" id="4"]
-
-[sub_resource type="GDScript" id="GDScript_t3c2p"]
-script/source = "extends PanelContainer
-
-func _draw() -> void:
-	draw_rect(Rect2(0, 0, size.x, size.y), Color(1, 0.56, 0.56, 1), false, 2)
-"
 
 [sub_resource type="Shader" id="11"]
 code = "shader_type canvas_item;
@@ -106,8 +98,10 @@ shader_parameter/brightness = 0.8
 shader_parameter/tex = ExtResource("3")
 
 [node name="AddNodePopup" type="Popup"]
-size = Vector2i(248, 400)
+transparent_bg = true
+size = Vector2i(252, 400)
 visible = true
+transparent = true
 script = ExtResource("1")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -115,10 +109,12 @@ custom_minimum_size = Vector2(0, 400)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = SubResource("GDScript_t3c2p")
+mouse_filter = 2
+theme_type_variation = &"MM_AddNodePanel"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -179,21 +175,18 @@ size_flags_horizontal = 6
 default_library_item = "Filter/Normal map"
 
 [node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Search..."
+placeholder_text = "Filter"
 clear_button_enabled = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
+[node name="List" type="ItemList" parent="PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="List" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-script = ExtResource("4")
+theme_type_variation = &"MM_AddNodePanelList"
+fixed_icon_size = Vector2i(18, 18)
 
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button1" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button2" to="." method="add_node"]
@@ -204,3 +197,7 @@ script = ExtResource("4")
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button7" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button8" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button9" to="." method="add_node"]
+[connection signal="gui_input" from="PanelContainer/VBoxContainer/Filter" to="." method="_on_filter_gui_input"]
+[connection signal="gui_input" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_gui_input"]
+[connection signal="item_activated" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_item_activated"]
+[connection signal="item_clicked" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_item_clicked"]

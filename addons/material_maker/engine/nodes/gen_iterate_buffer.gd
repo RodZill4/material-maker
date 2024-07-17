@@ -30,7 +30,7 @@ func _ready():
 		"o%d_input_init" % get_instance_id(),
 		"o%d_input_loop" % get_instance_id(),
 		"o%d_loop_tex" % get_instance_id(),
-		"o%d_tex" % get_instance_id()
+		"o%d_it_tex" % get_instance_id()
 	]
 	iteration_param_name = "o%d_iteration" % get_instance_id()
 	mm_deps.create_buffer(buffer_names[3], self)
@@ -127,6 +127,9 @@ func do_update_shaders() -> void:
 	set_current_iteration(0)
 
 func set_parameter(n : String, v) -> void:
+	if is_inside_tree():
+		if n == "size":
+			mm_deps.dependency_update("o%s_it_tex_size" % get_instance_id(), pow(2, v))
 	super.set_parameter(n, v)
 	set_current_iteration(0)
 
@@ -148,8 +151,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	if buffer_name == buffer_names[3]:
+		print("Cannot update %s" % buffer_name)
 		return false
-	if false and is_rendering:
+	if is_rendering:
+		print("Already rendering %s" % buffer_name)
 		return false
 	
 	is_rendering = true
@@ -167,7 +172,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		is_rendering = false
-		return false
+		print("Bad iteration for buffer %s (%d > %d)" % [ buffer_name, current_iteration, iterations ])
+		return true
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
 	
@@ -180,24 +186,30 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 			size = 4
 	
 	var status : bool = await shader_compute.render(texture, size)
+	if not status:
+		print("Error while rendering %s" % buffer_name)
 	
 	is_rendering = false
 	
 	if check_current_iteration != current_iteration:
 		mm_deps.dependency_update(buffer_name, texture, true)
+		push_warning("Iteration mismatch for %s" % buffer_name)
 		return false
 	
-	#todo texture.flags = 0
+	#print("iteration %d" % current_iteration)
 	
 	# Calculate iteration index
 	if autostop and shader_compute.get_difference() == 0:
+		#print("autostop at %d" % (current_iteration))
 		set_current_iteration(iterations+1)
 	else:
 		set_current_iteration(current_iteration+1)
+	
 	if current_iteration <= iterations:
 		mm_deps.dependency_update("o%d_loop_tex" % get_instance_id(), texture, true)
 	else:
-		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture, true)
+		print("updating texture")
+		mm_deps.dependency_update("o%d_it_tex" % get_instance_id(), texture, true)
 	mm_deps.dependency_update(buffer_name, texture, true)
 	
 	return status
@@ -215,10 +227,17 @@ func get_globals__(texture_name : String) -> Array[String]:
 	var texture_globals : String = "uniform sampler2D %s;\nuniform float o%d_tex_size = %d.0;\nuniform float o%d_iteration = 0.0;\n" % [ texture_name, get_instance_id() 	, pow(2, get_parameter("size")), get_instance_id() ]
 	return [ texture_globals ]
 
+func get_adjusted_uv(uv : String) -> String:
+	if not get_parameter("filter"):
+		var genname = "o"+str(get_instance_id())
+		return "((floor(%s * %s_it_tex_size)+vec2(0.5))/%s_it_tex_size)" % [ uv, genname, genname ]
+	else:
+		return uv
+
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
-	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0, "_tex" if output_index == 0 else "_loop_tex")
-	shader_code.add_uniform("%s_tex_size" % genname, "float", pow(2, get_parameter("size")))
+	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0, "_it_tex" if output_index == 0 else "_loop_tex")
+	shader_code.add_uniform("%s_it_tex_size" % genname, "float", pow(2, get_parameter("size")))
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:
@@ -227,10 +246,10 @@ func get_output_attributes(output_index : int) -> Dictionary:
 	match output_index:
 		0:
 			attributes.texture = "%s_tex" % genname
-			attributes.texture_size = "%s_tex_size" % genname
+			attributes.texture_size = "%s_it_tex_size" % genname
 		1:
 			attributes.texture = "%s_loop_tex" % genname
-			attributes.texture_size = "%s_tex_size" % genname
+			attributes.texture_size = "%s_it_tex_size" % genname
 			attributes.iteration = iteration_param_name
 	return attributes
 

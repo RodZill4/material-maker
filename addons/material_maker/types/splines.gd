@@ -12,13 +12,21 @@ class SplinesPoint:
 		width = w
 		offset = o
 
+	func is_equal(other : SplinesPoint) -> bool:
+		return position == other.position and width == other.width and offset == other.offset
+
 class Bezier:
 	var points : Array[SplinesPoint]
 	
 	func _init():
 		for i in range(4):
 			points.append(SplinesPoint.new())
-
+	
+	func is_equal(other : Bezier) -> bool:
+		for i in range(4):
+			if not points[i].is_equal(other.points[i]):
+				return false
+		return true
 
 var splines : Array[Bezier] = []
 var point_groups : Array = []
@@ -35,6 +43,7 @@ func _to_string() -> String:
 func duplicate() -> Object:
 	var copy = get_script().new()
 	copy.splines = splines.duplicate(true)
+	copy.point_groups = point_groups.duplicate(true)
 	return copy
 
 func clear() -> void:
@@ -52,7 +61,10 @@ func get_point_index(s : int, p : int) -> int:
 	return (s << 2) + p
 
 func get_point_by_index(i : int) -> SplinesPoint:
-	return splines[i >> 2].points[i & 3]
+	if (i >> 2) < splines.size():
+		return splines[i >> 2].points[i & 3]
+	else:
+		return SplinesPoint.new()
 
 func add_bezier(b : Bezier) -> int:
 	var rv : int = splines.size()
@@ -212,13 +224,19 @@ func set_points_offset(points : Array[int], offset : float, smooth : bool = fals
 
 func get_packed_array() -> PackedFloat32Array:
 	var values : PackedFloat32Array = PackedFloat32Array()
-	for s in splines:
-		for i in range(4):
-			var p : SplinesPoint = s.points[i]
-			values.append(p.position.x)
-			values.append(p.position.y)
-			values.append(p.width)
-			values.append(p.offset)
+	if splines.is_empty():
+		values.append(0.0)
+		values.append(0.0)
+		values.append(0.0)
+		values.append(0.0)
+	else:
+		for s in splines:
+			for i in range(4):
+				var p : SplinesPoint = s.points[i]
+				values.append(p.position.x)
+				values.append(p.position.y)
+				values.append(p.width)
+				values.append(p.offset)
 	return values
 
 func get_shader_params(parameter_name : String, attribute : String = "uniform") -> String:
@@ -230,7 +248,7 @@ func get_shader_params(parameter_name : String, attribute : String = "uniform") 
 func get_parameters(parameter_name : String) -> Array[MMGenBase.ShaderUniform]:
 	var rv : Array[MMGenBase.ShaderUniform] = []
 	var values : PackedFloat32Array = get_packed_array()
-	rv.append(MMGenBase.ShaderUniform.new("p_%s_points" % parameter_name, "vec4", values, values.size()/4))
+	rv.append(MMGenBase.ShaderUniform.new("p_%s_points" % parameter_name, "vec4", values, values.size()/4 if (values.size() > 0) else 1))
 	return rv
 
 func get_parameter_values(parameter_name : String) -> Dictionary:
@@ -242,12 +260,12 @@ func get_shader(parameter_name : String) -> String:
 	return "p_%s_points" % parameter_name
 
 func serialize() -> Dictionary:
-	return { type="Splines", values=Array(get_packed_array()), point_groups=point_groups.duplicate() }
+	return { type="Splines", values=[] if splines.is_empty() else Array(get_packed_array()), point_groups=point_groups.duplicate(true) }
 
 func deserialize(v) -> void:
 	if typeof(v) == TYPE_DICTIONARY and v.has("type") and v.type == "Splines":
 		splines = []
-		for i in range(0, v.values.size(), 4*4):
+		for i in range(0, 16*(v.values.size()/16), 16):
 			var spline : Bezier = Bezier.new()
 			splines.append(spline)
 			for pi in range(spline.points.size()):

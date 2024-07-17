@@ -10,3 +10,5 @@ offset_right = 64.0
 offset_bottom = 64.0
 mouse_filter = 2
 script = ExtResource("1_5efi8")
+
+[connection signal="resized" from="." to="." method="_on_resized"]

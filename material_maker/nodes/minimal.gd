@@ -46,7 +46,7 @@ func add_button(texture : Texture2D, pressed_callback = null, popup_callback = n
 
 func init_buttons():
 	close_button = add_button(CLOSE_ICON, self.on_close_pressed)
-	
+
 func on_close_pressed():
 	delete_request.emit()
 
@@ -78,22 +78,23 @@ func get_slot_from_position(pos : Vector2) -> Dictionary:
 	var rv : Dictionary = { type="none", index=-1, show_inputs = false, show_outputs=false }
 	var global_scale = get_global_transform().get_scale()
 	var rel_pos : Vector2 = (pos-global_position)/global_scale
+	var margin := 8
 	if get_input_port_count() > 0:
-		var input_1 : Vector2 = get_input_port_position(0)-5*global_scale
-		var input_2 : Vector2 = get_input_port_position(get_input_port_count()-1)+5*global_scale
+		var input_1 : Vector2 = get_input_port_position(0)-margin*global_scale
+		var input_2 : Vector2 = get_input_port_position(get_input_port_count()-1)+margin*global_scale
 		rv.show_inputs = Rect2(input_1, input_2-input_1).has_point(rel_pos)
 		if rv.show_inputs:
 			for i in range(get_input_port_count()):
-				if (get_input_port_position(i)-rel_pos).length() < 5*global_scale.x:
+				if (get_input_port_position(i)-rel_pos).length() < margin*global_scale.x:
 					rv.type = "input"
 					rv.index = i
 	if get_output_port_count() > 0:
-		var output_1 : Vector2 = get_output_port_position(0)-5*global_scale
-		var output_2 : Vector2 = get_output_port_position(get_output_port_count()-1)+5*global_scale
+		var output_1 : Vector2 = get_output_port_position(0)-margin*global_scale
+		var output_2 : Vector2 = get_output_port_position(get_output_port_count()-1)+margin*global_scale
 		rv.show_outputs = Rect2(output_1, output_2-output_1).has_point(rel_pos)
 		if rv.show_outputs:
 			for i in range(get_output_port_count()):
-				if (get_output_port_position(i)-rel_pos).length() < 5*global_scale.x:
+				if (get_output_port_position(i)-rel_pos).length() < margin*global_scale.x:
 					rv.type = "output"
 					rv.index = i
 	return rv

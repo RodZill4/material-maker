@@ -58,6 +58,8 @@
 			}
 		],
 		"instance": "",
+		"shortdesc": "Normal Blend",
+		"longdesc": "Blends normal maps using an optional mask",
 		"name": "Normal Blend",
 		"outputs": [
 			{

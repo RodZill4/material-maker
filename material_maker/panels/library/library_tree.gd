@@ -23,7 +23,7 @@ func _draw():
 	var sp : float = get_scroll().y
 	if bottom_rect.position.y + bottom_rect.size.y < size.y:
 		sp = 0
-	var library_manager = get_parent().library_manager
+	var library_manager = owner.library_manager
 	var items : Array[TreeItem] = get_root().get_children()
 	for item in items:
 		var color = library_manager.get_section_color(item.get_text(0))

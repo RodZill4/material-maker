@@ -192,6 +192,18 @@
 					{
 						"name": "snap(A, B)",
 						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
+					},
+					{
+						"name": "radians(A)",
+						"value": "radians($in1($uv))"
+					},
+					{
+						"name": "degrees(A)",
+						"value": "degrees($in1($uv))"
+					},
+					{
+						"name": "log(A, B)",
+						"value": "log($in1($uv))/log($in2($uv))"
 					}
 				]
 			},

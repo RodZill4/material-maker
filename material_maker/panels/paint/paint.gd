@@ -169,7 +169,8 @@ func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
 	brush_node.parameter_changed.connect(self.on_brush_changed)
 	painter.set_brush_preview_material(brush_view_3d.material)
-	painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+	if layers.selected_layer:
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
 
 func set_brush(data) -> void:
 	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
@@ -305,6 +306,7 @@ func load_id_map() -> bool:
 	return true
 
 func set_current_tool(m):
+	#preview_material.albedo_texture = painter.t2v_texture.get_texture()
 	var ignore = false
 	if m == MODE_MASK_SELECTOR:
 		if not painter.has_id_map():
@@ -379,6 +381,20 @@ const PAINTING_MODE_TEXTURE_FROM_VIEW = 2
 
 var stamp_center : Vector2
 
+func painter_update_brush_params(paint_params : Dictionary) -> void:
+	for k in paint_params.keys():
+		match k:
+			"brush_size":
+				if %PressureSize.button_pressed:
+					paint_params.brush_size *= next_pressure
+			"brush_opacity":
+				if %PressureOpacity.button_pressed:
+					paint_params.brush_opacity *= next_pressure
+			"brush_hardness":
+				if %PressureHardness.button_pressed:
+					paint_params.brush_hardness *= next_pressure
+	painter.update_brush_params(paint_params)
+
 func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VIEW):
 	var mouse_position : Vector2
 	var dont_paint : bool = false
@@ -391,19 +407,20 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			else:
 				mouse_position *= min(view_3d.size.x, view_3d.size.y)
 	if ev is InputEventMouseMotion:
+		var pressure = get_pressure(ev)
 		var pos_delta = mouse_position-last_motion_position
 		stroke_length += pos_delta.length()
 		pos_delta = pos_delta*0.75+last_motion_vector*0.75
 		stroke_angle = atan2(pos_delta.y, pos_delta.x)*180/PI
 		last_motion_position = mouse_position
 		last_motion_vector = pos_delta
-		painter.update_brush_params( { pressure=get_pressure(ev), stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
+		painter_update_brush_params( { pressure=pressure, stroke_length=stroke_length, stroke_angle=stroke_angle, stroke_seed=stroke_seed } )
 		if current_tool == MODE_COLOR_PICKER or current_tool == MODE_MASK_SELECTOR:
 			show_brush(null, null)
 		elif current_tool == MODE_LINE:
 			if previous_position != null:
 				var direction = mouse_position-previous_position
-				painter.update_brush_params( { pattern_angle=-atan2(direction.y, direction.x) } )
+				painter_update_brush_params( { pattern_angle=-atan2(direction.y, direction.x) } )
 			if dont_paint:
 				show_brush(null, null)
 			else:
@@ -412,7 +429,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 			var stamp_offset = mouse_position - stamp_center
 			var stamp_size = stamp_offset.length()
 			var stamp_angle = -stamp_offset.angle()
-			painter.update_brush_params( { brush_size=stamp_size, pattern_angle=stamp_angle } )
+			painter_update_brush_params( { brush_size=stamp_size, pattern_angle=stamp_angle } )
 			show_brush(stamp_center, stamp_center)
 		else:
 			if dont_paint:
@@ -421,31 +438,33 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				show_brush(mouse_position, mouse_position)
 		if ev.button_mask & MOUSE_BUTTON_MASK_LEFT != 0:
 			if ev.shift_pressed:
+				next_pressure = 1.0
 				reset_stroke()
 				brush_parameters.brush_size += ev.relative.x*0.1
 				brush_parameters.brush_size = clamp(brush_parameters.brush_size, 0.0, 250.0)
 				brush_parameters.brush_hardness += ev.relative.y*0.01
 				brush_parameters.brush_hardness = clamp(brush_parameters.brush_hardness, 0.0, 1.0)
-				painter.update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
+				painter_update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
 				%BrushSize.set_value(brush_parameters.brush_size)
 				%BrushHardness.set_value(brush_parameters.brush_hardness)
 			elif ev.is_command_or_control_pressed():
+				next_pressure = 1.0
 				reset_stroke()
 				brush_parameters.pattern_scale += ev.relative.x*0.1
 				brush_parameters.pattern_scale = clamp(brush_parameters.pattern_scale, 0.1, 25.0)
 				brush_parameters.pattern_angle = 0.5+(brush_parameters.pattern_angle+ev.relative.y*0.01)/TAU
 				brush_parameters.pattern_angle = TAU*(brush_parameters.pattern_angle-floor(brush_parameters.pattern_angle)-0.5)
-				painter.update_brush_params( { pattern_scale=brush_parameters.pattern_scale, pattern_angle=brush_parameters.pattern_angle } )
+				painter_update_brush_params( { pattern_scale=brush_parameters.pattern_scale, pattern_angle=brush_parameters.pattern_angle } )
 				%BrushAngle.set_value(brush_parameters.pattern_angle*57.2957795131)
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
-				paint(mouse_position, get_pressure(ev), ev.tilt, painting_mode)
+				paint(mouse_position, pressure, ev.tilt, painting_mode)
 				last_tilt = ev.tilt
-			elif ev.relative.length_squared() > 50:
-				get_pressure(ev)
+			painter_update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
 		else:
 			reset_stroke()
 		painter.update_brush()
 	elif ev is InputEventMouseButton:
+		var pressure = get_pressure(ev)
 		if !ev.is_command_or_control_pressed() and !ev.shift_pressed:
 			if ev.button_index == MOUSE_BUTTON_LEFT:
 				if ev.pressed:
@@ -453,10 +472,10 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 					previous_position = mouse_position
 					if current_tool == MODE_STAMP:
 						stamp_center = mouse_position
-						painter.update_brush_params( { brush_size=0 } )
+						painter_update_brush_params( { brush_size=0 } )
 						show_brush(stamp_center, stamp_center)
 				elif current_tool == MODE_STAMP:
-					paint(stamp_center, get_pressure(ev), last_tilt, painting_mode, true)
+					paint(stamp_center, pressure, last_tilt, painting_mode, true)
 				elif current_tool == MODE_COLOR_PICKER:
 					pick_color(ev.position, false)
 				elif current_tool == MODE_MASK_SELECTOR:
@@ -467,7 +486,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 						if previous_position != null:
 							var direction = mouse_position-previous_position
 							angle = -atan2(direction.y, direction.x)
-						painter.update_brush_params( { pattern_angle=angle } )
+						painter_update_brush_params( { pattern_angle=angle } )
 						painter.update_brush()
 					else:
 						last_painted_position = mouse_position+Vector2(brush_spacing_control.value, brush_spacing_control.value)
@@ -588,12 +607,10 @@ var procedural_update_changed_scheduled : bool = false
 func update_procedural_layer() -> void:
 	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
-		for i in range(10):
-			await get_tree().process_frame
-		do_update_procedural_layer()
+		await do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
-	painter.fill(false, true, false)
+	await painter.fill(false, true, false)
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
 	procedural_update_changed_scheduled = false
@@ -685,7 +702,8 @@ func do_paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0,
 		texture_space=(painting_mode != PAINTING_MODE_VIEW),
 		brush_pos=pos,
 		brush_ppos=previous_position,
-		brush_opacity=%BrushOpacity.value,
+		brush_size=%BrushSize.value*pressure if %PressureSize.button_pressed else %BrushSize.value,
+		brush_opacity=%BrushOpacity.value*pressure if %PressureOpacity.button_pressed else %BrushOpacity.value,
 		stroke_length=stroke_length,
 		stroke_angle=stroke_angle,
 		stroke_seed=stroke_seed,
@@ -740,7 +758,7 @@ func update_view():
 		#	await get_tree().process_frame
 		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
-	_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
+	#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
 
 func _on_resized():
 	call_deferred("update_view")
@@ -825,11 +843,12 @@ func load_project(file_name) -> bool:
 	initialize_layers_history()
 	return true
 
-func save():
+func save() -> bool:
 	if save_path != null:
 		do_save_project(save_path)
 	else:
 		save_as()
+	return true
 
 func save_as():
 	show_file_dialog(FileDialog.FILE_MODE_SAVE_FILE, "*.mmpp;Model painter project", "do_save_project")
@@ -922,7 +941,7 @@ func _on_Button_toggled(button_pressed : bool, button : String):
 func _on_Brush_value_changed(value, brush_parameter):
 	brush_parameters[brush_parameter] = value
 	var params_update : Dictionary = { brush_parameter:value }
-	painter.update_brush_params(params_update)
+	painter_update_brush_params(params_update)
 
 func set_environment(index) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")

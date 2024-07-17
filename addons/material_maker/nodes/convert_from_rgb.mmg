@@ -14,7 +14,7 @@
 		}
 	],
 	"label": "Convert from RGB",
-	"longdesc": "",
+	"longdesc": "Converts from RGB to a specified color space",
 	"name": "convert_from_rgb",
 	"node_position": {
 		"x": 0,
@@ -110,6 +110,6 @@
 	},
 	"seed": 0,
 	"seed_locked": false,
-	"shortdesc": "",
+	"shortdesc": "Convert from RGB",
 	"type": "graph"
 }

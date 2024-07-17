@@ -1,9 +1,9 @@
-extends VBoxContainer
+extends Control
 
 # The layer object
 var layers
 
-@onready var tree = $Tree
+@onready var tree = %Tree
 
 
 const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
@@ -27,7 +27,7 @@ func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeIte
 func _on_Add_pressed():
 	var menu = preload("res://material_maker/panels/layers/add_layer_menu.tscn").instantiate()
 	add_child(menu)
-	var button_rect = $Buttons/Add.get_global_rect()
+	var button_rect = %Buttons/Add.get_global_rect()
 	menu.connect("id_pressed", Callable(self, "_on_add_layer_menu"))
 	menu.connect("id_pressed", Callable(menu, "queue_free"))
 	menu.connect("popup_hide", Callable(menu, "queue_free"))

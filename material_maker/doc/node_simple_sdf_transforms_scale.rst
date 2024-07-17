@@ -1,7 +1,7 @@
 Scale node
 .............
 
-The **Scale** node generates a signed distance image obtained by scaling its input.
+The **Scale** node is variadic and generates signed distance images obtained by scaling its inputs.
 
 .. image:: images/node_simple_sdf_transforms_scale.png
 	:align: center
@@ -9,13 +9,13 @@ The **Scale** node generates a signed distance image obtained by scaling its inp
 Inputs
 ::::::
 
-The **Scale** node accepts a single input in signed distance function format.
+The **Scale** node accepts one or more inputs in signed distance function format.
 
 Outputs
 :::::::
 
-The **Scale** node generates a signed distance function of the
-scaled shape.
+The **Scale** node generates signed distance functions of the
+scaled shapes.
 
 Parameters
 ::::::::::

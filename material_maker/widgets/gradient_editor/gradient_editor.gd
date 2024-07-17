@@ -104,12 +104,18 @@ func _get_drag_data(_position : Vector2):
 	return data
 
 func _can_drop_data(_position : Vector2, data) -> bool:
-	return get_gradient_from_data(data) != null
+	return get_gradient_from_data(data) != null or typeof(data) == TYPE_COLOR
 
-func _drop_data(_position : Vector2, data) -> void:
-	var gradient = get_gradient_from_data(data)
-	if gradient != null:
-		set_value_and_update(MMType.deserialize_value(gradient), false)
+func _drop_data(position : Vector2, data) -> void:
+	if typeof(data) == TYPE_COLOR:
+		var p = clamp(position.x, 0, size.x-GradientCursor.WIDTH)
+		add_cursor(p, data)
+		continuous_change = false
+		update_from_value()
+	else:
+		var gradient = get_gradient_from_data(data)
+		if gradient != null:
+			set_value_and_update(MMType.deserialize_value(gradient), false)
 
 func set_value(v : MMGradient, from_popup : bool = false) -> void:
 	actual_value = v

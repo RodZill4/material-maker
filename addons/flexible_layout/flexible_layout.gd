@@ -544,6 +544,7 @@ class FlexWindow:
 		if first_panel:
 			position = Vector2i(first_panel.get_global_rect().position)+first_panel.get_window().position
 			size = first_panel.size
+			theme = main_control.owner.theme
 		panel = Control.new()
 		add_child(panel)
 		panel.position = Vector2i(0, 0)

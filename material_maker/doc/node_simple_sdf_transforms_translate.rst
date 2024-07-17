@@ -1,7 +1,7 @@
 Translate node
 ..............
 
-The **Translate** node generates a signed distance image obtained by translating its input.
+The **Translate** node is variadic and generates signed distance images obtained by translating its inputs.
 
 .. image:: images/node_simple_sdf_transforms_translate.png
 	:align: center
@@ -9,13 +9,13 @@ The **Translate** node generates a signed distance image obtained by translating
 Inputs
 ::::::
 
-The **Translate** node accepts a single input in signed distance function format.
+The **Translate** node accepts one or more inputs in signed distance function format.
 
 Outputs
 :::::::
 
-The **Translate** node generates a signed distance function of the
-translated shape.
+The **Translate** node generates signed distance functions of the
+translated shapes.
 
 Parameters
 ::::::::::

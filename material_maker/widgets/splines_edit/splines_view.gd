@@ -17,8 +17,7 @@ var draw_offset : Vector2 = Vector2(0, 0)
 
 func _ready() -> void:
 	splines = MMSplines.new()
-	connect("resized", Callable(self, "_on_resize"))
-	_on_resize()
+	_on_resized()
 
 func set_view_rect(do : Vector2, ds : Vector2):
 	draw_size = ds
@@ -62,9 +61,10 @@ func _draw():
 		draw_bezier(edited, fg)
 	if splines != null:
 		for b in splines.splines:
-			draw_bezier(b, fg, draw_width)
+			draw_bezier(b, curve_color, draw_width)
 
-func _on_resize() -> void:
+func _on_resized():
 	if auto_rescale:
 		var ds : float = min(size.x, size.y)
 		set_view_rect(0.5*(size-draw_size), Vector2(ds, ds))
+

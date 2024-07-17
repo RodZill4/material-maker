@@ -46,6 +46,15 @@ layout_mode = 1
 anchors_preset = 0
 offset_top = 28.0
 
+[node name="BackgroundPanel" type="Panel" parent="BackgroundPreviews"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"MM_ProjectsBackground"
+
 [node name="Preview2D" parent="BackgroundPreviews" instance=ExtResource("2_oiaqi")]
 visible = false
 material = SubResource("ShaderMaterial_8fw7q")
