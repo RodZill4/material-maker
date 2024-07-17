@@ -128,7 +128,11 @@ func _gui_input(event: InputEvent) -> void:
 			if event.is_command_or_control_pressed() and $Edit.text.is_valid_float() and event.pressed:
 				var amount := step
 				if is_equal_approx(step, 0.01):
-					amount = 0.1
+					if event.shift_pressed:
+						amount = 0.01
+					else:
+						amount = 0.1
+					
 				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 					set_value(max(float($Edit.text)-amount, min_value), true, true)
 					accept_event()
