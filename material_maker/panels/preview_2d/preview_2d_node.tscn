@@ -15,18 +15,6 @@ shader = SubResource("1")
 material = SubResource("2")
 mouse_filter = 0
 script = ExtResource("2")
-shader = "uniform vec2 preview_2d_size;
-
-void fragment() {
-	float ms = max(preview_2d_size.x, preview_2d_size.y);
-	vec2 uv = 0.5+(UV-vec2(0.5))*ms/preview_2d_size.yx;
-	float is = min(preview_2d_size.x, preview_2d_size.y);
-	vec4 image = preview_2d(uv);
-	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
-	uv -= vec2(0.5);
-	uv = abs(uv);
-	COLOR = vec4(image_with_background, step(max(uv.x, uv.y), 0.5)*0.8+0.2);
-}"
 
 [node name="ContextMenu" type="PopupMenu" parent="." index="0"]
 

@@ -96,7 +96,7 @@ func setup_controls(filter : String = "") -> void:
 		var float_param_defs = []
 		var complex_param_defs = []
 		for p in param_defs:
-			if p.type == "polygon" or  p.type == "polyline" or  p.type == "splines" or  p.type == "pixels":
+			if p.type == "polygon" or  p.type == "polyline" or  p.type == "splines" or  p.type == "pixels" or  p.type == "lattice":
 				complex_param_defs.append(p)
 			else:
 				float_param_defs.append(p)
@@ -104,7 +104,7 @@ func setup_controls(filter : String = "") -> void:
 			if c.has_method("set_view_rect"):
 				var s : float = min(size.x, size.y)/view_scale
 				c.set_view_rect(0.5*size-center*s, Vector2(s, s))
-			if c == $PolygonEditor or c == $SplinesEditor or c == $PixelsEditor:
+			if c == $PolygonEditor or c == $SplinesEditor or c == $PixelsEditor or c == $LatticeEditor:
 				continue
 			if c.has_method("setup_control"):
 				c.setup_control(generator, float_param_defs)
@@ -132,12 +132,12 @@ func setup_controls(filter : String = "") -> void:
 					$ComplexParameters.set_item_metadata(i, complex_param_defs[i])
 				$ComplexParameters.selected = 0
 				$ComplexParameters.visible = true
-		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor ]:
+		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 			e.setup_control(generator, edited_parameter)
 
 func _on_complex_parameters_item_selected(index):
 	var parameter = $ComplexParameters.get_item_metadata(index)
-	for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor ]:
+	for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 		e.setup_control(generator, [ parameter ])
 
 var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))

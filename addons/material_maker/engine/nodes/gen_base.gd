@@ -401,6 +401,16 @@ func set_parameter(n : String, v) -> void:
 					if old_value.size == v.size and old_value.bpp == v.bpp:
 						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
 						return
+			elif parameter_def.type == "lattice":
+				if old_value is Dictionary:
+					old_value = MMType.deserialize_value(old_value)
+				if v is Dictionary:
+					v = MMType.deserialize_value(v)
+				if old_value is MMLattice and v is MMLattice and old_value != null:
+					if old_value.size == v.size:
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
+						return
 		all_sources_changed()
 
 func notify_output_change(output_index : int) -> void:
