@@ -78,12 +78,10 @@ script = ExtResource("1")
 unique_name_in_owner = true
 item_count = 5
 item_0/text = "Rename item"
-item_0/id = 0
 item_1/text = "Update thumbnail"
 item_1/id = 1
 item_2/text = "Remove item"
 item_2/id = 2
-item_3/text = ""
 item_3/id = 3
 item_3/separator = true
 item_4/text = "Define aliases"
@@ -95,4 +93,4 @@ item_4/id = 4
 [connection signal="item_collapsed" from="Library/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_mouse_selected" from="Library/Tree" to="." method="_on_tree_item_mouse_selected"]
 [connection signal="about_to_popup" from="ItemMenu" to="Library" method="_on_PopupMenu_about_to_show"]
-[connection signal="index_pressed" from="ItemMenu" to="Library" method="_on_PopupMenu_index_pressed"]
+[connection signal="index_pressed" from="ItemMenu" to="." method="_on_PopupMenu_index_pressed"]
