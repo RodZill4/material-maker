@@ -1,0 +1,156 @@
+{
+	"name": "distort",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"lattice": {
+			"points": [
+				{
+					"x": 0,
+					"y": 0
+				},
+				{
+					"x": 1,
+					"y": 0
+				},
+				{
+					"x": 0,
+					"y": 1
+				},
+				{
+					"x": 1,
+					"y": 1
+				}
+			],
+			"size": {
+				"x": 1,
+				"y": 1
+			},
+			"type": "Lattice"
+		}
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float perspective_transform_coord(vec2 p, vec2 a, vec2 b, vec2 c, vec2 d) {",
+			"\tvec2 ab = b-a;",
+			"\tvec2 ac = c-a;",
+			"\t// vec2 axb = a+x*ab;",
+			"\tvec2 cd = d-c;",
+			"\tvec2 abcd = cd-ab;",
+			"\tvec2 pa = a-p;",
+			"\t// vec2 cxd = c+x*cd;",
+			"\t// vec2 v1 = ac+x*abcd;",
+			"\t// vec2 v2 = pa+x*ab;",
+			"\t// (ac.x+x*abcd.x)*(pa.y+x*ab.y)-(ac.y+x*abcd.y)*(pa.x+x*ab.x) = 0;",
+			"\t// (ac.x*pa.y-ac.y*pa.x)+x*(abcd.x*pa.y+ac.x*ab.y-abcd.y*pa.x-ac.y*ab.x)+x*x*(abcd.x*ab.y-abcd.y*ab.x) = 0",
+			"\tfloat aa = abcd.x*ab.y-abcd.y*ab.x;",
+			"\tfloat bb = abcd.x*pa.y+ac.x*ab.y-abcd.y*pa.x-ac.y*ab.x;",
+			"\tfloat cc = ac.x*pa.y-ac.y*pa.x;",
+			"\tfloat delta = bb*bb-4.0*aa*cc;",
+			"\tif (abs(aa) < 0.00001) {",
+			"\t\treturn -cc/bb;",
+			"\t} else if (delta >= 0.0) {",
+			"\t\tfloat s1 = (-bb-sqrt(delta))/(2.0*aa);",
+			"\t\tfloat s2 = (-bb+sqrt(delta))/(2.0*aa);",
+			"\t\treturn (abs(s1-0.5) < abs(s2-0.5)) ? s1 : s2;",
+			"\t}",
+			"\treturn 0.0;",
+			"}",
+			"",
+			"vec2 perspective_transform(vec2 p, vec2 a, vec2 b, vec2 c, vec2 d) {",
+			"\treturn vec2(perspective_transform_coord(p, a, b, d, c), perspective_transform_coord(p, a, d, b, c));",
+			"}",
+			""
+		],
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "The input to be distorted",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			}
+		],
+		"instance": [
+			"vec4 distort_$(name)(vec2 uv) {",
+			"\tvec2 p[] = $lattice;",
+			"\tivec2 lsize = $lattice_size;",
+			"\tvec2 luv;",
+			"\tbool inside = false;",
+			"\tfor (int y = 0; y < lsize.y; ++y) {",
+			"\t\tint yi0 = y*(lsize.x+1);",
+			"\t\tint yi1 = yi0+lsize.x+1;",
+			"\t\tfor (int x = 0; x < lsize.x; ++x) {",
+			"\t\t\tluv = perspective_transform(uv, p[yi0+x], p[yi0+x+1], p[yi1+x+1], p[yi1+x]);",
+			"\t\t\tvec2 luv_m05 = luv-vec2(0.5);",
+			"\t\t\tinside = abs(luv_m05.x) < 0.5 && abs(luv_m05.y) < 0.5;",
+			"\t\t\tif (inside) {",
+			"\t\t\t\tluv += vec2(float(x), float(y));",
+			"\t\t\t\tluv /= vec2(float(lsize.x), float(lsize.y));",
+			"\t\t\t\treturn $in(luv);",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"\t/*",
+			"\t\tP0 = p0+x*(p1-p0)",
+			"\t\tP1 = p3+x*(p2-p3)",
+			"\t\tP = a+x*(b-a)+y*(d-a)+xy*(c-b)+xy*(a-d)",
+			"\t*/",
+			"\treturn inside ? $in(luv) : vec4(0.0);",
+			"}",
+			""
+		],
+		"longdesc": "Distorts its input",
+		"name": "Distort",
+		"outputs": [
+			{
+				"longdesc": "The distorted image",
+				"rgba": "distort_$(name)($uv)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"points": [
+						{
+							"x": 0,
+							"y": 0
+						},
+						{
+							"x": 1,
+							"y": 0
+						},
+						{
+							"x": 1,
+							"y": 1
+						},
+						{
+							"x": 0,
+							"y": 1
+						}
+					],
+					"size": {
+						"x": 1,
+						"y": 1
+					},
+					"type": "Lattice"
+				},
+				"label": "",
+				"longdesc": "The lattice that describes the distorsion",
+				"name": "lattice",
+				"shortdesc": "Lattice",
+				"type": "lattice"
+			}
+		],
+		"shortdesc": "Distort"
+	},
+	"type": "shader"
+}
