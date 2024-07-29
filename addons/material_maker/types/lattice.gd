@@ -26,9 +26,23 @@ func compare(lattice) -> bool:
 			return false
 	return true
 
+static func get_point_from_array(v : Vector2i, size : Vector2i, points : PackedVector2Array) -> Vector2:
+	return points[v.x+(size.x+1)*v.y]
+
 static func interpolate_point(v : Vector2, size : Vector2i, points : PackedVector2Array) -> Vector2:
-	#v *= Vector2(size)
-	return v
+	v *= Vector2(size)
+	var vs : Vector2i = Vector2i(floor(v.x), floor(v.y))
+	vs.x = clampi(vs.x, 0, size.x-1)
+	vs.y = clampi(vs.y, 0, size.y-1)
+	var vt : Vector2 = Vector2(v.x-vs.x, v.y-vs.y)
+	print(str(vs)+"   "+str(vt))
+	var p00 : Vector2 = get_point_from_array(vs, size, points)
+	var p01 : Vector2 = get_point_from_array(vs+Vector2i(0, 1), size, points)
+	var p10 : Vector2 = get_point_from_array(vs+Vector2i(1, 0), size, points)
+	var p11 : Vector2 = get_point_from_array(vs+Vector2i(1, 1), size, points)
+	var p0 : Vector2 = lerp(p00, p01, vt.y)
+	var p1 : Vector2 = lerp(p10, p11, vt.y)
+	return lerp(p0, p1, vt.x)
 
 func resize(sx : int, sy : int) -> void:
 	var old_size : Vector2i = size
