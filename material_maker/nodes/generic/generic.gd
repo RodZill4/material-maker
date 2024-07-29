@@ -169,6 +169,10 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			var pixels : MMPixels = MMPixels.new()
 			pixels.deserialize(v)
 			o.value = pixels
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/lattice_edit/lattice_edit.tscn":
+			var lattice : MMLattice = MMLattice.new()
+			lattice.deserialize(v)
+			o.value = lattice
 		else:
 			print("unsupported widget "+str(o))
 
@@ -218,6 +222,8 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("updated",Callable(object,"_on_splines_changed").bind( o.name ))
 		elif o is Button and o.scene_file_path == "res://material_maker/widgets/pixels_edit/pixels_edit.tscn":
 			o.connect("updated",Callable(object,"_on_pixels_changed").bind( o.name ))
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/lattice_edit/lattice_edit.tscn":
+			o.connect("updated",Callable(object,"_on_lattice_changed").bind( o.name ))
 		else:
 			print("unsupported widget "+str(o))
 
@@ -280,6 +286,9 @@ func _on_splines_changed(new_splines, old_value, variable : String) -> void:
 func _on_pixels_changed(new_pixels, old_value, variable : String) -> void:
 	set_generator_parameter_ext(variable, new_pixels, MMType.serialize_value(old_value))
 
+func _on_lattice_changed(new_lattice, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_lattice, MMType.serialize_value(old_value))
+
 static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
 	var tooltip : String
 	if p.has("shortdesc"):
@@ -338,6 +347,8 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/splines_edit/splines_edit.tscn").instantiate()
 	elif p.type == "pixels":
 		control = preload("res://material_maker/widgets/pixels_edit/pixels_edit.tscn").instantiate()
+	elif p.type == "lattice":
+		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
 		control = LineEdit.new()
 		control.custom_minimum_size.x = 80
