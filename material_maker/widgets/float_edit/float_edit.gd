@@ -66,8 +66,11 @@ func get_value() -> Variant:
 
 
 func set_value(v: Variant, notify := false, merge_undos := false) -> void:
-	if v is int:
+	if v is int or (v is String and v.is_valid_float()):
 		v = float(v)
+	
+	if v is String and float_only:
+		v = min_value
 	
 	if v is float:
 		float_value = v
@@ -75,18 +78,16 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 			$Edit.text = str(v).pad_decimals(_step_decimals)
 		else:
 			$Edit.text = str(v)
-		$Slider.value = v
+		if mode != Modes.EDITING:
+			$Slider.value = v
+		else:
+			$Slider.value = min_value
 		if notify:
 			emit_signal("value_changed", float_value)
 			emit_signal("value_changed_undo", float_value, merge_undos)
 
-	elif v is String and not float_only:
-		if v.is_valid_float():
-			if get_decimal_places(float(v)) < _step_decimals:
-				v = v.pad_decimals(_step_decimals)
-			$Slider.value = float(v)
-		else:
-			$Slider.value = min_value
+	elif v is String:
+		$Slider.value = min_value
 		$Edit.text = v
 		if notify:
 			emit_signal("value_changed", v)
@@ -123,6 +124,7 @@ func _gui_input(event: InputEvent) -> void:
 				from_upper_bound = float_value >= max_value
 				actually_dragging = false
 				modifiers = get_modifiers(event)
+				$Edit.grab_focus()
 		
 		if event.is_action("ui_accept") and event.pressed:
 			mode = Modes.EDITING
@@ -134,22 +136,6 @@ func _gui_input(event: InputEvent) -> void:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if not event.pressed:
 					mode = Modes.EDITING
-					accept_event()
-			
-			# Handle CTRL+Scrolling
-			if event.is_command_or_control_pressed() and $Edit.text.is_valid_float() and event.pressed:
-				var amount := step
-				if is_equal_approx(step, 0.01):
-					if event.shift_pressed:
-						amount = 0.01
-					else:
-						amount = 0.1
-					
-				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-					set_value(max(float($Edit.text)-amount, min_value), true, true)
-					accept_event()
-				elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-					set_value(min(float($Edit.text)+amount, max_value), true, true)
 					accept_event()
 
 	if mode == Modes.SLIDING:
@@ -214,6 +200,23 @@ func _gui_input(event: InputEvent) -> void:
 					$Edit.text, self,
 					"set_value_from_expression_editor")
 				accept_event()
+			
+			# Handle CTRL+Scrolling
+			if event.is_command_or_control_pressed() and $Edit.text.is_valid_float() and event.pressed:
+				var amount := step
+				if is_equal_approx(step, 0.01):
+					if event.shift_pressed:
+						amount = 0.01
+					else:
+						amount = 0.1
+					
+				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+					set_value(max(float($Edit.text)-amount, min_value), true, true)
+					accept_event()
+				elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+					set_value(min(float($Edit.text)+amount, max_value), true, true)
+					accept_event()
+
 
 
 func _on_edit_focus_entered() -> void:
