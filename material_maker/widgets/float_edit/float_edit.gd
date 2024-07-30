@@ -112,8 +112,22 @@ func get_modifiers(event:InputEvent) -> int:
 	return new_modifiers
 
 
+func _input(event:InputEvent) -> void:
+	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
+		return
+	if mode == Modes.IDLE:
+		if event is InputEventKey and event.is_command_or_control_pressed() and event.pressed:
+			if event.keycode == KEY_C:
+				DisplayServer.clipboard_set(str(float_value))
+				accept_event()
+			if event.keycode == KEY_V:
+				set_value(DisplayServer.clipboard_get(), true)
+				accept_event()
+
+
 func _gui_input(event: InputEvent) -> void:
 	if mode == Modes.IDLE:
+		
 		# Handle Drag-Start
 		if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			if $Edit.text.is_valid_float():

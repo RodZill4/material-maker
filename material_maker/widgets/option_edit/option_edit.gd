@@ -25,3 +25,17 @@ func _on_about_to_popup() -> void:
 	# but doesn't make sense until gui_embed_subwindows is turned back on.
 	#get_popup().min_size.x = size.x
 	pass
+
+
+func _input(event:InputEvent) -> void:
+	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
+		return
+	if event is InputEventKey and event.is_command_or_control_pressed() and event.pressed:
+		if event.keycode == KEY_C:
+			DisplayServer.clipboard_set(str(selected))
+			accept_event()
+		if event.keycode == KEY_V:
+			var v := DisplayServer.clipboard_get()
+			if v.is_valid_int():
+				selected = min(max(0, int(v)),item_count-1)
+			accept_event()
