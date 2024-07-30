@@ -25,7 +25,9 @@ offset_top = -1.49829
 offset_bottom = -1.49829
 theme_override_constants/port_hotzone_inner_extent = 4
 theme_override_constants/port_hotzone_outer_extent = 4
+grid_pattern = 1
 right_disconnects = true
+show_zoom_label = true
 script = ExtResource("1")
 
 [node name="Timer" type="Timer" parent="."]
