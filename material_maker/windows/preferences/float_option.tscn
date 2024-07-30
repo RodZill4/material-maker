@@ -5,3 +5,4 @@
 
 [node name="FloatOption" instance=ExtResource("1")]
 script = ExtResource("2")
+config_variable = ""

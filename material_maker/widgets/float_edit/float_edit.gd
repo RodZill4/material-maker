@@ -55,8 +55,13 @@ var mode := Modes.IDLE:
 		update()
 
 
-func get_value() -> String:
-	return $Edit.text
+func get_value() -> Variant:
+	if $Edit.text.is_valid_float():
+		return float($Edit.text)
+	elif float_only:
+		return 0
+	else:
+		return $Edit.text
 
 
 func set_value(v: Variant, notify := false, merge_undos := false) -> void:
