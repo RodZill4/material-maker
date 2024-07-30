@@ -32,6 +32,7 @@ var start_value: float
 var modifiers: int
 var from_lower_bound: bool = false
 var from_upper_bound: bool = false
+var actually_dragging: bool = false
 
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
@@ -120,6 +121,7 @@ func _gui_input(event: InputEvent) -> void:
 				start_value = float_value
 				from_lower_bound = float_value <= min_value
 				from_upper_bound = float_value >= max_value
+				actually_dragging = false
 				modifiers = get_modifiers(event)
 		
 		if event.is_action("ui_accept") and event.pressed:
@@ -133,7 +135,8 @@ func _gui_input(event: InputEvent) -> void:
 				if not event.pressed:
 					mode = Modes.EDITING
 					accept_event()
-		
+			
+			# Handle CTRL+Scrolling
 			if event.is_command_or_control_pressed() and $Edit.text.is_valid_float() and event.pressed:
 				var amount := step
 				if is_equal_approx(step, 0.01):
@@ -151,8 +154,11 @@ func _gui_input(event: InputEvent) -> void:
 
 	if mode == Modes.SLIDING:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			mode = Modes.IDLE
-			set_value(float_value, true)
+			if actually_dragging:
+				mode = Modes.IDLE
+				set_value(float_value, true)
+			else:
+				mode = Modes.EDITING
 			accept_event()
 
 		if event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_LEFT:
@@ -161,33 +167,40 @@ func _gui_input(event: InputEvent) -> void:
 			last_position = event.position.x
 
 			var delta: float = last_position-start_position
-			var current_step := step
+			# By only setting [actually_dragging] to true after at least a 2 pixel movement,
+			# we can more reliably differentiate intential mouse movements from unintentional ones.
+			if abs(delta) > 2:
+				actually_dragging = true
+			if actually_dragging:
+				var current_step := step
 
-			if event.is_command_or_control_pressed():
-				delta *= 2
-			elif event.shift_pressed:
-				delta *= 0.2
-			if event.alt_pressed:
-				current_step *= 0.01
+				if event.is_command_or_control_pressed():
+					delta *= 2
+				elif event.shift_pressed:
+					delta *= 0.2
+				if event.alt_pressed:
+					current_step *= 0.01
 
-			var v: float = start_value + delta / (size.x / abs(max_value - min_value))
+				var v: float = start_value + delta / (size.x / abs(max_value - min_value))
 
-			if current_step != 0:
-				v = min_value + floor((v - min_value)/current_step) * current_step
+				if current_step != 0:
+					v = min_value + floor((v - min_value)/current_step) * current_step
 
-			if from_lower_bound and v > min_value:
-				from_lower_bound = false
+				if from_lower_bound and v > min_value:
+					from_lower_bound = false
 
-			if from_upper_bound and v < max_value:
-				from_upper_bound = false
+				if from_upper_bound and v < max_value:
+					from_upper_bound = false
 
-			if not from_lower_bound and v < min_value:
-				v = min_value
+				if not from_lower_bound and v < min_value:
+					v = min_value
 
-			if not from_upper_bound and v > max_value:
-				v = max_value
+				if not from_upper_bound and v > max_value:
+					v = max_value
 
-			set_value(v, true, true)
+				set_value(v, true, true)
+			
+			
 			accept_event()
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
