@@ -27,7 +27,7 @@ choco install material-maker.portable
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
 
 <a href="https://github.com/RodZill4/material-maker/actions">
-    <img src="https://github.com/RodZill4/material-maker/workflows/dev-desktop-builds/badge.svg" alt="Build Passing" />
+	<img src="https://github.com/RodZill4/material-maker/workflows/dev-desktop-builds/badge.svg" alt="Build Passing" />
 </a>
 
 ## Documentation

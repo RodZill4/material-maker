@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=124 format=3 uid="uid://bnw8qp6oanlqw"]
 
-[ext_resource type="FontFile" path="res://material_maker/theme/font.tres" id="1_jd14k"]
+[ext_resource type="FontFile" uid="uid://bbh5pjbblx75w" path="res://material_maker/theme/font.tres" id="1_jd14k"]
 [ext_resource type="Texture2D" uid="uid://dns037k5om74b" path="res://material_maker/theme/dark/checkbox_checked.png" id="2_47wpj"]
 [ext_resource type="Texture2D" uid="uid://d0jps0u7dybnk" path="res://material_maker/theme/dark/checkbox_radio_checked.png" id="3_umeqq"]
 [ext_resource type="Texture2D" uid="uid://dgy8i2xtjcbox" path="res://material_maker/theme/dark/checkbox_radio_unchecked.png" id="4_pmwt5"]
@@ -850,6 +850,7 @@ LineEdit/styles/normal = SubResource("StyleBoxFlat_a28yg")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_ynapp")
 LinkButton/colors/font_color = Color(0.8275, 0.8165, 0.8, 1)
 LinkButton/styles/focus = SubResource("StyleBoxEmpty_ntbfm")
+MM_FlexibleTab/base_type = &"TabBar"
 MenuButton/colors/font_color = Color(0.8275, 0.8165, 0.8, 1)
 MenuButton/colors/font_color_disabled = Color(1, 1, 1, 0.3)
 MenuButton/colors/font_color_hover = Color(0.8965, 0.8899, 0.88, 1)

@@ -1,9 +1,11 @@
 extends Container
 
+# Represents a single tab within a MM_FlexibleLayout.
+# Use Theme Overrides or Theme Files to style it.
 
 var flex_panel : Control
-var updating : bool = false
 
+var updating : bool = false
 
 func _ready():
 	$Container/Close.texture_normal = get_theme_icon("close", "TabBar")
