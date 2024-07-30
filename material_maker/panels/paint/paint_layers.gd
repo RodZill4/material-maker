@@ -275,7 +275,8 @@ func apply_masks(material : ShaderMaterial, masks : Array) -> void:
 func update_layers_renderer(visible_layers : Array) -> void:
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		while viewport.get_child_count() > 0:
-			viewport.remove_child(viewport.get_child(0))
+			var child = viewport.get_child(0)
+			viewport.remove_child(child)
 	var color_rect : ColorRect
 	color_rect = ColorRect.new()
 	color_rect.size = normal.size
