@@ -454,7 +454,6 @@ func update_node() -> void:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 			add_child(hsizer)
-			hsizer.add_child(Control.new())
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
@@ -463,20 +462,13 @@ func update_node() -> void:
 			var label_widget : Label = Label.new()
 			label_widget.text = label
 			hsizer.add_child(label_widget)
-		else:
-			var control : Control = Control.new()
-			control.custom_minimum_size.y = 25 if !generator.minimized else 12
-			hsizer.add_child(control)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
+	
 	var input_names_width : int = 0
-	for c in get_children():
-		var width = c.get_child(0).size.x
-		if width > input_names_width:
-			input_names_width = width
-	if input_names_width > 0:
-		input_names_width += 3
-	for c in get_children():
-		c.get_child(0).custom_minimum_size.x = input_names_width
+	input_names_width = get_children().reduce(
+		func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
+		, 0)
+	
 	# Parameters
 	if !generator.minimized:
 		controls = {}
@@ -506,11 +498,13 @@ func update_node() -> void:
 				while index >= get_child_count():
 					hsizer = HBoxContainer.new()
 					hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-					var empty_control : Control = Control.new()
-					empty_control.custom_minimum_size.x = input_names_width
-					hsizer.add_child(empty_control)
+					if input_names_width > 0:
+						var empty_control : Control = Control.new()
+						empty_control.custom_minimum_size.x = input_names_width
+						hsizer.add_child(empty_control)
 					add_child(hsizer)
 				hsizer = get_child(index)
+				hsizer.custom_minimum_size.y = 25
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label

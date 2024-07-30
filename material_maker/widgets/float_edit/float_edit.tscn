@@ -20,7 +20,6 @@ content_margin_bottom = 2.0
 clip_children = 1
 offset_right = 198.0
 offset_bottom = 27.0
-size_flags_vertical = 4
 theme_type_variation = &"MM_NodeFloatEdit"
 theme_override_styles/panel = SubResource("StyleBoxFlat_gl70v")
 script = ExtResource("1")
