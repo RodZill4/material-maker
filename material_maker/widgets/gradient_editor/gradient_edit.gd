@@ -299,7 +299,7 @@ func _input(ev:InputEvent) -> void:
 			if ev.keycode == KEY_V:
 				var val = ""
 				if DisplayServer.clipboard_get().is_valid_html_color():
-					val = Color(val)
+					val = Color.from_string(DisplayServer.clipboard_get(), Color.WHITE)
 				else:
 					val = str_to_var(DisplayServer.clipboard_get())
 				
