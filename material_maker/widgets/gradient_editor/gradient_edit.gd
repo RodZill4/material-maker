@@ -286,6 +286,29 @@ func _drop_data(pos: Vector2, data: Variant) -> void:
 		preview_cursor.queue_free()
 		preview_cursor = null
 
+
+# Handle Ctrl+C and Ctrl+V to copy and paste the gradient
+func _input(ev:InputEvent) -> void:
+	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
+		return
+	
+	if mode == Modes.IDLE:
+		if ev is InputEventKey and ev.is_command_or_control_pressed():
+			if not ev.pressed:
+				return
+			if ev.keycode == KEY_V:
+				var val = ""
+				if DisplayServer.clipboard_get().is_valid_html_color():
+					val = Color(val)
+				else:
+					val = str_to_var(DisplayServer.clipboard_get())
+				
+				_drop_data(get_local_mouse_position(), val)
+				accept_event()
+			
+			if ev.keycode == KEY_C:
+				DisplayServer.clipboard_set(var_to_str(MMType.serialize_value(value)))
+				accept_event()
 #endregion
 
 
