@@ -576,6 +576,15 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 				rv.defs += g.get_shader(genname+"_"+p.name)
 			variables[p.name] = genname+"_"+p.name+"_pixels_fct"
 			variables[p.name+"_size"] = genname+"_"+p.name+"_size"
+		elif p.type == "lattice":
+			var value = parameters[p.name]
+			if not value is MMLattice:
+				value = MMLattice.new()
+				value.deserialize(parameters[p.name])
+			if generate_declarations:
+				rv.add_uniforms(value.get_parameters(genname+"_"+p.name))
+			variables[p.name] = value.get_shader(genname+"_"+p.name)
+			variables[p.name+"_size"] = "ivec2(%d, %d)" % [ value.size.x, value.size.y ]
 		else:
 			print("ERROR: Unsupported parameter "+p.name+" of type "+p.type)
 

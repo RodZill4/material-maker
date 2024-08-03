@@ -111,6 +111,10 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 		match fn.get_extension():
 			"png":
 				export_image.save_png(fn)
+			"jpg":
+				export_image.save_jpg(fn, 1.0)
+			"webp":
+				export_image.save_webp(fn)
 			"exr":
 				if is_greyscale:
 					export_image = Image.new()

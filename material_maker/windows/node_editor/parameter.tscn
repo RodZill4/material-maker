@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bg24jri8a0t08"]
+[gd_scene load_steps=19 format=3 uid="uid://bg24jri8a0t08"]
 
 [ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dij6o75etamwy" path="res://material_maker/windows/node_editor/parameter_polyline.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://r8sldb05e3fj" path="res://material_maker/windows/node_editor/parameter_splines.tscn" id="13_vf8fr"]
 [ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_pixels.tscn" id="14_0c2vs"]
+[ext_resource type="PackedScene" uid="uid://g5ls3j2c3jfe" path="res://material_maker/windows/node_editor/parameter_lattice.tscn" id="15_rnq7j"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2")
@@ -108,6 +109,9 @@ layout_mode = 2
 
 [node name="pixels" parent="Types" instance=ExtResource("14_0c2vs")]
 visible = false
+layout_mode = 2
+
+[node name="lattice" parent="Types" instance=ExtResource("15_rnq7j")]
 layout_mode = 2
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]

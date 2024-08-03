@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1o4dgfm2i376"]
+
+[ext_resource type="Script" path="res://material_maker/widgets/lattice_edit/lattice_dialog.gd" id="1_smyqc"]
+[ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="2_w8wwg"]
+
+[node name="LatticeDialog" type="Window"]
+script = ExtResource("1_smyqc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+
+[node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="LatticeEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource("2_w8wwg")]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "OK"
+
+[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="value_changed" from="VBoxContainer/EditorContainer/LatticeEditor" to="." method="_on_LatticeEditor_value_changed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

@@ -75,6 +75,7 @@ ambient_light_source = 3
 ambient_light_color = Color(1, 1, 1, 1)
 
 [node name="NewPainterWindow" type="Window"]
+title = "New Paint Project"
 size = Vector2i(500, 300)
 script = ExtResource("2")
 mesh_material = SubResource("ShaderMaterial_5x24r")
@@ -133,7 +134,7 @@ stretch = true
 own_world_3d = true
 world_3d = SubResource("World3D_pmwks")
 handle_input_locally = false
-size = Vector2i(360, 257)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
 [node name="MeshPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]

@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://dicq2cut03ved"]
+
+[ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_emrdx"]
+[ext_resource type="Script" path="res://material_maker/widgets/lattice_edit/lattice_editor.gd" id="2_aqo66"]
+
+[node name="LatticeEditor" instance=ExtResource("1_emrdx")]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("2_aqo66")
+draw_area = true
+auto_rescale = true
+
+[node name="ControlPoints" type="Control" parent="." index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Size" type="SpinBox" parent="." index="1"]
+layout_mode = 1
+offset_right = 83.0625
+offset_bottom = 31.0
+min_value = 1.0
+max_value = 8.0
+value = 1.0
+
+[connection signal="gui_input" from="." to="." method="_on_LatticeEditor_gui_input"]
+[connection signal="value_changed" from="Size" to="." method="_on_size_value_changed"]

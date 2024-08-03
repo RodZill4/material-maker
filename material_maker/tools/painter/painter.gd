@@ -478,7 +478,7 @@ func update_brush(update_shaders : bool = false):
 			definitions += pattern_shader_code.defs
 		
 		var global_definitions : String = ""
-		global_definitions += brush_shader_code.get_globals_string()
+		global_definitions += brush_shader_code.get_globals_string(definitions+brush_code+pattern_code)
 		
 		var replaces : Dictionary = {
 			BRUSH_MODE="\""+get_brush_mode()+"\"",

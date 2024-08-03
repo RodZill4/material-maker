@@ -68,8 +68,7 @@ func generate_shader(src_code : MMGenBase.ShaderCode) -> String:
 	code += "render_mode blend_disabled, unshaded;\n"
 	code += common_shader
 	code += "\n"
-	for g in src_code.globals:
-		code += g
+	code += src_code.get_globals_string()
 	var shader_code = ""
 	shader_code += src_code.uniforms_as_strings()
 	shader_code += "\n"
