@@ -135,7 +135,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.path = v
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.do_set_image_path(v)
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
 			o.value = gradient
@@ -194,7 +194,7 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("file_selected",Callable(object,"_on_file_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.connect("on_file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			o.connect("updated",Callable(object,"_on_gradient_changed").bind( o.name ))
 		elif o is Button and o.scene_file_path == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
 			o.connect("updated",Callable(object,"_on_curve_changed").bind( o.name ))
@@ -311,7 +311,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.set_script(preload("res://material_maker/widgets/color_picker_button/color_picker_button.gd"))
 		control.custom_minimum_size.x = 40
 	elif p.type == "gradient":
-		control = preload("res://material_maker/widgets/gradient_editor/gradient_editor.tscn").instantiate()
+		control = preload("res://material_maker/widgets/gradient_editor/gradient_edit.tscn").instantiate()
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
 	elif p.type == "polygon":

@@ -151,17 +151,20 @@ func update_from_value() -> void:
 	emit_signal("updated", value, continuous_change)
 	continuous_change = true
 
+
 func set_value_and_update(v, cc : bool = true) -> void:
 	if ! cc:
 		continuous_change = false
 	set_value(v, true)
 	update_from_value()
 
+
 func add_cursor(x, color) -> void:
 	var cursor = GradientCursor.new()
 	add_child(cursor)
 	cursor.position.x = x
 	cursor.color = color
+
 
 func _gui_input(ev) -> void:
 	if ev is InputEventMouseButton and ev.button_index == 1 and ev.double_click:

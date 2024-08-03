@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=56 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=57 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -288,6 +288,23 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omwbs"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.145098, 0.145098, 0.164706, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3j6py"]
 content_margin_left = 2.0
 content_margin_top = 2.0
@@ -562,6 +579,9 @@ MM_NodeFloatEdit/styles/fill_normal = SubResource("StyleBoxFlat_hgk0b")
 MM_NodeFloatEdit/styles/focus = SubResource("StyleBoxFlat_0b15u")
 MM_NodeFloatEdit/styles/hover = SubResource("StyleBoxFlat_r1sff")
 MM_NodeFloatEdit/styles/normal = SubResource("StyleBoxFlat_8fogc")
+MM_NodeGradientEdit/base_type = &"Button"
+MM_NodeGradientEditPopup/base_type = &"PanelContainer"
+MM_NodeGradientEditPopup/styles/panel = SubResource("StyleBoxFlat_omwbs")
 MM_NodeOptionEdit/base_type = &"OptionButton"
 MM_NodeOptionEditPopup/base_type = &"PopupMenu"
 MM_NodeOptionEditPopup/styles/hover = SubResource("StyleBoxFlat_3j6py")

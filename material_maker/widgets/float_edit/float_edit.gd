@@ -285,12 +285,16 @@ func update() -> void:
 
 func _ready() -> void:
 	update()
+	min_value = min_value
+	max_value = max_value
+
 
 func _on_mouse_entered() -> void:
 	update()
 
 func _on_mouse_exited() -> void:
 	update()
+
 
 func _on_edit_draw() -> void:
 	if get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() ==  $Edit:

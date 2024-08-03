@@ -79,12 +79,14 @@ func get_shader_params(parameter_name : String, attribute : String = "uniform") 
 		rv += p.to_str(attribute)
 	return rv
 
+
 func get_parameters(parameter_name : String) -> Array[MMGenBase.ShaderUniform]:
 	var rv : Array[MMGenBase.ShaderUniform] = []
 	var parameter_values : Dictionary = get_parameter_values(parameter_name)
 	rv.append(MMGenBase.ShaderUniform.new("p_%s_pos" % parameter_name, "float", parameter_values["p_%s_pos" % parameter_name], points.size()))
 	rv.append(MMGenBase.ShaderUniform.new("p_%s_col" % parameter_name, "vec4", parameter_values["p_%s_col" % parameter_name], points.size()))
 	return rv
+
 
 func get_parameter_values(parameter_name : String) -> Dictionary:
 	sort()
