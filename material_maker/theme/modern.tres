@@ -582,6 +582,7 @@ MM_NodeFloatEdit/styles/normal = SubResource("StyleBoxFlat_8fogc")
 MM_NodeGradientEdit/base_type = &"Button"
 MM_NodeGradientEditPopup/base_type = &"PanelContainer"
 MM_NodeGradientEditPopup/styles/panel = SubResource("StyleBoxFlat_omwbs")
+MM_NodeImageEdit/base_type = &"Button"
 MM_NodeOptionEdit/base_type = &"OptionButton"
 MM_NodeOptionEditPopup/base_type = &"PopupMenu"
 MM_NodeOptionEditPopup/styles/hover = SubResource("StyleBoxFlat_3j6py")
