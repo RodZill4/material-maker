@@ -315,6 +315,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 80
 	elif p.type == "boolean":
 		control = CheckBox.new()
+		control.theme_type_variation = "MM_NodeCheckbox"
 	elif p.type == "color":
 		control = ColorPickerButton.new()
 		control.set_script(preload("res://material_maker/widgets/color_picker_button/color_picker_button.gd"))
