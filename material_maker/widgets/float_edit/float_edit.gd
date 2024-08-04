@@ -175,16 +175,23 @@ func _gui_input(event: InputEvent) -> void:
 				var current_step := step
 
 				if event.is_command_or_control_pressed():
-					delta *= 2
+					if step == 1:
+						current_step *= 5
+					if step < 1:
+						if max_value-min_value > 50:
+							current_step = 5
+						elif max_value-min_value > 1:
+							current_step = 1
+						else:
+							current_step = 0.1
 				elif event.shift_pressed:
 					delta *= 0.2
-				if event.alt_pressed:
-					current_step *= 0.01
+
 
 				var v: float = start_value + delta / (size.x / abs(max_value - min_value))
 
 				if current_step != 0:
-					v = min_value + floor((v - min_value)/current_step) * current_step
+					v = snappedf(v, current_step)
 
 				if from_lower_bound and v > min_value:
 					from_lower_bound = false
