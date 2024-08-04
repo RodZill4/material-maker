@@ -464,9 +464,11 @@ func update_node() -> void:
 		while get_child_count() < index:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+			hsizer.custom_minimum_size.y = 25
 			add_child(hsizer)
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
+		hsizer.custom_minimum_size.y = 25
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		add_child(hsizer)
 		if label != "":
