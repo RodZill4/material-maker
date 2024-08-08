@@ -16,9 +16,10 @@ func update_image() -> void:
 	if %Image.texture == null:
 		%Image.texture = ImageTexture.new()
 	
-	var image: Image = Image.load_from_file(image_path)
-	%Image.texture.set_image(image)
-	queue_redraw()
+	if FileAccess.file_exists(image_path):
+		var image: Image = Image.load_from_file(image_path)
+		%Image.texture.set_image(image)
+		queue_redraw()
 
 
 func _gui_input(event: InputEvent) -> void:
