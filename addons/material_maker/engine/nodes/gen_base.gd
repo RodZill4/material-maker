@@ -669,7 +669,7 @@ func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:
-	_deserialize(data)
+	await _deserialize(data)
 	if data.has("name"):
 		name = data.name
 	if data.has("node_position"):

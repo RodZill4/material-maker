@@ -1,4 +1,4 @@
-extends OptionButton
+extends "res://material_maker/widgets/option_edit/option_edit.gd"
 class_name SizeOptionButton
 
 @export var min_size : int = 4: set = set_min_size
@@ -8,6 +8,7 @@ class_name SizeOptionButton
 signal size_value_changed(s)
 
 func _ready() -> void:
+	super()
 	connect("item_selected", Callable(self, "_on_item_selected"))
 	update_options()
 

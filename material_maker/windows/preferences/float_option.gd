@@ -10,4 +10,4 @@ func init_from_config(config : ConfigFile) -> void:
 		set_value(config.get_value("config", config_variable))
 
 func update_config(config : ConfigFile) -> void:
-	config.set_value("config", config_variable, value)
+	config.set_value("config", config_variable, get_value())

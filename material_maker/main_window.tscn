@@ -15,39 +15,6 @@
 [ext_resource type="Script" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
 
-[sub_resource type="AtlasTexture" id="8"]
-atlas = ExtResource("8")
-region = Rect2(96, 128, 16, 16)
-
-[sub_resource type="GDScript" id="9"]
-script/source = "extends HBoxContainer
-
-
-const PASTE_TYPE_ICON : Dictionary = {
-	none=preload(\"res://material_maker/icons/paste_none.tres\"),
-	color=preload(\"res://material_maker/icons/paste_none.tres\"),
-	palette=preload(\"res://material_maker/icons/paste_palette.tres\"),
-	newgraph=preload(\"res://material_maker/icons/paste_newgraph.tres\"),
-	graph=preload(\"res://material_maker/icons/paste_graph.tres\")
-}
-
-func _on_Timer_timeout():
-	var data : String = DisplayServer.clipboard_get().strip_edges()
-	var parsed_data = await mm_globals.parse_paste_data(data)
-	$Contents.texture = PASTE_TYPE_ICON[parsed_data.type]
-	var hint : String
-	match parsed_data.type:
-		\"none\",\"color\":
-			hint = \"The clipboard cannot be pasted\"
-		\"palette\":
-			hint = \"The clipboard contains a color palette and can be pasted\\ninto a graph view as a colorize node\"
-		\"newgraph\":
-			hint = \"The clipboard can be pasted as a new graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
-		\"graph\":
-			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
-	tooltip_text = hint
-"
-
 [sub_resource type="GDScript" id="6"]
 script/source = "extends Label
 
@@ -92,14 +59,47 @@ _data = {
 "show": SubResource("7")
 }
 
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("8")
+region = Rect2(96, 128, 16, 16)
+
+[sub_resource type="GDScript" id="9"]
+script/source = "extends HBoxContainer
+
+
+const PASTE_TYPE_ICON : Dictionary = {
+	none=preload(\"res://material_maker/icons/paste_none.tres\"),
+	color=preload(\"res://material_maker/icons/paste_none.tres\"),
+	palette=preload(\"res://material_maker/icons/paste_palette.tres\"),
+	newgraph=preload(\"res://material_maker/icons/paste_newgraph.tres\"),
+	graph=preload(\"res://material_maker/icons/paste_graph.tres\")
+}
+
+func _on_Timer_timeout():
+	var data : String = DisplayServer.clipboard_get().strip_edges()
+	var parsed_data = await mm_globals.parse_paste_data(data)
+	$Contents.texture = PASTE_TYPE_ICON[parsed_data.type]
+	var hint : String
+	match parsed_data.type:
+		\"none\",\"color\":
+			hint = \"The clipboard cannot be pasted\"
+		\"palette\":
+			hint = \"The clipboard contains a color palette and can be pasted\\ninto a graph view as a colorize node\"
+		\"newgraph\":
+			hint = \"The clipboard can be pasted as a new graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
+		\"graph\":
+			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
+	tooltip_text = hint
+"
+
 [node name="MainWindow" type="PanelContainer" groups=["preview"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -160.0
 offset_top = -21.0
-offset_right = 160.0
-offset_bottom = 15.0
+offset_right = 430.0
+offset_bottom = 311.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -175,10 +175,14 @@ size_flags_horizontal = 3
 bbcode_enabled = true
 scroll_following = true
 
-[node name="StatusBar" type="HBoxContainer" parent="VBoxContainer"]
+[node name="StatusBar" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"MM_StatusBarBackground"
+
+[node name="HBox" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
 layout_mode = 2
 
-[node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar"]
+[node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -186,50 +190,63 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/Tip"]
+[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/Tip"]
 
-[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar"]
+[node name="UndoRedoLabel" type="Label" parent="VBoxContainer/StatusBar/HBox"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Undo/Redo action added"
+script = SubResource("6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/StatusBar/HBox/UndoRedoLabel"]
+libraries = {
+"": SubResource("AnimationLibrary_kxf7t")
+}
+
+[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Show console"
 texture_normal = SubResource("8")
 
-[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar"]
+[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 
-[node name="Share" parent="VBoxContainer/StatusBar" instance=ExtResource("12")]
+[node name="Share" parent="VBoxContainer/StatusBar/HBox" instance=ExtResource("12")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 
-[node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
+[node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 script = SubResource("9")
 
-[node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
+[node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = SubResource("8")
 
-[node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
+[node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer"]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = ExtResource("15")
 
-[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/ClipBoardAnalyzer"]
+[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer"]
 wait_time = 0.5
 autostart = true
 
-[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/StatusBar"]
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 
-[node name="RenderCounter" parent="VBoxContainer/StatusBar" instance=ExtResource("11")]
+[node name="RenderCounter" parent="VBoxContainer/StatusBar/HBox" instance=ExtResource("11")]
 layout_mode = 2
 
 [node name="NodeFactory" type="Node" parent="."]
@@ -238,19 +255,8 @@ script = ExtResource("9")
 [node name="AddNodePopup" parent="." instance=ExtResource("7")]
 visible = false
 
-[node name="UndoRedoLabel" type="Label" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 2
-text = "Undo/Redo action added"
-script = SubResource("6")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="UndoRedoLabel"]
-libraries = {
-"": SubResource("AnimationLibrary_kxf7t")
-}
-
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
 [connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
-[connection signal="timeout" from="VBoxContainer/StatusBar/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
-[connection signal="pressed" from="VBoxContainer/StatusBar/ConsoleButton" to="VBoxContainer/Console" method="toggle"]
-[connection signal="timeout" from="VBoxContainer/StatusBar/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/ClipBoardAnalyzer" method="_on_Timer_timeout"]
+[connection signal="timeout" from="VBoxContainer/StatusBar/HBox/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
+[connection signal="pressed" from="VBoxContainer/StatusBar/HBox/ConsoleButton" to="VBoxContainer/Console" method="toggle"]
+[connection signal="timeout" from="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" method="_on_Timer_timeout"]

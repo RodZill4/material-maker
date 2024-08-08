@@ -39,21 +39,7 @@ func generic_button_create_popup():
 	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
 	popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
 
-var portpreview_radius : float
-var portpreview_color : Color
-var portpreview_width : float
 
-func on_theme_changed() -> void:
-	portpreview_radius = get_theme_constant("portpreview_radius", "GraphNode")
-	portpreview_color = get_theme_color("portpreview_color", "GraphNode")
-	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
-	super.on_theme_changed()
-
-func _draw() -> void:
-	super._draw()
-	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
-		var conn_pos = get_output_port_position(generator.preview)
-		draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)
@@ -149,7 +135,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.path = v
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.do_set_image_path(v)
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
 			o.value = gradient
@@ -212,7 +198,7 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("file_selected",Callable(object,"_on_file_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.connect("on_file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			o.connect("updated",Callable(object,"_on_gradient_changed").bind( o.name ))
 		elif o is Button and o.scene_file_path == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
 			o.connect("updated",Callable(object,"_on_curve_changed").bind( o.name ))
@@ -321,8 +307,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.max_size = p.last
 		control.size_value = p.first if !p.has("default") else p.default
 	elif p.type == "enum":
-		control = OptionButton.new()
-		control.fit_to_longest_item = false
+		control = preload("res://material_maker/widgets/option_edit/option_edit.tscn").instantiate()
 		for i in range(p.values.size()):
 			var value = p.values[i]
 			control.add_item(value.name)
@@ -330,12 +315,13 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 80
 	elif p.type == "boolean":
 		control = CheckBox.new()
+		control.theme_type_variation = "MM_NodeCheckbox"
 	elif p.type == "color":
 		control = ColorPickerButton.new()
 		control.set_script(preload("res://material_maker/widgets/color_picker_button/color_picker_button.gd"))
 		control.custom_minimum_size.x = 40
 	elif p.type == "gradient":
-		control = preload("res://material_maker/widgets/gradient_editor/gradient_editor.tscn").instantiate()
+		control = preload("res://material_maker/widgets/gradient_editor/gradient_edit.tscn").instantiate()
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
 	elif p.type == "polygon":
@@ -386,13 +372,21 @@ func restore_preview_widget() -> void:
 			preview.get_parent().remove_child(preview)
 		preview.add_child(preview_timer)
 		var child_count = get_child_count()
-		var preview_parent = get_child(child_count-1)
-		while preview_parent is Container:
-			child_count = preview_parent.get_child_count()
-			preview_parent = preview_parent.get_child(child_count-1)
-		if preview_parent == null:
+		#var preview_parent = get_child(child_count-1)
+		#while preview_parent is Container:
+			#child_count = preview_parent.get_child_count()
+			#preview_parent = preview_parent.get_child(child_count-1)
+		#if preview_parent == null:
+			#preview_parent = Control.new()
+			#get_child(get_child_count()-1).add_child(preview_parent)
+		#preview_parent.add_child(preview)
+		var preview_parent: Control = null
+		if has_node("PreviewParent"):
+			preview_parent = get_node("PreviewParent")
+		else:
 			preview_parent = Control.new()
-			get_child(get_child_count()-1).add_child(preview_parent)
+			preview_parent.name = "PreviewParent"
+			add_child(preview_parent)
 		preview_parent.add_child(preview)
 		preview.visible = false
 		update_preview()
@@ -471,36 +465,31 @@ func update_node() -> void:
 		while get_child_count() < index:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+			hsizer.custom_minimum_size.y = 25
 			add_child(hsizer)
-			hsizer.add_child(Control.new())
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
+		hsizer.custom_minimum_size.y = 25
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		add_child(hsizer)
 		if label != "":
 			var label_widget : Label = Label.new()
 			label_widget.text = label
 			hsizer.add_child(label_widget)
-		else:
-			var control : Control = Control.new()
-			control.custom_minimum_size.y = 25 if !generator.minimized else 12
-			hsizer.add_child(control)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
+	
 	var input_names_width : int = 0
-	for c in get_children():
-		var width = c.get_child(0).size.x
-		if width > input_names_width:
-			input_names_width = width
-	if input_names_width > 0:
-		input_names_width += 3
-	for c in get_children():
-		c.get_child(0).custom_minimum_size.x = input_names_width
+	input_names_width = get_children().reduce(
+		func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
+		, 0)
+	
 	# Parameters
 	if !generator.minimized:
 		controls = {}
 		index = -1
 		var previous_focus = null
 		var first_focus = null
+		var labels := []
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -523,15 +512,18 @@ func update_node() -> void:
 				while index >= get_child_count():
 					hsizer = HBoxContainer.new()
 					hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-					var empty_control : Control = Control.new()
-					empty_control.custom_minimum_size.x = input_names_width
-					hsizer.add_child(empty_control)
+					if input_names_width > 0:
+						var empty_control : Control = Control.new()
+						empty_control.custom_minimum_size.x = input_names_width
+						hsizer.add_child(empty_control)
 					add_child(hsizer)
 				hsizer = get_child(index)
+				hsizer.custom_minimum_size.y = 25
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label
-					label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+					labels.append(label_widget)
+					label_widget.theme_type_variation = "MM_NodePropertyLabel"
 					hsizer.add_child(label_widget)
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
@@ -542,6 +534,13 @@ func update_node() -> void:
 				else:
 					first_focus = control
 				previous_focus = control
+		
+		var label_max_width = labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		label_max_width = min(100, label_max_width)
+		for label in labels:
+			label.custom_minimum_size.x = label_max_width
+			label.size.x = label_max_width
+			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
 			first_focus.focus_previous = previous_focus.get_path()
@@ -581,6 +580,7 @@ func update_node() -> void:
 		size = Vector2(96, 96)
 	# Preview
 	restore_preview_widget()
+
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()

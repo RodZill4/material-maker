@@ -10,7 +10,7 @@
 			{ "type":"rgb", "expr":"vec3($(value))" },
 			{ "type":"rgba", "expr":"vec4(vec3($(value)), 1.0)" }
 		],
-        "color":{ "r":0.5, "g":0.5, "b":0.5, "a":1.0 }
+        "color":"#8D8D8D",
     },
     {
         "name":"rgb",
@@ -23,7 +23,7 @@
 			{ "type":"f", "expr":"(dot($(value), vec3(1.0))/3.0)" },
 			{ "type":"rgba", "expr":"vec4($(value), 1.0)" }
 		],
-        "color":{ "r":0.5, "g":0.5, "b":1.0, "a":1.0 }
+        "color":"#33A3C7",
     },
     {
         "name":"rgba",
@@ -36,7 +36,7 @@
 			{ "type":"f", "expr":"(dot(($(value)).rgb, vec3(1.0))/3.0)" },
 			{ "type":"rgb", "expr":"(($(value)).rgb)" }
 		],
-        "color":{ "r":0.0, "g":0.5, "b":0.0, "a":0.5 }
+        "color":"#335DC7",
     },
     {
         "name":"sdf2d",
@@ -45,7 +45,7 @@
         "paramdefs":"vec2 uv",
         "params":"uv",
         "slot_type":1,
-        "color":{ "r":1.0, "g":0.5, "b":0.0, "a":1.0 }
+        "color":"#E8A31D",
     },
     {
         "name":"sdf3d",
@@ -57,7 +57,7 @@
 		"convert":[
 			{ "type":"sdf3dc", "expr":"vec2($(value), 0.0)" }
 		],
-        "color":{ "r":0.5, "g":0.0, "b":0.0, "a":1.0 }
+        "color":"#EB6135",
     },
     {
         "name":"sdf3dc",
@@ -69,7 +69,7 @@
 		"convert":[
 			{ "type":"sdf3d", "expr":"($(value)).x" }
 		],
-        "color":{ "r":1.0, "g":0.0, "b":0.0, "a":1.0 }
+        "color":"#DF2626",
     },
 	{
         "name":"tex3d_gs",
@@ -81,7 +81,7 @@
         "convert":[
 			{ "type":"tex3d", "expr":"vec3($(value))" }
 		],
-        "color":{ "r":0.8, "g":0.0, "b":1.0, "a":1.0 }
+        "color":"#A734DD",
     },
 	{
         "name":"tex3d",
@@ -93,7 +93,7 @@
 		"convert":[
 			{ "type":"tex3d_gs", "expr":"(dot($(value), vec3(1.0))/3.0)" }
 		],
-        "color":{ "r":1.0, "g":0.0, "b":1.0, "a":1.0 }
+        "color":"#E739D5",
     },
 	{
         "name":"v4v4",
@@ -102,7 +102,7 @@
         "paramdefs":"vec4 p",
         "params":"p",
         "slot_type":4,
-        "color":{ "r":0.6, "g":0.4, "b":0.1, "a":1.0 }
+        "color":"#B79074",
     },
     {
         "name":"fill",
@@ -111,11 +111,11 @@
         "paramdefs":"vec2 uv",
         "params":"uv",
         "slot_type":5,
-        "color":{ "r":0.86, "g":0.73, "b":0.53, "a":1.0 }
+        "color":"#2DB76C",
     },
     {
         "name":"any",
         "slot_type":42,
-        "color":{ "r":1.0, "g":1.0, "b":1.0, "a":1.0 }
+        "color":"#DEDEDE",
     }
 ]

@@ -13,6 +13,7 @@ var category_buttons = {}
 @onready var filter_line_edit : LineEdit = %Filter
 @onready var item_menu : PopupMenu = %ItemMenu
 
+const MINIMUM_ITEM_HEIGHT : int = 30
 
 const MENU_CREATE_LIBRARY : int = 1000
 const MENU_LOAD_LIBRARY : int =   1001
@@ -113,7 +114,8 @@ func update_tree() -> void:
 	tree.clear()
 	tree.create_item()
 	for i in library_manager.get_items(filter):
-		add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
+		var item := add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
+
 	tree.queue_redraw()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
@@ -129,10 +131,11 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 				break
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
+			new_item.custom_minimum_height = MINIMUM_ITEM_HEIGHT
 			new_item.set_text(0, TranslationServer.translate(item_name))
 		new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
 		new_item.set_icon(1, item_icon)
-		new_item.set_icon_max_width(1, 32)
+		new_item.set_icon_max_width(1, 28)
 		if item.has("type") || item.has("nodes"):
 			new_item.set_metadata(0, item)
 			new_item.set_metadata(1, library_index)
@@ -147,6 +150,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 				break
 		if new_parent == null:
 			new_parent = tree.create_item(item_parent)
+			new_parent.custom_minimum_height = MINIMUM_ITEM_HEIGHT
 			new_parent.set_text(0, TranslationServer.translate(prefix))
 			new_parent.collapsed = !force_expand and expanded_items.find(get_item_path(new_parent)) == -1
 		return add_item(item, library_index, suffix, item_icon, new_parent, force_expand)

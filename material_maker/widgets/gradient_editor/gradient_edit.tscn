@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://cp6ft7qbucfam"]
+
+[ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_edit.gd" id="1_51wqf"]
+[ext_resource type="Texture2D" uid="uid://dysx1qjceb1od" path="res://material_maker/theme/dark/optionbutton_arrow.png" id="2_kwkci"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7yhr"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7ak6"]
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 4
+
+[sub_resource type="Shader" id="Shader_786ke"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1yahc"]
+render_priority = 0
+shader = SubResource("Shader_786ke")
+
+[node name="GradientEdit" type="PanelContainer"]
+offset_right = 351.0
+offset_bottom = 42.0
+focus_mode = 2
+theme_type_variation = &"MM_NodeGradientEdit"
+theme_override_styles/panel = SubResource("StyleBoxFlat_j7yhr")
+script = ExtResource("1_51wqf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="Panel" parent="HBoxContainer"]
+clip_children = 1
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e7ak6")
+
+[node name="Gradient" type="ColorRect" parent="HBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_1yahc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="PopupButton" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+icon = ExtResource("2_kwkci")
+flat = true
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="resized" from="HBoxContainer/PanelContainer/Gradient" to="." method="_on_gradient_resized"]
+[connection signal="toggled" from="HBoxContainer/PopupButton" to="." method="_on_popup_button_toggled"]

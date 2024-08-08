@@ -1,28 +1,59 @@
-[gd_scene load_steps=2 format=3 uid="uid://csobd8p72hgfx"]
+[gd_scene load_steps=4 format=3 uid="uid://csobd8p72hgfx"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/image_picker_button/image_picker_button.gd" id="2"]
 
-[node name="ImagePicker" type="TextureButton"]
+[sub_resource type="Shader" id="Shader_ttwu0"]
+code = "shader_type canvas_item;
+
+uniform vec4 background_color_1 = vec4(0.4);
+uniform vec4 background_color_2 = vec4(0.6);
+
+void fragment() {
+	vec2 uv = UV;
+	float checkerboard = mod(floor(uv.x*10.0)+floor(uv.y*10.0), 2.0);
+	COLOR.rgb = mix(background_color_1, background_color_2, checkerboard).rgb;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y2gye"]
+shader = SubResource("Shader_ttwu0")
+shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 0.4)
+shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 0.6)
+
+[node name="ImageEdit" type="PanelContainer"]
+offset_right = 180.0
+offset_bottom = 64.0
+theme_type_variation = &"MM_NodeImageEdit"
+script = ExtResource("2")
+
+[node name="Image" type="TextureRect" parent="."]
+unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(64, 64)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Transparency" type="ColorRect" parent="Image"]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_y2gye")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-ignore_texture_size = true
-stretch_mode = 5
-script = ExtResource("2")
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
 
-[connection signal="pressed" from="." to="." method="_on_ImagePicker_pressed"]
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

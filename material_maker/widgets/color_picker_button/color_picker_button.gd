@@ -1,8 +1,6 @@
 extends ColorPickerButton
 
-
 var previous_color : Color
-
 
 signal color_changed_undo(c, previous)
 
@@ -32,15 +30,33 @@ func _drop_data(_position, data) -> void:
 	emit_signal("color_changed", color)
 	emit_signal("color_changed_undo", color, old_color)
 
+
 func on_color_changed(c):
 	emit_signal("color_changed_undo", c, null)
+
 
 func on_picker_created():
 	get_popup().connect("about_to_popup", Callable(self, "on_about_to_show"))
 	previous_color = color
 
+
 func on_about_to_show():
 	previous_color = color
 
+
 func on_popup_closed():
 	emit_signal("color_changed_undo", color, previous_color)
+
+
+func _input(event:InputEvent) -> void:
+	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
+		return
+	if event is InputEventKey and event.is_command_or_control_pressed() and event.pressed:
+		if event.keycode == KEY_C:
+			DisplayServer.clipboard_set(color.to_html())
+			accept_event()
+		if event.keycode == KEY_V:
+			var v := DisplayServer.clipboard_get()
+			if v.is_valid_html_color():
+				color = Color.from_string(v, color)
+			accept_event()

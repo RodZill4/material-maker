@@ -119,35 +119,35 @@ func _ready() -> void:
 	get_window().transparent = false
 	get_window().move_to_foreground()
 	get_window().gui_embed_subwindows = false
-	
+
 	get_window().close_requested.connect(self.on_close_requested)
-	
+
 	get_tree().set_auto_accept_quit(false)
-	
+
 	if mm_globals.get_config("locale") == "":
 		mm_globals.set_config("locale", TranslationServer.get_locale())
-	
+
 	on_config_changed()
-	
+
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
-	
+
 	if mm_globals.config.has_section_key("window", "maximized"):
 		get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
-	
+
 	if get_window().mode != Window.MODE_MAXIMIZED:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
-			
+
 	# Restore the theme
 	var theme_name : String = "default"
 	if mm_globals.config.has_section_key("window", "theme"):
 		theme_name = mm_globals.config.get_value("window", "theme")
 	change_theme(theme_name)
-	
+
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
 		print("Copying samples")
@@ -161,13 +161,13 @@ func _ready() -> void:
 			if f.ends_with(".ptex"):
 				print(f)
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
-	
+
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
 	get_window().min_size = Vector2(1024, 600)
-	
+
 	# Set window title
 	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
-	
+
 	layout.load_panels()
 	library = get_panel("Library")
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
@@ -177,12 +177,12 @@ func _ready() -> void:
 	hierarchy = get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self.on_group_selected)
 	brushes = get_panel("Brushes")
-	
+
 	# Load recent projects
 	load_recents()
-	
+
 	get_window().connect("files_dropped", self.on_files_dropped)
-	
+
 	var args : PackedStringArray = OS.get_cmdline_args()
 	for a in args:
 		if a.get_extension() == "ptex":
@@ -198,7 +198,7 @@ func _ready() -> void:
 				continue
 			var project_filename : String = mesh_filename.get_basename()+".mmpp"
 			create_paint_project(mesh, mesh_filename, 1024, project_filename)
-	
+
 	# Rescue unsaved projects
 	if true:
 		var dir : DirAccess = DirAccess.open("user://unsaved_projects")
@@ -223,16 +223,16 @@ func _ready() -> void:
 					"delete":
 						for f in files:
 							DirAccess.remove_absolute(f)
-	
+
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
 		new_material()
-	
+
 	size = get_window().size
 	position = Vector2.ZERO
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	update_menus()
-	
+
 	mm_logger.message("Material Maker "+ProjectSettings.get_setting("application/config/actual_release"))
 
 var menu_update_requested : bool = false
@@ -288,7 +288,7 @@ func on_config_changed() -> void:
 		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	get_viewport().content_scale_factor = ui_scale
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
-	
+
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
@@ -566,7 +566,7 @@ func get_file_absolute_path(filename : String) -> String:
 	if file == null:
 		return ""
 	return file.get_path_absolute()
-		
+
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
 	for f in filenames:
@@ -1194,8 +1194,8 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
-	$VBoxContainer/StatusBar/Tip.text = tip
-	var tip_timer : Timer = $VBoxContainer/StatusBar/Tip/Timer
+	$VBoxContainer/StatusBar/HBox/Tip.text = tip
+	var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
 	tip_timer.stop()
 	if timeout > 0.0:
 		tip_timer.one_shot = true
@@ -1203,7 +1203,7 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 		tip_timer.start()
 
 func _on_Tip_Timer_timeout():
-	$VBoxContainer/StatusBar/Tip.text = ""
+	$VBoxContainer/StatusBar/HBox/Tip.text = ""
 
 # Add dialog
 

@@ -55,7 +55,10 @@ func update_preview(preview : Control = null):
 	else:
 		preview.set_generator(preview_source.generator, preview_source.output_index)
 
-func _on_gui_input(event):
+
+func _input(event:InputEvent) -> void:
+	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		accept_event()
 		var menu : PopupMenu = PopupMenu.new()
@@ -66,6 +69,7 @@ func _on_gui_input(event):
 		add_child(menu)
 		menu.id_pressed.connect(self.on_context_menu)
 		menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+
 
 func on_context_menu(id : int):
 	var old_value = generator.get_parameter("preview")
@@ -103,4 +107,3 @@ func set_preview(v : int):
 		set_theme_type("ReroutePreview")
 	await get_tree().process_frame
 	size = Vector2(0, 0)
-
