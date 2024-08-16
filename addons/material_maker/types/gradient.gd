@@ -117,11 +117,11 @@ func get_shader(parameter_name : String) -> String:
 	match interpolation:
 		0:
 			if points.size() > 0:
-				shader += "  if (x < 0.5*(%s+%s)) {\n" % [ pv(parameter_name, 0), pv(parameter_name, 1) ]
+				shader += "  if (x < %s) {\n" % pv(parameter_name, 1)
 				shader += "    return "+pc(parameter_name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(1, s):
-					shader += "  } else if (x < 0.5*(%s+%s)) {\n" % [ pv(parameter_name, i), pv(parameter_name, i+1) ]
+					shader += "  } else if (x < %s) {\n" % pv(parameter_name, i+1)
 					shader += "    return "+pc(parameter_name, i)+";\n"
 				shader += "  }\n"
 				shader += "  return "+pc(parameter_name, s)+";\n"
@@ -174,8 +174,17 @@ func get_shader(parameter_name : String) -> String:
 func serialize() -> Dictionary:
 	sort()
 	var rv = []
-	for p in points:
-		rv.append({ pos=p.v, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
+	if interpolation == 0:
+		var p : Point = points[0]
+		rv.append({ pos=0, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
+		for i in range(1, points.size()):
+			var next_p : Point = points[i]
+			rv.append({ pos=next_p.v-0.00001, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
+			p = next_p
+			rv.append({ pos=next_p.v+0.00001, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
+	else:
+		for p in points:
+			rv.append({ pos=p.v, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
 	rv = { type="Gradient", points=rv, interpolation=interpolation }
 	return rv
 
@@ -185,12 +194,20 @@ func deserialize(v) -> void:
 		for i in v:
 			if !i.has("a"): i.a = 1.0
 			add_point(i.pos, Color(i.r, i.g, i.b, i.a))
+			interpolation = 1
 	elif typeof(v) == TYPE_DICTIONARY and v.has("type") && v.type == "Gradient":
 		for i in v.points:
 			if !i.has("a"): i.a = 1.0
 			add_point(i.pos, Color(i.r, i.g, i.b, i.a))
 		if v.has("interpolation"):
 			interpolation = int(v.interpolation)
+			if interpolation == 0:
+				for i in range(points.size()-1, 0, -1):
+					if points[i].c == points[i-1].c:
+						points.remove_at(i)
+					else:
+						points[i].v = 0.5*(points[i-1].v+points[i].v)
+				points[0].v = 0
 		else:
 			interpolation = 1
 	elif typeof(v) == TYPE_OBJECT and v.get_script() == get_script():
