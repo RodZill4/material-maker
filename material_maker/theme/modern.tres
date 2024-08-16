@@ -531,6 +531,7 @@ corner_radius_bottom_left = 3
 [resource]
 default_font = ExtResource("1_hqoqt")
 default_font_size = 16
+Button/colors/icon_hover_pressed_color = Color(0.874128, 0.694643, 0.972002, 1)
 Button/colors/icon_pressed_color = Color(0.792157, 0.478431, 0.94902, 1)
 Button/styles/disabled = SubResource("StyleBoxFlat_inl5r")
 Button/styles/focus = SubResource("StyleBoxFlat_kvrsn")

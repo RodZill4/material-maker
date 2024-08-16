@@ -68,7 +68,6 @@ popup/item_3/id = 3
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Pin"
-theme_override_colors/icon_pressed_color = Color(0.850395, 0.313357, 0.714746, 1)
 toggle_mode = true
 icon = ExtResource("3_bxwrk")
 flat = true
