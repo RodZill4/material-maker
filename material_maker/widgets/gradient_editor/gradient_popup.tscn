@@ -59,9 +59,9 @@ item_count = 4
 popup/item_0/text = "Constant"
 popup/item_1/text = "Linear"
 popup/item_1/id = 1
-popup/item_2/text = "Cubic?"
+popup/item_2/text = "SmoothStep"
 popup/item_2/id = 2
-popup/item_3/text = "Huh?"
+popup/item_3/text = "Cubic"
 popup/item_3/id = 3
 
 [node name="Pin" type="Button" parent="Panel/VBox/HBox"]
