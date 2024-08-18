@@ -20,8 +20,8 @@ on:
 
 env:
   GODOT_VERSION: 4.3
-  GODOT_SUB: beta2
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.3-beta2
+  GODOT_SUB: stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.3-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_4a1
 
