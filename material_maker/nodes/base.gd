@@ -133,10 +133,20 @@ func _notification(what : int) -> void:
 var portgroup_width : int
 var portgroup_stylebox : StyleBox
 
+var portpreview_radius : float
+var portpreview_color : Color
+var portpreview_width : float
+
+
 func on_theme_changed() -> void:
 	portgroup_width = get_theme_constant("width", "MM_NodePortGroup")
 	portgroup_stylebox = get_theme_stylebox("panel", "MM_NodePortGroup")
 	queue_redraw()
+	
+	portpreview_radius = get_theme_constant("portpreview_radius", "GraphNode")
+	portpreview_color = get_theme_color("portpreview_color", "GraphNode")
+	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
+
 
 func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
 	if left:
@@ -155,6 +165,7 @@ func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 	draw_circle(position, 5, color, true, -1, true)
 
+
 func _draw() -> void:
 	var color : Color = get_theme_color("title_color")
 	# warning-ignore:narrowing_conversion
@@ -171,23 +182,24 @@ func _draw() -> void:
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
 	for i in range(2):
-		if get_parent().locked_preview[i] != null and get_parent().locked_preview[i].generator == generator:
-			preview_port[i] = get_parent().locked_preview[i].output_index
-			preview_locked[i] = true
+		if get_parent().locked_preview[i] != null:
+			if get_parent().locked_preview[i].generator == generator:
+				preview_port[i] = get_parent().locked_preview[i].output_index
+				preview_locked[i] = true
 		elif get_parent().current_preview[i] != null and get_parent().current_preview[i].generator == generator:
 			preview_port[i] = get_parent().current_preview[i].output_index
 	if preview_port[0] == preview_port[1]:
 		preview_port[1] = -1
 		preview_locked[0] = preview_locked[0] || preview_locked[1]
 	for i in range(outputs.size()):
-		var j = -1
-		if i == preview_port[0]:
-			j = 0
-		elif i == preview_port[1]:
-			j = 1
-		if j != -1:
-			var conn_pos = get_output_port_position(i)
-			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked[j] else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
+		var conn_pos = get_output_port_position(i)
+		for preview in range(2):
+			if i == preview_port[preview]:
+				if preview_locked[preview]:
+					draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
+					draw_line(conn_pos+Vector2(-4,4), conn_pos+Vector2(4,-4), portpreview_color, 0.075*portpreview_width, true)
+				else:
+					draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
 		if show_outputs:
 			var string : StringName = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else StringName(tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
@@ -197,7 +209,11 @@ func _draw() -> void:
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
 		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
-
+	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
+		var conn_pos = get_output_port_position(generator.preview)
+		draw_circle(conn_pos, 3, portpreview_color, true)
+	
+	
 func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
 	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * portgroup_width
 	var stylebox_size: Vector2 = Vector2(portgroup_width, last_port.y - first_port.y + portgroup_width)
