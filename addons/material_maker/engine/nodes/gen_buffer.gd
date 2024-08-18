@@ -92,6 +92,8 @@ func update_shader() -> void:
 func do_update_shader() -> void:
 	if ! is_instance_valid(self) or exiting:
 		return
+	if not is_node_ready():
+		await ready
 	updating_shader = false
 	var context : MMGenContext = MMGenContext.new()
 	var source : ShaderCode
