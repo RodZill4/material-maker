@@ -35,6 +35,8 @@ func _ready():
 	update_postprocess_menu()
 	update_Guides_menu()
 	update_export_menu()
+	reset_view()
+	
 
 func update_view_menu() -> void:
 	$ContextMenu.add_submenu_item("View", "View")
@@ -48,9 +50,9 @@ func update_Guides_menu() -> void:
 	$ContextMenu/Guides.add_item("Change color", 1000)
 	$ContextMenu.add_submenu_item("Guides", "Guides")
 	if mm_globals.has_config("preview"+config_var_suffix+"_view_mode"):
-		_on_View_id_pressed(mm_globals.get_config("preview"+config_var_suffix+"_view_mode"))
+		set_view_mode(mm_globals.get_config("preview"+config_var_suffix+"_view_mode"))
 	if mm_globals.has_config("preview"+config_var_suffix+"_view_postprocess"):
-		_on_PostProcess_id_pressed(mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess"))
+		set_post_processing(mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess"))
 
 func update_postprocess_menu() -> void:
 	$ContextMenu/PostProcess.clear()
@@ -71,6 +73,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 func update_material(source):
 	super.update_material(source)
 	material.set_shader_parameter("mode", view_mode)
+	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
 	material.set_shader_parameter("background_color_1", Color(0.4, 0.4, 0.4))
 	material.set_shader_parameter("background_color_2", Color(0.6, 0.6, 0.6))
 
@@ -173,6 +176,8 @@ func update_shader_options() -> void:
 
 func on_resized() -> void:
 	super.on_resized()
+	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
+	printt(name, get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
 	material.set_shader_parameter("preview_2d_center", center)
 	material.set_shader_parameter("preview_2d_scale", view_scale)
 	setup_controls("previous")
@@ -198,6 +203,7 @@ func _on_gui_input(event):
 				MOUSE_BUTTON_MIDDLE:
 					dragging = true
 				MOUSE_BUTTON_LEFT:
+					print(material.shader.code)
 					if event.shift_pressed:
 						dragging = true
 					elif event.is_command_or_control_pressed():
@@ -230,9 +236,7 @@ func _on_gui_input(event):
 func _on_ContextMenu_id_pressed(id) -> void:
 	match id:
 		0:
-			center = Vector2(0.5, 0.5)
-			view_scale = 1.2
-			update_shader_options()
+			reset_view()
 		MENU_EXPORT_AGAIN:
 			export_again()
 		MENU_EXPORT_ANIMATION:
@@ -242,7 +246,14 @@ func _on_ContextMenu_id_pressed(id) -> void:
 		_:
 			print("unsupported id "+str(id))
 
-func _on_View_id_pressed(id):
+
+func reset_view() -> void:
+	center = Vector2(0.5, 0.5)
+	view_scale = 1.2
+	update_shader_options()
+
+
+func set_view_mode(id:int) -> void:
 	if id == view_mode:
 		return
 	$ContextMenu/View.set_item_checked(view_mode, false)
@@ -250,6 +261,11 @@ func _on_View_id_pressed(id):
 	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_parameter("mode", view_mode)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)
+
+
+func get_view_mode() -> int:
+	return view_mode
+
 
 func _on_Guides_id_pressed(id):
 	if id == 1000:
@@ -268,10 +284,14 @@ func _on_GridSize_value_changed(value):
 	$Guides.show_grid(value)
 
 
-func _on_PostProcess_id_pressed(id):
+func set_post_processing(id:int) -> void:
 	current_postprocess_option = id
 	set_generator(generator, output, true)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", current_postprocess_option)
+
+
+func get_post_processing() -> int:
+	return current_postprocess_option
 
 func _on_Preview2D_mouse_entered():
 	mm_globals.set_tip_text("#MMB: Pan, Mouse wheel: Zoom, #RMB: Context menu", 3)

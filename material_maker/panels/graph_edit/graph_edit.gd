@@ -16,7 +16,7 @@ class Preview:
 
 var node_factory = null
 
-var save_path = null: set = set_save_path
+var save_path := "": set = set_save_path
 var need_save : bool = false
 var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
@@ -362,7 +362,7 @@ func update_tab_title() -> void:
 		#print("no set_tab_title method")
 		return
 	var title = "[unnamed]"
-	if save_path != null:
+	if not save_path.is_empty():
 		title = save_path.right(-(save_path.rfind("/")+1))
 	if need_save:
 		title += " *"
@@ -375,7 +375,7 @@ func set_need_save(ns = true) -> void:
 		update_tab_title()
 	need_save_crash_recovery = true
 
-func set_save_path(path) -> void:
+func set_save_path(path: String) -> void:
 	if path != save_path:
 		remove_crash_recovery_file()
 		need_save_crash_recovery = false
@@ -483,7 +483,7 @@ func new_material(init_nodes = {nodes=[{name="Material", type="material",paramet
 		move_child(top_generator, 0)
 		update_view(top_generator)
 		center_view()
-		set_save_path(null)
+		set_save_path("")
 		set_need_save(false)
 
 func get_free_name(type) -> String:
@@ -624,7 +624,7 @@ func save_as() -> bool:
 				return true
 	return false
 
-func save_file(filename) -> bool:
+func save_file(filename:String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""

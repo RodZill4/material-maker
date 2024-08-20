@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=58 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=62 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -350,6 +350,43 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b7fkf"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pq4ta"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.123578, 0.129892, 0.142519, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhlqs"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0725373, 0.0770753, 0.0861506, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2484, 0.2484, 0.2484, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_82ewu"]
+content_margin_top = 3.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k0sx"]
 bg_color = Color(0.0941176, 0.0980392, 0.101961, 1)
 corner_radius_top_right = 4
@@ -602,6 +639,16 @@ MM_NodePropertyLabel/base_type = &"Label"
 MM_NodePropertyLabel/font_sizes/font_size = 15
 MM_PanelBackground/base_type = &"PanelContainer"
 MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")
+MM_PanelMenuBackground/base_type = &"ScrollContainer"
+MM_PanelMenuBackground/styles/panel = SubResource("StyleBoxEmpty_b7fkf")
+MM_PanelMenuBar/base_type = &"PanelContainer"
+MM_PanelMenuBar/styles/panel = SubResource("StyleBoxFlat_pq4ta")
+MM_PanelMenuSubPanel/base_type = &"PanelContainer"
+MM_PanelMenuSubPanel/styles/panel = SubResource("StyleBoxFlat_qhlqs")
+MM_PanelMenuSubPanelLabel/base_type = &"Label"
+MM_PanelMenuSubPanelLabel/colors/font_color = Color(0.454524, 0.454524, 0.454524, 1)
+MM_PanelMenuSubPanelLabel/font_sizes/font_size = 14
+MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_82ewu")
 MM_ProjectsBackground/base_type = &"Panel"
 MM_ProjectsBackground/styles/panel = SubResource("StyleBoxFlat_1k0sx")
 MM_StatusBarBackground/base_type = &"PanelContainer"

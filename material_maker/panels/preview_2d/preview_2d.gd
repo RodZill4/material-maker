@@ -10,7 +10,7 @@ var is_greyscale : bool = false
 var need_generate : bool = false
 
 var last_export_filename : String = ""
-var last_export_size = 0
+var last_export_size = 4
 
 
 const MENU_EXPORT_AGAIN : int = 1000
@@ -18,6 +18,7 @@ const MENU_EXPORT_ANIMATION : int = 1001
 const MENU_EXPORT_TAA_RENDER : int = 1002
 const MENU_EXPORT_CUSTOM_SIZE : int = 1003
 
+signal generator_changed
 
 func _enter_tree():
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
@@ -92,6 +93,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		var item_index = $ContextMenu.get_item_index(MENU_EXPORT_ANIMATION)
 		if item_index != -1:
 			$ContextMenu.set_item_disabled(item_index, !is_instance_valid(g))
+	generator_changed.emit()
 	update_material(source)
 
 var refreshing_generator : bool = false
@@ -147,7 +149,8 @@ func export_animation() -> void:
 	var window = load("res://material_maker/windows/export_animation/export_animation.tscn").instantiate()
 	mm_globals.main_window.add_dialog(window)
 	window.set_source(generator, output)
-	window.popup_centered()
+	window.exclusive = true
+	window.popup_centered()#e(get_window(), Rect2(get_window().size())
 
 func export_taa() -> void:
 	if generator == null:
@@ -207,9 +210,9 @@ func export_as_image_file(file_name : String, image_size : int) -> void:
 	last_export_size = image_size
 	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), false)
 
-func _on_Reference_id_pressed(id : int):
+func export_to_reference(resolution_id : int):
 	var texture : ImageTexture = ImageTexture.new()
-	await create_image("copy_to_texture", [ texture ], 64 << id)
+	await create_image("copy_to_texture", [ texture ], 64 << resolution_id)
 	mm_globals.main_window.get_panel("Reference").add_reference(texture)
 
 func _on_Preview2D_visibility_changed():
