@@ -9,13 +9,25 @@ var selected_control_points : Array[int] = []
 signal value_changed(value : MMSplines)
 signal unhandled_event(event : InputEvent)
 
+@onready var menu_bar := $SplinesMenu
+
+enum Modes {DRAW, SELECT}
+var mode := Modes.DRAW
+
+var progressive := false
+
 
 func _ready():
+	%DrawMode.button_group.pressed.connect(func(button):mode = Modes.DRAW if button.name == "DrawMode" else Modes.SELECT)
+	if get_parent().has_method("add_menu_bar"):
+		menu_bar.get_parent().remove_child(menu_bar)
+		get_parent().add_menu_bar(menu_bar, self)
+	
 	super._ready()
 	update_controls()
 
 func _draw():
-	if %Progressive.button_pressed and selected_control_points.size() > 1:
+	if progressive and selected_control_points.size() > 1:
 		for c in control_points.get_children():
 			if c.is_selected:
 				var index = 1+selected_control_points.find(c.get_meta("point"))
@@ -55,16 +67,19 @@ func update_controls() -> void:
 		i += 1
 	emit_signal("value_changed", splines)
 
+
 func update_control_positions() -> void:
 	for control_point in control_points.get_children():
 		var pi : int = control_point.get_meta("point")
 		control_point.setpos(transform_point(splines.get_point_by_index(pi).position))
+
 
 func is_editing() -> bool:
 	for c in control_points.get_children():
 		if c.is_moving:
 			return true
 	return false
+
 
 func _on_ControlPoint_moved(index):
 	var control_point : Control = control_points.get_child(index)
@@ -80,6 +95,7 @@ func _on_ControlPoint_moved(index):
 	update_control_positions()
 	queue_redraw()
 	emit_signal("value_changed", splines)
+
 
 func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_pressed : bool):
 	var cp = control_points.get_child(index)
@@ -127,7 +143,7 @@ func _on_reverse_selection_pressed():
 	queue_redraw()
 
 func _on_width_value_changed(value):
-	splines.set_points_width(get_selection(), value, %Progressive.button_pressed)
+	splines.set_points_width(get_selection(), value, progressive)
 	emit_signal("value_changed", splines)
 
 func _on_offset_value_changed(value):
@@ -207,15 +223,22 @@ func handle_draw_mode(event : InputEvent) -> bool:
 				return true
 	return false
 
+
+func _on_progressive_toggled(toggled_on: bool) -> void:
+	progressive = toggled_on
+	queue_redraw()
+
+
 func handle_select_mode(event : InputEvent) -> bool:
 	return false
 
+
 func _on_SplinesEditor_gui_input(event : InputEvent):
-	if %DrawMode.button_pressed:
+	if mode == Modes.DRAW:
 		if handle_draw_mode(event):
 			queue_redraw()
 			return
-	elif %DrawMode.button_pressed:
+	elif mode == Modes.SELECT:
 		if handle_select_mode(event):
 			queue_redraw()
 			return
@@ -256,4 +279,3 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 
 func control_update_parameter(value : MMSplines):
 	generator.set_parameter(parameter_name, splines.serialize())
-
