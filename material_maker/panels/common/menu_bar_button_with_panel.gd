@@ -6,6 +6,8 @@ var pinned := false
 
 
 func _ready() -> void:
+	toggle_mode = true
+	button_mask = MOUSE_BUTTON_MASK_LEFT | MOUSE_BUTTON_MASK_RIGHT
 	toggled.connect(_on_toggled)
 	owner.resized.connect(position_panel)
 
@@ -14,7 +16,7 @@ func _ready() -> void:
 
 func _draw() -> void:
 	if pinned:
-		draw_circle(Vector2(size.x, 0), 4, get_theme_color("icon_pressed_color"))
+		draw_circle(Vector2(size.x-2, 2), 4, get_theme_color("icon_pressed_color"))
 
 
 func _on_toggled(pressed:bool) -> void:
@@ -48,5 +50,7 @@ func _input(event:InputEvent) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and not event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
+			if not pinned and button_pressed:
+				get_viewport().set_input_as_handled()
 			pinned = true
 		grab_focus()

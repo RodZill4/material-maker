@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=25 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://djura7a50b2aq" path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" id="4_gd40d"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://b08bcbwwosrrk" path="res://material_maker/widgets/splines_edit/splines_editor.tscn" id="5_5hlfo"]
-[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://b51634rcdiyr" path="res://material_maker/widgets/pixels_edit/pixels_editor.tscn" id="6_m4663"]
 [ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="7_u2w4r"]
 [ext_resource type="Texture2D" uid="uid://tfi3spyumjxt" path="res://material_maker/theme/dark/popupmenu_visibility_visible.png" id="11_l5q6b"]
@@ -349,52 +348,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="ContextMenu" type="PopupMenu" parent="." index="19"]
-item_count = 1
-item_0/text = "Reset view"
-
-[node name="View" type="PopupMenu" parent="ContextMenu" index="3"]
-item_count = 5
-item_0/text = "Extend"
-item_0/checkable = 2
-item_0/checked = true
-item_1/text = "Repeat"
-item_1/checkable = 2
-item_1/id = 1
-item_2/text = "Clamp"
-item_2/checkable = 2
-item_2/id = 2
-item_3/text = "Temporal AA"
-item_3/checkable = 2
-item_3/id = 3
-item_4/text = "Temporal AA 2.2"
-item_4/checkable = 2
-item_4/id = 4
-
-[node name="Guides" type="PopupMenu" parent="ContextMenu" index="4"]
-
-[node name="Grid" type="Popup" parent="ContextMenu/Guides" index="3"]
-
-[node name="Panel" type="PanelContainer" parent="ContextMenu/Guides/Grid" index="0"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="GridSize" parent="ContextMenu/Guides/Grid/Panel" index="0" instance=ExtResource("6")]
-layout_mode = 2
-value = 4.0
-min_value = 2.0
-max_value = 64.0
-step = 1.0
-float_only = true
-
-[node name="Export" type="PopupMenu" parent="ContextMenu" index="5"]
-
-[node name="Reference" type="PopupMenu" parent="ContextMenu" index="6"]
-
-[node name="PostProcess" type="PopupMenu" parent="ContextMenu" index="7"]
-
-[node name="Accumulate" type="SubViewport" parent="." index="20"]
+[node name="Accumulate" type="SubViewport" parent="." index="19"]
 disable_3d = true
 handle_input_locally = false
 gui_snap_controls_to_pixels = false
@@ -407,7 +361,7 @@ material = SubResource("6")
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ComplexParameters" type="OptionButton" parent="." index="21"]
+[node name="ComplexParameters" type="OptionButton" parent="." index="20"]
 visible = false
 layout_mode = 1
 anchors_preset = 1
@@ -417,7 +371,7 @@ offset_left = -32.0
 offset_bottom = 20.0
 grow_horizontal = 0
 
-[node name="MenuBar" type="ScrollContainer" parent="." index="22"]
+[node name="MenuBar" type="ScrollContainer" parent="." index="21"]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 1
@@ -441,9 +395,10 @@ layout_mode = 2
 
 [node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
 layout_mode = 2
+tooltip_text = "View"
+theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
-text = "View"
 icon = ExtResource("11_l5q6b")
 script = ExtResource("12_nrhap")
 
@@ -542,9 +497,10 @@ layout_mode = 2
 
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
 layout_mode = 2
+tooltip_text = "Export"
+theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
-text = "Export"
 icon = ExtResource("12_wun6p")
 script = ExtResource("12_nrhap")
 
@@ -685,13 +641,6 @@ autowrap_mode = 1
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
-[connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/View" to="." method="_on_View_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Guides" to="." method="_on_Guides_id_pressed"]
-[connection signal="value_changed" from="ContextMenu/Guides/Grid/Panel/GridSize" to="." method="_on_GridSize_value_changed"]
-[connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/PostProcess" to="." method="_on_PostProcess_id_pressed"]
 [connection signal="item_selected" from="ComplexParameters" to="." method="_on_complex_parameters_item_selected"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_reset_view_button_pressed"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ViewMode" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_view_mode_item_selected"]

@@ -23,23 +23,10 @@ signal generator_changed
 func _enter_tree():
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
 
-func update_export_menu() -> void:
-	$ContextMenu/Export.clear()
-	$ContextMenu/Reference.clear()
-	for i in range(8):
-		var s = 64 << i
-		$ContextMenu/Export.add_item(str(s)+"x"+str(s), i)
-		$ContextMenu/Reference.add_item(str(s)+"x"+str(s), i)
-	$ContextMenu.add_submenu_item("Export", "Export")
-	$ContextMenu.add_item("Export again", MENU_EXPORT_AGAIN)
-	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), true)
-	$ContextMenu.add_item("Export animation", MENU_EXPORT_ANIMATION)
-	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_ANIMATION), true)
-	$ContextMenu.add_item("Export TAA render", MENU_EXPORT_TAA_RENDER)
-	$ContextMenu.add_submenu_item("Reference", "Reference")
 
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.output_type, template)
+
 
 func do_update_material(source, target_material : ShaderMaterial, template : String):
 	if source.output_type == "":
@@ -89,10 +76,10 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 				source = MMGenBase.get_default_generated_shader()
 	else:
 		generator = null
-	if get_node_or_null("ContextMenu") != null:
-		var item_index = $ContextMenu.get_item_index(MENU_EXPORT_ANIMATION)
-		if item_index != -1:
-			$ContextMenu.set_item_disabled(item_index, !is_instance_valid(g))
+	#if get_node_or_null("ContextMenu") != null:
+		#var item_index = $ContextMenu.get_item_index(MENU_EXPORT_ANIMATION)
+		#if item_index != -1:
+			#$ContextMenu.set_item_disabled(item_index, !is_instance_valid(g))
 	generator_changed.emit()
 	update_material(source)
 

@@ -643,6 +643,7 @@ MM_PanelMenuBackground/base_type = &"ScrollContainer"
 MM_PanelMenuBackground/styles/panel = SubResource("StyleBoxEmpty_b7fkf")
 MM_PanelMenuBar/base_type = &"PanelContainer"
 MM_PanelMenuBar/styles/panel = SubResource("StyleBoxFlat_pq4ta")
+MM_PanelMenuButton/base_type = &"Button"
 MM_PanelMenuSubPanel/base_type = &"PanelContainer"
 MM_PanelMenuSubPanel/styles/panel = SubResource("StyleBoxFlat_qhlqs")
 MM_PanelMenuSubPanelLabel/base_type = &"Label"

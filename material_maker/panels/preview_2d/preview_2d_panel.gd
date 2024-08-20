@@ -23,7 +23,6 @@ const POSTPROCESS_OPTIONS : Array = [
 	{ name="Lowres 512x512", function="preview_2d((floor(uv*512.0)+vec2(0.5))/512.0)" }
 ]
 
-
 const VIEW_EXTEND : int = 0
 const VIEW_REPEAT : int = 1
 const VIEW_CLAMP : int = 2
@@ -31,37 +30,12 @@ const VIEW_CLAMP : int = 2
 
 func _ready():
 	update_shader_options()
-	update_view_menu()
-	update_postprocess_menu()
-	update_Guides_menu()
-	update_export_menu()
 	reset_view()
-	
 
-func update_view_menu() -> void:
-	$ContextMenu.add_submenu_item("View", "View")
-
-func update_Guides_menu() -> void:
-	$ContextMenu/Guides.clear()
-	for s in $Guides.STYLES:
-		$ContextMenu/Guides.add_item(s)
-	$ContextMenu/Guides.add_submenu_item("Grid", "Grid")
-	$ContextMenu/Guides.add_separator()
-	$ContextMenu/Guides.add_item("Change color", 1000)
-	$ContextMenu.add_submenu_item("Guides", "Guides")
-	if mm_globals.has_config("preview"+config_var_suffix+"_view_mode"):
-		set_view_mode(mm_globals.get_config("preview"+config_var_suffix+"_view_mode"))
-	if mm_globals.has_config("preview"+config_var_suffix+"_view_postprocess"):
-		set_post_processing(mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess"))
-
-func update_postprocess_menu() -> void:
-	$ContextMenu/PostProcess.clear()
-	for o in POSTPROCESS_OPTIONS:
-		$ContextMenu/PostProcess.add_item(o.name)
-	$ContextMenu.add_submenu_item("Post Process", "PostProcess")
 
 func get_shader_custom_functions():
 	return "vec4 preview_2d_postprocessed(vec2 uv) { return %s; }\n" % POSTPROCESS_OPTIONS[current_postprocess_option].function
+
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	#center = Vector2(0.5, 0.5)
@@ -69,6 +43,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	super.set_generator(g, o, force)
 	setup_controls("previous")
 	update_shader_options()
+
 
 func update_material(source):
 	super.update_material(source)
@@ -147,12 +122,15 @@ var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 var local_rotate : float = 0.0
 var local_scale : float = 1.0
 
+
 func set_center_transform(t):
 	center_transform = t
+
 
 func set_local_transform(r : float, s : float):
 	local_rotate = r
 	local_scale = s
+
 
 func value_to_pos(value : Vector2, apply_parent_transform : bool = false, apply_local_transform : bool = false) -> Vector2:
 	if apply_parent_transform:
@@ -161,6 +139,7 @@ func value_to_pos(value : Vector2, apply_parent_transform : bool = false, apply_
 		value = value.rotated(deg_to_rad(local_rotate))
 		value *= local_scale
 	return (value-center+Vector2(0.5, 0.5))*min(size.x, size.y)/view_scale+0.5*size
+
 
 func pos_to_value(pos : Vector2, apply_parent_transform : bool = false, apply_local_transform : bool = false) -> Vector2:
 	var value = (pos-0.5*size)*view_scale/min(size.x, size.y)+center-Vector2(0.5, 0.5)
@@ -174,6 +153,7 @@ func pos_to_value(pos : Vector2, apply_parent_transform : bool = false, apply_lo
 func update_shader_options() -> void:
 	on_resized()
 
+
 func on_resized() -> void:
 	super.on_resized()
 	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
@@ -182,6 +162,7 @@ func on_resized() -> void:
 	material.set_shader_parameter("preview_2d_scale", view_scale)
 	setup_controls("previous")
 	$Guides.queue_redraw()
+
 
 var dragging : bool = false
 var zooming : bool = false
@@ -208,8 +189,6 @@ func _on_gui_input(event):
 						dragging = true
 					elif event.is_command_or_control_pressed():
 						zooming = true
-				MOUSE_BUTTON_RIGHT:
-					$ContextMenu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
 		else:
 			dragging = false
 			zooming = false
@@ -233,19 +212,16 @@ func _on_gui_input(event):
 	if need_update:
 		on_resized()
 
-func _on_ContextMenu_id_pressed(id) -> void:
-	match id:
-		0:
-			reset_view()
-		MENU_EXPORT_AGAIN:
-			export_again()
-		MENU_EXPORT_ANIMATION:
-			export_animation()
-		MENU_EXPORT_TAA_RENDER:
-			export_taa()
-		_:
-			print("unsupported id "+str(id))
 
+#region MENUS
+
+func add_menu_bar(menu_bar:Control, editor:Control) -> void:
+	%MenuBar.get_child(0).add_child(menu_bar)
+	editor.visibility_changed.connect(func(): menu_bar.visible = editor.visible)
+	menu_bar.visible = editor.visible
+
+
+#region VIEW MENU METHODS
 
 func reset_view() -> void:
 	center = Vector2(0.5, 0.5)
@@ -256,32 +232,13 @@ func reset_view() -> void:
 func set_view_mode(id:int) -> void:
 	if id == view_mode:
 		return
-	$ContextMenu/View.set_item_checked(view_mode, false)
 	view_mode = id
-	$ContextMenu/View.set_item_checked(view_mode, true)
 	material.set_shader_parameter("mode", view_mode)
 	mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)
 
 
 func get_view_mode() -> int:
 	return view_mode
-
-
-func _on_Guides_id_pressed(id):
-	if id == 1000:
-		var color_picker_popup = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
-		add_child(color_picker_popup)
-		var color_picker = color_picker_popup.get_node("ColorPicker")
-		color_picker.color = $Guides.color
-		color_picker.connect("color_changed",Callable($Guides,"set_color"))
-		color_picker_popup.position = get_viewport().get_mouse_position()
-		color_picker_popup.connect("popup_hide",Callable(color_picker_popup,"queue_free"))
-		color_picker_popup.popup()
-	else:
-		$Guides.style = id
-
-func _on_GridSize_value_changed(value):
-	$Guides.show_grid(value)
 
 
 func set_post_processing(id:int) -> void:
@@ -293,5 +250,8 @@ func set_post_processing(id:int) -> void:
 func get_post_processing() -> int:
 	return current_postprocess_option
 
+#endregion
+
+
 func _on_Preview2D_mouse_entered():
-	mm_globals.set_tip_text("#MMB: Pan, Mouse wheel: Zoom, #RMB: Context menu", 3)
+	mm_globals.set_tip_text("#MMB: Pan, Mouse wheel: Zoom", 3)
