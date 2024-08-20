@@ -52,25 +52,16 @@ script = ExtResource("5_t0t7h")
 
 [node name="Grid" type="GridContainer" parent="PixelMenu/UI/PixelSettings/SettingsPanel" index="0"]
 layout_mode = 2
-columns = 2
 
-[node name="WidthLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="0"]
+[node name="WidthHeightLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="0"]
 layout_mode = 2
-text = "Width:"
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Width and Height"
 
-[node name="Width" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="1" instance=ExtResource("4_ymoey")]
+[node name="Box" type="BoxContainer" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="1"]
 layout_mode = 2
-value = 8.0
-min_value = 2.0
-max_value = 32.0
-step = 1.0
-float_only = true
 
-[node name="HeightLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="2"]
-layout_mode = 2
-text = "Height:"
-
-[node name="Height" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="3" instance=ExtResource("4_ymoey")]
+[node name="Width" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box" index="0" instance=ExtResource("4_ymoey")]
 layout_mode = 2
 value = 8.0
 min_value = 2.0
@@ -78,11 +69,20 @@ max_value = 32.0
 step = 1.0
 float_only = true
 
-[node name="BPPLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="4"]
+[node name="Height" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box" index="1" instance=ExtResource("4_ymoey")]
 layout_mode = 2
-text = "BPP:"
+value = 8.0
+min_value = 2.0
+max_value = 32.0
+step = 1.0
+float_only = true
 
-[node name="BPP" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="5" instance=ExtResource("4_ymoey")]
+[node name="BPPLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="2"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Bits Per Pixel"
+
+[node name="BPP" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="3" instance=ExtResource("4_ymoey")]
 layout_mode = 2
 value = 1.0
 min_value = 1.0
@@ -99,6 +99,6 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [connection signal="gui_input" from="." to="." method="_on_PixelsEditor_gui_input"]
-[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Width" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_width_value_changed"]
-[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Height" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_height_value_changed"]
+[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box/Width" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_width_value_changed"]
+[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box/Height" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_height_value_changed"]
 [connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/BPP" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_bpp_value_changed"]

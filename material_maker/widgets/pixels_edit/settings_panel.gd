@@ -2,11 +2,14 @@ extends PanelContainer
 
 var pixel_editor: Control = null
 
+@onready var width := $Grid/Box/Width
+@onready var height := $Grid/Box/Height
+@onready var bpp := $Grid/BPP
 
 func _open() -> void:
-	$Grid/Width.value = float(pixel_editor.pixels.size.x)
-	$Grid/Height.value = float(pixel_editor.pixels.size.y)
-	$Grid/BPP.value = float(pixel_editor.pixels.bpp)
+	width.value = float(pixel_editor.pixels.size.x)
+	height.value = float(pixel_editor.pixels.size.y)
+	bpp.value = float(pixel_editor.pixels.bpp)
 
 
 func _on_width_value_changed(value: Variant) -> void:
@@ -22,7 +25,7 @@ func _on_bpp_value_changed(value: Variant) -> void:
 
 
 func update_from_values() -> void:
-	pixel_editor.pixels.set_size(int($Grid/Width.value), int($Grid/Height.value), int($Grid/BPP.value))
+	pixel_editor.pixels.set_size(int(width.value), int(height.value), int(bpp.value))
 	pixel_editor.queue_redraw()
 	pixel_editor.update_color_buttons()
 	pixel_editor.value_changed.emit(pixel_editor.pixels)
