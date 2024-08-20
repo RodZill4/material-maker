@@ -195,7 +195,7 @@ func export_as_image_file(file_name : String, image_size : int) -> void:
 	create_image("save_to_file", [ file_name, is_greyscale ], image_size)
 	last_export_filename = file_name
 	last_export_size = image_size
-	$ContextMenu.set_item_disabled($ContextMenu.get_item_index(MENU_EXPORT_AGAIN), false)
+
 
 func export_to_reference(resolution_id : int):
 	var texture : ImageTexture = ImageTexture.new()

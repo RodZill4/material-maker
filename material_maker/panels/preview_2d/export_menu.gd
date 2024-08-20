@@ -102,8 +102,9 @@ func _on_image_pressed() -> void:
 	
 	if path:
 		owner.export_as_image_file(path, 64 << %Resolution.selected)
-		update()
 		export_notification("Exported to " + path)
+		await get_tree().create_timer(0.5).timeout
+		update()
 
 
 func _on_animation_pressed() -> void:
