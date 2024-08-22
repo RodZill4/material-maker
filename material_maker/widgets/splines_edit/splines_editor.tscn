@@ -41,8 +41,8 @@ offset_bottom = 40.0
 
 [node name="SplinesMenu" type="PanelContainer" parent="." index="1"]
 layout_mode = 0
-offset_right = 36.0
-offset_bottom = 28.0
+offset_right = 422.0
+offset_bottom = 33.0
 theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="HBox" type="HBoxContainer" parent="SplinesMenu" index="0"]
@@ -72,10 +72,8 @@ icon = ExtResource("6_bja86")
 icon_alignment = 1
 
 [node name="VSeparator" type="VSeparator" parent="SplinesMenu/HBox" index="2"]
-custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 0
+theme_type_variation = &"MM_PanelMenuSeparator"
 
 [node name="DeleteControlPoints" type="Button" parent="SplinesMenu/HBox" index="3"]
 custom_minimum_size = Vector2(25, 25)
@@ -102,10 +100,8 @@ icon = SubResource("AtlasTexture_3lo2j")
 icon_alignment = 1
 
 [node name="VSeparator2" type="VSeparator" parent="SplinesMenu/HBox" index="6"]
-custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 0
+theme_type_variation = &"MM_PanelMenuSeparator"
 
 [node name="Progressive" type="Button" parent="SplinesMenu/HBox" index="7"]
 custom_minimum_size = Vector2(25, 25)
@@ -122,29 +118,23 @@ tooltip_text = "Reverse Order"
 icon = ExtResource("8_olqcj")
 icon_alignment = 1
 
-[node name="Spacer1" type="Control" parent="SplinesMenu/HBox" index="9"]
-layout_mode = 2
-
-[node name="WidthLabel" type="Label" parent="SplinesMenu/HBox" index="10"]
+[node name="WidthLabel" type="Label" parent="SplinesMenu/HBox" index="9"]
 layout_mode = 2
 theme_type_variation = &"MM_NodePropertyLabel"
 text = "Width:"
 
-[node name="Width" parent="SplinesMenu/HBox" index="11" instance=ExtResource("4_2po4g")]
+[node name="Width" parent="SplinesMenu/HBox" index="10" instance=ExtResource("4_2po4g")]
 layout_mode = 2
 value = 0.05
 max_value = 0.2
 float_only = true
 
-[node name="Spacer2" type="Control" parent="SplinesMenu/HBox" index="12"]
-layout_mode = 2
-
-[node name="OffsetLabel" type="Label" parent="SplinesMenu/HBox" index="13"]
+[node name="OffsetLabel" type="Label" parent="SplinesMenu/HBox" index="11"]
 layout_mode = 2
 theme_type_variation = &"MM_NodePropertyLabel"
 text = "Offset:"
 
-[node name="Offset" parent="SplinesMenu/HBox" index="14" instance=ExtResource("4_2po4g")]
+[node name="Offset" parent="SplinesMenu/HBox" index="12" instance=ExtResource("4_2po4g")]
 layout_mode = 2
 value = 0.0
 max_value = 10.0

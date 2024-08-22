@@ -34,10 +34,12 @@ theme_type_variation = &"MM_PanelMenuBar"
 layout_mode = 2
 
 [node name="PixelSettings" type="Button" parent="PixelMenu/UI" index="0"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 icon = SubResource("AtlasTexture_01pt6")
+icon_alignment = 1
 script = ExtResource("4_xknkb")
 
 [node name="SettingsPanel" type="PanelContainer" parent="PixelMenu/UI/PixelSettings" index="0"]
@@ -92,7 +94,7 @@ float_only = true
 
 [node name="VSeparator" type="VSeparator" parent="PixelMenu/UI" index="1"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_type_variation = &"MM_PanelMenuSeparator"
 
 [node name="Colors" type="BoxContainer" parent="PixelMenu/UI" index="2"]
 unique_name_in_owner = true

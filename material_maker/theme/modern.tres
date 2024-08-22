@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=62 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=63 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -357,15 +357,32 @@ content_margin_right = 4.0
 content_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pq4ta"]
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
-bg_color = Color(0.123578, 0.129892, 0.142519, 1)
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.190762, 0.190762, 0.190762, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eij2n"]
+bg_color = Color(0.187176, 0.187176, 0.187176, 1)
+border_width_top = 3
+border_width_bottom = 3
+border_color = Color(0.19, 0.19, 0.19, 0)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 1.0
+expand_margin_right = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhlqs"]
 content_margin_left = 4.0
@@ -644,6 +661,9 @@ MM_PanelMenuBackground/styles/panel = SubResource("StyleBoxEmpty_b7fkf")
 MM_PanelMenuBar/base_type = &"PanelContainer"
 MM_PanelMenuBar/styles/panel = SubResource("StyleBoxFlat_pq4ta")
 MM_PanelMenuButton/base_type = &"Button"
+MM_PanelMenuSeparator/base_type = &"VSeparator"
+MM_PanelMenuSeparator/constants/separation = 2
+MM_PanelMenuSeparator/styles/separator = SubResource("StyleBoxFlat_eij2n")
 MM_PanelMenuSubPanel/base_type = &"PanelContainer"
 MM_PanelMenuSubPanel/styles/panel = SubResource("StyleBoxFlat_qhlqs")
 MM_PanelMenuSubPanelLabel/base_type = &"Label"
