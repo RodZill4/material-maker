@@ -33,11 +33,14 @@ func _open() -> void:
 	
 	export_notification("")
 
+
 func update() -> void:
 	if not is_visible_in_tree():
 		return
 	
-	%ExportFileResultLabel.text = interpret_file_name(%ExportFile.text)
+	var file_result := interpret_file_name(%ExportFile.text)
+	%ExportFileResultLabel.text = file_result
+	%ExportFileResultLabel.visible = not %ExportFile.text.is_empty() and %ExportFile.text.count("$") != file_result.count("$")
 
 
 func _on_export_folder_text_changed(new_text: String) -> void:
@@ -48,10 +51,12 @@ func _on_export_folder_button_pressed() -> void:
 	var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
-	file_dialog.add_filter("*.png; PNG image file")
-	file_dialog.add_filter("*.exr; EXR image file")
-	if mm_globals.config.has_section_key("path", "save_preview"):
-		file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
+	#file_dialog.add_filter("*.png; PNG image file")
+	#file_dialog.add_filter("*.exr; EXR image file")
+	
+	if %ExportFolder.text:
+		file_dialog.current_dir = mm_globals.config.get_value("path", %ExportFolder.text)
+	
 	var files = await file_dialog.select_files()
 	
 	if files.size() == 1:
@@ -81,9 +86,14 @@ func _on_image_pressed() -> void:
 	if path.is_empty():
 		var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-		file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
-		file_dialog.add_filter("*.png; PNG image file")
-		file_dialog.add_filter("*.exr; EXR image file")
+		
+		if not file_name.is_empty():
+			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
+		else:
+			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+			file_dialog.add_filter("*.png; PNG image file")
+			file_dialog.add_filter("*.exr; EXR image file")
+		
 		if mm_globals.config.has_section_key("path", "save_preview"):
 			file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
 	
@@ -91,14 +101,13 @@ func _on_image_pressed() -> void:
 		
 		if files.size() > 0:
 			path = files[0]
-			%ExportFolder.text = path.get_base_dir()
-			_on_export_folder_text_changed(path.get_base_dir())
-			%ExportFolder.tooltip_text = path.get_base_dir()
 	
-	else:
-		file_name = interpret_file_name(file_name)
+	
+	if file_name:
+		file_name = interpret_file_name(file_name, path)
 		
 		path = path.path_join(file_name)
+	
 	
 	if path:
 		owner.export_as_image_file(path, 64 << %Resolution.selected)
@@ -125,8 +134,9 @@ func export_notification(text:String) -> void:
 	%ExportNotificationLabel.visible = not text.is_empty()
 
 
-func interpret_file_name(file_name: String) -> String:
-	var path: String = %ExportFolder.text
+func interpret_file_name(file_name: String, path:="") -> String:
+	if path.is_empty():
+		path = %ExportFolder.text
 	
 	if owner.generator:
 		file_name = file_name.replace("$node", owner.generator.name)
