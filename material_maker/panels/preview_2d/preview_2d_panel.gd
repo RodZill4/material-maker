@@ -11,7 +11,7 @@ extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 var center : Vector2 = Vector2(0.5, 0.5)
 var view_scale : float = 1.2
 
-var view_mode : int = 0
+var view_mode : int = 2
 
 var current_postprocess_option = 0
 const POSTPROCESS_OPTIONS : Array = [

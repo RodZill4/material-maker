@@ -377,7 +377,7 @@ clip_contents = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 30.0
+offset_bottom = 28.0
 grow_horizontal = 2
 theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
@@ -394,15 +394,18 @@ theme_type_variation = &"MM_PanelMenuBar"
 layout_mode = 2
 
 [node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "View"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
+text = "View"
 icon = ExtResource("11_l5q6b")
 script = ExtResource("12_nrhap")
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
+visible = false
 layout_mode = 0
 offset_left = -53.0
 offset_top = 34.0
@@ -496,15 +499,18 @@ custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Export"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
+text = "Export"
 icon = ExtResource("12_wun6p")
 script = ExtResource("12_nrhap")
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
+visible = false
 layout_mode = 0
 offset_left = -74.0
 offset_top = 36.0

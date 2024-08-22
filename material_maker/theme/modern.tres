@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=63 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=64 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -351,26 +351,32 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b7fkf"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pq4ta"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.081, 0.09145, 0.1, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.190762, 0.190762, 0.190762, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
+border_color = Color(0.442344, 0.440199, 0.421573, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="FontVariation" id="FontVariation_h5fjs"]
+base_font = ExtResource("1_hqoqt")
+variation_embolden = 0.37
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eij2n"]
 bg_color = Color(0.187176, 0.187176, 0.187176, 1)
@@ -661,6 +667,8 @@ MM_PanelMenuBackground/styles/panel = SubResource("StyleBoxEmpty_b7fkf")
 MM_PanelMenuBar/base_type = &"PanelContainer"
 MM_PanelMenuBar/styles/panel = SubResource("StyleBoxFlat_pq4ta")
 MM_PanelMenuButton/base_type = &"Button"
+MM_PanelMenuButton/font_sizes/font_size = 14
+MM_PanelMenuButton/fonts/font = SubResource("FontVariation_h5fjs")
 MM_PanelMenuSeparator/base_type = &"VSeparator"
 MM_PanelMenuSeparator/constants/separation = 2
 MM_PanelMenuSeparator/styles/separator = SubResource("StyleBoxFlat_eij2n")
