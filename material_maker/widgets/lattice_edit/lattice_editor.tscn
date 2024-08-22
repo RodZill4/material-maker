@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dicq2cut03ved"]
+[gd_scene load_steps=4 format=3 uid="uid://dicq2cut03ved"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_emrdx"]
 [ext_resource type="Script" path="res://material_maker/widgets/lattice_edit/lattice_editor.gd" id="2_aqo66"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="3_xfsm8"]
 
 [node name="LatticeEditor" instance=ExtResource("1_emrdx")]
 offset_left = 0.0
@@ -23,13 +24,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Size" type="SpinBox" parent="." index="1"]
-layout_mode = 1
-offset_right = 83.0625
-offset_bottom = 31.0
+[node name="LatticeMenu" type="PanelContainer" parent="." index="1"]
+layout_mode = 0
+offset_right = 92.0
+offset_bottom = 27.0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="LatticeMenu" index="0"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LatticeMenu/HBox" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_NodePropertyLabel"
+text = "Slices:"
+
+[node name="Size" parent="LatticeMenu/HBox" index="1" instance=ExtResource("3_xfsm8")]
+unique_name_in_owner = true
+layout_mode = 2
+value = 1.0
 min_value = 1.0
 max_value = 8.0
-value = 1.0
+step = 1.0
+float_only = true
 
 [connection signal="gui_input" from="." to="." method="_on_LatticeEditor_gui_input"]
-[connection signal="value_changed" from="Size" to="." method="_on_size_value_changed"]
+[connection signal="value_changed" from="LatticeMenu/HBox/Size" to="." method="_on_size_value_changed"]
