@@ -81,8 +81,8 @@ material = SubResource("2")
 custom_minimum_size = Vector2(100, 100)
 offset_left = 8.0
 offset_top = -5.0
-offset_right = 508.0
-offset_bottom = 434.0
+offset_right = 129.0
+offset_bottom = 116.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
@@ -558,6 +558,9 @@ theme_override_constants/separation = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "The file-name to use. 
+
+You can use $project, $node and $idx to make the file-name auto-adjust."
 theme_override_font_sizes/font_size = 15
 text = "$project_$node"
 

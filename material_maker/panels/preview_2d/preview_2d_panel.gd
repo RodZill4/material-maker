@@ -157,7 +157,6 @@ func update_shader_options() -> void:
 func on_resized() -> void:
 	super.on_resized()
 	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
-	printt(name, get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
 	material.set_shader_parameter("preview_2d_center", center)
 	material.set_shader_parameter("preview_2d_scale", view_scale)
 	setup_controls("previous")
@@ -184,7 +183,6 @@ func _on_gui_input(event):
 				MOUSE_BUTTON_MIDDLE:
 					dragging = true
 				MOUSE_BUTTON_LEFT:
-					print(material.shader.code)
 					if event.shift_pressed:
 						dragging = true
 					elif event.is_command_or_control_pressed():
