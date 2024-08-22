@@ -11,6 +11,7 @@ signal unhandled_event(event : InputEvent)
 
 
 func _ready() -> void:
+	super()
 	%SettingsPanel.pixel_editor = self
 	
 	if get_parent().has_method("add_menu_bar"):
