@@ -1139,7 +1139,7 @@
 							"\t\tm_Scale: {x: 1, y: 1}",
 							"\t\tm_Offset: {x: 0, y: 0}",
 							"\tm_Floats:",
-							"\t- _BumpScale: 1",
+							"\t- _BumpScale: $(param:normal)",
 							"\t- _Cutoff: 0.5",
 							"\t- _DetailNormalMapScale: 1",
 							"\t- _DstBlend: 0",
