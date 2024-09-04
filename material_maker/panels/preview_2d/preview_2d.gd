@@ -76,10 +76,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 				source = MMGenBase.get_default_generated_shader()
 	else:
 		generator = null
-	#if get_node_or_null("ContextMenu") != null:
-		#var item_index = $ContextMenu.get_item_index(MENU_EXPORT_ANIMATION)
-		#if item_index != -1:
-			#$ContextMenu.set_item_disabled(item_index, !is_instance_valid(g))
+
 	generator_changed.emit()
 	update_material(source)
 
@@ -112,23 +109,23 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 func on_resized() -> void:
 	material.set_shader_parameter("preview_2d_size", size)
 
-func export_again() -> void:
-	if last_export_filename == "":
-		return
-	var filename = last_export_filename
-	var extension = filename.get_extension()
-	var regex : RegEx = RegEx.new()
-	regex.compile("(.*)_(\\d+)$")
-	var re_match : RegExMatch = regex.search(filename.get_basename())
-	if re_match != null:
-		var value = re_match.strings[2].to_int()
-		var value_length = re_match.strings[2].length()
-		while true:
-			value += 1
-			filename = "%s_%0*d.%s" % [ re_match.strings[1], value_length, value, extension ]
-			if ! FileAccess.file_exists(filename):
-				break
-	export_as_image_file(filename, last_export_size)
+#func export_again() -> void:
+	#if last_export_filename == "":
+		#return
+	#var filename = last_export_filename
+	#var extension = filename.get_extension()
+	#var regex : RegEx = RegEx.new()
+	#regex.compile("(.*)_(\\d+)$")
+	#var re_match : RegExMatch = regex.search(filename.get_basename())
+	#if re_match != null:
+		#var value = re_match.strings[2].to_int()
+		#var value_length = re_match.strings[2].length()
+		#while true:
+			#value += 1
+			#filename = "%s_%0*d.%s" % [ re_match.strings[1], value_length, value, extension ]
+			#if ! FileAccess.file_exists(filename):
+				#break
+	#export_as_image_file(filename, last_export_size)
 
 func export_animation() -> void:
 	if generator == null:
