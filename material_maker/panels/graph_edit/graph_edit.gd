@@ -5,10 +5,12 @@ class_name MMGraphEdit
 class Preview:
 	var generator
 	var output_index : int
+	var node : Node
 
-	func _init(g, i : int = 0):
+	func _init(g, i : int = 0, n = null):
 		generator = g
 		output_index = i
+		node = n
 
 
 # warning-ignore:unused_class_variable
@@ -872,17 +874,19 @@ func _on_GraphEdit_node_unselected(_node):
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
-func get_current_preview(slot : int = 0):
+
+func get_current_preview(slot : int = 0) -> Preview:
 	if locked_preview[slot] != null:
 		return locked_preview[slot]
 	return current_preview[slot]
+
 
 func set_current_preview(slot : int, node, output_index : int = 0, locked = false) -> void:
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
 	if is_instance_valid(node):
-		preview = Preview.new(node.generator, output_index)
+		preview = Preview.new(node.generator, output_index, node)
 	if locked:
 		if is_instance_valid(node) and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
@@ -893,8 +897,11 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	else:
 		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
+		locked_preview[slot] = null
 		current_preview[slot] = preview
-	emit_signal("preview_changed", self)
+	
+	preview_changed.emit(self)
+	
 	if is_instance_valid(node):
 		node.queue_redraw()
 	if old_preview != null or old_locked_preview != null:

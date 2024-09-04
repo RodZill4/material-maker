@@ -23,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="LatticeMenu" type="PanelContainer" parent="." index="1"]
 layout_mode = 0
@@ -32,6 +33,7 @@ theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="HBox" type="HBoxContainer" parent="LatticeMenu" index="0"]
 layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="Label" type="Label" parent="LatticeMenu/HBox" index="0"]
 layout_mode = 2

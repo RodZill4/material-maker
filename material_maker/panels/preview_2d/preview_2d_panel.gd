@@ -1,6 +1,16 @@
 extends "res://material_maker/panels/preview_2d/preview_2d.gd"
 
 
+enum Modes {CUSTOM_PREVIEW=0, PREVIEW_1=1, PREVIEW_2=2}
+var preview_mode := Modes.CUSTOM_PREVIEW:
+	set(preview):
+		preview_mode = preview
+		if preview_mode == Modes.PREVIEW_2:
+			config_var_suffix = "_2"
+		else:
+			config_var_suffix = ""
+			
+
 @export var config_var_suffix : String = ""
 
 @export_multiline var shader_accumulate : String = "" # (String, MULTILINE)
@@ -13,7 +23,7 @@ var view_scale : float = 1.2
 
 var view_mode : int = 2
 
-var current_postprocess_option = 0
+var current_postprocess_option := 0
 const POSTPROCESS_OPTIONS : Array = [
 	{ name="None", function="preview_2d(uv)" },
 	{ name="Lowres 32x32", function="preview_2d((floor(uv*32.0)+vec2(0.5))/32.0)" },
@@ -23,14 +33,15 @@ const POSTPROCESS_OPTIONS : Array = [
 	{ name="Lowres 512x512", function="preview_2d((floor(uv*512.0)+vec2(0.5))/512.0)" }
 ]
 
-const VIEW_EXTEND : int = 0
-const VIEW_REPEAT : int = 1
-const VIEW_CLAMP : int = 2
-
 
 func _ready():
-	update_shader_options()
+	clear()
 	reset_view()
+
+
+func clear() -> void:
+	set_generator(null)
+	%PreviewLocked.button_pressed = false
 
 
 func get_shader_custom_functions():
@@ -38,11 +49,13 @@ func get_shader_custom_functions():
 
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
-	#center = Vector2(0.5, 0.5)
-	#view_scale = 1.2
 	super.set_generator(g, o, force)
-	setup_controls("previous")
 	update_shader_options()
+	
+	if preview_mode != Modes.CUSTOM_PREVIEW:
+		var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
+		if current_graph:
+			%PreviewLocked.button_pressed = current_graph.locked_preview[preview_mode-1] != null
 
 
 func update_material(source):
@@ -52,12 +65,14 @@ func update_material(source):
 	material.set_shader_parameter("background_color_1", Color(0.4, 0.4, 0.4))
 	material.set_shader_parameter("background_color_2", Color(0.6, 0.6, 0.6))
 
+
 func set_preview_shader_parameter(parameter_name, value):
 	material.set_shader_parameter(parameter_name, value)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	super.on_dep_update_value(buffer_name, parameter_name, value)
 	return false
+
 
 var setup_controls_filter : String = ""
 func setup_controls(filter : String = "") -> void:
@@ -110,8 +125,12 @@ func setup_controls(filter : String = "") -> void:
 					$ComplexParameters.set_item_metadata(i, complex_param_defs[i])
 				$ComplexParameters.selected = 0
 				$ComplexParameters.visible = true
+	
 		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 			e.setup_control(generator, edited_parameter)
+	else:
+		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
+			e.setup_control(null, [])
 
 func _on_complex_parameters_item_selected(index):
 	var parameter = $ComplexParameters.get_item_metadata(index)
@@ -253,3 +272,18 @@ func get_post_processing() -> int:
 
 func _on_Preview2D_mouse_entered():
 	mm_globals.set_tip_text("#MMB: Pan, Mouse wheel: Zoom", 3)
+
+
+func _on_preview_locked_toggled(toggled_on: bool) -> void:
+	if preview_mode == Modes.CUSTOM_PREVIEW:
+		return
+	
+	var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
+	if current_graph.locked_preview[preview_mode-1] != null and toggled_on:
+		return
+	if current_graph.locked_preview[preview_mode-1] == null and not toggled_on:
+		return
+	var prev = current_graph.get_current_preview(preview_mode-1)
+	if not prev:
+		return
+	current_graph.set_current_preview(preview_mode-1, prev.node, prev.output_index, toggled_on)

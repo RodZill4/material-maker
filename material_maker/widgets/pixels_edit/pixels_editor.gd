@@ -38,6 +38,8 @@ func update_color_buttons() -> void:
 		while colors.get_child_count() < palette_size:
 			var color_button : ColorPickerButton = ColorPickerButton.new()
 			color_button.custom_minimum_size = Vector2i(25, 25)
+			color_button.theme_type_variation = "MM_PanelMenuButton"
+			color_button.tooltip_text = "Click to select; Right click to change color"
 			color_button.toggle_mode = true
 			color_button.button_mask = MOUSE_BUTTON_MASK_RIGHT
 			colors.add_child(color_button)
@@ -48,7 +50,7 @@ func update_color_buttons() -> void:
 		colors.get_child(ci).color = pixels.palette[ci]
 	if current_color < 0 or current_color >= palette_size:
 		current_color = 0
-		#colors.get_child(current_color).set_focus() = 
+	
 
 func set_current_color(c : int) -> void:
 	current_color = c

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=33 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
@@ -9,16 +9,18 @@
 [ext_resource type="PackedScene" uid="uid://b08bcbwwosrrk" path="res://material_maker/widgets/splines_edit/splines_editor.tscn" id="5_5hlfo"]
 [ext_resource type="PackedScene" uid="uid://b51634rcdiyr" path="res://material_maker/widgets/pixels_edit/pixels_editor.tscn" id="6_m4663"]
 [ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="7_u2w4r"]
-[ext_resource type="Texture2D" uid="uid://tfi3spyumjxt" path="res://material_maker/theme/dark/popupmenu_visibility_visible.png" id="11_l5q6b"]
+[ext_resource type="Texture2D" uid="uid://dnyj2y655qc1o" path="res://material_maker/theme/new_theme_icons.png" id="10_l6r53"]
 [ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="12_4017l"]
 [ext_resource type="Script" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="12_nrhap"]
-[ext_resource type="Texture2D" uid="uid://dw0lvt1ip8ifp" path="res://material_maker/theme/dark/popupmenu_submenu.png" id="12_wun6p"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
 [ext_resource type="Texture2D" uid="uid://tetgna5qjvkf" path="res://material_maker/theme/dark/tabs_increment.png" id="15_ikyi1"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
+[ext_resource type="Texture2D" uid="uid://chdyfit4rv7ss" path="res://material_maker/theme/dark/curve_preset_bounce.tres" id="20_t88qf"]
+[ext_resource type="Texture2D" uid="uid://cwoby8q4quah3" path="res://material_maker/theme/dark/curve_preset_bevel.tres" id="21_eie3q"]
 
-[sub_resource type="Shader" id="1"]
+[sub_resource type="Shader" id="Shader_0mwcg"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -47,7 +49,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource("1")
+shader = SubResource("Shader_0mwcg")
 shader_parameter/preview_2d_size = Vector2(100, 100)
 shader_parameter/preview_2d_scale = 1.655
 shader_parameter/preview_2d_center = Vector2(0.46, 0.56)
@@ -72,9 +74,33 @@ resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("5")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8pw4"]
+atlas = ExtResource("10_l6r53")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="InputEventKey" id="InputEventKey_qowqu"]
+device = -1
+command_or_control_autoremap = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_fwcfb"]
+events = [SubResource("InputEventKey_qowqu")]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_72vod"]
+atlas = ExtResource("10_l6r53")
+region = Rect2(16, 0, 16, 16)
+
 [sub_resource type="FontVariation" id="FontVariation_wkuuo"]
 base_font = ExtResource("18_kn37y")
 variation_transform = Transform2D(1, 0.22, 0, 1, 0, 0)
+
+[sub_resource type="InputEventKey" id="InputEventKey_rhw4u"]
+device = -1
+command_or_control_autoremap = true
+keycode = 69
+
+[sub_resource type="Shortcut" id="Shortcut_llf02"]
+events = [SubResource("InputEventKey_rhw4u")]
 
 [node name="Preview2D" instance=ExtResource("3")]
 material = SubResource("2")
@@ -392,16 +418,16 @@ theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainMenu" index="0"]
 layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
-custom_minimum_size = Vector2(25, 25)
+custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "View"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
-text = "View"
-icon = ExtResource("11_l5q6b")
+icon = SubResource("AtlasTexture_p8pw4")
 script = ExtResource("12_nrhap")
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
@@ -418,9 +444,11 @@ script = ExtResource("13_5w2hy")
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="0"]
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="0" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 layout_mode = 2
+shortcut_context = NodePath("../../../../../../../..")
+shortcut = SubResource("Shortcut_fwcfb")
 text = "Reset View"
 
 [node name="ViewModeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="1"]
@@ -499,14 +527,13 @@ custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
-custom_minimum_size = Vector2(25, 25)
+custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "Export"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
-text = "Export"
-icon = ExtResource("12_wun6p")
+icon = SubResource("AtlasTexture_72vod")
 script = ExtResource("12_nrhap")
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
@@ -614,6 +641,7 @@ text = "Export"
 [node name="Image" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="8"]
 unique_name_in_owner = true
 layout_mode = 2
+shortcut = SubResource("Shortcut_llf02")
 text = "Export as Image"
 alignment = 0
 
@@ -644,6 +672,17 @@ theme_override_colors/font_color = Color(0.52, 0.52, 0.52, 1)
 theme_override_fonts/font = SubResource("FontVariation_wkuuo")
 autowrap_mode = 1
 
+[node name="PreviewLocked" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Lock this preview"
+toggle_mode = true
+icon_alignment = 1
+script = ExtResource("17_07kc5")
+icon_normal = ExtResource("20_t88qf")
+icon_pressed = ExtResource("21_eie3q")
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="unhandled_event" from="PolygonEditor" to="." method="_on_gui_input"]
@@ -665,3 +704,4 @@ autowrap_mode = 1
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Animation" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_animation_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/TAA_Render" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_taa_render_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Reference" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_reference_pressed"]
+[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/PreviewLocked" to="." method="_on_preview_locked_toggled"]
