@@ -129,13 +129,18 @@ func setup_controls(filter : String = "") -> void:
 		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 			e.setup_control(generator, edited_parameter)
 	else:
+		for c in get_children():
+			if c.has_method("setup_control"):
+				c.setup_control(null, [])
 		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 			e.setup_control(null, [])
+
 
 func _on_complex_parameters_item_selected(index):
 	var parameter = $ComplexParameters.get_item_metadata(index)
 	for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 		e.setup_control(generator, [ parameter ])
+
 
 var center_transform : Transform2D = Transform2D(0, Vector2(0.0, 0.0))
 var local_rotate : float = 0.0
