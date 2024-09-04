@@ -151,7 +151,7 @@
     id="swatch4"
     inkscape:swatch="solid"
     inkscape:label="Main"
-    gradientTransform="matrix(9.5183323e-5,0,0,9.5183323e-5,107.25625,-2.6374849)">
+    gradientTransform="matrix(9.5183323,0,0,9.5183323,107.25625,-2.6374849)">
    <stop
      style="stop-color:#ffffff;stop-opacity:1;"
      offset="0"
@@ -392,7 +392,7 @@
     xlink:href="#swatch4"
     id="linearGradient177"
     gradientUnits="userSpaceOnUse"
-    gradientTransform="matrix(6.188056e-7,0,0,6.1625552e-7,1512.5427,968.23262)" />
+    gradientTransform="matrix(6.188056,0,0,6.1625552,1512.5427,968.23262)" />
   <inkscape:path-effect
     effect="fillet_chamfer"
     id="path-effect178"
@@ -414,19 +414,19 @@
     inkscape:collect="always"
     xlink:href="#swatch4"
     id="linearGradient175"
-    gradientTransform="matrix(6.188056e-7,0,0,6.1625552e-7,1488.8871,968.23243)"
+    gradientTransform="matrix(6.188056,0,0,6.1625552,1488.8871,968.23243)"
     gradientUnits="userSpaceOnUse" />
   <linearGradient
     inkscape:collect="always"
     xlink:href="#swatch4"
     id="linearGradient167"
-    gradientTransform="matrix(1.2627128e-4,0,0,1.2627128e-4,1490.3672,968.61522)"
+    gradientTransform="matrix(1.2627128,0,0,1.2627128,1490.3672,968.61522)"
     gradientUnits="userSpaceOnUse" />
   <linearGradient
     inkscape:collect="always"
     xlink:href="#swatch4"
     id="linearGradient174"
-    gradientTransform="matrix(2.338793e-6,0,0,2.3291547e-6,1490.2182,968.66566)"
+    gradientTransform="matrix(2.338793,0,0,2.3291547,1490.2182,968.66566)"
     gradientUnits="userSpaceOnUse" />
   <linearGradient
     inkscape:collect="always"
@@ -1103,7 +1103,7 @@
     inkscape:collect="always"
     xlink:href="#swatch25"
     id="linearGradient10"
-    gradientTransform="matrix(1.4615386e-6,0,0,1.4615386e-6,2404.7726,603.64007)"
+    gradientTransform="matrix(1.4615386,0,0,1.4615386,2404.7726,603.64007)"
     gradientUnits="userSpaceOnUse" />
   <linearGradient
     inkscape:collect="always"
@@ -1115,7 +1115,7 @@
     inkscape:collect="always"
     xlink:href="#swatch25"
     id="linearGradient13"
-    gradientTransform="matrix(1.2244925e-6,0,0,1.2244925e-6,2269.342,672.16621)"
+    gradientTransform="matrix(1.2244925,0,0,1.2244925,2269.342,672.16621)"
     gradientUnits="userSpaceOnUse" />
   <inkscape:path-effect
     effect="fillet_chamfer"
