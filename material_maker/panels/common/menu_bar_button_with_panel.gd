@@ -1,12 +1,14 @@
 extends Button
 
+@export var mm_icon := ""
+
 @onready var panel := get_child(0)
 
 var pinned := false
 var theme_arrow_icon: Texture2D
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(35, 25)
+	
 	toggle_mode = true
 	button_mask = MOUSE_BUTTON_MASK_LEFT | MOUSE_BUTTON_MASK_RIGHT
 	toggled.connect(_on_toggled)
@@ -14,13 +16,24 @@ func _ready() -> void:
 
 	panel.hide()
 	
-	theme_arrow_icon = get_theme_icon("arrow", "OptionButton")
+	
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		if mm_icon:
+			icon = get_theme_icon(mm_icon, "MM_Icons")
+			
+		theme_arrow_icon = get_theme_icon("arrow", "OptionButton")
+		custom_minimum_size = Vector2(35, 25) * mm_globals.ui_scale
+		queue_redraw()
 
 
 func _draw() -> void:
 	if pinned:
-		draw_circle(Vector2(size.x-2, 2), 4, get_theme_color("icon_pressed_color"))
-	draw_texture(theme_arrow_icon, Vector2(18, 5))
+		draw_circle(Vector2(size.x-2, 2), 4 * mm_globals.ui_scale, get_theme_color("icon_pressed_color"))
+	draw_texture(theme_arrow_icon, Vector2(18, 5) * mm_globals.ui_scale)
+
 
 func _on_toggled(pressed:bool) -> void:
 	panel.visible = pressed
@@ -31,6 +44,7 @@ func _on_toggled(pressed:bool) -> void:
 			panel._open()
 	else:
 		pinned = false
+
 
 func position_panel() -> void:
 	var at_position := global_position

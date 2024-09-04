@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=22 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="8"]
 [ext_resource type="Script" path="res://material_maker/console.gd" id="8_1tb00"]
 [ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
+[ext_resource type="Script" path="res://material_maker/widgets/button_with_icon.gd" id="9_bj0xb"]
 [ext_resource type="PackedScene" uid="uid://cp2mbbfmrv6sf" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dnttargjmhjh8" path="res://material_maker/tools/share/share_button.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
@@ -64,10 +65,6 @@ _data = {
 "show": SubResource("7")
 }
 
-[sub_resource type="AtlasTexture" id="8"]
-atlas = ExtResource("8")
-region = Rect2(96, 128, 16, 16)
-
 [sub_resource type="GDScript" id="9"]
 script/source = "extends HBoxContainer
 
@@ -96,6 +93,10 @@ func _on_Timer_timeout():
 			hint = \"The clipboard can be pasted into a graph view\\nand contains %d nodes and %d connections\" % [ parsed_data.graph.nodes.size(), parsed_data.graph.connections.size() ]
 	tooltip_text = hint
 "
+
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("8")
+region = Rect2(96, 128, 16, 16)
 
 [node name="MainWindow" type="PanelContainer" groups=["preview"]]
 anchors_preset = 15
@@ -210,12 +211,13 @@ libraries = {
 "": SubResource("AnimationLibrary_kxf7t")
 }
 
-[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox"]
+[node name="ConsoleButton" type="Button" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Show console"
-texture_normal = SubResource("8")
+script = ExtResource("9_bj0xb")
+mm_icon = "Console"
 
 [node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2

@@ -52,7 +52,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	super.set_generator(g, o, force)
 	update_shader_options()
 	
-	if preview_mode != Modes.CUSTOM_PREVIEW:
+	if preview_mode != Modes.CUSTOM_PREVIEW and is_inside_tree():
 		var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
 		if current_graph:
 			%PreviewLocked.button_pressed = current_graph.locked_preview[preview_mode-1] != null

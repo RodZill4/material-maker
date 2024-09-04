@@ -124,13 +124,14 @@ func update(at:Node=null) -> void:
 				continue
 			
 			var texture: AtlasTexture = get_icon(icon_name, type)
+			var texture_scale: float = texture.get_meta("scale", 1) * scale
 			
-			texture.atlas = get_dynamic_svg(path,  scale, icon_color_swaps)
+			texture.atlas = get_dynamic_svg(path,  texture_scale, icon_color_swaps)
 
 			var base_region: Rect2 = base_texture.region
-			texture.region.position = base_region.position * scale
+			texture.region.position = base_region.position * texture_scale
 			
-			texture.region.size  = base_region.size * scale
+			texture.region.size  = base_region.size * texture_scale
 			set_icon(icon_name, type, texture)
 	
 	emit_changed()
@@ -146,9 +147,9 @@ func get_dynamic_svg(image_path:String, image_scale:float, color_swaps : Array= 
 	var file_text := file.get_as_text()
 	file.close()
 	
-	##print(color_swaps)
-	var regex := RegEx.create_from_string(r"e-[86754]")
-	file_text = regex.sub(file_text, "", true)
+	###print(color_swaps)
+	#var regex := RegEx.create_from_string(r"(?<=\d)e-\d")
+	#file_text = regex.sub(file_text, "", true)
 	
 	for swap in color_swaps:
 		if swap == null:

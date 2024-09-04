@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=31 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
@@ -99,14 +99,6 @@ keycode = 69
 
 [sub_resource type="Shortcut" id="Shortcut_llf02"]
 events = [SubResource("InputEventKey_rhw4u")]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_khhtg"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(96, 80, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nstr1"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(80, 80, 16, 16)
 
 [node name="Preview2D" instance=ExtResource("3")]
 material = SubResource("2")
@@ -435,6 +427,7 @@ toggle_mode = true
 button_mask = 3
 icon = SubResource("AtlasTexture_p8pw4")
 script = ExtResource("12_nrhap")
+mm_icon = "View"
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
 visible = false
@@ -541,6 +534,7 @@ toggle_mode = true
 button_mask = 3
 icon = SubResource("AtlasTexture_72vod")
 script = ExtResource("12_nrhap")
+mm_icon = "Export"
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
 visible = false
@@ -686,8 +680,8 @@ tooltip_text = "Lock this preview"
 toggle_mode = true
 icon_alignment = 1
 script = ExtResource("17_07kc5")
-icon_normal = SubResource("AtlasTexture_khhtg")
-icon_pressed = SubResource("AtlasTexture_nstr1")
+mm_icon_normal = "Unlocked"
+mm_icon_pressed = "Locked"
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]

@@ -1,8 +1,8 @@
-[gd_resource type="Theme" load_steps=66 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=95 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
-[ext_resource type="Texture2D" uid="uid://dnyj2y655qc1o" path="res://material_maker/theme/new_theme_icons.png" id="2_b1usk"]
+[ext_resource type="Texture2D" uid="uid://dt7vewgd5yk0q" path="res://material_maker/theme/new_theme_icons_clean.svg" id="2_uo7ch"]
 [ext_resource type="Texture2D" uid="uid://c74jqqhkapvx0" path="res://material_maker/theme/dark/graphnode_close.png" id="3_6fij0"]
 [ext_resource type="Texture2D" uid="uid://cgxvaurldh6mq" path="res://material_maker/theme/dark/graphnode_port.png" id="4_kelfg"]
 [ext_resource type="Texture2D" uid="uid://c4k81poqyod3g" path="res://material_maker/theme/dark/graphnode_resizer.png" id="5_3hfqd"]
@@ -227,6 +227,126 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 corner_detail = 4
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wv1k3"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5mpy4"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yl83e"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ce5fg"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg25g"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5laiy"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxvq8"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7er1n"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6qxj"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqmkr"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(80, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qbea1"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3dq6o"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_458ks"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xo65"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yefe5"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lc86"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(64, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gh0i5"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ln55e"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qq8w0"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uoih8"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtive"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(80, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62pyv"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h625b"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujx26"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emila"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucdk6"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwma0"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ik36r"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 0, 16, 16)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqwm5"]
 content_margin_left = 10.0
 content_margin_top = 10.0
@@ -431,7 +551,7 @@ corner_radius_bottom_left = 4
 corner_detail = 4
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qrndi"]
-atlas = ExtResource("2_b1usk")
+atlas = ExtResource("2_uo7ch")
 region = Rect2(112, 16, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dscxc"]
@@ -511,6 +631,10 @@ border_color = Color(1, 1, 1, 1)
 corner_detail = 1
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7bw33"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oqo67"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ax2cv"]
 content_margin_left = 7.0
@@ -643,6 +767,34 @@ MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")
 MM_FlexibleTab/base_type = &"TabBar"
 MM_FlexibleTab/constants/separation = 3
+MM_Icons/icons/Buffer = SubResource("AtlasTexture_wv1k3")
+MM_Icons/icons/BufferPaused = SubResource("AtlasTexture_5mpy4")
+MM_Icons/icons/Console = SubResource("AtlasTexture_yl83e")
+MM_Icons/icons/Cross = SubResource("AtlasTexture_ce5fg")
+MM_Icons/icons/Dice = SubResource("AtlasTexture_wg25g")
+MM_Icons/icons/DiceLocked = SubResource("AtlasTexture_5laiy")
+MM_Icons/icons/Download = SubResource("AtlasTexture_kxvq8")
+MM_Icons/icons/Edit = SubResource("AtlasTexture_7er1n")
+MM_Icons/icons/Export = SubResource("AtlasTexture_c6qxj")
+MM_Icons/icons/Locked = SubResource("AtlasTexture_dqmkr")
+MM_Icons/icons/Login = SubResource("AtlasTexture_qbea1")
+MM_Icons/icons/Minimize = SubResource("AtlasTexture_3dq6o")
+MM_Icons/icons/Save = SubResource("AtlasTexture_458ks")
+MM_Icons/icons/Search = SubResource("AtlasTexture_8xo65")
+MM_Icons/icons/Section_3D = SubResource("AtlasTexture_yefe5")
+MM_Icons/icons/Section_Filter = SubResource("AtlasTexture_5lc86")
+MM_Icons/icons/Section_Miscellaneous = SubResource("AtlasTexture_gh0i5")
+MM_Icons/icons/Section_Noise = SubResource("AtlasTexture_ln55e")
+MM_Icons/icons/Section_Pattern = SubResource("AtlasTexture_qq8w0")
+MM_Icons/icons/Section_Simple = SubResource("AtlasTexture_uoih8")
+MM_Icons/icons/Section_Transform = SubResource("AtlasTexture_dtive")
+MM_Icons/icons/Section_Workflow = SubResource("AtlasTexture_62pyv")
+MM_Icons/icons/Select = SubResource("AtlasTexture_h625b")
+MM_Icons/icons/Settings = SubResource("AtlasTexture_ujx26")
+MM_Icons/icons/Undock = SubResource("AtlasTexture_emila")
+MM_Icons/icons/Unlocked = SubResource("AtlasTexture_ucdk6")
+MM_Icons/icons/Upload = SubResource("AtlasTexture_xwma0")
+MM_Icons/icons/View = SubResource("AtlasTexture_ik36r")
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
 MM_NodeCheckbox/base_type = &"Button"
@@ -730,6 +882,7 @@ ReroutePreview/styles/panel_selected = SubResource("StyleBoxFlat_kbm1t")
 ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_7bw33")
 ReroutePreview/styles/titlebar_selected = SubResource("StyleBoxEmpty_7bw33")
 TabBar/constants/h_separation = 6
+TabBar/icons/close = SubResource("AtlasTexture_oqo67")
 TabBar/styles/tab_focus = SubResource("StyleBoxFlat_ax2cv")
 TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_708uu")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
