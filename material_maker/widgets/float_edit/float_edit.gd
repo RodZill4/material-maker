@@ -2,7 +2,7 @@ extends Container
 
 var float_value: float = 0.5
 @export var value: float = 0.5 :
-	get: 
+	get:
 		return float_value
 	set(new_value):
 		set_value(new_value)

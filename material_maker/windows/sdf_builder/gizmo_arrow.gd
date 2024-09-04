@@ -40,12 +40,13 @@ func _ready():
 func set_material(m):
 	material = m
 	if is_inside_tree():
-		$Arrow.set_surface_override_material(0, material)
-		$Torus.set_surface_override_material(0, material)
+		for mesh in [$Arrow, $Arrow/Tip, $Torus]:
+			mesh.set_surface_override_material(0, material)
 
 func _on_TranslateArea_input_event(camera, event, _position, _normal, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		$Arrow.get_surface_override_material(0).set_shader_parameter("highlight", 0.1 if event.pressed else 0.0)
+		for mesh in [$Arrow, $Arrow/Tip]:
+			$Arrow.get_surface_override_material(0).set_shader_parameter("highlight", 0.1 if event.pressed else 0.0)
 	elif event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_LEFT:
 		var origin : Vector3 = global_transform * Vector3(0, 0, 0)
 		var end : Vector3 = global_transform * Vector3(1, 0, 0)

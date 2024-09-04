@@ -12,15 +12,15 @@ var cursor_index: int:
 		cursor_index = val
 
 # Reference to the GradientEdit
-var gradient_edit: Control = null
+var gradient_edit : Control = null
 
 # Depends on the height of the GradientEdit
-var width: float = 10
+var width : float = 10
 
 enum Modes {IDLE, SLIDING, PREVIEW}
-var mode := Modes.IDLE
+var mode : Modes = Modes.IDLE
 
-var slide_start_point := 0.0
+var slide_start_point : float = 0.0
 
 
 func _ready() -> void:
@@ -32,20 +32,20 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var HEIGHT := size.y
-	var WIDTH := size.y/2.0
+	var HEIGHT : float = size.y
+	var WIDTH : float = size.y/2.0
 	
 	# Define the HOUSE shape
 	var polygon := PackedVector2Array([Vector2(0, HEIGHT*0.75), Vector2(WIDTH*0.5, HEIGHT*0.5), Vector2(WIDTH, HEIGHT*0.75), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT), Vector2(0, HEIGHT*0.75)])
 	draw_colored_polygon(polygon, display_color)
 	
-	var outline_color := Color.BLACK if (display_color.v > 0.5 and display_color.s < 0.6) else Color.WHITE
+	var outline_color : Color = Color.BLACK if (display_color.get_luminance() > 0.5) else Color.WHITE
 	draw_polyline(polygon, outline_color)
 	draw_dashed_line(Vector2(WIDTH/2, 0), Vector2(WIDTH/2, HEIGHT*0.5), outline_color)
 	
 	# Draw the TRIANGLE (house roof) shape
 	if gradient_edit.active_cursor == cursor_index:
-		var active_polygon := PackedVector2Array([Vector2(0, HEIGHT*0.75), Vector2(WIDTH*0.5, HEIGHT*0.5), Vector2(WIDTH, HEIGHT*0.75), Vector2(0, HEIGHT*0.75)])
+		var active_polygon : PackedVector2Array = PackedVector2Array([Vector2(0, HEIGHT*0.75), Vector2(WIDTH*0.5, HEIGHT*0.5), Vector2(WIDTH, HEIGHT*0.75), Vector2(0, HEIGHT*0.75)])
 		draw_colored_polygon(active_polygon, outline_color)
 
 
