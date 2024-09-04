@@ -17,8 +17,6 @@
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
-[ext_resource type="Texture2D" uid="uid://chdyfit4rv7ss" path="res://material_maker/theme/dark/curve_preset_bounce.tres" id="20_t88qf"]
-[ext_resource type="Texture2D" uid="uid://cwoby8q4quah3" path="res://material_maker/theme/dark/curve_preset_bevel.tres" id="21_eie3q"]
 
 [sub_resource type="Shader" id="Shader_0mwcg"]
 resource_local_to_scene = true
@@ -101,6 +99,14 @@ keycode = 69
 
 [sub_resource type="Shortcut" id="Shortcut_llf02"]
 events = [SubResource("InputEventKey_rhw4u")]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khhtg"]
+atlas = ExtResource("10_l6r53")
+region = Rect2(96, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nstr1"]
+atlas = ExtResource("10_l6r53")
+region = Rect2(80, 80, 16, 16)
 
 [node name="Preview2D" instance=ExtResource("3")]
 material = SubResource("2")
@@ -680,8 +686,8 @@ tooltip_text = "Lock this preview"
 toggle_mode = true
 icon_alignment = 1
 script = ExtResource("17_07kc5")
-icon_normal = ExtResource("20_t88qf")
-icon_pressed = ExtResource("21_eie3q")
+icon_normal = SubResource("AtlasTexture_khhtg")
+icon_pressed = SubResource("AtlasTexture_nstr1")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
