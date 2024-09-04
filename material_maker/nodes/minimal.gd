@@ -9,7 +9,7 @@ var buttons : HBoxContainer = null
 var close_button : Button
 
 
-const CLOSE_ICON := "Cross"
+const CLOSE_ICON := "Node_Delete"
 
 
 func _ready() -> void:

@@ -11,7 +11,7 @@ var preview_timer : Timer = Timer.new()
 var generic_button : Button
 
 
-const GENERIC_ICON := "Generic"#= preload("res://material_maker/icons/add_generic.tres")
+const GENERIC_ICON := "Variadic"#= preload("res://material_maker/icons/add_generic.tres")
 
 
 func _ready() -> void:
@@ -582,8 +582,8 @@ func update_node() -> void:
 			hsizer.custom_minimum_size.y = item_min_height if !generator.minimized else 12 * mm_globals.ui_scale
 	# Edit buttons
 	if generator.is_editable():
-		for theme_stylebox in ["frame", "selected_frame"]:
-			remove_theme_stylebox_override(theme_stylebox)
+		#for theme_stylebox in ["frame", "selected_frame"]:
+			#remove_theme_stylebox_override(theme_stylebox)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")

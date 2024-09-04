@@ -13,8 +13,10 @@ offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
+focus_mode = 0
 theme_type_variation = &"MM_NodeButton"
 flat = true
+expand_icon = true
 script = ExtResource("1_f00x4")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

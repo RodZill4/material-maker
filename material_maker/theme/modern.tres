@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=95 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=98 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -230,10 +230,12 @@ corner_detail = 4
 [sub_resource type="AtlasTexture" id="AtlasTexture_wv1k3"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(0, 80, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5mpy4"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(16, 80, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yl83e"]
 atlas = ExtResource("2_uo7ch")
@@ -246,10 +248,12 @@ region = Rect2(48, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_wg25g"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(96, 64, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5laiy"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(112, 64, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kxvq8"]
 atlas = ExtResource("2_uo7ch")
@@ -263,6 +267,10 @@ region = Rect2(64, 0, 16, 16)
 atlas = ExtResource("2_uo7ch")
 region = Rect2(16, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jd0a"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 32, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqmkr"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(80, 80, 16, 16)
@@ -274,6 +282,12 @@ region = Rect2(32, 64, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_3dq6o"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(112, 48, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjtbp"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 0, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_458ks"]
 atlas = ExtResource("2_uo7ch")
@@ -342,6 +356,11 @@ region = Rect2(96, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_xwma0"]
 atlas = ExtResource("2_uo7ch")
 region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xv0q"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 80, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ik36r"]
 atlas = ExtResource("2_uo7ch")
@@ -776,9 +795,11 @@ MM_Icons/icons/DiceLocked = SubResource("AtlasTexture_5laiy")
 MM_Icons/icons/Download = SubResource("AtlasTexture_kxvq8")
 MM_Icons/icons/Edit = SubResource("AtlasTexture_7er1n")
 MM_Icons/icons/Export = SubResource("AtlasTexture_c6qxj")
+MM_Icons/icons/Folder = SubResource("AtlasTexture_2jd0a")
 MM_Icons/icons/Locked = SubResource("AtlasTexture_dqmkr")
 MM_Icons/icons/Login = SubResource("AtlasTexture_qbea1")
 MM_Icons/icons/Minimize = SubResource("AtlasTexture_3dq6o")
+MM_Icons/icons/Node_Delete = SubResource("AtlasTexture_yjtbp")
 MM_Icons/icons/Save = SubResource("AtlasTexture_458ks")
 MM_Icons/icons/Search = SubResource("AtlasTexture_8xo65")
 MM_Icons/icons/Section_3D = SubResource("AtlasTexture_yefe5")
@@ -794,6 +815,7 @@ MM_Icons/icons/Settings = SubResource("AtlasTexture_ujx26")
 MM_Icons/icons/Undock = SubResource("AtlasTexture_emila")
 MM_Icons/icons/Unlocked = SubResource("AtlasTexture_ucdk6")
 MM_Icons/icons/Upload = SubResource("AtlasTexture_xwma0")
+MM_Icons/icons/Variadic = SubResource("AtlasTexture_2xv0q")
 MM_Icons/icons/View = SubResource("AtlasTexture_ik36r")
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")

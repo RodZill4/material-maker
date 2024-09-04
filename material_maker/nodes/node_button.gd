@@ -13,6 +13,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
 		if mm_icon:
 			icon = get_theme_icon(mm_icon, "MM_Icons")
+			custom_minimum_size = Vector2(25, 25) * mm_globals.ui_scale
 
 
 func _on_gui_input(event):
