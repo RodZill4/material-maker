@@ -143,11 +143,12 @@ func update(at:Node=null) -> void:
 
 
 func get_dynamic_svg(image_path:String, image_scale:float, color_swaps : Array= []) -> ImageTexture:
+	if FileAccess.file_exists(image_path.trim_suffix(".svg")+"_export.svg"):
+		image_path = image_path.trim_suffix(".svg")+"_export.svg"
 	var file := FileAccess.open(image_path, FileAccess.READ)
 	var file_text := file.get_as_text()
 	file.close()
 	
-	###print(color_swaps)
 	#var regex := RegEx.create_from_string(r"(?<=\d)e-\d")
 	#file_text = regex.sub(file_text, "", true)
 	
