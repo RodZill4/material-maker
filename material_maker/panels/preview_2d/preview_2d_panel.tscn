@@ -533,6 +533,7 @@ custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "Export"

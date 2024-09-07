@@ -42,6 +42,9 @@ func _ready():
 func clear() -> void:
 	set_generator(null)
 	%PreviewLocked.button_pressed = false
+	
+	%PreviewLocked.visible = preview_mode != Modes.CUSTOM_PREVIEW
+	%ExportMenu.visible = preview_mode != Modes.CUSTOM_PREVIEW
 
 
 func get_shader_custom_functions():
