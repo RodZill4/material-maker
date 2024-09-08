@@ -101,8 +101,10 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	set_preview_shader_parameter(parameter_name, value)
 	return false
 
+
 func on_resized() -> void:
 	material.set_shader_parameter("preview_2d_size", size)
+
 
 func export_animation() -> void:
 	if generator == null:
@@ -112,6 +114,7 @@ func export_animation() -> void:
 	window.set_source(generator, output)
 	window.exclusive = true
 	window.popup_centered()#e(get_window(), Rect2(get_window().size())
+
 
 func export_taa() -> void:
 	if generator == null:
@@ -140,6 +143,7 @@ func create_image(renderer_function : String, params : Array, image_size : int) 
 	renderer = await renderer.render_material(self, tmp_material, image_size, source.output_type != "rgba")
 	renderer.callv(renderer_function, params)
 	renderer.release(self)
+
 
 func export_as_image_file(file_name : String, image_size : int) -> void:
 	mm_globals.config.set_value("path", "save_preview", file_name.get_base_dir())

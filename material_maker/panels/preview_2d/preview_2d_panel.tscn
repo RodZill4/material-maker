@@ -14,7 +14,6 @@
 [ext_resource type="Script" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="12_nrhap"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="14_qr76f"]
-[ext_resource type="Texture2D" uid="uid://tetgna5qjvkf" path="res://material_maker/theme/dark/tabs_increment.png" id="15_ikyi1"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
@@ -88,6 +87,10 @@ events = [SubResource("InputEventKey_qowqu")]
 [sub_resource type="AtlasTexture" id="AtlasTexture_72vod"]
 atlas = ExtResource("10_l6r53")
 region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtqjj"]
+atlas = ExtResource("10_l6r53")
+region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="FontVariation" id="FontVariation_wkuuo"]
 base_font = ExtResource("18_kn37y")
@@ -430,6 +433,7 @@ icon = SubResource("AtlasTexture_p8pw4")
 script = ExtResource("12_nrhap")
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
+visible = false
 top_level = true
 layout_mode = 0
 offset_left = -53.0
@@ -554,8 +558,8 @@ icon = SubResource("AtlasTexture_72vod")
 script = ExtResource("12_nrhap")
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
-visible = false
 top_level = true
+custom_minimum_size = Vector2(320, 0)
 layout_mode = 0
 offset_left = -74.0
 offset_top = 36.0
@@ -587,7 +591,7 @@ theme_override_font_sizes/font_size = 15
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
-icon = ExtResource("15_ikyi1")
+icon = SubResource("AtlasTexture_mtqjj")
 icon_alignment = 1
 
 [node name="ExportFileLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="2"]
@@ -634,7 +638,7 @@ text = "Resolution"
 unique_name_in_owner = true
 layout_mode = 2
 selected = 4
-item_count = 8
+item_count = 9
 popup/item_0/text = "64x64"
 popup/item_1/text = "128x128"
 popup/item_1/id = 1
@@ -650,38 +654,61 @@ popup/item_6/text = "4048x2048"
 popup/item_6/id = 6
 popup/item_7/text = "8192x8192"
 popup/item_7/id = 7
+popup/item_8/text = "Custom Resolution"
+popup/item_8/id = 8
 
-[node name="ExportLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="7"]
+[node name="CustomResolutionSection" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="7"]
+unique_name_in_owner = true
+layout_mode = 2
+vertical = true
+
+[node name="CustomResolutionLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/CustomResolutionSection" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Custom Resolution"
+
+[node name="CustomResolution" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/CustomResolutionSection" index="1" instance=ExtResource("14_qr76f")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Width"
+value = 512.0
+min_value = 16.0
+max_value = 2048.0
+step = 1.0
+float_only = true
+
+[node name="ExportLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="8"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Export"
 
-[node name="Image" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="8"]
+[node name="Image" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="9"]
 unique_name_in_owner = true
 layout_mode = 2
 shortcut = SubResource("Shortcut_llf02")
 text = "Export as Image"
 alignment = 0
 
-[node name="Animation" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="9"]
+[node name="Animation" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="10"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Export as Animation"
 alignment = 0
 
-[node name="TAA_Render" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="10"]
+[node name="TAA_Render" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="11"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Export as TAA Render"
 alignment = 0
 
-[node name="Reference" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="11"]
+[node name="Reference" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="12"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Export to Reference"
 alignment = 0
 
-[node name="ExportNotificationLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="12"]
+[node name="ExportNotificationLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="13"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

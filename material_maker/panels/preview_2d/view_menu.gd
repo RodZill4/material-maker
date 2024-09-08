@@ -1,15 +1,17 @@
 extends PanelContainer
 
-var GUIDES_CUSTOM_GRID := 7
+const GUIDES_CUSTOM_GRID := 7
 
 func _open() -> void:
 	%ViewMode.selected = owner.get_view_mode()
 	%PostProcessing.selected = owner.get_post_processing()
+	
 	%Guides.selected = owner.get_node("Guides").style
 	if owner.get_node("Guides").style == 1000:
 		%Guides.selected = GUIDES_CUSTOM_GRID
 	%CustomGridSize.visible = %Guides.selected == GUIDES_CUSTOM_GRID
 	%CustomGridSizeLabel.visible = %Guides.selected == GUIDES_CUSTOM_GRID
+	
 	%GuidesColor.color = owner.get_node("Guides").color
 
 

@@ -8,11 +8,14 @@ var export_settings := {
 	#"export_type" : "preview$SUFFIX_last_export_type",
 	}
 
+const RESOLUTION_CUSTOM := 8
+
 func _ready() -> void:
 	for val in export_settings.values():
 		val = val.replace("$SUFFIX", owner.config_var_suffix)
 	
 	owner.generator_changed.connect(update)
+
 
 func _open() -> void:
 	if mm_globals.has_config(export_settings.path):
@@ -24,6 +27,7 @@ func _open() -> void:
 	
 	if mm_globals.has_config(export_settings.resolution):
 		%Resolution.selected = mm_globals.get_config(export_settings.resolution)
+	%CustomResolutionSection.visible = %Resolution.selected == RESOLUTION_CUSTOM
 	
 	if mm_globals.has_config(export_settings.resolution):
 		%Resolution.selected = mm_globals.get_config(export_settings.resolution)
@@ -32,6 +36,8 @@ func _open() -> void:
 		%FileType.selected = mm_globals.get_config(export_settings.extension)
 	
 	export_notification("")
+	
+	size = Vector2()
 
 
 func update() -> void:
@@ -77,6 +83,9 @@ func _on_file_type_item_selected(index: int) -> void:
 
 func _on_resolution_item_selected(index: int) -> void:
 	mm_globals.set_config(export_settings.resolution, index)
+	%CustomResolutionSection.visible = index == RESOLUTION_CUSTOM
+	if index != RESOLUTION_CUSTOM:
+		%CustomResolution.set_value(64 << index)
 
 
 func _on_image_pressed() -> void:
@@ -110,7 +119,10 @@ func _on_image_pressed() -> void:
 	
 	
 	if path:
-		owner.export_as_image_file(path, 64 << %Resolution.selected)
+		if %Resolution.selected == RESOLUTION_CUSTOM:
+			owner.export_as_image_file(path, %CustomResolution.get_value())
+		else:
+			owner.export_as_image_file(path, 64 << %Resolution.selected)
 		export_notification("Exported to " + path)
 		await get_tree().create_timer(0.5).timeout
 		update()
