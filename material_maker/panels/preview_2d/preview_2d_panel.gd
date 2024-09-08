@@ -109,31 +109,32 @@ func setup_controls(filter : String = "") -> void:
 		var edited_parameter : Array = []
 		match complex_param_defs.size():
 			0:
-				$ComplexParameters.clear()
-				$ComplexParameters.visible = false
+				%ComplexParameters.clear()
+				%ComplexParameters.visible = false
 			1:
 				edited_parameter = [complex_param_defs[0]]
-				$ComplexParameters.clear()
-				$ComplexParameters.visible = false
+				%ComplexParameters.clear()
+				%ComplexParameters.visible = false
 			_:
-				if $ComplexParameters.item_count == complex_param_defs.size():
+				if %ComplexParameters.item_count == complex_param_defs.size():
 					var changed : bool = false
-					for i in $ComplexParameters.item_count:
-						if $ComplexParameters.get_item_text(i) != complex_param_defs[i].name:
+					for i in %ComplexParameters.item_count:
+						if %ComplexParameters.get_item_text(i) != complex_param_defs[i].name:
 							changed = true
 					if not changed:
 						return
 				edited_parameter = [complex_param_defs[0]]
-				$ComplexParameters.clear()
+				%ComplexParameters.clear()
 				for i in range(complex_param_defs.size()):
-					$ComplexParameters.add_item(complex_param_defs[i].name, i)
-					$ComplexParameters.set_item_metadata(i, complex_param_defs[i])
-				$ComplexParameters.selected = 0
-				$ComplexParameters.visible = true
+					%ComplexParameters.add_item(complex_param_defs[i].name, i)
+					%ComplexParameters.set_item_metadata(i, complex_param_defs[i])
+				%ComplexParameters.selected = 0
+				%ComplexParameters.visible = true
 	
 		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 			e.setup_control(generator, edited_parameter)
 	else:
+		%ComplexParameters.visible = false
 		for c in get_children():
 			if c.has_method("setup_control"):
 				c.setup_control(null, [])
@@ -142,7 +143,7 @@ func setup_controls(filter : String = "") -> void:
 
 
 func _on_complex_parameters_item_selected(index):
-	var parameter = $ComplexParameters.get_item_metadata(index)
+	var parameter = %ComplexParameters.get_item_metadata(index)
 	for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 		e.setup_control(generator, [ parameter ])
 

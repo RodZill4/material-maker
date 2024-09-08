@@ -26,8 +26,8 @@ alpha = 1.0
 
 [node name="PixelMenu" type="PanelContainer" parent="." index="0"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 20.0
+offset_right = 52.0
+offset_bottom = 25.0
 theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="UI" type="HBoxContainer" parent="PixelMenu" index="0"]
@@ -37,6 +37,7 @@ theme_type_variation = &"MM_PanelMenuBar"
 [node name="PixelSettings" type="Button" parent="PixelMenu/UI" index="0"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
+size_flags_vertical = 0
 tooltip_text = "Pixel Settings"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
@@ -45,6 +46,7 @@ script = ExtResource("4_xknkb")
 
 [node name="SettingsPanel" type="PanelContainer" parent="PixelMenu/UI/PixelSettings" index="0"]
 unique_name_in_owner = true
+top_level = true
 layout_mode = 2
 offset_left = 10.0
 offset_top = 39.0
@@ -97,9 +99,10 @@ float_only = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSeparator"
 
-[node name="Colors" type="BoxContainer" parent="PixelMenu/UI" index="2"]
+[node name="Colors" type="GridContainer" parent="PixelMenu/UI" index="2"]
 unique_name_in_owner = true
 layout_mode = 2
+columns = 8
 
 [connection signal="gui_input" from="." to="." method="_on_PixelsEditor_gui_input"]
 [connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box/Width" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_width_value_changed"]

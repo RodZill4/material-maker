@@ -393,17 +393,7 @@ material = SubResource("6")
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ComplexParameters" type="OptionButton" parent="." index="20"]
-visible = false
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -32.0
-offset_bottom = 20.0
-grow_horizontal = 0
-
-[node name="MenuBar" type="ScrollContainer" parent="." index="21"]
+[node name="MenuBar" type="ScrollContainer" parent="." index="20"]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 1
@@ -415,11 +405,13 @@ theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 
-[node name="HBox" type="HBoxContainer" parent="MenuBar" index="0"]
+[node name="HBox" type="HFlowContainer" parent="MenuBar" index="0"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" index="0"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainMenu" index="0"]
@@ -437,7 +429,7 @@ icon = SubResource("AtlasTexture_p8pw4")
 script = ExtResource("12_nrhap")
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
-visible = false
+top_level = true
 layout_mode = 0
 offset_left = -53.0
 offset_top = 34.0
@@ -545,6 +537,7 @@ script = ExtResource("12_nrhap")
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
 visible = false
+top_level = true
 layout_mode = 0
 offset_left = -74.0
 offset_top = 36.0
@@ -690,13 +683,17 @@ script = ExtResource("17_07kc5")
 icon_normal = SubResource("AtlasTexture_khhtg")
 icon_pressed = SubResource("AtlasTexture_nstr1")
 
+[node name="ComplexParameters" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox" index="3"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="unhandled_event" from="PolygonEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
-[connection signal="item_selected" from="ComplexParameters" to="." method="_on_complex_parameters_item_selected"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_reset_view_button_pressed"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ViewMode" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_view_mode_item_selected"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/PostProcessing" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_post_processing_item_selected"]
@@ -712,3 +709,4 @@ icon_pressed = SubResource("AtlasTexture_nstr1")
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/TAA_Render" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_taa_render_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Reference" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_reference_pressed"]
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/PreviewLocked" to="." method="_on_preview_locked_toggled"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ComplexParameters" to="." method="_on_complex_parameters_item_selected"]
