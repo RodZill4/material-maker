@@ -43,7 +43,7 @@ func clear() -> void:
 	set_generator(null)
 	%PreviewLocked.button_pressed = false
 	
-	%PreviewLocked.visible = preview_mode != Modes.CUSTOM_PREVIEW
+	%PreviewLocked.visible = false
 	%ExportMenu.visible = preview_mode != Modes.CUSTOM_PREVIEW
 
 
@@ -54,6 +54,8 @@ func get_shader_custom_functions():
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	super.set_generator(g, o, force)
 	update_shader_options()
+	
+	%PreviewLocked.visible = g != null and preview_mode != Modes.CUSTOM_PREVIEW
 	
 	if preview_mode != Modes.CUSTOM_PREVIEW:
 		var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
@@ -294,4 +296,4 @@ func _on_preview_locked_toggled(toggled_on: bool) -> void:
 	var prev = current_graph.get_current_preview(preview_mode-1)
 	if not prev:
 		return
-	current_graph.set_current_preview(preview_mode-1, prev.node, prev.output_index, toggled_on)
+	current_graph.set_current_preview(preview_mode-1, prev.node, prev.output_index, toggled_on, not toggled_on)
