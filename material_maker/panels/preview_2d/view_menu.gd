@@ -13,6 +13,8 @@ func _open() -> void:
 	%CustomGridSizeLabel.visible = %Guides.selected == GUIDES_CUSTOM_GRID
 	
 	%GuidesColor.color = owner.get_node("Guides").color
+	
+	size = Vector2()
 
 
 func _on_reset_view_button_pressed() -> void:
