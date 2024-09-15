@@ -22,6 +22,7 @@ func _draw() -> void:
 		draw_circle(Vector2(size.x-2, 2), 4, get_theme_color("icon_pressed_color"))
 	draw_texture(theme_arrow_icon, Vector2(18, 5))
 
+
 func _on_toggled(pressed:bool) -> void:
 	panel.visible = pressed
 	
@@ -32,6 +33,7 @@ func _on_toggled(pressed:bool) -> void:
 	else:
 		pinned = false
 
+
 func position_panel() -> void:
 	var at_position := global_position
 	at_position.x += size.x/2 - panel.size.x/2
@@ -41,6 +43,9 @@ func position_panel() -> void:
 		
 
 func _input(event:InputEvent) -> void:
+	if shortcut_context and shortcut_context.get_global_rect().has_point(get_global_mouse_position()) and event.is_pressed():
+		propagate_shortcuts(get_child(0), event)
+	
 	if not panel.visible:
 		return
 	
@@ -48,6 +53,24 @@ func _input(event:InputEvent) -> void:
 		var node := get_viewport().gui_get_hovered_control()
 		if node != self and not is_ancestor_of(node) and (not pinned or (node and node.script == self.script)):
 			button_pressed = false
+
+
+func propagate_shortcuts(node:Control, event:InputEvent) -> void:
+	for child in node.get_children():
+		if not child is Control or child.is_visible_in_tree():
+			continue
+		if child is Button:
+			#print(child)
+			if child.shortcut and child.shortcut.matches_event(event):
+				if child.toggle_mode:
+					child.button_pressed = not child.button_pressed
+					child.toggled.emit(child.button_pressed)
+				if child is MM_OptionEdit:
+					child.roll()
+				else:
+					child.pressed.emit()
+
+		propagate_shortcuts(child, event)
 
 
 func _gui_input(event: InputEvent) -> void:
