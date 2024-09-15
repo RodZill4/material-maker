@@ -422,10 +422,11 @@ theme_type_variation = &"MM_PanelMenuBar"
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
+[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0" node_paths=PackedStringArray("shortcut_context")]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "View"
+shortcut_context = NodePath("../../../../..")
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
@@ -433,7 +434,6 @@ icon = SubResource("AtlasTexture_p8pw4")
 script = ExtResource("12_nrhap")
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
-visible = false
 top_level = true
 layout_mode = 0
 offset_left = -53.0
@@ -443,23 +443,25 @@ offset_bottom = 115.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("13_5w2hy")
 
-[node name="VBox" type="VBoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" index="0"]
+[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" index="0"]
 layout_mode = 2
-theme_override_constants/separation = 2
 
-[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="0" node_paths=PackedStringArray("shortcut_context")]
+[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="0"]
+visible = false
+layout_mode = 2
+
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="1"]
 unique_name_in_owner = true
 layout_mode = 2
-shortcut_context = NodePath("../../../../../../../..")
 shortcut = SubResource("Shortcut_fwcfb")
-text = "Reset View"
+text = "Center View"
 
-[node name="ViewModeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="1"]
+[node name="ViewModeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="2"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "View Mode"
 
-[node name="ViewMode" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="2" instance=ExtResource("12_4017l")]
+[node name="ViewMode" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="3" instance=ExtResource("12_4017l")]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
@@ -474,12 +476,12 @@ popup/item_3/id = 3
 popup/item_4/text = "Remporal AA 2.2"
 popup/item_4/id = 4
 
-[node name="PostProcessingLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="3"]
+[node name="PostProcessingLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="4"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Post Processing"
 
-[node name="PostProcessing" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="4" instance=ExtResource("12_4017l")]
+[node name="PostProcessing" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="5" instance=ExtResource("12_4017l")]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
@@ -496,12 +498,12 @@ popup/item_4/id = 4
 popup/item_5/text = "Lowres 512x512"
 popup/item_5/id = 5
 
-[node name="GuidesLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="5"]
+[node name="GuidesLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="6"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Guides"
 
-[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="6"]
+[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="7"]
 layout_mode = 2
 
 [node name="Guides" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer" index="0" instance=ExtResource("12_4017l")]
@@ -531,13 +533,13 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 
-[node name="CustomGridSizeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="7"]
+[node name="CustomGridSizeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="8"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Custom Grid Size"
 
-[node name="CustomGridSize" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="8" instance=ExtResource("14_qr76f")]
+[node name="CustomGridSize" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="9" instance=ExtResource("14_qr76f")]
 unique_name_in_owner = true
 layout_mode = 2
 value = 10.0
@@ -546,11 +548,12 @@ max_value = 32.0
 step = 1.0
 float_only = true
 
-[node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
+[node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "Export"
+shortcut_context = NodePath("../../../../..")
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
@@ -558,6 +561,7 @@ icon = SubResource("AtlasTexture_72vod")
 script = ExtResource("12_nrhap")
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
+visible = false
 top_level = true
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 0
