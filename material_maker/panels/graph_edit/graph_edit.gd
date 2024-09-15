@@ -866,7 +866,10 @@ func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 				if n.generator == current_preview[0].generator:
 					return
 		if node.get_output_port_count():
-			set_current_preview(0, node)
+			if Input.is_key_pressed(KEY_SHIFT):
+				set_current_preview(1, node)
+			else:
+				set_current_preview(0, node)
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
