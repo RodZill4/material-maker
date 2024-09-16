@@ -47,6 +47,7 @@ func update() -> void:
 	var file_result := interpret_file_name(%ExportFile.text)
 	%ExportFileResultLabel.text = file_result
 	%ExportFileResultLabel.visible = not %ExportFile.text.is_empty() and %ExportFile.text.count("$") != file_result.count("$")
+	size = Vector2()
 
 
 func _on_export_folder_text_changed(new_text: String) -> void:
@@ -92,14 +93,20 @@ func _on_image_pressed() -> void:
 	var path: String = %ExportFolder.text
 	var file_name: String = %ExportFile.text
 	
+	
+	if file_name:
+		file_name = interpret_file_name(file_name, path)
+	
 	if path.is_empty():
 		var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 		
 		if not file_name.is_empty():
 			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
+			file_dialog.title = 'Save Image "'+file_name+'"'
 		else:
 			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+			file_dialog.title = 'Save Image'
 			file_dialog.add_filter("*.png; PNG image file")
 			file_dialog.add_filter("*.exr; EXR image file")
 		
@@ -113,8 +120,6 @@ func _on_image_pressed() -> void:
 	
 	
 	if file_name:
-		file_name = interpret_file_name(file_name, path)
-		
 		path = path.path_join(file_name)
 	
 	
