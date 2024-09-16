@@ -60,8 +60,8 @@ func propagate_shortcuts(node:Control, event:InputEvent) -> void:
 		if not child is Control or child.is_visible_in_tree():
 			continue
 		if child is Button:
-			#print(child)
 			if child.shortcut and child.shortcut.matches_event(event):
+				accept_event()
 				if child.toggle_mode:
 					child.button_pressed = not child.button_pressed
 					child.toggled.emit(child.button_pressed)
