@@ -115,7 +115,15 @@ func do_update_shaders() -> void:
 		var shader_compute : MMShaderCompute = shader_computes[i]
 		var buffer_name : String = buffer_names[i]
 		if i == 1 and get_parameter("autostop"):
-			await shader_compute.set_shader_from_shadercode(sources[i], f32, texture)
+
+			var shader_template : String = load("res://addons/material_maker/engine/nodes/iterate_buffer_compute.tres").text
+			var output_texture_type : int = 0 if (sources[i].output_type == "f") else 1
+			if f32:
+				output_texture_type |= 2
+			var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
+			var extra_parameters : Array[Dictionary] = [{name="mm_compare", type="sampler2D", value=texture}]
+			var extra_output_parameters : Array[Dictionary] = [{name="mm_highest_diff", type="int"}]
+			await shader_compute.compute_shader.set_shader_from_shadercode_ext(shader_template, sources[i], output_textures, extra_parameters, false, extra_output_parameters)
 		else:
 			await shader_compute.set_shader_from_shadercode(sources[i], f32)
 		mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
@@ -185,7 +193,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		if size < 4:
 			size = 4
 	
-	var status : bool = await shader_compute.render(texture, size)
+	var output_parameter_values : Dictionary = { mm_highest_diff = 0 }
+	var status : bool = await shader_compute.compute_shader.render(texture, Vector2i(size, size), output_parameter_values)
 	if not status:
 		print("Error while rendering %s" % buffer_name)
 	
@@ -199,8 +208,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	#print("iteration %d" % current_iteration)
 	
 	# Calculate iteration index
-	if autostop and shader_compute.get_difference() == 0:
-		#print("autostop at %d" % (current_iteration))
+	if autostop and output_parameter_values.has("mm_highest_diff") and output_parameter_values["mm_highest_diff"] == 0:
+		print("autostop at %d" % (current_iteration))
 		set_current_iteration(iterations+1)
 	else:
 		set_current_iteration(current_iteration+1)
