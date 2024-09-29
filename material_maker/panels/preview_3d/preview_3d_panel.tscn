@@ -1,8 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cj6b1r8b6jel3"]
+[gd_scene load_steps=25 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
 [ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dnyj2y655qc1o" path="res://material_maker/theme/new_theme_icons.png" id="4_1y5jf"]
+[ext_resource type="Script" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="5_3wjmy"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_3d/model_menu.gd" id="6_ihg7a"]
+[ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="6_is3yl"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="7_5sf8s"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type spatial;
@@ -28,6 +33,46 @@ shader_parameter/aabb_size = null
 
 [sub_resource type="World3D" id="World3D_3xlky"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3er5j"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(64, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icdbm"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(64, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvufd"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(80, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2v0k"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(80, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2aqpg"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uda2n"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(112, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0phwj"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(80, 64, 16, 16)
+
+[sub_resource type="InputEventKey" id="InputEventKey_qowqu"]
+device = -1
+command_or_control_autoremap = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_gj738"]
+events = [SubResource("InputEventKey_qowqu")]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u54hy"]
+atlas = ExtResource("4_1y5jf")
+region = Rect2(64, 0, 16, 16)
+
 [node name="Preview3D" instance=ExtResource("1")]
 custom_minimum_size = Vector2(250, 200)
 offset_left = 0.0
@@ -48,16 +93,308 @@ mouse_filter = 2
 expand_mode = 1
 
 [node name="UI" type="PanelContainer" parent="." index="2"]
+visible = false
 layout_mode = 2
 
 [node name="Preview3DUI" parent="UI" index="0" instance=ExtResource("2")]
 layout_mode = 2
 
 [node name="PopupMenu" type="PopupMenu" parent="." index="3"]
+size = Vector2i(215, 100)
 item_count = 2
 item_0/text = "Reset center"
 item_1/text = "Center on clicked surface"
 item_1/id = 1
 
+[node name="MenuBar" type="ScrollContainer" parent="." index="4"]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBackground"
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="HBox" type="HFlowContainer" parent="MenuBar" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" index="0"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainMenu" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="ModelMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Model"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+icon = SubResource("AtlasTexture_3er5j")
+script = ExtResource("5_3wjmy")
+
+[node name="ModelMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu" index="0"]
+top_level = true
+layout_mode = 0
+offset_left = -53.0
+offset_top = 34.0
+offset_right = 92.0
+offset_bottom = 115.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("6_ihg7a")
+
+[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" index="0"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="0"]
+visible = false
+layout_mode = 2
+
+[node name="ModelLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="1"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Model"
+
+[node name="Model" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="2" instance=ExtResource("6_is3yl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 6
+popup/item_0/text = "Cube"
+popup/item_0/icon = SubResource("AtlasTexture_3er5j")
+popup/item_1/text = "Cylinder"
+popup/item_1/icon = SubResource("AtlasTexture_icdbm")
+popup/item_1/id = 1
+popup/item_2/text = "Sphere"
+popup/item_2/icon = SubResource("AtlasTexture_lvufd")
+popup/item_2/id = 2
+popup/item_3/text = "Prism"
+popup/item_3/icon = SubResource("AtlasTexture_lvufd")
+popup/item_3/id = 3
+popup/item_4/text = "Plane"
+popup/item_4/icon = SubResource("AtlasTexture_f2v0k")
+popup/item_4/id = 4
+popup/item_5/text = "Custom"
+popup/item_5/icon = SubResource("AtlasTexture_2aqpg")
+popup/item_5/id = 5
+
+[node name="MeshConfigHeader" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="3"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"MM_PanelMenuSubPanelSection"
+toggle_mode = true
+text = "Mesh Configuration"
+icon = SubResource("AtlasTexture_uda2n")
+flat = true
+icon_alignment = 2
+
+[node name="MeshConfigSection" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="4"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+vertical = true
+
+[node name="UVScaleLabel2" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/MeshConfigSection" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "UV Scale"
+
+[node name="UV_Scale" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/MeshConfigSection" index="1"]
+layout_mode = 2
+
+[node name="UV_Scale_x" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/MeshConfigSection/UV_Scale" index="0" instance=ExtResource("7_5sf8s")]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 1.0
+max_value = 5.0
+step = 0.01
+float_only = true
+
+[node name="UV_Scale_y" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/MeshConfigSection/UV_Scale" index="1" instance=ExtResource("7_5sf8s")]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 1.0
+max_value = 5.0
+step = 0.01
+float_only = true
+
+[node name="Tesselated" type="CheckBox" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/MeshConfigSection" index="2"]
+layout_mode = 2
+text = "Tesselated"
+
+[node name="HSeparator" type="HSeparator" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="5"]
+visible = false
+layout_mode = 2
+
+[node name="RotationLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="6"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Rotation"
+
+[node name="Rotation" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="7" instance=ExtResource("6_is3yl")]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "Off"
+popup/item_1/text = "Slow"
+popup/item_1/id = 1
+popup/item_2/text = "Medium"
+popup/item_2/id = 2
+popup/item_3/text = "Fast"
+popup/item_3/id = 3
+
+[node name="HSeparator2" type="HSeparator" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="8"]
+visible = false
+layout_mode = 2
+
+[node name="GenerateMapHeader" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="9"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"MM_PanelMenuSubPanelSection"
+toggle_mode = true
+text = "Generate Map"
+icon = SubResource("AtlasTexture_uda2n")
+flat = true
+icon_alignment = 2
+
+[node name="GenerateMapSection" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox" index="10"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+vertical = true
+
+[node name="MapTypeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Type"
+
+[node name="MapType" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection" index="1" instance=ExtResource("6_is3yl")]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 6
+popup/item_0/text = "Position"
+popup/item_1/text = "Normal"
+popup/item_1/id = 1
+popup/item_2/text = "Curvature"
+popup/item_2/id = 2
+popup/item_3/text = "Ambient Occlusion"
+popup/item_3/id = 3
+popup/item_4/text = "Bent Normals"
+popup/item_4/id = 4
+popup/item_5/text = "Thickness"
+popup/item_5/id = 5
+
+[node name="MapResolutionLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection" index="2"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Resolution"
+
+[node name="MapResolution" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection" index="3" instance=ExtResource("6_is3yl")]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 5
+popup/item_0/text = "256x256"
+popup/item_1/text = "512x512"
+popup/item_1/id = 1
+popup/item_2/text = "1024x1024"
+popup/item_2/id = 2
+popup/item_3/text = "2048x2048"
+popup/item_3/id = 3
+popup/item_4/text = "4096x4096"
+popup/item_4/id = 4
+
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection" index="4"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Generate Map"
+
+[node name="EnvironmentMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Environment"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+icon = SubResource("AtlasTexture_0phwj")
+script = ExtResource("5_3wjmy")
+
+[node name="EnvironmentMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu" index="0"]
+visible = false
+top_level = true
+layout_mode = 0
+offset_left = -53.0
+offset_top = 34.0
+offset_right = 117.0
+offset_bottom = 154.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+
+[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" index="0"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="0"]
+visible = false
+layout_mode = 2
+
+[node name="EnvironmentLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="1"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Environment"
+
+[node name="Box" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="2"]
+layout_mode = 2
+
+[node name="Environment" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box" index="0" instance=ExtResource("6_is3yl")]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 3
+popup/item_0/text = "Epping Forest"
+popup/item_1/text = "Moonless Golf"
+popup/item_1/id = 1
+popup/item_2/text = "Studio"
+popup/item_2/id = 2
+
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box" index="1"]
+layout_mode = 2
+tooltip_text = " Environment Editor"
+shortcut = SubResource("Shortcut_gj738")
+icon = SubResource("AtlasTexture_u54hy")
+
+[node name="TonemapLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="3"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Tonemap"
+
+[node name="ToneMap" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="4" instance=ExtResource("6_is3yl")]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 5
+popup/item_0/text = "Linear"
+popup/item_1/text = "Reinhard"
+popup/item_1/id = 1
+popup/item_2/text = "Filmic"
+popup/item_2/id = 2
+popup/item_3/text = "ACES"
+popup/item_3/id = 3
+popup/item_4/text = "Remporal AA 2.2"
+popup/item_4/id = 4
+
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/Model" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_item_selected"]
+[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/MeshConfigHeader" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_mesh_config_header_toggled"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/Rotation" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_rotation_item_selected"]
+[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapHeader" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_generate_map_header_toggled"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection/MapType" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_view_mode_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection/MapResolution" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_view_mode_item_selected"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBox/GenerateMapSection/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_reset_view_button_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_reset_view_button_pressed"]
