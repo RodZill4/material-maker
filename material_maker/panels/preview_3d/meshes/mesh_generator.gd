@@ -4,7 +4,7 @@ var shader : MMComputeShader = MMComputeShader.new()
 var size : int = 2
 
 @onready var generated_mesh = $Pivot/MeshInstance
-@onready var plane = $Pivot/Plane
+@onready var ref_mesh = $Pivot/Ref
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,7 +34,7 @@ func get_expression_value_from_string(string : String, prefix: String, values: D
 	return rv
 
 func setup_shader():
-	var string : String = FileAccess.open("res://material_maker/panels/preview_3d/meshes/compute_plane.txt", FileAccess.READ).get_as_text()
+	var string : String = FileAccess.open("res://material_maker/panels/preview_3d/meshes/compute_cube.txt", FileAccess.READ).get_as_text()
 	var vertex_count : int = get_expression_value_from_string(string, "// VERTEX COUNT:", {size=size})
 	var index_count : int = get_expression_value_from_string(string, "// INDEX COUNT:", {size=size})
 	shader.local_size = size if size < 32 else 32
@@ -71,7 +71,7 @@ func _on_reload_shader_pressed():
 
 func _on_model_pressed():
 	generated_mesh.visible = not generated_mesh.visible
-	plane.visible = not plane.visible
+	ref_mesh.visible = not ref_mesh.visible
 
 func _on_size_value_changed(value):
 	size = 1 << int(value)

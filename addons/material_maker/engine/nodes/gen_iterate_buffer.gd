@@ -115,7 +115,6 @@ func do_update_shaders() -> void:
 		var shader_compute : MMShaderCompute = shader_computes[i]
 		var buffer_name : String = buffer_names[i]
 		if i == 1 and get_parameter("autostop"):
-
 			var shader_template : String = load("res://addons/material_maker/engine/nodes/iterate_buffer_compute.tres").text
 			var output_texture_type : int = 0 if (sources[i].output_type == "f") else 1
 			if f32:
@@ -177,10 +176,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		iterations = 1
 	if current_iteration > iterations:
+		print("Bad iteration for buffer %s (%d > %d)" % [ buffer_name, current_iteration, iterations ])
 		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		is_rendering = false
-		print("Bad iteration for buffer %s (%d > %d)" % [ buffer_name, current_iteration, iterations ])
 		return true
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
@@ -193,7 +192,9 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		if size < 4:
 			size = 4
 	
-	var output_parameter_values : Dictionary = { mm_highest_diff = 0 }
+	var output_parameter_values : Dictionary = { }
+	if current_iteration > 0:
+		output_parameter_values.mm_highest_diff = 0
 	var status : bool = await shader_compute.compute_shader.render(texture, Vector2i(size, size), output_parameter_values)
 	if not status:
 		print("Error while rendering %s" % buffer_name)

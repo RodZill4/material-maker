@@ -253,7 +253,7 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 		for o in output_parameters.keys():
 			var output_parameter : Parameter = output_parameters[o]
 			var output_parameter_size : int = output_parameter.offset
-			if output_parameter.size > 0:
+			if output_parameter.array_size > 0:
 				output_parameter_size += output_parameter.size * output_parameter.array_size
 			else:
 				output_parameter_size += output_parameter.size
@@ -261,7 +261,7 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 				outputs_size = output_parameter_size
 		outputs = PackedByteArray()
 		outputs.resize(outputs_size)
-		if false and has_output_parameters:
+		if has_output_parameters:
 			for p in output_parameters_values.keys():
 				if output_parameters.has(p):
 					set_parameter_value_to_buffer(output_parameters[p], outputs, output_parameters_values[p])
@@ -290,10 +290,11 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 	else:
 		render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
 	
+	print(has_output_parameters)
 	if has_output_parameters:
 		for pn in output_parameters.keys():
 			output_parameters_values.erase(pn)
-		if uniform_set_4.is_valid() and has_output_parameters:
+		if uniform_set_4.is_valid():
 			time("Store output parameters")
 			outputs = rd.buffer_get_data(outputs_buffer)
 			for pn in output_parameters.keys():

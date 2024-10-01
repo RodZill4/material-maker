@@ -1,0 +1,110 @@
+#version 450
+// VERTEX COUNT: 6*(size+1)*(size+1)
+// INDEX COUNT: 12*size*(size+2)-2
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+void set_face_point(int vertex_index, vec3 vertex, vec3 normal, vec3 tangent, vec2 tex_uvs) {
+	mm_out.vertices[3*vertex_index+0] = vertex.x;
+	mm_out.vertices[3*vertex_index+1] = vertex.y;
+	mm_out.vertices[3*vertex_index+2] = vertex.z;
+	mm_out.normals[3*vertex_index+0] = normal.x;
+	mm_out.normals[3*vertex_index+1] = normal.y;
+	mm_out.normals[3*vertex_index+2] = normal.z;
+	mm_out.tangents[4*vertex_index+0] = tangent.x;
+	mm_out.tangents[4*vertex_index+1] = tangent.y;
+	mm_out.tangents[4*vertex_index+2] = tangent.z;
+	mm_out.tangents[4*vertex_index+3] = 1.0;
+	mm_out.tex_uvs[2*vertex_index+0] = tex_uvs.x;
+	mm_out.tex_uvs[2*vertex_index+1] = tex_uvs.y;
+}
+
+void set_point(int x, int y) {
+	int vertex_index = x+(size+1)*y;
+	int vertex_offset = (size+1)*(size+1);
+	float scale = 1.0/float(size);
+	vec2 p = vec2(scale*x-0.5, scale*y-0.5);
+	vec3 vertex;
+	vec3 tangent;
+	vec3 normal;
+	vec2 tex_uvs;
+	vec2 angle;
+	vec2 base = p;
+	int round = 0;
+	float radius = curvature*0.70710678118;
+	if (2.0*scale*x < curvature) {
+		base.x = -0.5+0.5*curvature;
+		round += 1;
+	} else if (2.0*scale*x > 2.0-curvature) {
+		base.x = 0.5-0.5*curvature;
+		round += 1;
+	}
+	if (2.0*scale*y < curvature) {
+		base.y = -0.5+0.5*curvature;
+		round += 1;
+	} else if (2.0*scale*y > 2.0-curvature) {
+		base.y = 0.5-0.5*curvature;
+		round += 1;
+	}
+	if (p == base) {
+		angle = vec2(0.0);
+	} else {
+		angle = p-base;
+		angle *= 0.78539816339;
+		angle /= 0.5*curvature;
+		if (round > 1) {
+			float m = max(abs(angle.x), abs(angle.y));
+			angle = 1.1*m*normalize(angle/m);
+		}
+	}
+	vec2 sin_angle = sin(angle);
+	normal = vec3(sin_angle.x, sqrt(1.0-dot(sin_angle, sin_angle)), sin_angle.y);
+	vertex = vec3(base.x, 0.5-0.72*radius, base.y)+radius*normal;
+	tangent = normalize(vec3(1.0, 0.0, 0.0));
+	tex_uvs = scale*vec2(x, y);
+	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);
+	set_face_point(vertex_index+vertex_offset, vertex.yzx, normal.yzx, tangent.yzx, tex_uvs);
+	set_face_point(vertex_index+2*vertex_offset, vertex.zxy, normal.zxy, tangent.zxy, tex_uvs);
+	set_face_point(vertex_index+3*vertex_offset, -vertex.xzy, -normal.xzy, -tangent.xzy, tex_uvs);
+	set_face_point(vertex_index+4*vertex_offset, -vertex.yxz, -normal.yxz, -tangent.yxz, tex_uvs);
+	set_face_point(vertex_index+5*vertex_offset, -vertex.zyx, -normal.zyx, -tangent.zyx, tex_uvs);
+}
+
+void main() {
+	ivec2 c = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	set_point(c.x, c.y);
+	if (c.x == size-1) {
+		set_point(size, c.y);
+		if (c.y == size-1) {
+			set_point(size, size);
+		}
+	}
+	if (c.y == size-1) {
+		set_point(c.x, size);
+	}
+	int index_offset = 0;
+	int vertex_offset = 0;
+	for (int i = 0; i < 6; ++i) {
+		mm_out.indexes[index_offset+2*(c.x+(size+2)*c.y)] = vertex_offset+c.x+(size+1)*(c.y+1);
+		mm_out.indexes[index_offset+2*(c.x+(size+2)*c.y)+1] = vertex_offset+c.x+(size+1)*c.y;
+		if (c.x == size-1) {
+			mm_out.indexes[index_offset+2*(size+(size+2)*c.y)] = vertex_offset+size+(size+1)*(c.y+1);
+			mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+1] = vertex_offset+size+(size+1)*c.y;
+			if (c.y != size-1) {
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+2] = vertex_offset+size+(size+1)*c.y;
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+3] = vertex_offset+(size+1)*(c.y+2);
+			} else if (i < 5) {
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+2] = vertex_offset+size+(size+1)*c.y;
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+3] = vertex_offset+(size+1)*(size+2);
+			}
+		}
+		index_offset += 2*(size+2)*size;
+		vertex_offset += (size+1)*(size+1);
+	}
+}
