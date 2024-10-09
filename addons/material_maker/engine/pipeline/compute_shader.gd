@@ -290,7 +290,6 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 	else:
 		render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
 	
-	print(has_output_parameters)
 	if has_output_parameters:
 		for pn in output_parameters.keys():
 			output_parameters_values.erase(pn)
