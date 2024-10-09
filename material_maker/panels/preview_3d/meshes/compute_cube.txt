@@ -59,13 +59,15 @@ void set_point(int x, int y) {
 		angle *= 0.78539816339;
 		angle /= 0.5*curvature;
 		if (round > 1) {
-			float m = max(abs(angle.x), abs(angle.y));
-			angle = 1.1*m*normalize(angle/m);
+			float max_angle = max(abs(angle.x), abs(angle.y));
+			float min_angle = min(abs(angle.x), abs(angle.y));
+			float d2c = min_angle/max_angle;
+			angle = (1.0+0.12*d2c*d2c)*max_angle*normalize(angle/max_angle);
 		}
 	}
 	vec2 sin_angle = sin(angle);
 	normal = vec3(sin_angle.x, sqrt(1.0-dot(sin_angle, sin_angle)), sin_angle.y);
-	vertex = vec3(base.x, 0.5-0.72*radius, base.y)+radius*normal;
+	vertex = vec3(base.x, 0.5-0.709*radius, base.y)+radius*normal;
 	tangent = normalize(vec3(1.0, 0.0, 0.0));
 	tex_uvs = scale*vec2(x, y);
 	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);

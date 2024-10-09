@@ -12,8 +12,7 @@ func _ready():
 	w.borderless = false
 	w.size = Vector2i(800, 600)
 	w.move_to_center()
-	await setup_shader()
-	await generate_mesh()
+	update(true)
 
 func get_expression_value_from_string(string : String, prefix: String, values: Dictionary) -> int:
 	var begin : int = string.find(prefix)
@@ -65,9 +64,26 @@ func generate_mesh():
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
 	print("Done")
 
-func _on_reload_shader_pressed():
-	await setup_shader()
-	await generate_mesh()
+var need_update : bool = false
+var need_reset_shader : bool = false
+var updating : bool = false
+
+func update(reset_shader : bool = false) -> void:
+	need_update = true
+	need_reset_shader = reset_shader
+	if updating:
+		return
+	while need_update:
+		need_update = false
+		updating = true
+		if need_reset_shader:
+			need_reset_shader = false
+			await setup_shader()
+		await generate_mesh()
+	updating = false
+
+func _on_reload_shader_pressed() -> void:
+	update(true)
 
 func _on_model_pressed():
 	generated_mesh.visible = not generated_mesh.visible
@@ -75,8 +91,7 @@ func _on_model_pressed():
 
 func _on_size_value_changed(value):
 	size = 1 << int(value)
-	await setup_shader()
-	await generate_mesh()
+	update(true)
 
 func _on_curvature_value_changed(value):
-	await generate_mesh()
+	update()

@@ -169,7 +169,7 @@ libraries = {
 "": SubResource("AnimationLibrary_s43cy")
 }
 autoplay = "rotate"
-speed_scale = 0.1
+speed_scale = 0.01
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_73u55")
@@ -199,7 +199,7 @@ text = "Model"
 
 [node name="Size" type="SpinBox" parent="UI/VBoxContainer"]
 layout_mode = 2
-max_value = 12.0
+max_value = 10.0
 value = 1.0
 prefix = "Size: "
 
