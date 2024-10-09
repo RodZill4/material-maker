@@ -1,6 +1,20 @@
-extends TextureButton
+extends Button
 
 signal on_show_popup()
+
+var mm_icon := "":
+	set(val):
+		mm_icon = val
+		if val:
+			_notification(NOTIFICATION_THEME_CHANGED)
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		if mm_icon:
+			icon = get_theme_icon(mm_icon, "MM_Icons")
+			custom_minimum_size = Vector2(25, 25) * mm_globals.ui_scale
+
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:

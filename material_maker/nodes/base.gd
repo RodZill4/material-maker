@@ -2,22 +2,22 @@ extends MMGraphNodeMinimal
 class_name MMGraphNodeBase
 
 
-var minimize_button : TextureButton
-var randomness_button : TextureButton
-var buffer_button : TextureButton
+var minimize_button : Button
+var randomness_button : Button
+var buffer_button : Button
 
 var show_inputs : bool = false
 var show_outputs : bool = false
 
 
-const MINIMIZE_ICON : Texture2D = preload("res://material_maker/icons/minimize.tres")
-const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomness_unlocked.tres")
-const RANDOMNESS_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
-const BUFFER_ICON : Texture2D = preload("res://material_maker/icons/buffer.tres")
-const BUFFER_PAUSED_ICON : Texture2D = preload("res://material_maker/icons/buffer_paused.tres")
-const CUSTOM_ICON : Texture2D = preload("res://material_maker/icons/custom.png")
-const PREVIEW_ICON : Texture2D = preload("res://material_maker/icons/preview.png")
-const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/preview_locked.png")
+const MINIMIZE_ICON := "Minimize"# = preload("res://material_maker/icons/minimize.tres")
+const RANDOMNESS_ICON := "Dice" # Texture2D = preload("res://material_maker/icons/randomness_unlocked.tres")
+const RANDOMNESS_LOCKED_ICON := "DiceLocked" # Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
+const BUFFER_ICON := "Buffer" # preload("res://material_maker/icons/buffer.tres")
+const BUFFER_PAUSED_ICON := "BufferPaused" # preload("res://material_maker/icons/buffer_paused.tres")
+const CUSTOM_ICON := "Dice" # preload("res://material_maker/icons/custom.png")
+#const PREVIEW_ICON := "Dice" # preload("res://material_maker/icons/preview.png")
+#const PREVIEW_LOCKED_ICON := "Dice" # preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
 const MENU_SHARE_NODE : int        = 1001
@@ -51,9 +51,10 @@ static func wrap_string(s : String, l : int = 50) -> String:
 
 func _ready() -> void:
 	super._ready()
-	_notification(NOTIFICATION_THEME_CHANGED)
+	#_notification(NOTIFICATION_THEME_CHANGED)
 	gui_input.connect(self._on_gui_input)
 	update.call_deferred()
+
 
 func init_buttons():
 	super.init_buttons()
@@ -64,6 +65,8 @@ func init_buttons():
 	randomness_button.tooltip_text = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 	buffer_button = add_button(BUFFER_ICON, null, buffer_button_create_popup)
 	buffer_button.visible = false
+
+
 
 func on_minimize_pressed():
 	generator.minimized = !generator.minimized
@@ -114,17 +117,19 @@ func get_rendering_time_color(rendering_time : int) -> Color:
 	else:
 		return TIME_COLOR_BAD
 
+
 func update():
 	super.update()
 	if generator != null and generator.has_randomness():
 		randomness_button.visible = true
-		randomness_button.texture_normal = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
+		randomness_button.mm_icon = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
 	else:
 		randomness_button.visible = false
 	buffer_button.visible = ! generator.get_buffers().is_empty()
 	if buffer_button.visible:
-		buffer_button.texture_normal = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
+		buffer_button.mm_icon = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
 		buffer_button.tooltip_text = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
+
 
 func _notification(what : int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
@@ -163,7 +168,7 @@ func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
 			var conn_pos1 = get_output_port_position(slot_index)
 			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
-	draw_circle(position, 5, color, true, -1, true)
+	draw_circle(position, 5*mm_globals.ui_scale, color, true, -1, true)
 
 
 func _draw() -> void:
@@ -172,7 +177,7 @@ func _draw() -> void:
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
-		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
+		draw_texture_rect(get_theme_icon(CUSTOM_ICON, "MM_Icons"), Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)

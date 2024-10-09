@@ -23,15 +23,15 @@ func _ready() -> void:
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
-	tree.set_column_custom_minimum_width(1, 36)
+	
 	# Connect
 	library_manager.libraries_changed.connect(self.update_tree)
 	# Setup section buttons
 	for s in library_manager.get_sections():
-		var button : TextureButton = TextureButton.new()
-		var texture : Texture2D = library_manager.get_section_icon(s)
+		var button : Button = Button.new()
+		#var texture : Texture2D = library_manager.get_section_icon(s)
 		button.name = s
-		button.texture_normal = texture
+		#button.icon = texture
 		%SectionButtons.add_child(button)
 		category_buttons[s] = button
 		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
@@ -39,6 +39,24 @@ func _ready() -> void:
 	libraries_button.get_popup().id_pressed.connect(self._on_Libraries_id_pressed)
 	init_expanded_items()
 	update_tree()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		if is_node_ready():
+			tree.set_column_custom_minimum_width(1, 36 * mm_globals.ui_scale)
+			update_tree()
+			for i in %SectionButtons.get_children():
+				i.icon = get_theme_icon("Section_"+i.name, "MM_Icons")
+				var pnl = i.get_theme_stylebox("normal")
+				pnl = pnl.duplicate()
+				pnl.bg_color = library_manager.get_section_color(i.name)
+				i.add_theme_stylebox_override("normal", pnl)
+				i.add_theme_stylebox_override("pressed", pnl)
+				pnl = pnl.duplicate()
+				pnl.bg_color = library_manager.get_section_color(i.name).lerp(i.get_theme_color("font_color"), 0.3)
+				i.add_theme_stylebox_override("hover", pnl)
+
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
@@ -97,13 +115,17 @@ func get_expanded_items(item : TreeItem = null) -> PackedStringArray:
 		rv.append_array(get_expanded_items(i))
 	return rv
 
+
 func update_category_button(category : String) -> void:
 	if library_manager.is_section_enabled(category):
-		category_buttons[category].material = null
+		#category_buttons[category].material = null
+		category_buttons[category].disabled = false
 		category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 	else:
-		category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+		category_buttons[category].disabled = true
+		#category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
 		category_buttons[category].tooltip_text = category+"\nRight click to enable"
+
 
 func update_tree() -> void:
 	# update category buttons
@@ -131,11 +153,11 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 				break
 		if new_item == null:
 			new_item = tree.create_item(item_parent)
-			new_item.custom_minimum_height = MINIMUM_ITEM_HEIGHT
+			new_item.custom_minimum_height = MINIMUM_ITEM_HEIGHT * mm_globals.ui_scale
 			new_item.set_text(0, TranslationServer.translate(item_name))
 		new_item.collapsed = !force_expand and expanded_items.find(item.tree_item) == -1
 		new_item.set_icon(1, item_icon)
-		new_item.set_icon_max_width(1, 28)
+		new_item.set_icon_max_width(1, 28 * mm_globals.ui_scale)
 		if item.has("type") || item.has("nodes"):
 			new_item.set_metadata(0, item)
 			new_item.set_metadata(1, library_index)
@@ -150,7 +172,7 @@ func add_item(item, library_index : int, item_name : String, item_icon = null, i
 				break
 		if new_parent == null:
 			new_parent = tree.create_item(item_parent)
-			new_parent.custom_minimum_height = MINIMUM_ITEM_HEIGHT
+			new_parent.custom_minimum_height = MINIMUM_ITEM_HEIGHT * mm_globals.ui_scale
 			new_parent.set_text(0, TranslationServer.translate(prefix))
 			new_parent.collapsed = !force_expand and expanded_items.find(get_item_path(new_parent)) == -1
 		return add_item(item, library_index, suffix, item_icon, new_parent, force_expand)
@@ -218,19 +240,25 @@ func _on_Section_Button_pressed(category : String) -> void:
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			tree.ensure_cursor_is_visible()
+			for node in tree.get_children(true):
+				if node is VScrollBar:
+					node.value = tree.get_item_area_rect(item).position.y
+					break
 			break
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-		if library_manager.toggle_section(category):
-			category_buttons[category].material = null
-			category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
-		else:
-			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
-			category_buttons[category].tooltip_text = category+"\nRight click to enable"
-			if current_category == category:
-				current_category = ""
+		library_manager.toggle_section(category)
+			##category_buttons[category].material = null
+			#category_buttons[category].disabled = false
+			#category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
+		#else:
+			#category_buttons[category].disabled = true
+			##category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+			#category_buttons[category].tooltip_text = category+"\nRight click to enable"
+			#if current_category == category:
+				#current_category = ""
+
 
 func _on_Libraries_about_to_show():
 	var popup : PopupMenu = libraries_button.get_popup()

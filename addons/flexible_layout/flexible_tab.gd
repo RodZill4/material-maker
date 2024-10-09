@@ -6,8 +6,8 @@ var updating : bool = false
 
 
 func _ready():
-	$Container/Close.texture_normal = get_theme_icon("close", "TabBar")
 	update()
+
 
 func _notification(what):
 	match what:
