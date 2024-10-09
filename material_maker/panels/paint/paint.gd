@@ -85,9 +85,6 @@ var stroke_angle : float = 0.0
 var stroke_seed : float = 0.0
 
 
-const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
-
-
 signal update_material
 
 
@@ -170,9 +167,11 @@ func update_brush() -> void:
 	brush_node.parameter_changed.connect(self.on_brush_changed)
 	painter.set_brush_preview_material(brush_view_3d.material)
 	if layers.selected_layer:
-		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 
 func set_brush(data) -> void:
+	#print("Setting brush")
+	#print(data)
 	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
 	parameters_panel.set_generator(null)
 	graph_edit.new_material(data)
@@ -325,7 +324,7 @@ func set_current_tool(m):
 		tools.get_node(MODE_NAMES[i]).button_pressed = (i == current_tool)
 
 func _on_Fill_pressed():
-	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC:
 		return
 	painter.fill(eraser_button.button_pressed)
 	set_need_save()
@@ -605,7 +604,7 @@ func _on_Texture_resized():
 var procedural_update_changed_scheduled : bool = false
 
 func update_procedural_layer() -> void:
-	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
+	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
 		await do_update_procedural_layer()
 
@@ -619,7 +618,7 @@ var saved_brush = null
 
 func _on_PaintLayers_layer_selected(layer):
 	var brush_updated : bool = false
-	if layer.get_layer_type() == Layer.LAYER_PROC:
+	if layer.get_layer_type() == MMLayer.LAYER_PROC:
 		if saved_brush == null:
 			saved_brush = $VSplitContainer/GraphEdit.top_generator.serialize()
 		if ! layer.material.is_empty():
@@ -630,7 +629,7 @@ func _on_PaintLayers_layer_selected(layer):
 		saved_brush = null
 		brush_updated = true
 	if not brush_updated:
-		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 
 var brush_changed_scheduled : bool = false
 
@@ -676,14 +675,14 @@ func reset_stroke() -> void:
 	previous_position = null
 
 func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
-	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC:
 		return
 	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 		if ! end_of_stroke and (pos-last_painted_position).length() < brush_spacing_control.value:
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 	last_painted_position = pos
 
 var next_paint_to = null
