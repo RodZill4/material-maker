@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=57 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=58 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
@@ -193,6 +193,8 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5447p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
@@ -568,6 +570,8 @@ LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
 MM_AddNodePanel/base_type = &"PanelContainer"
 MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
+MM_AddNodePanelList/font_sizes/font_size = 14
+MM_AddNodePanelList/styles/focus = SubResource("StyleBoxEmpty_5447p")
 MM_FilterLineEdit/base_type = &"LineEdit"
 MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")
