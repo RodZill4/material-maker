@@ -40,7 +40,6 @@ func _ready():
 func draw_grid(s : int) -> void:
 	_real_grid_size = s
 	var parent = get_parent()
-	print(parent)
 	for i in range(s+1):
 		var x = float(i) / float(s) - 0.5
 		var p : Vector2 = parent.value_to_pos(Vector2(x, x))
