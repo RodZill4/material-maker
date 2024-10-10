@@ -57,7 +57,7 @@
 [ext_resource type="Texture2D" uid="uid://rs23woqfg04o" path="res://material_maker/theme/dark/popupmenu_visibility_xray.png" id="55"]
 [ext_resource type="Texture2D" uid="uid://dw0lvt1ip8ifp" path="res://material_maker/theme/dark/popupmenu_submenu.png" id="56"]
 [ext_resource type="Texture2D" uid="uid://c1s6ailuulpow" path="res://material_maker/theme/dark/popupmenu_checked.png" id="57"]
-[ext_resource type="FontFile" path="res://material_maker/theme/font.tres" id="58"]
+[ext_resource type="FontFile" uid="uid://bbh5pjbblx75w" path="res://material_maker/theme/font.tres" id="58"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="59"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ihgd"]
@@ -849,6 +849,7 @@ LineEdit/styles/normal = SubResource("61")
 LineEdit/styles/read_only = SubResource("58")
 LinkButton/colors/font_color = Color(0.787255, 0.787255, 0.787255, 1)
 LinkButton/styles/focus = SubResource("80")
+MM_FlexibleTab/base_type = &"TabBar"
 MenuButton/colors/font_color = Color(0.787255, 0.787255, 0.787255, 1)
 MenuButton/colors/font_disabled_color = Color(1, 1, 1, 0.3)
 MenuButton/colors/font_hover_color = Color(0.872353, 0.872353, 0.872353, 1)
