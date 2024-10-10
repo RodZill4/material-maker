@@ -8,6 +8,7 @@
 	"parameters": {
 		"cx": 0,
 		"cy": 0,
+		"log_scale": 0,
 		"scale_x": 1,
 		"scale_y": 1
 	},
@@ -38,7 +39,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows a scaled image",
-				"rgba": "$i#(scale($uv, vec2(0.5+$cx, 0.5+$cy), vec2($scale_x, $scale_y)))",
+				"rgba": "$i#(scale($uv, vec2(0.5+$cx, 0.5+$cy), vec2($scale_x, $scale_y) * pow(2.0, $log_scale)))",
 				"shortdesc": "Output#",
 				"type": "rgba"
 			}
@@ -90,6 +91,18 @@
 				"name": "scale_y",
 				"shortdesc": "Scale.y",
 				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Log Scale",
+				"longdesc": "Adjust scale to very large or very small values",
+				"max": 6,
+				"min": -6,
+				"name": "log_scale",
+				"shortdesc": "Log Scale",
+				"step": 0.01,
 				"type": "float"
 			}
 		],
