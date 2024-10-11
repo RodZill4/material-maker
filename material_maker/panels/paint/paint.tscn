@@ -647,6 +647,7 @@ scroll_offset = Vector2(0, -308)
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
 
+[connection signal="end_of_stroke" from="Painter" to="." method="_on_Painter_end_of_stroke"]
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
 [connection signal="dragged" from="VSplitContainer" to="." method="_on_v_split_container_dragged"]

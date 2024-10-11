@@ -75,9 +75,8 @@ static func save_layers(layers_array : Array, path : String) -> Array:
 	return layers_data
 
 func set_state(s):
-	print(s)
 	for c in s.keys():
 		if c in get_channels():
-			set(c, s[c])
+			get(c).set_image(s[c])
 		else:
 			print("Useless channel %s in layer state" % c)

@@ -298,6 +298,7 @@ func update_view(p : Projection, t : Transform3D, s : Vector2i):
 	brush_params.view_back = Vector3(0.0, 0.0, 1.0) * transform.basis.orthonormalized()
 	brush_params.view_right = Vector3(1.0, 0.0, 0.0) * transform.basis.orthonormalized()
 	brush_params.view_up = Vector3(0.0, 1.0, 0.0) * transform.basis.orthonormalized()
+	print("back: "+str(brush_params.view_back))
 	update_view_textures()
 	update_brush()
 
@@ -572,16 +573,14 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 	return false
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true, on_mask : bool = false) -> void:
-	var active_viewports : Array = []
-	if on_mask:
-		active_viewports.push_back("mask")
+	var channels_infos : Array[Dictionary] = PAINT_CHANNELS_MASK if on_mask else PAINT_CHANNELS
 	for p in shader_params.keys():
 		var n : String
 		if PARAMETER_RENAMES.has(p):
 			n = PARAMETER_RENAMES[p]
 		else:
 			n = p
-		paint_shader.set_parameter(n, shader_params[p])
+		paint_shader.set_parameter(n, shader_params[p], true)
 	await paint_shader.render_ext(paint_textures, Vector2i(texture_size, texture_size))
 	for i in range(paint_textures.size()/3):
 		if OS.is_debug_build():
@@ -600,19 +599,11 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 			await init_shader.render_ext([ paint_textures[i*3+1] ], Vector2i(texture_size, texture_size))
 			paint_textures[i*3+1].get_texture()
 		var stroke_state = {}
-		for v in active_viewports:
-			pass
-			# TODO: this is used for undo/redo
-			# stroke_state[v] = viewports[v].get_current_state()
+		for c in channels_infos.size():
+			var channel_name : String = channels_infos[c].name
+			if has_channel[channel_name]:
+				stroke_state[channel_name] = get_paint_channel(c).next_texture
 		emit_signal("end_of_stroke", stroke_state)
-
-func set_state(s):
-	for c in s.keys():
-		pass
-		# TODO: initialize layers
-		#if viewports.has(c):
-		#	viewports[c].init(Color(1, 1, 1, 1), s[c])
-	emit_signal("painted")
 
 func fill(erase : bool, reset : bool = false, emit_end_of_stroke : bool = true) -> void:
 	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)

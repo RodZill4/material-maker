@@ -105,12 +105,12 @@ func get_occlusion_texture():
 func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	select_layer(new_selected.get_meta("layer"))
 
-func select_layer(layer : MMLayer) -> void:
-	if layer == selected_layer:
+func select_layer(layer : MMLayer, force : bool = false, update_last : bool = true) -> void:
+	if layer == selected_layer and not force:
 		return
 	if painter_node == null:
 		painter_node = get_node(painter)
-	if selected_layer != null:
+	if selected_layer != null and update_last:
 		for c in selected_layer.get_channels():
 			var old_texture : Texture2D = selected_layer.get(c)
 			var new_texture = ImageTexture.new()

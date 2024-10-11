@@ -952,22 +952,22 @@ func set_environment(index) -> void:
 
 var stroke_history = { layers={} }
 
+var redo_index : int = 0
+
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
 		"reload_layer_state":
 			var layer = command.layer
 			var state = stroke_history.layers[layer].history[command.index]
+			if false:
+				for c in state.keys():
+					state[c].save_png("d:/redo_%d_%s.png" % [ redo_index, c ])
+			redo_index += 1
+			layer.set_state(state)
 			if layer == layers.selected_layer:
-				painter.set_state(state)
+				layers.select_layer(layers.selected_layer, true, false)
 			else:
-				layer.set_state(state)
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			layers._on_layers_changed()
+				layers._on_layers_changed()
 			stroke_history.layers[layer].current = command.index
 
 func initialize_layer_history(layer):
@@ -979,12 +979,10 @@ func initialize_layer_history(layer):
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for c in layer.get_channels():
-		var texture = layer.get_channel_texture(c)
-		if texture is ViewportTexture:
-			var image = texture.get_image()
-			texture = ImageTexture.new()
-			texture.set_image(image)
-		channels[c] = texture
+		var texture : Texture = layer.get_channel_texture(c)
+		var image : Image = Image.new()
+		image.copy_from(texture.get_image())
+		channels[c] = image
 	stroke_history.layers[layer] = { history=[channels], current=0 }
 
 func initialize_layers_history(layer_list = null):
@@ -996,6 +994,8 @@ func initialize_layers_history(layer_list = null):
 		initialize_layer_history(l)
 		initialize_layers_history(l.layers)
 
+var undo_index : int = 0
+
 # Undo/Redo for strokes
 func _on_Painter_end_of_stroke(stroke_state):
 	var layer = layers.selected_layer
@@ -1006,7 +1006,12 @@ func _on_Painter_end_of_stroke(stroke_state):
 	# Copy relevant channels into stroke state
 	for c in stroke_state.keys():
 		if c in layer.get_channels():
-			new_history_item[c] = stroke_state[c]
+			var channel_image : Image = Image.new()
+			channel_image.copy_from(stroke_state[c].get_texture().get_image())
+			if false:
+				channel_image.save_png("d:/undo_%d_%s.png" % [ undo_index, c ])
+			new_history_item[c] = channel_image
+	undo_index += 1
 	layer_history.history.push_back(new_history_item)
 	var undo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
 	layer_history.current += 1
