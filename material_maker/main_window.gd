@@ -185,7 +185,7 @@ func _ready() -> void:
 
 	var args : PackedStringArray = OS.get_cmdline_args()
 	for a in args:
-		if a.get_extension() == "ptex":
+		if a.get_extension().to_lower() in [ "ptex", "mmpp" ]:
 			do_load_project(get_file_absolute_path(a))
 		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
