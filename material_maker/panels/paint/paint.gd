@@ -110,7 +110,8 @@ func _ready():
 	image.fill(Color(1, 1, 1))
 	mask_texture.set_image(image)
 	mask.set_texture(mask_texture)
-
+	_on_Brush_value_changed(%BrushSize.value, "brush_size")
+	_on_Brush_value_changed(%BrushHardness.value, "brush_hardness")
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
@@ -198,18 +199,13 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 	mi.mesh = mesh
 	layers.add_layer()
 	model_path = mesh_file_path
-	set_object(mi)
+	set_object(mi, true)
 	set_project_path(project_file_path)
 	initialize_layers_history()
 
-func set_object(o):
+func set_object(o, init_material : bool = false):
 	object_name = o.name
 	set_project_path(null)
-	var mat = o.get_surface_override_material(0)
-	if mat == null:
-		mat = o.mesh.surface_get_material(0)
-	if mat == null:
-		mat = StandardMaterial3D.new()
 	preview_material = StandardMaterial3D.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	#preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
@@ -245,7 +241,13 @@ func set_object(o):
 	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
-	painter.init_textures(mat)
+	if init_material:
+		var mat = o.get_surface_override_material(0)
+		if mat == null:
+			mat = o.mesh.surface_get_material(0)
+		if mat == null:
+			mat = StandardMaterial3D.new()
+		painter.init_textures(mat)
 
 func get_settings() -> Dictionary:
 	return settings

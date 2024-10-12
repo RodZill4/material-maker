@@ -52,9 +52,7 @@ func set_brush(brush) -> Texture2D:
 	painter.set_brush_node(brush, false)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	painter.init_textures(background_material)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await painter.init_textures(background_material)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var paint_parameters : Dictionary = {

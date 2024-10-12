@@ -268,22 +268,22 @@ func init_do_texture_channels(depth : float = 1.0, depth_texture : Texture2D = n
 	# do_viewport.init_channels(depth_texture, calculate_mask(depth, StandardMaterial3D.TEXTURE_CHANNEL_RED), occlusion_texture, calculate_mask(occlusion, occlusion_channel), null, Color(1.0, 0.0, 0.0, 0.0), null, Color(1.0, 0.0, 0.0, 0.0))
 
 func init_textures(m : StandardMaterial3D):
-	init_rgba_texture(CHANNEL_ALBEDO, m.albedo_color, m.albedo_texture)
-	init_mr_texture_channels(m.metallic, m.metallic_texture, m.metallic_texture_channel, m.roughness, m.roughness_texture, m.roughness_texture_channel)
+	await init_rgba_texture(CHANNEL_ALBEDO, m.albedo_color, m.albedo_texture)
+	await init_mr_texture_channels(m.metallic, m.metallic_texture, m.metallic_texture_channel, m.roughness, m.roughness_texture, m.roughness_texture_channel)
 	if m.emission_enabled:
 		var emission_color = m.emission
 		emission_color.a = 1.0
-		init_rgba_texture(CHANNEL_EMISSION, emission_color, m.emission_texture)
+		await init_rgba_texture(CHANNEL_EMISSION, emission_color, m.emission_texture)
 	else:
-		init_rgba_texture(CHANNEL_EMISSION, Color(0.0, 0.0, 0.0), null)
+		await init_rgba_texture(CHANNEL_EMISSION, Color(0.0, 0.0, 0.0), null)
 	if m.normal_enabled:
-		init_rgba_texture(CHANNEL_NORMAL, Color(1.0, 1.0, 1.0), m.n_texture)
+		await init_rgba_texture(CHANNEL_NORMAL, Color(1.0, 1.0, 1.0), m.n_texture)
 	else:
-		init_rgba_texture(CHANNEL_NORMAL, Color(0.5, 0.5, 0.0), null)
+		await init_rgba_texture(CHANNEL_NORMAL, Color(0.5, 0.5, 0.0), null)
 	if m.heightmap_enabled or m.ao_enabled:
-		init_do_texture_channels(m.depth_scale if m.heightmap_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
+		await init_do_texture_channels(m.depth_scale if m.heightmap_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
 	else:
-		init_rgba_texture(CHANNEL_DO, Color(0.0, 1.0, 0.0, 0.0), null)
+		await init_rgba_texture(CHANNEL_DO, Color(0.0, 1.0, 0.0, 0.0), null)
 
 func set_texture_size(s : float):
 	if texture_size != s:

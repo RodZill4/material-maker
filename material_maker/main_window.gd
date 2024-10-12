@@ -903,7 +903,7 @@ func add_brush_to_library(index) -> void:
 	# Create thumbnail
 	var result = await get_current_project().get_brush_preview()
 	var image : Image = Image.new()
-	image.copy_from(result.get_data())
+	image.copy_from(result.get_image())
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
