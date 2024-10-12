@@ -350,8 +350,8 @@ func update_brush(update_shaders : bool = false):
 	if brush_preview_material != null:
 		if update_shaders:
 			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.gdshader"
-			var code : String = get_output_code(1)
-			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
+			var output_code : Dictionary = get_output_code(1)
+			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = output_code.code }, output_code.uniforms)
 		brush_preview_material.set_shader_parameter("rect_size", viewport_size)
 		brush_preview_material.set_shader_parameter("view2tex_tex", v2t_texture.get_texture())
 		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", mesh_position_tex.get_texture())
@@ -495,10 +495,10 @@ func update_brush(update_shaders : bool = false):
 		mm_deps.buffer_create_compute_material("painter_%d:paint" % get_instance_id(), paint_shader_wrapper)
 	paint_shader.set_parameter("viewport_size", Vector2(viewport_size))
 
-func get_output_code(index : int) -> String:
+func get_output_code(index : int) -> Dictionary:
 	if brush_node == null or !is_instance_valid(brush_node):
 		brush_node = null
-		return ""
+		return {}
 	var context : MMGenContext = MMGenContext.new()
 	var source_mask : MMGenBase.ShaderCode = brush_node.get_shader_code("uv", 0, context)
 	context = MMGenContext.new(context)
@@ -509,7 +509,6 @@ func get_output_code(index : int) -> String:
 	definitions.add_globals(source.globals)
 	definitions.add_globals(source_mask.globals)
 	new_code += definitions.get_globals_string()
-	# TODO: Merge uniform lists
 	definitions.add_uniforms(source.uniforms)
 	definitions.add_uniforms(source_mask.uniforms)
 	new_code += definitions.uniforms_as_strings()
@@ -530,14 +529,16 @@ func get_output_code(index : int) -> String:
 	new_code += source.code+"\n"
 	new_code += "return "+source.output_values.rgba+";\n"
 	new_code += "}\n"
-	return new_code
+	return { code=new_code, uniforms=definitions.uniforms }
 
-func update_shader(buffer_name : String, shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
+func update_shader(buffer_name : String, shader_material : ShaderMaterial, shader_file : String, defines : Dictionary, uniforms : Array) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
 	var shader_wrapper : MMShaderMaterial = MMShaderMaterial.new(shader_material)
 	await mm_deps.buffer_create_shader_material(buffer_name, shader_wrapper, mm_preprocessor.preprocess_file(shader_file, defines))
+	for u in uniforms:
+		shader_material.set_shader_parameter(u.name, u.value)
 	if get_parent().has_method("update_procedural_layer"):
 		get_parent().update_procedural_layer()
 
