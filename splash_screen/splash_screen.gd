@@ -14,7 +14,7 @@ const BACKGROUNDS_DIR : String = "res://splash_screen/backgrounds/"
 const BACKGROUNDS : Array[Dictionary] = [
 	{ title="Beanbag Chair", author="Angel", file="angel_beanbag_chair.png" },
 	{ title="Soft Nurball", author="Angel", file="angel_soft_nurball.png" },
-	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds", file="oneiric_worlds_zefyr.png" },
+	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds", file="oneiric_worlds_zefyr.png", url="https://store.steampowered.com/app/1344990/Zefyr_A_Thiefs_Melody" },
 	{ title="Carved Wood", author="Pavel Oliva", file="pavel_oliva_carved_wood.png" },
 	{ title="Celestial Floor", author="Pavel Oliva", file="pavel_oliva_celestial_floor.png" },
 	{ title="Cursed Planks", author="Pavel Oliva", file="pavel_oliva_cursed_planks.png" },
@@ -59,6 +59,15 @@ func set_screen(bi : int) -> void:
 	%Title.text = background.title
 	%Author.text = background.author
 	%Version.text = ProjectSettings.get_setting("application/config/actual_release")
+	if "url" in background:
+		%Title.gui_input.connect(self._on_title_gui_input.bind(background.url))
+		%Title.mouse_filter = MOUSE_FILTER_STOP
+		%Title.mouse_default_cursor_shape = CURSOR_POINTING_HAND
+	else:
+		%Title.mouse_filter = MOUSE_FILTER_IGNORE
+		%Title.mouse_default_cursor_shape = CURSOR_ARROW
+		for c in %Title.gui_input.get_connections():
+			%Title.gui_input.disconnect(c.callable)
 
 func _ready():
 	set_process(false)
@@ -138,3 +147,7 @@ func _on_previous_pressed():
 
 func _on_next_pressed():
 	set_screen((background_index+1) % BACKGROUNDS.size())
+
+func _on_title_gui_input(event, url : String):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		OS.shell_open(url)
