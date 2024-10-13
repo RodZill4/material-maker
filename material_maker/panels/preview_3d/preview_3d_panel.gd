@@ -28,7 +28,6 @@ func on_right_click():
 	var texture : ViewportTexture = $MaterialPreview.get_texture()
 	var image : Image = texture.get_image()
 	var mouse_position = get_local_mouse_position()*Vector2($MaterialPreview.size)/size
-	mouse_position.y = $MaterialPreview.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
 	var pos : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
 	pos -= Vector3(0.5, 0.5, 0.5)
@@ -37,7 +36,7 @@ func on_right_click():
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$TextureRect.visible = false
-	$PopupMenu.popup(Rect2(get_global_mouse_position(), Vector2(0.0, 0.0)))
+	$PopupMenu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
 
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
