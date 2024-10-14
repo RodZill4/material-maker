@@ -6,10 +6,10 @@ var generator : MMGenBase = null : set = set_generator
 var disable_undoredo_for_offset : bool = false
 
 var buttons : HBoxContainer = null
-var close_button : TextureButton
+var close_button : Button
 
 
-const CLOSE_ICON : Texture2D = preload("res://material_maker/icons/close.tres")
+const CLOSE_ICON := "Node_Delete"
 
 
 func _ready() -> void:
@@ -24,12 +24,14 @@ func _ready() -> void:
 		init_buttons()
 	add_to_group("generator_node")
 
+
 func update():
 	queue_redraw()
 
-func add_button(texture : Texture2D, pressed_callback = null, popup_callback = null) -> TextureButton:
-	var button : TextureButton = preload("res://material_maker/nodes/node_button.tscn").instantiate()
-	button.texture_normal = texture
+
+func add_button(mm_icon : String, pressed_callback = null, popup_callback = null) -> Button:
+	var button : Button = preload("res://material_maker/nodes/node_button.tscn").instantiate()
+	button.mm_icon = mm_icon
 	buttons.add_child(button)
 	buttons.move_child(button, 0)
 	if pressed_callback:

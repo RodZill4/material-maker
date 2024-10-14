@@ -34,8 +34,9 @@ func _draw():
 				var last_item : TreeItem = get_last_item(item)
 				if last_item != null:
 					last_rect = get_item_area_rect(last_item)
-			draw_rect(Rect2(1, rect.position.y-sp, 4, last_rect.position.y-rect.position.y+last_rect.size.y), color)
+			draw_rect(Rect2(1, rect.position.y-sp, 4 * mm_globals.ui_scale, last_rect.position.y-rect.position.y+last_rect.size.y), color)
 		item = item.get_next()
+
 
 func _get_drag_data(_position):
 	if !supports_drag:
@@ -53,7 +54,7 @@ func _get_drag_data(_position):
 			preview.texture = preview_texture
 		elif data.has("type") and data.type == "uniform":
 			preview = ColorRect.new()
-			preview.size = Vector2(32, 32)
+			preview.size = Vector2(32, 32) * mm_globals.ui_scale
 			if data.has("color"):
 				preview.color = Color(data.color.r, data.color.g, data.color.b, data.color.a)
 		else:

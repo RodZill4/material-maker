@@ -1,19 +1,25 @@
-[gd_scene load_steps=20 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=22 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/main_window_layout.gd" id="2"]
+[ext_resource type="Script" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="2_k42x1"]
 [ext_resource type="PackedScene" uid="uid://eiq3i53x72m2" path="res://addons/flexible_layout/flexible_layout.tscn" id="6_ygla4"]
 [ext_resource type="PackedScene" uid="uid://clw8sb0p8webl" path="res://material_maker/windows/add_node_popup/add_node_popup.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://bnqq3vhwmudkw" path="res://material_maker/projects_panel.tscn" id="7_ih0ps"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="8"]
 [ext_resource type="Script" path="res://material_maker/console.gd" id="8_1tb00"]
 [ext_resource type="Script" path="res://material_maker/node_factory.gd" id="9"]
-[ext_resource type="Theme" uid="uid://3f6cl7v1oyqo" path="res://material_maker/theme/default.tres" id="10"]
+[ext_resource type="Script" path="res://material_maker/widgets/button_with_icon.gd" id="9_bj0xb"]
 [ext_resource type="PackedScene" uid="uid://cp2mbbfmrv6sf" path="res://material_maker/widgets/render_counter/render_counter.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://dnttargjmhjh8" path="res://material_maker/tools/share/share_button.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
 [ext_resource type="Script" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
+
+[sub_resource type="Theme" id="Theme_iekvw"]
+script = ExtResource("2_k42x1")
+scale = 1.0
+icon_color_swaps = []
 
 [sub_resource type="GDScript" id="6"]
 script/source = "extends Label
@@ -59,10 +65,6 @@ _data = {
 "show": SubResource("7")
 }
 
-[sub_resource type="AtlasTexture" id="8"]
-atlas = ExtResource("8")
-region = Rect2(96, 128, 16, 16)
-
 [sub_resource type="GDScript" id="9"]
 script/source = "extends HBoxContainer
 
@@ -92,6 +94,10 @@ func _on_Timer_timeout():
 	tooltip_text = hint
 "
 
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("8")
+region = Rect2(96, 128, 16, 16)
+
 [node name="MainWindow" type="PanelContainer" groups=["preview"]]
 anchors_preset = 15
 anchor_right = 1.0
@@ -104,7 +110,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("10")
+theme = SubResource("Theme_iekvw")
 theme_type_variation = &"MM_MainBackground"
 script = ExtResource("1")
 
@@ -205,12 +211,13 @@ libraries = {
 "": SubResource("AnimationLibrary_kxf7t")
 }
 
-[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox"]
+[node name="ConsoleButton" type="Button" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Show console"
-texture_normal = SubResource("8")
+script = ExtResource("9_bj0xb")
+mm_icon = "Console"
 
 [node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
 layout_mode = 2

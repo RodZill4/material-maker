@@ -3,7 +3,7 @@ extends HBoxContainer
 
 @onready var http_request : HTTPRequest = $HTTPRequest
 var request_type : String = ""
-@onready var connect_button : TextureButton = $ConnectButton
+@onready var connect_button : Button = $ConnectButton
 
 var licenses : Array = []
 var my_assets : Array = []
@@ -27,7 +27,7 @@ func update_my_assets():
 				a.type = asset_types[int(a.type) & 15]
 
 func set_logged_in(user_name : String) -> void:
-	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/golden_link.tres")
+	$ConnectButton.mm_icon = "Login"
 	if user_name == "":
 		$ConnectButton.tooltip_text = "Logged in.\nMaterials can be submitted."
 	else:
@@ -36,7 +36,7 @@ func set_logged_in(user_name : String) -> void:
 	connect_button.disabled = false
 
 func set_logged_out(message : String = "") -> void:
-	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
+	$ConnectButton.mm_icon = "Login"
 	$ConnectButton.tooltip_text = "Click to log in and submit assets"
 	$SendButton.disabled = true
 	if message != "":
