@@ -584,7 +584,7 @@ func update_node() -> void:
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
