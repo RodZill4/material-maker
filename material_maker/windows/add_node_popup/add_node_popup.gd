@@ -81,7 +81,7 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 			b.enable()
 	if filter.text != "":
 		filter.text = ""
-		update_list(filter.text)
+	update_list(filter.text)
 	filter.grab_focus()
 
 
@@ -163,7 +163,9 @@ func update_list(filter_text : String = "") -> void:
 
 	%List.clear()
 	var idx := 0
-	for i in library_manager.get_items(filter_text, true):
+	var items: Array = library_manager.get_items(filter_text, true)
+	items.sort_custom(func(a,b): return a.idx < b.idx if a.quality == b.quality else a.quality > b.quality)
+	for i in items:
 		var obj = i.item
 		if not obj.has("type"):
 			continue
@@ -172,8 +174,12 @@ func update_list(filter_text : String = "") -> void:
 		var section = obj.tree_item.get_slice("/", 0)
 		var color : Color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
 		color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
+		#print(i)
+		var _name = obj.display_name
+		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
+		#if obj.has("shortdesc")
 		
-		%List.add_item(obj.display_name, i.icon)
+		%List.add_item(_name, i.icon)
 		%List.set_item_custom_fg_color(idx, color)
 		%List.set_item_metadata(idx, i)
 		%List.set_item_tooltip_enabled(idx, false)
@@ -192,13 +198,18 @@ func _unhandled_input(event) -> void:
 func _on_filter_gui_input(event: InputEvent) -> void:
 	if event.is_action("ui_down"):
 		%List.grab_focus()
-		%List.select(1)
+		%List.select(0)
 
 
 func _on_list_gui_input(event: InputEvent) -> void:
 	if event.is_action("ui_up"):
 		if not %List.item_count or %List.is_selected(0):
 			%Filter.grab_focus()
+	
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
+		if idx != -1:
+			_on_list_item_activated(idx)
 	
 
 func get_list_drag_data(m_position):
@@ -208,11 +219,6 @@ func get_list_drag_data(m_position):
 	texture_rect.scale = Vector2(0.35, 0.35)
 	%List.set_drag_preview(texture_rect)
 	return data.item.tree_item
-
-
-
-func _on_list_item_clicked(index: int, at_position:= Vector2(), mouse_button_index:= 0) -> void:
-	pass
 
 
 func _on_list_item_activated(index: int) -> void:
