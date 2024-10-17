@@ -45,7 +45,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
-const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light", "Modern"]
+const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -143,7 +143,7 @@ func _ready() -> void:
 			get_window().size = mm_globals.config.get_value("window", "size")
 
 	# Restore the theme
-	var theme_name : String = "default"
+	var theme_name: String = "default dark"
 	if mm_globals.config.has_section_key("window", "theme"):
 		theme_name = mm_globals.config.get_value("window", "theme")
 	change_theme(theme_name)
@@ -470,7 +470,10 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
 func change_theme(theme_name) -> void:
+	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
+		theme_name = "default_dark"
 	theme = load("res://material_maker/theme/"+theme_name+".tres")
+
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
