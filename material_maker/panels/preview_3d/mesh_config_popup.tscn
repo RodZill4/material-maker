@@ -4,48 +4,32 @@
 [ext_resource type="Script" path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" id="2"]
 
 [node name="MeshConfiguration" type="PopupPanel"]
-offset_right = 284.0
-offset_bottom = 127.0
+size = Vector2i(217, 101)
+visible = true
 script = ExtResource("2")
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_right = 213.0
+offset_bottom = 97.0
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer"]
-offset_right = 276.0
-offset_bottom = 28.0
+layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/Panel"]
-offset_left = 77.0
-offset_top = 7.0
-offset_right = 199.0
-offset_bottom = 21.0
+layout_mode = 2
 size_flags_horizontal = 4
 text = "Mesh configuration"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="UVScale" type="HBoxContainer" parent="VBoxContainer"]
-offset_top = 32.0
-offset_right = 276.0
-offset_bottom = 56.0
+layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/UVScale"]
-offset_top = 5.0
-offset_right = 59.0
-offset_bottom = 19.0
+layout_mode = 2
 tooltip_text = "The texture's display scale on the 3D preview.
 Higher values will make the texture span a smaller area.
 The texture will repeat automatically to cover the whole mesh.
@@ -54,35 +38,28 @@ mouse_filter = 1
 text = "UV Scale:"
 
 [node name="X" parent="VBoxContainer/UVScale" instance=ExtResource("1")]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 63.0
-offset_right = 121.0
-offset_bottom = 24.0
+layout_mode = 2
 value = 1.0
 max_value = 5.0
 step = 0.01
 float_only = true
 
 [node name="Y" parent="VBoxContainer/UVScale" instance=ExtResource("1")]
-anchor_left = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 125.0
-offset_right = 183.0
-offset_bottom = 24.0
+layout_mode = 2
 value = 1.0
 max_value = 5.0
 step = 0.01
 float_only = true
 
 [node name="Tesselated" type="CheckBox" parent="VBoxContainer"]
-offset_top = 60.0
-offset_right = 276.0
-offset_bottom = 84.0
+layout_mode = 2
 tooltip_text = "If tesselation is enabled, the mesh will be subdivided, which is necessary for materials that use vertex displacement."
 text = "Tesselated"
+
+[node name="Parameters" type="GridContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
 
 [connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]
 [connection signal="value_changed" from="VBoxContainer/UVScale/X" to="." method="_on_UV_value_changed"]

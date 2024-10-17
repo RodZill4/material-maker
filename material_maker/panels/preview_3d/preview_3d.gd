@@ -157,12 +157,12 @@ func set_rotate_model_speed(speed: float) -> void:
 		object_rotate.play("rotate")
 
 func get_materials() -> Array:
-	if current_object != null and current_object.get_surface_override_material(0) != null:
-		return [ current_object.get_surface_override_material(0) ]
+	if current_object != null and current_object.get_material() != null:
+		return [ current_object.get_material() ]
 	return []
 
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
-	var preview_material = current_object.get_surface_override_material(0)
+	var preview_material = current_object.get_material()
 	preview_material.set_shader_parameter(parameter_name, value)
 	return false
 
