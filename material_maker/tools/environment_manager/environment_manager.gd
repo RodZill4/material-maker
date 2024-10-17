@@ -108,23 +108,37 @@ func set_value(index, variable, value, force = false):
 			emit_signal("environment_updated", index)
 		update_thumbnail(index)
 
-func apply_environment(index : int, e : Environment, s : DirectionalLight3D) -> void:
+func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_color := Color.TRANSPARENT) -> void:
 	if index < 0 || index >= environments.size():
 		return
 	var env : Dictionary = environments[index]
 	var env_textures : Dictionary = environment_textures[index]
-	e.background_mode = Environment.BG_COLOR if env.show_color else Environment.BG_SKY
-	e.background_color = MMType.deserialize_value(env.color)
-	if !e.has_meta("hdri") or e.get_meta("hdri") != env.hdri_url:
-		if !env_textures.has("hdri"):
+
+	var custom_bg_color := false
+
+	if bg_color != Color.TRANSPARENT:
+		custom_bg_color = true
+
+		e.background_mode = Environment.BG_COLOR
+		e.background_color = bg_color
+		e.background_energy_multiplier = 1
+	elif env.show_color:
+		e.background_mode = Environment.BG_COLOR
+		e.background_color = MMType.deserialize_value(env.color)
+	else:
+		e.background_mode = Environment.BG_SKY
+		e.background_energy_multiplier = env.sky_energy
+
+	if not e.has_meta("hdri") or e.get_meta("hdri") != env.hdri_url:
+		if not env_textures.has("hdri"):
 			await read_hdr(index, env.hdri_url)
 		if env_textures.has("hdri"):
-			e.background_mode = Environment.BG_SKY
+			if custom_bg_color:
+				e.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 			e.sky = Sky.new()
 			e.sky.sky_material = PanoramaSkyMaterial.new()
 			e.sky.sky_material.panorama = env_textures.hdri
 		e.set_meta("hdri", env.hdri_url)
-	e.background_energy_multiplier = env.sky_energy
 	e.ambient_light_color = MMType.deserialize_value(env.ambient_light_color)
 	e.ambient_light_energy = env.ambient_light_energy
 	e.ambient_light_sky_contribution = env.ambient_light_sky_contribution

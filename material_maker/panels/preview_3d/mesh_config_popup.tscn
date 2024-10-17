@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" id="2"]
 
 [node name="MeshConfiguration" type="PopupPanel"]
-size = Vector2i(217, 101)
+size = Vector2i(217, 100)
 visible = true
 script = ExtResource("2")
 
@@ -15,7 +15,7 @@ anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 213.0
-offset_bottom = 97.0
+offset_bottom = 96.0
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2

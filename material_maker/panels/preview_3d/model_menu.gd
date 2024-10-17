@@ -1,14 +1,24 @@
 extends PanelContainer
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	await owner.ready
+	update_model_selector()
 
+
+func update_model_selector() -> void:
+	%Model.clear()
+	for i in owner.objects.get_child_count():
+		var o = owner.objects.get_child(i)
+		var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % o.name)
+		if thumbnail:
+			%Model.add_icon_item(thumbnail, o.name, i)
+		else:
+			%Model.add_item(o.name, i)
 
 
 func _on_model_item_selected(index: int) -> void:
-	owner._on_Model_item_selected(index)
+	owner.set_model(index)
 
 
 func _on_mesh_config_header_toggled(toggled_on: bool) -> void:
