@@ -12,7 +12,12 @@ extends Control
 func get_projects():
 	return projects
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		_on_projects_panel_resized()
+
 func _on_projects_panel_resized():
+	$Projects/TabBar.size.y = 0
 	var preview_position : Vector2 = Vector2(0.0, 0.0)
 	var preview_size : Vector2 = size
 	preview_position.y += $Projects/TabBar.size.y

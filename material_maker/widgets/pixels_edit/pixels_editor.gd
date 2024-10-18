@@ -1,43 +1,56 @@
 extends "res://material_maker/widgets/pixels_edit/pixels_view.gd"
 
 
-var current_color : int = -1
+var current_color: int = -1
 
+@onready var menu_bar: Control = $PixelMenu
+@onready var colors: Control = %Colors
 
 signal value_changed(value : MMPixels)
 signal unhandled_event(event : InputEvent)
+
+
+func _ready() -> void:
+	super()
+	%SettingsPanel.pixel_editor = self
+	
+	if get_parent().has_method("add_menu_bar"):
+		menu_bar.get_parent().remove_child(menu_bar)
+		get_parent().add_menu_bar(menu_bar, self)
 
 
 func set_pixels(p : MMPixels) -> void:
 	pixels = p
 	queue_redraw()
 	update_color_buttons()
-	%SettingsPanel.visible = false
+
 
 func update_color_buttons() -> void:
 	var palette_size : int = pixels.palette.size()
-	var button_count : int = %Colors.get_child_count()
+	var button_count : int = colors.get_child_count()
 	if palette_size < button_count:
 		while button_count > palette_size:
 			button_count -= 1
-			var color_button : Node = %Colors.get_child(button_count)
-			%Colors.remove_child(color_button)
+			var color_button : Node = colors.get_child(button_count)
+			colors.remove_child(color_button)
 			color_button.free()
-	elif palette_size > %Colors.get_child_count():
-		while %Colors.get_child_count() < palette_size:
+	elif palette_size > colors.get_child_count():
+		while colors.get_child_count() < palette_size:
 			var color_button : ColorPickerButton = ColorPickerButton.new()
-			color_button.custom_minimum_size = Vector2i(16, 16)
+			color_button.custom_minimum_size = Vector2i(25, 25)
+			color_button.theme_type_variation = "MM_PanelMenuButton"
+			color_button.tooltip_text = "Click to select; Right click to change color"
 			color_button.toggle_mode = true
 			color_button.button_mask = MOUSE_BUTTON_MASK_RIGHT
-			%Colors.add_child(color_button)
+			colors.add_child(color_button)
 			color_button.focus_entered.connect(self.set_current_color.bind(button_count))
 			color_button.color_changed.connect(self.set_palette_color.bind(button_count))
 			button_count += 1
 	for ci in palette_size:
-		%Colors.get_child(ci).color = pixels.palette[ci]
+		colors.get_child(ci).color = pixels.palette[ci]
 	if current_color < 0 or current_color >= palette_size:
 		current_color = 0
-		#%Colors.get_child(current_color).set_focus() = 
+	
 
 func set_current_color(c : int) -> void:
 	current_color = c
@@ -89,16 +102,3 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 
 func control_update_parameter(_value : MMPixels):
 	generator.set_parameter(parameter_name, pixels.serialize())
-
-func _on_settings_button_pressed():
-	var settings_panel : Control = %SettingsPanel
-	settings_panel.visible = not settings_panel.visible
-	if settings_panel.visible:
-		%Width.value = float(pixels.size.x)
-		%Height.value = float(pixels.size.y)
-		%BPP.value = float(pixels.bpp)
-	else:
-		pixels.set_size(int(%Width.value), int(%Height.value), int(%BPP.value))
-		queue_redraw()
-		update_color_buttons()
-		self.value_changed.emit(pixels)

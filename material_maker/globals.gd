@@ -7,6 +7,8 @@ extends Node
 # warning-ignore:unused_class_variable
 var main_window
 
+var ui_scale := 0.0
+
 var config : ConfigFile = ConfigFile.new()
 const DEFAULT_CONFIG : Dictionary = {
 	locale = "",

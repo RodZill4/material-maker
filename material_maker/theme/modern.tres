@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=57 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=98 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_hqoqt"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_1xp11"]
+[ext_resource type="Texture2D" uid="uid://dt7vewgd5yk0q" path="res://material_maker/theme/new_theme_icons_clean.svg" id="2_uo7ch"]
 [ext_resource type="Texture2D" uid="uid://c74jqqhkapvx0" path="res://material_maker/theme/dark/graphnode_close.png" id="3_6fij0"]
 [ext_resource type="Texture2D" uid="uid://cgxvaurldh6mq" path="res://material_maker/theme/dark/graphnode_port.png" id="4_kelfg"]
 [ext_resource type="Texture2D" uid="uid://c4k81poqyod3g" path="res://material_maker/theme/dark/graphnode_resizer.png" id="5_3hfqd"]
@@ -17,7 +18,7 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvrsn"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ebjbq"]
 content_margin_left = 3.0
 content_margin_top = 3.0
 content_margin_right = 3.0
@@ -27,11 +28,12 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.490196, 0.505882, 0.545098, 1)
+border_color = Color(0.485703, 0.485704, 0.485703, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2qiie"]
 content_margin_left = 3.0
@@ -194,6 +196,8 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5447p"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
 content_margin_top = 2.0
@@ -222,6 +226,160 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 corner_detail = 4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wv1k3"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 80, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5mpy4"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 80, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yl83e"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ce5fg"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wg25g"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 64, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5laiy"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 64, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxvq8"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7er1n"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6qxj"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jd0a"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqmkr"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(80, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qbea1"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3dq6o"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 48, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehvet"]
+atlas = null
+region = Rect2(32, 32, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xuvon"]
+atlas = null
+region = Rect2(48, 32, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lrbkn"]
+atlas = null
+region = Rect2(16, 32, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjtbp"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 0, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_458ks"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xo65"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yefe5"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lc86"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(64, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gh0i5"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ln55e"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qq8w0"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uoih8"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtive"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(80, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62pyv"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 112, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h625b"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujx26"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emila"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucdk6"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(96, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwma0"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xv0q"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(32, 80, 16, 16)
+metadata/scale = 2.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ik36r"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqwm5"]
 content_margin_left = 10.0
@@ -348,6 +506,66 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w0mkx"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pq4ta"]
+content_margin_left = 4.0
+content_margin_top = 3.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.262933, 0.262932, 0.262932, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing = false
+
+[sub_resource type="FontVariation" id="FontVariation_h5fjs"]
+base_font = ExtResource("1_hqoqt")
+variation_embolden = 0.37
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eij2n"]
+bg_color = Color(0.165656, 0.165656, 0.165656, 1)
+border_width_top = 3
+border_width_bottom = 3
+border_color = Color(0.19, 0.19, 0.19, 0)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhlqs"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0725373, 0.0770753, 0.0861506, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2484, 0.2484, 0.2484, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_82ewu"]
+content_margin_top = 3.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k0sx"]
 bg_color = Color(0.0941176, 0.0980392, 0.101961, 1)
 corner_radius_top_right = 4
@@ -365,6 +583,10 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrndi"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(112, 16, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dscxc"]
 content_margin_left = 6.0
@@ -443,6 +665,10 @@ border_color = Color(1, 1, 1, 1)
 corner_detail = 1
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7bw33"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oqo67"]
+atlas = ExtResource("2_uo7ch")
+region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ax2cv"]
 content_margin_left = 7.0
@@ -534,7 +760,7 @@ default_font_size = 16
 Button/colors/icon_hover_pressed_color = Color(0.874128, 0.694643, 0.972002, 1)
 Button/colors/icon_pressed_color = Color(0.792157, 0.478431, 0.94902, 1)
 Button/styles/disabled = SubResource("StyleBoxFlat_inl5r")
-Button/styles/focus = SubResource("StyleBoxFlat_kvrsn")
+Button/styles/focus = SubResource("StyleBoxFlat_ebjbq")
 Button/styles/hover = SubResource("StyleBoxFlat_2qiie")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_2qiie")
 Button/styles/normal = SubResource("StyleBoxFlat_rxikb")
@@ -568,11 +794,47 @@ LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
 MM_AddNodePanel/base_type = &"PanelContainer"
 MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
+MM_AddNodePanelList/font_sizes/font_size = 14
+MM_AddNodePanelList/styles/focus = SubResource("StyleBoxEmpty_5447p")
 MM_FilterLineEdit/base_type = &"LineEdit"
 MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")
 MM_FlexibleTab/base_type = &"TabBar"
 MM_FlexibleTab/constants/separation = 3
+MM_Icons/icons/Buffer = SubResource("AtlasTexture_wv1k3")
+MM_Icons/icons/BufferPaused = SubResource("AtlasTexture_5mpy4")
+MM_Icons/icons/Console = SubResource("AtlasTexture_yl83e")
+MM_Icons/icons/Cross = SubResource("AtlasTexture_ce5fg")
+MM_Icons/icons/Dice = SubResource("AtlasTexture_wg25g")
+MM_Icons/icons/DiceLocked = SubResource("AtlasTexture_5laiy")
+MM_Icons/icons/Download = SubResource("AtlasTexture_kxvq8")
+MM_Icons/icons/Edit = SubResource("AtlasTexture_7er1n")
+MM_Icons/icons/Export = SubResource("AtlasTexture_c6qxj")
+MM_Icons/icons/Folder = SubResource("AtlasTexture_2jd0a")
+MM_Icons/icons/Locked = SubResource("AtlasTexture_dqmkr")
+MM_Icons/icons/Login = SubResource("AtlasTexture_qbea1")
+MM_Icons/icons/Minimize = SubResource("AtlasTexture_3dq6o")
+MM_Icons/icons/Mouse_Left = SubResource("AtlasTexture_ehvet")
+MM_Icons/icons/Mouse_Middle = SubResource("AtlasTexture_xuvon")
+MM_Icons/icons/Mouse_Right = SubResource("AtlasTexture_lrbkn")
+MM_Icons/icons/Node_Delete = SubResource("AtlasTexture_yjtbp")
+MM_Icons/icons/Save = SubResource("AtlasTexture_458ks")
+MM_Icons/icons/Search = SubResource("AtlasTexture_8xo65")
+MM_Icons/icons/Section_3D = SubResource("AtlasTexture_yefe5")
+MM_Icons/icons/Section_Filter = SubResource("AtlasTexture_5lc86")
+MM_Icons/icons/Section_Miscellaneous = SubResource("AtlasTexture_gh0i5")
+MM_Icons/icons/Section_Noise = SubResource("AtlasTexture_ln55e")
+MM_Icons/icons/Section_Pattern = SubResource("AtlasTexture_qq8w0")
+MM_Icons/icons/Section_Simple = SubResource("AtlasTexture_uoih8")
+MM_Icons/icons/Section_Transform = SubResource("AtlasTexture_dtive")
+MM_Icons/icons/Section_Workflow = SubResource("AtlasTexture_62pyv")
+MM_Icons/icons/Select = SubResource("AtlasTexture_h625b")
+MM_Icons/icons/Settings = SubResource("AtlasTexture_ujx26")
+MM_Icons/icons/Undock = SubResource("AtlasTexture_emila")
+MM_Icons/icons/Unlocked = SubResource("AtlasTexture_ucdk6")
+MM_Icons/icons/Upload = SubResource("AtlasTexture_xwma0")
+MM_Icons/icons/Variadic = SubResource("AtlasTexture_2xv0q")
+MM_Icons/icons/View = SubResource("AtlasTexture_ik36r")
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
 MM_NodeCheckbox/base_type = &"Button"
@@ -598,10 +860,29 @@ MM_NodePropertyLabel/base_type = &"Label"
 MM_NodePropertyLabel/font_sizes/font_size = 15
 MM_PanelBackground/base_type = &"PanelContainer"
 MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")
+MM_PanelMenuBackground/base_type = &"ScrollContainer"
+MM_PanelMenuBackground/styles/panel = SubResource("StyleBoxEmpty_w0mkx")
+MM_PanelMenuBar/base_type = &"PanelContainer"
+MM_PanelMenuBar/constants/separation = 3
+MM_PanelMenuBar/styles/panel = SubResource("StyleBoxFlat_pq4ta")
+MM_PanelMenuButton/base_type = &"Button"
+MM_PanelMenuButton/font_sizes/font_size = 14
+MM_PanelMenuButton/fonts/font = SubResource("FontVariation_h5fjs")
+MM_PanelMenuFloatEdit/base_type = &"MM_NodeFloatEdit"
+MM_PanelMenuSeparator/base_type = &"VSeparator"
+MM_PanelMenuSeparator/constants/separation = 2
+MM_PanelMenuSeparator/styles/separator = SubResource("StyleBoxFlat_eij2n")
+MM_PanelMenuSubPanel/base_type = &"PanelContainer"
+MM_PanelMenuSubPanel/styles/panel = SubResource("StyleBoxFlat_qhlqs")
+MM_PanelMenuSubPanelLabel/base_type = &"Label"
+MM_PanelMenuSubPanelLabel/colors/font_color = Color(0.454524, 0.454524, 0.454524, 1)
+MM_PanelMenuSubPanelLabel/font_sizes/font_size = 14
+MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_82ewu")
 MM_ProjectsBackground/base_type = &"Panel"
 MM_ProjectsBackground/styles/panel = SubResource("StyleBoxFlat_1k0sx")
 MM_StatusBarBackground/base_type = &"PanelContainer"
 MM_StatusBarBackground/styles/panel = SubResource("StyleBoxFlat_7hrav")
+OptionButton/icons/arrow = SubResource("AtlasTexture_qrndi")
 Panel/styles/panel = SubResource("StyleBoxFlat_dscxc")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")
@@ -641,6 +922,7 @@ ReroutePreview/styles/panel_selected = SubResource("StyleBoxFlat_kbm1t")
 ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_7bw33")
 ReroutePreview/styles/titlebar_selected = SubResource("StyleBoxEmpty_7bw33")
 TabBar/constants/h_separation = 6
+TabBar/icons/close = SubResource("AtlasTexture_oqo67")
 TabBar/styles/tab_focus = SubResource("StyleBoxFlat_ax2cv")
 TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_708uu")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")

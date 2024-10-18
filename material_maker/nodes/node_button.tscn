@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" path="res://material_maker/nodes/node_button.gd" id="1_f00x4"]
 
-[node name="NodeButton" type="TextureButton"]
+[node name="NodeButton" type="Button"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -3.5
+offset_top = -3.5
+offset_right = 3.5
+offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
+focus_mode = 0
+theme_type_variation = &"MM_NodeButton"
+flat = true
+expand_icon = true
 script = ExtResource("1_f00x4")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

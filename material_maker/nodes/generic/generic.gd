@@ -8,15 +8,22 @@ var output_count = 0
 
 var preview : ColorRect
 var preview_timer : Timer = Timer.new()
-var generic_button : TextureButton
+var generic_button : Button
 
 
-const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic.tres")
+const GENERIC_ICON := "Variadic"#= preload("res://material_maker/icons/add_generic.tres")
 
 
 func _ready() -> void:
 	super._ready()
 	add_to_group("updated_from_locale")
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		if generator:
+			update_node()
+
 
 func init_buttons():
 	super.init_buttons()
@@ -300,7 +307,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.step = 0.005 if !p.has("step") else p.step
 		if p.has("default"):
 			control.value = p.default
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 80 * mm_globals.ui_scale
 	elif p.type == "size":
 		control = SizeOptionButton.new()
 		control.min_size = p.first
@@ -312,14 +319,14 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			var value = p.values[i]
 			control.add_item(value.name)
 			control.selected = 0 if !p.has("default") else p.default
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 80 * mm_globals.ui_scale
 	elif p.type == "boolean":
 		control = CheckBox.new()
 		control.theme_type_variation = "MM_NodeCheckbox"
 	elif p.type == "color":
 		control = ColorPickerButton.new()
 		control.set_script(preload("res://material_maker/widgets/color_picker_button/color_picker_button.gd"))
-		control.custom_minimum_size.x = 40
+		control.custom_minimum_size.x = 80 * mm_globals.ui_scale
 	elif p.type == "gradient":
 		control = preload("res://material_maker/widgets/gradient_editor/gradient_edit.tscn").instantiate()
 	elif p.type == "curve":
@@ -337,12 +344,12 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
 		control = LineEdit.new()
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 80 * mm_globals.ui_scale
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()
 	elif p.type == "file":
 		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instantiate()
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 80 * mm_globals.ui_scale
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)
@@ -426,9 +433,14 @@ func update_node() -> void:
 	# Clean node
 	clear_all_slots()
 	save_preview_widget()
+	
 	for c in get_children():
 		remove_child(c)
 		c.free()
+	
+	var item_min_height := 25 * mm_globals.ui_scale
+	var label_max_width := 100 * mm_globals.ui_scale
+	
 	# Show or hide the close button
 	close_button.visible = generator.can_be_deleted()
 	# Rebuild node
@@ -465,11 +477,11 @@ func update_node() -> void:
 		while get_child_count() < index:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			hsizer.custom_minimum_size.y = 25
+			hsizer.custom_minimum_size.y = item_min_height
 			add_child(hsizer)
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
-		hsizer.custom_minimum_size.y = 25
+		hsizer.custom_minimum_size.y = item_min_height
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		add_child(hsizer)
 		if label != "":
@@ -518,7 +530,7 @@ func update_node() -> void:
 						hsizer.add_child(empty_control)
 					add_child(hsizer)
 				hsizer = get_child(index)
-				hsizer.custom_minimum_size.y = 25
+				hsizer.custom_minimum_size.y = item_min_height
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label
@@ -535,11 +547,11 @@ func update_node() -> void:
 					first_focus = control
 				previous_focus = control
 		
-		var label_max_width = labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
-		label_max_width = min(100, label_max_width)
+		var label_width = labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		label_width = min(label_width, label_max_width)
 		for label in labels:
-			label.custom_minimum_size.x = label_max_width
-			label.size.x = label_max_width
+			label.custom_minimum_size.x = label_width
+			label.size.x = label_width
 			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
@@ -567,24 +579,24 @@ func update_node() -> void:
 			add_child(hsizer)
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
-			hsizer.custom_minimum_size.y = 25 if !generator.minimized else 12
+			hsizer.custom_minimum_size.y = item_min_height if !generator.minimized else 12 * mm_globals.ui_scale
 	# Edit buttons
 	if generator.is_editable():
-		for theme_stylebox in ["frame", "selected_frame"]:
-			remove_theme_stylebox_override(theme_stylebox)
+		#for theme_stylebox in ["frame", "selected_frame"]:
+			#remove_theme_stylebox_override(theme_stylebox)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
 		add_child(edit_buttons)
 		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
 		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
 	if generator.minimized:
-		size = Vector2(96, 96)
+		size = Vector2(96, 96) * mm_globals.ui_scale
 	# Preview
 	restore_preview_widget()
 
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")

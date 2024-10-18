@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
+[gd_scene load_steps=6 format=3 uid="uid://drbpisn5f3h8y"]
 
 [ext_resource type="Script" path="res://material_maker/panels/library/library_tree.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="Script" path="res://material_maker/widgets/button_with_icon.gd" id="3_sjaxn"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("3")
@@ -50,6 +51,8 @@ layout_mode = 2
 size_flags_horizontal = 4
 icon = SubResource("1")
 flat = false
+script = ExtResource("3_sjaxn")
+mm_icon = "Settings"
 
 [node name="Tree" type="Tree" parent="Library"]
 unique_name_in_owner = true
@@ -70,6 +73,8 @@ size_flags_vertical = 4
 tooltip_text = "Get more nodes from website"
 text = "Browse Community Nodes "
 clip_text = true
+script = ExtResource("3_sjaxn")
+mm_icon = "Download"
 
 [node name="ItemMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true

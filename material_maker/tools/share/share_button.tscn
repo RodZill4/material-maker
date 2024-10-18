@@ -1,17 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnttargjmhjh8"]
+[gd_scene load_steps=4 format=3 uid="uid://dnttargjmhjh8"]
 
-[ext_resource type="Texture2D" path="res://material_maker/tools/share/broken_link.tres" id="1"]
 [ext_resource type="Script" path="res://material_maker/tools/share/share_button.gd" id="2"]
+[ext_resource type="Script" path="res://material_maker/widgets/button_with_icon.gd" id="2_ujx6c"]
 [ext_resource type="Script" path="res://material_maker/tools/share/share_http_request.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="4"]
-
-[sub_resource type="AtlasTexture" id="1"]
-atlas = ExtResource("4")
-region = Rect2(224, 0, 32, 16)
-
-[sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("4")
-region = Rect2(224, 16, 32, 16)
 
 [node name="Share" type="HBoxContainer"]
 offset_right = 40.0
@@ -19,19 +10,20 @@ offset_bottom = 40.0
 tooltip_text = "Open Material Maker web site"
 script = ExtResource("2")
 
-[node name="ConnectButton" type="TextureButton" parent="."]
+[node name="ConnectButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Connect to web site"
-texture_normal = ExtResource("1")
+script = ExtResource("2_ujx6c")
+mm_icon = "Login"
 
-[node name="SendButton" type="TextureButton" parent="."]
+[node name="SendButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Send material to web site"
 disabled = true
-texture_normal = SubResource("1")
-texture_disabled = SubResource("2")
+script = ExtResource("2_ujx6c")
+mm_icon = "Upload"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 max_redirects = 0
