@@ -471,9 +471,14 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 
 func change_theme(theme_name) -> void:
 	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
-		theme_name = "default_dark"
-	theme = load("res://material_maker/theme/"+theme_name+".tres")
-
+		theme_name = "default dark"
+	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
+	if _theme == theme:
+		return
+	if _theme is EnhancedTheme:
+		_theme.update()
+	await get_tree().process_frame
+	theme = _theme
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
