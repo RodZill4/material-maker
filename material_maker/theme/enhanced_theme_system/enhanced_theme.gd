@@ -38,11 +38,13 @@ func update(at:Node=null) -> void:
 	clear()
 
 	for i in base_theme.get_property_list():
-		if not i.name.begins_with("resource_") and i.usage & PROPERTY_USAGE_EDITOR and i.name != "script":
+		if i.usage & PROPERTY_USAGE_EDITOR and not i.name.begins_with("resource_") and i.name != "script":
 			var val: Variant = base_theme.get(i.name)
 			if val is Resource:
 				if val is AtlasTexture and get(i.name) is AtlasTexture:
 					val = get(i.name)
+				elif val is Font:
+					pass
 				else:
 					val = val.duplicate()
 			set(i.name, val)
@@ -169,7 +171,7 @@ func get_dynamic_svg(image_path:String, image_scale:float, color_swaps : Array= 
 
 	return ImageTexture.create_from_image(img)
 
-
-func _validate_property(property: Dictionary) -> void:
-	if property.name.begins_with("default_") or "/" in property.name:
-		property.usage = PROPERTY_USAGE_INTERNAL
+#
+#func _validate_property(property: Dictionary) -> void:
+	#if property.name.begins_with("default_") or "/" in property.name:
+		#property.usage = PROPERTY_USAGE_INTERNAL
