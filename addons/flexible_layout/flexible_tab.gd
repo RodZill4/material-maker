@@ -6,7 +6,6 @@ var updating : bool = false
 
 
 func _ready():
-	$Container/Close.texture_normal = get_theme_icon("close", "TabBar")
 	update()
 
 func _notification(what):
@@ -23,6 +22,8 @@ func get_flex_layout():
 	return flex_tab.flexible_layout
 
 func update():
+	$Container/Close.texture_normal = get_theme_icon("close", "MM_FlexibleTab")
+	$Container/Undock.texture_normal = get_theme_icon("undock", "MM_FlexibleTab")
 	if not updating:
 		updating = true
 		var is_current: bool = (get_index() == get_parent().get_parent().current)

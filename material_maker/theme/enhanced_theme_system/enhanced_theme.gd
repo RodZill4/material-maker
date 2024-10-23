@@ -135,7 +135,10 @@ func update(at:Node=null) -> void:
 			var texture: AtlasTexture = get_icon(icon_name, type)
 			var texture_scale: float = texture.get_meta("scale", 1)# * scale
 
-			texture.atlas = get_dynamic_svg(path,  texture_scale, icon_color_swaps)
+			if base_texture.has_meta("keep_colors"):
+				texture.atlas = get_dynamic_svg(path, texture_scale)
+			else:
+				texture.atlas = get_dynamic_svg(path, texture_scale, icon_color_swaps)
 
 			var base_region: Rect2 = base_texture.region
 			texture.region.position = base_region.position * texture_scale
