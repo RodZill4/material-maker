@@ -23,7 +23,9 @@ func get_flex_layout():
 
 func update():
 	$Container/Close.texture_normal = get_theme_icon("close", "MM_FlexibleTab")
+	$Container/Close.modulate = get_theme_color("font_selected_color", "MM_FlexibleTab")
 	$Container/Undock.texture_normal = get_theme_icon("undock", "MM_FlexibleTab")
+	$Container/Undock.modulate = get_theme_color("font_selected_color", "MM_FlexibleTab")
 	if not updating:
 		updating = true
 		var is_current: bool = (get_index() == get_parent().get_parent().current)
