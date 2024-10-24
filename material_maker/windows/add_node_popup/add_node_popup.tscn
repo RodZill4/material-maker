@@ -99,7 +99,7 @@ shader_parameter/tex = ExtResource("3")
 
 [node name="AddNodePopup" type="Popup"]
 transparent_bg = true
-size = Vector2i(252, 400)
+size = Vector2i(350, 400)
 visible = true
 transparent = true
 script = ExtResource("1")
