@@ -1,7 +1,8 @@
 [gd_resource type="Theme" load_steps=83 format=3 uid="uid://42cileyfwaca"]
 
-[ext_resource type="Texture2D" uid="uid://c7mq31csbj1fg" path="res://material_maker/theme/new_theme_icons.svg" id="1_7p32q"]
+[ext_resource type="Texture2D" uid="uid://c7mq31csbj1fg" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_l05jd"]
+
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inl5r"]
 content_margin_left = 3.0
