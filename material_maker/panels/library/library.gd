@@ -39,6 +39,17 @@ func _ready() -> void:
 	libraries_button.get_popup().id_pressed.connect(self._on_Libraries_id_pressed)
 	init_expanded_items()
 	update_tree()
+	update_theme()
+
+func _notification(what: int) -> void:
+	if not is_node_ready():
+		return
+
+	if what == NOTIFICATION_THEME_CHANGED:
+		update_theme()
+
+func update_theme() -> void:
+	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
