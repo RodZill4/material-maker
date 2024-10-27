@@ -124,55 +124,56 @@ size_flags_horizontal = 3
 material = SubResource("ShaderMaterial_88qrb")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Miscellaneous/Reroute"
+default_library_item = "Simple/Uniform/Greyscale"
 
 [node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_wwply")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Simple/Shape3D"
+default_library_item = "Filter/Colorize"
 
 [node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_h5yl4")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Noise/FBM"
+default_library_item = "Filter/Blend"
 
 [node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_xysbp")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Filter/Colorize"
+default_library_item = "Transform"
 
 [node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_2fcwt")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Transform3D"
+default_library_item = "Filter/Math"
 
 [node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_l7flh")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Transform3D/Tiler"
 
 [node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_s5pxd")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Filter/Blend"
 
 [node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_irmk8")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Filter/Math"
 
 [node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_nyf2o")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Filter/Normal map"
+
+[node name="Button10" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_nyf2o")
+layout_mode = 2
+size_flags_horizontal = 6
 
 [node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -197,6 +198,7 @@ fixed_icon_size = Vector2i(18, 18)
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button7" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button8" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button9" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button10" to="." method="add_node"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/Filter" to="." method="_on_filter_gui_input"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_gui_input"]
 [connection signal="item_activated" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_item_activated"]
