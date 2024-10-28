@@ -110,7 +110,7 @@
 			"\tif (abs(edge_uv.y) < 1.0) {",
 			"\t\treturn $in_edge(vec2(edge_uv.x, 0.5+0.5*edge_uv.y));",
 			"\t} else if (closest > 0.0) {",
-			"\t\treturn $in_fill($uv);",
+			"\t\treturn $in_fill(uv);",
 			"\t}",
 			"\treturn vec4(0.0);",
 			"}"
