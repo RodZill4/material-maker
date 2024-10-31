@@ -29,7 +29,6 @@ func get_expression_value_from_string(expression_string : String, values: Dictio
 func do_update_mesh() -> void:
 	var size : int = mm_globals.main_window.preview_tesselation_detail
 	if size != shader_size or compute_shader != shader_string:
-		print("Updating mesh generation compute shader")
 		var vertex_count : int = get_expression_value_from_string(vertex_count_expression, { size=size} )
 		var index_count : int = get_expression_value_from_string(index_count_expression, { size=size} )
 		shader.local_size = size if size < 32 else 32
@@ -45,7 +44,6 @@ func do_update_mesh() -> void:
 		await shader.set_shader_ext(compute_shader)
 		shader_size = size
 		shader_string = compute_shader
-	print("Running mesh generation compute shader")
 	var opv : Dictionary = { vertices_format="vec3", normals_format="vec3", tex_uvs_format="vec2" }
 	shader.set_parameter("size", size)
 	for p in parameters:
