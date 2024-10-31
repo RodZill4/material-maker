@@ -403,7 +403,7 @@ func update_preview() -> void:
 func do_update_preview() -> void:
 	preview.set_generator(generator, generator.preview, true)
 
-	var scale_modifier: float = get_global_transform().get_scale().x
+	var scale_modifier : float = get_global_transform().get_scale().x
 	var titlebar_stylebox :=  get_theme_stylebox("titlebar", "GraphNode")
 	var title_bar_height := get_titlebar_hbox().size.y +titlebar_stylebox.content_margin_bottom+titlebar_stylebox.content_margin_top
 	var margin: int = 8
@@ -423,6 +423,7 @@ func update_title() -> void:
 					break
 
 func update_node() -> void:
+	var minimum_line_height = get_theme_constant("minimum_line_height", "MM_Node") if has_theme_constant("minimum_line_height", "MM_Node") else 25
 	# Clean node
 	clear_all_slots()
 	save_preview_widget()
@@ -465,11 +466,11 @@ func update_node() -> void:
 		while get_child_count() < index:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			hsizer.custom_minimum_size.y = 25
+			hsizer.custom_minimum_size.y = minimum_line_height
 			add_child(hsizer)
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
-		hsizer.custom_minimum_size.y = 25
+		hsizer.custom_minimum_size.y = minimum_line_height
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		add_child(hsizer)
 		if label != "":
@@ -518,7 +519,7 @@ func update_node() -> void:
 						hsizer.add_child(empty_control)
 					add_child(hsizer)
 				hsizer = get_child(index)
-				hsizer.custom_minimum_size.y = 25
+				hsizer.custom_minimum_size.y = minimum_line_height
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label
@@ -567,7 +568,7 @@ func update_node() -> void:
 			add_child(hsizer)
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
-			hsizer.custom_minimum_size.y = 25 if !generator.minimized else 12
+			hsizer.custom_minimum_size.y = minimum_line_height if !generator.minimized else 12
 	# Edit buttons
 	if generator.is_editable():
 		for theme_stylebox in ["frame", "selected_frame"]:

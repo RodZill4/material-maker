@@ -1183,7 +1183,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
-			"obj", "glb":
+			"obj", "glb", "gltf":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
