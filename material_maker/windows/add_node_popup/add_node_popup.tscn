@@ -130,7 +130,7 @@ default_library_item = "Miscellaneous/Reroute"
 material = SubResource("ShaderMaterial_wwply")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Simple/Shape3D"
+default_library_item = "Simple/Shape"
 
 [node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_h5yl4")
@@ -148,13 +148,13 @@ default_library_item = "Filter/Colorize"
 material = SubResource("ShaderMaterial_2fcwt")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Transform3D"
+default_library_item = "Transform"
 
 [node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_l7flh")
 layout_mode = 2
 size_flags_horizontal = 6
-default_library_item = "Transform3D/Tiler"
+default_library_item = "Transform/Tiler"
 
 [node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
 material = SubResource("ShaderMaterial_s5pxd")
