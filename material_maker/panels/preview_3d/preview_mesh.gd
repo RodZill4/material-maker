@@ -21,7 +21,8 @@ func _ready():
 	update_mesh.call_deferred()
 
 func get_material() -> Material:
-	set_surface_override_material(0, material)
+	if get_surface_override_material_count() > 0:
+		set_surface_override_material(0, material)
 	return material
 
 func set_uv_scale(s : Vector2) -> void:
