@@ -1,8 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://clw8sb0p8webl"]
+[gd_scene load_steps=18 format=3 uid="uid://clw8sb0p8webl"]
 
 [ext_resource type="Script" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
-[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="3"]
 
 [sub_resource type="Shader" id="11"]
 code = "shader_type canvas_item;
@@ -19,47 +18,55 @@ void fragment() {
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_buqpn"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_88qrb"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jt68i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wwply"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_jt68i")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_nfnnr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h5yl4"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_nfnnr")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_gqmjk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xysbp"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_gqmjk")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2fcwt"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l7flh"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
 [sub_resource type="Shader" id="19"]
 code = "shader_type canvas_item;
@@ -81,21 +88,21 @@ resource_local_to_scene = true
 shader = SubResource("19")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_irmk8"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nyf2o"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("3")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
 [node name="AddNodePopup" type="Popup"]
 transparent_bg = true
