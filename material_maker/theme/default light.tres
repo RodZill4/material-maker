@@ -671,7 +671,7 @@ target = Color(0.0562916, 0.0562916, 0.0562916, 1)
 script = ExtResource("4_rhf2q")
 name = "Secondary"
 orig = Color(0.933333, 0.521569, 0.909804, 1)
-target = Color(0.149953, 0.652053, 0.834827, 1)
+target = Color(0.46572, 0.189705, 0.480764, 1)
 
 [sub_resource type="Resource" id="Resource_8dhbo"]
 script = ExtResource("4_rhf2q")

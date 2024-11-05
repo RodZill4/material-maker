@@ -26,7 +26,6 @@ offset_bottom = -1.49829
 grid_pattern = 1
 right_disconnects = true
 show_zoom_label = true
-show_arrange_button = false
 script = ExtResource("1")
 
 [node name="Timer" type="Timer" parent="."]
