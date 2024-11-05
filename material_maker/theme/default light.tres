@@ -1,4 +1,4 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=100 format=3 uid="uid://u00kx2lkkx8j"]
+[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=101 format=3 uid="uid://u00kx2lkkx8j"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_de56q"]
 [ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_gdmjv"]
@@ -671,13 +671,19 @@ target = Color(0.0562916, 0.0562916, 0.0562916, 1)
 script = ExtResource("4_rhf2q")
 name = "Secondary"
 orig = Color(0.933333, 0.521569, 0.909804, 1)
-target = Color(0.46572, 0.189705, 0.480764, 1)
+target = Color(0.565764, 0.138889, 0.589763, 1)
 
 [sub_resource type="Resource" id="Resource_8dhbo"]
 script = ExtResource("4_rhf2q")
 name = "MainDisabled"
 orig = Color(0.807843, 0.807843, 0.807843, 1)
 target = Color(0.237539, 0.237539, 0.237539, 1)
+
+[sub_resource type="Resource" id="Resource_5oh4i"]
+script = ExtResource("4_rhf2q")
+name = "Hover"
+orig = Color(0.933333, 0.678431, 0.909804, 1)
+target = Color(0.398892, 0.209142, 0.42588, 1)
 
 [sub_resource type="Resource" id="Resource_ub5ur"]
 script = ExtResource("4_rhf2q")
@@ -933,5 +939,5 @@ Tree/styles/selected_focus = SubResource("StyleBoxFlat_uf4s7")
 script = ExtResource("5_fagh3")
 base_theme = ExtResource("3_e7v0o")
 font_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf")])
-icon_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo")])
+icon_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo"), SubResource("Resource_5oh4i")])
 theme_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps")])
