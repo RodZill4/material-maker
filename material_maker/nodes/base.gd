@@ -82,7 +82,7 @@ func randomness_button_create_popup():
 	if ! generator.is_seed_locked() and DisplayServer.clipboard_get().left(5) == "seed=":
 		menu.add_item(tr("Paste seed"), 2)
 	add_child(menu)
-	menu.popup(Rect2i(get_local_mouse_position()+get_screen_position(), Vector2i(0, 0)))
+	menu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
 	menu.connect("popup_hide", Callable(menu, "queue_free"))
 	menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
 
@@ -96,7 +96,7 @@ func buffer_button_create_popup():
 		menu.add_separator()
 		menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 	add_child(menu)
-	menu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
+	menu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
 	menu.connect("popup_hide",Callable(menu,"queue_free"))
 	menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
 
@@ -281,7 +281,7 @@ func _on_gui_input(event) -> void:
 						add_child(menu)
 						menu.popup_hide.connect(menu.queue_free)
 						menu.id_pressed.connect(self._on_menu_id_pressed)
-						menu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
+						menu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
 					else:
 						menu.free()
 		elif doubleclicked:

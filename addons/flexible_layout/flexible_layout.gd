@@ -472,8 +472,7 @@ class FlexLayout:
 		if rect.size.x == 0 or rect.size.y == 0:
 			return
 		if top:
-			var scale : float = control.get_window().content_scale_factor
-			rect.size = Vector2i(Vector2(rect.size)/scale)
+			rect.size = Vector2i(Vector2(rect.size))
 			top.layout(rect)
 		main_control.layout_changed.emit()
 	

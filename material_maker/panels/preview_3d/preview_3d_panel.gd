@@ -23,7 +23,6 @@ func on_right_click():
 	#todo $MaterialPreview.keep_3d_linear = true
 	await get_tree().process_frame
 	await get_tree().process_frame
-	await get_tree().process_frame
 	# Pick position in image
 	var texture : ViewportTexture = $MaterialPreview.get_texture()
 	var image : Image = texture.get_image()
@@ -36,7 +35,7 @@ func on_right_click():
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$TextureRect.visible = false
-	$PopupMenu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
+	$PopupMenu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
 
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")

@@ -203,7 +203,7 @@ func _on_gui_input(event):
 					elif event.is_command_or_control_pressed():
 						zooming = true
 				MOUSE_BUTTON_RIGHT:
-					$ContextMenu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
+					$ContextMenu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
 		else:
 			dragging = false
 			zooming = false

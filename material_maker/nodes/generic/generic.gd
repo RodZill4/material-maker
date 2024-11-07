@@ -37,7 +37,7 @@ func generic_button_create_popup():
 	add_child(popup_menu)
 	popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
 	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
-	popup_menu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
+	popup_menu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
 
 
 
