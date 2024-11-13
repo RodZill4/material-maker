@@ -1,4 +1,3 @@
-@tool
 extends Theme
 class_name EnhancedTheme
 
