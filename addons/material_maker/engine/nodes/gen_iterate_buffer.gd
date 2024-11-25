@@ -114,17 +114,19 @@ func do_update_shaders() -> void:
 	for i in 2:
 		var shader_compute : MMShaderCompute = shader_computes[i]
 		var buffer_name : String = buffer_names[i]
+		var output_texture_type : int = 0 if new_is_greyscale else 1
+		if f32:
+			output_texture_type |= 2
 		if i == 1 and get_parameter("autostop"):
 			var shader_template : String = load("res://addons/material_maker/engine/nodes/iterate_buffer_compute.tres").text
-			var output_texture_type : int = 0 if (sources[i].output_type == "f") else 1
-			if f32:
-				output_texture_type |= 2
 			var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
 			var extra_parameters : Array[Dictionary] = [{name="mm_compare", type="sampler2D", value=texture}]
 			var extra_output_parameters : Array[Dictionary] = [{name="mm_highest_diff", type="int"}]
 			await shader_compute.compute_shader.set_shader_from_shadercode_ext(shader_template, sources[i], output_textures, extra_parameters, false, extra_output_parameters)
 		else:
-			await shader_compute.set_shader_from_shadercode(sources[i], f32)
+			var shader_template : String = load("res://addons/material_maker/engine/nodes/buffer_compute.tres").text
+			var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
+			await shader_compute.compute_shader.set_shader_from_shadercode_ext(shader_template, sources[i], output_textures, [], false, [])
 		mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
 	mm_deps.update()
 	if new_is_greyscale != is_greyscale:
@@ -139,6 +141,7 @@ func set_parameter(n : String, v) -> void:
 			mm_deps.dependency_update("o%s_it_tex_size" % get_instance_id(), pow(2, v))
 	super.set_parameter(n, v)
 	set_current_iteration(0)
+	mm_deps.buffer_invalidate(buffer_names[0])
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if parameter_name != buffer_names[2] and parameter_name != iteration_param_name and (buffer_name != buffer_names[1] or ! value is Texture2D):
