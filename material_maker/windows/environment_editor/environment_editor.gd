@@ -148,7 +148,7 @@ func _on_Environments_gui_input(event):
 	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
-		context_menu.popup(Rect2(mm_globals.screen_space_mouse_position($Main/HSplitContainer/Environments), Vector2(0, 0)))
+		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]

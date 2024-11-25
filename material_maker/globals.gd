@@ -142,8 +142,8 @@ func parse_paste_data(data : String):
 
 # Misc. UI functions
 
-func screen_space_mouse_position(control : Control) -> Vector2:
-	return control.get_local_mouse_position()*control.get_viewport().content_scale_factor+control.get_screen_position()
+static func popup_menu(menu : PopupMenu, parent : Control):
+	menu.popup(Rect2(parent.get_local_mouse_position()+parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0):
 	main_window.set_tip_text(tip, timeout)

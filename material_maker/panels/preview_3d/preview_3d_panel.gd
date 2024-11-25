@@ -35,7 +35,7 @@ func on_right_click():
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$TextureRect.visible = false
-	$PopupMenu.popup(Rect2(mm_globals.screen_space_mouse_position(self), Vector2(0, 0)))
+	mm_globals.popup_menu($PopupMenu, self)
 
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
