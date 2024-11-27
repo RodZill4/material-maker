@@ -1,7 +1,7 @@
 Roman numerals node
 ~~~~~~~~~~~~~~~~~~~
 
-The **Roman numerals** node outputs roman numbers up to 40
+The **Roman numerals** node outputs roman numbers up to 3999
 
 .. image:: images/node_simple_roman_numerals.png
 	:align: center
@@ -32,6 +32,8 @@ The **Roman numerals** node accepts the following parameters:
 * the *Bevel* parameter controls the glyph's edge widths.
 
 * the *Spacing* parameter controls the spacing between glyphs.
+
+* the *Align* parameter controls how the number is aligned (0: left, 0.5: center, 1: right).
 
 Example images
 ++++++++++++++

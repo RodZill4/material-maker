@@ -53,7 +53,7 @@ vec2 transform2(vec2 uv, vec2 translate, float rotate, vec2 scale) {
 	rv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;
 	rv /= scale;
 	rv += vec2(0.5);
-	return rv;	
+	return rv;
 }
 uniform sampler2D texture_3;
 const float texture_3_size = 128.0;
@@ -78,7 +78,7 @@ vec4 brick_corner_bb(vec2 uv, vec2 bmin, vec2 bmax, float mortar, float corner, 
 	float min_size = min(size.x, size.y);
 	mortar *= brick_height;
 	corner *= brick_height;
-	
+
 	vec2 corner1 = vec2(bmin + mortar);
 	vec2 corner2 = vec2(bmax.x - mortar - corner, bmin.y + mortar);
 	vec2 corner3 = vec2(bmin.x + mortar, bmax.y - mortar - corner);
@@ -107,7 +107,7 @@ vec4 bricks_rb2(vec2 uv, vec2 count, float repeat, float offset) {
 }
 vec4 bricks_rb3(vec2 uv, vec2 count, float repeat, float offset) {
 	vec4 bb = bricks_rb(uv, count, repeat, offset);
-	
+
 	if ( (uv.x - bb.x) / (bb.z - bb.x) < 1.0/3.0) {
 		bb.z = bb.x + (bb.z - bb.x) / 3.0;
 	} else {
@@ -276,7 +276,7 @@ vec3 hsv_to_rgb(vec3 c) {
 }
 float anisotropic(vec2 uv, vec2 size, float seed, float smoothness, float interpolation) {
 	vec2 seed2 = rand2(vec2(seed, 1.0-seed));
-	
+
 	vec2 xy = floor(uv*size);
 	vec2 offset = vec2(rand(seed2 + xy.y), 0.0);
 	vec2 xy_offset = floor(uv * size + offset );
@@ -286,7 +286,7 @@ float anisotropic(vec2 uv, vec2 size, float seed, float smoothness, float interp
 	float smooth_mix = smoothstep(0.0, 1.0, mixer);
 	float linear = mix(f0, f1, mixer);
 	float smoothed = mix(f0, f1, smooth_mix);
-	
+
 	return mix(linear, smoothed, interpolation);
 }
 vec2 get_from_tileset(float count, float seed, vec2 uv) {
