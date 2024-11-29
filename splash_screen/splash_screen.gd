@@ -61,7 +61,8 @@ func _enter_tree():
 				screen = randi() % BACKGROUNDS.size()
 	set_screen(screen)
 	var window : Window = get_window()
-	window.position = (DisplayServer.screen_get_size(window.current_screen)-Vector2i(size))/2
+	var current_screen_index = window.current_screen
+	window.position = (DisplayServer.screen_get_size(current_screen_index)-Vector2i(size))/2 + DisplayServer.screen_get_position(current_screen_index)
 	window.size = size
 
 func set_screen(bi : int) -> void:
