@@ -7,12 +7,15 @@ signal active_cursor_changed(index:int)
 
 func _ready() -> void:
 	%GradientEdit.remove_popup_button()
+	%Pin.icon = get_theme_icon("pin_unpinned", "MM_Icons")
+	%Previous.icon = get_theme_icon("arrow_left", "MM_Icons")
+	%Next.icon = get_theme_icon("arrow_right", "MM_Icons")
 
 
 func set_gradient(value:MMGradient, cursor_index := 0) -> void:
 	%GradientEdit.value = value
-	
-	# Usually the gradient isn't instantly loaded, 
+
+	# Usually the gradient isn't instantly loaded,
 	# because the nodes size isn't yet correct, so we wait until the Cursors are loaded
 	await %GradientEdit.value_was_set
 	%Interpolation.selected = value.interpolation
@@ -36,7 +39,7 @@ func close() -> void:
 func _on_gradient_edit_updated(value: Variant, merge_undos: bool) -> void:
 	# Propagate changes to the parent GradientEdit
 	updated.emit(value, merge_undos)
-	
+
 	# Update values of the active cursor
 	_on_gradient_edit_active_cursor_changed()
 

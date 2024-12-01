@@ -1,4 +1,3 @@
-@tool
 extends Theme
 class_name EnhancedTheme
 
@@ -64,12 +63,19 @@ func update(at:Node=null) -> void:
 	for swap in theme_color_swaps:
 		theme_color_swap_dict[swap.orig.to_html()] = swap.target.to_html()
 
+	var icon_color_swap_dict := {}
+	for swap in icon_color_swaps:
+		icon_color_swap_dict[swap.orig.to_html()] = swap.target.to_html()
+
 	## COLORS
 	for type in get_color_type_list():
 		for color_name in get_color_list(type):
 			if "font_" in color_name:
 				if get_color(color_name, type).to_html() in font_color_swap_dict:
 					set_color(color_name, type, Color(font_color_swap_dict[get_color(color_name, type).to_html()]))
+			elif "icon_" in color_name:
+				if get_color(color_name, type).to_html() in icon_color_swap_dict:
+					set_color(color_name, type, Color(icon_color_swap_dict[get_color(color_name, type).to_html()]))
 			else:
 				if get_color(color_name, type).to_html() in theme_color_swap_dict:
 					set_color(color_name, type, Color(theme_color_swap_dict[get_color(color_name, type).to_html()]))
@@ -135,7 +141,10 @@ func update(at:Node=null) -> void:
 			var texture: AtlasTexture = get_icon(icon_name, type)
 			var texture_scale: float = texture.get_meta("scale", 1)# * scale
 
-			texture.atlas = get_dynamic_svg(path,  texture_scale, icon_color_swaps)
+			if base_texture.has_meta("recolor"):
+				texture.atlas = get_dynamic_svg(path, texture_scale, icon_color_swaps)
+			else:
+				texture.atlas = get_dynamic_svg(path, texture_scale)
 
 			var base_region: Rect2 = base_texture.region
 			texture.region.position = base_region.position * texture_scale

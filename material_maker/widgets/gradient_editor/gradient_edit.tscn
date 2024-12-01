@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cp6ft7qbucfam"]
+[gd_scene load_steps=6 format=3 uid="uid://cp6ft7qbucfam"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_edit.gd" id="1_51wqf"]
-[ext_resource type="Texture2D" uid="uid://dysx1qjceb1od" path="res://material_maker/theme/dark/optionbutton_arrow.png" id="2_kwkci"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7yhr"]
 content_margin_left = 3.0
@@ -62,7 +61,6 @@ mouse_filter = 2
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
-icon = ExtResource("2_kwkci")
 flat = true
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]

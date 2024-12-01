@@ -9,6 +9,7 @@ signal size_value_changed(s)
 
 func _ready() -> void:
 	super()
+	theme_type_variation = "MM_NodeOptionEdit"
 	connect("item_selected", Callable(self, "_on_item_selected"))
 	update_options()
 
