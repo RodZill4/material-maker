@@ -121,6 +121,8 @@ func do_load_custom_mesh(file_path) -> void:
 func select_object(id) -> void:
 	current_object.visible = false
 	current_object = objects.get_child(id)
+	if current_object.has_method("update_mesh"):
+		current_object.update_mesh()
 	current_object.visible = true
 	emit_signal("need_update", [ self ])
 	var aabb : AABB = current_object.get_aabb()
@@ -200,7 +202,7 @@ func on_gui_input(event) -> void:
 
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-					_mouse_start_position = event.global_position/get_window().content_scale_factor
+					_mouse_start_position = event.global_position
 					moving = true
 				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp

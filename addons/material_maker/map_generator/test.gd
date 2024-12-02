@@ -14,12 +14,7 @@ func _ready():
 
 func show_map(map_name : String):
 	var mesh = load("res://material_maker/meshes/suzanne.obj")
-	var t : MMTexture
-	if false:
-		t = MMTexture.new()
-		await MMMapGenerator.generate(mesh, map_name, 512, t)
-	else:
-		t = await MMMapGenerator.get_map(mesh, map_name)
+	var t : MMTexture = await MMMapGenerator.get_map(mesh, map_name, true)
 	texture = await t.get_texture()
 
 func _on_maps_item_selected(index):

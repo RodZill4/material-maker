@@ -73,7 +73,7 @@ func _on_Image_gui_input(event) -> void:
 			elif event.button_index == MOUSE_BUTTON_MIDDLE:
 				dragging = true
 			elif event.button_index == MOUSE_BUTTON_RIGHT:
-				$ContextMenu.popup(Rect2(get_local_mouse_position()+get_screen_position(), Vector2(0, 0)))
+				mm_globals.popup_menu($ContextMenu, self)
 		elif event.button_index == MOUSE_BUTTON_MIDDLE:
 			dragging = false
 		elif event.button_index == MOUSE_BUTTON_LEFT:

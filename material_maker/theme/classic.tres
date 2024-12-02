@@ -70,56 +70,56 @@ border_color = Color(0.099986, 0.099986, 0.0999859, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62l4s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
-content_margin_left = 10.0
+content_margin_left = 28.0
 content_margin_top = 8.0
-content_margin_right = 10.0
+content_margin_right = 28.0
 content_margin_bottom = 8.0
 bg_color = Color(0, 0, 0, 0.666667)
 border_width_left = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.145762, 0.145765, 0.164989, 1)
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryqkj"]
 content_margin_left = 10.0
-content_margin_top = 8.0
+content_margin_top = 28.0
 content_margin_right = 10.0
-content_margin_bottom = 8.0
+content_margin_bottom = 28.0
 bg_color = Color(0.017329, 0.0173288, 0.0216428, 1)
 border_width_left = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.745098, 0.752941, 0.772549, 1)
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imqse"]
 content_margin_left = 5.0
-content_margin_top = 5.0
+content_margin_top = 3.0
 content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_bottom = 3.0
 bg_color = Color(0.490196, 0.505882, 0.545098, 1)
 border_color = Color(0.490196, 0.505882, 0.545098, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
+corner_radius_top_left = 10
+corner_radius_top_right = 10
 corner_detail = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ru0kh"]
 content_margin_left = 5.0
-content_margin_top = 5.0
+content_margin_top = 2.0
 content_margin_right = 5.0
-content_margin_bottom = 5.0
+content_margin_bottom = 2.0
 bg_color = Color(0.490196, 0.505882, 0.545098, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_color = Color(0.745098, 0.752941, 0.772549, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
+corner_radius_top_left = 10
+corner_radius_top_right = 10
 corner_detail = 4
 
 [sub_resource type="FontVariation" id="FontVariation_na26k"]
@@ -243,15 +243,17 @@ opentype_features = {
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwwye"]
 bg_color = Color(1, 1, 1, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s6o4g"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s6o4g"]
+bg_color = Color(0.3, 0.33, 0.41, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8m00c"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8m00c"]
+bg_color = Color(0.2, 0.23, 0.31, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77egl"]
 content_margin_left = 3.0
-content_margin_top = 3.0
+content_margin_top = 1.0
 content_margin_right = 3.0
-content_margin_bottom = 3.0
+content_margin_bottom = 1.0
 draw_center = false
 border_width_left = 1
 border_width_top = 1
@@ -261,16 +263,16 @@ border_color = Color(0.490196, 0.505882, 0.545098, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56r42"]
 content_margin_left = 3.0
-content_margin_top = 3.0
+content_margin_top = 1.0
 content_margin_right = 3.0
-content_margin_bottom = 3.0
+content_margin_bottom = 1.0
 bg_color = Color(0.183886, 0.211227, 0.279542, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmyhr"]
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
+content_margin_left = 3.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
 border_width_left = 1
 border_width_top = 1
@@ -560,6 +562,7 @@ GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_btw0t")
 GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
 GraphNode/colors/portpreview_color = Color(0.89059, 0.89059, 0.89059, 1)
 GraphNode/colors/title_color = Color(0.87451, 0.878431, 0.886275, 1)
+GraphNode/constants/port_h_offset = 10
 GraphNode/constants/portpreview_radius = 6
 GraphNode/constants/portpreview_width = 15
 GraphNode/styles/panel = SubResource("StyleBoxFlat_uwck0")
@@ -592,13 +595,14 @@ MM_FlexibleTab/base_type = &"TabBar"
 MM_FlexibleTab/constants/separation = 3
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
+MM_Node/constants/minimum_line_height = 16
 MM_NodeCheckbox/base_type = &"Button"
 MM_NodeFloatEdit/base_type = &"Button"
 MM_NodeFloatEdit/font_sizes/font_size = 15
 MM_NodeFloatEdit/fonts/font = SubResource("FontVariation_80ifi")
 MM_NodeFloatEdit/styles/clip = SubResource("StyleBoxFlat_pwwye")
-MM_NodeFloatEdit/styles/fill_hover = SubResource("StyleBoxEmpty_s6o4g")
-MM_NodeFloatEdit/styles/fill_normal = SubResource("StyleBoxEmpty_8m00c")
+MM_NodeFloatEdit/styles/fill_hover = SubResource("StyleBoxFlat_s6o4g")
+MM_NodeFloatEdit/styles/fill_normal = SubResource("StyleBoxFlat_8m00c")
 MM_NodeFloatEdit/styles/focus = SubResource("StyleBoxFlat_77egl")
 MM_NodeFloatEdit/styles/hover = SubResource("StyleBoxFlat_56r42")
 MM_NodeFloatEdit/styles/normal = SubResource("StyleBoxFlat_kmyhr")
@@ -610,7 +614,7 @@ MM_NodeOptionEdit/base_type = &"OptionButton"
 MM_NodeOptionEditPopup/base_type = &"PopupMenu"
 MM_NodeOptionEditPopup/styles/hover = SubResource("StyleBoxFlat_ofcpt")
 MM_NodeOptionEditPopup/styles/panel = SubResource("StyleBoxFlat_g2id4")
-MM_NodePortGroup/constants/width = 4
+MM_NodePortGroup/constants/width = 2
 MM_NodePortGroup/styles/panel = SubResource("StyleBoxFlat_k2ns1")
 MM_NodePropertyLabel/base_type = &"Label"
 MM_NodePropertyLabel/font_sizes/font_size = 15

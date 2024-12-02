@@ -309,7 +309,7 @@ func _on_Tree_item_rmb_selected(mouse_position : Vector2i):
 		item_menu.set_item_disabled(0, read_only)
 		item_menu.set_item_disabled(1, read_only)
 		item_menu.set_item_disabled(2, read_only)
-		item_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+		mm_globals.popup_menu(item_menu, self)
 
 func _on_PopupMenu_index_pressed(index):
 	var library_index : int = 0

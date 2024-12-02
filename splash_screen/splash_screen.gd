@@ -26,7 +26,9 @@ const BACKGROUNDS : Array[Dictionary] = [
 	{ title="Vintage Luggage", author="Pavel Oliva", file="pavel_oliva_vintage_luggage.png" },
 	{ title="Golden Tiles", author="PixelMuncher", file="pixelmuncher_golden_tiles.png" },
 	{ title="Spiral Trails", author="DroppedBeat", file="droppedbeat_spiral_trails.tres" },
+	{ title="Star Trails", author="DroppedBeat", file="droppedbeat_star_trails.tres" },
 	{ title="Matrix Rain", author="DroppedBeat", file="droppedbeat_matrix_rain.tres" },
+	{ title="Meteor Rain", author="DroppedBeat", file="droppedbeat_meteor_rain.tres" },
 	{ title="Procedural Material", author="DroppedBeat", file="droppedbeat_procedural_material.png" },
 	{ title="Vending Machines", author="DroppedBeat", file="droppedbeat_vending_machines.png" },
 	{ title="Path Traced Green Thing", author="Paulo Falcao", file="paulo_falcao_green_thing.png" },
@@ -35,17 +37,33 @@ const BACKGROUNDS : Array[Dictionary] = [
 	{ title="Dirty Tiles", author="cybereality", file="cybereality_dirty_tiles.png" },
 	{ title="Future Visions", author="cybereality", file="cybereality_future_visions.png" },
 	{ title="Brutalism", author="cybereality", file="cybereality_brutalism.png" },
-	{ title="Old Doors", author="cgmytro", file="cgmytro_old_doors.png" }
+	{ title="Old Doors", author="cgmytro", file="cgmytro_old_doors.png" },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_1.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_2.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_3.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_4.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_5.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_6.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_7.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_8.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
 ]
 
 
 func _enter_tree():
-	randomize()
-	set_screen(randi() % BACKGROUNDS.size())
+	var date : Dictionary = Time.get_date_dict_from_system()
+	var date_int : int = date.month*33+date.day
+	var screen : int
+	match date_int:
+		_:
+			randomize()
+			screen = randi() % BACKGROUNDS.size()
+			while BACKGROUNDS[screen].has("odds") and BACKGROUNDS[screen].odds < randf():
+				screen = randi() % BACKGROUNDS.size()
+	set_screen(screen)
 	var window : Window = get_window()
-	window.position = (DisplayServer.screen_get_size(window.current_screen)-Vector2i(size))/2
+	var current_screen_index = window.current_screen
+	window.position = (DisplayServer.screen_get_size(current_screen_index)-Vector2i(size))/2 + DisplayServer.screen_get_position(current_screen_index)
 	window.size = size
-	#await get_tree().process_frame
 
 func set_screen(bi : int) -> void:
 	background_index = bi

@@ -235,6 +235,10 @@ func _ready() -> void:
 
 	mm_logger.message("Material Maker "+ProjectSettings.get_setting("application/config/actual_release"))
 
+	size = get_viewport().size/get_viewport().content_scale_factor
+	position = Vector2i(0, 0)
+
+
 var menu_update_requested : bool = false
 
 func update_menus() -> void:
@@ -287,6 +291,8 @@ func on_config_changed() -> void:
 		# This prevents UI elements from being too small on hiDPI displays.
 		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	get_viewport().content_scale_factor = ui_scale
+	size = get_viewport().size/get_viewport().content_scale_factor
+	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
 
 	# Clamp to reasonable values to avoid crashes on startup.
@@ -1183,7 +1189,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
-			"obj":
+			"obj", "glb", "gltf":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":

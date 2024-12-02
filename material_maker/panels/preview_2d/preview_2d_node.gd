@@ -6,4 +6,4 @@ func _ready() -> void:
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-			$ContextMenu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+			mm_globals.popup_menu($ContextMenu, self)

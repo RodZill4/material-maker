@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bq7jj2aydbqug"]
+[gd_scene load_steps=14 format=3 uid="uid://bq7jj2aydbqug"]
 
 [ext_resource type="Script" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
 [ext_resource type="FontFile" uid="uid://dttdyavpec18b" path="res://material_maker/fonts/vegur_regular.otf" id="3_m0b76"]
+[ext_resource type="Texture2D" uid="uid://dfy67bw73b836" path="res://splash_screen/arrow.svg" id="5_o00vo"]
 [ext_resource type="Shader" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
-[ext_resource type="Texture2D" uid="uid://btpt3nk4o7725" path="res://splash_screen/arrow.png" id="6_qghsp"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jeaul"]
 size = Vector2(760, 430)
@@ -14,6 +14,26 @@ bg_color = Color(0.509804, 0.584314, 1, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dfnby"]
 shader = ExtResource("5_xhfa4")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c2kbv"]
+atlas = ExtResource("5_o00vo")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rho5p"]
+atlas = ExtResource("5_o00vo")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rcyda"]
+atlas = ExtResource("5_o00vo")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uxt7b"]
+atlas = ExtResource("5_o00vo")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_587d8"]
+atlas = ExtResource("5_o00vo")
+region = Rect2(64, 32, 64, 32)
 
 [node name="Container" type="MarginContainer"]
 custom_minimum_size = Vector2(760, 430)
@@ -138,33 +158,67 @@ theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 18
 text = "Author"
 
-[node name="BackgroundSelect" type="HBoxContainer" parent="."]
+[node name="BackgroundSelect" type="Control" parent="."]
 visible = false
 layout_mode = 2
-size_flags_vertical = 0
+mouse_filter = 2
 
 [node name="Previous" type="TextureButton" parent="BackgroundSelect"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+offset_left = 368.0
+offset_top = 65.0
+offset_right = 400.0
+offset_bottom = 97.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture_normal = ExtResource("6_qghsp")
+texture_normal = SubResource("AtlasTexture_c2kbv")
 ignore_texture_size = true
 stretch_mode = 0
 flip_h = true
 
-[node name="Space" type="Control" parent="BackgroundSelect"]
-layout_mode = 2
-size_flags_horizontal = 3
-
 [node name="Next" type="TextureButton" parent="BackgroundSelect"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+offset_left = 456.0
+offset_top = 67.0
+offset_right = 488.0
+offset_bottom = 99.0
 size_flags_horizontal = 8
 size_flags_vertical = 0
-texture_normal = ExtResource("6_qghsp")
+texture_normal = SubResource("AtlasTexture_rho5p")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="RightEye" type="TextureRect" parent="BackgroundSelect"]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 86.0
+offset_right = 450.0
+offset_bottom = 126.0
+scale = Vector2(0.185, 0.185)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_rcyda")
+
+[node name="LeftEye" type="TextureRect" parent="BackgroundSelect"]
+layout_mode = 0
+offset_left = 439.0
+offset_top = 83.0
+offset_right = 479.0
+offset_bottom = 123.0
+scale = Vector2(0.185, 0.185)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_uxt7b")
+
+[node name="Mouth" type="TextureRect" parent="BackgroundSelect"]
+layout_mode = 0
+offset_left = 421.0
+offset_top = 99.0
+offset_right = 485.0
+offset_bottom = 139.0
+scale = Vector2(0.255, 0.185)
+mouse_filter = 2
+texture = SubResource("AtlasTexture_587d8")
 
 [connection signal="gui_input" from="SplashScreen/TextureRect/SecretButton" to="." method="_on_secret_button_gui_input"]
 [connection signal="pressed" from="BackgroundSelect/Previous" to="." method="_on_previous_pressed"]

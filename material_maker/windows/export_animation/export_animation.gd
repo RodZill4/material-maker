@@ -1,7 +1,7 @@
 extends Window
 
 
-@export var shader : String = "" # (String, MULTILINE)
+@export_multiline var shader : String = "" # (String, MULTILINE)
 
 
 var generator
@@ -48,6 +48,10 @@ func set_source(g, o):
 	anim_code = anim_code.replace("varying float elapsed_time;", "uniform float begin;\nuniform float end;\nvarying float elapsed_time;");
 	anim_code = anim_code.replace("elapsed_time = TIME;", "elapsed_time = (begin == end) ? begin : begin+sign(end-begin)*mod(TIME, abs(end-begin));");
 	image_anim.material.shader.code = anim_code
+	for u in source.uniforms:
+		image_begin.material.set_shader_parameter(u.name, u.value)
+		image_anim.material.set_shader_parameter(u.name, u.value)
+		image_end.material.set_shader_parameter(u.name, u.value)
 	for image_index in range(BUFFER_NAMES.size()):
 		var i = buffer_images[image_index]
 		var b : String = BUFFER_NAMES[image_index]

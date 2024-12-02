@@ -335,12 +335,6 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 	elif not silent:
 		print("Cannot assign parameter "+name)
 
-func constant_as_string(value, type : String) -> String:
-	if value is Color:
-		return "vec4"+str(value)
-	else:
-		return str(value)
-
 static func get_parameter_declarations(defs : Dictionary, values = null) -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
@@ -372,7 +366,8 @@ func get_uniform_declarations() -> String:
 		uniform_declarations += "\n"
 		for c in constants.keys():
 			var constant : Parameter = constants[c]
-			uniform_declarations += "const %s %s = %s;\n" % [ constant.type, c, constant_as_string(constant.value, constant.type) ]
+			var shader_uniform : MMGenBase.ShaderUniform = MMGenBase.ShaderUniform.new(c, constant.type, constant.value, constant.array_size)
+			uniform_declarations += shader_uniform.to_str("const", true)
 	return uniform_declarations
 
 func get_input_texture_declarations() -> String:

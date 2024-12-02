@@ -27,12 +27,7 @@ signal free_rendering_device
 
 func _ready() -> void:
 	shader_error_handler = load("res://addons/material_maker/engine/shader_error_handler.gd").new()
-	common_shader = "varying float elapsed_time;
-
-void vertex() {
-	elapsed_time = TIME;
-}
-"
+	common_shader = "varying float elapsed_time;\nvoid vertex() {\n\telapsed_time = TIME;\n}\n"
 	common_shader += preload("res://addons/material_maker/shader_functions.tres").text
 	for i in total_renderers:
 		var renderer = preload("res://addons/material_maker/engine/renderer.tscn").instantiate()
