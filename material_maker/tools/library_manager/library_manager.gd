@@ -93,24 +93,22 @@ func get_item(item_name : String):
 					return item
 	return null
 
-func get_items(filter : String, sorted = false) -> Array:
-	var array : Array = []
-	var aliased_items = []
-	for al in [ base_item_aliases, user_item_aliases ]:
-		for a in al.keys():
-			if al[a].find(filter) != -1 and aliased_items.find(a) == -1:
-				aliased_items.push_back(a)
+func get_items(filter : String, sorted := false) -> Array:
+	var array: Array = []
+	var aliased_items := [base_item_aliases, user_item_aliases]
+
 	for li in get_child_count():
 		var l = get_child(li)
 		if disabled_libraries.find(l.library_path) == -1:
 			for i in l.get_items(filter, disabled_sections, aliased_items):
 				i.library_index = li
 				array.push_back(i)
+
 	if sorted:
-		var sorted_array : Array = []
+		var sorted_array: Array = []
 		for i in array:
 			var u1 = item_usage[i.name] if item_usage.has(i.name) else 0
-			var inserted = false
+			var inserted := false
 			for p in sorted_array.size():
 				var i2 = sorted_array[p]
 				var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
@@ -121,7 +119,13 @@ func get_items(filter : String, sorted = false) -> Array:
 			if !inserted:
 				sorted_array.push_back(i)
 		array = sorted_array
+		var idx := 0
+		for item in array:
+			item["idx"] = idx
+			idx += 1
+
 	return array
+
 
 func save_library_list() -> void:
 	var library_list = []
