@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dpulty2lkvcht"]
 
-[ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cxcw0mi4sfl2x" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
 
 [sub_resource type="Animation" id="3"]
 tracks/0/type = "value"

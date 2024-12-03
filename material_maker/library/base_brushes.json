@@ -406,24 +406,6 @@
 					"to_port": 0
 				},
 				{
-					"from": "dilate",
-					"from_port": 0,
-					"to": "colorize",
-					"to_port": 0
-				},
-				{
-					"from": "dilate",
-					"from_port": 0,
-					"to": "colorize_2",
-					"to_port": 0
-				},
-				{
-					"from": "colorize_2",
-					"from_port": 0,
-					"to": "Brush",
-					"to_port": 0
-				},
-				{
 					"from": "uniform",
 					"from_port": 0,
 					"to": "blend",
@@ -436,16 +418,34 @@
 					"to_port": 1
 				},
 				{
-					"from": "colorize",
+					"from": "tones_step",
 					"from_port": 0,
 					"to": "blend",
 					"to_port": 2
+				},
+				{
+					"from": "tones_step_2",
+					"from_port": 0,
+					"to": "Brush",
+					"to_port": 0
 				},
 				{
 					"from": "blend",
 					"from_port": 0,
 					"to": "Brush",
 					"to_port": 1
+				},
+				{
+					"from": "dilate",
+					"from_port": 0,
+					"to": "tones_step_2",
+					"to_port": 0
+				},
+				{
+					"from": "dilate",
+					"from_port": 0,
+					"to": "tones_step",
+					"to_port": 0
 				}
 			],
 			"icon_data": "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",
@@ -460,28 +460,27 @@
 				{
 					"name": "Brush",
 					"node_position": {
-						"x": -31,
-						"y": -167
+						"x": 135.363632202148,
+						"y": -107.909088134766
 					},
 					"parameters": {
 						"has_albedo": true,
 						"has_ao": false,
 						"has_depth": false,
 						"has_emission": false,
-						"has_metallic": false,
+						"has_metallic": true,
 						"has_normal": false,
-						"has_roughness": false,
+						"has_roughness": true,
 						"mode": 0
 					},
 					"seed": 50278,
-					"seed_locked": false,
 					"type": "brush"
 				},
 				{
 					"name": "text",
 					"node_position": {
-						"x": -745.5,
-						"y": -235.5
+						"x": -687.847534179688,
+						"y": -121.500198364258
 					},
 					"parameters": {
 						"center": true,
@@ -492,98 +491,32 @@
 						"y": 0
 					},
 					"seed": 37340,
-					"seed_locked": false,
 					"type": "text"
 				},
 				{
 					"name": "dilate",
 					"node_position": {
-						"x": -717.5,
-						"y": -38
+						"x": -490.757049560547,
+						"y": -122.295082092285
 					},
 					"parameters": {
 						"param0": 9,
 						"param1": 0.1,
 						"param2": 0,
-						"param3": 0
+						"param3": 0,
+						"param4": true
 					},
 					"seed": 10743,
-					"seed_locked": false,
 					"type": "dilate"
-				},
-				{
-					"minimized": true,
-					"name": "colorize",
-					"node_position": {
-						"x": -528.5,
-						"y": -19.25
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0.936364,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed": 12285,
-					"seed_locked": true,
-					"type": "colorize"
-				},
-				{
-					"minimized": true,
-					"name": "colorize_2",
-					"node_position": {
-						"x": -483.5,
-						"y": -227.25
-					},
-					"parameters": {
-						"gradient": {
-							"interpolation": 1,
-							"points": [
-								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
-									"pos": 0.827273,
-									"r": 0
-								},
-								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
-									"pos": 1,
-									"r": 1
-								}
-							],
-							"type": "Gradient"
-						}
-					},
-					"seed": 47006,
-					"seed_locked": false,
-					"type": "colorize"
 				},
 				{
 					"name": "5907",
 					"node_position": {
-						"x": -254.656921,
-						"y": -346.357147
+						"x": 66.0240478515625,
+						"y": -339.283294677734
 					},
 					"parameters": {
+						"outline_width": 0.2,
 						"param0": "Text",
 						"param1": {
 							"a": 1,
@@ -602,7 +535,6 @@
 						"param3": 900
 					},
 					"seed": 57752,
-					"seed_locked": false,
 					"type": "remote",
 					"widgets": [
 						{
@@ -648,14 +580,23 @@
 							],
 							"name": "param3",
 							"type": "linked_control"
+						},
+						{
+							"default": 0.1,
+							"label": "Outline width",
+							"max": 0.5,
+							"min": 0,
+							"name": "outline_width",
+							"step": 0.01,
+							"type": "named_parameter"
 						}
 					]
 				},
 				{
 					"name": "uniform",
 					"node_position": {
-						"x": -461.656921,
-						"y": -159.357147
+						"x": -304.499145507813,
+						"y": -43.3914794921875
 					},
 					"parameters": {
 						"color": {
@@ -667,14 +608,13 @@
 						}
 					},
 					"seed": 2636,
-					"seed_locked": false,
 					"type": "uniform"
 				},
 				{
 					"name": "uniform_2",
 					"node_position": {
-						"x": -458.156921,
-						"y": -98.857147
+						"x": -306.084320068359,
+						"y": 40.7448806762695
 					},
 					"parameters": {
 						"color": {
@@ -686,29 +626,54 @@
 						}
 					},
 					"seed": 44308,
-					"seed_locked": false,
 					"type": "uniform"
 				},
 				{
 					"name": "blend",
 					"node_position": {
-						"x": -286.656921,
-						"y": -133.607147
+						"x": -152.867630004883,
+						"y": -17.0901336669922
 					},
 					"parameters": {
 						"amount": 1,
 						"blend_type": 0
 					},
 					"seed": 50213,
-					"seed_locked": false,
 					"type": "blend"
+				},
+				{
+					"name": "tones_step",
+					"node_position": {
+						"x": -325.683898925781,
+						"y": 129.084991455078
+					},
+					"parameters": {
+						"invert": false,
+						"value": 0.95,
+						"width": 0.05
+					},
+					"seed_int": 0,
+					"type": "tones_step"
+				},
+				{
+					"name": "tones_step_2",
+					"node_position": {
+						"x": -152.649841308594,
+						"y": -158.806915283203
+					},
+					"parameters": {
+						"invert": false,
+						"value": "0.95-$outline_width",
+						"width": 0.05
+					},
+					"seed_int": 0,
+					"type": "tones_step"
 				}
 			],
 			"parameters": {
 
 			},
-			"seed": 0,
-			"seed_locked": false,
+			"seed_int": 0,
 			"shortdesc": "",
 			"tree_item": "Simple/Text",
 			"type": "graph"
@@ -1179,9 +1144,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"type": "ios"
 						},
 						{
@@ -2107,9 +2070,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"type": "ios"
 						},
 						{
@@ -2140,9 +2101,7 @@
 
 							},
 							"type": "remote",
-							"widgets": [
-
-							]
+							"widgets": []
 						}
 					],
 					"parameters": {
@@ -2244,9 +2203,7 @@
 					"shader_model": {
 						"code": "",
 						"global": "",
-						"inputs": [
-
-						],
+						"inputs": [],
 						"instance": "",
 						"name": "Layers",
 						"outputs": [
@@ -2256,9 +2213,7 @@
 								"type": "rgba"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
@@ -2373,9 +2328,7 @@
 					"shader_model": {
 						"code": "",
 						"global": "",
-						"inputs": [
-
-						],
+						"inputs": [],
 						"instance": "",
 						"name": "Layers",
 						"outputs": [
@@ -2385,9 +2338,7 @@
 								"type": "rgba"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
@@ -2521,9 +2472,7 @@
 					"shader_model": {
 						"code": "",
 						"global": "",
-						"inputs": [
-
-						],
+						"inputs": [],
 						"instance": "",
 						"name": "Layers",
 						"outputs": [
@@ -2533,9 +2482,7 @@
 								"type": "rgba"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
@@ -2883,9 +2830,7 @@
 
 					},
 					"type": "remote",
-					"widgets": [
-
-					]
+					"widgets": []
 				},
 				{
 					"connections": [
@@ -3112,9 +3057,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"type": "ios"
 						},
 						{
@@ -3145,9 +3088,7 @@
 
 							},
 							"type": "remote",
-							"widgets": [
-
-							]
+							"widgets": []
 						}
 					],
 					"parameters": {
@@ -4051,9 +3992,7 @@
 							"shader_model": {
 								"code": "",
 								"global": "",
-								"inputs": [
-
-								],
+								"inputs": [],
 								"instance": "",
 								"name": "Radial Gradient",
 								"outputs": [
@@ -4117,9 +4056,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"seed": -25777,
 							"seed_locked": false,
 							"type": "ios"
@@ -4156,9 +4093,7 @@
 							"seed": 42434,
 							"seed_locked": false,
 							"type": "remote",
-							"widgets": [
-
-							]
+							"widgets": []
 						}
 					],
 					"parameters": {
@@ -4728,9 +4663,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"seed": 63262,
 							"seed_locked": false,
 							"type": "ios"
@@ -5135,9 +5068,7 @@
 								"type": "rgb"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
@@ -5782,9 +5713,7 @@
 					"shader_model": {
 						"code": "",
 						"global": "float curvature(vec2 uv, float epsilon) {\n\tvec2 eps = vec2(epsilon, 0.0);\n\tvec3 dp;\n\tdp = (texture(mesh_inv_uv_tex, uv+eps).xyz-texture(mesh_inv_uv_tex, uv-eps).xyz)*mesh_aabb_size;\n\tfloat curvature = length(texture(mesh_normal_tex, uv+eps).xyz-texture(mesh_normal_tex, uv-eps).xyz)/max(epsilon, length(dp));\n\tdp = (texture(mesh_inv_uv_tex, uv+eps).xyz-texture(mesh_inv_uv_tex, uv-eps).xyz)*mesh_aabb_size;\n\tcurvature = max(curvature, length(texture(mesh_normal_tex, uv+eps.yx).xyz-texture(mesh_normal_tex, uv-eps.yx).xyz)/max(epsilon, length(dp)));\n\treturn curvature;\n}\n\nfloat curvature2(vec2 uv, float epsilon) {\n\tvec2 eps = vec2(epsilon, 0.0);\n\tvec3 dp;\n\tdp = (texture(mesh_inv_uv_tex, uv+eps).xyz-texture(mesh_inv_uv_tex, uv-eps).xyz)*mesh_aabb_size;\n\tfloat curvature = dot(texture(mesh_normal_tex, uv+eps).xyz-texture(mesh_normal_tex, uv-eps).xyz, dp);\n\tdp = (texture(mesh_inv_uv_tex, uv+eps.yx).xyz-texture(mesh_inv_uv_tex, uv-eps.yx).xyz)*mesh_aabb_size;\n\tcurvature = \n\tcurvature+dot(texture(mesh_normal_tex, uv+eps.yx).xyz-texture(mesh_normal_tex, uv-eps.yx).xyz, dp);\n\treturn curvature;\n}\n",
-						"inputs": [
-
-						],
+						"inputs": [],
 						"instance": "",
 						"name": "Curvature",
 						"outputs": [
@@ -5978,9 +5907,7 @@
 								"type": "rgb"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
@@ -6359,9 +6286,7 @@
 								"type": "rgb"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
@@ -7556,9 +7481,7 @@
 					"seed": 43283,
 					"seed_locked": false,
 					"type": "remote",
-					"widgets": [
-
-					]
+					"widgets": []
 				},
 				{
 					"name": "380_2",
@@ -7784,9 +7707,7 @@
 					"shader_model": {
 						"code": "",
 						"global": "vec3 brush_flatten(vec2 uv, vec2 angle, vec3 v) {\n\tvec3 target_normal = normalize(view_back*cos(angle.x)*cos(angle.y)+view_right*sin(angle.x)+view_up*sin(angle.y));\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(target_normal, mesh_tangent), dot(target_normal, mesh_bitangent), dot(target_normal, mesh_normal)));\n}\n",
-						"inputs": [
-
-						],
+						"inputs": [],
 						"instance": "",
 						"longdesc": "Draws a uniform greyscale image",
 						"name": "Flatten",
@@ -7933,9 +7854,7 @@
 					"shader_model": {
 						"code": "",
 						"global": "vec3 brush_flatten(vec2 uv, vec2 angle, vec3 v) {\n\tvec3 target_normal = normalize(view_back*cos(angle.x)*cos(angle.y)+view_right*sin(angle.x)+view_up*sin(angle.y));\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(target_normal, mesh_tangent), dot(target_normal, mesh_bitangent), dot(target_normal, mesh_normal)));\n}\n",
-						"inputs": [
-
-						],
+						"inputs": [],
 						"instance": "",
 						"longdesc": "Draws a uniform greyscale image",
 						"name": "Flatten",
@@ -8459,9 +8378,7 @@
 									"parameters": {
 
 									},
-									"ports": [
-
-									],
+									"ports": [],
 									"seed": 26580,
 									"seed_locked": false,
 									"type": "ios"
@@ -8569,9 +8486,7 @@
 							"parameters": {
 
 							},
-							"ports": [
-
-							],
+							"ports": [],
 							"seed": 19973,
 							"seed_locked": false,
 							"type": "ios"
@@ -8608,9 +8523,7 @@
 							"seed": 58368,
 							"seed_locked": false,
 							"type": "remote",
-							"widgets": [
-
-							]
+							"widgets": []
 						},
 						{
 							"name": "brightness_contrast",

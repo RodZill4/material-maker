@@ -1,0 +1,52 @@
+#version 450
+// VERTEX COUNT: (size+1)*(size+1)
+// INDEX COUNT: 2*size*(size+2)-2
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+void set_point(int x, int y) {
+	int vertex_index = x+(size+1)*y;
+	float scale = 1.0/float(size);
+	mm_out.vertices[3*vertex_index+0] = 2.0*scale*x-1.0;
+	mm_out.vertices[3*vertex_index+1] = curvature*cos(scale*x-0.5)*cos(scale*y-0.5)-curvature;
+	mm_out.vertices[3*vertex_index+2] = 2.0*scale*y-1.0;
+	vec3 tangent = normalize(vec3(2.0, -curvature*scale*sin(scale*x-0.5)*cos(scale*y-0.5), 0.0));
+	vec3 cotangent = normalize(vec3(0.0, -curvature*scale*cos(scale*x-0.5)*sin(scale*y-0.5), 2.0));
+	vec3 normal = normalize(cross(cotangent, tangent));
+	mm_out.normals[3*vertex_index+0] = normal.x;
+	mm_out.normals[3*vertex_index+1] = normal.y;
+	mm_out.normals[3*vertex_index+2] = normal.z;
+	mm_out.tangents[4*vertex_index+0] = tangent.x;
+	mm_out.tangents[4*vertex_index+1] = tangent.y;
+	mm_out.tangents[4*vertex_index+2] = tangent.z;
+	mm_out.tangents[4*vertex_index+3] = 1.0;
+	mm_out.tex_uvs[2*vertex_index+0] = scale*x;
+	mm_out.tex_uvs[2*vertex_index+1] = scale*y;
+}
+
+void main() {
+	ivec2 c = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	set_point(c.x, c.y);
+	mm_out.indexes[2*(c.x+(size+2)*c.y)] = c.x+(size+1)*(c.y+1);
+	mm_out.indexes[2*(c.x+(size+2)*c.y)+1] = c.x+(size+1)*c.y;
+	if (c.x == size-1) {
+		mm_out.indexes[2*(size+(size+2)*c.y)] = size+(size+1)*(c.y+1);
+		mm_out.indexes[2*(size+(size+2)*c.y)+1] = size+(size+1)*c.y;
+		set_point(size, c.y);
+		if (c.y == size-1) {
+			set_point(size, size);
+		} else {
+			mm_out.indexes[2*(size+(size+2)*c.y)+2] = size+(size+1)*c.y;
+			mm_out.indexes[2*(size+(size+2)*c.y)+3] = (size+1)*(c.y+2);
+		}
+	}
+	if (c.y == size-1) {
+		set_point(c.x, size);
+	}
+}

@@ -1,7 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cjcxjmoki7j0n"]
 
 [ext_resource type="Script" path="res://material_maker/windows/add_node_popup/quick_button.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="2"]
 
 [sub_resource type="Shader" id="11"]
 code = "shader_type canvas_item;
@@ -18,12 +17,14 @@ void fragment() {
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4pf3v"]
+
 [sub_resource type="ShaderMaterial" id="12"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
-shader_parameter/tex = ExtResource("2")
+shader_parameter/tex = SubResource("PlaceholderTexture2D_4pf3v")
 
 [node name="QuickButton" type="ColorRect"]
 material = SubResource("12")

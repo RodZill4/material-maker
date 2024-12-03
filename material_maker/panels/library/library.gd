@@ -218,7 +218,10 @@ func _on_Section_Button_pressed(category : String) -> void:
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			tree.ensure_cursor_is_visible()
+			for node in tree.get_children(true):
+				if node is VScrollBar:
+					node.value = tree.get_item_area_rect(item).position.y
+					break
 			break
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
@@ -306,7 +309,7 @@ func _on_Tree_item_rmb_selected(mouse_position : Vector2i):
 		item_menu.set_item_disabled(0, read_only)
 		item_menu.set_item_disabled(1, read_only)
 		item_menu.set_item_disabled(2, read_only)
-		item_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+		mm_globals.popup_menu(item_menu, self)
 
 func _on_PopupMenu_index_pressed(index):
 	var library_index : int = 0

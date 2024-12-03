@@ -14,10 +14,6 @@ layout(set = 3, binding = 0, std140) restrict buffer MM {
 	int mm_chunk_y;
 };
 
-layout(set = 4, binding = 0, std140) buffer MMout {
-	int mm_compare[1];
-} mm_out;
-
 @COMMON_SHADER_FUNCTIONS
 
 const float seed_variation = 0.0;
@@ -37,5 +33,5 @@ void main() {
 
 	vec4 diff_vec = abs(outColor - texture(mm_compare, uv));
 	float diff = max(max(diff_vec.r, diff_vec.g), max(diff_vec.b, diff_vec.a));
-	atomicMax(mm_out.mm_compare[0], int(diff*65536.0));
+	atomicMax(mm_out.mm_highest_diff, int(diff*65536.0));
 }"

@@ -1,0 +1,24 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://bpe2pnw4jgdpq"]
+
+[ext_resource type="Texture2D" uid="uid://du2r5sfapuxxx" path="res://material_maker/panels/preview_3d/meshes/bricks_albedo.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://dfvy71k6qeu0g" path="res://material_maker/panels/preview_3d/meshes/bricks_orm.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://bgqqi03ty5vjy" path="res://material_maker/panels/preview_3d/meshes/bricks_normal.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bx4upg4i1n5db" path="res://material_maker/panels/preview_3d/meshes/bricks_heightmap.png" id="4"]
+
+[resource]
+albedo_texture = ExtResource("1")
+metallic = 1.0
+metallic_texture = ExtResource("2")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("3")
+ao_enabled = true
+ao_texture = ExtResource("2")
+heightmap_enabled = true
+heightmap_scale = -1.0
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("4")

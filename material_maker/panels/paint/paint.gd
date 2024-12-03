@@ -85,9 +85,6 @@ var stroke_angle : float = 0.0
 var stroke_seed : float = 0.0
 
 
-const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
-
-
 signal update_material
 
 
@@ -113,7 +110,8 @@ func _ready():
 	image.fill(Color(1, 1, 1))
 	mask_texture.set_image(image)
 	mask.set_texture(mask_texture)
-
+	_on_Brush_value_changed(%BrushSize.value, "brush_size")
+	_on_Brush_value_changed(%BrushHardness.value, "brush_hardness")
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
@@ -170,9 +168,11 @@ func update_brush() -> void:
 	brush_node.parameter_changed.connect(self.on_brush_changed)
 	painter.set_brush_preview_material(brush_view_3d.material)
 	if layers.selected_layer:
-		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 
 func set_brush(data) -> void:
+	#print("Setting brush")
+	#print(data)
 	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
 	parameters_panel.set_generator(null)
 	graph_edit.new_material(data)
@@ -199,18 +199,13 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 	mi.mesh = mesh
 	layers.add_layer()
 	model_path = mesh_file_path
-	set_object(mi)
+	set_object(mi, true)
 	set_project_path(project_file_path)
 	initialize_layers_history()
 
-func set_object(o):
+func set_object(o, init_material : bool = false):
 	object_name = o.name
 	set_project_path(null)
-	var mat = o.get_surface_override_material(0)
-	if mat == null:
-		mat = o.mesh.surface_get_material(0)
-	if mat == null:
-		mat = StandardMaterial3D.new()
 	preview_material = StandardMaterial3D.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	#preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
@@ -246,7 +241,13 @@ func set_object(o):
 	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
-	painter.init_textures(mat)
+	if init_material:
+		var mat = o.get_surface_override_material(0)
+		if mat == null:
+			mat = o.mesh.surface_get_material(0)
+		if mat == null:
+			mat = StandardMaterial3D.new()
+		painter.init_textures(mat)
 
 func get_settings() -> Dictionary:
 	return settings
@@ -325,7 +326,7 @@ func set_current_tool(m):
 		tools.get_node(MODE_NAMES[i]).button_pressed = (i == current_tool)
 
 func _on_Fill_pressed():
-	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC:
 		return
 	painter.fill(eraser_button.button_pressed)
 	set_need_save()
@@ -605,7 +606,7 @@ func _on_Texture_resized():
 var procedural_update_changed_scheduled : bool = false
 
 func update_procedural_layer() -> void:
-	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
+	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
 		await do_update_procedural_layer()
 
@@ -619,7 +620,7 @@ var saved_brush = null
 
 func _on_PaintLayers_layer_selected(layer):
 	var brush_updated : bool = false
-	if layer.get_layer_type() == Layer.LAYER_PROC:
+	if layer.get_layer_type() == MMLayer.LAYER_PROC:
 		if saved_brush == null:
 			saved_brush = $VSplitContainer/GraphEdit.top_generator.serialize()
 		if ! layer.material.is_empty():
@@ -630,7 +631,7 @@ func _on_PaintLayers_layer_selected(layer):
 		saved_brush = null
 		brush_updated = true
 	if not brush_updated:
-		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 
 var brush_changed_scheduled : bool = false
 
@@ -676,14 +677,14 @@ func reset_stroke() -> void:
 	previous_position = null
 
 func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
-	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC:
 		return
 	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 		if ! end_of_stroke and (pos-last_painted_position).length() < brush_spacing_control.value:
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 	last_painted_position = pos
 
 var next_paint_to = null
@@ -953,22 +954,22 @@ func set_environment(index) -> void:
 
 var stroke_history = { layers={} }
 
+var redo_index : int = 0
+
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
 		"reload_layer_state":
 			var layer = command.layer
 			var state = stroke_history.layers[layer].history[command.index]
+			if false:
+				for c in state.keys():
+					state[c].save_png("d:/redo_%d_%s.png" % [ redo_index, c ])
+			redo_index += 1
+			layer.set_state(state)
 			if layer == layers.selected_layer:
-				painter.set_state(state)
+				layers.select_layer(layers.selected_layer, true, false)
 			else:
-				layer.set_state(state)
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			layers._on_layers_changed()
+				layers._on_layers_changed()
 			stroke_history.layers[layer].current = command.index
 
 func initialize_layer_history(layer):
@@ -980,12 +981,10 @@ func initialize_layer_history(layer):
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for c in layer.get_channels():
-		var texture = layer.get_channel_texture(c)
-		if texture is ViewportTexture:
-			var image = texture.get_image()
-			texture = ImageTexture.new()
-			texture.set_image(image)
-		channels[c] = texture
+		var texture : Texture = layer.get_channel_texture(c)
+		var image : Image = Image.new()
+		image.copy_from(texture.get_image())
+		channels[c] = image
 	stroke_history.layers[layer] = { history=[channels], current=0 }
 
 func initialize_layers_history(layer_list = null):
@@ -997,6 +996,8 @@ func initialize_layers_history(layer_list = null):
 		initialize_layer_history(l)
 		initialize_layers_history(l.layers)
 
+var undo_index : int = 0
+
 # Undo/Redo for strokes
 func _on_Painter_end_of_stroke(stroke_state):
 	var layer = layers.selected_layer
@@ -1007,7 +1008,12 @@ func _on_Painter_end_of_stroke(stroke_state):
 	# Copy relevant channels into stroke state
 	for c in stroke_state.keys():
 		if c in layer.get_channels():
-			new_history_item[c] = stroke_state[c]
+			var channel_image : Image = Image.new()
+			channel_image.copy_from(stroke_state[c].get_texture().get_image())
+			if false:
+				channel_image.save_png("d:/undo_%d_%s.png" % [ undo_index, c ])
+			new_history_item[c] = channel_image
+	undo_index += 1
 	layer_history.history.push_back(new_history_item)
 	var undo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
 	layer_history.current += 1

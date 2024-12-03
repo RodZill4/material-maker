@@ -2,6 +2,9 @@ extends RefCounted
 class_name MMPipeline
 
 
+const SIZE_FROM_TYPE : Dictionary = { bool=4, int=4, float=4, vec2=8, vec3=16, vec4=16, mat4x4=64 }
+
+
 class Parameter:
 	extends RefCounted
 	
@@ -11,7 +14,7 @@ class Parameter:
 	var size : int
 	var value
 	
-	func _init(t : String, v):
+	func _init(t : String, v = null, s : int = 0):
 		var bracket_position = t.find("[")
 		if bracket_position != -1:
 			array_size = t.substr(bracket_position+1, t.find("]", bracket_position+1)).to_int()
@@ -19,24 +22,10 @@ class Parameter:
 		else:
 			type = t
 			array_size = 0
+		if s > 0:
+			array_size = s if array_size == 0 else array_size*s
 		offset = 0
-		match type:
-			"bool":
-				size = 4
-			"int":
-				size = 4
-			"float":
-				size = 4
-			"vec2":
-				size = 8
-			"vec3":
-				size = 16
-			"vec4":
-				size = 16
-			"mat4x4":
-				size = 64
-			_:
-				size = 0
+		size = SIZE_FROM_TYPE[type] if SIZE_FROM_TYPE.has(type) else 0
 		value = v
 
 class InputTexture:
@@ -94,6 +83,8 @@ var input_textures : Array[InputTexture]
 var time_current_desc : String = ""
 var time_current_time : int = 0
 
+var output_parameters : Dictionary
+
 func time(desc : String = ""):
 	return
 	if time_current_desc != "":
@@ -107,6 +98,7 @@ func clear():
 	parameter_values = PackedByteArray()
 	input_texture_indexes = {}
 	input_textures = []
+	output_parameters = {}
 
 func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces : Dictionary) -> RID:
 	var errors : bool = false
@@ -131,118 +123,224 @@ func do_compile_shader(rd : RenderingDevice, shader_text : Dictionary, replaces 
 			print("Error creating shader from spirv")
 	return shader
 
-func add_parameter_or_texture(n : String, t : String, v, parameter_as_constant : bool = false):
-	if t == "sampler2D":
-		if input_texture_indexes.has(n):
-			print("ERROR: Redefining texture "+n)
-			input_textures[input_texture_indexes[n]] = InputTexture.new(n, v)
+func add_parameter_or_texture(name : String, type : String, value, parameter_as_constant : bool = false, array_size : int = 0):
+	if type == "sampler2D":
+		if input_texture_indexes.has(name):
+			print("ERROR: Redefining texture "+name)
+			input_textures[input_texture_indexes[name]] = InputTexture.new(name, value)
 		else:
-			input_texture_indexes[n] = input_textures.size()
-			input_textures.append(InputTexture.new(n, v))
+			input_texture_indexes[name] = input_textures.size()
+			input_textures.append(InputTexture.new(name, value))
 	elif parameter_as_constant:
-		if constants.has(n):
-			print("ERROR: Redefining constant "+n)
-		constants[n] = Parameter.new(t, v)
+		if constants.has(name):
+			print("ERROR: Redefining constant "+name)
+		constants[name] = Parameter.new(type, value)
 	else:
-		if parameters.has(n):
-			print("ERROR: Redefining parameter "+n)
-		parameters[n] = Parameter.new(t, v)
+		if parameters.has(name):
+			print("ERROR: Redefining parameter "+name)
+		parameters[name] = Parameter.new(type, value, array_size)
+
+func add_output_parameter(name : String, type : String, array_size : int = 0):
+	output_parameters[name] = Parameter.new(type, null, array_size)
+
+static func set_parameter_value_to_buffer(parameter : Parameter, buffer : PackedByteArray, value) -> bool:
+	match parameter.type:
+		"bool":
+			if value is bool:
+				buffer.encode_s32(parameter.offset, -1 if value else 0)
+				return true
+		"int":
+			if value is int:
+				buffer.encode_s32(parameter.offset, value)
+				return true
+			elif value is PackedInt32Array and value.size() == parameter.array_size:
+				for i in value.size():
+					buffer.encode_s32(parameter.offset+i*4, value[i])
+				return true
+		"float":
+			if value is float or value is int:
+				buffer.encode_float(parameter.offset, value)
+				return true
+			elif value is PackedFloat32Array and value.size() == parameter.array_size:
+				for i in value.size():
+					buffer.encode_float(parameter.offset+i*4, value[i])
+				return true
+		"vec2":
+			if value is Vector2 or value is Vector2i:
+				buffer.encode_float(parameter.offset,    value.x)
+				buffer.encode_float(parameter.offset+4,  value.y)
+				return true
+			elif value is PackedVector2Array and value.size() == parameter.array_size:
+				for i in value.size():
+					buffer.encode_float(parameter.offset+i*8, value[i].x)
+					buffer.encode_float(parameter.offset+i*8+4, value[i].y)
+				return true
+			elif value is PackedFloat32Array and value.size() == 2*parameter.array_size:
+				for i in value.size():
+					buffer.encode_float(parameter.offset+i*4, value[i])
+				return true
+		"vec3":
+			if value is Vector3:
+				buffer.encode_float(parameter.offset,    value.x)
+				buffer.encode_float(parameter.offset+4,  value.y)
+				buffer.encode_float(parameter.offset+8,  value.z)
+				return true
+		"vec4":
+			if value is Color:
+				buffer.encode_float(parameter.offset,    value.r)
+				buffer.encode_float(parameter.offset+4,  value.g)
+				buffer.encode_float(parameter.offset+8,  value.b)
+				buffer.encode_float(parameter.offset+12, value.a)
+				return true
+			elif value is PackedColorArray and value.size() == parameter.array_size:
+				for i in value.size():
+					buffer.encode_float(parameter.offset+i*16,    value[i].r)
+					buffer.encode_float(parameter.offset+i*16+4,  value[i].g)
+					buffer.encode_float(parameter.offset+i*16+8,  value[i].b)
+					buffer.encode_float(parameter.offset+i*16+12, value[i].a)
+				return true
+			elif value is PackedFloat32Array and value.size() == 4*parameter.array_size:
+				for i in value.size():
+					buffer.encode_float(parameter.offset+i*4, value[i])
+				return true
+		"mat4x4":
+			if value is Projection:
+				var offset : int = parameter.offset
+				if buffer.size() < offset+16:
+					print("Ack!")
+				for v in [ value.x, value.y, value.z, value.w ]:
+					for f in [ v.x, v.y, v.z, v.w ]:
+						buffer.encode_float(offset, f)
+						offset += 4
+				return true
+	return false
+
+static func get_parameter_value_from_buffer(parameter : Parameter, buffer : PackedByteArray, format : String = "") -> Variant:
+	var array_size : int = parameter.array_size
+	var type : String = parameter.type
+	if format != "":
+		if type == "float" and format == "vec3":
+			type = "vec3"
+			array_size /= 3
+		elif type == "float" and format == "vec2":
+			type = "vec2"
+			array_size /= 2
+	match type:
+		"bool":
+			var value : bool = false if buffer.decode_s32(parameter.offset) == 0 else true
+			return value
+		"int":
+			if array_size == 0:
+				return buffer.decode_s32(parameter.offset)
+			var ba : PackedByteArray = buffer.slice(parameter.offset, parameter.offset+4*array_size)
+			return ba.to_int32_array()
+		"float":
+			if array_size == 0:
+				return buffer.decode_float(parameter.offset)
+			var ba : PackedByteArray = buffer.slice(parameter.offset, parameter.offset+4*array_size)
+			return ba.to_float32_array()
+		"vec2":
+			if array_size == 0:
+				var value : Vector2
+				value.x = buffer.decode_float(parameter.offset)
+				value.y = buffer.decode_float(parameter.offset+4)
+				return value
+			if false:
+				var value : PackedVector2Array = PackedVector2Array()
+				value.resize(array_size)
+				for i in array_size:
+					value[i].x = buffer.decode_float(parameter.offset+i*8)
+					value[i].y = buffer.decode_float(parameter.offset+i*8+4)
+				return value
+			else:
+				var ba : PackedByteArray = PackedByteArray()
+				ba.resize(8)
+				ba.encode_u32(0, TYPE_PACKED_VECTOR2_ARRAY)
+				ba.encode_u32(4, array_size)
+				ba.append_array(buffer.slice(parameter.offset, parameter.offset+8*array_size))
+				return ba.decode_var(0)
+		"vec3":
+			if array_size == 0:
+				var value : Vector3
+				value.x = buffer.decode_float(parameter.offset)
+				value.y = buffer.decode_float(parameter.offset+4)
+				value.z = buffer.decode_float(parameter.offset+8)
+				return value
+			if false:
+				var value : PackedVector3Array = PackedVector3Array()
+				value.resize(array_size)
+				for i in array_size:
+					value[i].x = buffer.decode_float(parameter.offset+i*12)
+					value[i].y = buffer.decode_float(parameter.offset+i*12+4)
+					value[i].z = buffer.decode_float(parameter.offset+i*12+8)
+				return value
+			else:
+				var ba : PackedByteArray = PackedByteArray()
+				ba.resize(8)
+				ba.encode_u32(0, TYPE_PACKED_VECTOR3_ARRAY)
+				ba.encode_u32(4, array_size)
+				ba.append_array(buffer.slice(parameter.offset, parameter.offset+12*array_size))
+				return ba.decode_var(0)
+		"vec4":
+			if array_size == 0:
+				var value : Color
+				value.r = buffer.decode_float(parameter.offset)
+				value.g = buffer.decode_float(parameter.offset+4)
+				value.b = buffer.decode_float(parameter.offset+8)
+				value.a = buffer.decode_float(parameter.offset+12)
+				return value
+			var value : PackedColorArray = PackedColorArray()
+			value.resize(array_size)
+			for i in array_size:
+				value[i].r = buffer.decode_float(parameter.offset+i*16)
+				value[i].g = buffer.decode_float(parameter.offset+i*16+4)
+				value[i].b = buffer.decode_float(parameter.offset+i*16+8)
+				value[i].a = buffer.decode_float(parameter.offset+i*16+12)
+			return value
+		"mat4x4":
+			if array_size == 0:
+				var offset : int = parameter.offset
+				var value : Projection
+				value.x.x = buffer.decode_float(parameter.offset)
+				value.x.y = buffer.decode_float(parameter.offset+4)
+				value.x.z = buffer.decode_float(parameter.offset+8)
+				value.x.w = buffer.decode_float(parameter.offset+12)
+				value.y.x = buffer.decode_float(parameter.offset+16)
+				value.y.y = buffer.decode_float(parameter.offset+20)
+				value.y.z = buffer.decode_float(parameter.offset+24)
+				value.y.w = buffer.decode_float(parameter.offset+28)
+				value.z.x = buffer.decode_float(parameter.offset+32)
+				value.z.y = buffer.decode_float(parameter.offset+36)
+				value.z.z = buffer.decode_float(parameter.offset+40)
+				value.z.w = buffer.decode_float(parameter.offset+44)
+				value.w.x = buffer.decode_float(parameter.offset+48)
+				value.w.y = buffer.decode_float(parameter.offset+52)
+				value.w.z = buffer.decode_float(parameter.offset+56)
+				value.w.w = buffer.decode_float(parameter.offset+60)
+				return value
+	return false
 
 func set_parameter(name : String, value, silent : bool = false) -> void:
 	if parameters.has(name):
 		if value == null:
 			print("Cannot assign null value to parameter "+name)
 			return
-		var p : Parameter = parameters[name]
-		p.value = value
-		match p.type:
-			"bool":
-				if value is bool:
-					parameter_values.encode_s32(p.offset, -1 if value else 0)
-					return
-			"int":
-				if value is int:
-					parameter_values.encode_s32(p.offset, value)
-					return
-				elif value is PackedInt32Array and value.size() == p.array_size:
-					for i in value.size():
-						parameter_values.encode_s32(p.offset+i*4, value[i])
-					return
-			"float":
-				if value is float or value is int:
-					parameter_values.encode_float(p.offset, value)
-					return
-				elif value is PackedFloat32Array and value.size() == p.array_size:
-					for i in value.size():
-						parameter_values.encode_float(p.offset+i*4, value[i])
-					return
-			"vec2":
-				if value is Vector2 or value is Vector2i:
-					parameter_values.encode_float(p.offset,    value.x)
-					parameter_values.encode_float(p.offset+4,  value.y)
-					return
-				elif value is PackedVector2Array and value.size() == p.array_size:
-					for i in value.size():
-						parameter_values.encode_float(p.offset+i*8, value[i].x)
-						parameter_values.encode_float(p.offset+i*8+4, value[i].y)
-					return
-				elif value is PackedFloat32Array and value.size() == 2*p.array_size:
-					for i in value.size():
-						parameter_values.encode_float(p.offset+i*4, value[i])
-					return
-			"vec3":
-				if value is Vector3:
-					parameter_values.encode_float(p.offset,    value.x)
-					parameter_values.encode_float(p.offset+4,  value.y)
-					parameter_values.encode_float(p.offset+8,  value.z)
-					return
-			"vec4":
-				if value is Color:
-					parameter_values.encode_float(p.offset,    value.r)
-					parameter_values.encode_float(p.offset+4,  value.g)
-					parameter_values.encode_float(p.offset+8,  value.b)
-					parameter_values.encode_float(p.offset+12, value.a)
-					return
-				elif value is PackedColorArray and value.size() == p.array_size:
-					for i in value.size():
-						parameter_values.encode_float(p.offset+i*16,    value[i].r)
-						parameter_values.encode_float(p.offset+i*16+4,  value[i].g)
-						parameter_values.encode_float(p.offset+i*16+8,  value[i].b)
-						parameter_values.encode_float(p.offset+i*16+12, value[i].a)
-					return
-				elif value is PackedFloat32Array and value.size() == 4*p.array_size:
-					for i in value.size():
-						parameter_values.encode_float(p.offset+i*4, value[i])
-					return
-			"mat4x4":
-				if value is Projection:
-					var offset : int = p.offset
-					if parameter_values.size() < offset+16:
-						print("Ack!")
-					for v in [ value.x, value.y, value.z, value.w ]:
-						for f in [ v.x, v.y, v.z, v.w ]:
-							parameter_values.encode_float(offset, f)
-							offset += 4
-					return
-		print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, p.type ])
+		var parameter : Parameter = parameters[name]
+		parameter.value = value
+		if not set_parameter_value_to_buffer(parameter, parameter_values, value):
+			print("Unsupported value %s for parameter %s of type %s" % [ str(value), name, parameter.type ])
 	elif input_texture_indexes.has(name):
 		var texture_index : int = input_texture_indexes[name]
 		input_textures[texture_index].texture = value
 	elif not silent:
 		print("Cannot assign parameter "+name)
 
-func constant_as_string(value, type : String) -> String:
-	if value is Color:
-		return "vec4"+str(value)
-	else:
-		return str(value)
-
-func get_uniform_declarations() -> String:
+static func get_parameter_declarations(defs : Dictionary, values = null) -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
 	for type in [ "mat4x4", "vec4", "vec3", "vec2", "float", "int", "bool" ]:
-		for p in parameters.keys():
-			var parameter : Parameter = parameters[p]
+		for p in defs.keys():
+			var parameter : Parameter = defs[p]
 			if parameter.type != type:
 				continue
 			var array : String = ""
@@ -254,16 +352,22 @@ func get_uniform_declarations() -> String:
 				size += parameter.size
 			else:
 				size += parameter.size*parameter.array_size
+	if values != null and size > 0:
+		values.resize(size)
+	return uniform_declarations
+
+func get_uniform_declarations() -> String:
+	var uniform_declarations : String = get_parameter_declarations(parameters, parameter_values)
 	if uniform_declarations != "":
 		uniform_declarations = "layout(set = 1, binding = 0, std430) restrict readonly buffer Parameters {\n"+uniform_declarations+"};\n"
-		parameter_values.resize(size)
 		for p in parameters.keys():
 			set_parameter(p, parameters[p].value)
 	if ! constants.is_empty():
 		uniform_declarations += "\n"
 		for c in constants.keys():
 			var constant : Parameter = constants[c]
-			uniform_declarations += "const %s %s = %s;\n" % [ constant.type, c, constant_as_string(constant.value, constant.type) ]
+			var shader_uniform : MMGenBase.ShaderUniform = MMGenBase.ShaderUniform.new(c, constant.type, constant.value, constant.array_size)
+			uniform_declarations += shader_uniform.to_str("const", true)
 	return uniform_declarations
 
 func get_input_texture_declarations() -> String:
@@ -272,6 +376,12 @@ func get_input_texture_declarations() -> String:
 		var t : InputTexture = input_textures[ti]
 		texture_declarations += "layout(set = 2, binding = %d) uniform sampler2D %s;\n" % [ ti, t.name ]
 	return texture_declarations
+
+func get_output_parameters_declarations() -> String:
+	var output_parameters_declarations : String = get_parameter_declarations(output_parameters)
+	if output_parameters_declarations != "":
+		output_parameters_declarations = "layout(set = 4, binding = 0, std430) buffer MMout {\n"+output_parameters_declarations+"} mm_out;\n"
+	return output_parameters_declarations
 
 func create_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, usage_bits : int):
 	var fmt : RDTextureFormat = RDTextureFormat.new()

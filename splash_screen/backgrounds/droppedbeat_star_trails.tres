@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b82ta4cl5vb57"]
+
+[ext_resource type="Shader" path="res://splash_screen/backgrounds/droppedbeat_star_trails.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/uv1_scale = Vector3(0.85, 0.51, 1)
+shader_parameter/uv1_offset = Vector3(0.04, 0.38, 0)
+shader_parameter/variation = 0.0

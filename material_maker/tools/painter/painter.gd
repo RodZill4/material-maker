@@ -268,22 +268,22 @@ func init_do_texture_channels(depth : float = 1.0, depth_texture : Texture2D = n
 	# do_viewport.init_channels(depth_texture, calculate_mask(depth, StandardMaterial3D.TEXTURE_CHANNEL_RED), occlusion_texture, calculate_mask(occlusion, occlusion_channel), null, Color(1.0, 0.0, 0.0, 0.0), null, Color(1.0, 0.0, 0.0, 0.0))
 
 func init_textures(m : StandardMaterial3D):
-	init_rgba_texture(CHANNEL_ALBEDO, m.albedo_color, m.albedo_texture)
-	init_mr_texture_channels(m.metallic, m.metallic_texture, m.metallic_texture_channel, m.roughness, m.roughness_texture, m.roughness_texture_channel)
+	await init_rgba_texture(CHANNEL_ALBEDO, m.albedo_color, m.albedo_texture)
+	await init_mr_texture_channels(m.metallic, m.metallic_texture, m.metallic_texture_channel, m.roughness, m.roughness_texture, m.roughness_texture_channel)
 	if m.emission_enabled:
 		var emission_color = m.emission
 		emission_color.a = 1.0
-		init_rgba_texture(CHANNEL_EMISSION, emission_color, m.emission_texture)
+		await init_rgba_texture(CHANNEL_EMISSION, emission_color, m.emission_texture)
 	else:
-		init_rgba_texture(CHANNEL_EMISSION, Color(0.0, 0.0, 0.0), null)
+		await init_rgba_texture(CHANNEL_EMISSION, Color(0.0, 0.0, 0.0), null)
 	if m.normal_enabled:
-		init_rgba_texture(CHANNEL_NORMAL, Color(1.0, 1.0, 1.0), m.n_texture)
+		await init_rgba_texture(CHANNEL_NORMAL, Color(1.0, 1.0, 1.0), m.n_texture)
 	else:
-		init_rgba_texture(CHANNEL_NORMAL, Color(0.5, 0.5, 0.0), null)
+		await init_rgba_texture(CHANNEL_NORMAL, Color(0.5, 0.5, 0.0), null)
 	if m.heightmap_enabled or m.ao_enabled:
-		init_do_texture_channels(m.depth_scale if m.heightmap_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
+		await init_do_texture_channels(m.depth_scale if m.heightmap_enabled else 0.0, m.depth_texture, m.ao_light_affect if m.ao_enabled else 1.0, m.ao_texture, m.ao_texture_channel)
 	else:
-		init_rgba_texture(CHANNEL_DO, Color(0.0, 1.0, 0.0, 0.0), null)
+		await init_rgba_texture(CHANNEL_DO, Color(0.0, 1.0, 0.0, 0.0), null)
 
 func set_texture_size(s : float):
 	if texture_size != s:
@@ -298,6 +298,7 @@ func update_view(p : Projection, t : Transform3D, s : Vector2i):
 	brush_params.view_back = Vector3(0.0, 0.0, 1.0) * transform.basis.orthonormalized()
 	brush_params.view_right = Vector3(1.0, 0.0, 0.0) * transform.basis.orthonormalized()
 	brush_params.view_up = Vector3(0.0, 1.0, 0.0) * transform.basis.orthonormalized()
+	print("back: "+str(brush_params.view_back))
 	update_view_textures()
 	update_brush()
 
@@ -349,8 +350,8 @@ func update_brush(update_shaders : bool = false):
 	if brush_preview_material != null:
 		if update_shaders:
 			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.gdshader"
-			var code : String = get_output_code(1)
-			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = code })
+			var output_code : Dictionary = get_output_code(1)
+			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = output_code.code }, output_code.uniforms)
 		brush_preview_material.set_shader_parameter("rect_size", viewport_size)
 		brush_preview_material.set_shader_parameter("view2tex_tex", v2t_texture.get_texture())
 		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", mesh_position_tex.get_texture())
@@ -494,10 +495,10 @@ func update_brush(update_shaders : bool = false):
 		mm_deps.buffer_create_compute_material("painter_%d:paint" % get_instance_id(), paint_shader_wrapper)
 	paint_shader.set_parameter("viewport_size", Vector2(viewport_size))
 
-func get_output_code(index : int) -> String:
+func get_output_code(index : int) -> Dictionary:
 	if brush_node == null or !is_instance_valid(brush_node):
 		brush_node = null
-		return ""
+		return {}
 	var context : MMGenContext = MMGenContext.new()
 	var source_mask : MMGenBase.ShaderCode = brush_node.get_shader_code("uv", 0, context)
 	context = MMGenContext.new(context)
@@ -508,7 +509,6 @@ func get_output_code(index : int) -> String:
 	definitions.add_globals(source.globals)
 	definitions.add_globals(source_mask.globals)
 	new_code += definitions.get_globals_string()
-	# TODO: Merge uniform lists
 	definitions.add_uniforms(source.uniforms)
 	definitions.add_uniforms(source_mask.uniforms)
 	new_code += definitions.uniforms_as_strings()
@@ -529,14 +529,16 @@ func get_output_code(index : int) -> String:
 	new_code += source.code+"\n"
 	new_code += "return "+source.output_values.rgba+";\n"
 	new_code += "}\n"
-	return new_code
+	return { code=new_code, uniforms=definitions.uniforms }
 
-func update_shader(buffer_name : String, shader_material : ShaderMaterial, shader_file : String, defines : Dictionary) -> void:
+func update_shader(buffer_name : String, shader_material : ShaderMaterial, shader_file : String, defines : Dictionary, uniforms : Array) -> void:
 	if shader_material == null:
 		print("no shader material")
 		return
 	var shader_wrapper : MMShaderMaterial = MMShaderMaterial.new(shader_material)
 	await mm_deps.buffer_create_shader_material(buffer_name, shader_wrapper, mm_preprocessor.preprocess_file(shader_file, defines))
+	for u in uniforms:
+		shader_material.set_shader_parameter(u.name, u.value)
 	if get_parent().has_method("update_procedural_layer"):
 		get_parent().update_procedural_layer()
 
@@ -572,16 +574,14 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 	return false
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true, on_mask : bool = false) -> void:
-	var active_viewports : Array = []
-	if on_mask:
-		active_viewports.push_back("mask")
+	var channels_infos : Array[Dictionary] = PAINT_CHANNELS_MASK if on_mask else PAINT_CHANNELS
 	for p in shader_params.keys():
 		var n : String
 		if PARAMETER_RENAMES.has(p):
 			n = PARAMETER_RENAMES[p]
 		else:
 			n = p
-		paint_shader.set_parameter(n, shader_params[p])
+		paint_shader.set_parameter(n, shader_params[p], true)
 	await paint_shader.render_ext(paint_textures, Vector2i(texture_size, texture_size))
 	for i in range(paint_textures.size()/3):
 		if OS.is_debug_build():
@@ -600,19 +600,11 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 			await init_shader.render_ext([ paint_textures[i*3+1] ], Vector2i(texture_size, texture_size))
 			paint_textures[i*3+1].get_texture()
 		var stroke_state = {}
-		for v in active_viewports:
-			pass
-			# TODO: this is used for undo/redo
-			# stroke_state[v] = viewports[v].get_current_state()
+		for c in channels_infos.size():
+			var channel_name : String = channels_infos[c].name
+			if has_channel[channel_name]:
+				stroke_state[channel_name] = get_paint_channel(c).next_texture
 		emit_signal("end_of_stroke", stroke_state)
-
-func set_state(s):
-	for c in s.keys():
-		pass
-		# TODO: initialize layers
-		#if viewports.has(c):
-		#	viewports[c].init(Color(1, 1, 1, 1), s[c])
-	emit_signal("painted")
 
 func fill(erase : bool, reset : bool = false, emit_end_of_stroke : bool = true) -> void:
 	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)

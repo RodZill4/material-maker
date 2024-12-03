@@ -45,7 +45,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
-const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light", "Modern"]
+const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -143,7 +143,7 @@ func _ready() -> void:
 			get_window().size = mm_globals.config.get_value("window", "size")
 
 	# Restore the theme
-	var theme_name : String = "default"
+	var theme_name: String = "default dark"
 	if mm_globals.config.has_section_key("window", "theme"):
 		theme_name = mm_globals.config.get_value("window", "theme")
 	change_theme(theme_name)
@@ -185,7 +185,7 @@ func _ready() -> void:
 
 	var args : PackedStringArray = OS.get_cmdline_args()
 	for a in args:
-		if a.get_extension() == "ptex":
+		if a.get_extension().to_lower() in [ "ptex", "mmpp" ]:
 			do_load_project(get_file_absolute_path(a))
 		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
@@ -234,6 +234,10 @@ func _ready() -> void:
 	update_menus()
 
 	mm_logger.message("Material Maker "+ProjectSettings.get_setting("application/config/actual_release"))
+
+	size = get_viewport().size/get_viewport().content_scale_factor
+	position = Vector2i(0, 0)
+
 
 var menu_update_requested : bool = false
 
@@ -287,6 +291,8 @@ func on_config_changed() -> void:
 		# This prevents UI elements from being too small on hiDPI displays.
 		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	get_viewport().content_scale_factor = ui_scale
+	size = get_viewport().size/get_viewport().content_scale_factor
+	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
 
 	# Clamp to reasonable values to avoid crashes on startup.
@@ -470,7 +476,15 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
 func change_theme(theme_name) -> void:
-	theme = load("res://material_maker/theme/"+theme_name+".tres")
+	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
+		theme_name = "default dark"
+	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
+	if _theme == theme:
+		return
+	if _theme is EnhancedTheme:
+		_theme.update()
+	await get_tree().process_frame
+	theme = _theme
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -903,7 +917,7 @@ func add_brush_to_library(index) -> void:
 	# Create thumbnail
 	var result = await get_current_project().get_brush_preview()
 	var image : Image = Image.new()
-	image.copy_from(result.get_data())
+	image.copy_from(result.get_image())
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
@@ -1175,7 +1189,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
-			"obj":
+			"obj", "glb", "gltf":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":

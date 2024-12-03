@@ -74,6 +74,12 @@ const MESH_MAPS : Array[Dictionary] = [
 		output_type="f",
 		map="thickness",
 		output="texture($TEXTURE, $UV).r"
+	},
+	{
+		name="Adjacency",
+		output_type="rgb",
+		map="adjacency",
+		output="texture($TEXTURE, $UV).rgb"
 	}
 ]
 
