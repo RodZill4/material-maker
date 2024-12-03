@@ -1,6 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://clw8sb0p8webl"]
+[gd_scene load_steps=21 format=3 uid="uid://clw8sb0p8webl"]
 
-[ext_resource type="Script" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
+[ext_resource type="Script" uid="uid://di33ywsh7i1mp" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
 
 [sub_resource type="Shader" id="11"]
@@ -111,6 +111,20 @@ shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j7uv1"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c6ii2"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
 [node name="AddNodePopup" type="Popup"]
 transparent_bg = true
 size = Vector2i(360, 400)
@@ -193,12 +207,12 @@ layout_mode = 2
 size_flags_horizontal = 6
 
 [node name="Button11" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_7i7iy")
+material = SubResource("ShaderMaterial_j7uv1")
 layout_mode = 2
 size_flags_horizontal = 6
 
 [node name="Button12" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_7i7iy")
+material = SubResource("ShaderMaterial_c6ii2")
 layout_mode = 2
 size_flags_horizontal = 6
 
