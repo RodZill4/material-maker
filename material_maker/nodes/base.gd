@@ -148,7 +148,7 @@ func on_theme_changed() -> void:
 	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
 
 
-func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
+func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 	if left:
 		var inputs = generator.get_input_defs()
 		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
@@ -163,7 +163,7 @@ func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
 			var conn_pos1 = get_output_port_position(slot_index)
 			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
-	draw_circle(position, 5, color, true, -1, true)
+	draw_circle(pos, 5, color, true, -1, true)
 
 
 func _draw() -> void:

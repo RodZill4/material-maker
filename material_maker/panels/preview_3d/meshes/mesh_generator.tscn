@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://b5vc72lmdldus"]
 
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/meshes/mesh_generator.gd" id="1_m0lfx"]
+[ext_resource type="Script" uid="uid://caeqkfckha5pa" path="res://material_maker/panels/preview_3d/meshes/mesh_generator.gd" id="1_m0lfx"]
 [ext_resource type="Texture2D" uid="uid://du2r5sfapuxxx" path="res://material_maker/panels/preview_3d/meshes/bricks_albedo.png" id="2_o2y7f"]
 [ext_resource type="Texture2D" uid="uid://dfvy71k6qeu0g" path="res://material_maker/panels/preview_3d/meshes/bricks_orm.png" id="3_0fl5d"]
 [ext_resource type="Texture2D" uid="uid://bx4upg4i1n5db" path="res://material_maker/panels/preview_3d/meshes/bricks_heightmap.png" id="4_87aax"]
@@ -72,25 +72,25 @@ void fragment() {
 render_priority = 0
 shader = SubResource("Shader_3eg21")
 shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/texture_albedo = ExtResource("2_o2y7f")
 shader_parameter/point_size = 1.0
 shader_parameter/roughness = 1.0
+shader_parameter/texture_metallic = ExtResource("3_0fl5d")
 shader_parameter/metallic_texture_channel = null
+shader_parameter/texture_roughness = ExtResource("3_0fl5d")
 shader_parameter/specular = 0.5
 shader_parameter/metallic = 1.0
+shader_parameter/texture_normal = ExtResource("5_2283w")
 shader_parameter/normal_scale = 1.0
+shader_parameter/texture_ambient_occlusion = ExtResource("3_0fl5d")
 shader_parameter/ao_texture_channel = null
 shader_parameter/ao_light_affect = 0.0
+shader_parameter/texture_heightmap = ExtResource("4_87aax")
 shader_parameter/heightmap_scale = 0.1
 shader_parameter/uv1_scale = Vector3(1, 1, 1)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/texture_albedo = ExtResource("2_o2y7f")
-shader_parameter/texture_metallic = ExtResource("3_0fl5d")
-shader_parameter/texture_roughness = ExtResource("3_0fl5d")
-shader_parameter/texture_normal = ExtResource("5_2283w")
-shader_parameter/texture_ambient_occlusion = ExtResource("3_0fl5d")
-shader_parameter/texture_heightmap = ExtResource("4_87aax")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_nb5y3"]
 
@@ -129,8 +129,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_s43cy"]
 _data = {
-"RESET": SubResource("Animation_lmjcq"),
-"rotate": SubResource("Animation_umfat")
+&"RESET": SubResource("Animation_lmjcq"),
+&"rotate": SubResource("Animation_umfat")
 }
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_odkg4"]
@@ -166,7 +166,7 @@ skeleton = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Pivot"]
 libraries = {
-"": SubResource("AnimationLibrary_s43cy")
+&"": SubResource("AnimationLibrary_s43cy")
 }
 autoplay = "rotate"
 speed_scale = 0.01

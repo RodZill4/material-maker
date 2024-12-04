@@ -31,8 +31,8 @@ func set_shader(vertex_source : String, fragment_source : String, replaces : Dic
 	mm_renderer.release_rendering_device(self)
 	return shader.is_valid()
 
-func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+func in_thread_render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
+	var rd : RenderingDevice = mm_renderer.rendering_device
 	var rids : RIDs = RIDs.new()
 	
 	var target_texture_id : RID = create_output_texture(rd, size, texture_type, true)
@@ -95,8 +95,9 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 	rd.sync()
 	
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
-	await target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
+	target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
 	
 	rids.free_rids(rd)
-	
-	mm_renderer.release_rendering_device(self)
+
+func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
+	return await mm_renderer.thread_run(self.in_thread_render, [size, texture_type, target_texture, with_depth])

@@ -1026,10 +1026,10 @@ func update_preview_3d(previews : Array, _sequential = false) -> void:
 		gen_material = graph_edit.top_generator.get_node("Material")
 	if gen_material != current_gen_material:
 		if current_gen_material != null and is_instance_valid(current_gen_material):
-			current_gen_material.set_3d_previews([])
+			current_gen_material.set_3d_previews([] as Array[ShaderMaterial])
 		current_gen_material = gen_material
 	if current_gen_material != null:
-		var materials : Array = []
+		var materials : Array[ShaderMaterial] = []
 		for p in previews:
 			materials.append_array(p.get_materials())
 		current_gen_material.set_3d_previews(materials)

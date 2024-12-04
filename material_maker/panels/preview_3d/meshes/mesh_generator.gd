@@ -52,17 +52,18 @@ func generate_mesh():
 	shader.set_parameter("size", size)
 	shader.set_parameter("curvature", $UI/VBoxContainer/Curvature.value)
 	await shader.render_ext([], Vector2i(size, size), opv)
-	var mesh : ArrayMesh = generated_mesh.mesh
-	mesh.clear_surfaces()
-	var flags : int = Mesh.ARRAY_FORMAT_VERTEX | Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_INDEX
-	var vertices : PackedVector3Array = opv.vertices
-	var normals : PackedVector3Array = opv.normals
-	var tangents : PackedFloat32Array = opv.tangents
-	var tex_uvs : PackedVector2Array = opv.tex_uvs
-	var indexes : PackedInt32Array = opv.indexes
-	var arrays : Array = [vertices, normals, tangents, null, tex_uvs, null, null, null, null, null, null, null, indexes]
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
-	print("Done")
+	if opv.has("vertices"):
+		var mesh : ArrayMesh = generated_mesh.mesh
+		mesh.clear_surfaces()
+		var flags : int = Mesh.ARRAY_FORMAT_VERTEX | Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_INDEX
+		var vertices : PackedVector3Array = opv.vertices
+		var normals : PackedVector3Array = opv.normals
+		var tangents : PackedFloat32Array = opv.tangents
+		var tex_uvs : PackedVector2Array = opv.tex_uvs
+		var indexes : PackedInt32Array = opv.indexes
+		var arrays : Array = [vertices, normals, tangents, null, tex_uvs, null, null, null, null, null, null, null, indexes]
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
+		print("Done")
 
 var need_update : bool = false
 var need_reset_shader : bool = false

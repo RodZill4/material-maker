@@ -52,7 +52,7 @@ func do_update_material(source, target_material : ShaderMaterial, template : Str
 	for u in source.uniforms:
 		if u.value:
 			if u.value is MMTexture:
-				target_material.set_shader_parameter(u.name, u.value.get_texture())
+				target_material.set_shader_parameter(u.name, await u.value.get_texture())
 			else:
 				target_material.set_shader_parameter(u.name, u.value)
 	# Make sure position/size parameters are setup
