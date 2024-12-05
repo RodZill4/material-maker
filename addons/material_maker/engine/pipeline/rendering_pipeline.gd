@@ -64,10 +64,12 @@ func in_thread_render(size : Vector2i, texture_type : int, target_texture : MMTe
 		blend
 	)
 	
-	var draw_list : int = rd.draw_list_begin(framebuffer,
-		RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ,
-		RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ,
-		clearColors)
+	# pre dev6
+	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, clearColors)
+	# dev6
+	var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, true, 1.0, Rect2(), RenderingDevice.OPAQUE_PASS)
+		
+
 	rd.draw_list_bind_render_pipeline(draw_list, pipeline)
 	
 	var uniform_set_1 : RID = RID()
