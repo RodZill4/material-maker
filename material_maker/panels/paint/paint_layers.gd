@@ -124,7 +124,7 @@ func select_layer(layer : MMLayer, force : bool = false, update_last : bool = tr
 				await painter_node.init_rgba_texture_by_name(c, Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
 				await painter_node.init_rgba_texture_by_name(c)
-			layer.set(c, painter_node.get_texture_by_name(c))
+			layer.set(c, await painter_node.get_texture_by_name(c))
 		emit_signal("layer_selected", layer)
 	selected_layer = layer
 	await get_tree().process_frame
