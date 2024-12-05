@@ -172,7 +172,7 @@ func initialize_rendering_thread():
 	rendering_thread = Thread.new()
 	rendering_mutex = Mutex.new()
 	rendering_semaphore = Semaphore.new()
-	rendering_thread.start(self.thread_loop)
+	rendering_thread.start(self.thread_loop, 2)
 	thread_run(self.create_rendering_device)
 
 func request_rendering_device(user) -> RenderingDevice:
