@@ -108,6 +108,7 @@ func release(renderer : Object) -> void:
 
 # rendering thread
 
+const render_in_separate_thread : bool = true
 var rendering_thread : Thread
 var rendering_mutex : Mutex
 var rendering_semaphore : Semaphore
@@ -118,8 +119,6 @@ var rendering_thread_running : bool
 var rendering_thread_working : bool = false
 var rendering_device : RenderingDevice
 var rendering_device_user = null
-#var next_task : int = 0
-#var running_tasks : Array[int] = []
 
 func thread_loop():
 	while true:
@@ -134,46 +133,56 @@ func thread_loop():
 		rendering_thread_running = false
 		rendering_mutex.unlock()
 
-func thread_run(c : Callable, p : Array = []):
-	#var task_index = next_task
-	#next_task += 1
-	#running_tasks.append(task_index)
-	#print("Running ", c, "(task ", task_index, ") in thread")
-	while rendering_thread_working:
-		await get_tree().process_frame
-	rendering_thread_working = true
-	while not rendering_mutex.try_lock():
-		await get_tree().process_frame
-	rendering_callable = c
-	rendering_parameters = p
-	rendering_thread_running = true
-	rendering_mutex.unlock()
-	rendering_semaphore.post()
-	var running : bool = true
-	var rv
-	while running:
-		while not rendering_mutex.try_lock():
-			if is_inside_tree():
-				await get_tree().process_frame
-		running = rendering_thread_running
-		rv = rendering_return_value
+func thread_run(c : Callable, p : Array = [], stop_thread = false):
+	if render_in_separate_thread:
+		if rendering_thread == null:
+			return
+		while rendering_thread_working and is_inside_tree():
+			await get_tree().process_frame
+		rendering_thread_working = true
+		while not rendering_mutex.try_lock() and is_inside_tree():
+			await get_tree().process_frame
+		rendering_callable = c
+		rendering_parameters = p
+		rendering_thread_running = not stop_thread
 		rendering_mutex.unlock()
-	rendering_thread_working = false
-	#print("Done with ", c, "(task ", task_index, ")")
-	#running_tasks.erase(task_index)
-	#if not running_tasks.is_empty():
-	#	print("Remaining tasks: ", running_tasks)
-	return rv
+		rendering_semaphore.post()
+		var running : bool = true
+		var rv
+		while running:
+			while not rendering_mutex.try_lock():
+				if is_inside_tree():
+					await get_tree().process_frame
+			running = rendering_thread_running
+			rv = rendering_return_value
+			rendering_mutex.unlock()
+		rendering_thread_working = false
+		return rv
+	else:
+		return await c.callv(p)
 
 func create_rendering_device():
 	rendering_device = RenderingServer.create_local_rendering_device()
 
+func destroy_rendering_device():
+	pass
+
 func initialize_rendering_thread():
-	rendering_thread = Thread.new()
-	rendering_mutex = Mutex.new()
-	rendering_semaphore = Semaphore.new()
-	rendering_thread.start(self.thread_loop, 2)
-	thread_run(self.create_rendering_device)
+	if render_in_separate_thread:
+		rendering_thread = Thread.new()
+		rendering_mutex = Mutex.new()
+		rendering_semaphore = Semaphore.new()
+		rendering_thread.start(self.thread_loop, 2)
+		thread_run(self.create_rendering_device)
+	else:
+		create_rendering_device()
+
+func stop_rendering_thread():
+	if render_in_separate_thread:
+		await thread_run(destroy_rendering_device, [])
+		await thread_run(destroy_rendering_device, [], true)
+		rendering_thread.wait_to_finish()
+		rendering_thread = null
 
 func request_rendering_device(user) -> RenderingDevice:
 	while ! renderers_enabled or rendering_device_user != null:

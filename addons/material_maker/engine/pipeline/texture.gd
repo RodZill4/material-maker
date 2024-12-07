@@ -17,7 +17,8 @@ func _init() -> void:
 func _notification(what : int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
-			await mm_renderer.thread_run(in_thread_free_rid, [rid, rd])
+			if mm_renderer:
+				await mm_renderer.thread_run(in_thread_free_rid, [rid, rd])
 
 static func in_thread_free_rid(texture_rid, rendering_device):
 	if texture_rid.is_valid():
