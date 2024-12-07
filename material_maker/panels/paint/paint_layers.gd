@@ -446,19 +446,20 @@ func debug_get_texture_names():
 # tr("Depth")
 # tr("Occlusion")
 
-func debug_get_texture(ID):
+func debug_get_texture(ID) -> Texture2D:
 	match ID:
 		0:
-			return get_albedo_texture()
+			return await get_albedo_texture()
 		1:
-			return get_metallic_texture()
+			return await get_metallic_texture()
 		2:
-			return get_roughness_texture()
+			return await get_roughness_texture()
 		3:
-			return get_emission_texture()
+			return await get_emission_texture()
 		4:
-			return get_normal_map()
+			return await get_normal_map()
 		5:
-			return get_depth_texture()
+			return await get_depth_texture()
 		6:
-			return get_occlusion_texture()
+			return await get_occlusion_texture()
+	return null

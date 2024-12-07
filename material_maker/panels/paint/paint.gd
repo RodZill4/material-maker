@@ -757,7 +757,7 @@ func update_view():
 		# DEBUG: show tex2view texture on model
 		#for i in range(10):
 		#	await get_tree().process_frame
-		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
+		#painted_mesh.get_surface_override_material(0).albedo_texture = await painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
 	#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
 
@@ -912,8 +912,8 @@ func _on_ChannelSelect_item_selected(ID):
 func debug_get_texture_names():
 	return [ "Mask" ]
 
-func debug_get_texture(_ID):
-	return mask
+func debug_get_texture(_ID) -> Texture2D:
+	return await mask.get_texture()
 
 # Brush options UI
 
