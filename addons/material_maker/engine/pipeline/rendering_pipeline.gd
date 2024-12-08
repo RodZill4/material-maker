@@ -31,8 +31,8 @@ func set_shader(vertex_source : String, fragment_source : String, replaces : Dic
 	mm_renderer.release_rendering_device(self)
 	return shader.is_valid()
 
-func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+func in_thread_render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
+	var rd : RenderingDevice = mm_renderer.rendering_device
 	var rids : RIDs = RIDs.new()
 	
 	var target_texture_id : RID = create_output_texture(rd, size, texture_type, true)
@@ -64,10 +64,12 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 		blend
 	)
 	
-	var draw_list : int = rd.draw_list_begin(framebuffer,
-		RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ,
-		RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ,
-		clearColors)
+	# pre dev6
+	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, clearColors)
+	# dev6
+	var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, true, 1.0, Rect2(), RenderingDevice.OPAQUE_PASS)
+		
+
 	rd.draw_list_bind_render_pipeline(draw_list, pipeline)
 	
 	var uniform_set_1 : RID = RID()
@@ -95,8 +97,9 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 	rd.sync()
 	
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
-	await target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
+	target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
 	
 	rids.free_rids(rd)
-	
-	mm_renderer.release_rendering_device(self)
+
+func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
+	return await mm_renderer.thread_run(self.in_thread_render, [size, texture_type, target_texture, with_depth])

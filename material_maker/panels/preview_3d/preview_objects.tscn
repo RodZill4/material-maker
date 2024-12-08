@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://cxcw0mi4sfl2x"]
 
 [ext_resource type="ArrayMesh" uid="uid://kvgtp30latgq" path="res://material_maker/meshes/suzanne.obj" id="1"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_mesh.gd" id="3"]
+[ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
+[ext_resource type="Script" uid="uid://m5lpqku28wub" path="res://material_maker/panels/preview_3d/preview_mesh.gd" id="3"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_iqcsj"]
 
@@ -237,5 +237,3 @@ visible = false
 mesh = ExtResource("1")
 script = ExtResource("3")
 can_tesselate = false
-
-[connection signal="visibility_changed" from="Cube" to="Cube" method="_on_visibility_changed"]

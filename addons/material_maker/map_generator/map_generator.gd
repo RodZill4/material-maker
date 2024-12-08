@@ -14,16 +14,67 @@ const MAP_DEFINITIONS : Dictionary = {
 		type="simple",
 		vertex = "position_vertex",
 		fragment = "common_fragment",
-		postprocess=["dilate"]
+		postprocess=["dilate"],
+		dependencies=["seams"]
 	},
-	normal = { type="simple", vertex = "normal_vertex", fragment = "normal_fragment", postprocess=["dilate"] },
-	tangent = { type="simple", vertex = "tangent_vertex", fragment = "normal_fragment", postprocess=["dilate"] },
-	ambient_occlusion = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=0, postprocess=["dilate"] },
-	bent_normals = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=1, postprocess=["dilate"] },
-	thickness = { type="bvh", vertex = "ao_vertex", fragment = "ao_fragment", mode=2, postprocess=["dilate"] },
-	curvature = { type="curvature", vertex = "curvature_vertex", fragment = "common_fragment", postprocess=["dilate"] },
-	seams = { type="simple", vertex = "position_vertex", fragment = "common_fragment", postprocess=["seams_1", "seams_2"] },
-	adjacency = { type="adjacency", vertex = "normal_vertex", fragment = "common_fragment", postprocess=["adjacency_dilate"] },
+	normal = {
+		type="simple",
+		vertex = "normal_vertex",
+		fragment = "normal_fragment",
+		postprocess=["dilate"],
+		dependencies=["seams"]
+	},
+	tangent = {
+		type="simple",
+		vertex = "tangent_vertex",
+		fragment = "normal_fragment",
+		postprocess=["dilate"],
+		dependencies=["seams"]
+	},
+	ambient_occlusion = {
+		type="bvh",
+		vertex = "ao_vertex",
+		fragment = "ao_fragment",
+		mode=0,
+		postprocess=["dilate"],
+		dependencies=["seams"]
+	},
+	bent_normals = {
+		type="bvh",
+		vertex = "ao_vertex",
+		fragment = "ao_fragment",
+		mode=1,
+		postprocess=["dilate"],
+		dependencies=["seams"]
+	},
+	thickness = {
+		type="bvh",
+		vertex = "ao_vertex",
+		fragment = "ao_fragment",
+		mode=2,
+		postprocess=["dilate"],
+		dependencies=["seams"]
+	},
+	curvature = {
+		type="curvature",
+		vertex = "curvature_vertex",
+		fragment = "common_fragment",
+		postprocess=["dilate"],
+		dependencies=["seams"]
+	},
+	seams = {
+		type="simple",
+		vertex = "position_vertex",
+		fragment = "common_fragment",
+		postprocess=["seams_1", "seams_2"]
+	},
+	adjacency = {
+		type="adjacency",
+		vertex = "normal_vertex",
+		fragment = "common_fragment",
+		postprocess=["adjacency_dilate"],
+		dependencies=["seams"]
+	}
 }
 
 
@@ -145,7 +196,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			postprocess_pipeline.add_parameter_or_texture("pixels", "int", pixels)
 			match p:
 				"adjacency_dilate", "dilate":
-					var seams_map : MMTexture = await get_map(mesh, "seams", false, true)
+					var seams_map : MMTexture = mesh_maps[mesh].seams
 					postprocess_pipeline.add_parameter_or_texture("seams_map", "sampler2D", seams_map)
 			await postprocess_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
 			await postprocess_pipeline.render(texture, Vector2i(size, size))
@@ -155,7 +206,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 
 static var busy : bool = false
 
-static func get_map(mesh : Mesh, map : String, force_generate : bool = false, parallel : bool = false) -> MMTexture:
+static func get_map(mesh : Mesh, map : String, force_generate : bool = false) -> MMTexture:
 	if mesh == null:
 		if error_texture == null:
 			error_texture = MMTexture.new()
@@ -167,15 +218,18 @@ static func get_map(mesh : Mesh, map : String, force_generate : bool = false, pa
 		mesh_maps[mesh] = {}
 	if force_generate:
 		mesh_maps[mesh].erase(map)
-	while true:
-		if mesh_maps[mesh].has(map):
-			break
-		if parallel or not busy:
-			busy = true
-			var texture : MMTexture = MMTexture.new()
-			mesh_maps[mesh][map] = texture
-			await generate(mesh, map, 2048, texture)
-			busy = false
-			break
-		await mm_globals.get_tree().process_frame
+	if not mesh_maps[mesh].has(map):
+		if MAP_DEFINITIONS[map].has("dependencies"):
+			for d in MAP_DEFINITIONS[map].dependencies:
+				await get_map(mesh, d)
+		print("Creating map ", map, " for mesh ", mesh)
+		while not mesh_maps[mesh].has(map):
+			if busy:
+				await mm_globals.get_tree().process_frame
+			else:
+				busy = true
+				var texture : MMTexture = MMTexture.new()
+				await generate(mesh, map, 2048, texture)
+				mesh_maps[mesh][map] = texture
+				busy = false
 	return mesh_maps[mesh][map] as MMTexture

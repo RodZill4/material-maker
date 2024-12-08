@@ -172,16 +172,18 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 func render(texture : MMTexture, size : Vector2i, output_parameters_values = null) -> bool:
 	return await render_ext([texture], size, output_parameters_values)
 
-func render_ext(textures : Array[MMTexture], size : Vector2i, output_parameters_values = null) -> bool:
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+func in_thread_render_ext(textures : Array[MMTexture], size : Vector2i, output_parameters_values = null) -> bool:
+	var rd : RenderingDevice = mm_renderer.rendering_device
 	var rids : RIDs = RIDs.new()
 	var start_time = Time.get_ticks_msec()
 	set_parameter("elapsed_time", 0.001*float(start_time), true)
-	var status = await render_2(rd, textures, output_parameters_values, size, rids)
+	var status = render_2(rd, textures, output_parameters_values, size, rids)
 	rids.free_rids(rd)
 	render_time = Time.get_ticks_msec() - start_time
-	mm_renderer.release_rendering_device(self)
 	return status
+
+func render_ext(textures : Array[MMTexture], size : Vector2i, output_parameters_values = null) -> bool:
+	return await mm_renderer.thread_run(self.in_thread_render_ext, [textures, size, output_parameters_values])
 
 func render_2(rd : RenderingDevice, textures : Array[MMTexture], output_parameters_values, size : Vector2i, rids : RIDs) -> bool:
 	if not shader.is_valid():
@@ -201,7 +203,7 @@ func render_2(rd : RenderingDevice, textures : Array[MMTexture], output_paramete
 		#print("Creating texture for "+output_texture.name)
 		output_textures_rids.append(create_output_texture(rd, size, output_texture.type))
 	
-	var status : bool = await do_render(rd, output_textures_rids, size, rids, output_parameters_values)
+	var status : bool = do_render(rd, output_textures_rids, size, rids, output_parameters_values)
 	if ! status:
 		push_warning("Rendering failed")
 		return false
@@ -278,17 +280,7 @@ func do_render(rd : RenderingDevice, output_textures_rids : Array[RID], size : V
 	var chunk_count : int = max(1, size.x*size.y/(max_viewport_size*max_viewport_size))
 	var chunk_height : int = max(1, size.y/chunk_count)
 	
-	#await render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
-	if true:
-		# Use threads
-		var thread : Thread = Thread.new()
-		thread.start(render_loop.bind(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4))
-		while thread.is_alive():
-			await mm_renderer.get_tree().process_frame
-		
-		thread.wait_to_finish()
-	else:
-		render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
+	render_loop(rd, size, chunk_height, uniform_set_0, uniform_set_1, uniform_set_2, uniform_set_4)
 	
 	if has_output_parameters:
 		for pn in output_parameters.keys():

@@ -595,7 +595,7 @@ func do_load_project(file_name : String) -> bool:
 	var status : bool = false
 	match file_name.get_extension():
 		"ptex":
-			status = do_load_material(file_name, false)
+			status = await do_load_material(file_name, false)
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
 			status = do_load_painting(file_name)
@@ -623,9 +623,13 @@ func create_new_graph_edit_if_needed() -> MMGraphEdit:
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
 	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
-	graph_edit.load_file(filename)
+	await graph_edit.load_file(filename)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
+	print("Current mesh: ", current_mesh)
+	print("Top generator: ", graph_edit.top_generator)
+	if current_mesh and graph_edit.top_generator:
+		graph_edit.top_generator.set_current_mesh(current_mesh)
 	return true
 
 func do_load_material_from_data(filename : String, data : String, update_hierarchy : bool = true) -> bool:
@@ -688,6 +692,7 @@ func quit() -> void:
 		if !result:
 			quitting = false
 			return
+	await mm_renderer.stop_rendering_thread()
 	dim_window()
 	get_tree().quit()
 	quitting = false
@@ -1026,10 +1031,10 @@ func update_preview_3d(previews : Array, _sequential = false) -> void:
 		gen_material = graph_edit.top_generator.get_node("Material")
 	if gen_material != current_gen_material:
 		if current_gen_material != null and is_instance_valid(current_gen_material):
-			current_gen_material.set_3d_previews([])
+			current_gen_material.set_3d_previews([] as Array[ShaderMaterial])
 		current_gen_material = gen_material
 	if current_gen_material != null:
-		var materials : Array = []
+		var materials : Array[ShaderMaterial] = []
 		for p in previews:
 			materials.append_array(p.get_materials())
 		current_gen_material.set_3d_previews(materials)
@@ -1044,10 +1049,6 @@ func _on_Projects_tab_changed(_tab) -> void:
 		project.call("project_selected")
 	var new_tab = projects_panel.get_projects().get_current_tab_control()
 	if new_tab != current_tab:
-# TODO: ???
-#		for c in get_incoming_connections():
-#			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-#				c.source.disconnect(c.signal_name,Callable(self,c.method_name))
 		var new_graph_edit = null
 		if new_tab is GraphEdit:
 			new_graph_edit = new_tab

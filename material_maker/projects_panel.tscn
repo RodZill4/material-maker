@@ -1,9 +1,9 @@
 [gd_scene load_steps=12 format=3 uid="uid://bnqq3vhwmudkw"]
 
-[ext_resource type="Script" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
+[ext_resource type="Script" uid="uid://cryayuomvuwbo" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="2_oiaqi"]
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="3_qvj7k"]
-[ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="4_mpinq"]
+[ext_resource type="Script" uid="uid://bl15iwn2k8qm" path="res://material_maker/widgets/tabs/tabs.gd" id="4_mpinq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5_1qnqj"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="6_mpc0m"]
 

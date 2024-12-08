@@ -186,6 +186,7 @@ func update_view_textures():
 
 func update_textures() -> void:
 	await MMMapGenerator.generate(mesh, "seams", texture_size, mesh_seams_tex)
+	await mesh_seams_tex.get_texture()
 	
 	update_view_textures()
 	
@@ -206,7 +207,7 @@ func has_id_map() -> bool:
 	return id_map_set
 
 func get_id_map() -> Texture2D:
-	return id_map_tex.get_texture()
+	return await id_map_tex.get_texture()
 
 func set_id_map(file_name : String):
 	var image : Image = Image.load_from_file(file_name)
@@ -353,17 +354,17 @@ func update_brush(update_shaders : bool = false):
 			var output_code : Dictionary = get_output_code(1)
 			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = output_code.code }, output_code.uniforms)
 		brush_preview_material.set_shader_parameter("rect_size", viewport_size)
-		brush_preview_material.set_shader_parameter("view2tex_tex", v2t_texture.get_texture())
-		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", mesh_position_tex.get_texture())
+		brush_preview_material.set_shader_parameter("view2tex_tex", await v2t_texture.get_texture())
+		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", await mesh_position_tex.get_texture())
 		brush_preview_material.set_shader_parameter("mesh_aabb_position", mesh_aabb.position)
 		brush_preview_material.set_shader_parameter("mesh_aabb_size", mesh_aabb.size)
-		brush_preview_material.set_shader_parameter("mesh_normal_tex", mesh_normal_tex.get_texture())
-		brush_preview_material.set_shader_parameter("mesh_tangent_tex", mesh_tangent_tex.get_texture())
-		brush_preview_material.set_shader_parameter("layer_albedo_tex", get_albedo_texture())
-		brush_preview_material.set_shader_parameter("layer_mr_tex", get_mr_texture())
-		brush_preview_material.set_shader_parameter("layer_emission_tex", get_emission_texture())
-		brush_preview_material.set_shader_parameter("layer_normal_tex", get_normal_texture())
-		brush_preview_material.set_shader_parameter("layer_do_tex", get_do_texture())
+		brush_preview_material.set_shader_parameter("mesh_normal_tex", await mesh_normal_tex.get_texture())
+		brush_preview_material.set_shader_parameter("mesh_tangent_tex", await mesh_tangent_tex.get_texture())
+		brush_preview_material.set_shader_parameter("layer_albedo_tex", await get_albedo_texture())
+		brush_preview_material.set_shader_parameter("layer_mr_tex", await get_mr_texture())
+		brush_preview_material.set_shader_parameter("layer_emission_tex", await get_emission_texture())
+		brush_preview_material.set_shader_parameter("layer_normal_tex", await get_normal_texture())
+		brush_preview_material.set_shader_parameter("layer_do_tex", await get_do_texture())
 		for p in brush_params.keys():
 			brush_preview_material.set_shader_parameter(p, brush_params[p])
 		brush_preview_material.set_shader_parameter("pattern_alpha", 0.5 if pattern_shown else 0.0)
@@ -556,8 +557,7 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 		if suffix == "brush":
 			print("brush")
 			if value is MMTexture:
-				print("Is a texture")
-				brush_preview_material.set_shader_parameter(parameter_name, value.get_texture())
+				brush_preview_material.set_shader_parameter(parameter_name, await value.get_texture())
 			else:
 				brush_preview_material.set_shader_parameter(parameter_name, value)
 		elif suffix == "paint":
@@ -626,22 +626,22 @@ func get_paint_channel(channel_index : int):
 	return paint_channels[channel_index]
 
 func get_texture_by_name(channel_name : String) -> Texture2D:
-	return get_paint_channel(paint_textures_by_name[channel_name]).next_texture.get_texture()
+	return await get_paint_channel(paint_textures_by_name[channel_name]).next_texture.get_texture()
 	
 func get_albedo_texture() -> Texture2D:
-	return get_paint_channel(CHANNEL_ALBEDO).next_texture.get_texture()
+	return await get_paint_channel(CHANNEL_ALBEDO).next_texture.get_texture()
 
 func get_mr_texture() -> Texture2D:
-	return get_paint_channel(CHANNEL_MR).next_texture.get_texture()
+	return await get_paint_channel(CHANNEL_MR).next_texture.get_texture()
 
 func get_emission_texture() -> Texture2D:
-	return get_paint_channel(CHANNEL_EMISSION).next_texture.get_texture()
+	return await get_paint_channel(CHANNEL_EMISSION).next_texture.get_texture()
 
 func get_normal_texture() -> Texture2D:
-	return get_paint_channel(CHANNEL_NORMAL).next_texture.get_texture()
+	return await get_paint_channel(CHANNEL_NORMAL).next_texture.get_texture()
 
 func get_do_texture() -> Texture2D:
-	return get_paint_channel(CHANNEL_DO).next_texture.get_texture()
+	return await get_paint_channel(CHANNEL_DO).next_texture.get_texture()
 
 func save_viewport(v : SubViewport, f : String):
 	v.get_texture().get_data().save_png(f)
@@ -687,40 +687,43 @@ func debug_get_texture_names():
 # tr("Depth/Occlusion (current layer)")
 # tr("Mask (current layer)")
 
-func debug_get_texture(ID):
+func debug_get_texture(ID) -> Texture2D:
+	var texture : MMTexture
 	match debug_get_texture_names()[ID]:
 		"View to texture":
-			return v2t_texture.get_texture()
+			texture = v2t_texture
 		"Texture to view":
-			return t2v_texture.get_texture()
+			texture = t2v_texture
 		"Seams":
-			return mesh_seams_tex.get_texture()
+			texture = mesh_seams_tex
 		"Albedo (current layer)":
-			return get_paint_channel(CHANNEL_ALBEDO).next_texture.get_texture()
+			texture = get_paint_channel(CHANNEL_ALBEDO).next_texture
 		"Albedo previous (current layer)":
-			return get_paint_channel(CHANNEL_ALBEDO).texture.get_texture()
+			texture = get_paint_channel(CHANNEL_ALBEDO).texture
 		"Albedo stroke (current layer)":
-			return get_paint_channel(CHANNEL_ALBEDO).stroke.get_texture()
+			texture = get_paint_channel(CHANNEL_ALBEDO).stroke
 		"Metallic/Roughness (current layer)":
-			return get_paint_channel(CHANNEL_MR).next_texture.get_texture()
+			texture = get_paint_channel(CHANNEL_MR).next_texture
 		"Metallic/Roughness stroke (current layer)":
-			return get_paint_channel(CHANNEL_MR).stroke.get_texture()
+			texture = get_paint_channel(CHANNEL_MR).stroke
 		"Emission (current layer)":
-			return get_paint_channel(CHANNEL_EMISSION).next_texture.get_texture()
+			texture = get_paint_channel(CHANNEL_EMISSION).next_texture
 		"Emission stroke (current layer)":
-			return get_paint_channel(CHANNEL_EMISSION).stroke.get_texture()
+			texture = get_paint_channel(CHANNEL_EMISSION).stroke
 		"Normal (current layer)":
-			return get_paint_channel(CHANNEL_NORMAL).next_texture.get_texture()
+			texture = get_paint_channel(CHANNEL_NORMAL).next_texture
 		"Normal stroke (current layer)":
-			return get_paint_channel(CHANNEL_NORMAL).stroke.get_texture()
+			texture = get_paint_channel(CHANNEL_NORMAL).stroke
 		"Depth/Occlusion (current layer)":
-			return get_paint_channel(CHANNEL_DO).next_texture.get_texture()
+			texture = get_paint_channel(CHANNEL_DO).next_texture
 		"Depth/Occlusion stroke (current layer)":
-			return get_paint_channel(CHANNEL_DO).stroke.get_texture()
+			texture = get_paint_channel(CHANNEL_DO).stroke
 		"Mesh position map":
-			return mesh_position_tex
+			texture = mesh_position_tex
 		"Mesh normal map":
-			return mesh_normal_tex
+			texture = mesh_normal_tex
 		"Mesh tangent map":
-			return mesh_tangent_tex
-	return null
+			texture = mesh_tangent_tex
+		_:
+			return null
+	return await texture.get_texture()
