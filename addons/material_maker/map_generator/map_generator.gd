@@ -196,7 +196,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			postprocess_pipeline.add_parameter_or_texture("pixels", "int", pixels)
 			match p:
 				"adjacency_dilate", "dilate":
-					var seams_map : MMTexture = mesh_maps[mesh].seams
+					var seams_map : MMTexture = mesh_maps[mesh]["seams:"+str(size)]
 					postprocess_pipeline.add_parameter_or_texture("seams_map", "sampler2D", seams_map)
 			await postprocess_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
 			await postprocess_pipeline.render(texture, Vector2i(size, size))
@@ -206,8 +206,8 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 
 static var busy : bool = false
 
-static func get_map(mesh : Mesh, map : String, force_generate : bool = false) -> MMTexture:
-	if mesh == null:
+static func get_map(mesh : Mesh, map : String, size : int = 2048, force_generate : bool = false) -> MMTexture:
+	if mesh == null or size <= 0:
 		if error_texture == null:
 			error_texture = MMTexture.new()
 			var image : Image = Image.create(1, 1, 0, Image.FORMAT_RGBAH)
@@ -216,20 +216,21 @@ static func get_map(mesh : Mesh, map : String, force_generate : bool = false) ->
 		return error_texture
 	if ! mesh_maps.has(mesh):
 		mesh_maps[mesh] = {}
+	var field_name : String = map+":"+str(size)
 	if force_generate:
-		mesh_maps[mesh].erase(map)
-	if not mesh_maps[mesh].has(map):
+		mesh_maps[mesh].erase(field_name)
+	if not mesh_maps[mesh].has(field_name):
 		if MAP_DEFINITIONS[map].has("dependencies"):
 			for d in MAP_DEFINITIONS[map].dependencies:
-				await get_map(mesh, d)
-		print("Creating map ", map, " for mesh ", mesh)
-		while not mesh_maps[mesh].has(map):
+				await get_map(mesh, d, size)
+		print("Creating map ", field_name, " for mesh ", mesh)
+		while not mesh_maps[mesh].has(field_name):
 			if busy:
 				await mm_globals.get_tree().process_frame
 			else:
 				busy = true
 				var texture : MMTexture = MMTexture.new()
-				await generate(mesh, map, 2048, texture)
-				mesh_maps[mesh][map] = texture
+				await generate(mesh, map, size, texture)
+				mesh_maps[mesh][field_name] = texture
 				busy = false
-	return mesh_maps[mesh][map] as MMTexture
+	return mesh_maps[mesh][field_name] as MMTexture
