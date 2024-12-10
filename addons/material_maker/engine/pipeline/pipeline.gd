@@ -384,6 +384,8 @@ func get_output_parameters_declarations() -> String:
 	return output_parameters_declarations
 
 func create_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, usage_bits : int):
+	if texture_size.x == 0 or texture_size.y == 0:
+		return RID()
 	var fmt : RDTextureFormat = RDTextureFormat.new()
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
 	fmt.width = texture_size.x
@@ -393,11 +395,8 @@ func create_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type 
 	fmt.texture_type = RenderingDevice.TEXTURE_TYPE_2D
 		
 	var view : RDTextureView = RDTextureView.new()
-	
-	var data = PackedByteArray()
-	data.resize(fmt.height*fmt.width*texture_type_struct.channels*texture_type_struct.bytes_per_channel)
 
-	return rd.texture_create(fmt, view, [data])
+	return rd.texture_create(fmt, view, [])
 
 func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, is_framebuffer : bool = false) -> RID:
 	var usage_bits : int

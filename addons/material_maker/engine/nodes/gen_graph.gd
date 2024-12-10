@@ -13,9 +13,14 @@ var transmits_seed : bool = true
 
 var current_mesh : Mesh = null
 
+
 signal graph_changed()
 signal connections_changed(removed_connections, added_connections)
 signal hierarchy_changed()
+
+
+func _ready() -> void:
+	super._ready()
 
 func emit_hierarchy_changed():
 	var top = self

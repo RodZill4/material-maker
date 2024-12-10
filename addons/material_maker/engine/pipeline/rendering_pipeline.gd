@@ -14,6 +14,8 @@ func create_framebuffer(rd : RenderingDevice, texture_rid : RID, depth_rid : RID
 		framebuffer_textures.append(depth_rid)
 	var framebuffer : RID
 	framebuffer = rd.framebuffer_create(framebuffer_textures)
+	if not rd.framebuffer_is_valid(framebuffer):
+		print("Framebuffer is invalid")
 	return framebuffer
 
 func bind_buffer_uniforms(rd : RenderingDevice, draw_list : int, shader : RID, buffers : Array[PackedByteArray], set : int, rids : RIDs):
@@ -63,13 +65,16 @@ func in_thread_render(size : Vector2i, texture_type : int, target_texture : MMTe
 		depth_stencil_state,
 		blend
 	)
+	rids.add(pipeline, "pipeline")
+	if not rd.render_pipeline_is_valid(pipeline):
+		print("Invalid render pipeline")
 	
 	# pre dev6
 	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, clearColors)
 	# dev6
-	var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, true, 1.0, Rect2(), RenderingDevice.OPAQUE_PASS)
-		
-
+	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, true, 0.0, Rect2(), RenderingDevice.OPAQUE_PASS)
+	var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, 1.0, 0)
+	
 	rd.draw_list_bind_render_pipeline(draw_list, pipeline)
 	
 	var uniform_set_1 : RID = RID()
