@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://e06xegp2tp3f"]
 
-[ext_resource type="Script" path="res://addons/flexible_layout/flexible_tab.gd" id="1"]
+[ext_resource type="Script" uid="uid://ywxnr7grll4s" path="res://addons/flexible_layout/flexible_tab.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://xuy6dfh1rsne" path="res://addons/flexible_layout/undock.png" id="2_nx0qp"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bok24"]

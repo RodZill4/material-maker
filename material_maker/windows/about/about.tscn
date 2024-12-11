@@ -1,9 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://btww87u0o4x7t"]
+[gd_scene load_steps=12 format=3 uid="uid://btww87u0o4x7t"]
 
-[ext_resource type="Script" path="res://material_maker/windows/about/about.gd" id="1"]
+[ext_resource type="Script" uid="uid://c80e0om4076tc" path="res://material_maker/windows/about/about.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://uwqukrk00ios" path="res://material_maker/windows/about/github.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://n121jfbm7ydw" path="res://material_maker/windows/about/twitter.png" id="3"]
-[ext_resource type="Texture2D" uid="uid://bt7vgpv1dduvh" path="res://material_maker/windows/about/icon.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://d0417sp8jvp7a" path="res://material_maker/windows/about/itchio.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dntvnke4pcqqf" path="res://icon.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://bxfuae46y2fdc" path="res://material_maker/windows/about/youtube.png" id="7"]
@@ -15,6 +14,7 @@
 
 [node name="About" type="Window"]
 title = "About Material Maker"
+position = Vector2i(0, 36)
 size = Vector2i(600, 500)
 script = ExtResource("1")
 
@@ -63,45 +63,30 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 6
-text = "© 2018-2023 Rodolphe Suescun and contributors"
+text = "© 2018-2024 Rodolphe Suescun and contributors"
 
 [node name="VBoxContainer" type="TabContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_alignment = 1
+current_tab = 0
 
 [node name="Authors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="List" type="GridContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/h_separation = 16
 columns = 2
-
-[node name="Godot" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List"]
-layout_mode = 2
-
-[node name="Godot" type="TextureButton" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List/Godot"]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource("4")
-stretch_mode = 4
-
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List/Godot"]
-layout_mode = 2
-text = " Godot Engine"
-
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "99% of Material Maker's code is the awesome Godot Engine"
 
 [node name="Donors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors"]
 layout_mode = 2
@@ -152,6 +137,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
 wrap_mode = 1
+metadata/_tab_index = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -248,7 +234,6 @@ texture_normal = ExtResource("9")
 stretch_mode = 4
 
 [connection signal="close_requested" from="." to="." method="queue_free"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/Authors/List/Godot/Godot" to="." method="open_url" binds= ["https://godotengine.org/"]]
 [connection signal="pressed" from="HBoxContainer/SocialNetworks/Patreon" to="." method="open_url" binds= ["https://www.patreon.com/rodzlabs"]]
 [connection signal="pressed" from="HBoxContainer/SocialNetworks/ItchIo" to="." method="open_url" binds= ["https://rodzilla.itch.io/material-maker"]]
 [connection signal="pressed" from="HBoxContainer/SocialNetworks/Github" to="." method="open_url" binds= ["https://github.com/RodZill4/godot-procedural-textures"]]

@@ -90,10 +90,10 @@ func on_dep_update_buffer(_buffer_name) -> bool:
 		return false
 	for v in [ $ViewportImage, $ViewportHistogram1, $ViewportHistogram2 ]:
 		v.render_target_update_mode = SubViewport.UPDATE_ONCE
-		if get_tree() == null:
+		if not is_inside_tree():
 			return false
 		await get_tree().process_frame
-		if get_tree() == null:
+		if not is_inside_tree():
 			return false
 		await get_tree().process_frame
 	mm_deps.dependency_update("histogram_"+str(get_instance_id()), null, true)
