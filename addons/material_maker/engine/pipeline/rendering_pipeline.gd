@@ -5,7 +5,6 @@ class_name MMRenderingPipeline
 var shader : RID = RID()
 
 var index_count : int = 0
-var clearColors : PackedColorArray = PackedColorArray([Color.TRANSPARENT])
 
 
 func create_framebuffer(rd : RenderingDevice, texture_rid : RID, depth_rid : RID = RID()) -> RID:
@@ -72,8 +71,9 @@ func in_thread_render(size : Vector2i, texture_type : int, target_texture : MMTe
 	# pre dev6
 	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, clearColors)
 	# dev6
-	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, true, 0.0, Rect2(), RenderingDevice.OPAQUE_PASS)
-	var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, clearColors, 1.0, 0)
+	var clear_colors : PackedColorArray = PackedColorArray([Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 0)])
+	var draw_flags : int = RenderingDevice.DRAW_CLEAR_COLOR_ALL | RenderingDevice.DRAW_IGNORE_COLOR_ALL |  RenderingDevice.DRAW_CLEAR_DEPTH | RenderingDevice.DRAW_IGNORE_DEPTH
+	var draw_list : int = rd.draw_list_begin(framebuffer, draw_flags, clear_colors, 1.0, 0)
 	
 	rd.draw_list_bind_render_pipeline(draw_list, pipeline)
 	

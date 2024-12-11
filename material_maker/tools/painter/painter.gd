@@ -163,8 +163,7 @@ func _ready():
 	
 	initialized = true
 	
-	update_view_textures()
-	
+	await update_view_textures()
 
 func update_view_textures():
 	if not initialized or mesh == null or viewport_size.x <= 0 or viewport_size.y <= 0:
@@ -185,18 +184,18 @@ func update_view_textures():
 	t2v_texture.get_texture()
 
 func update_textures() -> void:
-	await MMMapGenerator.generate(mesh, "seams", texture_size, mesh_seams_tex)
+	mesh_seams_tex = await MMMapGenerator.get_map(mesh, "seams", texture_size)
 	await mesh_seams_tex.get_texture()
 	
-	update_view_textures()
+	await update_view_textures()
 	
 	# position texture
-	await MMMapGenerator.generate(mesh, "position", texture_size, mesh_position_tex)
+	mesh_position_tex = await MMMapGenerator.get_map(mesh, "position", texture_size)
 	# normal texture
-	await MMMapGenerator.generate(mesh, "normal", texture_size, mesh_normal_tex)
+	mesh_normal_tex = await MMMapGenerator.get_map(mesh, "normal", texture_size)
 	
 	# tangent texture
-	await MMMapGenerator.generate(mesh, "tangent", texture_size, mesh_tangent_tex)
+	mesh_tangent_tex = await MMMapGenerator.get_map(mesh, "tangent", texture_size)
 	mesh_aabb = mesh.get_aabb()
 
 func set_mesh(m : Mesh):
@@ -329,6 +328,7 @@ func update_brush_params(shader_params : Dictionary) -> void:
 		if brush_preview_material != null:
 			if brush_params[p] is MMTexture:
 				print("Setting texture")
+				brush_preview_material.set_shader_parameter(p, await brush_params[p].get_texture())
 			else:
 				brush_preview_material.set_shader_parameter(p, brush_params[p])
 		paint_shader.set_parameter(p, shader_params[p])
@@ -353,6 +353,7 @@ func update_brush(update_shaders : bool = false):
 			var brush_shader_file : String = "res://material_maker/tools/painter/shaders/brush.gdshader"
 			var output_code : Dictionary = get_output_code(1)
 			update_shader("painter_%d:brush" % get_instance_id(), brush_preview_material, brush_shader_file, { BRUSH_MODE="\""+get_brush_mode()+"\"", GENERATED_CODE = output_code.code }, output_code.uniforms)
+			print(brush_preview_material.shader.code)
 		brush_preview_material.set_shader_parameter("rect_size", viewport_size)
 		brush_preview_material.set_shader_parameter("view2tex_tex", await v2t_texture.get_texture())
 		brush_preview_material.set_shader_parameter("mesh_inv_uv_tex", await mesh_position_tex.get_texture())
@@ -584,9 +585,9 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 		paint_shader.set_parameter(n, shader_params[p], true)
 	await paint_shader.render_ext(paint_textures, Vector2i(texture_size, texture_size))
 	for i in range(paint_textures.size()/3):
-		if OS.is_debug_build():
+		if false and OS.is_debug_build():
 			paint_textures[i*3+1].get_texture()	# Update stroke texture
-		paint_textures[i*3+2].get_texture() 	# Update painted texture
+		await paint_textures[i*3+2].get_texture() 	# Update painted texture
 	emit_signal("painted")
 	if end_of_stroke and emit_end_of_stroke:
 		for i in range(paint_textures.size()/3):
@@ -607,7 +608,7 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 		emit_signal("end_of_stroke", stroke_state)
 
 func fill(erase : bool, reset : bool = false, emit_end_of_stroke : bool = true) -> void:
-	paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)
+	await paint({ brush_pos=Vector2(0, 0), brush_ppos=Vector2(0, 0), erase=erase, pressure=1.0, fill=true, reset=reset }, true, emit_end_of_stroke)
 
 func view_to_texture(position : Vector2) -> Vector2:
 	if view_to_texture_image == null:
