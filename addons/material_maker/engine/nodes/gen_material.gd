@@ -170,7 +170,7 @@ func update_materials(material_list, sequential : bool = false) -> void:
 
 func update_material(m, sequential : bool = false) -> void:
 	if m is ShaderMaterial:
-		m.shader.code = preview_material.shader.code
+		m.shader = preview_material.shader
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
 

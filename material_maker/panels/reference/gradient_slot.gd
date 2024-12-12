@@ -7,12 +7,14 @@ signal clicked
 
 func set_gradient(g) -> void:
 	gradient = g
-	var shader := ""
-	shader = "shader_type canvas_item;\n"
-	shader += gradient.get_shader_params("")
-	shader += gradient.get_shader("")
-	shader += "void fragment() { COLOR = _gradient_fct(UV.x); }"
-	$ColorRect.material.shader.code = shader
+	var shader_code : String = ""
+	shader_code = "shader_type canvas_item;\n"
+	shader_code += gradient.get_shader_params("")
+	shader_code += gradient.get_shader("")
+	shader_code += "void fragment() { COLOR = _gradient_fct(UV.x); }"
+	var shader : Shader = Shader.new()
+	shader.code = shader_code
+	$ColorRect.material.shader = shader
 	update_shader_parameters()
 
 
