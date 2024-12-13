@@ -44,7 +44,7 @@ func get_output_texture_declarations() -> String:
 	return texture_declarations
 
 func set_shader(string : String, output_texture_type : int, replaces : Dictionary = {}) -> bool:
-	return await set_shader_ext(string, [{name="OUTPUT_TEXTURE", type=output_texture_type}], replaces)
+	return set_shader_ext(string, [{name="OUTPUT_TEXTURE", type=output_texture_type}], replaces)
 
 func set_shader_ext(string : String, output_textures_desc : Array[Dictionary] = [], replaces : Dictionary = {}) -> bool:
 	output_textures = []
@@ -63,9 +63,8 @@ func set_shader_ext(string : String, output_textures_desc : Array[Dictionary] = 
 	replaces["@DECLARATIONS"] += get_input_texture_declarations()+"\n"
 	replaces["@DECLARATIONS"] += get_output_parameters_declarations()+"\n"
 	
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+	var rd : RenderingDevice = mm_renderer.rendering_device
 	shader = do_compile_shader(rd, { compute=string }, replaces)
-	mm_renderer.release_rendering_device(self)
 	return shader.is_valid()
 
 func set_parameters_from_shadercode(shader_code : MMGenBase.ShaderCode, parameters_as_constants : bool = false):

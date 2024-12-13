@@ -106,14 +106,14 @@ class UIProgress:
 
 static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture):
 	assert(mesh != null)
-	print("Generating %s map for mesh %s" % [ map, str(mesh) ])
+	print.call_deferred("Generating %s map for mesh %s" % [ map, str(mesh) ])
 	var progress
 	if mm_globals.main_window:
 		progress = UIProgress.new()
 	else:
 		progress = DefaultProgress.new()
-	progress.set_text("Generating "+map+" map")
-	progress.set_progress(0)
+	progress.set_text.call_deferred("Generating "+map+" map")
+	progress.set_progress.call_deferred(0)
 	var pixels : int = size/4
 	var map_definition : Dictionary = MAP_DEFINITIONS[map]
 	var mesh_pipeline : MMMeshRenderingPipeline = MMMeshRenderingPipeline.new()
@@ -122,28 +122,18 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 	match map_definition.type:
 		"simple":
 			mesh_pipeline.mesh = mesh
-			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
-			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
+			mesh_pipeline.set_shader(vertex_shader, fragment_shader)
+			mesh_pipeline.in_thread_render(Vector2i(size, size), 3, texture)
 		"curvature":
 			var curvature_generator : MMCurvatureGenerator = MMCurvatureGenerator.new()
-			var thread : Thread = Thread.new()
-			thread.start(curvature_generator.generate.bind(mesh))
-			while thread.is_alive():
-				await mm_globals.get_tree().process_frame
-				progress.set_progress(curvature_generator.get_progress())
-			mesh_pipeline.mesh = thread.wait_to_finish()
-			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
-			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
+			mesh_pipeline.mesh = curvature_generator.generate(mesh)
+			mesh_pipeline.set_shader(vertex_shader, fragment_shader)
+			mesh_pipeline.in_thread_render(Vector2i(size, size), 3, texture)
 		"adjacency":
 			var adjacency_generator : MMAdjacencyGenerator = MMAdjacencyGenerator.new()
-			var thread : Thread = Thread.new()
-			thread.start(adjacency_generator.generate.bind(mesh))
-			while thread.is_alive():
-				await mm_globals.get_tree().process_frame
-				progress.set_progress(adjacency_generator.get_progress())
-			mesh_pipeline.mesh = thread.wait_to_finish()
-			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
-			await mesh_pipeline.render(Vector2i(size, size), 3, texture)
+			mesh_pipeline.mesh = adjacency_generator.generate(mesh)
+			mesh_pipeline.set_shader(vertex_shader, fragment_shader)
+			mesh_pipeline.in_thread_render(Vector2i(size, size), 3, texture)
 		"bvh":
 			mesh_pipeline.mesh = mesh
 			var bvh : MMTexture = MMTexture.new()
@@ -161,18 +151,18 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
 			print("Casting %d rays..." % ray_count)
 			for i in range(ray_count):
-				progress.set_progress(float(i)/ray_count)
+				progress.set_progress.call_deferred(float(i)/ray_count)
 				mesh_pipeline.set_parameter("iteration", i+1)
 				mesh_pipeline.set_parameter("prev_iteration_tex", texture)
-				await mesh_pipeline.render(Vector2i(size, size), 3, texture)
+				mesh_pipeline.in_thread_render(Vector2i(size, size), 3, texture)
 			
 			if map == "bent_normals":
 				print("Normalizing...")
 				var normalize_pipeline : MMComputeShader = MMComputeShader.new()
 				normalize_pipeline.clear()
 				normalize_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
-				await normalize_pipeline.set_shader(load("res://addons/material_maker/map_generator/normalize_compute.tres").text, 3)
-				await normalize_pipeline.render(texture, Vector2i(size, size))
+				normalize_pipeline.set_shader(load("res://addons/material_maker/map_generator/normalize_compute.tres").text, 3)
+				normalize_pipeline.in_thread_render_ext([texture], Vector2i(size, size))
 			
 			# Denoise
 			if true:
@@ -181,8 +171,8 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				denoise_pipeline.clear()
 				denoise_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
 				denoise_pipeline.add_parameter_or_texture("radius", "int", 3)
-				await denoise_pipeline.set_shader(load("res://addons/material_maker/map_generator/denoise_compute.tres").text, 3)
-				await denoise_pipeline.render(texture, Vector2i(size, size))
+				denoise_pipeline.set_shader(load("res://addons/material_maker/map_generator/denoise_compute.tres").text, 3)
+				denoise_pipeline.in_thread_render_ext([texture], Vector2i(size, size))
 
 	# Extend the map past seams
 	if pixels > 0 and map_definition.has("postprocess"):
@@ -198,11 +188,12 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				"adjacency_dilate", "dilate":
 					var seams_map : MMTexture = mesh_maps[mesh]["seams:"+str(size)]
 					postprocess_pipeline.add_parameter_or_texture("seams_map", "sampler2D", seams_map)
-			await postprocess_pipeline.set_shader(load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text, 3)
-			await postprocess_pipeline.render(texture, Vector2i(size, size))
+			var shader_string : String = load("res://addons/material_maker/map_generator/"+p+"_compute.tres").text
+			postprocess_pipeline.set_shader(shader_string, 3)
+			postprocess_pipeline.in_thread_render_ext([texture], Vector2i(size, size))
 			#texture.save_to_file("d:/debug_%d.png" % debug_index)
 			debug_index += 1
-		progress.set_progress(1.0)
+		progress.set_progress.call_deferred(1.0)
 
 static var busy : bool = false
 
@@ -230,7 +221,8 @@ static func get_map(mesh : Mesh, map : String, size : int = 2048, force_generate
 			else:
 				busy = true
 				var texture : MMTexture = MMTexture.new()
-				await generate(mesh, map, size, texture)
+				await mm_renderer.thread_run(generate, [mesh, map, size, texture])
+				print("generated texture ", texture)
 				mesh_maps[mesh][field_name] = texture
 				busy = false
 	return mesh_maps[mesh][field_name] as MMTexture
