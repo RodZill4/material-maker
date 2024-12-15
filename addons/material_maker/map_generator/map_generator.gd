@@ -149,7 +149,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			mesh_pipeline.add_parameter_or_texture("iteration", "int", 1)
 			mesh_pipeline.add_parameter_or_texture("mode", "int", map_definition.mode)
 			await mesh_pipeline.set_shader(vertex_shader, fragment_shader)
-			print("Casting %d rays..." % ray_count)
+			print.call_deferred("Casting %d rays..." % ray_count)
 			for i in range(ray_count):
 				progress.set_progress.call_deferred(float(i)/ray_count)
 				mesh_pipeline.set_parameter("iteration", i+1)
@@ -157,7 +157,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 				mesh_pipeline.in_thread_render(Vector2i(size, size), 3, texture)
 			
 			if map == "bent_normals":
-				print("Normalizing...")
+				print.call_deferred("Normalizing...")
 				var normalize_pipeline : MMComputeShader = MMComputeShader.new()
 				normalize_pipeline.clear()
 				normalize_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
@@ -166,7 +166,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 			
 			# Denoise
 			if true:
-				print("Denoising...")
+				print.call_deferred("Denoising...")
 				var denoise_pipeline : MMComputeShader = MMComputeShader.new()
 				denoise_pipeline.clear()
 				denoise_pipeline.add_parameter_or_texture("tex", "sampler2D", texture)
@@ -176,7 +176,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 
 	# Extend the map past seams
 	if pixels > 0 and map_definition.has("postprocess"):
-		print("Postprocessing...")
+		print.call_deferred("Postprocessing...")
 		#texture.save_to_file("d:/debug_x_%d.png" % debug_index)
 		debug_index += 1
 		for p in map_definition.postprocess:
@@ -214,7 +214,7 @@ static func get_map(mesh : Mesh, map : String, size : int = 2048, force_generate
 		if MAP_DEFINITIONS[map].has("dependencies"):
 			for d in MAP_DEFINITIONS[map].dependencies:
 				await get_map(mesh, d, size)
-		print("Creating map ", field_name, " for mesh ", mesh)
+		#print("Creating map ", field_name, " for mesh ", mesh)
 		while not mesh_maps[mesh].has(field_name):
 			if busy:
 				await mm_globals.get_tree().process_frame
@@ -222,7 +222,6 @@ static func get_map(mesh : Mesh, map : String, size : int = 2048, force_generate
 				busy = true
 				var texture : MMTexture = MMTexture.new()
 				await mm_renderer.thread_run(generate, [mesh, map, size, texture])
-				print("generated texture ", texture)
 				mesh_maps[mesh][field_name] = texture
 				busy = false
 	return mesh_maps[mesh][field_name] as MMTexture
