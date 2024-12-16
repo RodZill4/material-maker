@@ -1,5 +1,6 @@
 extends MeshInstance3D
 
+
 @export var can_tesselate : bool = true
 
 @export var uv_scale : Vector2 = Vector2(1, 1): set = set_uv_scale
@@ -8,7 +9,8 @@ extends MeshInstance3D
 @export var parameters : Array = []
 var parameter_values : Dictionary = {}
 
-var material : Material
+
+var material : ShaderMaterial
 
 
 func _ready():
@@ -28,13 +30,8 @@ func get_material() -> Material:
 func set_uv_scale(s : Vector2) -> void:
 	if s != uv_scale:
 		uv_scale = s
-		print(material)
 		if material != null:
-			if material is StandardMaterial3D:
-				material.uv1_scale.x = uv_scale.x
-				material.uv1_scale.y = uv_scale.y
-			elif material is ShaderMaterial:
-				material.set_shader_parameter("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
+			material.set_shader_parameter("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 
 func set_parameter(v : float, n : String) -> void:
 	if parameter_values[n] != v:
@@ -84,4 +81,4 @@ func update_mesh() -> void:
 			pass
 		_:
 			push_error("Unknown non-tesselated mesh type: %s" % mesh.get_class())
-	set_surface_override_material(0, material)
+	get_material()

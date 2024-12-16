@@ -20,7 +20,7 @@ var iteration_param_name : String
 var used_named_parameters : Array = []
 
 
-func _ready():
+func _init():
 	#texture.flags = Texture2D.FLAG_REPEAT
 	shader_computes.append(MMShaderCompute.new())
 	shader_computes.append(MMShaderCompute.new())

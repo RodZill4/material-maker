@@ -83,7 +83,7 @@ func set_brush(brush) -> Texture2D:
 	await get_tree().process_frame
 	if DEBUG:
 		for i in painter.debug_get_texture_names().size():
-			var t = painter.debug_get_texture(i)
+			var t = await painter.debug_get_texture(i)
 			t.get_data().save_png("d:/debug_brush_preview_%d.png" % i)
 	initialized = true
 	return $SubViewport.get_texture()

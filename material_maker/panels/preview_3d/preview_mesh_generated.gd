@@ -49,16 +49,17 @@ func do_update_mesh() -> void:
 	for p in parameters:
 		shader.set_parameter(p.name, parameter_values[p.name])
 	await shader.render_ext([], Vector2i(size, size), opv)
-	mesh.clear_surfaces()
-	var flags : int = Mesh.ARRAY_FORMAT_VERTEX | Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_INDEX
-	var vertices : PackedVector3Array = opv.vertices
-	var normals : PackedVector3Array = opv.normals
-	var tangents : PackedFloat32Array = opv.tangents
-	var tex_uvs : PackedVector2Array = opv.tex_uvs
-	var indexes : PackedInt32Array = opv.indexes
-	var arrays : Array = [vertices, normals, tangents, null, tex_uvs, null, null, null, null, null, null, null, indexes]
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
-	set_surface_override_material(0, material)
+	if opv.has("vertices"):
+		mesh.clear_surfaces()
+		var flags : int = Mesh.ARRAY_FORMAT_VERTEX | Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_INDEX
+		var vertices : PackedVector3Array = opv.vertices
+		var normals : PackedVector3Array = opv.normals
+		var tangents : PackedFloat32Array = opv.tangents
+		var tex_uvs : PackedVector2Array = opv.tex_uvs
+		var indexes : PackedInt32Array = opv.indexes
+		var arrays : Array = [vertices, normals, tangents, null, tex_uvs, null, null, null, null, null, null, null, indexes]
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
+		set_surface_override_material(0, material)
 
 var need_update : bool = false
 static var updating : bool = false

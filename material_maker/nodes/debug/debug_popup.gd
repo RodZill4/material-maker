@@ -19,7 +19,9 @@ func _on_ShaderType_item_selected(index):
 	else:
 		$VBoxContainer/Code.visible = false
 		$VBoxContainer/ColorRect.visible = true
-		$VBoxContainer/ColorRect.material.shader.code = generate_godot_canvasitem()
+		var shader : Shader = Shader.new()
+		shader.code = generate_godot_canvasitem()
+		$VBoxContainer/ColorRect.material.shader = shader
 
 func _on_CopyToClipboard_pressed():
 	DisplayServer.clipboard_set($VBoxContainer/Code.text)

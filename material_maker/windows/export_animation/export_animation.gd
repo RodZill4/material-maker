@@ -42,12 +42,16 @@ func set_source(g, o):
 	var ends_code = code;
 	ends_code = ends_code.replace("varying float elapsed_time;", "uniform float elapsed_time;");
 	ends_code = ends_code.replace("elapsed_time = TIME;", "");
-	image_begin.material.shader.code = ends_code
-	image_end.material.shader.code = ends_code
+	var ends_shader : Shader = Shader.new()
+	ends_shader.code = ends_code
+	image_begin.material.shader = ends_shader
+	image_end.material.shader = ends_shader
 	var anim_code = code;
 	anim_code = anim_code.replace("varying float elapsed_time;", "uniform float begin;\nuniform float end;\nvarying float elapsed_time;");
 	anim_code = anim_code.replace("elapsed_time = TIME;", "elapsed_time = (begin == end) ? begin : begin+sign(end-begin)*mod(TIME, abs(end-begin));");
-	image_anim.material.shader.code = anim_code
+	var anim_shader : Shader = Shader.new()
+	anim_shader.code = anim_code
+	image_anim.material.shader = anim_shader
 	for u in source.uniforms:
 		image_begin.material.set_shader_parameter(u.name, u.value)
 		image_anim.material.set_shader_parameter(u.name, u.value)

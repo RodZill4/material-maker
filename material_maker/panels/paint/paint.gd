@@ -458,7 +458,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				painter_update_brush_params( { pattern_scale=brush_parameters.pattern_scale, pattern_angle=brush_parameters.pattern_angle } )
 				%BrushAngle.set_value(brush_parameters.pattern_angle*57.2957795131)
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
-				paint(mouse_position, pressure, ev.tilt, painting_mode)
+				await paint(mouse_position, pressure, ev.tilt, painting_mode)
 				last_tilt = ev.tilt
 			painter_update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
 		else:
@@ -684,7 +684,7 @@ func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0)
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
+	await do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 	last_painted_position = pos
 
 var next_paint_to = null
@@ -757,7 +757,7 @@ func update_view():
 		# DEBUG: show tex2view texture on model
 		#for i in range(10):
 		#	await get_tree().process_frame
-		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
+		#painted_mesh.get_surface_override_material(0).albedo_texture = await painter.debug_get_texture(1)
 	# Force recalculate brush size parameter
 	#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
 
@@ -912,8 +912,8 @@ func _on_ChannelSelect_item_selected(ID):
 func debug_get_texture_names():
 	return [ "Mask" ]
 
-func debug_get_texture(_ID):
-	return mask
+func debug_get_texture(_ID) -> Texture2D:
+	return await mask.get_texture()
 
 # Brush options UI
 
