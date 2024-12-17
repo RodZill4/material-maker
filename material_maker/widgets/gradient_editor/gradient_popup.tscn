@@ -1,12 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://in4lqr3eetvc"]
+[gd_scene load_steps=5 format=3 uid="uid://in4lqr3eetvc"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2_fotv7"]
 [ext_resource type="PackedScene" uid="uid://cp6ft7qbucfam" path="res://material_maker/widgets/gradient_editor/gradient_edit.tscn" id="2_uait3"]
-[ext_resource type="Texture2D" uid="uid://c87dumeqpcpkn" path="res://material_maker/theme/dark/tabcontainer_decrement.png" id="2_xmqsa"]
 [ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="3_2wy2b"]
-[ext_resource type="Texture2D" uid="uid://c7tbnm43rce6e" path="res://material_maker/theme/dark/vslider_grabber_highlight.png" id="3_bxwrk"]
-[ext_resource type="Texture2D" uid="uid://d3y3kp5qy5x30" path="res://material_maker/theme/dark/tabcontainer_increment.png" id="4_fwye6"]
 
 [node name="GradientPopup" type="MarginContainer"]
 top_level = true
@@ -33,7 +30,6 @@ alignment = 2
 [node name="Previous" type="Button" parent="Panel/VBox/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
-icon = ExtResource("2_xmqsa")
 
 [node name="Offset" parent="Panel/VBox/HBox" instance=ExtResource("2_fotv7")]
 unique_name_in_owner = true
@@ -45,7 +41,6 @@ float_only = true
 [node name="Next" type="Button" parent="Panel/VBox/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
-icon = ExtResource("4_fwye6")
 
 [node name="Control" type="Control" parent="Panel/VBox/HBox"]
 custom_minimum_size = Vector2(15, 0)
@@ -57,6 +52,7 @@ layout_mode = 2
 selected = 0
 item_count = 4
 popup/item_0/text = "Constant"
+popup/item_0/id = 0
 popup/item_1/text = "Linear"
 popup/item_1/id = 1
 popup/item_2/text = "SmoothStep"
@@ -69,7 +65,6 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Pin"
 toggle_mode = true
-icon = ExtResource("3_bxwrk")
 flat = true
 
 [node name="GradientEdit" parent="Panel/VBox" instance=ExtResource("2_uait3")]

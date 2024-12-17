@@ -9,6 +9,14 @@ extends Control
 @onready var preview_3d_background_panel = $PreviewUI/Panel
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		if not is_node_ready():
+			await ready
+		preview_2d_background_button.icon = get_theme_icon("2D_preview", "MM_Icons")
+		preview_3d_background_button.icon = get_theme_icon("3D_preview", "MM_Icons")
+		%ControlView.texture = get_theme_icon("3D_preview_control", "MM_Icons")
+
 func get_projects():
 	return projects
 

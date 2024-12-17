@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://ds4jcblbferbu" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
 
+
 [sub_resource type="GDScript" id="6"]
 script/source = "extends Label
 
