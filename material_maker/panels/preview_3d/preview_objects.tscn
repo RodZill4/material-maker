@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://cxcw0mi4sfl2x"]
 
 [ext_resource type="ArrayMesh" uid="uid://kvgtp30latgq" path="res://material_maker/meshes/suzanne.obj" id="1"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_mesh.gd" id="3"]
+[ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
+[ext_resource type="Script" uid="uid://m5lpqku28wub" path="res://material_maker/panels/preview_3d/preview_mesh.gd" id="3"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_iqcsj"]
 
@@ -95,13 +95,13 @@ void set_point(int x, int y) {
 	normal = vec3(sin_angle.x, sqrt(1.0-dot(sin_angle, sin_angle)), sin_angle.y);
 	vertex = vec3(base.x, 0.5-0.709*radius, base.y)+radius*normal;
 	tangent = normalize(vec3(1.0, 0.0, 0.0));
-	tex_uvs = scale*vec2(x, y);
+	tex_uvs = scale*vec2(x, y)/vec2(3.0, 2.0);
 	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);
-	set_face_point(vertex_index+vertex_offset, vertex.yzx, normal.yzx, tangent.yzx, tex_uvs);
-	set_face_point(vertex_index+2*vertex_offset, vertex.zxy, normal.zxy, tangent.zxy, tex_uvs);
-	set_face_point(vertex_index+3*vertex_offset, -vertex.xzy, -normal.xzy, -tangent.xzy, tex_uvs);
-	set_face_point(vertex_index+4*vertex_offset, -vertex.yxz, -normal.yxz, -tangent.yxz, tex_uvs);
-	set_face_point(vertex_index+5*vertex_offset, -vertex.zyx, -normal.zyx, -tangent.zyx, tex_uvs);
+	set_face_point(vertex_index+vertex_offset, vertex.yzx, normal.yzx, tangent.yzx, tex_uvs+vec2(1.0/3.0, 0.0/2.0));
+	set_face_point(vertex_index+2*vertex_offset, vertex.zxy, normal.zxy, tangent.zxy, tex_uvs+vec2(2.0/3.0, 0.0/2.0));
+	set_face_point(vertex_index+3*vertex_offset, -vertex.xzy, -normal.xzy, -tangent.xzy, tex_uvs+vec2(0.0/3.0, 1.0/2.0));
+	set_face_point(vertex_index+4*vertex_offset, -vertex.yxz, -normal.yxz, -tangent.yxz, tex_uvs+vec2(1.0/3.0, 1.0/2.0));
+	set_face_point(vertex_index+5*vertex_offset, -vertex.zyx, -normal.zyx, -tangent.zyx, tex_uvs+vec2(2.0/3.0, 1.0/2.0));
 }
 
 void main() {

@@ -32,9 +32,9 @@ var active_cursor := 0:
 # Reference of the preview cursor (when dropping in a color)
 var preview_cursor: GradientEditCursor = null
 # Reference to the popup
-var popup: Control = null
+var popup : Control = null
 
-var hovered := false
+var hovered : bool = false
 
 
 func _ready() -> void:
@@ -178,27 +178,29 @@ func add_cursor(offset, color) -> GradientEditCursor:
 func update_shader() -> void:
 	if value == null:
 		return
-	var shader := ""
-	shader = "shader_type canvas_item;\n"
-	shader += value.get_shader_params("")
-	shader += """
+	var shader_code := ""
+	shader_code = "shader_type canvas_item;\n"
+	shader_code += value.get_shader_params("")
+	shader_code += """
 uniform vec2 size = vec2(25.0, 25.0);
 uniform vec3 background_color_1 = vec3(0.4);
 uniform vec3 background_color_2 = vec3(0.6);
 	"""
-	shader += value.get_shader("")
-	shader += """void fragment() {
+	shader_code += value.get_shader("")
+	shader_code += """void fragment() {
 	vec2 uv = UV*size;
 	float checkerboard = mod(floor(uv.x*0.2)+floor(uv.y*0.2), 2.0);
 	vec4 gradient = _gradient_fct(UV.x);
 	vec3 gradient_with_checkerboard = mix(mix(background_color_1, background_color_2, checkerboard).rgb, gradient.rgb, gradient.a);
 	if (UV.y < 0.75){
 		COLOR.rgb = gradient_with_checkerboard;
-	}else{
+	} else {
 		COLOR.rgb = gradient.rgb;
 	}
 	}"""
-	%Gradient.material.shader.set_code(shader)
+	var shader : Shader = Shader.new()
+	shader.code = shader_code
+	%Gradient.material.shader = shader
 	update_shader_parameters()
 
 

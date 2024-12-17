@@ -1,0 +1,139 @@
+{
+	"connections": [
+		{
+			"from": "uniform",
+			"from_port": 0,
+			"to": "brush_triplanar",
+			"to_port": 1
+		},
+		{
+			"from": "brush_triplanar",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "brush_triplanar",
+			"to_port": 0
+		}
+	],
+	"label": "Mesh 3D",
+	"longdesc": "",
+	"name": "mesh_3d",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "brush_triplanar",
+			"node_position": {
+				"x": -128.5,
+				"y": 14.5
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "tex3d"
+					},
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "position_map",
+						"type": "rgb"
+					}
+				],
+				"instance": "",
+				"name": "3D",
+				"outputs": [
+					{
+						"rgb": "$in(vec4($position_map($uv), 0.0))",
+						"type": "rgb"
+					}
+				],
+				"parameters": []
+			},
+			"type": "shader"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": -401.200012207031,
+				"y": 113.099998474121
+			},
+			"parameters": {
+				"map": 0
+			},
+			"seed": 51108,
+			"type": "meshmap"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -585.700012207031,
+				"y": -15.1666688919067
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "tex3d"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 37.2999992370605,
+				"y": 14.8333292007446
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"name": "port0",
+					"type": "rgb"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -146.933319091797,
+				"y": -146.599990844727
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "remote",
+			"widgets": []
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

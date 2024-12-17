@@ -129,8 +129,10 @@ func dependency_update(dependency_name : String, value = null, internal : bool =
 		var b : Buffer = buffers[dependency_name]
 		match b.status:
 			Buffer.Invalidated:
-				print_debug("Buffer %s (updating) should not be invalidated status" % dependency_name)
-				is_buffer_just_updated = true
+				#print_debug("Buffer %s (updating) should not be invalidated" % dependency_name)
+				#is_buffer_just_updated = true
+				update()
+				return
 			Buffer.UpdatingInvalidated:
 				#print_debug("Buffer %s (updating) reset to invalidated status" % dependency_name)
 				b.status = Buffer.Invalidated

@@ -83,7 +83,9 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 			var image : Image = Image.create(256, 256, false, Image.FORMAT_RGBA8)
 			for i in range(tmp_assets.size()):
 				var m = tmp_assets[i]
-				if int(m.type) & 15 == type:
+				m.id = int(m.id)
+				m.type = int(m.type)
+				if m.type & 15 == type:
 					m.texture = ImageTexture.new()
 					m.texture.set_image(image)
 					assets.push_back(m)
@@ -109,9 +111,11 @@ func update_thumbnails() -> void:
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
-			var error = $ImageHTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp")
+			var address : String = MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp"
+			var error = $ImageHTTPRequest.request(address)
 			if error == OK:
 				var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
+				print(data.get_string_from_ascii())
 				image.load_webp_from_buffer(data)
 				image.save_png(cache_filename)
 			else:

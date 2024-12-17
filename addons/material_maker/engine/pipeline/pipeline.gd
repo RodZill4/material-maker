@@ -335,12 +335,6 @@ func set_parameter(name : String, value, silent : bool = false) -> void:
 	elif not silent:
 		print("Cannot assign parameter "+name)
 
-func constant_as_string(value, type : String) -> String:
-	if value is Color:
-		return "vec4"+str(value)
-	else:
-		return str(value)
-
 static func get_parameter_declarations(defs : Dictionary, values = null) -> String:
 	var uniform_declarations : String = ""
 	var size : int = 0
@@ -372,7 +366,8 @@ func get_uniform_declarations() -> String:
 		uniform_declarations += "\n"
 		for c in constants.keys():
 			var constant : Parameter = constants[c]
-			uniform_declarations += "const %s %s = %s;\n" % [ constant.type, c, constant_as_string(constant.value, constant.type) ]
+			var shader_uniform : MMGenBase.ShaderUniform = MMGenBase.ShaderUniform.new(c, constant.type, constant.value, constant.array_size)
+			uniform_declarations += shader_uniform.to_str("const", true)
 	return uniform_declarations
 
 func get_input_texture_declarations() -> String:
@@ -389,6 +384,8 @@ func get_output_parameters_declarations() -> String:
 	return output_parameters_declarations
 
 func create_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, usage_bits : int):
+	if texture_size.x == 0 or texture_size.y == 0:
+		return RID()
 	var fmt : RDTextureFormat = RDTextureFormat.new()
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
 	fmt.width = texture_size.x
@@ -398,11 +395,8 @@ func create_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type 
 	fmt.texture_type = RenderingDevice.TEXTURE_TYPE_2D
 		
 	var view : RDTextureView = RDTextureView.new()
-	
-	var data = PackedByteArray()
-	data.resize(fmt.height*fmt.width*texture_type_struct.channels*texture_type_struct.bytes_per_channel)
 
-	return rd.texture_create(fmt, view, [data])
+	return rd.texture_create(fmt, view, [])
 
 func create_output_texture(rd : RenderingDevice, texture_size : Vector2i, texture_type : int, is_framebuffer : bool = false) -> RID:
 	var usage_bits : int

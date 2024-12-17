@@ -5,7 +5,6 @@ class_name MMRenderingPipeline
 var shader : RID = RID()
 
 var index_count : int = 0
-var clearColors : PackedColorArray = PackedColorArray([Color.TRANSPARENT])
 
 
 func create_framebuffer(rd : RenderingDevice, texture_rid : RID, depth_rid : RID = RID()) -> RID:
@@ -14,6 +13,8 @@ func create_framebuffer(rd : RenderingDevice, texture_rid : RID, depth_rid : RID
 		framebuffer_textures.append(depth_rid)
 	var framebuffer : RID
 	framebuffer = rd.framebuffer_create(framebuffer_textures)
+	if not rd.framebuffer_is_valid(framebuffer):
+		print("Framebuffer is invalid")
 	return framebuffer
 
 func bind_buffer_uniforms(rd : RenderingDevice, draw_list : int, shader : RID, buffers : Array[PackedByteArray], set : int, rids : RIDs):
@@ -26,13 +27,12 @@ func draw_list_extra_setup(rd : RenderingDevice, draw_list : int, shader : RID, 
 
 func set_shader(vertex_source : String, fragment_source : String, replaces : Dictionary = {}) -> bool:
 	replaces["@DECLARATIONS"] = get_uniform_declarations()+"\n"+get_input_texture_declarations()
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+	var rd : RenderingDevice = mm_renderer.rendering_device
 	shader = do_compile_shader(rd, { vertex=vertex_source, fragment=fragment_source }, replaces)
-	mm_renderer.release_rendering_device(self)
 	return shader.is_valid()
 
-func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
-	var rd : RenderingDevice = await mm_renderer.request_rendering_device(self)
+func in_thread_render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
+	var rd : RenderingDevice = mm_renderer.rendering_device
 	var rids : RIDs = RIDs.new()
 	
 	var target_texture_id : RID = create_output_texture(rd, size, texture_type, true)
@@ -63,11 +63,17 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 		depth_stencil_state,
 		blend
 	)
+	rids.add(pipeline, "pipeline")
+	if not rd.render_pipeline_is_valid(pipeline):
+		print("Invalid render pipeline")
 	
-	var draw_list : int = rd.draw_list_begin(framebuffer,
-		RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ,
-		RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ,
-		clearColors)
+	# pre dev6
+	#var draw_list : int = rd.draw_list_begin(framebuffer, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, RenderingDevice.INITIAL_ACTION_CLEAR, RenderingDevice.FINAL_ACTION_READ, clearColors)
+	# dev6
+	var clear_colors : PackedColorArray = PackedColorArray([Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 0)])
+	var draw_flags : int = RenderingDevice.DRAW_CLEAR_COLOR_ALL | RenderingDevice.DRAW_IGNORE_COLOR_ALL |  RenderingDevice.DRAW_CLEAR_DEPTH | RenderingDevice.DRAW_IGNORE_DEPTH
+	var draw_list : int = rd.draw_list_begin(framebuffer, draw_flags, clear_colors, 1.0, 0)
+	
 	rd.draw_list_bind_render_pipeline(draw_list, pipeline)
 	
 	var uniform_set_1 : RID = RID()
@@ -95,8 +101,9 @@ func render(size : Vector2i, texture_type : int, target_texture : MMTexture, wit
 	rd.sync()
 	
 	var texture_type_struct : Dictionary = TEXTURE_TYPE[texture_type]
-	await target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
+	target_texture.set_texture_rid(target_texture_id, size, texture_type_struct.data_format, rd)
 	
 	rids.free_rids(rd)
-	
-	mm_renderer.release_rendering_device(self)
+
+func render(size : Vector2i, texture_type : int, target_texture : MMTexture, with_depth : bool = false):
+	return await mm_renderer.thread_run(self.in_thread_render, [size, texture_type, target_texture, with_depth])

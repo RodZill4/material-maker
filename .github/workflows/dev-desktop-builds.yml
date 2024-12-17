@@ -19,11 +19,11 @@ on:
         default: "true"
 
 env:
-  GODOT_VERSION: 4.3
-  GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.3-stable
+  GODOT_VERSION: 4.4
+  GODOT_SUB: dev6
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.4-dev6
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_4a1
+  MM_RELEASE: 1_4a2
 
 jobs:
   export_windows_linux:

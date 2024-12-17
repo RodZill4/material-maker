@@ -38,6 +38,8 @@ func _enter_tree():
 func _exit_tree():
 	config.save("user://mm_config.ini")
 
+# Config
+
 func has_config(key : String) -> bool:
 	return config.has_section_key("config", key)
 
@@ -52,6 +54,7 @@ func get_config(key : String):
 func set_config(key : String, value):
 	config.set_value("config", key, value)
 
+# Clipboard parsing
 
 func try_parse_palette(hex_values_str : String) -> Dictionary:
 	var points = []
@@ -136,6 +139,11 @@ func parse_paste_data(data : String):
 	last_paste_data = data
 	last_parsed_paste_data = { type=type, graph=graph }
 	return { type=type, graph=graph }
+
+# Misc. UI functions
+
+static func popup_menu(menu : PopupMenu, parent : Control):
+	menu.popup(Rect2(parent.get_local_mouse_position()+parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0):
 	main_window.set_tip_text(tip, timeout)

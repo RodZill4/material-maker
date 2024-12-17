@@ -19,7 +19,9 @@ func _on_ShaderType_item_selected(index):
 	else:
 		$VBoxContainer/Code.visible = false
 		$VBoxContainer/ColorRect.visible = true
-		$VBoxContainer/ColorRect.material.shader.code = generate_godot_canvasitem()
+		var shader : Shader = Shader.new()
+		shader.code = generate_godot_canvasitem()
+		$VBoxContainer/ColorRect.material.shader = shader
 
 func _on_CopyToClipboard_pressed():
 	DisplayServer.clipboard_set($VBoxContainer/Code.text)
@@ -30,7 +32,7 @@ func generate_shadertoy() -> String:
 	code += mm_renderer.common_shader
 	code += "\n"
 	code = code.replace("varying float elapsed_time;", "")
-	code = code.replace("void vertex() {\n\telapsed_time = TIME;\n}\n", "")
+	code = code.replace("void vertex() {\n\telapsed_time = TIME;\n}", "")
 	code += src_code.uniforms_as_strings("const", true)
 	code += "\n"
 	code += src_code.get_globals_string(src_code.defs+src_code.code)
@@ -43,7 +45,7 @@ func generate_shadertoy() -> String:
 	code += "vec2 UV = vec2(0.0, 1.0) + vec2(1.0, -1.0) * (fragCoord-0.5*(iResolution.xy-vec2(minSize)))/minSize;\n"
 	code += src_code.code
 	if src_code.output_values.has("rgba"):
-		code += "fragColor = "+src_code.output_values.rgba+";\n"
+		code += "fragColor = vec4(mix(vec3(0.5), "+src_code.output_values.rgba+".rgb, "+src_code.output_values.rgba+".a), 1.0);\n"
 	else:
 		code += "fragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
 	code += "}\n"
@@ -56,7 +58,7 @@ func generate_godot_canvasitem() -> String:
 	var code = "shader_type canvas_item;\n"
 	code += "const float seed_variation = 0.0;\n"
 	code += mm_renderer.common_shader
-	code += src_code.uniforms_as_strings()
+	code += src_code.uniforms_as_strings("uniform", true)
 	code += "\n"
 	code += src_code.get_globals_string(src_code.defs+src_code.code)
 	code += src_code.defs
@@ -78,7 +80,7 @@ func generate_godot_spatial() -> String:
 	code += "\nconst float seed_variation = 0.0;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	code += src_code.uniforms_as_strings()
+	code += src_code.uniforms_as_strings("uniform", true)
 	code += "\n"
 	code += src_code.get_globals_string(src_code.defs+src_code.code)
 	code += src_code.defs

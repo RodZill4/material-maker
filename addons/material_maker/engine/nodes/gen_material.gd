@@ -17,7 +17,7 @@ var preview_parameters : Dictionary = {}
 var preview_textures = {}
 var preview_texture_dependencies = {}
 
-var external_previews : Array = []
+var external_previews : Array[ShaderMaterial] = []
 var export_output_def : Dictionary
 
 
@@ -169,16 +169,14 @@ func update_materials(material_list, sequential : bool = false) -> void:
 		update_material(m, sequential)
 
 func update_material(m, sequential : bool = false) -> void:
-	if m is StandardMaterial3D:
-		pass
-	elif m is ShaderMaterial:
-		m.shader.code = preview_material.shader.code
+	if m is ShaderMaterial:
+		m.shader = preview_material.shader
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
 	for p in external_previews:
-		p.shader.code = preview_material.shader.code
+		p.shader = preview_material.shader
 		for t in preview_textures.keys():
 			p.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
 		for t in preview_texture_dependencies.keys():
@@ -315,7 +313,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 			shader_code += "\n"
 	return { shader_code = shader_code, uniforms = rv.uniforms }
 
-func set_3d_previews(previews : Array):
+func set_3d_previews(previews : Array[ShaderMaterial]):
 	external_previews = previews
 	update_external_previews()
 

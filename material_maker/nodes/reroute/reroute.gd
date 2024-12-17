@@ -70,7 +70,7 @@ func _input(event:InputEvent) -> void:
 		menu.add_item("Huge preview")
 		add_child(menu)
 		menu.id_pressed.connect(self.on_context_menu)
-		menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+		mm_globals.popup_menu(menu, self)
 
 
 func on_context_menu(id : int):

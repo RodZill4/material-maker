@@ -29,7 +29,6 @@ func get_expression_value_from_string(expression_string : String, values: Dictio
 func do_update_mesh() -> void:
 	var size : int = mm_globals.main_window.preview_tesselation_detail
 	if size != shader_size or compute_shader != shader_string:
-		print("Updating mesh generation compute shader")
 		var vertex_count : int = get_expression_value_from_string(vertex_count_expression, { size=size} )
 		var index_count : int = get_expression_value_from_string(index_count_expression, { size=size} )
 		shader.local_size = size if size < 32 else 32
@@ -45,22 +44,22 @@ func do_update_mesh() -> void:
 		await shader.set_shader_ext(compute_shader)
 		shader_size = size
 		shader_string = compute_shader
-	print("Running mesh generation compute shader")
 	var opv : Dictionary = { vertices_format="vec3", normals_format="vec3", tex_uvs_format="vec2" }
 	shader.set_parameter("size", size)
 	for p in parameters:
 		shader.set_parameter(p.name, parameter_values[p.name])
 	await shader.render_ext([], Vector2i(size, size), opv)
-	mesh.clear_surfaces()
-	var flags : int = Mesh.ARRAY_FORMAT_VERTEX | Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_INDEX
-	var vertices : PackedVector3Array = opv.vertices
-	var normals : PackedVector3Array = opv.normals
-	var tangents : PackedFloat32Array = opv.tangents
-	var tex_uvs : PackedVector2Array = opv.tex_uvs
-	var indexes : PackedInt32Array = opv.indexes
-	var arrays : Array = [vertices, normals, tangents, null, tex_uvs, null, null, null, null, null, null, null, indexes]
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
-	set_surface_override_material(0, material)
+	if opv.has("vertices"):
+		mesh.clear_surfaces()
+		var flags : int = Mesh.ARRAY_FORMAT_VERTEX | Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_INDEX
+		var vertices : PackedVector3Array = opv.vertices
+		var normals : PackedVector3Array = opv.normals
+		var tangents : PackedFloat32Array = opv.tangents
+		var tex_uvs : PackedVector2Array = opv.tex_uvs
+		var indexes : PackedInt32Array = opv.indexes
+		var arrays : Array = [vertices, normals, tangents, null, tex_uvs, null, null, null, null, null, null, null, indexes]
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays, [], {}, flags)
+		set_surface_override_material(0, material)
 
 var need_update : bool = false
 static var updating : bool = false

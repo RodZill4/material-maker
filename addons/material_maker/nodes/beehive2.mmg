@@ -13,7 +13,9 @@
 		"code": [
 			"vec2 $(name_uv)_scale = vec2($sx, $sy*1.73205080757);",
 			"vec2 $(name_uv)_uv = $uv*$(name_uv)_scale;",
-			"vec4 $(name_uv)_center = beehive_center($(name_uv)_uv);"
+			"vec4 $(name_uv)_center = beehive_center($(name_uv)_uv);",
+			"vec4 $(name_uv)_fill = fract(vec4($(name_uv)_uv-$(name_uv)_center.xy-vec2(0.5, 0.57735026919), vec2(1.0, 1.15470053838))/$(name_uv)_scale.xyxy);",
+			"$(name_uv)_fill = floor($(name_uv)_fill*16384.0)/16384.0;"
 		],
 		"global": [
 			"float beehive_dist(vec2 p){",
@@ -30,9 +32,7 @@
 			"}",
 			""
 		],
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
 		"longdesc": "Draws a greyscale hexagonal tiles pattern",
 		"name": "Beehive",
@@ -44,7 +44,7 @@
 				"type": "f"
 			},
 			{
-				"fill": "vec4($(name_uv)_uv-$(name_uv)_center.xy-vec2(0.5, 0.57735026919), vec2(1.0, 1.15470053838))/$(name_uv)_scale.xyxy",
+				"fill": "$(name_uv)_fill",
 				"longdesc": "An output that should be plugged into a Fill companion node",
 				"shortdesc": "Fill",
 				"type": "fill"

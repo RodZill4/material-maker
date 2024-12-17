@@ -124,7 +124,7 @@ func select_layer(layer : MMLayer, force : bool = false, update_last : bool = tr
 				await painter_node.init_rgba_texture_by_name(c, Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
 				await painter_node.init_rgba_texture_by_name(c)
-			layer.set(c, painter_node.get_texture_by_name(c))
+			layer.set(c, await painter_node.get_texture_by_name(c))
 		emit_signal("layer_selected", layer)
 	selected_layer = layer
 	await get_tree().process_frame
@@ -446,19 +446,20 @@ func debug_get_texture_names():
 # tr("Depth")
 # tr("Occlusion")
 
-func debug_get_texture(ID):
+func debug_get_texture(ID) -> Texture2D:
 	match ID:
 		0:
-			return get_albedo_texture()
+			return await get_albedo_texture()
 		1:
-			return get_metallic_texture()
+			return await get_metallic_texture()
 		2:
-			return get_roughness_texture()
+			return await get_roughness_texture()
 		3:
-			return get_emission_texture()
+			return await get_emission_texture()
 		4:
-			return get_normal_map()
+			return await get_normal_map()
 		5:
-			return get_depth_texture()
+			return await get_depth_texture()
 		6:
-			return get_occlusion_texture()
+			return await get_occlusion_texture()
+	return null
