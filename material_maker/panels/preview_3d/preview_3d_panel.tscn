@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cj6b1r8b6jel3"]
+[gd_scene load_steps=7 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
@@ -26,17 +26,7 @@ shader = SubResource("1")
 shader_parameter/aabb_position = null
 shader_parameter/aabb_size = null
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
-
-[sub_resource type="Sky" id="Sky_wye7d"]
-sky_material = SubResource("PanoramaSkyMaterial_40ogr")
-
-[sub_resource type="Environment" id="Environment_qxxdb"]
-background_mode = 2
-sky = SubResource("Sky_wye7d")
-
 [sub_resource type="World3D" id="World3D_3xlky"]
-environment = SubResource("Environment_qxxdb")
 
 [node name="Preview3D" instance=ExtResource("1")]
 custom_minimum_size = Vector2(250, 200)
@@ -56,7 +46,6 @@ visible = false
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
-flip_v = true
 
 [node name="UI" type="PanelContainer" parent="." index="2"]
 layout_mode = 2
@@ -64,10 +53,9 @@ layout_mode = 2
 [node name="Preview3DUI" parent="UI" index="0" instance=ExtResource("2")]
 layout_mode = 2
 
-[node name="PopupMenu" type="PopupMenu" parent="." index="4"]
+[node name="PopupMenu" type="PopupMenu" parent="." index="3"]
 item_count = 2
 item_0/text = "Reset center"
-item_0/id = 0
 item_1/text = "Center on clicked surface"
 item_1/id = 1
 

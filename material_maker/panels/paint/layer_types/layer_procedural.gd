@@ -1,4 +1,5 @@
-extends "res://material_maker/panels/paint/layer_types/layer_paint.gd"
+extends MMPaintLayer
+class_name MMProceduralLayer
 
 var material : Dictionary = {}
 

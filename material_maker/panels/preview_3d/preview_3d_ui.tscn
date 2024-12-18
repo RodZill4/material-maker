@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://brlp703awvxbn"]
+[gd_scene load_steps=5 format=3 uid="uid://brlp703awvxbn"]
 
+[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_3d_ui.gd" id="1_oc43p"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -15,6 +16,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 20.0
 size_flags_horizontal = 3
+script = ExtResource("1_oc43p")
 
 [node name="Model" type="MenuButton" parent="."]
 layout_mode = 2

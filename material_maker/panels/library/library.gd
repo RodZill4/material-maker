@@ -39,6 +39,17 @@ func _ready() -> void:
 	libraries_button.get_popup().id_pressed.connect(self._on_Libraries_id_pressed)
 	init_expanded_items()
 	update_tree()
+	update_theme()
+
+func _notification(what: int) -> void:
+	if not is_node_ready():
+		return
+
+	if what == NOTIFICATION_THEME_CHANGED:
+		update_theme()
+
+func update_theme() -> void:
+	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
@@ -309,7 +320,7 @@ func _on_Tree_item_rmb_selected(mouse_position : Vector2i):
 		item_menu.set_item_disabled(0, read_only)
 		item_menu.set_item_disabled(1, read_only)
 		item_menu.set_item_disabled(2, read_only)
-		item_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+		mm_globals.popup_menu(item_menu, self)
 
 func _on_PopupMenu_index_pressed(index):
 	var library_index : int = 0

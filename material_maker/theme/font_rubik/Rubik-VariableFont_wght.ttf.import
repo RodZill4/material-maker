@@ -14,14 +14,15 @@ dest_files=["res://.godot/imported/Rubik-VariableFont_wght.ttf-df017581c1c1aaed8
 
 Rendering=null
 antialiasing=1
-generate_mipmaps=false
+generate_mipmaps=true
+disable_embedded_bitmaps=false
 multichannel_signed_distance_field=false
 msdf_pixel_range=93
 msdf_size=50
 allow_system_fallback=true
 force_autohinter=false
 hinting=0
-subpixel_positioning=3
+subpixel_positioning=2
 oversampling=2.0
 Fallbacks=null
 fallbacks=[]

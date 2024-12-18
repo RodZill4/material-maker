@@ -1666,19 +1666,20 @@
 			"type": "sixteen_segment"
 		},
 		{
-			"display_name": "Roman Numerals",
-			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAMJJREFUaIHt2ssOgzAMRFFS9f9/2ey6qKoSB0+sQfesIWhsLJ7HAQC4YSzsExGzq4+xsH3KK7vDM0XEfJkXtt8hG6DquPanUGWAybrWnjx0oJt9gErMwIriAJfVLb9+0YFu9gGKMQNp9QH+1FhxC00HutkHqMcM5EgC/Ky06CmeDnSzDyDBDCSoAnzVW/cikQ50sw+gwgzMEgb4VF36LYMOdLMPIMQMTHlLV9/wLdW+AwR4tg2/FNh3gADd7AMAAG45AdaAaPHzRObEAAAAAElFTkSuQmCC",
-			"name": "roman_numerals",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAYJJREFUeJztmsGOgzAQQ1+q/dDwUXzv7KGq1Kosm6TErpSxxHFgZHh2DhQgWFg39wJupQHuBdxKA9wLuLW8AT9X3CRirElLKZfMf6LlvwC4H4SmXLXWiPvrHboiImqt0/YDojD5JBgRw5/qJ7OtWh4BiQG1VsnMiCQIQH9ij871KhGY/YBt2yyzrZqOAIyluaIBIBHQGdCT6qoGACEC0J7oqgaAREBjwEiaKxoARAhAX6qrGgASAa0BLemubAAQIwD/J7uyASAR0BnQk+qqBgAhAtCW7soGgERAb8BZyqsbAAwIwN8Jr24ASAS0BrSku7IBQIwAnKe8ugEgEfAYcJT2jgYAEwLwnvSOBoBEQG/AWcqrGwAMCMBx2jsaABIBnwHPqe9qADAiAO//CCUCBlkMOEp7RwOACQF4TX1XA0AicM2PkqNypv9DVgReFkkEPLIZ8Jz6rgYAIwLgPQA9lAi4F3BreQOs54B9352PB8wh+A1aHoE0wL2AW2mAewG3ljfgFz4S06ZyFqaeAAAAAElFTkSuQmCC",
+			"name": "roman_numerals2",
 			"parameters": {
-				"bevel": 0,
+				"a": 0.5,
+				"bevel": 0.1,
 				"h": 0.75,
 				"n": 5,
-				"r": 0.4,
-				"s": 0.5,
+				"r": 0.05,
+				"s": 0,
 				"w": 0.5
 			},
+			"seed_int": 0,
 			"tree_item": "Simple/Roman Numerals",
-			"type": "roman_numerals"
+			"type": "roman_numerals2"
 		},
 		{
 			"display_name": "Runes",

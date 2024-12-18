@@ -35,7 +35,7 @@ func do_update_material(source, target_material : ShaderMaterial, template : Str
 	for u in source.uniforms:
 		if u.value:
 			if u.value is MMTexture:
-				target_material.set_shader_parameter(u.name, u.value.get_texture())
+				target_material.set_shader_parameter(u.name, await u.value.get_texture())
 			else:
 				target_material.set_shader_parameter(u.name, u.value)
 	# Make sure position/size parameters are setup
@@ -136,8 +136,11 @@ func create_image(renderer_function : String, params : Array, image_size : int) 
 				source = MMGenBase.get_default_generated_shader()
 	# Update shader
 	var tmp_material = ShaderMaterial.new()
-	tmp_material.shader = Shader.new()
-	tmp_material.shader.code = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 mm_texture_size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
+	var shader : Shader = Shader.new()
+	shader.code = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 mm_texture_size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
+	tmp_material.shader = shader
+	for u in source.uniforms:
+		tmp_material.set_shader_parameter(u.name, u.value)
 	mm_deps.material_update_params(MMShaderMaterial.new(tmp_material))
 	var renderer = await mm_renderer.request(self)
 	renderer = await renderer.render_material(self, tmp_material, image_size, source.output_type != "rgba")

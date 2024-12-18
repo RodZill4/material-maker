@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dpulty2lkvcht"]
 
-[ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cxcw0mi4sfl2x" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
 
 [sub_resource type="Animation" id="3"]
 tracks/0/type = "value"
@@ -18,7 +18,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sxr5g"]
 _data = {
-"rotate": SubResource("3")
+&"rotate": SubResource("3")
 }
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
@@ -46,7 +46,7 @@ fov = 50.0
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_sxr5g")
+&"": SubResource("AnimationLibrary_sxr5g")
 }
 autoplay = "rotate"
 

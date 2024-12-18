@@ -40,7 +40,7 @@ func _ready():
 func _exit_tree():
 	if item_usage_file == "":
 		return
-	DirAccess.open("res://").make_dir_recursive(item_usage_file.get_base_dir())
+	DirAccess.make_dir_recursive_absolute(item_usage_file.get_base_dir())
 	var file = FileAccess.open(item_usage_file, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(item_usage, "\t", true))
@@ -55,6 +55,7 @@ func init_libraries() -> void:
 		add_child(library)
 		library.generate_node_sections(node_sections)
 	library = LIBRARY.new()
+	DirAccess.make_dir_recursive_absolute(user_lib.get_base_dir())
 	if library.load_library(user_lib):
 		if library.library_name == "":
 			library.library_name = user_lib_name
@@ -92,17 +93,17 @@ func get_item(item_name : String):
 					return item
 	return null
 
-func get_items(filter : String, sorted = false) -> Array:
-	var array : Array = []
+func get_items(filter : String, sorted := false) -> Array:
+	var array: Array = []
 	var aliased_items := [base_item_aliases, user_item_aliases]
-	
+
 	for li in get_child_count():
 		var l = get_child(li)
 		if disabled_libraries.find(l.library_path) == -1:
 			for i in l.get_items(filter, disabled_sections, aliased_items):
 				i.library_index = li
 				array.push_back(i)
-	
+
 	if sorted:
 		var sorted_array: Array = []
 		for i in array:
@@ -122,8 +123,9 @@ func get_items(filter : String, sorted = false) -> Array:
 		for item in array:
 			item["idx"] = idx
 			idx += 1
-	
+
 	return array
+
 
 func save_library_list() -> void:
 	var library_list = []

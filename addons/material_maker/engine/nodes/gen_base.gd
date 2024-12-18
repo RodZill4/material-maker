@@ -524,6 +524,16 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
 
+func render_output_to_texture(output_index : int, size : int) -> MMTexture:
+	var context : MMGenContext = MMGenContext.new()
+	var source : ShaderCode = get_shader_code("uv", output_index, context)
+	var shader_compute : MMShaderCompute = MMShaderCompute.new()
+	var shader_status : bool = await shader_compute.set_shader_from_shadercode(source, false)
+	var texture : MMTexture = MMTexture.new()
+	if shader_status:
+		var status = await shader_compute.render(texture, size)
+	return texture
+
 func render_output(output_index : int, size : int) -> Image:
 	var context : MMGenContext = MMGenContext.new()
 	var source : ShaderCode = get_shader_code("uv", output_index, context)

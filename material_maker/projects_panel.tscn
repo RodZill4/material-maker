@@ -1,10 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://bnqq3vhwmudkw"]
+[gd_scene load_steps=8 format=3 uid="uid://bnqq3vhwmudkw"]
 
-[ext_resource type="Script" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
+[ext_resource type="Script" uid="uid://cryayuomvuwbo" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="2_oiaqi"]
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="3_qvj7k"]
 [ext_resource type="Script" path="res://material_maker/widgets/tabs/tabs.gd" id="4_mpinq"]
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5_1qnqj"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="6_mpc0m"]
 
 [sub_resource type="Shader" id="1"]
@@ -14,18 +13,6 @@ resource_local_to_scene = true
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("1")
-
-[sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("5_1qnqj")
-region = Rect2(96, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="4"]
-atlas = ExtResource("5_1qnqj")
-region = Rect2(96, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="5"]
-atlas = ExtResource("5_1qnqj")
-region = Rect2(96, 64, 32, 31)
 
 [node name="ProjectsPanel" type="Control"]
 clip_contents = true
@@ -118,10 +105,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 5.5
-offset_top = -53.5
-offset_right = 335.5
-offset_bottom = -13.5
+offset_left = 11.5
+offset_top = -24.5
+offset_right = 95.5
+offset_bottom = -16.5
 grow_vertical = 0
 mouse_filter = 2
 
@@ -129,13 +116,11 @@ mouse_filter = 2
 layout_mode = 2
 tooltip_text = "Show 2D preview"
 toggle_mode = true
-icon = SubResource("3")
 
 [node name="Preview3DButton" type="Button" parent="PreviewUI"]
 layout_mode = 2
 tooltip_text = "Show 3D preview"
 toggle_mode = true
-icon = SubResource("4")
 
 [node name="Panel" type="PanelContainer" parent="PreviewUI"]
 visible = false
@@ -148,9 +133,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="ControlView" type="TextureRect" parent="PreviewUI/Panel/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
-texture = SubResource("5")
 
 [node name="Preview3DUI" parent="PreviewUI/Panel/HBoxContainer" instance=ExtResource("6_mpc0m")]
 layout_mode = 2

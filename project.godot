@@ -12,18 +12,19 @@ config_version=5
 
 config/name="Material Maker"
 config/description="An open source, extensible procedural material authoring tool"
+config/tags=PackedStringArray("material_maker")
 run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker_dev"
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.4")
 boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="1.4.0.0"
-config/actual_release="1.4pre"
+config/release="1.4.0.1"
+config/actual_release="1.4a2"
 
 [audio]
 
@@ -58,8 +59,7 @@ window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
 
-run/main_run_args="--no-splash"
-run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\stylizedhammer.obj"
+run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\suzanne.mmpp"
 run/main_run_args_nosplash="--no-splash"
 
 [editor_plugins]
@@ -129,9 +129,9 @@ limits/debugger/max_chars_per_second=204800000
 [rendering]
 
 textures/vram_compression/import_etc2_astc=true
-shading/overrides/force_vertex_shading.mobile=false
 shading/overrides/force_lambert_over_burley.mobile=false
 environment/defaults/default_environment="res://default_env.tres"
+shading/overrides/force_vertex_shading.mobile=false
 quality/shadows/filter_mode=2
 shading/overrides/force_blinn_over_ggx.mobile=false
 quality/filters/anisotropic_filter_level=16

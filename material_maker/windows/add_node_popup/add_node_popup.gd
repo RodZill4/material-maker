@@ -178,14 +178,14 @@ func update_list(filter_text : String = "") -> void:
 		var _name = obj.display_name
 		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
 		#if obj.has("shortdesc")
-		
+
 		%List.add_item(_name, i.icon)
 		%List.set_item_custom_fg_color(idx, color)
 		%List.set_item_metadata(idx, i)
 		%List.set_item_tooltip_enabled(idx, false)
 
 		idx += 1
-	
+
 	%List.select(0)
 	%List.ensure_current_is_visible()
 
@@ -205,12 +205,12 @@ func _on_list_gui_input(event: InputEvent) -> void:
 	if event.is_action("ui_up"):
 		if not %List.item_count or %List.is_selected(0):
 			%Filter.grab_focus()
-	
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
 		if idx != -1:
 			_on_list_item_activated(idx)
-	
+
 
 func get_list_drag_data(m_position):
 	var data = %List.get_item_metadata(%List.get_item_at_position(m_position))

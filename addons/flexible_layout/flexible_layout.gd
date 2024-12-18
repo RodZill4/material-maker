@@ -472,7 +472,8 @@ class FlexLayout:
 		if rect.size.x == 0 or rect.size.y == 0:
 			return
 		if top:
-			top.layout(control.get_rect())
+			rect.size = Vector2i(Vector2(rect.size))
+			top.layout(rect)
 		main_control.layout_changed.emit()
 	
 	func move_panel(panel, reference_panel : FlexNode, destination : int, test_only : bool = false) -> bool:

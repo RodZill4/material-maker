@@ -78,10 +78,10 @@ func get_value() -> Variant:
 func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 	if v is int or (v is String and v.is_valid_float()):
 		v = float(v)
-	
+
 	if v is String and float_only:
 		v = min_value
-	
+
 	if v is float:
 		float_value = v
 		if get_decimal_places(v) < _step_decimals:
@@ -126,7 +126,7 @@ func _input(event:InputEvent) -> void:
 
 func _gui_input(event: InputEvent) -> void:
 	if mode == Modes.IDLE:
-		
+
 		# Handle Drag-Start
 		if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			if $Edit.text.is_valid_float():
@@ -137,12 +137,12 @@ func _gui_input(event: InputEvent) -> void:
 				from_upper_bound = float_value >= max_value
 				actually_dragging = false
 				$Edit.grab_focus()
-		
+
 		if event.is_action("ui_accept") and event.pressed:
 			mode = Modes.EDITING
 			accept_event()
 			return
-		
+
 		if event is InputEventMouseButton:
 			# Handle Edit-Click (on button up!)
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -204,8 +204,8 @@ func _gui_input(event: InputEvent) -> void:
 					v = max_value
 
 				set_value(v, true, true)
-			
-			
+
+
 			accept_event()
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
@@ -219,7 +219,7 @@ func _gui_input(event: InputEvent) -> void:
 					$Edit.text, self,
 					"set_value_from_expression_editor")
 				accept_event()
-			
+
 			# Handle CTRL+Scrolling
 			if event.is_command_or_control_pressed() and $Edit.text.is_valid_float() and event.pressed:
 				var amount := step
@@ -228,7 +228,7 @@ func _gui_input(event: InputEvent) -> void:
 						amount = 0.01
 					else:
 						amount = 0.1
-					
+
 				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 					set_value(max(float($Edit.text)-amount, min_value), true, true)
 					accept_event()
@@ -276,6 +276,8 @@ func get_decimal_places(v: float) -> int:
 func _notification(what):
 	match what:
 		NOTIFICATION_THEME_CHANGED:
+			if get_theme_stylebox("clip") != get_theme_stylebox("panel"):
+				add_theme_stylebox_override("panel", get_theme_stylebox("clip"))
 			update()
 
 
@@ -283,7 +285,7 @@ func update() -> void:
 	var is_hovered := Rect2(Vector2(), size).has_point(get_local_mouse_position()) or mode == Modes.SLIDING
 	$Slider.add_theme_stylebox_override("fill", get_theme_stylebox("fill_hover" if is_hovered else "fill_normal"))
 	$Slider.add_theme_stylebox_override("background", get_theme_stylebox("hover" if is_hovered else "normal"))
-	
+
 	$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
 	$Edit.queue_redraw()
 
@@ -292,6 +294,7 @@ func _ready() -> void:
 	update()
 	min_value = min_value
 	max_value = max_value
+
 
 
 func _on_mouse_entered() -> void:

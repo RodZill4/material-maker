@@ -290,7 +290,7 @@ func show_menu(current_item : TreeItem):
 	add_child(menu)
 	menu.id_pressed.connect(self._on_menu.bind(current_item))
 	menu.popup_hide.connect(menu.queue_free)
-	menu.popup(Rect2($VBoxContainer.get_local_mouse_position()+$VBoxContainer.get_screen_position(), Vector2(0, 0)))
+	mm_globals.popup_menu(menu, $VBoxContainer)
 
 func _on_Tree_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:

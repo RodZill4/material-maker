@@ -1,6 +1,6 @@
 [gd_scene load_steps=45 format=3 uid="uid://qx02gvymgb5o"]
 
-[ext_resource type="Script" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="1"]
+[ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ftx52hy53io2" path="res://material_maker/panels/paint/export.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="7_xm5h4"]
 [ext_resource type="PackedScene" uid="uid://d12t30rjvol15" path="res://material_maker/tools/painter/painter.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://drudtoqh4ks4n" path="res://material_maker/panels/paint/paint_layers.tscn" id="13"]
-[ext_resource type="Script" path="res://material_maker/panels/paint/paint.gd" id="16"]
+[ext_resource type="Script" uid="uid://dcabyce4hnfr7" path="res://material_maker/panels/paint/paint.gd" id="16"]
 [ext_resource type="PackedScene" uid="uid://dy1u50we7gtru" path="res://material_maker/panels/graph_edit/graph_edit.tscn" id="17"]
 
 [sub_resource type="Shader" id="Shader_dye6v"]
@@ -646,6 +646,7 @@ focus_mode = 1
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
 
+[connection signal="end_of_stroke" from="Painter" to="." method="_on_Painter_end_of_stroke"]
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
 [connection signal="dragged" from="VSplitContainer" to="." method="_on_v_split_container_dragged"]

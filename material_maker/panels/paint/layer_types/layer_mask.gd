@@ -1,4 +1,5 @@
-extends "res://material_maker/panels/paint/layer_types/layer.gd"
+extends MMLayer
+class_name MMMaskLayer
 
 # warning-ignore:unused_class_variable
 var mask : Texture2D

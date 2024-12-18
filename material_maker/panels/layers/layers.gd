@@ -6,12 +6,6 @@ var layers
 @onready var tree = %Tree
 
 
-const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
-const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")
-const LayerProcedural = preload("res://material_maker/panels/paint/layer_types/layer_procedural.gd")
-const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_mask.gd")
-
-
 func _ready():
 	set_layers(layers)
 
@@ -61,8 +55,8 @@ func _on_Down_pressed():
 func _on_Config_pressed():
 	var current = tree.get_selected()
 	if current != null:
-		var layer : Layer = current.get_meta("layer")
-		if layer.get_layer_type() == Layer.LAYER_MASK:
+		var layer : MMLayer = current.get_meta("layer")
+		if layer.get_layer_type() == MMLayer.LAYER_MASK:
 			return
 		var popup = preload("res://material_maker/panels/layers/layer_config_popup.tscn").instantiate()
 		add_child(popup)

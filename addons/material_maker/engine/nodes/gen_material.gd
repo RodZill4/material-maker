@@ -17,7 +17,7 @@ var preview_parameters : Dictionary = {}
 var preview_textures = {}
 var preview_texture_dependencies = {}
 
-var external_previews : Array = []
+var external_previews : Array[ShaderMaterial] = []
 var export_output_def : Dictionary
 
 
@@ -131,11 +131,11 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		preview_parameters[parameter_name] = value
 		for p in external_previews:
 			if value is MMTexture:
-				p.set_shader_parameter(parameter_name, await value.get_texture())
+				var texture = await value.get_texture()
+				p.set_shader_parameter(parameter_name, texture)
+				preview_texture_dependencies[parameter_name] = texture
 			else:
 				p.set_shader_parameter(parameter_name, value)
-		if preview_texture_dependencies.has(parameter_name):
-			preview_texture_dependencies[parameter_name] = value
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
@@ -169,16 +169,14 @@ func update_materials(material_list, sequential : bool = false) -> void:
 		update_material(m, sequential)
 
 func update_material(m, sequential : bool = false) -> void:
-	if m is StandardMaterial3D:
-		pass
-	elif m is ShaderMaterial:
-		m.shader.code = preview_material.shader.code
+	if m is ShaderMaterial:
+		m.shader = preview_material.shader
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
 	for p in external_previews:
-		p.shader.code = preview_material.shader.code
+		p.shader = preview_material.shader
 		for t in preview_textures.keys():
 			p.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
 		for t in preview_texture_dependencies.keys():
@@ -293,7 +291,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				mm_deps.create_buffer(buffer_name, self)
 			shader_code += l+"\n"
 	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
-	definitions += rv.uniforms_as_strings()
+	definitions += rv.uniforms_as_strings("uniform", true)
 	for d in rv.globals:
 		definitions += "// #globals: %s\n" % d.source
 		definitions += d.code+"\n"
@@ -315,7 +313,7 @@ func process_shader(shader_text : String, custom_script : String = ""):
 			shader_code += "\n"
 	return { shader_code = shader_code, uniforms = rv.uniforms }
 
-func set_3d_previews(previews : Array):
+func set_3d_previews(previews : Array[ShaderMaterial]):
 	external_previews = previews
 	update_external_previews()
 
@@ -693,13 +691,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					saved_files += 1
 					progress_dialog.set_progress(float(saved_files)/float(total_files))
 					continue
-				var result = await render(self, output_index, size)
-				var is_greyscale : bool = false
-				var output = get_preprocessed_output_def(output_index)
-				if output != null:
-					is_greyscale = output.has("type") and output.type == "f"
-				result.save_to_file(file_name, is_greyscale)
-				result.release(self)
+				var result : MMTexture = await render_output_to_texture(output_index, size)
+				await result.save_to_file(file_name)
 				saved_files += 1
 				progress_dialog.set_progress(float(saved_files)/float(total_files))
 			"template":
@@ -718,7 +711,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					preview_texture_dependencies[t].get_data().save_png(file_name)
+					preview_texture_dependencies[t].get_image().save_png(file_name)
 					index += 1
 					saved_files += 1
 					progress_dialog.set_progress(float(saved_files)/float(total_files))
