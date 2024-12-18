@@ -1,39 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://b08bcbwwosrrk"]
+[gd_scene load_steps=6 format=3 uid="uid://b08bcbwwosrrk"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_a4o1g"]
-[ext_resource type="Script" path="res://material_maker/widgets/splines_edit/splines_editor.gd" id="2_tepru"]
-[ext_resource type="Texture2D" uid="uid://dnyj2y655qc1o" path="res://material_maker/theme/new_theme_icons.png" id="3_nl1x0"]
+[ext_resource type="Script" uid="uid://c4mrqp5wc4qg5" path="res://material_maker/widgets/splines_edit/splines_editor.gd" id="2_tepru"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4_2po4g"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_w4n15"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_km108"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_v6wki"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(80, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ofrl2"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(32, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6siad"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(48, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8xl33"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(64, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l8ytc"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(80, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_koac8"]
-atlas = ExtResource("3_nl1x0")
-region = Rect2(96, 16, 16, 16)
 
 [sub_resource type="Curve2D" id="Curve2D_koywa"]
 
@@ -58,8 +29,8 @@ offset_bottom = 40.0
 
 [node name="SplinesMenu" type="PanelContainer" parent="." index="1"]
 layout_mode = 0
-offset_right = 422.0
-offset_bottom = 33.0
+offset_right = 466.0
+offset_bottom = 25.0
 theme_type_variation = &"MM_PanelMenuBar"
 
 [node name="HBox" type="HBoxContainer" parent="SplinesMenu" index="0"]
@@ -75,7 +46,6 @@ theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_w4n15")
-icon = SubResource("AtlasTexture_km108")
 
 [node name="SelectMode" type="Button" parent="SplinesMenu/HBox" index="1"]
 unique_name_in_owner = true
@@ -85,51 +55,50 @@ tooltip_text = "Select"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_w4n15")
-icon = SubResource("AtlasTexture_v6wki")
 
 [node name="VSeparator" type="VSeparator" parent="SplinesMenu/HBox" index="2"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSeparator"
 
 [node name="DeleteControlPoints" type="Button" parent="SplinesMenu/HBox" index="3"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Delete Point"
 theme_type_variation = &"MM_PanelMenuButton"
-icon = SubResource("AtlasTexture_ofrl2")
 
 [node name="UnlinkControlPoints" type="Button" parent="SplinesMenu/HBox" index="4"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Unlink Points"
 theme_type_variation = &"MM_PanelMenuButton"
-icon = SubResource("AtlasTexture_6siad")
 
 [node name="LinkControlPoints" type="Button" parent="SplinesMenu/HBox" index="5"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Link Points"
 theme_type_variation = &"MM_PanelMenuButton"
-icon = SubResource("AtlasTexture_8xl33")
 
 [node name="VSeparator2" type="VSeparator" parent="SplinesMenu/HBox" index="6"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSeparator"
 
 [node name="Progressive" type="Button" parent="SplinesMenu/HBox" index="7"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Progressive"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
-icon = SubResource("AtlasTexture_l8ytc")
 
 [node name="ReverseSelection" type="Button" parent="SplinesMenu/HBox" index="8"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Reverse Order"
 theme_type_variation = &"MM_PanelMenuButton"
-icon = SubResource("AtlasTexture_koac8")
 
 [node name="WidthLabel" type="Label" parent="SplinesMenu/HBox" index="9"]
 layout_mode = 2

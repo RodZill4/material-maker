@@ -13,37 +13,39 @@ const RESOLUTION_CUSTOM := 8
 func _ready() -> void:
 	for val in export_settings.values():
 		val = val.replace("$SUFFIX", owner.config_var_suffix)
-	
+
 	owner.generator_changed.connect(update)
+
+	%ExportFolderButton.icon = get_theme_icon("folder", "MM_Icons")
 
 
 func _open() -> void:
 	if mm_globals.has_config(export_settings.path):
 		%ExportFolder.text = mm_globals.get_config(export_settings.path)
-	
+
 	if mm_globals.has_config(export_settings.file_name):
 		%ExportFile.text = mm_globals.get_config(export_settings.file_name)
 	%ExportFileResultLabel.text = interpret_file_name(%ExportFile.text)
-	
+
 	if mm_globals.has_config(export_settings.resolution):
 		%Resolution.selected = mm_globals.get_config(export_settings.resolution)
 	%CustomResolutionSection.visible = %Resolution.selected == RESOLUTION_CUSTOM
-	
+
 	if mm_globals.has_config(export_settings.resolution):
 		%Resolution.selected = mm_globals.get_config(export_settings.resolution)
-	
+
 	if mm_globals.has_config(export_settings.extension):
 		%FileType.selected = mm_globals.get_config(export_settings.extension)
-	
+
 	export_notification("")
-	
+
 	size = Vector2()
 
 
 func update() -> void:
 	if not is_visible_in_tree():
 		return
-	
+
 	var file_result := interpret_file_name(%ExportFile.text)
 	%ExportFileResultLabel.text = file_result
 	%ExportFileResultLabel.visible = not %ExportFile.text.is_empty() and %ExportFile.text.count("$") != file_result.count("$")
@@ -60,12 +62,12 @@ func _on_export_folder_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
 	#file_dialog.add_filter("*.png; PNG image file")
 	#file_dialog.add_filter("*.exr; EXR image file")
-	
+
 	if %ExportFolder.text:
 		file_dialog.current_dir = mm_globals.config.get_value("path", %ExportFolder.text)
-	
+
 	var files = await file_dialog.select_files()
-	
+
 	if files.size() == 1:
 		%ExportFolder.text = files[0]
 		_on_export_folder_text_changed(files[0])
@@ -92,15 +94,15 @@ func _on_resolution_item_selected(index: int) -> void:
 func _on_image_pressed() -> void:
 	var path: String = %ExportFolder.text
 	var file_name: String = %ExportFile.text
-	
-	
+
+
 	if file_name:
 		file_name = interpret_file_name(file_name, path)
-	
+
 	if path.is_empty():
 		var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-		
+
 		if not file_name.is_empty():
 			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
 			file_dialog.title = 'Save Image "'+file_name+'"'
@@ -109,20 +111,20 @@ func _on_image_pressed() -> void:
 			file_dialog.title = 'Save Image'
 			file_dialog.add_filter("*.png; PNG image file")
 			file_dialog.add_filter("*.exr; EXR image file")
-		
+
 		if mm_globals.config.has_section_key("path", "save_preview"):
 			file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
-	
+
 		var files = await file_dialog.select_files()
-		
+
 		if files.size() > 0:
 			path = files[0]
-	
-	
+
+
 	if file_name:
 		path = path.path_join(file_name)
-	
-	
+
+
 	if path:
 		if %Resolution.selected == RESOLUTION_CUSTOM:
 			owner.export_as_image_file(path, %CustomResolution.get_value())
@@ -154,22 +156,22 @@ func export_notification(text:String) -> void:
 func interpret_file_name(file_name: String, path:="") -> String:
 	if path.is_empty():
 		path = %ExportFolder.text
-	
+
 	if owner.generator:
 		file_name = file_name.replace("$node", owner.generator.name)
 	else:
 		file_name = file_name.replace("$node", "unnamed")
-	
+
 	var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
 	if current_graph.save_path:
 		file_name = file_name.replace("$project", current_graph.save_path.get_file().trim_suffix("."+current_graph.save_path.get_extension()))
 	else:
 		file_name = file_name.replace("$project", "unnamed_project")
-	
+
 	match %FileType.selected:
 		0: file_name += ".png"
 		1: file_name += ".exr"
-	
+
 	if "$idx" in file_name:
 		if path:
 			var idx := 1

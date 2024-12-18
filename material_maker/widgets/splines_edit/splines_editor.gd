@@ -19,10 +19,19 @@ var progressive := false
 
 func _ready():
 	%DrawMode.button_group.pressed.connect(func(button):mode = Modes.DRAW if button.name == "DrawMode" else Modes.SELECT)
+
+	%DrawMode.icon = get_theme_icon("draw", "MM_Icons")
+	%SelectMode.icon = get_theme_icon("select", "MM_Icons")
+	%DeleteControlPoints.icon = get_theme_icon("delete", "MM_Icons")
+	%UnlinkControlPoints.icon = get_theme_icon("spline_unlink", "MM_Icons")
+	%LinkControlPoints.icon = get_theme_icon("spline_link", "MM_Icons")
+	%Progressive.icon = get_theme_icon("spline_progressive", "MM_Icons")
+	%ReverseSelection.icon = get_theme_icon("spline_reverse", "MM_Icons")
+
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
-	
+
 	super._ready()
 	update_controls()
 

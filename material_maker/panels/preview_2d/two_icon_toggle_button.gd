@@ -1,7 +1,7 @@
 extends Button
 
-@export var icon_normal : Texture2D 
-@export var icon_pressed : Texture2D 
+@export var icon_normal_name := ""
+@export var icon_pressed_name := ""
 
 func _ready() -> void:
 	toggled.connect(_on_toggled)
@@ -10,7 +10,6 @@ func _ready() -> void:
 
 func _on_toggled(toggled:= false):
 	if button_pressed:
-		icon = icon_pressed
+		icon = get_theme_icon(icon_pressed_name, "MM_Icons")
 	else:
-		icon = icon_normal
-		
+		icon = get_theme_icon(icon_normal_name, "MM_Icons")

@@ -1,8 +1,8 @@
 [gd_resource type="Theme" script_class="EnhancedTheme" load_steps=34 format=3 uid="uid://dhuhq2immquoh"]
 
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="3_xjelh"]
-[ext_resource type="Script" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_0efyb"]
-[ext_resource type="Script" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="5_yjidp"]
+[ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_0efyb"]
+[ext_resource type="Script" uid="uid://cvv2rdxv4oql6" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="5_yjidp"]
 
 [sub_resource type="Resource" id="Resource_silay"]
 script = ExtResource("4_0efyb")

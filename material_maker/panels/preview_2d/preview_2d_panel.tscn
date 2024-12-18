@@ -1,21 +1,20 @@
-[gd_scene load_steps=34 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=28 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
+[ext_resource type="Script" uid="uid://cj476fi1ociuw" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://djura7a50b2aq" path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" id="4_gd40d"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
+[ext_resource type="Script" uid="uid://p2topj3y4p63" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://b08bcbwwosrrk" path="res://material_maker/widgets/splines_edit/splines_editor.tscn" id="5_5hlfo"]
 [ext_resource type="PackedScene" uid="uid://b51634rcdiyr" path="res://material_maker/widgets/pixels_edit/pixels_editor.tscn" id="6_m4663"]
 [ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="7_u2w4r"]
-[ext_resource type="Texture2D" uid="uid://dnyj2y655qc1o" path="res://material_maker/theme/new_theme_icons.png" id="10_l6r53"]
 [ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="12_4017l"]
-[ext_resource type="Script" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="12_nrhap"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="12_nrhap"]
+[ext_resource type="Script" uid="uid://5r7ncawc0gx7" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="14_qr76f"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
+[ext_resource type="Script" uid="uid://ca5sfnwa05qm2" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
+[ext_resource type="Script" uid="uid://pielyrq85378" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
 
 [sub_resource type="Shader" id="Shader_0mwcg"]
@@ -52,7 +51,7 @@ shader_parameter/preview_2d_size = Vector2(100, 100)
 shader_parameter/preview_2d_scale = 1.655
 shader_parameter/preview_2d_center = Vector2(0.46, 0.56)
 shader_parameter/mode = 2
-shader_parameter/background_color = Vector4(0, 0, 0, 0)
+shader_parameter/background_color = Vector4(0, 0, 0, 0.575)
 shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 1)
 shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 1)
 
@@ -72,10 +71,6 @@ resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("5")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_p8pw4"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(0, 0, 16, 16)
-
 [sub_resource type="InputEventKey" id="InputEventKey_qowqu"]
 device = -1
 command_or_control_autoremap = true
@@ -83,14 +78,6 @@ keycode = 82
 
 [sub_resource type="Shortcut" id="Shortcut_fwcfb"]
 events = [SubResource("InputEventKey_qowqu")]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_72vod"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mtqjj"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="FontVariation" id="FontVariation_wkuuo"]
 base_font = ExtResource("18_kn37y")
@@ -104,21 +91,13 @@ keycode = 69
 [sub_resource type="Shortcut" id="Shortcut_llf02"]
 events = [SubResource("InputEventKey_rhw4u")]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_khhtg"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(96, 80, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nstr1"]
-atlas = ExtResource("10_l6r53")
-region = Rect2(80, 80, 16, 16)
-
 [node name="Preview2D" instance=ExtResource("3")]
 material = SubResource("2")
 custom_minimum_size = Vector2(100, 100)
 offset_left = 8.0
 offset_top = -5.0
-offset_right = 129.0
-offset_bottom = 116.0
+offset_right = 481.0
+offset_bottom = 414.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
@@ -403,7 +382,7 @@ clip_contents = false
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 28.0
+offset_bottom = 25.0
 grow_horizontal = 2
 theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
@@ -430,10 +409,11 @@ shortcut_context = NodePath("../../../../..")
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
-icon = SubResource("AtlasTexture_p8pw4")
 script = ExtResource("12_nrhap")
+icon_name = "view"
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
+visible = false
 top_level = true
 layout_mode = 0
 offset_left = -53.0
@@ -467,6 +447,7 @@ layout_mode = 2
 selected = 0
 item_count = 5
 popup/item_0/text = "Extend"
+popup/item_0/id = 0
 popup/item_1/text = "Repeat"
 popup/item_1/id = 1
 popup/item_2/text = "Clamp"
@@ -487,6 +468,7 @@ layout_mode = 2
 selected = 0
 item_count = 6
 popup/item_0/text = "None"
+popup/item_0/id = 0
 popup/item_1/text = "Lowres 32x32"
 popup/item_1/id = 1
 popup/item_2/text = "Lowres 64x64"
@@ -513,6 +495,7 @@ size_flags_horizontal = 3
 selected = 0
 item_count = 8
 popup/item_0/text = "None"
+popup/item_0/id = 0
 popup/item_1/text = "Corners"
 popup/item_1/id = 1
 popup/item_2/text = "Lines"
@@ -557,11 +540,10 @@ shortcut_context = NodePath("../../../../..")
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
-icon = SubResource("AtlasTexture_72vod")
 script = ExtResource("12_nrhap")
+icon_name = "export"
 
 [node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
-visible = false
 top_level = true
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 0
@@ -595,7 +577,6 @@ theme_override_font_sizes/font_size = 15
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
-icon = SubResource("AtlasTexture_mtqjj")
 icon_alignment = 1
 
 [node name="ExportFileLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="2"]
@@ -623,6 +604,7 @@ layout_mode = 2
 selected = 0
 item_count = 2
 popup/item_0/text = ".png"
+popup/item_0/id = 0
 popup/item_1/text = ".exr"
 popup/item_1/id = 1
 
@@ -644,6 +626,7 @@ layout_mode = 2
 selected = 4
 item_count = 9
 popup/item_0/text = "64x64"
+popup/item_0/id = 0
 popup/item_1/text = "128x128"
 popup/item_1/id = 1
 popup/item_2/text = "256x256"
@@ -729,8 +712,8 @@ tooltip_text = "Lock this preview"
 toggle_mode = true
 icon_alignment = 1
 script = ExtResource("17_07kc5")
-icon_normal = SubResource("AtlasTexture_khhtg")
-icon_pressed = SubResource("AtlasTexture_nstr1")
+icon_normal_name = "lock_unlocked"
+icon_pressed_name = "lock_locked"
 
 [node name="ComplexParameters" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox" index="3"]
 unique_name_in_owner = true

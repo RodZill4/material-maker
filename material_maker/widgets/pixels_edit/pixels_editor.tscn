@@ -1,15 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://b51634rcdiyr"]
+[gd_scene load_steps=6 format=3 uid="uid://b51634rcdiyr"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_07x6a"]
-[ext_resource type="Script" path="res://material_maker/widgets/pixels_edit/pixels_editor.gd" id="2_bpua1"]
-[ext_resource type="Texture2D" uid="uid://dnyj2y655qc1o" path="res://material_maker/theme/new_theme_icons.png" id="3_pl73b"]
-[ext_resource type="Script" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="4_xknkb"]
+[ext_resource type="Script" uid="uid://n2cq7cn7q7ih" path="res://material_maker/widgets/pixels_edit/pixels_editor.gd" id="2_bpua1"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="4_xknkb"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4_ymoey"]
-[ext_resource type="Script" path="res://material_maker/widgets/pixels_edit/settings_panel.gd" id="5_t0t7h"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4fnpr"]
-atlas = ExtResource("3_pl73b")
-region = Rect2(32, 0, 16, 16)
+[ext_resource type="Script" uid="uid://p2e1g2v1rmc1" path="res://material_maker/widgets/pixels_edit/settings_panel.gd" id="5_t0t7h"]
 
 [node name="PixelsEditor" instance=ExtResource("1_07x6a")]
 offset_left = 0.0
@@ -41,8 +36,8 @@ size_flags_vertical = 0
 tooltip_text = "Pixel Settings"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
-icon = SubResource("AtlasTexture_4fnpr")
 script = ExtResource("4_xknkb")
+icon_name = "settings"
 
 [node name="SettingsPanel" type="PanelContainer" parent="PixelMenu/UI/PixelSettings" index="0"]
 unique_name_in_owner = true

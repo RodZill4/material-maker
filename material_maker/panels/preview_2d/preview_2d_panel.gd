@@ -9,7 +9,7 @@ var preview_mode := Modes.CUSTOM_PREVIEW:
 			config_var_suffix = "_2"
 		else:
 			config_var_suffix = ""
-			
+
 
 @export var config_var_suffix : String = ""
 
@@ -39,10 +39,15 @@ func _ready():
 	reset_view()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		update_shader_options()
+
+
 func clear() -> void:
 	set_generator(null)
 	%PreviewLocked.button_pressed = false
-	
+
 	%PreviewLocked.visible = false
 	%ExportMenu.visible = preview_mode != Modes.CUSTOM_PREVIEW
 
@@ -54,10 +59,10 @@ func get_shader_custom_functions():
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	super.set_generator(g, o, force)
 	update_shader_options()
-	
+
 	%PreviewLocked.visible = g != null and preview_mode != Modes.CUSTOM_PREVIEW
-	
-	if preview_mode != Modes.CUSTOM_PREVIEW:
+
+	if preview_mode != Modes.CUSTOM_PREVIEW and is_inside_tree():
 		var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
 		if current_graph:
 			%PreviewLocked.button_pressed = current_graph.locked_preview[preview_mode-1] != null
@@ -130,7 +135,7 @@ func setup_controls(filter : String = "") -> void:
 					%ComplexParameters.set_item_metadata(i, complex_param_defs[i])
 				%ComplexParameters.selected = 0
 				%ComplexParameters.visible = true
-	
+
 		for e in [ $PolygonEditor, $SplinesEditor, $PixelsEditor, $LatticeEditor ]:
 			e.setup_control(generator, edited_parameter)
 	else:
@@ -288,7 +293,7 @@ func _on_Preview2D_mouse_entered():
 func _on_preview_locked_toggled(toggled_on: bool) -> void:
 	if preview_mode == Modes.CUSTOM_PREVIEW:
 		return
-	
+
 	var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
 	if current_graph.locked_preview[preview_mode-1] != null and toggled_on:
 		return

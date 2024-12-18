@@ -13,7 +13,7 @@ signal unhandled_event(event : InputEvent)
 func _ready() -> void:
 	super()
 	%SettingsPanel.pixel_editor = self
-	
+
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
@@ -50,7 +50,7 @@ func update_color_buttons() -> void:
 		colors.get_child(ci).color = pixels.palette[ci]
 	if current_color < 0 or current_color >= palette_size:
 		current_color = 0
-	
+
 
 func set_current_color(c : int) -> void:
 	current_color = c
