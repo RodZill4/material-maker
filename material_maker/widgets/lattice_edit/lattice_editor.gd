@@ -2,7 +2,8 @@ extends "res://material_maker/widgets/lattice_edit/lattice_view.gd"
 
 
 @onready var control_points : Control = $ControlPoints
-
+@onready var size_edit: Control = %Size
+@onready var menu_bar: Control = $LatticeMenu
 
 signal value_changed(value : MMLattice)
 signal unhandled_event(event : InputEvent)
@@ -10,13 +11,20 @@ signal unhandled_event(event : InputEvent)
 
 func _ready():
 	super._ready()
+	
+	if get_parent().has_method("add_menu_bar"):
+		menu_bar.get_parent().remove_child(menu_bar)
+		get_parent().add_menu_bar(menu_bar, self)
+	
 	update_controls()
+
 
 func set_lattice(p : MMLattice) -> void:
 	lattice = p
-	$Size.value = lattice.size.x
+	size_edit.value = lattice.size.x
 	queue_redraw()
 	update_controls()
+
 
 func update_controls() -> void:
 	for c in control_points.get_children():
@@ -30,11 +38,13 @@ func update_controls() -> void:
 		control_point.connect("moved", Callable(self, "_on_ControlPoint_moved"))
 	emit_signal("value_changed", lattice)
 
+
 func is_editing() -> bool:
 	for c in control_points.get_children():
 		if c.is_moving:
 			return true
 	return false
+
 
 func _on_size_value_changed(value):
 	if value != lattice.size.x:
