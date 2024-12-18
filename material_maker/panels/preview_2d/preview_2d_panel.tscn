@@ -612,7 +612,6 @@ popup/item_1/id = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-theme_override_colors/font_color = Color(0.569503, 0.480253, 0.24056, 1)
 theme_override_fonts/font = SubResource("FontVariation_wkuuo")
 
 [node name="ResolutionLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="5"]

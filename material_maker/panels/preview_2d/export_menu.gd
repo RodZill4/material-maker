@@ -16,7 +16,12 @@ func _ready() -> void:
 
 	owner.generator_changed.connect(update)
 
-	%ExportFolderButton.icon = get_theme_icon("folder", "MM_Icons")
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		%ExportFolderButton.icon = get_theme_icon("folder", "MM_Icons")
+		%ExportFileResultLabel.add_theme_color_override("font_color", get_theme_color("font_color", "Label").lerp(Color.ORANGE, 0.5))
+		%ExportNotificationLabel.add_theme_color_override("font_color", get_theme_color("font_color", "Label").lerp(get_theme_color("icon_pressed_color", "Button"), 0.5))
 
 
 func _open() -> void:
