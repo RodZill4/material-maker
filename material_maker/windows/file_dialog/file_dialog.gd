@@ -12,6 +12,7 @@ signal return_paths(path_list)
 
 
 func _ready() -> void:
+	min_size = Vector2(500, 500)
 	if DIALOG_HACK:
 		var vbox = get_vbox()
 		var hbox = HSplitContainer.new()

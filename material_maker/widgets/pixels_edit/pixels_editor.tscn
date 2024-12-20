@@ -1,13 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://b51634rcdiyr"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_07x6a"]
-[ext_resource type="Script" path="res://material_maker/widgets/pixels_edit/pixels_editor.gd" id="2_bpua1"]
-[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="3_hp3rp"]
+[ext_resource type="Script" uid="uid://n2cq7cn7q7ih" path="res://material_maker/widgets/pixels_edit/pixels_editor.gd" id="2_bpua1"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="4_xknkb"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4_ymoey"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_01pt6"]
-atlas = ExtResource("3_hp3rp")
-region = Rect2(0, 0, 16, 16)
+[ext_resource type="Script" uid="uid://p2e1g2v1rmc1" path="res://material_maker/widgets/pixels_edit/settings_panel.gd" id="5_t0t7h"]
 
 [node name="PixelsEditor" instance=ExtResource("1_07x6a")]
 offset_left = 0.0
@@ -22,76 +19,87 @@ draw_area = true
 auto_rescale = true
 alpha = 1.0
 
-[node name="UI" type="HBoxContainer" parent="." index="0"]
-layout_mode = 1
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PixelMenu" type="PanelContainer" parent="." index="0"]
+layout_mode = 0
+offset_right = 52.0
+offset_bottom = 25.0
+theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="Colors" type="GridContainer" parent="UI" index="0"]
+[node name="UI" type="HBoxContainer" parent="PixelMenu" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="PixelSettings" type="Button" parent="PixelMenu/UI" index="0"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Pixel Settings"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+script = ExtResource("4_xknkb")
+icon_name = "settings"
+
+[node name="SettingsPanel" type="PanelContainer" parent="PixelMenu/UI/PixelSettings" index="0"]
 unique_name_in_owner = true
+top_level = true
 layout_mode = 2
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-columns = 2
+offset_left = 10.0
+offset_top = 39.0
+offset_right = 126.0
+offset_bottom = 124.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("5_t0t7h")
 
-[node name="Settings" type="VBoxContainer" parent="UI" index="1"]
-layout_mode = 2
-
-[node name="SettingsButton" type="TextureButton" parent="UI/Settings" index="0"]
-layout_mode = 2
-size_flags_horizontal = 0
-texture_normal = SubResource("AtlasTexture_01pt6")
-
-[node name="SettingsPanel" type="PanelContainer" parent="UI/Settings" index="1"]
-unique_name_in_owner = true
-visible = false
+[node name="Grid" type="GridContainer" parent="PixelMenu/UI/PixelSettings/SettingsPanel" index="0"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="UI/Settings/SettingsPanel" index="0"]
+[node name="WidthHeightLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="0"]
 layout_mode = 2
-columns = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Width and Height"
 
-[node name="WidthLabel" type="Label" parent="UI/Settings/SettingsPanel/GridContainer" index="0"]
+[node name="Box" type="BoxContainer" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="1"]
 layout_mode = 2
-text = "Width:"
 
-[node name="Width" parent="UI/Settings/SettingsPanel/GridContainer" index="1" instance=ExtResource("4_ymoey")]
-unique_name_in_owner = true
+[node name="Width" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box" index="0" instance=ExtResource("4_ymoey")]
 layout_mode = 2
-text = "8"
 value = 8.0
 min_value = 2.0
 max_value = 32.0
 step = 1.0
 float_only = true
 
-[node name="HeightLabel" type="Label" parent="UI/Settings/SettingsPanel/GridContainer" index="2"]
+[node name="Height" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box" index="1" instance=ExtResource("4_ymoey")]
 layout_mode = 2
-text = "Height:"
-
-[node name="Height" parent="UI/Settings/SettingsPanel/GridContainer" index="3" instance=ExtResource("4_ymoey")]
-unique_name_in_owner = true
-layout_mode = 2
-text = "8"
 value = 8.0
 min_value = 2.0
 max_value = 32.0
 step = 1.0
 float_only = true
 
-[node name="BPPLabel" type="Label" parent="UI/Settings/SettingsPanel/GridContainer" index="4"]
+[node name="BPPLabel" type="Label" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="2"]
 layout_mode = 2
-text = "BPP:"
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Bits Per Pixel"
 
-[node name="BPP" parent="UI/Settings/SettingsPanel/GridContainer" index="5" instance=ExtResource("4_ymoey")]
-unique_name_in_owner = true
+[node name="BPP" parent="PixelMenu/UI/PixelSettings/SettingsPanel/Grid" index="3" instance=ExtResource("4_ymoey")]
 layout_mode = 2
-text = "1"
 value = 1.0
 min_value = 1.0
 max_value = 4.0
 step = 1.0
 float_only = true
 
+[node name="VSeparator" type="VSeparator" parent="PixelMenu/UI" index="1"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSeparator"
+
+[node name="Colors" type="GridContainer" parent="PixelMenu/UI" index="2"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 8
+
 [connection signal="gui_input" from="." to="." method="_on_PixelsEditor_gui_input"]
-[connection signal="pressed" from="UI/Settings/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box/Width" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_width_value_changed"]
+[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/Box/Height" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_height_value_changed"]
+[connection signal="value_changed" from="PixelMenu/UI/PixelSettings/SettingsPanel/Grid/BPP" to="PixelMenu/UI/PixelSettings/SettingsPanel" method="_on_bpp_value_changed"]
