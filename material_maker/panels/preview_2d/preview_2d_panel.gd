@@ -21,9 +21,22 @@ var preview_mode := Modes.CUSTOM_PREVIEW:
 var center : Vector2 = Vector2(0.5, 0.5)
 var view_scale : float = 1.2
 
-var view_mode : int = 2
+var view_mode : int = 2:
+	set(v):
+		if v == view_mode:
+			return
+		view_mode = v
+		material.set_shader_parameter("mode", view_mode)
+		mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)
 
-var current_postprocess_option := 0
+var view_filter : int = 0:
+	set(v):
+		if v == view_filter:
+			return
+		view_filter = v
+		set_generator(generator, output, true)
+		mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", view_filter)
+
 const POSTPROCESS_OPTIONS : Array = [
 	{ name="None", function="preview_2d(uv)" },
 	{ name="Lowres 32x32", function="preview_2d((floor(uv*32.0)+vec2(0.5))/32.0)" },
@@ -37,6 +50,10 @@ const POSTPROCESS_OPTIONS : Array = [
 func _ready():
 	clear()
 	reset_view()
+	if mm_globals.has_config("preview"+config_var_suffix+"_view_mode"):
+		view_mode = mm_globals.get_config("preview"+config_var_suffix+"_view_mode")
+	if mm_globals.has_config("preview"+config_var_suffix+"_view_postprocess"):
+		view_filter = mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess")
 
 
 func _notification(what: int) -> void:
@@ -53,7 +70,7 @@ func clear() -> void:
 
 
 func get_shader_custom_functions():
-	return "vec4 preview_2d_postprocessed(vec2 uv) { return %s; }\n" % POSTPROCESS_OPTIONS[current_postprocess_option].function
+	return "vec4 preview_2d_postprocessed(vec2 uv) { return %s; }\n" % POSTPROCESS_OPTIONS[view_filter].function
 
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
@@ -260,28 +277,6 @@ func reset_view() -> void:
 	center = Vector2(0.5, 0.5)
 	view_scale = 1.2
 	update_shader_options()
-
-
-func set_view_mode(id:int) -> void:
-	if id == view_mode:
-		return
-	view_mode = id
-	material.set_shader_parameter("mode", view_mode)
-	mm_globals.set_config("preview"+config_var_suffix+"_view_mode", view_mode)
-
-
-func get_view_mode() -> int:
-	return view_mode
-
-
-func set_post_processing(id:int) -> void:
-	current_postprocess_option = id
-	set_generator(generator, output, true)
-	mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", current_postprocess_option)
-
-
-func get_post_processing() -> int:
-	return current_postprocess_option
 
 #endregion
 

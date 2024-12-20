@@ -413,56 +413,55 @@ script = ExtResource("12_nrhap")
 icon_name = "view"
 
 [node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
-visible = false
 top_level = true
 layout_mode = 0
-offset_left = -53.0
-offset_top = 34.0
-offset_right = 92.0
-offset_bottom = 115.0
+offset_left = 493.0
+offset_top = 9.0
+offset_right = 817.0
+offset_bottom = 145.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("13_5w2hy")
 
-[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" index="0"]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="0"]
-visible = false
-layout_mode = 2
-
-[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="1"]
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" index="0"]
 unique_name_in_owner = true
 layout_mode = 2
 shortcut = SubResource("Shortcut_fwcfb")
 text = "Center View"
 
-[node name="ViewModeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="2"]
+[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" index="1"]
+layout_mode = 2
+columns = 2
+
+[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="0"]
+visible = false
+layout_mode = 2
+
+[node name="ViewModeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="1"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-text = "View Mode"
+text = "View"
 
-[node name="ViewMode" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="3" instance=ExtResource("12_4017l")]
+[node name="ViewMode" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="2" instance=ExtResource("12_4017l")]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
-item_count = 5
+item_count = 3
 popup/item_0/text = "Extend"
 popup/item_0/id = 0
 popup/item_1/text = "Repeat"
 popup/item_1/id = 1
 popup/item_2/text = "Clamp"
 popup/item_2/id = 2
-popup/item_3/text = "Temporal AA"
-popup/item_3/id = 3
-popup/item_4/text = "Remporal AA 2.2"
-popup/item_4/id = 4
 
-[node name="PostProcessingLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="4"]
+[node name="PostProcessingLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="3"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-text = "Post Processing"
+text = "Filter"
 
-[node name="PostProcessing" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="5" instance=ExtResource("12_4017l")]
+[node name="PostProcessing" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="4" instance=ExtResource("12_4017l")]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
@@ -480,49 +479,30 @@ popup/item_4/id = 4
 popup/item_5/text = "Lowres 512x512"
 popup/item_5/id = 5
 
-[node name="GuidesLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="6"]
+[node name="GuidesLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="5"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Guides"
 
-[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="7"]
+[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox" index="6"]
 layout_mode = 2
 
-[node name="Guides" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer" index="0" instance=ExtResource("12_4017l")]
+[node name="Guides" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/BoxContainer" index="0" instance=ExtResource("12_4017l")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
-item_count = 8
+item_count = 4
 popup/item_0/text = "None"
 popup/item_0/id = 0
 popup/item_1/text = "Corners"
 popup/item_1/id = 1
 popup/item_2/text = "Lines"
 popup/item_2/id = 2
-popup/item_3/text = "Grid 4x4"
+popup/item_3/text = "Grid"
 popup/item_3/id = 3
-popup/item_4/text = "Grid 8x8"
-popup/item_4/id = 4
-popup/item_5/text = "Grid 10x10"
-popup/item_5/id = 5
-popup/item_6/text = "Grid 16x16"
-popup/item_6/id = 6
-popup/item_7/text = "Grid Custom"
-popup/item_7/id = 7
 
-[node name="GuidesColor" type="ColorPickerButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer" index="1"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(25, 0)
-layout_mode = 2
-
-[node name="CustomGridSizeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="8"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-text = "Custom Grid Size"
-
-[node name="CustomGridSize" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="9" instance=ExtResource("14_qr76f")]
+[node name="CustomGridSize" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/BoxContainer" index="1" instance=ExtResource("14_qr76f")]
 unique_name_in_owner = true
 layout_mode = 2
 value = 10.0
@@ -530,6 +510,11 @@ min_value = 1.0
 max_value = 32.0
 step = 1.0
 float_only = true
+
+[node name="GuidesColor" type="ColorPickerButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/BoxContainer" index="2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
 
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
@@ -547,10 +532,10 @@ icon_name = "export"
 top_level = true
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 0
-offset_left = -74.0
-offset_top = 36.0
-offset_right = 252.0
-offset_bottom = 341.0
+offset_left = 491.0
+offset_top = 189.0
+offset_right = 817.0
+offset_bottom = 594.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("16_0fl4g")
 
@@ -725,12 +710,12 @@ layout_mode = 2
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
-[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_reset_view_button_pressed"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ViewMode" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_view_mode_item_selected"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/PostProcessing" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_post_processing_item_selected"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/Guides" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_item_selected"]
-[connection signal="color_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/GuidesColor" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_color_color_changed"]
-[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/CustomGridSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_custom_grid_size_value_changed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_reset_view_button_pressed"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/ViewMode" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_view_mode_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/PostProcessing" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_post_processing_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/BoxContainer/Guides" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_item_selected"]
+[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/BoxContainer/CustomGridSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_custom_grid_size_value_changed"]
+[connection signal="color_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBox/BoxContainer/GuidesColor" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_color_color_changed"]
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/ExportFolder/ExportFolder" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_text_changed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/ExportFolder/ExportFolderButton" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_button_pressed"]
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/ExportFile/ExportFile" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_file_text_changed"]
