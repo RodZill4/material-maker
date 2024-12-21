@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=117 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=118 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://c7mq31csbj1fg" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -374,6 +374,10 @@ region = Rect2(64, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_nkmvd"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(48, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w0re2"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(96, 128, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ck0hb"]
 atlas = ExtResource("1_s43fy")
@@ -956,6 +960,7 @@ MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
 MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
 MM_Icons/icons/pin_pinned = SubResource("AtlasTexture_du4od")
 MM_Icons/icons/pin_unpinned = SubResource("AtlasTexture_nkmvd")
+MM_Icons/icons/reset_view = SubResource("AtlasTexture_w0re2")
 MM_Icons/icons/select = SubResource("AtlasTexture_ck0hb")
 MM_Icons/icons/settings = SubResource("AtlasTexture_33srw")
 MM_Icons/icons/spline_link = SubResource("AtlasTexture_fs6qc")

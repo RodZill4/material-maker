@@ -16,10 +16,6 @@ func _open() -> void:
 	size = Vector2()
 
 
-func _on_reset_view_button_pressed() -> void:
-	owner.reset_view()
-
-
 func _on_view_mode_item_selected(index: int) -> void:
 	owner.view_mode = index
 

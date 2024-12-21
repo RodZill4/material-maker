@@ -69,7 +69,9 @@ func _on_export_folder_button_pressed() -> void:
 	#file_dialog.add_filter("*.exr; EXR image file")
 
 	if %ExportFolder.text:
-		file_dialog.current_dir = mm_globals.config.get_value("path", %ExportFolder.text)
+		var current_dir = mm_globals.config.get_value("path", %ExportFolder.text)
+		if current_dir is String:
+			file_dialog.current_dir = current_dir
 
 	var files = await file_dialog.select_files()
 
@@ -93,13 +95,21 @@ func _on_resolution_item_selected(index: int) -> void:
 	mm_globals.set_config(export_settings.resolution, index)
 	%CustomResolutionSection.visible = index == RESOLUTION_CUSTOM
 	if index != RESOLUTION_CUSTOM:
-		%CustomResolution.set_value(64 << index)
+		%CustomResolutionX.set_value(64 << index)
+		%CustomResolutionY.set_value(64 << index)
+
+
+func get_export_resolution() -> Vector2i:
+		if %Resolution.selected == RESOLUTION_CUSTOM:
+			return Vector2i(int(%CustomResolutionX.value), int(%CustomResolutionY.value))
+		else:
+			var export_size : int = 64 << %Resolution.selected
+			return Vector2i(export_size, export_size)
 
 
 func _on_image_pressed() -> void:
 	var path: String = %ExportFolder.text
 	var file_name: String = %ExportFile.text
-
 
 	if file_name:
 		file_name = interpret_file_name(file_name, path)
@@ -125,16 +135,12 @@ func _on_image_pressed() -> void:
 		if files.size() > 0:
 			path = files[0]
 
-
 	if file_name:
 		path = path.path_join(file_name)
 
 
 	if path:
-		if %Resolution.selected == RESOLUTION_CUSTOM:
-			owner.export_as_image_file(path, %CustomResolution.get_value())
-		else:
-			owner.export_as_image_file(path, 64 << %Resolution.selected)
+		owner.export_as_image_file(path, get_export_resolution())
 		export_notification("Exported to " + path)
 		await get_tree().create_timer(0.5).timeout
 		update()
@@ -149,7 +155,7 @@ func _on_taa_render_pressed() -> void:
 
 
 func _on_reference_pressed() -> void:
-	owner.export_to_reference(%Resolution.selected)
+	owner.export_to_reference(get_export_resolution())
 	export_notification("Exported to Reference")
 
 

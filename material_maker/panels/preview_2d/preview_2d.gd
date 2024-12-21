@@ -125,40 +125,24 @@ func export_taa() -> void:
 	window.popup_centered()
 
 
-func create_image(renderer_function : String, params : Array, image_size : int) -> void:
-	var source = MMGenBase.get_default_generated_shader()
+func create_image(renderer_function : String, params : Array, image_size : Vector2i) -> void:
 	if generator != null:
-		var gen_output_defs = generator.get_output_defs()
-		if ! gen_output_defs.is_empty():
-			var context : MMGenContext = MMGenContext.new()
-			source = generator.get_shader_code("uv", output, context)
-			if source.output_type == "":
-				source = MMGenBase.get_default_generated_shader()
-	# Update shader
-	var tmp_material = ShaderMaterial.new()
-	var shader : Shader = Shader.new()
-	shader.code = MMGenBase.generate_preview_shader(source, source.output_type, "uniform vec2 mm_texture_size;\nuniform float mm_chunk_size = 1.0;\nuniform vec2 mm_chunk_offset = vec2(0.0);\nvoid fragment() {COLOR = preview_2d(mm_chunk_offset+mm_chunk_size*UV);}")
-	tmp_material.shader = shader
-	for u in source.uniforms:
-		tmp_material.set_shader_parameter(u.name, u.value)
-	mm_deps.material_update_params(MMShaderMaterial.new(tmp_material))
-	var renderer = await mm_renderer.request(self)
-	renderer = await renderer.render_material(self, tmp_material, image_size, source.output_type != "rgba")
-	renderer.callv(renderer_function, params)
-	renderer.release(self)
+		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
 
 
-func export_as_image_file(file_name : String, image_size : int) -> void:
+func export_as_image_file(file_name : String, image_size : Vector2i) -> void:
 	mm_globals.config.set_value("path", "save_preview", file_name.get_base_dir())
-	create_image("save_to_file", [ file_name, is_greyscale ], image_size)
+	if generator != null:
+		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
+		await texture.save_to_file(file_name)
 	last_export_filename = file_name
 	last_export_size = image_size
 
 
-func export_to_reference(resolution_id : int):
-	var texture : ImageTexture = ImageTexture.new()
-	await create_image("copy_to_texture", [ texture ], 64 << resolution_id)
-	mm_globals.main_window.get_panel("Reference").add_reference(texture)
+func export_to_reference(image_size : Vector2i):
+	if generator != null:
+		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
+		mm_globals.main_window.get_panel("Reference").add_reference(await texture.get_texture())
 
 
 func _on_Preview2D_visibility_changed():
