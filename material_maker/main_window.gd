@@ -1014,6 +1014,7 @@ func update_preview_2d() -> void:
 		var generator : MMGenBase = null
 		var output_index : int = -1
 		if preview == null or not is_instance_valid(preview.generator):
+			previews[i].clear()
 			continue
 		generator = preview.generator
 		output_index = preview.output_index

@@ -201,10 +201,10 @@ func _ready() -> void:
 
 static func get_default_generated_shader() -> ShaderCode:
 	var rv : ShaderCode = ShaderCode.new()
-	rv.output_type = "f"
+	rv.output_type = "rgba"
 	rv.output_values.f = "0.0"
 	rv.output_values.rgb = "vec3(0.0)"
-	rv.output_values.rgba = "vec4(0.0, 0.0, 0.0, 1.0)"
+	rv.output_values.rgba = "vec4(0.0, 0.0, 0.0, 0.0)"
 	return rv
 
 func _post_load() -> void:
@@ -517,6 +517,7 @@ func generate_output_shader(output_index : int, preview : bool = false):
 	return { shader=shader, output_type=output_type }
 
 func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
+	print("This function is deprecated!")
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
 	var shader : String = output_shader.shader
 	var output_type : String = output_shader.output_type
@@ -524,30 +525,19 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
 
-func render_output_to_texture(output_index : int, size : int) -> MMTexture:
+func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 	var context : MMGenContext = MMGenContext.new()
 	var source : ShaderCode = get_shader_code("uv", output_index, context)
-	var shader_compute : MMShaderCompute = MMShaderCompute.new()
-	var shader_status : bool = await shader_compute.set_shader_from_shadercode(source, false)
+	var compute_shader : MMComputeShader = MMComputeShader.new()
+	var shader_status : bool = await compute_shader.set_shader_from_shadercode(source, false)
 	var texture : MMTexture = MMTexture.new()
 	if shader_status:
-		var status = await shader_compute.render(texture, size)
+		var status = await compute_shader.render_ext([texture], size)
 	return texture
 
-func render_output(output_index : int, size : int) -> Image:
-	var context : MMGenContext = MMGenContext.new()
-	var source : ShaderCode = get_shader_code("uv", output_index, context)
-	var shader_compute : MMShaderCompute = MMShaderCompute.new()
-	var shader_status : bool = await shader_compute.set_shader_from_shadercode(source, false)
-	var image : Image
-	if shader_status:
-		var texture : MMTexture = MMTexture.new()
-		var status = await shader_compute.render(texture, size)
-		if status:
-			image = (await texture.get_texture()).get_image()
-	else:
-		image = Image.new()
-	return image
+func render_output(output_index : int, size : Vector2i) -> Image:
+	var texture : MMTexture = await render_output_to_texture(output_index, size)
+	return (await texture.get_texture()).get_image()
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var rv = _get_shader_code(uv, output_index, context)
