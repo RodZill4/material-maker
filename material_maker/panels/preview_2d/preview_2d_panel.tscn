@@ -74,6 +74,7 @@ shader = SubResource("5")
 
 [sub_resource type="InputEventKey" id="InputEventKey_83edi"]
 command_or_control_autoremap = true
+pressed = true
 keycode = 82
 
 [sub_resource type="Shortcut" id="Shortcut_r76ng"]
@@ -91,7 +92,7 @@ keycode = 69
 [sub_resource type="Shortcut" id="Shortcut_llf02"]
 events = [SubResource("InputEventKey_rhw4u")]
 
-[node name="Preview2D" instance=ExtResource("3")]
+[node name="Preview2D" node_paths=PackedStringArray("shortcut_context") instance=ExtResource("3")]
 material = SubResource("2")
 custom_minimum_size = Vector2(100, 100)
 offset_left = 8.0
@@ -100,6 +101,7 @@ offset_right = 481.0
 offset_bottom = 414.0
 grow_horizontal = 2
 grow_vertical = 2
+shortcut_context = NodePath(".")
 color = Color(1, 1, 1, 0)
 script = ExtResource("4")
 config_var_suffix = ""

@@ -46,8 +46,8 @@ func position_panel() -> void:
 
 
 func _input(event:InputEvent) -> void:
-	if shortcut_context and shortcut_context.get_global_rect().has_point(get_global_mouse_position()) and event.is_pressed():
-		propagate_shortcuts(get_child(0), event)
+	if event.is_pressed():
+		mm_globals.propagate_shortcuts(self, event)
 
 	if not panel.visible:
 		return
@@ -56,24 +56,6 @@ func _input(event:InputEvent) -> void:
 		var node := get_viewport().gui_get_hovered_control()
 		if node != self and not is_ancestor_of(node) and (not pinned or (node and node.script == self.script)):
 			button_pressed = false
-
-
-func propagate_shortcuts(node:Control, event:InputEvent) -> void:
-	for child in node.get_children():
-		if not child is Control or child.is_visible_in_tree():
-			continue
-		if child is Button:
-			if child.shortcut and child.shortcut.matches_event(event):
-				accept_event()
-				if child.toggle_mode:
-					child.button_pressed = not child.button_pressed
-					child.toggled.emit(child.button_pressed)
-				if child is MM_OptionEdit:
-					child.roll()
-				else:
-					child.pressed.emit()
-
-		propagate_shortcuts(child, event)
 
 
 func _gui_input(event: InputEvent) -> void:

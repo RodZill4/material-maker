@@ -218,6 +218,10 @@ func on_resized() -> void:
 var dragging : bool = false
 var zooming : bool = false
 
+func _input(event):
+	if event.is_pressed():
+		mm_globals.propagate_shortcuts(self, event)
+
 func _on_gui_input(event):
 	var need_update : bool = false
 	var new_center : Vector2 = center
