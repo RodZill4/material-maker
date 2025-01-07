@@ -36,6 +36,7 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
+          cp -f material_maker/theme/default_theme_icons.svg material_maker/theme/default_theme_icons_export.svg
           wget -q ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64.zip
           unzip Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64.zip
           wget -q ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
@@ -118,6 +119,7 @@ jobs:
           submodules: true
       - name: Setup environment 🔧
         run: |
+          cp -f material_maker/theme/default_theme_icons.svg material_maker/theme/default_theme_icons_export.svg
           export GODOT_VERSION=${GODOT_VERSION}
           export EXPORT_NAME=material_maker
       - name: Install the Apple certificate and provisioning profile
