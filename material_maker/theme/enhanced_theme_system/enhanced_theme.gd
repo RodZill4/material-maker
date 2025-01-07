@@ -159,12 +159,19 @@ func update(at:Node=null) -> void:
 	if at:
 		at.theme = self
 
+var dynamic_svgs : Dictionary[String, ImageTexture] = {}
 
 func get_dynamic_svg(image_path:String, image_scale:float, color_swaps : Array= []) -> ImageTexture:
+	var key : String = image_path+","+str(image_scale)+","+str(color_swaps.hash())
+	if dynamic_svgs.has(key):
+		return dynamic_svgs[key]
 	if FileAccess.file_exists(image_path.trim_suffix(".svg")+"_export.svg"):
 		image_path = image_path.trim_suffix(".svg")+"_export.svg"
-	var file := FileAccess.open(image_path, FileAccess.READ)
-	var file_text := file.get_as_text()
+	var file : FileAccess = FileAccess.open(image_path, FileAccess.READ)
+	if file == null:
+		print("Cannot open image file ", image_path)
+		return
+	var file_text : String = file.get_as_text()
 	file.close()
 
 	#var regex := RegEx.create_from_string(r"(?<=\d)e-\d")
@@ -175,10 +182,13 @@ func get_dynamic_svg(image_path:String, image_scale:float, color_swaps : Array= 
 			break
 		file_text = file_text.replace(swap.orig.to_html(false), swap.target.to_html(false))
 
-	var img := Image.new()
+	var img : Image = Image.new()
 	img.load_svg_from_buffer(file_text.to_utf8_buffer(), image_scale)
+	var image_texture : ImageTexture = ImageTexture.create_from_image(img)
+	
+	dynamic_svgs[key] = image_texture
 
-	return ImageTexture.create_from_image(img)
+	return image_texture
 
 #
 #func _validate_property(property: Dictionary) -> void:
