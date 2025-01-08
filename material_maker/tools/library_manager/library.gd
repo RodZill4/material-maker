@@ -113,6 +113,7 @@ func get_items(filter : String, disabled_sections : Array, aliased_items : Array
 				array.push_back({ name=i.tree_item, item=i, icon=library_icons[i.tree_item], quality=result_quality})
 	return array
 
+
 func generate_node_sections(node_sections : Dictionary) -> void:
 	for i in library_items:
 		var section = i.tree_item

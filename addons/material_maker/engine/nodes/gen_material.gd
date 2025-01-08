@@ -691,7 +691,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					saved_files += 1
 					progress_dialog.set_progress(float(saved_files)/float(total_files))
 					continue
-				var result : MMTexture = await render_output_to_texture(output_index, size)
+				var result : MMTexture = await render_output_to_texture(output_index, Vector2i(size, size))
 				await result.save_to_file(file_name)
 				saved_files += 1
 				progress_dialog.set_progress(float(saved_files)/float(total_files))

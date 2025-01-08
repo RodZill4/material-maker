@@ -1,8 +1,8 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=34 format=3 uid="uid://u00kx2lkkx8j"]
+[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=35 format=3 uid="uid://u00kx2lkkx8j"]
 
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="1_ugsao"]
-[ext_resource type="Script" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_rhf2q"]
-[ext_resource type="Script" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="5_fagh3"]
+[ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_rhf2q"]
+[ext_resource type="Script" uid="uid://cvv2rdxv4oql6" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="5_fagh3"]
 
 [sub_resource type="Resource" id="Resource_silay"]
 script = ExtResource("4_rhf2q")
@@ -51,6 +51,13 @@ script = ExtResource("4_rhf2q")
 name = "Placeholder Color"
 orig = Color(0.87451, 0.87451, 0.87451, 0.6)
 target = Color(0.169245, 0.169245, 0.169245, 0.6)
+
+[sub_resource type="Resource" id="Resource_3wcad"]
+script = ExtResource("4_rhf2q")
+name = "PanelMenuLabel"
+orig = Color(0.556863, 0.556863, 0.556863, 1)
+target = Color(0.29219, 0.29219, 0.29219, 1)
+metadata/_custom_type_script = ExtResource("4_rhf2q")
 
 [sub_resource type="Resource" id="Resource_cisvi"]
 script = ExtResource("4_rhf2q")
@@ -180,13 +187,13 @@ target = Color(0.617455, 0.617455, 0.617455, 1)
 
 [sub_resource type="Resource" id="Resource_upxps"]
 script = ExtResource("4_rhf2q")
-name = "FloatFillHover"
-orig = Color(0.356863, 0.356863, 0.356863, 1)
-target = Color(0.601223, 0.601223, 0.601223, 1)
+name = "PanelMenuBackgrounds"
+orig = Color(0.0666667, 0.0705882, 0.0784314, 1)
+target = Color(0.912935, 0.916904, 0.924811, 1)
 
 [resource]
 script = ExtResource("5_fagh3")
 base_theme = ExtResource("1_ugsao")
-font_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf")])
+font_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf"), SubResource("Resource_3wcad")])
 icon_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo"), SubResource("Resource_5oh4i")])
-theme_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps")])
+theme_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_upxps")])

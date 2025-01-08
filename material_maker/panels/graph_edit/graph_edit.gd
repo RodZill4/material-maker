@@ -5,10 +5,12 @@ class_name MMGraphEdit
 class Preview:
 	var generator
 	var output_index : int
+	var node : Node
 
-	func _init(g, i : int = 0):
+	func _init(g, i : int = 0, n = null):
 		generator = g
 		output_index = i
+		node = n
 
 
 # warning-ignore:unused_class_variable
@@ -16,7 +18,7 @@ class Preview:
 
 var node_factory = null
 
-var save_path = null: set = set_save_path
+var save_path := "": set = set_save_path
 var need_save : bool = false
 var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
@@ -362,7 +364,7 @@ func update_tab_title() -> void:
 		#print("no set_tab_title method")
 		return
 	var title = "[unnamed]"
-	if save_path != null:
+	if not save_path.is_empty():
 		title = save_path.right(-(save_path.rfind("/")+1))
 	if need_save:
 		title += " *"
@@ -375,7 +377,7 @@ func set_need_save(ns = true) -> void:
 		update_tab_title()
 	need_save_crash_recovery = true
 
-func set_save_path(path) -> void:
+func set_save_path(path: String) -> void:
 	if path != save_path:
 		remove_crash_recovery_file()
 		need_save_crash_recovery = false
@@ -483,7 +485,7 @@ func new_material(init_nodes = {nodes=[{name="Material", type="material",paramet
 		move_child(top_generator, 0)
 		update_view(top_generator)
 		center_view()
-		set_save_path(null)
+		set_save_path("")
 		set_need_save(false)
 
 func get_free_name(type) -> String:
@@ -624,7 +626,7 @@ func save_as() -> bool:
 				return true
 	return false
 
-func save_file(filename) -> bool:
+func save_file(filename:String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
@@ -863,7 +865,11 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 			for n in get_selected_nodes():
 				if n.generator == current_preview[0].generator:
 					return
-		set_current_preview(0, node)
+		if node.get_output_port_count():
+			if Input.is_key_pressed(KEY_SHIFT):
+				set_current_preview(1, node)
+			else:
+				set_current_preview(0, node)
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
@@ -872,17 +878,19 @@ func _on_GraphEdit_node_unselected(_node):
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
-func get_current_preview(slot : int = 0):
+
+func get_current_preview(slot : int = 0) -> Preview:
 	if locked_preview[slot] != null:
 		return locked_preview[slot]
 	return current_preview[slot]
 
-func set_current_preview(slot : int, node, output_index : int = 0, locked = false) -> void:
+
+func set_current_preview(slot: int, node: GraphNode, output_index: int = 0, locked := false, force_unlock := false) -> void:
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
 	if is_instance_valid(node):
-		preview = Preview.new(node.generator, output_index)
+		preview = Preview.new(node.generator, output_index, node)
 	if locked:
 		if is_instance_valid(node) and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
@@ -893,14 +901,19 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	else:
 		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
+		if force_unlock:
+			locked_preview[slot] = null
 		current_preview[slot] = preview
-	emit_signal("preview_changed", self)
+	
+	preview_changed.emit(self)
+	
 	if is_instance_valid(node):
 		node.queue_redraw()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
 			if c is GraphNode and (c.generator == old_preview or c.generator == old_locked_preview):
 				c.queue_redraw()
+
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually  dragged

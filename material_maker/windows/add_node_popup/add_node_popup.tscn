@@ -245,4 +245,3 @@ fixed_icon_size = Vector2i(18, 18)
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/Filter" to="." method="_on_filter_gui_input"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_gui_input"]
 [connection signal="item_activated" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_item_activated"]
-[connection signal="item_clicked" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_item_clicked"]

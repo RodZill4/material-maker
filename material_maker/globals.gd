@@ -147,3 +147,26 @@ static func popup_menu(menu : PopupMenu, parent : Control):
 
 func set_tip_text(tip : String, timeout : float = 0.0):
 	main_window.set_tip_text(tip, timeout)
+
+static func do_propagate_shortcuts(control : Control, event : InputEvent):
+	for child in control.get_children():
+		if not child is Control:
+			continue
+		if child is Button:
+			if child.shortcut and child.shortcut.matches_event(event):
+				control.accept_event()
+				if child.toggle_mode:
+					child.button_pressed = not child.button_pressed
+					child.toggled.emit(child.button_pressed)
+				if child is MM_OptionEdit:
+					child.roll()
+				else:
+					child.pressed.emit()
+		do_propagate_shortcuts(child, event)
+
+static func propagate_shortcuts(control : Control, event : InputEvent):
+	if not control.shortcut_context:
+		return
+	if not control.shortcut_context.get_global_rect().has_point(control.get_global_mouse_position()):
+		return
+	do_propagate_shortcuts(control, event)

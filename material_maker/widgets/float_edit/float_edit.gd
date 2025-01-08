@@ -31,7 +31,6 @@ var _step_decimals := 2
 var start_position: float
 var last_position: float
 var start_value: float
-var modifiers: int
 var from_lower_bound: bool = false
 var from_upper_bound: bool = false
 var actually_dragging: bool = false
@@ -39,7 +38,7 @@ var actually_dragging: bool = false
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
 
-enum Modes {IDLE, SLIDING, EDITING}
+enum Modes {IDLE, SLIDING, EDITING, UNEDITABLE}
 var mode := Modes.IDLE:
 	set(m):
 		mode = m
@@ -56,6 +55,15 @@ var mode := Modes.IDLE:
 			$Edit.alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			$Edit.mouse_filter = MOUSE_FILTER_IGNORE
 		update()
+
+var editable := true:
+	set(val):
+		if val:
+			mode = Modes.UNEDITABLE
+		else:
+			mode = Modes.IDLE
+	get:
+		return mode != Modes.UNEDITABLE
 
 
 func get_value() -> Variant:
@@ -103,17 +111,6 @@ func set_value_from_expression_editor(v: String) -> void:
 		set_value(v, true)
 
 
-func get_modifiers(event:InputEvent) -> int:
-	var new_modifiers = 0
-	if event.shift_pressed:
-		new_modifiers |= 1
-	if event.is_command_or_control_pressed():
-		new_modifiers |= 2
-	if event.alt_pressed:
-		new_modifiers |= 4
-	return new_modifiers
-
-
 func _input(event:InputEvent) -> void:
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
@@ -139,7 +136,6 @@ func _gui_input(event: InputEvent) -> void:
 				from_lower_bound = float_value <= min_value
 				from_upper_bound = float_value >= max_value
 				actually_dragging = false
-				modifiers = get_modifiers(event)
 				$Edit.grab_focus()
 
 		if event.is_action("ui_accept") and event.pressed:

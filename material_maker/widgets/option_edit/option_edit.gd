@@ -1,3 +1,4 @@
+class_name MM_OptionEdit
 extends OptionButton
 
 
@@ -11,13 +12,17 @@ func _gui_input(event: InputEvent) -> void:
 	if event.is_command_or_control_pressed() and event is InputEventMouseButton and event.pressed:
 		
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				selected = wrap(selected+1, 0, item_count)
-			else:
-				selected = wrap(selected-1, 0, item_count)
-
-			item_selected.emit(selected)
+			roll(event.button_index == MOUSE_BUTTON_WHEEL_DOWN)
 			accept_event()
+
+
+func roll(roll_up:= false) -> void:
+	if roll_up:
+		selected = wrap(selected-1, 0, item_count)
+	else:
+		selected = wrap(selected+1, 0, item_count)
+	
+	item_selected.emit(selected)
 
 
 func _on_about_to_popup() -> void:
@@ -28,6 +33,10 @@ func _on_about_to_popup() -> void:
 
 
 func _input(event:InputEvent) -> void:
+	if is_visible_in_tree() and shortcut and shortcut.matches_event(event) and event.is_pressed():
+		roll()
+		accept_event()
+	
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
 	if event is InputEventKey and event.is_command_or_control_pressed() and event.pressed:
