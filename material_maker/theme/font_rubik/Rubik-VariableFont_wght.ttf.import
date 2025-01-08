@@ -23,6 +23,7 @@ allow_system_fallback=true
 force_autohinter=false
 hinting=0
 subpixel_positioning=2
+keep_rounding_remainders=true
 oversampling=2.0
 Fallbacks=null
 fallbacks=[]

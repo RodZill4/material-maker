@@ -663,14 +663,14 @@ func export_material(export_prefix, profile) -> void:
 func get_selected_nodes() -> Array:
 	var selected_nodes = []
 	for n in get_children():
-		if n is GraphNode and n.selected:
+		if n is GraphElement and n.selected:
 			selected_nodes.append(n)
 	return selected_nodes
 
 func remove_selection() -> void:
 	var prev = generator.serialize()
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+		if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
 			do_remove_node(c)
 	var next = generator.serialize()
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
@@ -680,7 +680,7 @@ func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
 	if nodes.is_empty():
 		for c in get_children():
-			if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+			if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
 				nodes.append(c)
 	if nodes.is_empty():
 		return {}
@@ -705,7 +705,7 @@ func serialize_selection(nodes = []) -> Dictionary:
 
 func can_copy() -> bool:
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+		if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
 			return true
 	return false
 
@@ -721,7 +721,7 @@ func do_paste(data) -> void:
 	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
 		node_position = offset_from_global_position(get_global_mouse_position())
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = false
 	var new_nodes = await create_nodes(data, node_position)
 	if new_nodes != null:
@@ -750,17 +750,17 @@ func duplicate_selected() -> void:
 
 func select_all() -> void:
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = true
 
 func select_none() -> void:
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = false
 
 func select_invert() -> void:
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = not c.selected
 
 # Delay after graph update
@@ -843,14 +843,14 @@ func highlight_connections() -> void:
 		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
 	highlighting_connections = false
 
-func _on_GraphEdit_node_selected(node : GraphNode) -> void:
-	# TODO: Rewrite that comment node related feature
-	if false: # node.comment:
+func _on_GraphEdit_node_selected(node : GraphElement) -> void:
+	if node is MMGraphComment:
 		# Need to account for zoom level when checking for contained nodes within comment
 		var current_zoom = get_zoom()
 		var node_rect = node.get_rect()
 		node_rect.size = node_rect.size * current_zoom
-
+		
+		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
 				var c_rect = c.get_rect()
@@ -998,10 +998,10 @@ func undoredo_command(command : Dictionary) -> void:
 		"remove_generators":
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for n in command.generators:
-				var g = parent_generator.get_node(n)
+				var g = parent_generator.get_node(NodePath(n))
 				if generator == parent_generator:
 					if has_node("node_"+g.name):
-						do_remove_node(get_node("node_"+g.name))
+						do_remove_node(get_node(NodePath("node_"+g.name)))
 					else:
 						print("Cannot find node_"+g.name)
 						for c in get_children():

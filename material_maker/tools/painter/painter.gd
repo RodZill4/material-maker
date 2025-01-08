@@ -575,6 +575,9 @@ func on_dep_update_value(buffer_name : String, parameter_name : String, value) -
 	return false
 
 func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true, on_mask : bool = false) -> void:
+	await mm_renderer.thread_run(self.in_thread_paint, [shader_params, end_of_stroke, emit_end_of_stroke, on_mask])
+
+func in_thread_paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of_stroke : bool = true, on_mask : bool = false) -> void:
 	var channels_infos : Array[Dictionary] = PAINT_CHANNELS_MASK if on_mask else PAINT_CHANNELS
 	for p in shader_params.keys():
 		var n : String
@@ -583,23 +586,23 @@ func paint(shader_params : Dictionary, end_of_stroke : bool = false, emit_end_of
 		else:
 			n = p
 		paint_shader.set_parameter(n, shader_params[p], true)
-	await paint_shader.render_ext(paint_textures, Vector2i(texture_size, texture_size))
+	paint_shader.in_thread_render_ext(paint_textures, Vector2i(texture_size, texture_size))
 	for i in range(paint_textures.size()/3):
 		if false and OS.is_debug_build():
-			paint_textures[i*3+1].get_texture()	# Update stroke texture
-		await paint_textures[i*3+2].get_texture() 	# Update painted texture
+			paint_textures[i*3+1].in_thread_get_texture()	# Update stroke texture
+		paint_textures[i*3+2].in_thread_get_texture() 	# Update painted texture
 	emit_signal("painted")
 	if end_of_stroke and emit_end_of_stroke:
 		for i in range(paint_textures.size()/3):
 			init_shader.set_parameter("modulate", Color(1.0, 1.0, 1.0, 1.0))
 			init_shader.set_parameter("use_input_image", true)
 			init_shader.set_parameter("input_image", paint_textures[i*3+2])
-			await init_shader.render_ext([ paint_textures[i*3] ], Vector2i(texture_size, texture_size))
-			paint_textures[i*3].get_texture()
+			init_shader.in_thread_render_ext([ paint_textures[i*3] ], Vector2i(texture_size, texture_size))
+			paint_textures[i*3].in_thread_get_texture()
 			init_shader.set_parameter("modulate", Color(0.0, 0.0, 0.0, 0.0))
 			init_shader.set_parameter("use_input_image", false)
-			await init_shader.render_ext([ paint_textures[i*3+1] ], Vector2i(texture_size, texture_size))
-			paint_textures[i*3+1].get_texture()
+			init_shader.in_thread_render_ext([ paint_textures[i*3+1] ], Vector2i(texture_size, texture_size))
+			paint_textures[i*3+1].in_thread_get_texture()
 		var stroke_state = {}
 		for c in channels_infos.size():
 			var channel_name : String = channels_infos[c].name

@@ -1009,7 +1009,7 @@ func _on_Painter_end_of_stroke(stroke_state):
 	for c in stroke_state.keys():
 		if c in layer.get_channels():
 			var channel_image : Image = Image.new()
-			channel_image.copy_from(stroke_state[c].get_texture().get_image())
+			channel_image.copy_from((await stroke_state[c].get_texture()).get_image())
 			if false:
 				channel_image.save_png("d:/undo_%d_%s.png" % [ undo_index, c ])
 			new_history_item[c] = channel_image

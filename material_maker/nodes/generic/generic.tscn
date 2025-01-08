@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://o548y7t5j5ii"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/generic/generic.gd" id="1"]
+[ext_resource type="Script" uid="uid://b4jcud3prd0ol" path="res://material_maker/nodes/generic/generic.gd" id="1"]
 
 [node name="Generic" type="GraphNode"]
 offset_right = 95.0

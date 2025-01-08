@@ -34,24 +34,25 @@ func add_node(node_data) -> void:
 	current_graph.undoredo.start_group()
 	var nodes : Array = current_graph.create_nodes(node_data, insert_position)
 	if not nodes.is_empty():
-		var node : GraphNode = nodes[0]
-		if qc_node != "": # dragged from port
-			var port_position : Vector2
-			if qc_is_output:
-				for new_slot in node.get_output_port_count():
-					var slot_type : int = node.get_output_port_type(new_slot)
-					if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
-						current_graph.on_connect_node(node.name, new_slot, qc_node, qc_slot)
-						port_position = node.get_output_port_position(new_slot)
-						break
-			else:
-				for new_slot in node.get_input_port_count():
-					var slot_type : int = node.get_input_port_type(new_slot)
-					if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
-						current_graph.on_connect_node(qc_node, qc_slot, node.name, new_slot)
-						port_position = node.get_input_port_position(new_slot)
-						break
-			node.position_offset -= port_position/current_graph.zoom
+		var node : GraphNode = nodes[0] as GraphNode
+		if node != null:
+			if qc_node != "": # dragged from port
+				var port_position : Vector2
+				if qc_is_output:
+					for new_slot in node.get_output_port_count():
+						var slot_type : int = node.get_output_port_type(new_slot)
+						if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
+							current_graph.on_connect_node(node.name, new_slot, qc_node, qc_slot)
+							port_position = node.get_output_port_position(new_slot)
+							break
+				else:
+					for new_slot in node.get_input_port_count():
+						var slot_type : int = node.get_input_port_type(new_slot)
+						if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
+							current_graph.on_connect_node(qc_node, qc_slot, node.name, new_slot)
+							port_position = node.get_input_port_position(new_slot)
+							break
+				node.position_offset -= port_position/current_graph.zoom
 	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	todo_renamed_hide()
