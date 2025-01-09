@@ -275,6 +275,11 @@ atlas = ExtResource("1_s43fy")
 region = Rect2(32, 176, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asgc8"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.498039, 0.498039, 0.498039, 0)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
