@@ -1,7 +1,7 @@
-[gd_resource type="Theme" load_steps=118 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=121 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
-[ext_resource type="Texture2D" uid="uid://c7mq31csbj1fg" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_telh7"]
 content_margin_left = 6.0
@@ -269,6 +269,27 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.359069, 0.359069, 0.359069, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08mel"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(32, 176, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asgc8"]
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_en6gw"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.485703, 0.485704, 0.485703, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
@@ -937,6 +958,9 @@ LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
 MM_AddNodePanel/base_type = &"PanelContainer"
 MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
+MM_CommentNode/icons/resizer = SubResource("AtlasTexture_08mel")
+MM_CommentNode/styles/default = SubResource("StyleBoxFlat_asgc8")
+MM_CommentNode/styles/selected = SubResource("StyleBoxFlat_en6gw")
 MM_FilterLineEdit/base_type = &"LineEdit"
 MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")

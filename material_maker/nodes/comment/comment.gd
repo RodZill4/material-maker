@@ -14,8 +14,7 @@ var generator : MMGenComment:
 		editor.text = generator.text
 		position_offset = generator.position
 		size = generator.size
-
-		set_stylebox_color(generator.color)
+		update_stylebox()
 		
 		if mm_globals.get_config("auto_size_comment"):
 			resize_to_selection()
@@ -87,6 +86,13 @@ func resize_to_selection() -> void:
 
 # Title edit
 
+func _on_gui_input(event):
+	if event is InputEventMouseMotion:
+		if event.position.x > size.x-10 and event.position.y > size.y-10:
+			mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
+		else:
+			mouse_default_cursor_shape = Control.CURSOR_ARROW
+
 func _on_Title_gui_input(event):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
 		title_edit.text = title.text
@@ -142,7 +148,7 @@ func _on_change_color_pressed():
 
 func update_node() -> void:
 	size = generator.size
-	set_stylebox_color(generator.color)
+	update_stylebox()
 
 func set_color(c):
 	$Popup.hide()
@@ -152,14 +158,16 @@ func set_color(c):
 	var redo_action = { type="comment_color_change", node=generator.get_hier_name(), color=c }
 	get_parent().undoredo.add("Change comment color", [undo_action], [redo_action], true)
 	generator.color = c
-	set_stylebox_color(c)
+	update_stylebox()
 	get_parent().send_changed_signal()
 
-func set_stylebox_color(c):
+func update_stylebox():
+	var c : Color = generator.color
 	c.a = 0.5
-	var stylebox : StyleBoxFlat = StyleBoxFlat.new()
+	var stylebox : StyleBoxFlat = get_theme_stylebox("selected" if selected else "default", "MM_CommentNode").duplicate()
 	stylebox.bg_color = c
 	$PanelContainer.add_theme_stylebox_override("panel", stylebox)
+	$PanelContainer/ResizerIcon.texture = get_theme_icon("resizer", "MM_CommentNode")
 
 func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -182,9 +190,11 @@ func _on_position_offset_changed():
 
 func _on_node_selected():
 	_on_raise_request()
+	update_stylebox()
 
 func _on_node_deselected():
 	_on_raise_request()
+	update_stylebox()
 
 func _on_raise_request():
 	var parent = get_parent()
