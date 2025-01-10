@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=121 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=123 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -381,6 +381,10 @@ region = Rect2(16, 0, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 32, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8uenv"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(80, 32, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_m27ao"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(80, 80, 16, 16)
@@ -752,6 +756,23 @@ content_margin_right = 3.0
 content_margin_bottom = 3.0
 bg_color = Color(0.117647, 0.121569, 0.133333, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rqlqa"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.0666667, 0.0705882, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.24, 0.24, 0.24, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 4
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8sgsn"]
 content_margin_left = 3.0
 content_margin_top = 3.0
@@ -984,6 +1005,7 @@ MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
 MM_Icons/icons/export = SubResource("AtlasTexture_5e0gw")
 MM_Icons/icons/folder = SubResource("AtlasTexture_rqlqa")
+MM_Icons/icons/link = SubResource("AtlasTexture_8uenv")
 MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
 MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
 MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
@@ -1078,6 +1100,7 @@ PopupMenu/icons/unchecked = SubResource("AtlasTexture_bxwwn")
 PopupMenu/icons/unchecked_disabled = SubResource("AtlasTexture_ftwxj")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_rqlqa")
 SpinBox/colors/down_disabled_icon_modulate = Color(0.875, 0.875, 0.875, 0.5)
 SpinBox/colors/down_hover_icon_modulate = Color(1, 1, 1, 1)
 SpinBox/colors/down_icon_modulate = Color(1, 1, 1, 1)

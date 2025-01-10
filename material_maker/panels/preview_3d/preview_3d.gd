@@ -15,29 +15,29 @@ const CAMERA_FOV_MAX = 90
 @onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera3D
 @onready var sun = $MaterialPreview/Preview3d/Sun
 
-var ui
+#var ui
 var trigger_on_right_click = true
 
 var moving = false
 
 signal need_update(me)
-
-const MENU : Array[Dictionary] = [
-	{ menu="Model/Select", submenu="model_list" },
-	{ menu="Model/Configure", command="configure_model" },
-	{ menu="Model/Rotate/Off", command="set_rotate_model_speed", command_parameter=0 },
-	{ menu="Model/Rotate/Slow", command="set_rotate_model_speed", command_parameter=0.01 },
-	{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
-	{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
-	{ menu="Model/Generate map/Position", submenu="generate_position_map" },
-	{ menu="Model/Generate map/Normal", submenu="generate_normal_map" },
-	{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
-	{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
-	{ menu="Model/Generate map/Bent Normals", submenu="generate_bent_normals_map" },
-	{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
-	{ menu="Environment/Select", submenu="environment_list" },
-	{ menu="Environment/Tonemap", submenu="tonemap_list" }
-]
+#
+#const MENU : Array[Dictionary] = [
+	#{ menu="Model/Select", submenu="model_list" },
+	#{ menu="Model/Configure", command="configure_model" },
+	#{ menu="Model/Rotate/Off", command="set_rotate_model_speed", command_parameter=0 },
+	#{ menu="Model/Rotate/Slow", command="set_rotate_model_speed", command_parameter=0.01 },
+	#{ menu="Model/Rotate/Medium", command="set_rotate_model_speed", command_parameter=0.05 },
+	#{ menu="Model/Rotate/Fast", command="set_rotate_model_speed", command_parameter=0.1 },
+	#{ menu="Model/Generate map/Position", submenu="generate_position_map" },
+	#{ menu="Model/Generate map/Normal", submenu="generate_normal_map" },
+	#{ menu="Model/Generate map/Curvature", submenu="generate_curvature_map" },
+	#{ menu="Model/Generate map/Ambient Occlusion", submenu="generate_ao_map" },
+	#{ menu="Model/Generate map/Bent Normals", submenu="generate_bent_normals_map" },
+	#{ menu="Model/Generate map/Thickness", submenu="generate_thickness_map" },
+	#{ menu="Environment/Select", submenu="environment_list" },
+	#{ menu="Environment/Tonemap", submenu="tonemap_list" }
+#]
 
 
 var _mouse_start_position : Vector2 = Vector2.ZERO
@@ -53,10 +53,10 @@ func _exit_tree():
 	mm_deps.delete_buffer("preview_"+str(get_instance_id()))
 
 func _ready() -> void:
-	ui = get_node(ui_path)
+	#ui = get_node(ui_path)
 	#update_menu()
-	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
-	set_environment(0)
+	#$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
+	#set_environment(0)
 	# Required for supersampling to work.
 	# $MaterialPreview.get_texture().flags = Texture2D.FLAG_FILTER
 	# $MaterialPreview.connect("size_changed",Callable(self,"_on_material_preview_size_changed"))
@@ -148,15 +148,16 @@ func _on_Environment_item_selected(id) -> void:
 
 
 func set_environment(id:int) -> void:
-	current_environment = id
+	if id >= 0:
+		current_environment = id
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	if clear_background:
 		$MaterialPreview.transparent_bg = true
-		environment_manager.apply_environment(id, environment, sun, Color.TRANSPARENT, true)
+		environment_manager.apply_environment(current_environment, environment, sun, Color.TRANSPARENT, true)
 	else:
 		$MaterialPreview.transparent_bg = false
-		environment_manager.apply_environment(id, environment, sun)
+		environment_manager.apply_environment(current_environment, environment, sun)
 
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
 
@@ -289,6 +290,7 @@ func generate_map(generate_function : String, image_size : int) -> void:
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		call(generate_function, files[0], image_size)
+
 
 func do_generate_map(file_name : String, map : String, image_size : int) -> void:
 	var id = objects.get_child_count()-1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cj6b1r8b6jel3"]
+[gd_scene load_steps=27 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://bntvqam28c8qx" path="res://material_maker/panels/preview_3d/model_menu.gd" id="6_ihg7a"]
 [ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="6_is3yl"]
 [ext_resource type="Script" uid="uid://k528bu7vevi0" path="res://material_maker/panels/preview_3d/environment_menu.gd" id="9_dj5a4"]
+[ext_resource type="Script" uid="uid://cy7mimh863mo4" path="res://material_maker/panels/preview_3d/export_menu.gd" id="10_q5dml"]
+[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="11_101bs"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type spatial;
@@ -74,16 +76,18 @@ region = Rect2(80, 176, 16, 16)
 atlas = ExtResource("4_1y5jf")
 region = Rect2(96, 176, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uda2n"]
-atlas = ExtResource("4_1y5jf")
-region = Rect2(112, 16, 16, 16)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ck7o"]
+
+[sub_resource type="FontVariation" id="FontVariation_8ck7o"]
+base_font = ExtResource("11_101bs")
+variation_transform = Transform2D(1, 0.22, 0, 1, 0, 0)
 
 [node name="Preview3D" instance=ExtResource("1")]
 custom_minimum_size = Vector2(250, 200)
 offset_left = -1.0
 offset_top = -2.0
 offset_right = 248.0
-offset_bottom = 197.0
+offset_bottom = 253.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3")
@@ -97,8 +101,7 @@ theme_type_variation = &"MM_PanelBackground"
 
 [node name="MaterialPreview" parent="." index="1"]
 world_3d = SubResource("World3D_3xlky")
-transparent_bg = true
-size = Vector2i(250, 200)
+size = Vector2i(250, 256)
 
 [node name="TextureRect" type="TextureRect" parent="." index="2"]
 visible = false
@@ -153,13 +156,12 @@ script = ExtResource("5_3wjmy")
 icon_name = "model"
 
 [node name="ModelMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu" index="0"]
-visible = false
 top_level = true
 layout_mode = 0
-offset_left = -53.0
-offset_top = 34.0
-offset_right = 158.0
-offset_bottom = 100.0
+offset_left = 284.0
+offset_top = 3.0
+offset_right = 495.0
+offset_bottom = 69.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("6_ihg7a")
 
@@ -260,33 +262,138 @@ button_group = SubResource("ButtonGroup_h3rxa")
 icon = SubResource("AtlasTexture_1hxco")
 icon_alignment = 1
 
-[node name="GenerateMapsSection" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer" index="1"]
-visible = false
+[node name="EnvironmentMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Environment"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("5_3wjmy")
+icon_name = "environment"
+
+[node name="EnvironmentMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu" index="0"]
+top_level = true
+layout_mode = 0
+offset_left = 282.0
+offset_top = 85.0
+offset_right = 540.0
+offset_bottom = 179.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("9_dj5a4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" index="0"]
+layout_mode = 2
+
+[node name="Box" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer" index="0"]
+layout_mode = 2
+
+[node name="EnvironmentLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Environment"
+
+[node name="EnvironmentEditorButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = " Environment Editor"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="EnvironmentList" type="ItemList" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/v_separation = 5
+theme_override_constants/h_separation = 5
+theme_override_styles/panel = SubResource("StyleBoxEmpty_8ck7o")
+item_count = 4
+max_columns = 0
+fixed_icon_size = Vector2i(55, 55)
+
+[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer" index="2"]
 layout_mode = 2
 columns = 2
 
-[node name="GenerateMapHeader" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection" index="0"]
-visible = false
+[node name="ClearBackground_Label" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" index="0"]
 layout_mode = 2
-size_flags_horizontal = 0
-theme_type_variation = &"MM_PanelMenuSubPanelSection"
+size_flags_vertical = 1
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Clear BG"
+
+[node name="ClearBackground" type="CheckBox" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="TonemapLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" index="2"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Tonemap"
+
+[node name="ToneMap" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" index="3" instance=ExtResource("6_is3yl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "Linear"
+popup/item_0/id = 0
+popup/item_1/text = "Reinhard"
+popup/item_1/id = 1
+popup/item_2/text = "Filmic"
+popup/item_2/id = 2
+popup/item_3/text = "ACES"
+popup/item_3/id = 3
+
+[node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Export"
+theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
-text = "Generate Map"
-icon = SubResource("AtlasTexture_uda2n")
-flat = true
-icon_alignment = 2
+button_mask = 3
+script = ExtResource("5_3wjmy")
+icon_name = "export"
 
-[node name="GenerateMapSection" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection" index="1"]
+[node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
+top_level = true
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 0
+offset_left = 285.0
+offset_top = 255.0
+offset_right = 550.0
+offset_bottom = 426.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("10_q5dml")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" index="0"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer" index="0"]
 visible = false
 layout_mode = 2
-vertical = true
 
-[node name="MapTypeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection" index="0"]
+[node name="GenerateMapLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer" index="1"]
+layout_mode = 2
+text = "Generate Maps"
+
+[node name="GenerateMapsSection" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer" index="2"]
+layout_mode = 2
+columns = 2
+
+[node name="MapTypeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" index="0"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Type"
 
-[node name="MapType" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection" index="1" instance=ExtResource("6_is3yl")]
+[node name="MapType" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" index="1" instance=ExtResource("6_is3yl")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
@@ -304,12 +411,13 @@ popup/item_4/id = 4
 popup/item_5/text = "Thickness"
 popup/item_5/id = 5
 
-[node name="MapResolutionLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection" index="2"]
+[node name="MapResolutionLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" index="2"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Resolution"
 
-[node name="MapResolution" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection" index="3" instance=ExtResource("6_is3yl")]
+[node name="MapResolution" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" index="3" instance=ExtResource("6_is3yl")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
@@ -325,89 +433,50 @@ popup/item_3/id = 3
 popup/item_4/text = "4096x4096"
 popup/item_4/id = 4
 
-[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection" index="4"]
+[node name="MapResolutionLabel2" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" index="4"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "File"
+
+[node name="ExportFile" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" index="5"]
+layout_mode = 2
+theme_override_constants/separation = 2
+vertical = true
+
+[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile" index="0"]
+layout_mode = 2
+
+[node name="MapExportFile" type="LineEdit" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The file-name to use. 
+Use $project, $type and $idx to make it auto-adjust."
+theme_override_font_sizes/font_size = 15
+text = "$project_$type_map"
+
+[node name="MapFileType" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer" index="1" instance=ExtResource("6_is3yl")]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = ".png"
+popup/item_0/id = 0
+popup/item_1/text = ".exr"
+popup/item_1/id = 1
+
+[node name="MapExportFileResultLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+theme_override_fonts/font = SubResource("FontVariation_8ck7o")
+text_overrun_behavior = 3
+
+[node name="GenerateMapButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer" index="3"]
 layout_mode = 2
 text = "Generate Map"
-
-[node name="EnvironmentMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1"]
-custom_minimum_size = Vector2(40, 25)
-layout_mode = 2
-tooltip_text = "Environment"
-theme_type_variation = &"MM_PanelMenuButton"
-toggle_mode = true
-button_mask = 3
-script = ExtResource("5_3wjmy")
-icon_name = "environment"
-
-[node name="EnvironmentMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu" index="0"]
-top_level = true
-layout_mode = 0
-offset_left = -53.0
-offset_top = 34.0
-offset_right = 117.0
-offset_bottom = 154.0
-theme_type_variation = &"MM_PanelMenuSubPanel"
-script = ExtResource("9_dj5a4")
-
-[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" index="0"]
-layout_mode = 2
-columns = 2
-
-[node name="EnvironmentLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="0"]
-layout_mode = 2
-theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-text = "Environment"
-
-[node name="Box" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="1"]
-layout_mode = 2
-
-[node name="Environment" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box" index="0" instance=ExtResource("6_is3yl")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-selected = 0
-item_count = 3
-popup/item_0/text = "Epping Forest"
-popup/item_0/id = 0
-popup/item_1/text = "Moonless Golf"
-popup/item_1/id = 1
-popup/item_2/text = "Studio"
-popup/item_2/id = 2
-
-[node name="EnvironmentEditorButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box" index="1"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = " Environment Editor"
-
-[node name="ClearBackground_Label" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="2"]
-layout_mode = 2
-theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-text = "Clear BG"
-
-[node name="ClearBackground" type="CheckBox" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="3"]
-unique_name_in_owner = true
-layout_mode = 2
-button_pressed = true
-
-[node name="TonemapLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="4"]
-layout_mode = 2
-theme_type_variation = &"MM_PanelMenuSubPanelLabel"
-text = "Tonemap"
-
-[node name="ToneMap" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="5" instance=ExtResource("6_is3yl")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-selected = 0
-item_count = 4
-popup/item_0/text = "Linear"
-popup/item_0/id = 0
-popup/item_1/text = "Reinhard"
-popup/item_1/id = 1
-popup/item_2/text = "Filmic"
-popup/item_2/id = 2
-popup/item_3/text = "ACES"
-popup/item_3/id = 3
 
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
 [connection signal="resized" from="." to="." method="_on_resized"]
@@ -418,11 +487,11 @@ popup/item_3/id = 3
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Slow" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_slow_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Medium" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_medium_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Fast" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_fast_toggled"]
-[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapHeader" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_generate_map_header_toggled"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection/MapType" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_view_mode_item_selected"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection/MapResolution" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_view_mode_item_selected"]
-[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection/ResetViewButton" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_reset_view_button_pressed"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box/Environment" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_item_selected"]
-[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box/EnvironmentEditorButton" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_editor_button_pressed"]
-[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/ClearBackground" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_clear_background_toggled"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/ToneMap" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_tone_map_item_selected"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box/EnvironmentEditorButton" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_editor_button_pressed"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer/EnvironmentList" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_list_item_selected"]
+[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ClearBackground" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_clear_background_toggled"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ToneMap" to="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_tone_map_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapType" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_type_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapResolution" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_resolution_item_selected"]
+[connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapExportFile" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_export_file_text_changed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapButton" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_generate_map_button_pressed"]

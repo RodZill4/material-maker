@@ -145,7 +145,8 @@ parameters = [{
 "label": "Chamfer",
 "max_value": "1",
 "min_value": "0",
-"name": "chamfer"
+"name": "chamfer",
+"save_in_config": true
 }]
 
 [node name="Cylinder" type="MeshInstance3D" parent="."]
@@ -223,7 +224,8 @@ parameters = [{
 "label": "Curvature",
 "max_value": "5",
 "min_value": "0",
-"name": "curvature"
+"name": "curvature",
+"save_in_config": true
 }]
 
 [node name="Prism" type="MeshInstance3D" parent="."]

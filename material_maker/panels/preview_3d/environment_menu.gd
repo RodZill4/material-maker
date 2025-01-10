@@ -1,5 +1,7 @@
 extends PanelContainer
 
+const SETTING_PREVIEW_CLEAR_BG := "3D_preview_panel_clear_background"
+
 const TONEMAPS : Array = ["Linear", "Reinhard", "Filmic", "ACES"]
 
 func _ready() -> void:
@@ -7,7 +9,11 @@ func _ready() -> void:
 	for i in TONEMAPS.size():
 		%ToneMap.add_item(TONEMAPS[i], i)
 
+	if mm_globals.has_config(SETTING_PREVIEW_CLEAR_BG):
+		%ClearBackground.button_pressed = mm_globals.get_config(SETTING_PREVIEW_CLEAR_BG)
+
 	%EnvironmentEditorButton.icon = get_theme_icon("draw", "MM_Icons")
+
 
 func _open() -> void:
 	update_environment_selector()
@@ -20,10 +26,19 @@ func update_environment_selector() -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	if not environment_manager:
 		return
-	%Environment.clear()
-	for env in environment_manager.get_environment_list():
-		%Environment.add_icon_item(env.thumbnail, env.name)
 
+	%EnvironmentList.clear()
+
+	var idx := 0
+	for env in environment_manager.get_environment_list():
+		%EnvironmentList.add_icon_item(env.thumbnail)
+		%EnvironmentList.set_item_tooltip(idx, env.name)
+		idx += 1
+
+	%EnvironmentList.fixed_icon_size.x = %EnvironmentList.size.x/4.0 - 7
+	%EnvironmentList.fixed_icon_size.y = %EnvironmentList.fixed_icon_size.x
+	%EnvironmentList.get_parent().custom_minimum_size.y = %EnvironmentList.size.x/4.0
+	size = Vector2()
 
 
 func _on_environment_editor_button_pressed() -> void:
@@ -34,8 +49,9 @@ func _on_environment_editor_button_pressed() -> void:
 
 
 
-func _on_environment_item_selected(index: int) -> void:
+func _on_environment_list_item_selected(index: int) -> void:
 	owner.set_environment(index)
+
 
 
 func _on_tone_map_item_selected(index: int) -> void:
@@ -44,4 +60,6 @@ func _on_tone_map_item_selected(index: int) -> void:
 
 func _on_clear_background_toggled(toggled_on: bool) -> void:
 	owner.clear_background = toggled_on
-	owner.set_environment(%Environment.get_selected_id())
+	mm_globals.set_config(SETTING_PREVIEW_CLEAR_BG, toggled_on)
+	if owner.is_node_ready():
+		owner.set_environment(-1)

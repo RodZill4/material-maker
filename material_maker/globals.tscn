@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://vt76awmi7ix7"]
 
-[ext_resource type="Script" path="res://material_maker/globals.gd" id="1"]
-[ext_resource type="Script" path="res://material_maker/globals_menu_manager.gd" id="2"]
+[ext_resource type="Script" uid="uid://cllqlhj3x3jj7" path="res://material_maker/globals.gd" id="1"]
+[ext_resource type="Script" uid="uid://c8lpv0jfyajsp" path="res://material_maker/globals_menu_manager.gd" id="2"]
 
 [node name="Globals" type="Node"]
 script = ExtResource("1")

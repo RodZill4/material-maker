@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dmyq6xxfx88m0"]
 
-[ext_resource type="Script" path="res://material_maker/tools/environment_manager/environment_manager.gd" id="1"]
+[ext_resource type="Script" uid="uid://vkw5u7nwwyeh" path="res://material_maker/tools/environment_manager/environment_manager.gd" id="1"]
 
 [sub_resource type="World3D" id="World3D_620e6"]
 
