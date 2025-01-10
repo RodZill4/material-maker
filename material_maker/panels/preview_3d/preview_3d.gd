@@ -42,6 +42,8 @@ const MENU : Array[Dictionary] = [
 
 var _mouse_start_position : Vector2 = Vector2.ZERO
 
+var clear_background := false
+
 
 func _enter_tree():
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
@@ -51,9 +53,9 @@ func _exit_tree():
 
 func _ready() -> void:
 	ui = get_node(ui_path)
-	update_menu()
+	#update_menu()
 	$MaterialPreview/Preview3d/ObjectRotate.play("rotate")
-	_on_Environment_item_selected(0)
+	set_environment(0)
 	# Required for supersampling to work.
 	# $MaterialPreview.get_texture().flags = Texture2D.FLAG_FILTER
 	# $MaterialPreview.connect("size_changed",Callable(self,"_on_material_preview_size_changed"))
@@ -62,19 +64,41 @@ func _ready() -> void:
 	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
 
-func update_menu():
-	mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
 
-func create_menu_model_list(menu : MMMenuManager.MenuBase) -> void:
-	menu.clear()
-	for i in objects.get_child_count():
-		var o = objects.get_child(i)
-		var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % o.name)
-		if thumbnail:
-			menu.add_icon_item(thumbnail, "", i)
-		else:
-			menu.add_item(o.name, i)
-	menu.connect_id_pressed(self._on_Model_item_selected)
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		pass#set_environment()
+
+#func update_menu():
+	#mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
+
+
+func set_model(id:int) -> void:
+	if id == objects.get_child_count()-1:
+		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+		dialog.min_size = Vector2(500, 500)
+		dialog.access = FileDialog.ACCESS_FILESYSTEM
+		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+		for f in MMMeshLoader.get_file_dialog_filters():
+			dialog.add_filter(f)
+		if mm_globals.config.has_section_key("path", "mesh"):
+			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
+		var files = await dialog.select_files()
+		if files.size() == 1:
+			do_load_custom_mesh(files[0])
+	else:
+		select_object(id)
+#
+#func create_menu_model_list(menu : MMMenuManager.MenuBase) -> void:
+	#menu.clear()
+	#for i in objects.get_child_count():
+		#var o = objects.get_child(i)
+		#var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % o.name)
+		#if thumbnail:
+			#menu.add_icon_item(thumbnail, "", i)
+		#else:
+			#menu.add_item(o.name, i)
+	#menu.connect_id_pressed(self._on_Model_item_selected)
 
 func create_menu_environment_list(menu : MMMenuManager.MenuBase) -> void:
 	get_node("/root/MainWindow/EnvironmentManager").create_environment_menu(menu)
@@ -92,20 +116,7 @@ func create_menu_tonemap_list(menu : MMMenuManager.MenuBase) -> void:
 	menu.connect_id_pressed(self._on_Tonemaps_item_selected)
 
 func _on_Model_item_selected(id) -> void:
-	if id == objects.get_child_count()-1:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-		dialog.min_size = Vector2(500, 500)
-		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		for f in MMMeshLoader.get_file_dialog_filters():
-			dialog.add_filter(f)
-		if mm_globals.config.has_section_key("path", "mesh"):
-			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
-		var files = await dialog.select_files()
-		if files.size() == 1:
-			do_load_custom_mesh(files[0])
-	else:
-		select_object(id)
+	set_model(id)
 
 func do_load_custom_mesh(file_path) -> void:
 	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
@@ -128,17 +139,34 @@ func select_object(id) -> void:
 	var aabb : AABB = current_object.get_aabb()
 	current_object.transform.origin = -(aabb.position+0.5*aabb.size)
 
+
 func _on_Environment_item_selected(id) -> void:
+	set_environment(id)
+
+
+func set_environment(id:int) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment_manager.apply_environment(id, environment, sun)
+	if clear_background:
+		var stylebox := get_theme_stylebox("panel", "MM_PanelBackground")
+		if stylebox and "bg_color" in stylebox:
+			environment_manager.apply_environment(id, environment, sun, stylebox.bg_color, true)
+		else:
+			environment_manager.apply_environment(id, environment, sun, Color.TRANSPARENT, true)
+
+	else:
+		environment_manager.apply_environment(id, environment, sun)
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
 
+
 func _on_Tonemaps_item_selected(id) -> void:
+	set_tonemap(id)
+
+func set_tonemap(id) -> void:
 	mm_globals.set_config("ui_3d_preview_tonemap", id)
 	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	environment.tonemap_mode = id
-	update_menu.call_deferred()
+	#update_menu.call_deferred()
 
 func _on_material_preview_size_changed() -> void:
 	pass
@@ -173,7 +201,7 @@ func zoom(amount : float):
 
 func on_gui_input(event) -> void:
 	if event is InputEventPanGesture:
-		$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+		#$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 		var camera_basis = camera.global_transform.basis
 		var camera_rotation : Vector2 = event.delta
 		camera_stand.rotate(camera_basis.x.normalized(), -camera_rotation.y)
@@ -183,7 +211,8 @@ func on_gui_input(event) -> void:
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
-			$MaterialPreview/Preview3d/ObjectRotate.stop(false)
+			pass
+			#$MaterialPreview/Preview3d/ObjectRotate.stop(false)
 		match event.button_index:
 			MOUSE_BUTTON_WHEEL_UP:
 				if event.is_command_or_control_pressed():

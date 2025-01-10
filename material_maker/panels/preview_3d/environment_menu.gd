@@ -7,6 +7,7 @@ func _ready() -> void:
 	for i in TONEMAPS.size():
 		%ToneMap.add_item(TONEMAPS[i], i)
 
+	%EnvironmentEditorButton.icon = get_theme_icon("draw", "MM_Icons")
 
 func _open() -> void:
 	update_environment_selector()

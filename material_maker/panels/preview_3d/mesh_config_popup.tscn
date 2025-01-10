@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://e1adf0mjl5qe"]
 
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" id="2"]
+[ext_resource type="Script" uid="uid://blmq2gm7dwr3k" path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" id="2"]
 
 [node name="MeshConfiguration" type="PopupPanel"]
-size = Vector2i(217, 100)
+size = Vector2i(219, 101)
 visible = true
 script = ExtResource("2")
 
@@ -14,8 +14,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 213.0
-offset_bottom = 96.0
+offset_right = 215.0
+offset_bottom = 97.0
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
