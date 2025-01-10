@@ -48,5 +48,10 @@ func _on_PopupMenu_id_pressed(id):
 func _on_Preview3D_mouse_entered():
 	mm_globals.set_tip_text("#LMB: Rotate view, #RMB: Tilt view, Mouse wheel: Zoom", 3)
 
+
 func on_drop_model_file(file_name : String):
 	do_load_custom_mesh(file_name)
+
+
+func _on_resized() -> void:
+	$BG.size = size

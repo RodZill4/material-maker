@@ -89,24 +89,31 @@ grow_vertical = 2
 script = ExtResource("3")
 click_material = SubResource("2")
 
-[node name="MaterialPreview" parent="." index="0"]
+[node name="BG" type="Panel" parent="." index="0"]
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"MM_PanelBackground"
+
+[node name="MaterialPreview" parent="." index="1"]
 world_3d = SubResource("World3D_3xlky")
+transparent_bg = true
 size = Vector2i(250, 200)
 
-[node name="TextureRect" type="TextureRect" parent="." index="1"]
+[node name="TextureRect" type="TextureRect" parent="." index="2"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 
-[node name="UI" type="PanelContainer" parent="." index="2"]
+[node name="UI" type="PanelContainer" parent="." index="3"]
 visible = false
 layout_mode = 2
 
 [node name="Preview3DUI" parent="UI" index="0" instance=ExtResource("2")]
 layout_mode = 2
 
-[node name="PopupMenu" type="PopupMenu" parent="." index="3"]
+[node name="PopupMenu" type="PopupMenu" parent="." index="4"]
 size = Vector2i(215, 100)
 item_count = 2
 item_0/text = "Reset center"
@@ -114,7 +121,7 @@ item_0/id = 0
 item_1/text = "Center on clicked surface"
 item_1/id = 1
 
-[node name="MenuBar" type="ScrollContainer" parent="." index="4"]
+[node name="MenuBar" type="ScrollContainer" parent="." index="5"]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
@@ -146,6 +153,7 @@ script = ExtResource("5_3wjmy")
 icon_name = "model"
 
 [node name="ModelMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu" index="0"]
+visible = false
 top_level = true
 layout_mode = 0
 offset_left = -53.0
@@ -252,26 +260,8 @@ button_group = SubResource("ButtonGroup_h3rxa")
 icon = SubResource("AtlasTexture_1hxco")
 icon_alignment = 1
 
-[node name="Rotation" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model" index="6" instance=ExtResource("6_is3yl")]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-selected = 0
-item_count = 4
-popup/item_0/text = "Off"
-popup/item_0/id = 0
-popup/item_1/text = "Slow"
-popup/item_1/id = 1
-popup/item_2/text = "Medium"
-popup/item_2/id = 2
-popup/item_3/text = "Fast"
-popup/item_3/id = 3
-
-[node name="HSeparator3" type="HSeparator" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model" index="7"]
-visible = false
-layout_mode = 2
-
 [node name="GenerateMapsSection" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer" index="1"]
+visible = false
 layout_mode = 2
 columns = 2
 
@@ -350,7 +340,6 @@ script = ExtResource("5_3wjmy")
 icon_name = "environment"
 
 [node name="EnvironmentMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu" index="0"]
-visible = false
 top_level = true
 layout_mode = 0
 offset_left = -53.0
@@ -362,17 +351,14 @@ script = ExtResource("9_dj5a4")
 
 [node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" index="0"]
 layout_mode = 2
+columns = 2
 
-[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="0"]
-visible = false
-layout_mode = 2
-
-[node name="EnvironmentLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="1"]
+[node name="EnvironmentLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="0"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Environment"
 
-[node name="Box" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="2"]
+[node name="Box" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="1"]
 layout_mode = 2
 
 [node name="Environment" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox/Box" index="0" instance=ExtResource("6_is3yl")]
@@ -393,11 +379,15 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = " Environment Editor"
 
+[node name="ClearBackground_Label" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="2"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Clear BG"
+
 [node name="ClearBackground" type="CheckBox" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="3"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
-text = "Clear Background"
 
 [node name="TonemapLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBox" index="4"]
 layout_mode = 2
@@ -420,6 +410,7 @@ popup/item_3/text = "ACES"
 popup/item_3/id = 3
 
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
+[connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox/Model" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_item_selected"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox/ModelConfigurate" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_configurate_pressed"]
@@ -427,7 +418,6 @@ popup/item_3/id = 3
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Slow" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_slow_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Medium" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_medium_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Fast" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_fast_toggled"]
-[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/Rotation" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_rotation_item_selected"]
 [connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapHeader" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_generate_map_header_toggled"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection/MapType" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_view_mode_item_selected"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/GenerateMapsSection/GenerateMapSection/MapResolution" to="MenuBar/HBox/MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_view_mode_item_selected"]

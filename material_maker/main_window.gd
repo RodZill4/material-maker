@@ -941,8 +941,10 @@ func _on_PaintEnvironment_id_pressed(id) -> void:
 		paint.set_environment(id)
 
 
-func environment_editor() -> void:
-	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instantiate())
+func environment_editor() -> Node:
+	var env_editor : Node = load("res://material_maker/windows/environment_editor/environment_editor.tscn").instantiate()
+	add_child(env_editor)
+	return env_editor
 
 # -----------------------------------------------------------------------
 #                             Help menu

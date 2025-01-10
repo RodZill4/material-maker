@@ -28,7 +28,10 @@ func update_environment_selector() -> void:
 
 func _on_environment_editor_button_pressed() -> void:
 	var main_window = get_node("/root/MainWindow")
-	if main_window: main_window.environment_editor()
+	if main_window:
+		var env_editor: Node = main_window.environment_editor()
+		env_editor.tree_exited.connect(update_environment_selector)
+
 
 
 func _on_environment_item_selected(index: int) -> void:

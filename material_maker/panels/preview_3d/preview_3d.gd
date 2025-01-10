@@ -42,7 +42,8 @@ const MENU : Array[Dictionary] = [
 
 var _mouse_start_position : Vector2 = Vector2.ZERO
 
-var clear_background := false
+var clear_background := true
+var current_environment := 0
 
 
 func _enter_tree():
@@ -66,8 +67,10 @@ func _ready() -> void:
 
 
 func _notification(what: int) -> void:
+	if not is_node_ready():
+		return
 	if what == NOTIFICATION_THEME_CHANGED:
-		pass#set_environment()
+		set_environment(current_environment)
 
 #func update_menu():
 	#mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
@@ -145,17 +148,16 @@ func _on_Environment_item_selected(id) -> void:
 
 
 func set_environment(id:int) -> void:
+	current_environment = id
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	if clear_background:
-		var stylebox := get_theme_stylebox("panel", "MM_PanelBackground")
-		if stylebox and "bg_color" in stylebox:
-			environment_manager.apply_environment(id, environment, sun, stylebox.bg_color, true)
-		else:
-			environment_manager.apply_environment(id, environment, sun, Color.TRANSPARENT, true)
-
+		$MaterialPreview.transparent_bg = true
+		environment_manager.apply_environment(id, environment, sun, Color.TRANSPARENT, true)
 	else:
+		$MaterialPreview.transparent_bg = false
 		environment_manager.apply_environment(id, environment, sun)
+
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
 
 

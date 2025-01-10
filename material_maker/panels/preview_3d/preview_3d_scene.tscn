@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dpulty2lkvcht"]
 
-[ext_resource type="PackedScene" uid="uid://btwebpm8te1i7" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cxcw0mi4sfl2x" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
 [ext_resource type="Texture2D" uid="uid://bqre7xkdgb655" path="res://material_maker/environments/hdris/moonless_golf_1k.hdr" id="2_ks6fo"]
 
 [sub_resource type="Animation" id="3"]
@@ -38,6 +38,7 @@ reflected_light_source = 2
 [node name="Preview3dScene" type="Node3D"]
 
 [node name="ObjectsPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
 
 [node name="Objects" parent="ObjectsPivot" instance=ExtResource("2")]
 

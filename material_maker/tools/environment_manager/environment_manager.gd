@@ -108,7 +108,7 @@ func set_value(index, variable, value, force = false):
 			emit_signal("environment_updated", index)
 		update_thumbnail(index)
 
-func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_color := Color.TRANSPARENT) -> void:
+func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_color := Color.TRANSPARENT, force_color := false) -> void:
 	if index < 0 || index >= environments.size():
 		return
 	var env : Dictionary = environments[index]
@@ -116,7 +116,7 @@ func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_col
 
 	var custom_bg_color := false
 
-	if bg_color != Color.TRANSPARENT:
+	if bg_color != Color.TRANSPARENT or force_color:
 		custom_bg_color = true
 
 		e.background_mode = Environment.BG_COLOR
