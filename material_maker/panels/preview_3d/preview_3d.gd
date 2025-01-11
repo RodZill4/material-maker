@@ -295,8 +295,7 @@ func generate_map(generate_function : String, image_size : int) -> void:
 func do_generate_map(file_name : String, map : String, image_size : int) -> void:
 	var id = objects.get_child_count()-1
 	var object : MeshInstance3D = objects.get_child(id)
-	var t : MMTexture = MMTexture.new()
-	await MMMapGenerator.generate(object.mesh, map, image_size, t)
+	var t : MMTexture = await MMMapGenerator.get_map(object.mesh, map, image_size)
 	t.save_to_file(file_name)
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 
