@@ -55,3 +55,4 @@ func on_drop_model_file(file_name : String):
 
 func _on_resized() -> void:
 	$BG.size = size
+	%MenuBar.size.x = size.x
