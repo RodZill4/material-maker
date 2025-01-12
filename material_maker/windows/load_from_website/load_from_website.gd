@@ -115,7 +115,6 @@ func update_thumbnails() -> void:
 			var error = $ImageHTTPRequest.request(address)
 			if error == OK:
 				var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
-				print(data.get_string_from_ascii())
 				image.load_webp_from_buffer(data)
 				image.save_png(cache_filename)
 			else:
