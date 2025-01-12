@@ -798,7 +798,6 @@
 			"$fi",
 			"$begin_generate",
 			"\tvec3 albedo_tex = $albedo_tex(uv);",
-			"\talbedo_tex = mix(pow((albedo_tex + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),albedo_tex * (1.0 / 12.92),lessThan(albedo_tex,vec3(0.04045)));",
 			"\tALBEDO = albedo_tex.rgb*$albedo_color.rgb;",
 			"\tMETALLIC = $metallic_tex(uv)*$metallic;",
 			"\tROUGHNESS = $roughness_tex(uv)*$roughness;",

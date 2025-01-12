@@ -178,11 +178,11 @@ func update_external_previews() -> void:
 	for p in external_previews:
 		p.shader = preview_material.shader
 		for t in preview_textures.keys():
-			p.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
+			p.set_shader_parameter(t, preview_material.get_shader_parameter(t))
 		for t in preview_texture_dependencies.keys():
-			p.set_shader_parameter(t, preview_texture_dependencies[t])
+			p.set_shader_parameter(t, preview_material.get_shader_parameter(t))
 		for u in preview_parameters.keys():
-			p.set_shader_parameter(u, preview_parameters[u])
+			p.set_shader_parameter(u, preview_material.get_shader_parameter(u))
 
 func update() -> void:
 	if preview_material == null:
@@ -194,12 +194,13 @@ func update() -> void:
 	preview_texture_dependencies = {}
 	for u in result.uniforms:
 		if u.value:
-			preview_material.set_shader_parameter(u.name, u.value)
-			preview_parameters[u.name] = u.value
-	for p in RenderingServer.get_shader_parameter_list(preview_material.shader.get_rid()):
-		if p.hint_string == "Texture2D" and preview_textures.keys().find(p.name) == -1:
-			var value = preview_material.get_shader_parameter(p.name)
-			preview_texture_dependencies[p.name] = value
+			if u.type == "sampler2D":
+				var texture = await u.value.get_texture()
+				preview_texture_dependencies[u.name] = texture
+				preview_material.set_shader_parameter(u.name, texture)
+			else:
+				preview_material.set_shader_parameter(u.name, u.value)
+				preview_parameters[u.name] = u.value
 	update_shaders()
 	update_external_previews()
 
@@ -236,7 +237,7 @@ func apply_gen_options(s : String, gen_options : Array, custom_options, definiti
 			print("No implementation of option '%s'" % o)
 	return s
 
-func process_shader(shader_text : String, custom_script : String = ""):
+func process_shader(shader_text : String, custom_script : String = "", force_uniforms_init : bool = false):
 	var custom_options = CustomOptions.new()
 	if custom_script != "" and check_custom_script(custom_script):
 		print("Using custom script")
@@ -291,7 +292,10 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				mm_deps.create_buffer(buffer_name, self)
 			shader_code += l+"\n"
 	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
-	definitions += rv.uniforms_as_strings("uniform", true)
+	if force_uniforms_init:
+		definitions += rv.uniforms_as_strings("uniform", true)
+	else:
+		definitions += rv.uniforms_as_strings("uniform", false)
 	for d in rv.globals:
 		definitions += "// #globals: %s\n" % d.source
 		definitions += d.code+"\n"
@@ -574,7 +578,7 @@ func create_file_from_template(template : String, file_name : String, export_con
 	var custom_script = ""
 	if export_context.has("@mm_custom_script"):
 		custom_script = export_context["@mm_custom_script"]
-	processed_template = process_shader(processed_template, custom_script).shader_code
+	processed_template = process_shader(processed_template, custom_script, true).shader_code
 	if file_name == "clipboard":
 		DisplayServer.clipboard_set("\n".join(processed_template.split("\n", false)))
 	else:

@@ -27,6 +27,7 @@ func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 9
 	mm_deps.create_buffer("o%d_tex" % get_instance_id(), self)
+	do_update_shader()
 
 func _exit_tree() -> void:
 	exiting = true
