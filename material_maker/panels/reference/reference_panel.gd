@@ -38,13 +38,9 @@ func _ready():
 	%GradientSlot.toggled.connect(_on_slot_toggled.bind(%GradientSlot))
 
 
-func _on_slot_toggled(toggled_on: bool, slot: Button) -> void:
-	if toggled_on:
-		selected_slot = slot
-	elif selected_slot == slot:
-		selected_slot = null
-
-	is_picking = selected_slot != null
+## This is magically called by the main window :)
+func on_drop_image_file(file_name: String) -> void:
+	add_reference(file_name)
 
 
 func add_reference(from:Variant) -> void:
@@ -70,7 +66,7 @@ func add_reference(from:Variant) -> void:
 
 	opened_images.insert(
 		current_image_index+1,
-		{"texture":texture, "scale":0.95, "center":Vector2(0.5, 0.5)}
+		{"texture":texture, "scale":1.1, "center":Vector2(0.5, 0.47)}
 		)
 
 	go_to_image(current_image_index+1)
@@ -81,6 +77,7 @@ func go_to_image(index:int) -> void:
 	current_image_index = index
 
 	%RemoveImageButton.disabled = opened_images.is_empty()
+	%Empty.visible = opened_images.is_empty()
 
 	%NavigationMenu.visible = len(opened_images) > 1
 	%PrevImageButton.disabled = current_image_index == 0
@@ -93,9 +90,6 @@ func go_to_image(index:int) -> void:
 	var m : ShaderMaterial = %Image.material
 	if len(opened_images) == 0:
 		m.set_shader_parameter("image", null)
-		m.set_shader_parameter("image_size", Vector2(0, 0))
-		m.set_shader_parameter("scale", 1)
-		m.set_shader_parameter("center", Vector2(0, 0))
 		return
 
 	var i := opened_images[current_image_index]
@@ -135,6 +129,15 @@ func _on_prev_image_button_pressed() -> void:
 
 func _on_next_image_button_pressed() -> void:
 	go_to_image(current_image_index+1)
+
+
+func _on_slot_toggled(toggled_on: bool, slot: Button) -> void:
+	if toggled_on:
+		selected_slot = slot
+	elif selected_slot == slot:
+		selected_slot = null
+
+	is_picking = selected_slot != null
 
 
 func get_color_under_cursor() -> Color:
@@ -194,7 +197,7 @@ func handle_movement(event: InputEvent) -> void:
 
 	elif event is InputEventMouseMotion:
 		if is_dragging:
-			new_center = m.get_shader_parameter("center")-event.relative*scale/multiplier
+			new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
 
 		elif is_zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 3)
@@ -209,6 +212,7 @@ func handle_movement(event: InputEvent) -> void:
 		new_center.y = clamp(new_center.y, 0.0, 1.0)
 		m.set_shader_parameter("center", new_center)
 		opened_images[current_image_index].center = new_center
+
 
 func handle_picking(event: InputEvent) -> void:
 	var picking_color := selected_slot.get_parent() == %ColorSlots

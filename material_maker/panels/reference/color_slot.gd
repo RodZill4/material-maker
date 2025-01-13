@@ -21,5 +21,4 @@ func _get_drag_data(_position):
 func _on_color_rect_draw() -> void:
 	if button_pressed:
 		var picker_icon := get_theme_icon("color_picker", "MM_Icons")
-		printt(get_rect().size, picker_icon.get_size())
 		$ColorRect.draw_texture(picker_icon, ($ColorRect.get_rect().size-picker_icon.get_size())/2.0)
