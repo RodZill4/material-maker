@@ -1,6 +1,6 @@
 extends Panel
 
-var current_tab : int = -1 : 
+var current_tab : int = -1 :
 	get:
 		return current_tab
 	set(new_value):
@@ -31,6 +31,7 @@ func add_tab(control, legible_unique_name = false) -> void:
 	move_child(control, $TabBar.get_tab_count())
 	$TabBar.add_tab(control.name)
 	control.visible = false
+	_on_Projects_resized()
 
 func set_current_tab(t : int):
 	current_tab = t

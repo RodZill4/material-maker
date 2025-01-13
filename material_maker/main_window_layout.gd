@@ -13,6 +13,21 @@ const PANELS = [
 	{ name="Layers", scene=preload("res://material_maker/panels/layers/layers.tscn"), position="BottomRight" },
 	{ name="Parameters", scene=preload("res://material_maker/panels/parameters/parameters.tscn"), position="TopRight" },
 ]
+
+var default_material_layout := {
+	&"main": { &"type": "FlexTop", &"w": 1900.0, &"h": 939.0, &"children": [
+		{ &"type": "FlexSplit", &"w": 1900.0, &"h": 939.0, &"children": [
+			{ &"type": "FlexTab", &"w": 373.0, &"h": 939.0, &"children": [], &"tabs": [
+				&"Library", &"Hierarchy"], &"current": 0 },
+			{ &"type": "FlexMain", &"w": 1073.0, &"h": 939.0, &"children": [] },
+			{ &"type": "FlexSplit", &"w": 434.0, &"h": 939.0, &"children": [
+				{ &"type": "FlexTab", &"w": 434.0, &"h": 501.0, &"children": [], &"tabs": [
+					&"Preview2D", &"Histogram"], &"current": 0 },
+				{ &"type": "FlexTab", &"w": 434.0, &"h": 427.0, &"children": [], &"tabs": [
+					&"Preview3D", &"Preview2D (2)", &"Reference"], &"current": 0 }
+			], &"dir": "v" }], &"dir": "h" }]}, &"windows": [] }
+
+
 const HIDE_PANELS = {
 	material=[ "Brushes", "Layers", "Parameters" ],
 	paint=[ "Preview3D", "Histogram", "Hierarchy" ]
@@ -41,17 +56,21 @@ func load_panels() -> void:
 				node.set(p, panel.parameters[p])
 		panels[panel.name] = node
 		$FlexibleLayout.add(panel.name, node)
-	var current_config = null
+
 	for mode in [ "material", "paint" ]:
 		if mm_globals.config.has_section_key("layout", mode):
 			layout[mode] = JSON.parse_string(mm_globals.config.get_value("layout", mode))
+		elif mode == "material":
+			layout[mode] = default_material_layout
 	$FlexibleLayout.init(layout[current_mode] if layout.has(current_mode) else null)
+
 
 func save_config() -> void:
 	layout[current_mode] = $FlexibleLayout.serialize()
 	for mode in [ "material", "paint" ]:
 		if layout.has(mode):
 			mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))
+
 
 func get_panel(n) -> Control:
 	if panels.has(n):
