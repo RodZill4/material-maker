@@ -220,7 +220,7 @@ vertex_count_expression = "(size+1)*(size+1)"
 index_count_expression = "2*size*(size+2)-2"
 uv_scale = Vector2(2, 2)
 parameters = [{
-"default_value": 2.0,
+"default_value": 0.5,
 "label": "Curvature",
 "max_value": "5",
 "min_value": "0",

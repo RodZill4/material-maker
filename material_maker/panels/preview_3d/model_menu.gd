@@ -12,6 +12,8 @@ func _ready() -> void:
 	if mm_globals.has_config(SETTING_3D_PREVIEW_MODEL):
 		%Model.select(mm_globals.get_config(SETTING_3D_PREVIEW_MODEL))
 		_on_model_item_selected(mm_globals.get_config(SETTING_3D_PREVIEW_MODEL))
+	else:
+		_on_model_item_selected(0)
 
 	if mm_globals.has_config(SETTING_3D_PREVIEW_ROTATION_SPEED):
 		match mm_globals.get_config(SETTING_3D_PREVIEW_ROTATION_SPEED):
@@ -26,22 +28,24 @@ func _open() -> void:
 func update_model_selector() -> void:
 	%Model.clear()
 	for i in owner.objects.get_child_count():
-		var o = owner.objects.get_child(i)
-		#var thumbnail := load("res://material_maker/panels/preview_3d/thumbnails/meshes/%s.png" % o.name)
-		#if thumbnail:
-			#%Model.add_icon_item(thumbnail, o.name, i)
-		#else:
+		var o: Node = owner.objects.get_child(i)
 		%Model.add_item(o.name, i)
 
 
 func _on_model_item_selected(index: int) -> void:
-	mm_globals.set_config(SETTING_3D_PREVIEW_MODEL, index)
-	owner.set_model(index)
+	if await owner.set_model(index):
+		mm_globals.set_config(SETTING_3D_PREVIEW_MODEL, index)
+		get_node("../../ExportMenu").visible = index == %Model.item_count-1
 
-#
-#func _on_generate_map_header_toggled(toggled_on: bool) -> void:
-	#%GenerateMapSection.visible = toggled_on
-	#size = Vector2()
+	# Return to the previous model, if the selection failed (can happen on custom models)
+	elif mm_globals.has_config(SETTING_3D_PREVIEW_MODEL):
+		%Model.select(mm_globals.get_config(SETTING_3D_PREVIEW_MODEL))
+		_on_model_item_selected(mm_globals.get_config(SETTING_3D_PREVIEW_MODEL))
+	else:
+		%Model.select(0)
+		_on_model_item_selected(0)
+
+
 
 
 func _on_model_configurate_pressed() -> void:

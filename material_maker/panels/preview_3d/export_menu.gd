@@ -8,6 +8,7 @@ const SETTING_GENERATE_MAP_RESOLUTION := "3D_generate_map_resolution"
 func _ready() -> void:
 	pass
 
+
 func _open() -> void:
 	if mm_globals.has_config(SETTING_GENERATE_MAP_EXPORT_PATH):
 		%MapExportFile.text = mm_globals.get_config(SETTING_GENERATE_MAP_EXPORT_PATH)

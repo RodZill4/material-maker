@@ -76,7 +76,7 @@ func _notification(what: int) -> void:
 	#mm_globals.menu_manager.create_menus(MENU, self, mm_globals.menu_manager.MenuBarGodot.new(ui))
 
 
-func set_model(id:int) -> void:
+func set_model(id:int) -> bool:
 	if id == objects.get_child_count()-1:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		dialog.min_size = Vector2(500, 500)
@@ -89,9 +89,12 @@ func set_model(id:int) -> void:
 		var files = await dialog.select_files()
 		if files.size() == 1:
 			do_load_custom_mesh(files[0])
+		else:
+			return false
 	else:
 		select_object(id)
-#
+	return true
+
 #func create_menu_model_list(menu : MMMenuManager.MenuBase) -> void:
 	#menu.clear()
 	#for i in objects.get_child_count():
