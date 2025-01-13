@@ -498,6 +498,8 @@
 						"prompt_overwrite": false,
 						"template": [
 							"import unreal",
+							"import sys",
+							"sys.path.append('$(material_maker_path)$(path_separator)export')",
 							"import mm",
 							"from importlib import reload",
 							"reload(mm)",
