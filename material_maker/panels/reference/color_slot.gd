@@ -1,21 +1,14 @@
-extends ColorRect
-
-
-signal clicked
+extends Button
 
 
 func _ready() -> void:
-	pass # Replace with function body.
+	button_group.pressed.connect(func(_x): $ColorRect.queue_redraw())
+	toggled.connect(func(_x): $ColorRect.queue_redraw())
+
 
 func set_slot_color(c) -> void:
 	$ColorRect.color = c
 
-func select(b : bool) -> void:
-	color = Color(1.0, 1.0, 1.0, 1.0) if b else Color(1.0, 1.0, 1.0, 0.0)
-
-func _on_ColorSlot_gui_input(event : InputEvent):
-	if event is InputEventMouseButton and event.pressed:
-		emit_signal("clicked", self)
 
 func _get_drag_data(_position):
 	var preview = ColorRect.new()
@@ -23,3 +16,10 @@ func _get_drag_data(_position):
 	preview.custom_minimum_size = Vector2(32, 32)
 	set_drag_preview(preview)
 	return $ColorRect.color
+
+
+func _on_color_rect_draw() -> void:
+	if button_pressed:
+		var picker_icon := get_theme_icon("color_picker", "MM_Icons")
+		printt(get_rect().size, picker_icon.get_size())
+		$ColorRect.draw_texture(picker_icon, ($ColorRect.get_rect().size-picker_icon.get_size())/2.0)
