@@ -27,6 +27,7 @@ var default_material_layout := {
 					&"Preview3D", &"Preview2D (2)", &"Reference"], &"current": 0 }
 			], &"dir": "v" }], &"dir": "h" }]}, &"windows": [] }
 
+var default_paint_layout : Dictionary = { main={ children=[ { children=[ { children=[], current=0, h=766.0, tabs=["Brushes"], type="FlexTab", w=279.0 }, { children=[], h=766.0, type="FlexMain", w=844.0 }, { children=[ { children=[], current=0, h=370.0, tabs=["Parameters"], type="FlexTab", w=240.0 }, { children=[], current=0, h=386.0, tabs=["Layers"], type="FlexTab", w=240.0 }], dir="v", h=766.0, type="FlexSplit", w=240.0 }], dir="h", h=766.0, type="FlexSplit", w=1383.0 }], h=766.0, type="FlexTop", w=1383.0 }, windows=[] }
 
 const HIDE_PANELS = {
 	material=[ "Brushes", "Layers", "Parameters" ],
@@ -62,6 +63,8 @@ func load_panels() -> void:
 			layout[mode] = JSON.parse_string(mm_globals.config.get_value("layout", mode))
 		elif mode == "material":
 			layout[mode] = default_material_layout
+		elif mode == "paint":
+			layout[mode] = default_paint_layout
 	$FlexibleLayout.init(layout[current_mode] if layout.has(current_mode) else null)
 
 
