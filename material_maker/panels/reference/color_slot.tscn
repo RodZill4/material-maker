@@ -1,23 +1,26 @@
 [gd_scene load_steps=2 format=3 uid="uid://cqalnln5sq2ff"]
 
-[ext_resource type="Script" path="res://material_maker/panels/reference/color_slot.gd" id="1"]
+[ext_resource type="Script" uid="uid://ctlul33mwpeby" path="res://material_maker/panels/reference/color_slot.gd" id="1"]
 
-[node name="ColorSlot" type="ColorRect"]
+[node name="ColorSlot" type="Button"]
 custom_minimum_size = Vector2(32, 32)
 offset_right = 32.0
 offset_bottom = 32.0
-color = Color(1, 1, 1, 0)
+toggle_mode = true
 script = ExtResource("1")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = 2.0
 offset_right = -2.0
 offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.501961, 0.501961, 0.501961, 1)
 
-[connection signal="gui_input" from="." to="." method="_on_ColorSlot_gui_input"]
+[connection signal="draw" from="ColorRect" to="." method="_on_color_rect_draw"]
