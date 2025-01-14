@@ -69,6 +69,7 @@ enabled=PackedStringArray()
 [gui]
 
 timers/tooltip_delay_sec=0.1
+theme/custom="res://material_maker/theme/modern.tres"
 
 [input]
 

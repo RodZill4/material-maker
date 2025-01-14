@@ -38,6 +38,7 @@ func _on_toggled(pressed:bool) -> void:
 
 
 func position_panel() -> void:
+	panel.size = Vector2(0,0)
 	var at_position := global_position
 	at_position.x += size.x/2 - panel.size.x/2
 	at_position.x = max(at_position.x, get_parent().get_child(0).global_position.x)

@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpulty2lkvcht"]
+[gd_scene load_steps=8 format=3 uid="uid://dpulty2lkvcht"]
 
 [ext_resource type="PackedScene" uid="uid://cxcw0mi4sfl2x" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://bqre7xkdgb655" path="res://material_maker/environments/hdris/moonless_golf_1k.hdr" id="2_ks6fo"]
 
 [sub_resource type="Animation" id="3"]
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -22,13 +24,17 @@ _data = {
 }
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
+panorama = ExtResource("2_ks6fo")
 
 [sub_resource type="Sky" id="Sky_wye7d"]
 sky_material = SubResource("PanoramaSkyMaterial_40ogr")
 
 [sub_resource type="Environment" id="Environment_qxxdb"]
-background_mode = 2
+background_mode = 1
+background_color = Color(1, 1, 1, 0)
 sky = SubResource("Sky_wye7d")
+ambient_light_source = 3
+reflected_light_source = 2
 
 [node name="Preview3dScene" type="Node3D"]
 
@@ -48,7 +54,6 @@ fov = 50.0
 libraries = {
 &"": SubResource("AnimationLibrary_sxr5g")
 }
-autoplay = "rotate"
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 shadow_enabled = true

@@ -18,6 +18,9 @@ func _ready():
 	material.shader = Shader.new()
 	material.set_shader_parameter("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 	for p in parameters:
+		if p.get("save_in_config", false):
+			if mm_globals.has_config("3D_preview_objects/"+name.to_snake_case()+"_"+p.name):
+				parameter_values[p.name] = mm_globals.get_config("3D_preview_objects/"+name.to_snake_case()+"_"+p.name)
 		if not parameter_values.has(p.name):
 			parameter_values[p.name] = p.default_value
 	update_mesh.call_deferred()
@@ -35,6 +38,9 @@ func set_uv_scale(s : Vector2) -> void:
 
 func set_parameter(v : float, n : String) -> void:
 	if parameter_values[n] != v:
+		for p in parameters:
+			if p.name == n and p.get("save_in_config", false):
+				mm_globals.set_config("3D_preview_objects/"+name.to_snake_case()+"_"+p.name, v)
 		parameter_values[n] = v
 		update_mesh()
 

@@ -575,6 +575,7 @@ icon_alignment = 1
 
 [node name="ExportFileLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="2"]
 layout_mode = 2
+size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "File Name"
 

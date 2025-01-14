@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dpaxvlnn2u1f6"]
 
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_3d.gd" id="1"]
+[ext_resource type="Script" uid="uid://ciayi8gvd2e1b" path="res://material_maker/panels/preview_3d/preview_3d.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://dpulty2lkvcht" path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" id="2"]
 
 [node name="Preview3D" type="SubViewportContainer" groups=["preview"]]
