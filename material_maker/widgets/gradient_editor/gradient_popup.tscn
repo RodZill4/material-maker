@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://in4lqr3eetvc"]
+[gd_scene load_steps=7 format=3 uid="uid://in4lqr3eetvc"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_popup.gd" id="1"]
+[ext_resource type="Script" uid="uid://h85iv7e2rlbv" path="res://material_maker/widgets/gradient_editor/gradient_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2_fotv7"]
 [ext_resource type="PackedScene" uid="uid://cp6ft7qbucfam" path="res://material_maker/widgets/gradient_editor/gradient_edit.tscn" id="2_uait3"]
 [ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="3_2wy2b"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="4_6ujyx"]
+[ext_resource type="Script" uid="uid://d1a1bkn1evvxv" path="res://material_maker/widgets/gradient_editor/gradient_effects_menu.gd" id="5_sd4bi"]
 
 [node name="GradientPopup" type="MarginContainer"]
 top_level = true
@@ -59,6 +61,30 @@ popup/item_2/text = "SmoothStep"
 popup/item_2/id = 2
 popup/item_3/text = "Cubic"
 popup/item_3/id = 3
+
+[node name="EffectsMenu" type="Button" parent="Panel/VBox/HBox"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "View"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("4_6ujyx")
+icon_name = "settings"
+
+[node name="EffectsMenuPanel" type="PanelContainer" parent="Panel/VBox/HBox/EffectsMenu"]
+unique_name_in_owner = true
+top_level = true
+layout_mode = 0
+offset_left = 493.0
+offset_top = 9.0
+offset_right = 817.0
+offset_bottom = 75.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("5_sd4bi")
+
+[node name="VBox" type="VBoxContainer" parent="Panel/VBox/HBox/EffectsMenu/EffectsMenuPanel"]
+layout_mode = 2
 
 [node name="Pin" type="Button" parent="Panel/VBox/HBox"]
 unique_name_in_owner = true

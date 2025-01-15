@@ -28,6 +28,7 @@ func _draw() -> void:
 
 func _on_toggled(pressed:bool) -> void:
 	panel.visible = pressed
+	panel.size = Vector2()
 
 	if panel.visible:
 		position_panel()
