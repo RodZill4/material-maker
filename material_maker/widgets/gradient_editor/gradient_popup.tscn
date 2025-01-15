@@ -65,7 +65,7 @@ popup/item_3/id = 3
 [node name="EffectsMenu" type="Button" parent="Panel/VBox/HBox"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
-tooltip_text = "View"
+tooltip_text = "Tools"
 theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_mask = 3
