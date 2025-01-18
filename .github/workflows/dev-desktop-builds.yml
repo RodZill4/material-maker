@@ -20,10 +20,10 @@ on:
 
 env:
   GODOT_VERSION: 4.4
-  GODOT_SUB: dev7
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.4-dev7
+  GODOT_SUB: beta1
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.4-beta1
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_4a2
+  MM_RELEASE: 1_4a3
 
 jobs:
   export_windows_linux:
