@@ -99,10 +99,6 @@ func set_shader_from_shadercode_ext(shader_template : String, shader_code : MMGe
 func set_shader_from_shadercode(shader_code : MMGenBase.ShaderCode, is_32_bits : bool = false, extra_parameters : Array[Dictionary] = []) -> bool:
 	var shader_template : String = load("res://addons/material_maker/engine/nodes/buffer_compute.tres").text
 	
-	#if compare_texture:
-	#	shader_template = load("res://addons/material_maker/engine/nodes/iterate_buffer_compute.tres").text
-	#else:
-	
 	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
 	
 	var output_texture_type : int = 0 if (shader_code.output_type == "f") else 1
