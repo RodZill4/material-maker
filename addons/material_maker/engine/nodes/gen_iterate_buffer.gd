@@ -251,6 +251,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	var genname = "o"+str(get_instance_id())
 	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0, "_it_tex" if output_index == 0 else "_loop_tex")
 	shader_code.add_uniform("%s_it_tex_size" % genname, "float", pow(2, get_parameter("size")))
+	shader_code.add_uniform(iteration_param_name, "int", current_iteration)
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:
