@@ -71,7 +71,7 @@ func _exit_tree() -> void:
 			environments[i].thumbnail = Marshalls.raw_to_base64(image.save_png_to_buffer())
 	var file = FileAccess.open("user://environments.json", FileAccess.WRITE)
 	if file != null:
-		file.store_string(JSON.stringify(environments.slice(3, environments.size()-1)))
+		file.store_string(JSON.stringify(environments.slice(3, environments.size())))
 
 func get_environment_list() -> Array:
 	var list = []
