@@ -11,8 +11,8 @@ const CAMERA_FOV_MAX = 90
 @onready var objects = $MaterialPreview/Preview3d/ObjectsPivot/Objects
 @onready var current_object = objects.get_child(0)
 
-@onready var camera_stand = $MaterialPreview/Preview3d/CameraPivot
-@onready var camera = $MaterialPreview/Preview3d/CameraPivot/Camera3D
+@onready var camera_controller = $MaterialPreview/Preview3d/CameraController
+@onready var camera = $MaterialPreview/Preview3d/Camera3D
 @onready var sun = $MaterialPreview/Preview3d/Sun
 
 #var ui
@@ -205,15 +205,9 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 func zoom(amount : float):
 	camera.position.z = clamp(camera.position.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
 
-func on_gui_input(event) -> void:
-	if event is InputEventPanGesture:
-		#$MaterialPreview/Preview3d/ObjectRotate.stop(false)
-		var camera_basis = camera.global_transform.basis
-		var camera_rotation : Vector2 = event.delta
-		camera_stand.rotate(camera_basis.x.normalized(), -camera_rotation.y)
-		camera_stand.rotate(camera_basis.y.normalized(), -camera_rotation.x)
-	elif event is InputEventMagnifyGesture:
-		zoom(1.0/event.factor)
+func on_gui_input(event : InputEvent) -> void:
+	if camera_controller.process_event(event):
+		accept_event()
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
@@ -270,13 +264,8 @@ func on_gui_input(event) -> void:
 			if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 				objects_pivot.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
 				objects_pivot.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
-				if objects_rotation != 1:
-					camera_stand.rotate(camera_basis.x.normalized(), -motion.y)
-					camera_stand.rotate(camera_basis.y.normalized(), -motion.x)
 			elif event.button_mask & MOUSE_BUTTON_MASK_RIGHT:
 				objects_pivot.rotate(camera_basis.z.normalized(), objects_rotation * motion.x)
-				if objects_rotation != 1:
-					camera_stand.rotate(camera_basis.z.normalized(), -motion.x)
 
 func on_right_click():
 	pass

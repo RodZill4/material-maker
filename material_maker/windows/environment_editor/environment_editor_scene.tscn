@@ -1,23 +1,39 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdkj3jrppq51u"]
+[gd_scene load_steps=6 format=3 uid="uid://cdkj3jrppq51u"]
 
 [sub_resource type="SphereMesh" id="1"]
 radius = 0.8
 height = 1.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iodts"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_he74e"]
+metallic = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7b6bj"]
+roughness = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wgw8l"]
+metallic = 1.0
+roughness = 0.0
 
 [node name="Node3D" type="Node3D"]
 
 [node name="Sphere1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
 mesh = SubResource("1")
+surface_material_override/0 = SubResource("StandardMaterial3D_iodts")
 
 [node name="Sphere2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
 mesh = SubResource("1")
+surface_material_override/0 = SubResource("StandardMaterial3D_he74e")
 
 [node name="Sphere3" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
 mesh = SubResource("1")
+surface_material_override/0 = SubResource("StandardMaterial3D_7b6bj")
 
 [node name="Sphere4" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
 mesh = SubResource("1")
+surface_material_override/0 = SubResource("StandardMaterial3D_wgw8l")
