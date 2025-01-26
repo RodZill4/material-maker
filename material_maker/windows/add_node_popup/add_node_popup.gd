@@ -64,6 +64,7 @@ func todo_renamed_hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
+	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	var current_graph = get_current_graph()
 	insert_position = current_graph.offset_from_global_position(current_graph.get_global_mouse_position())
 	popup()

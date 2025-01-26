@@ -12,7 +12,8 @@ signal return_paths(path_list)
 
 
 func _ready() -> void:
-	min_size = Vector2(500, 500)
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = content_scale_factor*Vector2(500, 500)
 	if DIALOG_HACK:
 		var vbox = get_vbox()
 		var hbox = HSplitContainer.new()

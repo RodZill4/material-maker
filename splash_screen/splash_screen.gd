@@ -62,8 +62,10 @@ func _enter_tree():
 	set_screen(screen)
 	var window : Window = get_window()
 	var current_screen_index = window.current_screen
-	window.position = (DisplayServer.screen_get_size(current_screen_index)-Vector2i(size))/2 + DisplayServer.screen_get_position(current_screen_index)
-	window.size = size
+	var ui_scale : int = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
+	window.position = (DisplayServer.screen_get_size(current_screen_index)-Vector2i(ui_scale*size))/2 + DisplayServer.screen_get_position(current_screen_index)
+	window.size = ui_scale*size
+	window.content_scale_factor = ui_scale
 
 func set_screen(bi : int) -> void:
 	background_index = bi

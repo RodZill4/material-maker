@@ -66,6 +66,7 @@ func fill_list(filter : String):
 func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 	# Hide the window until the asset list is loaded
 	visible = false
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	mm_globals.main_window.add_dialog(self)
 	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:
@@ -128,7 +129,7 @@ func _on_ItemList_nothing_selected():
 	$VBoxContainer/Buttons/OK.disabled = true
 
 func _on_VBoxContainer_minimum_size_changed():
-	size = $VBoxContainer.size+Vector2(4, 4)
+	size = ($VBoxContainer.size+Vector2(4, 4))*content_scale_factor
 
 
 func _on_Filter_changed(new_text):
