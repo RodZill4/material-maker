@@ -40,12 +40,10 @@ func process_event(event : InputEvent) -> bool:
 				camera_position.translate(Vector3(0.0, 0.0, zoom*(1.0 if event.shift_pressed else 0.1)))
 			return true
 	elif event is InputEventPanGesture:
-		# TODO: test and fix this
-		camera_rotation2.rotate_x(-0.01*event.delta.y)
-		camera_rotation1.rotate_y(-0.01*event.delta.x)
+		camera_rotation2.rotate_x(-0.05*event.delta.y)
+		camera_rotation1.rotate_y(-0.05*event.delta.x)
 		return true
 	elif event is InputEventMagnifyGesture:
-		# TODO: test and fix this
-		camera_position.z /= event.factor
+		camera_position.position.z /= event.factor
 		return true
 	return false
