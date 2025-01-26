@@ -53,10 +53,8 @@ var mask : MMTexture = MMTexture.new()
 
 @onready var view_3d = $VSplitContainer/HSplitContainer/Painter/View
 @onready var main_view = $VSplitContainer/HSplitContainer/Painter/View/MainView
-@onready var camera : Camera3D = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera3D
-@onready var camera_position = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition
-@onready var camera_rotation1 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1
-@onready var camera_rotation2 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2
+@onready var camera : Camera3D = $VSplitContainer/HSplitContainer/Painter/View/MainView/Camera3D
+@onready var camera_controller = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraController
 @onready var painted_mesh = $VSplitContainer/HSplitContainer/Painter/View/MainView/PaintedMesh
 @onready var painter = $Painter
 @onready var tools = $VSplitContainer/HSplitContainer/Painter/Tools
@@ -234,9 +232,9 @@ func set_object(o, init_material : bool = false):
 	preview_material.ao_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_override_material(0, preview_material)
-	# Center camera on  mesh
+	# Center camera on mesh
 	var aabb : AABB = painted_mesh.get_aabb()
-	camera_position.transform.origin = aabb.position+0.5*aabb.size
+	camera_controller.transform.origin = aabb.position+0.5*aabb.size
 	update_camera()
 	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
@@ -335,15 +333,15 @@ func _on_Eraser_toggled(button_pressed):
 	view_3d.mouse_default_cursor_shape = Control.CURSOR_CROSS if button_pressed else Control.CURSOR_POINTING_HAND
 
 func _physics_process(delta):
-	camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
-	camera_rotation2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
+	# TODO: Move this to the CameraController scene?
+	#camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
+	#camera_rotation2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
 	update_view()
 
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
-		if ev.keycode == KEY_CTRL:
-			#TODO: move this to another shortcut, this is too annoying
-			#painter.show_pattern(ev.pressed)
+		if ev.keycode == KEY_P:
+			painter.show_pattern(ev.pressed)
 			accept_event()
 		elif ev.keycode == KEY_LEFT or ev.keycode == KEY_RIGHT or ev.keycode == KEY_UP or ev.keycode == KEY_DOWN:
 			var new_key_rotate = Vector2(0.0, 0.0)
@@ -495,36 +493,11 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 					reset_stroke()
 
 func _on_View_gui_input(ev : InputEvent):
+	if camera_controller.process_event(ev):
+		update_view()
+		accept_event()
 	handle_stroke_input(ev, PAINTING_MODE_TEXTURE_FROM_VIEW if paint_engine_button.button_pressed else PAINTING_MODE_VIEW)
-	if ev is InputEventPanGesture:
-		camera_rotation1.rotate_y(-0.1*ev.delta.x)
-		camera_rotation2.rotate_x(-0.1*ev.delta.y)
-		update_view()
-		accept_event()
-	elif ev is InputEventMagnifyGesture:
-		camera.translate(Vector3(0.0, 0.0, ev.factor-1.0))
-		update_view()
-		accept_event()
-	elif ev is InputEventMouseMotion:
-		if ev.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0:
-			if ev.shift_pressed:
-				var factor = 0.0025*camera.position.z
-				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
-				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
-				#update_view()
-				accept_event()
-			elif ev.is_command_or_control_pressed():
-				camera.translate(Vector3(0.0, 0.0, -0.01*ev.relative.y*camera.transform.origin.z))
-				#update_view()
-				accept_event()
-			else:
-				camera_rotation1.rotate_y(-0.01*ev.relative.x)
-				camera_rotation2.rotate_x(-0.01*ev.relative.y)
-				#update_view()
-				accept_event()
-	elif ev is InputEventMouseButton:
-		if !ev.pressed and ev.button_index == MOUSE_BUTTON_MIDDLE:
-			update_view()
+	if ev is InputEventMouseButton:
 		# Mouse wheel
 		if ev.is_command_or_control_pressed():
 			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -535,16 +508,6 @@ func _on_View_gui_input(ev : InputEvent):
 				return
 			update_view()
 			accept_event()
-		else:
-			var zoom = 0.0
-			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom -= 1.0
-			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				zoom += 1.0
-			if zoom != 0.0:
-				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
-				update_view()
-				accept_event()
 	else:
 		__input(ev)
 
@@ -749,17 +712,27 @@ func update_camera():
 	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
 	camera.far = 1.01*(cam_to_center+mesh_size)
 
+var updating : bool = false
+var need_update : bool = false
+
 func update_view():
-	update_camera()
-	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
-	if painter != null:
-		painter.update_view(camera.get_camera_projection(), transform, main_view.size)
-		# DEBUG: show tex2view texture on model
-		#for i in range(10):
-		#	await get_tree().process_frame
-		#painted_mesh.get_surface_override_material(0).albedo_texture = await painter.debug_get_texture(1)
-	# Force recalculate brush size parameter
-	#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
+	need_update = true
+	if updating:
+		return
+	updating = true
+	while need_update:
+		need_update = false
+		update_camera()
+		var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
+		if painter != null:
+			await painter.update_view(camera.get_camera_projection(), transform, main_view.size)
+			# DEBUG: show tex2view texture on model
+			#for i in range(10):
+			#	await get_tree().process_frame
+			#painted_mesh.get_surface_override_material(0).albedo_texture = await painter.debug_get_texture(1)
+		# Force recalculate brush size parameter
+		#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
+	updating = false
 
 func _on_resized():
 	call_deferred("update_view")
@@ -946,7 +919,7 @@ func _on_Brush_value_changed(value, brush_parameter):
 
 func set_environment(index) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera3D.environment
+	var environment = camera.environment
 	var sun = $VSplitContainer/HSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
 
