@@ -32,7 +32,7 @@ class Buffer:
 
 var dependencies : Dictionary = {}
 var dependencies_values : Dictionary = {}
-var buffers : Dictionary = {}
+var buffers : Dictionary[String, Buffer] = {}
 
 var reset_stats : bool = true
 var render_queue_size : int = 0
@@ -42,6 +42,9 @@ signal render_queue_empty
 
 
 func create_buffer(buffer_name : String, object : Object = null):
+	if buffers.has(buffer_name):
+		assert(buffers[buffer_name].object == object)
+		return
 	buffers[buffer_name] = Buffer.new(buffer_name, object)
 	buffer_invalidate(buffer_name)
 	if object is Node and not object.is_connected("tree_exiting", self.delete_buffers_from_object.bind(object)):
