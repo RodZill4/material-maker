@@ -76,14 +76,14 @@ func _on_ViewportContainer_resized():
 func _on_name_text_entered(new_text : String):
 	environment_list.set_item_text(current_environment, new_text)
 
-func _on_ViewportContainer_gui_input(ev : InputEvent):
-	if camera_controller.process_event(ev):
+func _on_ViewportContainer_gui_input(event : InputEvent):
+	if camera_controller.process_event(event, get_viewport()):
 		$Main.accept_event()
-	elif ev is InputEventMouseButton:
-		if ev.is_command_or_control_pressed():
-			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
+	elif event is InputEventMouseButton:
+		if event.is_command_or_control_pressed():
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
-			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.fov -= 1
 			else:
 				return

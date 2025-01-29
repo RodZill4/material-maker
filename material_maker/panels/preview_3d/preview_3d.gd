@@ -206,7 +206,7 @@ func zoom(amount : float):
 	camera.position.z = clamp(camera.position.z*amount, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX)
 
 func on_gui_input(event : InputEvent) -> void:
-	if camera_controller.process_event(event):
+	if camera_controller.process_event(event, get_viewport()):
 		accept_event()
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
