@@ -24,7 +24,7 @@
 			}
 		],
 		"instance": "",
-		"name": "pack_4x16_to_2x32",
+		"name": "pack 4x16 to 2x32",
 		"outputs": [
 			{
 				"rgb": "vec3(pack_4x16_to_2x32($source($uv)), 0.0)",

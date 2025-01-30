@@ -32,7 +32,7 @@
 		],
 		"instance": "",
 		"longdesc": "Mixes several workflow maps, to be used with the same base material",
-		"name": "Mix maps",
+		"name": "Mix Maps",
 		"outputs": [
 			{
 				"longdesc": "Generates a merged workflow map",
@@ -44,7 +44,7 @@
 		"parameters": [
 
 		],
-		"shortdesc": "Mix maps"
+		"shortdesc": "Mix Maps"
 	},
 	"type": "shader"
 }

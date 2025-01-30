@@ -40,7 +40,7 @@
 			}
 		],
 		"instance": "",
-		"name": "pack_1x32_to_2x16",
+		"name": "pack 1x32 to 2x16",
 		"outputs": [
 			{
 				"rgb": "vec3(pack_1x32_to_2x16($source($uv)), 0.0)",
