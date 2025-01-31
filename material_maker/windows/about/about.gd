@@ -58,6 +58,7 @@ func _ready() -> void:
 			name_control = label
 		elif c.has("icon"):
 			var icon : TextureRect = TextureRect.new()
+			icon.expand_mode = TextureRect.EXPAND_FIT_HEIGHT_PROPORTIONAL
 			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 			icon.texture = load(c.icon)
 			name_control = icon
