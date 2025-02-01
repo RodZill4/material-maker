@@ -10,6 +10,9 @@ extends MeshInstance3D
 var parameter_values : Dictionary = {}
 
 
+@export var save_parameters : bool = true
+
+
 var material : ShaderMaterial
 
 

@@ -1,27 +1,28 @@
-[gd_scene load_steps=6 format=3 uid="uid://cq4jf2i8qyhqw"]
+[gd_scene load_steps=10 format=3 uid="uid://cq4jf2i8qyhqw"]
+
+[ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_gyiei"]
+[ext_resource type="Texture2D" uid="uid://bm0yyipaorsh4" path="res://material_maker/tools/share/hdri/kloofendal_48d_partly_cloudy_1k.exr" id="2_2mtav"]
 
 [sub_resource type="SphereMesh" id="1"]
 radial_segments = 256
 rings = 128
 
-[sub_resource type="Shader" id="Shader_7peee"]
-code = "shader_type spatial;
-
-void fragment() {
-	// Place fragment code here.
-}
-"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rw2ha"]
-render_priority = 0
-shader = SubResource("Shader_7peee")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2mtav"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_fvxxt"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_fvxxt"]
+panorama = ExtResource("2_2mtav")
 
 [sub_resource type="Sky" id="6"]
+sky_material = SubResource("PanoramaSkyMaterial_fvxxt")
 
 [sub_resource type="Environment" id="5"]
 background_mode = 2
 sky = SubResource("6")
-ambient_light_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+ambient_light_color = Color(0.486275, 0.498039, 0.498039, 1)
 tonemap_mode = 2
 
 [node name="Node3D" type="Node3D"]
@@ -31,6 +32,253 @@ transform = Transform3D(-0.38692, 0, -0.922113, 0, 1, 0, 0.922113, 0, -0.38692, 
 
 [node name="Sphere" type="MeshInstance3D" parent="Pivot"]
 transform = Transform3D(0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707107, 0, 0, 0)
+visible = false
+mesh = SubResource("1")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_rw2ha")
+
+[node name="Cylinder" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0, 0)
+visible = false
+mesh = SubResource("ArrayMesh_2mtav")
+script = ExtResource("1_gyiei")
+compute_shader = "#version 450
+// VERTEX COUNT: (size+1)*(size+1)
+// INDEX COUNT: 2*size*(size+2)-2
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+const float TAU = 6.28318530718;
+
+void set_face_point(int vertex_index, vec3 vertex, vec3 normal, vec3 tangent, vec2 tex_uvs) {
+	mm_out.vertices[3*vertex_index+0] = vertex.x;
+	mm_out.vertices[3*vertex_index+1] = vertex.y;
+	mm_out.vertices[3*vertex_index+2] = vertex.z;
+	mm_out.normals[3*vertex_index+0] = normal.x;
+	mm_out.normals[3*vertex_index+1] = normal.y;
+	mm_out.normals[3*vertex_index+2] = normal.z;
+	mm_out.tangents[4*vertex_index+0] = tangent.x;
+	mm_out.tangents[4*vertex_index+1] = tangent.y;
+	mm_out.tangents[4*vertex_index+2] = tangent.z;
+	mm_out.tangents[4*vertex_index+3] = 1.0;
+	mm_out.tex_uvs[2*vertex_index+0] = tex_uvs.x;
+	mm_out.tex_uvs[2*vertex_index+1] = tex_uvs.y;
+}
+
+void set_point(int x, int y) {
+	int vertex_index = x+(size+1)*y;
+	int vertex_offset = (size+1)*(size+1);
+	float scale = 1.0/float(size);
+	vec2 vertex_2d = vec2(0.4, scale*y-0.5);
+	vec2 normal_2d = vec2(1.0, 0.0);
+	if (abs(vertex_2d.y) > 0.5*(1.0-chamfer)) {
+		float s = sign(vertex_2d.y);
+		float r = 2.0*chamfer/TAU;
+		float a = 0.5*TAU*(0.5-abs(vertex_2d.y))/chamfer;
+		normal_2d = vec2(sin(a), s*cos(a));
+		vertex_2d = vec2(vertex_2d.x-r, s*0.5*(1.0-chamfer))+r*normal_2d;
+	}
+	float a = float(x)*TAU/float(size);	
+	vec3 vertex = vec3(vertex_2d.x*cos(a), vertex_2d.y, vertex_2d.x*sin(a));
+	vec3 normal = normalize(vec3(normal_2d.x*cos(a), normal_2d.y, normal_2d.x*sin(a)));
+	vec3 tangent = vec3(-sin(a), 0, cos(a));
+	vec2 tex_uvs =vec2(1.0, 1.0)-scale*vec2(x, y);
+	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);
+}
+
+void main() {
+	ivec2 c = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	set_point(c.x, c.y);
+	mm_out.indexes[2*(c.x+(size+2)*c.y)] = c.x+(size+1)*(c.y+1);
+	mm_out.indexes[2*(c.x+(size+2)*c.y)+1] = c.x+(size+1)*c.y;
+	if (c.x == size-1) {
+		mm_out.indexes[2*(size+(size+2)*c.y)] = size+(size+1)*(c.y+1);
+		mm_out.indexes[2*(size+(size+2)*c.y)+1] = size+(size+1)*c.y;
+		set_point(size, c.y);
+		if (c.y == size-1) {
+			set_point(size, size);
+		} else {
+			mm_out.indexes[2*(size+(size+2)*c.y)+2] = size+(size+1)*c.y;
+			mm_out.indexes[2*(size+(size+2)*c.y)+3] = (size+1)*(c.y+2);
+		}
+	}
+	if (c.y == size-1) {
+		set_point(c.x, size);
+	}
+}
+"
+vertex_count_expression = "(size+1)*(size+1)"
+index_count_expression = "2*size*(size+2)-2"
+can_tesselate = false
+uv_scale = Vector2(3, 2)
+parameters = [{
+"default_value": 0.2,
+"label": "Chamfer",
+"max_value": "1",
+"min_value": "0",
+"name": "chamfer",
+"save_in_config": true
+}]
+save_parameters = false
+
+[node name="Cube" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(0.649519, 0, 0.375, 0, 0.75, 0, -0.375, 0, 0.649519, -0.0260303, 0, 0.0109223)
+visible = false
+mesh = SubResource("ArrayMesh_fvxxt")
+script = ExtResource("1_gyiei")
+compute_shader = "#version 450
+// VERTEX COUNT: 6*(size+1)*(size+1)
+// INDEX COUNT: 12*size*(size+2)-2
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+void set_face_point(int vertex_index, vec3 vertex, vec3 normal, vec3 tangent, vec2 tex_uvs, mat3 mat) {
+	vertex = mat*vertex;
+	mm_out.vertices[3*vertex_index+0] = vertex.x;
+	mm_out.vertices[3*vertex_index+1] = vertex.y;
+	mm_out.vertices[3*vertex_index+2] = vertex.z;
+	normal = mat*normal;
+	mm_out.normals[3*vertex_index+0] = normal.x;
+	mm_out.normals[3*vertex_index+1] = normal.y;
+	mm_out.normals[3*vertex_index+2] = normal.z;
+	tangent = mat*tangent;
+	mm_out.tangents[4*vertex_index+0] = tangent.x;
+	mm_out.tangents[4*vertex_index+1] = tangent.y;
+	mm_out.tangents[4*vertex_index+2] = tangent.z;
+	mm_out.tangents[4*vertex_index+3] = 1.0;
+	mm_out.tex_uvs[2*vertex_index+0] = tex_uvs.x;
+	mm_out.tex_uvs[2*vertex_index+1] = tex_uvs.y;
+}
+
+void set_point(int x, int y) {
+	int vertex_index = x+(size+1)*y;
+	int vertex_offset = (size+1)*(size+1);
+	float scale = 1.0/float(size);
+	vec2 p = vec2(scale*x-0.5, scale*y-0.5);
+	vec3 vertex;
+	vec3 tangent;
+	vec3 normal;
+	vec2 tex_uvs;
+	vec2 angle;
+	vec2 base = p;
+	int round = 0;
+	float radius = chamfer*0.70710678118;
+	if (2.0*scale*x < chamfer) {
+		base.x = -0.5+0.5*chamfer;
+		round += 1;
+	} else if (2.0*scale*x > 2.0-chamfer) {
+		base.x = 0.5-0.5*chamfer;
+		round += 1;
+	}
+	if (2.0*scale*y < chamfer) {
+		base.y = -0.5+0.5*chamfer;
+		round += 1;
+	} else if (2.0*scale*y > 2.0-chamfer) {
+		base.y = 0.5-0.5*chamfer;
+		round += 1;
+	}
+	if (p == base) {
+		angle = vec2(0.0);
+	} else {
+		angle = p-base;
+		angle *= 0.78539816339;
+		angle /= 0.5*chamfer;
+		if (round > 1) {
+			float max_angle = max(abs(angle.x), abs(angle.y));
+			float min_angle = min(abs(angle.x), abs(angle.y));
+			float d2c = min_angle/max_angle;
+			angle = (1.0+0.12*d2c*d2c)*max_angle*normalize(angle/max_angle);
+		}
+	}
+	vec2 sin_angle = sin(angle);
+	normal = vec3(sin_angle.x, sqrt(1.0-dot(sin_angle, sin_angle)), sin_angle.y);
+	vertex = vec3(base.x, 0.5-0.709*radius, base.y)+radius*normal;
+	tangent = normalize(vec3(1.0, 0.0, 0.0));
+	tex_uvs = scale*vec2(x, y)/vec2(3.0, 2.0);
+	mat3 mat;
+	vec2 uv_offset;
+	mat = mat3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+	uv_offset = vec2(0.0, 0.0);
+	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(-1, 0, 0, 0, 0, -1, 0, -1, 0);
+	uv_offset = vec2(1.0, 0.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(1, 0, 0, 0, 0, 1, 0, -1, 0);
+	uv_offset = vec2(2.0, 0.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+2*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(0, 0, -1, 1, 0, 0, 0, -1, 0);
+	uv_offset = vec2(0.0, 1.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+3*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(0, 0, 1, -1, 0, 0, 0, -1, 0);
+	uv_offset = vec2(1.0, 1.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+4*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(1, 0, 0, 0, -1, 0, 0, 0, -1);
+	uv_offset = vec2(2.0, 1.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+5*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+}
+
+void main() {
+	ivec2 c = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	set_point(c.x, c.y);
+	if (c.x == size-1) {
+		set_point(size, c.y);
+		if (c.y == size-1) {
+			set_point(size, size);
+		}
+	}
+	if (c.y == size-1) {
+		set_point(c.x, size);
+	}
+	int index_offset = 0;
+	int vertex_offset = 0;
+	for (int i = 0; i < 6; ++i) {
+		mm_out.indexes[index_offset+2*(c.x+(size+2)*c.y)] = vertex_offset+c.x+(size+1)*(c.y+1);
+		mm_out.indexes[index_offset+2*(c.x+(size+2)*c.y)+1] = vertex_offset+c.x+(size+1)*c.y;
+		if (c.x == size-1) {
+			mm_out.indexes[index_offset+2*(size+(size+2)*c.y)] = vertex_offset+size+(size+1)*(c.y+1);
+			mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+1] = vertex_offset+size+(size+1)*c.y;
+			if (c.y != size-1) {
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+2] = vertex_offset+size+(size+1)*c.y;
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+3] = vertex_offset+(size+1)*(c.y+2);
+			} else if (i < 5) {
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+2] = vertex_offset+size+(size+1)*c.y;
+				mm_out.indexes[index_offset+2*(size+(size+2)*c.y)+3] = vertex_offset+(size+1)*(size+2);
+			}
+		}
+		index_offset += 2*(size+2)*size;
+		vertex_offset += (size+1)*(size+1);
+	}
+}
+"
+vertex_count_expression = "6*(size+1)*(size+1)"
+index_count_expression = "12*size*(size+2)-2"
+can_tesselate = false
+uv_scale = Vector2(3, 2)
+parameters = [{
+"default_value": 0.2,
+"label": "Chamfer",
+"max_value": "1",
+"min_value": "0",
+"name": "chamfer",
+"save_in_config": true
+}]
+save_parameters = false
+
+[node name="Custom" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(0.707107, 0, -0.707106, 0, 1, 0, 0.707106, 0, 0.707107, 0, 0, 0)
+visible = false
 mesh = SubResource("1")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_rw2ha")
@@ -39,8 +287,14 @@ surface_material_override/0 = SubResource("ShaderMaterial_rw2ha")
 transform = Transform3D(0.488265, -0.365119, 0.792645, 0.0168143, 0.912039, 0.409759, -0.872534, -0.186743, 0.451456, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Camera3D" type="Camera3D" parent="Pivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8)
+[node name="CameraAnchor" type="Node3D" parent="Pivot"]
+transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 5.96046e-08, 0, 2)
+
+[node name="Camera3D" type="Camera3D" parent="Pivot/CameraAnchor"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, -5.96046e-08, 0, 1.19209e-07)
+fov = 30.0
+near = 0.5
+far = 10.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("5")

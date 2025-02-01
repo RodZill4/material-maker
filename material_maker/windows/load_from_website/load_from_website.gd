@@ -25,7 +25,7 @@ func _on_ItemList_item_activated(index) -> void:
 	if only_return_index:
 		emit_signal("return_asset", { index=displayed_assets[index] })
 	else:
-		var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterial?id="+str(displayed_assets[index]))
+		var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(displayed_assets[index]))
 		if error != OK:
 			return
 		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()

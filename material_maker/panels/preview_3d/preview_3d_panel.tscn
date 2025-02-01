@@ -1,9 +1,8 @@
-[gd_scene load_steps=27 format=3 uid="uid://cj6b1r8b6jel3"]
+[gd_scene load_steps=23 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
 [ext_resource type="Script" uid="uid://f81isnxjqrub" path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://bqre7xkdgb655" path="res://material_maker/environments/hdris/moonless_golf_1k.hdr" id="3_6ex0n"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="4_1y5jf"]
 [ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="5_3wjmy"]
 [ext_resource type="Script" uid="uid://bntvqam28c8qx" path="res://material_maker/panels/preview_3d/model_menu.gd" id="6_ihg7a"]
@@ -34,21 +33,7 @@ shader = SubResource("1")
 shader_parameter/aabb_position = null
 shader_parameter/aabb_size = null
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
-panorama = ExtResource("3_6ex0n")
-
-[sub_resource type="Sky" id="Sky_wye7d"]
-sky_material = SubResource("PanoramaSkyMaterial_40ogr")
-
-[sub_resource type="Environment" id="Environment_qxxdb"]
-background_mode = 1
-background_color = Color(1, 1, 1, 0)
-sky = SubResource("Sky_wye7d")
-ambient_light_source = 3
-reflected_light_source = 2
-
 [sub_resource type="World3D" id="World3D_3xlky"]
-environment = SubResource("Environment_qxxdb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2aqpg"]
 atlas = ExtResource("4_1y5jf")

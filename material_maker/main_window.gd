@@ -1027,7 +1027,7 @@ func update_preview_2d() -> void:
 			projects_panel.preview_2d_background.set_generator(generator, output_index)
 
 var current_gen_material = null
-func update_preview_3d(previews : Array, _sequential = false) -> void:
+func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var gen_material = null
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
@@ -1040,7 +1040,7 @@ func update_preview_3d(previews : Array, _sequential = false) -> void:
 		var materials : Array[ShaderMaterial] = []
 		for p in previews:
 			materials.append_array(p.get_materials())
-		current_gen_material.set_3d_previews(materials)
+		await current_gen_material.set_3d_previews(materials)
 
 func on_preview_changed(graph) -> void:
 	if graph == get_current_graph_edit():

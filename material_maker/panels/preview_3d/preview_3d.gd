@@ -197,6 +197,17 @@ func get_materials() -> Array:
 		return [ current_object.get_material() ]
 	return []
 
+func get_preview_settings() -> Dictionary:
+	var settings : Dictionary = {}
+	settings.object_mesh = current_object.mesh
+	settings.object_material = current_object.get_active_material(0)
+	settings.object_transform = current_object.global_transform
+	settings.camera_transform = camera.global_transform
+	settings.camera_fov = camera.fov
+	settings.camera_near = camera.near
+	settings.camera_far = camera.far
+	return settings
+
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 	var preview_material = current_object.get_material()
 	preview_material.set_shader_parameter(parameter_name, value)
