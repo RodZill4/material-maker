@@ -170,7 +170,7 @@
 			"}",
 			""
 		],
-		"name": "PolyCurve",
+		"name": "Poly Curve",
 		"outputs": [
 			{
 				"longdesc": "An image showing the specified curve",

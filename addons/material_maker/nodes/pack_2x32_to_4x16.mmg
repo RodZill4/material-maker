@@ -24,7 +24,7 @@
 			}
 		],
 		"instance": "",
-		"name": "pack_2x32_to_4x16",
+		"name": "pack 2x32 to 4x16",
 		"outputs": [
 			{
 				"rgba": "pack_2x32_to_4x16($source($uv).xy)",

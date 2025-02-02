@@ -34,7 +34,7 @@
 			"}"
 		],
 		"longdesc": "Generates an angle map to be used by Advances Tiler nodes from a heightmap",
-		"name": "Height To Angle",
+		"name": "Height to Angle",
 		"outputs": [
 			{
 				"f": "$(name)_fct($uv, 0.001)+$angle/180.0",
@@ -57,7 +57,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "Height to angle"
+		"shortdesc": "Height to Angle"
 	},
 	"type": "shader"
 }
