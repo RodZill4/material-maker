@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://pyimsn2fnsa3"]
 
-[ext_resource type="Script" path="res://addons/material_maker/engine/nodes/gen_sdf.gd" id="1"]
+[ext_resource type="Script" uid="uid://csqqg3rre416e" path="res://addons/material_maker/engine/nodes/gen_sdf.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://bf5k7ed5a8ny1" path="res://material_maker/windows/sdf_builder/preview_2d.tscn" id="2"]
-[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/sdf_builder.gd" id="3"]
-[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" id="4"]
+[ext_resource type="Script" uid="uid://jv4kbv17b3o8" path="res://material_maker/windows/sdf_builder/sdf_builder.gd" id="3"]
+[ext_resource type="Script" uid="uid://t8ntu7l3y5wa" path="res://material_maker/windows/sdf_builder/sdf_builder_tree.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://bsdj8r6ur5sja" path="res://material_maker/windows/sdf_builder/preview_3d.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="6"]
 
@@ -29,6 +29,7 @@ exclusive = true
 script = ExtResource("3")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(800, 400)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
