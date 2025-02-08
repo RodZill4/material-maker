@@ -191,7 +191,6 @@ func update_list(filter_text : String = "") -> void:
 	%List.select(0)
 	%List.ensure_current_is_visible()
 
-
 func _unhandled_input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		todo_renamed_hide()
