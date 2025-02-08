@@ -694,7 +694,7 @@ func _input(event):
 					if item != null:
 						delete_item(item)
 				KEY_X:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							copy_item(item)
@@ -702,21 +702,21 @@ func _input(event):
 					else:
 						return
 				KEY_C:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							copy_item(item)
 					else:
 						return
 				KEY_V:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							paste_item(item)
 					else:
 						return
 				KEY_Z:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						pass
 					else:
 						return

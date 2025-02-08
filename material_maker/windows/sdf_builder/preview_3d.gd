@@ -121,10 +121,6 @@ func _on_Preview3D_resized():
 		viewport.size = size
 		update_viewport()
 
-func _input(ev):
-	return
-	_unhandled_input(ev)
-	
 func navigation_input(ev) -> bool:
 	if ! get_global_rect().has_point(get_global_mouse_position()):
 		return false
@@ -157,7 +153,6 @@ func navigation_input(ev) -> bool:
 				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
 			return true
 	return false
-
 
 func _on_Background_input_event(_camera, event, _position, _normal, _shape_idx):
 	if navigation_input(event):
