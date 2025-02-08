@@ -25,10 +25,11 @@ atlas = ExtResource("6")
 region = Rect2(48, 0, 16, 16)
 
 [node name="Control" type="Window"]
+position = Vector2i(0, 36)
 exclusive = true
 script = ExtResource("3")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="TopContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(800, 400)
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,15 +37,16 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Toolbar" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Toolbar" type="HBoxContainer" parent="TopContainer"]
 layout_mode = 2
 
-[node name="Main" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Main" type="HBoxContainer" parent="TopContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Tree" type="Tree" parent="VBoxContainer/Main"]
+[node name="Tree" type="Tree" parent="TopContainer/Main"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -53,7 +55,8 @@ columns = 3
 select_mode = 1
 script = ExtResource("4")
 
-[node name="Preview2D" parent="VBoxContainer/Main" instance=ExtResource("2")]
+[node name="Preview2D" parent="TopContainer/Main" instance=ExtResource("2")]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_pgcwv")
 layout_mode = 2
 size_flags_horizontal = 3
@@ -61,61 +64,66 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
-[node name="Preview3D" parent="VBoxContainer/Main" instance=ExtResource("5")]
+[node name="Preview3D" parent="TopContainer/Main" instance=ExtResource("5")]
+unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_stretch_ratio = 2.0
 control_target = NodePath("../../..")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Main"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TopContainer/Main"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="Parameters" type="VBoxContainer" parent="VBoxContainer/Main/ScrollContainer"]
+[node name="Parameters" type="VBoxContainer" parent="TopContainer/Main/ScrollContainer"]
 layout_mode = 2
 
-[node name="NodeParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
+[node name="NodeParametersButton" type="CheckBox" parent="TopContainer/Main/ScrollContainer/Parameters"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Node Parameters"
 
-[node name="NodeParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
+[node name="NodeParameters" type="GridContainer" parent="TopContainer/Main/ScrollContainer/Parameters"]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 7
 
-[node name="Button" type="Button" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
+[node name="Button" type="Button" parent="TopContainer/Main/ScrollContainer/Parameters"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 icon = SubResource("3")
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
+[node name="HSeparator" type="HSeparator" parent="TopContainer/Main/ScrollContainer/Parameters"]
 layout_mode = 2
 
-[node name="ItemParams" type="CheckBox" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
+[node name="ItemParametersButton" type="CheckBox" parent="TopContainer/Main/ScrollContainer/Parameters"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Item Parameters"
 
-[node name="ItemParameters" type="GridContainer" parent="VBoxContainer/Main/ScrollContainer/Parameters"]
+[node name="ItemParameters" type="GridContainer" parent="TopContainer/Main/ScrollContainer/Parameters"]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 3
 
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="TopContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 5
 
-[node name="Apply" type="Button" parent="VBoxContainer/Buttons"]
+[node name="Apply" type="Button" parent="TopContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="VBoxContainer/Buttons"]
+[node name="OK" type="Button" parent="TopContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
+[node name="Cancel" type="Button" parent="TopContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Cancel"
@@ -124,16 +132,17 @@ text = "Cancel"
 script = ExtResource("1")
 editor = true
 
-[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="drop_item" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
-[connection signal="gui_input" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
-[connection signal="item_collapsed" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
-[connection signal="item_edited" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_edited"]
-[connection signal="item_selected" from="VBoxContainer/Main/Tree" to="." method="_on_Tree_item_selected"]
-[connection signal="toggled" from="VBoxContainer/Main/ScrollContainer/Parameters/NodeParams" to="." method="_on_NodeParams_toggled"]
-[connection signal="pressed" from="VBoxContainer/Main/ScrollContainer/Parameters/Button" to="." method="create_node_parameter"]
-[connection signal="toggled" from="VBoxContainer/Main/ScrollContainer/Parameters/ItemParams" to="." method="_on_ItemParams_toggled"]
-[connection signal="pressed" from="VBoxContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
-[connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
-[connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="minimum_size_changed" from="TopContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="drop_item" from="TopContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
+[connection signal="gui_input" from="TopContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
+[connection signal="item_collapsed" from="TopContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
+[connection signal="item_edited" from="TopContainer/Main/Tree" to="." method="_on_Tree_item_edited"]
+[connection signal="item_selected" from="TopContainer/Main/Tree" to="." method="_on_Tree_item_selected"]
+[connection signal="toggled" from="TopContainer/Main/ScrollContainer/Parameters/NodeParametersButton" to="." method="_on_NodeParams_toggled"]
+[connection signal="pressed" from="TopContainer/Main/ScrollContainer/Parameters/Button" to="." method="create_node_parameter"]
+[connection signal="toggled" from="TopContainer/Main/ScrollContainer/Parameters/ItemParametersButton" to="." method="_on_ItemParams_toggled"]
+[connection signal="pressed" from="TopContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="TopContainer/Buttons/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="TopContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
 [connection signal="parameter_changed" from="GenSDF" to="." method="on_parameter_changed"]
