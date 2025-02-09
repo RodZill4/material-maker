@@ -46,7 +46,7 @@
 			"}"
 		],
 		"longdesc": "An edge detect filter that detects edges along all directions and draws them in white on a black background",
-		"name": "Edge detect",
+		"name": "Edge Detect",
 		"outputs": [
 			{
 				"f": "clamp(100.0*($(name)_fct($uv)-$threshold), 0.0, 1.0)",
@@ -87,7 +87,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "Edge detect"
+		"shortdesc": "Edge Detect"
 	},
 	"type": "shader"
 }

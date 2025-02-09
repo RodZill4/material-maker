@@ -24,7 +24,7 @@
 			}
 		],
 		"instance": "",
-		"name": "pack_2x16_to_1x32",
+		"name": "pack 2x16 to 1x32",
 		"outputs": [
 			{
 				"f": "pack_2x16_to_1x32($source($uv).xy)",

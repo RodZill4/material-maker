@@ -16,7 +16,7 @@ func get_type() -> String:
 	return "sdf"
 
 func get_type_name() -> String:
-	return "EasySDF"
+	return "Easy SDF"
 
 func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 	if parameters_filter == "":

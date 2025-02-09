@@ -62,7 +62,7 @@
 		],
 		"instance": "",
 		"longdesc": "Draws a white shape on a black background",
-		"name": "Arc pavement",
+		"name": "Arc Pavement",
 		"outputs": [
 			{
 				"f": "pavement($(name_uv)_ap.zw, $bevel, 2.0*$mortar)",

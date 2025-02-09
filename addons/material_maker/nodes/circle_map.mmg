@@ -24,7 +24,7 @@
 		],
 		"instance": "",
 		"longdesc": "Maps its input into a circle",
-		"name": "CircleMap",
+		"name": "Circle Map",
 		"outputs": [
 			{
 				"longdesc": "Shows the remapped image",
@@ -59,7 +59,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "CircleMap"
+		"shortdesc": "Circle Map"
 	},
 	"type": "shader"
 }

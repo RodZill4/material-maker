@@ -39,12 +39,12 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "Converts its input into greyscale",
-		"name": "Greyscale",
+		"longdesc": "Converts its input into grayscale",
+		"name": "Grayscale",
 		"outputs": [
 			{
 				"f": "gs_$mode($in($uv))",
-				"longdesc": "Shows the image converted to greyscale",
+				"longdesc": "Shows the image converted to grayscale",
 				"shortdesc": "Output",
 				"type": "f"
 			}
@@ -53,7 +53,7 @@
 			{
 				"default": 4,
 				"label": "",
-				"longdesc": "The algorithm used to convert the input into greyscale",
+				"longdesc": "The algorithm used to convert the input into grayscale",
 				"name": "mode",
 				"shortdesc": "Mode",
 				"type": "enum",
@@ -81,7 +81,7 @@
 				]
 			}
 		],
-		"shortdesc": "Greyscale"
+		"shortdesc": "Grayscale"
 	},
 	"type": "shader"
 }

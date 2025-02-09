@@ -60,7 +60,7 @@
 		],
 		"instance": "",
 		"longdesc": "Alters the Hue, Saturation and Value of its input using 3 map inputs",
-		"name": "AlterHSV",
+		"name": "Alter HSV",
 		"outputs": [
 			{
 				"longdesc": "Shows the image with adjusted Hue, Saturation and Value",

@@ -49,7 +49,7 @@
 			"to_port": 0
 		}
 	],
-	"label": "Fill from colors",
+	"label": "Fill from Colors",
 	"longdesc": "Fills areas defined by different colors in its input",
 	"name": "fill_from_colors",
 	"node_position": {
@@ -345,6 +345,6 @@
 		"size": 8
 	},
 	"seed_int": 0,
-	"shortdesc": "Fill from colors",
+	"shortdesc": "Fill from Colors",
 	"type": "graph"
 }

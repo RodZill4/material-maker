@@ -219,23 +219,23 @@
 				"type": "enum",
 				"values": [
 					{
-						"name": "Running bond",
+						"name": "Running Bond",
 						"value": "rb"
 					},
 					{
-						"name": "Running bond (2)",
+						"name": "Running Bond 2",
 						"value": "rb2"
 					},
 					{
-						"name": "HerringBone",
+						"name": "Herringbone",
 						"value": "hb"
 					},
 					{
-						"name": "Basket weave",
+						"name": "Basket Weave",
 						"value": "bw"
 					},
 					{
-						"name": "Spanish bond",
+						"name": "Spanish Bond",
 						"value": "sb"
 					}
 				]
