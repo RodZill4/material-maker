@@ -10,8 +10,6 @@ class PluginContext:
 			print("Dependency already exists, either its been loaded or there is a dependency collision")
 			return ResourceLoader.load(resource_path)
 			
-		print("Path slices:")
-		print(resource_path.get_slice("::", 0))
 		var res_path = resource_path.get_slice("::", 2)
 		var file_path = res_path.replace("res://", plugin_path + "/")
 		
@@ -26,4 +24,6 @@ class PluginContext:
 			
 		print(resource)
 		resource.take_over_path(resource_path)
+		resource.take_over_path(resource_path.get_slice("::", 0))
+		resource.take_over_path(resource_path.get_slice("::", 2))
 		return resource
