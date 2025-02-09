@@ -250,10 +250,9 @@ func update_menus() -> void:
 		do_update_menus.call_deferred()
 
 func plugin_ui_loaded():
-	var children = mm_loader.get_children()
+	var children = mm_plugins.get_children()
 	for child in children:
-		if child.has_method("on_ui_loaded"):
-			child.on_ui_loaded()
+		child.ui_ready()
 			
 func do_update_menus() -> void:
 	# Create menus
