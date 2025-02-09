@@ -8,11 +8,11 @@ var external_export_targets : Dictionary = {}
 
 var current_project_path : String = ""
 
+
 const CHECK_PREDEFINED : bool = false
 
 const USER_EXPORT_DIR : String = "user://export_targets"
 const SHARED_NODES_DIR : String = "user://shared_nodes"
-
 
 
 func _ready()-> void:
