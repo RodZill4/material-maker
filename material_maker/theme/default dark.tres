@@ -1,0 +1,192 @@
+[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=34 format=3 uid="uid://dhuhq2immquoh"]
+
+[ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="3_xjelh"]
+[ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_0efyb"]
+[ext_resource type="Script" uid="uid://cvv2rdxv4oql6" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="5_yjidp"]
+
+[sub_resource type="Resource" id="Resource_silay"]
+script = ExtResource("4_0efyb")
+name = "Main Font Color"
+orig = Color(1, 1, 1, 1)
+target = Color(1, 1, 1, 1)
+
+[sub_resource type="Resource" id="Resource_eavso"]
+script = ExtResource("4_0efyb")
+name = "NodeTitleFontOutline"
+orig = Color(0.168627, 0.176471, 0.192157, 1)
+target = Color(0.168627, 0.176471, 0.192157, 1)
+
+[sub_resource type="Resource" id="Resource_1jhxl"]
+script = ExtResource("4_0efyb")
+name = "Button Normal"
+orig = Color(0.87451, 0.87451, 0.87451, 1)
+target = Color(0.87451, 0.87451, 0.87451, 1)
+
+[sub_resource type="Resource" id="Resource_qiwix"]
+script = ExtResource("4_0efyb")
+name = "Button Hover"
+orig = Color(0.94902, 0.94902, 0.94902, 1)
+target = Color(0.94902, 0.94902, 0.94902, 1)
+
+[sub_resource type="Resource" id="Resource_5yhcl"]
+script = ExtResource("4_0efyb")
+name = "Button Disabled"
+orig = Color(0.87451, 0.87451, 0.87451, 0.501961)
+target = Color(0.87451, 0.87451, 0.87451, 0.501961)
+
+[sub_resource type="Resource" id="Resource_vdnfu"]
+script = ExtResource("4_0efyb")
+name = "Tree"
+orig = Color(0.701961, 0.701961, 0.701961, 1)
+target = Color(0.701961, 0.701961, 0.701961, 1)
+
+[sub_resource type="Resource" id="Resource_21aar"]
+script = ExtResource("4_0efyb")
+name = "Menu Shortcut"
+orig = Color(0.701961, 0.701961, 0.701961, 0.8)
+target = Color(0.701961, 0.701961, 0.701961, 0.8)
+
+[sub_resource type="Resource" id="Resource_us4qf"]
+script = ExtResource("4_0efyb")
+name = "Placeholder Color"
+orig = Color(0.87451, 0.87451, 0.87451, 0.6)
+target = Color(0.87451, 0.87451, 0.87451, 0.6)
+
+[sub_resource type="Resource" id="Resource_cisvi"]
+script = ExtResource("4_0efyb")
+name = "Main"
+orig = Color(1, 1, 1, 1)
+target = Color(1, 1, 1, 1)
+
+[sub_resource type="Resource" id="Resource_j2h7k"]
+script = ExtResource("4_0efyb")
+name = "Secondary"
+orig = Color(0.933333, 0.521569, 0.909804, 1)
+target = Color(0.933333, 0.521569, 0.909804, 1)
+
+[sub_resource type="Resource" id="Resource_8dhbo"]
+script = ExtResource("4_0efyb")
+name = "MainDisabled"
+orig = Color(0.807843, 0.807843, 0.807843, 1)
+target = Color(0.807843, 0.807843, 0.807843, 1)
+
+[sub_resource type="Resource" id="Resource_5oh4i"]
+script = ExtResource("4_0efyb")
+name = "Hover"
+orig = Color(0.933333, 0.678431, 0.909804, 1)
+target = Color(0.933333, 0.678431, 0.909804, 1)
+
+[sub_resource type="Resource" id="Resource_ub5ur"]
+script = ExtResource("4_0efyb")
+name = "Main Background"
+orig = Color(0.0431373, 0.0431373, 0.0470588, 1)
+target = Color(0.0431373, 0.0431373, 0.0470588, 1)
+
+[sub_resource type="Resource" id="Resource_5rv7m"]
+script = ExtResource("4_0efyb")
+name = "Background"
+orig = Color(0.0941176, 0.0980392, 0.101961, 1)
+target = Color(0.0941176, 0.0980392, 0.101961, 1)
+
+[sub_resource type="Resource" id="Resource_xqbwo"]
+script = ExtResource("4_0efyb")
+name = "Nodes"
+orig = Color(0.0666667, 0.0666667, 0.0784314, 1)
+target = Color(0.0666667, 0.0666667, 0.0784314, 1)
+
+[sub_resource type="Resource" id="Resource_a2t6i"]
+script = ExtResource("4_0efyb")
+name = "Elements"
+orig = Color(0.168627, 0.176471, 0.192157, 1)
+target = Color(0.168627, 0.176471, 0.192157, 1)
+
+[sub_resource type="Resource" id="Resource_pekt7"]
+script = ExtResource("4_0efyb")
+name = "Tab Selected"
+orig = Color(0.129412, 0.137255, 0.152941, 1)
+target = Color(0.129412, 0.137255, 0.152941, 1)
+
+[sub_resource type="Resource" id="Resource_vbpcr"]
+script = ExtResource("4_0efyb")
+name = "Hover"
+orig = Color(0.266667, 0.278431, 0.301961, 1)
+target = Color(0.266667, 0.278431, 0.301961, 1)
+
+[sub_resource type="Resource" id="Resource_qngft"]
+script = ExtResource("4_0efyb")
+name = "Tab Unselected"
+orig = Color(0.109804, 0.113725, 0.12549, 1)
+target = Color(0.109804, 0.113725, 0.12549, 1)
+
+[sub_resource type="Resource" id="Resource_5mixu"]
+script = ExtResource("4_0efyb")
+name = "PopupMenuPanels"
+orig = Color(0.117647, 0.121569, 0.133333, 1)
+target = Color(0.117647, 0.121569, 0.133333, 1)
+
+[sub_resource type="Resource" id="Resource_kxmra"]
+script = ExtResource("4_0efyb")
+name = "AddNodePopup"
+orig = Color(0.0941176, 0.0941176, 0.105882, 1)
+target = Color(0.0941176, 0.0941176, 0.105882, 1)
+
+[sub_resource type="Resource" id="Resource_siafh"]
+script = ExtResource("4_0efyb")
+name = "AddNodePopupBorder"
+orig = Color(0.360784, 0.360784, 0.360784, 1)
+target = Color(0.360784, 0.360784, 0.360784, 1)
+
+[sub_resource type="Resource" id="Resource_s732t"]
+script = ExtResource("4_0efyb")
+name = "NodeBorderUnselected"
+orig = Color(0.145098, 0.145098, 0.164706, 1)
+target = Color(0.145098, 0.145098, 0.164706, 1)
+
+[sub_resource type="Resource" id="Resource_j1t84"]
+script = ExtResource("4_0efyb")
+name = "NodeBorderSelected"
+orig = Color(0.745098, 0.752941, 0.772549, 1)
+target = Color(0.745098, 0.752941, 0.772549, 1)
+
+[sub_resource type="Resource" id="Resource_g7e3b"]
+script = ExtResource("4_0efyb")
+name = "Grid"
+orig = Color(0.137255, 0.141176, 0.152941, 1)
+target = Color(0.137255, 0.141176, 0.152941, 1)
+
+[sub_resource type="Resource" id="Resource_oirgf"]
+script = ExtResource("4_0efyb")
+name = "Port Preview Color"
+orig = Color(0.890196, 0.890196, 0.890196, 1)
+target = Color(0.890196, 0.890196, 0.890196, 1)
+
+[sub_resource type="Resource" id="Resource_1pump"]
+script = ExtResource("4_0efyb")
+name = "Node Title Color"
+orig = Color(0.87451, 0.878431, 0.886275, 1)
+target = Color(0.87451, 0.878431, 0.886275, 1)
+
+[sub_resource type="Resource" id="Resource_fxm05"]
+script = ExtResource("4_0efyb")
+name = "PortGroup"
+orig = Color(0.8, 0.8, 0.8, 1)
+target = Color(0.8, 0.8, 0.8, 1)
+
+[sub_resource type="Resource" id="Resource_mfxjg"]
+script = ExtResource("4_0efyb")
+name = "FloatFillNormal"
+orig = Color(0.301961, 0.301961, 0.301961, 1)
+target = Color(0.301961, 0.301961, 0.301961, 1)
+
+[sub_resource type="Resource" id="Resource_upxps"]
+script = ExtResource("4_0efyb")
+name = "FloatFillHover"
+orig = Color(0.356863, 0.356863, 0.356863, 1)
+target = Color(0.356863, 0.356863, 0.356863, 1)
+
+[resource]
+script = ExtResource("5_yjidp")
+base_theme = ExtResource("3_xjelh")
+font_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf")])
+icon_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo"), SubResource("Resource_5oh4i")])
+theme_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps")])

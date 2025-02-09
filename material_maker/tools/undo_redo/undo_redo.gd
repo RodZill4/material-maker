@@ -118,5 +118,5 @@ func add(action_name : String, undo_actions : Array, redo_actions : Array, merge
 		if group_level > 0:
 			group = undo_redo
 	if OS.is_debug_build():
-		get_node("/root/MainWindow/UndoRedoLabel").show_step(step)
+		get_node("/root/MainWindow").get_node("%UndoRedoLabel").show_step(step)
 	mm_globals.main_window.update_menus()

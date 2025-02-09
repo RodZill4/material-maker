@@ -1,0 +1,71 @@
+{
+	"name": "sdheart",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0.0,
+		"cy": 0.05,
+		"r": 0.4
+	},
+	"seed": 0,
+	"seed_locked": false,
+	"shader_model": {
+		"code": "float radius_$(name_uv) = $r * 1.75;",
+		"global": "float sdHeart( in vec2 p )\n{\n    p.x = abs(p.x);\n\tp.y = 0.5 - p.y;\n\n    if( p.y+p.x>1.0 )\n        return sqrt(dot2(p-vec2(0.25,0.75))) - sqrt(2.0)/4.0;\n    return sqrt(min(dot2(p-vec2(0.00,1.00)),\n                    dot2(p-0.5*max(p.x+p.y,0.0)))) * sign(p.x-p.y);\n}",
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "A heart described as a signed distance function",
+		"name": "sdHeart",
+		"outputs": [
+			{
+				"longdesc": "The heart as a signed distance function",
+				"sdf2d": "sdHeart(($uv - 0.5 - vec2($cx, $cy)) / radius_$(name_uv)) * radius_$(name_uv)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Radius1.r",
+				"default": 0.4,
+				"label": "Radius",
+				"longdesc": "Radius of the heart",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdHeart"
+	},
+	"type": "shader"
+}

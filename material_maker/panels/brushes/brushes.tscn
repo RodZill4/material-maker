@@ -7,8 +7,4 @@
 script = ExtResource("2")
 library_manager_name = "BrushLibraryManager"
 
-[node name="Tree" parent="." index="3"]
-supports_drag = false
-
-[connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_activated"]
-[connection signal="item_icon_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]
+[connection signal="item_activated" from="Library/Tree" to="." method="_on_Tree_item_activated"]

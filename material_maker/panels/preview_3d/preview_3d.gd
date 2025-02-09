@@ -97,7 +97,8 @@ func _on_Model_item_selected(id) -> void:
 		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		dialog.add_filter("*.obj;OBJ model File")
+		for f in MMMeshLoader.get_file_dialog_filters():
+			dialog.add_filter(f)
 		if mm_globals.config.has_section_key("path", "mesh"):
 			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
 		var files = await dialog.select_files()
@@ -109,10 +110,8 @@ func _on_Model_item_selected(id) -> void:
 func do_load_custom_mesh(file_path) -> void:
 	mm_globals.config.set_value("path", "mesh", file_path.get_base_dir())
 	var id = objects.get_child_count()-1
-	#var mesh = $ObjLoader.load_obj_file(file_path)
 	var mesh : Mesh = null
-	var obj_loader = load("res://material_maker/tools/obj_loader/obj_loader.gd")
-	mesh = obj_loader.load_obj_file(file_path)
+	mesh = MMMeshLoader.load_mesh(file_path)
 	if mesh != null:
 		var object : MeshInstance3D = objects.get_child(id)
 		object.mesh = mesh
@@ -122,6 +121,8 @@ func do_load_custom_mesh(file_path) -> void:
 func select_object(id) -> void:
 	current_object.visible = false
 	current_object = objects.get_child(id)
+	if current_object.has_method("update_mesh"):
+		current_object.update_mesh()
 	current_object.visible = true
 	emit_signal("need_update", [ self ])
 	var aabb : AABB = current_object.get_aabb()
@@ -158,12 +159,12 @@ func set_rotate_model_speed(speed: float) -> void:
 		object_rotate.play("rotate")
 
 func get_materials() -> Array:
-	if current_object != null and current_object.get_surface_override_material(0) != null:
-		return [ current_object.get_surface_override_material(0) ]
+	if current_object != null and current_object.get_material() != null:
+		return [ current_object.get_material() ]
 	return []
 
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
-	var preview_material = current_object.get_surface_override_material(0)
+	var preview_material = current_object.get_material()
 	preview_material.set_shader_parameter(parameter_name, value)
 	return false
 
@@ -201,7 +202,7 @@ func on_gui_input(event) -> void:
 
 				if event.pressed and lpressed != rpressed: # xor
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-					_mouse_start_position = event.global_position/get_window().content_scale_factor
+					_mouse_start_position = event.global_position
 					moving = true
 				elif not lpressed and not rpressed:
 					Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) # allow and hide cursor warp
@@ -261,8 +262,7 @@ func generate_map(generate_function : String, image_size : int) -> void:
 func do_generate_map(file_name : String, map : String, image_size : int) -> void:
 	var id = objects.get_child_count()-1
 	var object : MeshInstance3D = objects.get_child(id)
-	var t : MMTexture = MMTexture.new()
-	await MMMapGenerator.generate(object.mesh, map, image_size, t)
+	var t : MMTexture = await MMMapGenerator.get_map(object.mesh, map, image_size)
 	t.save_to_file(file_name)
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
 

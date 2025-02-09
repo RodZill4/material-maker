@@ -23,8 +23,7 @@ uniform sampler2D begin;
 uniform sampler2D end;
 
 void fragment() {
-	vec2 uv = UV*vec2(1.0, -1.0)+vec2(0.0, 1.0);
-	COLOR = vec4(mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 0.0, 0.0), clamp(length(texture(begin, uv)-texture(end, uv)), 0.0, 1.0)), 1.0);
+	COLOR = vec4(mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 0.0, 0.0), clamp(length(texture(begin, UV)-texture(end, UV)), 0.0, 1.0)), 1.0);
 }
 
 "
@@ -182,10 +181,9 @@ focus_neighbor_left = NodePath("../Images")
 focus_neighbor_right = NodePath("../Size")
 focus_next = NodePath("../../Buttons/Export")
 focus_previous = NodePath("../Images")
-item_count = 5
 selected = 0
+item_count = 5
 popup/item_0/text = "PNG files"
-popup/item_0/id = 0
 popup/item_1/text = "1 line spritesheet"
 popup/item_1/id = 1
 popup/item_2/text = "2 lines spritesheet"

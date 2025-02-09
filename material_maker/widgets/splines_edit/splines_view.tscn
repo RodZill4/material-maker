@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://boibgbuu5yg5u"]
+
+[ext_resource type="Script" path="res://material_maker/widgets/splines_edit/splines_view.gd" id="1_5efi8"]
+
+[node name="SplinesView" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 64.0
+offset_bottom = 64.0
+mouse_filter = 2
+script = ExtResource("1_5efi8")
+
+[connection signal="resized" from="." to="." method="_on_resized"]

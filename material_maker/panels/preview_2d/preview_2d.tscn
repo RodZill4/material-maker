@@ -27,13 +27,13 @@ shader = "uniform vec2 preview_2d_size;
 
 void fragment() {
 	float ms = max(preview_2d_size.x, preview_2d_size.y);
-	vec2 uv = fract(0.5+1.2*(UV-vec2(0.5))*ms/preview_2d_size.yx);
-	float is = min(preview_2d_size.x, preview_2d_size.y)/1.2;
-	vec2 m2 = min(fract(uv), 1.0-fract(uv));
+	vec2 uv = 0.5+(UV-vec2(0.5))*ms/preview_2d_size.yx;
+	float is = min(preview_2d_size.x, preview_2d_size.y);
 	vec4 image = preview_2d(uv);
 	vec3 image_with_background = mix(vec3(mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0)), image.xyz, image.a);
-	float lines_color = 0.5*(cos(5.0*TIME+100.0*(uv.x+uv.y))+1.0);
-	COLOR = vec4(mix(image_with_background, vec3(lines_color), step(is*min(m2.x, m2.y), 1.0)), 1.0);
+	uv -= vec2(0.5);
+	uv = abs(uv);
+	COLOR = vec4(image_with_background, step(max(uv.x, uv.y), 0.5)*0.8+0.2);
 }"
 
 [connection signal="resized" from="." to="." method="on_resized"]

@@ -1,0 +1,95 @@
+{
+	"name": "sdegg",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"cx": 0,
+		"cy": 0.1,
+		"pointiness": 0.9,
+		"radius": 0.25
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float sdEgg( in vec2 p, in float ra, in float rb )",
+			"{",
+			"\tp = vec2(p.x,-p.y);",
+			"\tfloat k = sqrt(3.0);",
+			"\tp.x = abs(p.x);",
+			"\tfloat r = ra - rb;",
+			"\treturn ((p.y<0.0)\t   ? length(vec2(p.x,  p.y\t)) - r :",
+			"\t\t\t((k*(p.x+r)<p.y) ? length(vec2(p.x,  p.y-k*r)) :",
+			"\t\t\t\t\t\t\t  length(vec2(p.x+r,p.y\t)) - 2.0*r)) - rb;",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "An egg described as a signed distance function",
+		"name": "sdEgg",
+		"outputs": [
+			{
+				"longdesc": "The egg as a signed distance function",
+				"sdf2d": "sdEgg($uv - 0.5 - vec2($cx, $cy), $radius, (1.0-max($pointiness,0.0))*$radius)",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Radius1.r",
+				"default": 0.25,
+				"label": "Radius",
+				"longdesc": "Radius of the egg",
+				"max": 1,
+				"min": 0,
+				"name": "radius",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius11.r",
+				"default": 0.9,
+				"label": "Pointiness",
+				"longdesc": "Pointiness of the egg",
+				"max": 1,
+				"min": 0,
+				"name": "pointiness",
+				"shortdesc": "Egg pointiness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.x",
+				"default": 0,
+				"label": "Center X",
+				"longdesc": "The position of the center on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cx",
+				"shortdesc": "Center.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0.1,
+				"label": "Center Y",
+				"longdesc": "The position of the center on the Y axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "cy",
+				"shortdesc": "Center.y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdEgg"
+	},
+	"type": "shader"
+}

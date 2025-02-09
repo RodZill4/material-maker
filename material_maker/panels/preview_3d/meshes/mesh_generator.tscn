@@ -1,0 +1,217 @@
+[gd_scene load_steps=16 format=3 uid="uid://b5vc72lmdldus"]
+
+[ext_resource type="Script" uid="uid://caeqkfckha5pa" path="res://material_maker/panels/preview_3d/meshes/mesh_generator.gd" id="1_m0lfx"]
+[ext_resource type="Texture2D" uid="uid://du2r5sfapuxxx" path="res://material_maker/panels/preview_3d/meshes/bricks_albedo.png" id="2_o2y7f"]
+[ext_resource type="Texture2D" uid="uid://dfvy71k6qeu0g" path="res://material_maker/panels/preview_3d/meshes/bricks_orm.png" id="3_0fl5d"]
+[ext_resource type="Texture2D" uid="uid://bx4upg4i1n5db" path="res://material_maker/panels/preview_3d/meshes/bricks_heightmap.png" id="4_87aax"]
+[ext_resource type="Texture2D" uid="uid://bgqqi03ty5vjy" path="res://material_maker/panels/preview_3d/meshes/bricks_normal.png" id="5_2283w"]
+
+[sub_resource type="Shader" id="Shader_3eg21"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.3.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform float point_size : hint_range(0.1, 128.0, 0.1);
+
+uniform float roughness : hint_range(0.0, 1.0);
+uniform sampler2D texture_metallic : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_g, filter_linear_mipmap, repeat_enable;
+
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float metallic : hint_range(0.0, 1.0, 0.01);
+
+uniform sampler2D texture_normal : hint_roughness_normal, filter_linear_mipmap, repeat_enable;
+uniform float normal_scale : hint_range(-16.0, 16.0);
+
+uniform sampler2D texture_ambient_occlusion : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform vec4 ao_texture_channel;
+uniform float ao_light_affect : hint_range(0.0, 1.0, 0.01);
+
+uniform sampler2D texture_heightmap : hint_default_black, filter_linear_mipmap, repeat_enable;
+uniform float heightmap_scale : hint_range(-0.2, 0.2, 0.001);
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+void vertex() {
+	VERTEX += NORMAL * texture(texture_heightmap, UV).r * heightmap_scale;
+	UV = UV * uv1_scale.xy + uv1_offset.xy;
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+
+	vec4 albedo_tex = texture(texture_albedo, base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+
+	float metallic_tex = dot(texture(texture_metallic, base_uv), metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	SPECULAR = specular;
+
+	vec4 roughness_texture_channel = vec4(0.0, 1.0, 0.0, 0.0);
+	float roughness_tex = dot(texture(texture_roughness, base_uv), roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+
+	// Normal Map: Enabled
+	NORMAL_MAP = texture(texture_normal, base_uv).rgb;
+	NORMAL_MAP_DEPTH = normal_scale;
+
+	// Ambient Occlusion: Enabled
+	AO = dot(texture(texture_ambient_occlusion, base_uv), ao_texture_channel);
+	AO_LIGHT_AFFECT = ao_light_affect;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8fhl5"]
+render_priority = 0
+shader = SubResource("Shader_3eg21")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/texture_albedo = ExtResource("2_o2y7f")
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/texture_metallic = ExtResource("3_0fl5d")
+shader_parameter/metallic_texture_channel = null
+shader_parameter/texture_roughness = ExtResource("3_0fl5d")
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/texture_normal = ExtResource("5_2283w")
+shader_parameter/normal_scale = 1.0
+shader_parameter/texture_ambient_occlusion = ExtResource("3_0fl5d")
+shader_parameter/ao_texture_channel = null
+shader_parameter/ao_light_affect = 0.0
+shader_parameter/texture_heightmap = ExtResource("4_87aax")
+shader_parameter/heightmap_scale = 0.1
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nb5y3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_np4y6"]
+
+[sub_resource type="Animation" id="Animation_lmjcq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_umfat"]
+resource_name = "rotate"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s43cy"]
+_data = {
+&"RESET": SubResource("Animation_lmjcq"),
+&"rotate": SubResource("Animation_umfat")
+}
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_odkg4"]
+
+[sub_resource type="Sky" id="Sky_f7iul"]
+sky_material = SubResource("ProceduralSkyMaterial_odkg4")
+process_mode = 3
+
+[sub_resource type="Environment" id="Environment_73u55"]
+background_mode = 2
+sky = SubResource("Sky_f7iul")
+
+[node name="MeshGenerator" type="Node"]
+script = ExtResource("1_m0lfx")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-3.78552e-08, -0.5, 0.866025, -2.18557e-08, 0.866025, 0.5, -1, 1.95399e-14, -4.37114e-08, 1.68223, 1.12409, 0)
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="MeshInstance" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_8fhl5")
+mesh = SubResource("ArrayMesh_nb5y3")
+skeleton = NodePath("../..")
+
+[node name="Ref" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_8fhl5")
+mesh = SubResource("BoxMesh_np4y6")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Pivot"]
+libraries = {
+&"": SubResource("AnimationLibrary_s43cy")
+}
+autoplay = "rotate"
+speed_scale = 0.01
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_73u55")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.0942471, 0.777948, 0.62122, -0.0687772, -0.627595, 0.775496, 0.99317, 0.0303625, 0.112654, -0.086213, 2.8091, 0)
+light_energy = 2.0
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ReloadShader" type="Button" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Reload Shader"
+
+[node name="Model" type="Button" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Model"
+
+[node name="Size" type="SpinBox" parent="UI/VBoxContainer"]
+layout_mode = 2
+max_value = 10.0
+value = 1.0
+prefix = "Size: "
+
+[node name="Curvature" type="HSlider" parent="UI/VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+scrollable = false
+tick_count = 5
+ticks_on_borders = true
+
+[connection signal="pressed" from="UI/VBoxContainer/ReloadShader" to="." method="_on_reload_shader_pressed"]
+[connection signal="pressed" from="UI/VBoxContainer/Model" to="." method="_on_model_pressed"]
+[connection signal="value_changed" from="UI/VBoxContainer/Size" to="." method="_on_size_value_changed"]
+[connection signal="value_changed" from="UI/VBoxContainer/Curvature" to="." method="_on_curvature_value_changed"]

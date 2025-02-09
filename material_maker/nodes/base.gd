@@ -51,6 +51,7 @@ static func wrap_string(s : String, l : int = 50) -> String:
 
 func _ready() -> void:
 	super._ready()
+	_notification(NOTIFICATION_THEME_CHANGED)
 	gui_input.connect(self._on_gui_input)
 	update.call_deferred()
 
@@ -81,7 +82,7 @@ func randomness_button_create_popup():
 	if ! generator.is_seed_locked() and DisplayServer.clipboard_get().left(5) == "seed=":
 		menu.add_item(tr("Paste seed"), 2)
 	add_child(menu)
-	menu.popup(Rect2i(get_global_mouse_position(), Vector2i(0, 0)))
+	mm_globals.popup_menu(menu, self)
 	menu.connect("popup_hide", Callable(menu, "queue_free"))
 	menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
 
@@ -95,7 +96,7 @@ func buffer_button_create_popup():
 		menu.add_separator()
 		menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 	add_child(menu)
-	menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+	mm_globals.popup_menu(menu, self)
 	menu.connect("popup_hide",Callable(menu,"queue_free"))
 	menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
 
@@ -125,6 +126,46 @@ func update():
 		buffer_button.texture_normal = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
 		buffer_button.tooltip_text = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
 
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		on_theme_changed()
+
+var portgroup_width : int
+var portgroup_stylebox : StyleBox
+
+var portpreview_radius : float
+var portpreview_color : Color
+var portpreview_width : float
+
+
+func on_theme_changed() -> void:
+	portgroup_width = get_theme_constant("width", "MM_NodePortGroup")
+	portgroup_stylebox = get_theme_stylebox("panel", "MM_NodePortGroup")
+	queue_redraw()
+	
+	portpreview_radius = get_theme_constant("portpreview_radius", "GraphNode")
+	portpreview_color = get_theme_color("portpreview_color", "GraphNode")
+	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
+
+
+func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
+	if left:
+		var inputs = generator.get_input_defs()
+		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
+			var conn_pos1 = get_input_port_position(slot_index)
+			# warning-ignore:narrowing_conversion
+			var conn_pos2 = get_input_port_position(min(slot_index+inputs[slot_index].group_size-1, inputs.size()-1))
+			draw_portgroup_stylebox(conn_pos1, conn_pos2)
+	else:
+		var outputs = generator.get_output_defs()
+		if slot_index < outputs.size() and outputs[slot_index].has("group_size") and outputs[slot_index].group_size > 1:
+			# warning-ignore:narrowing_conversion
+			var conn_pos1 = get_output_port_position(slot_index)
+			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
+			draw_portgroup_stylebox(conn_pos1, conn_pos2)
+	draw_circle(pos, 5, color, true, -1, true)
+
+
 func _draw() -> void:
 	var color : Color = get_theme_color("title_color")
 	# warning-ignore:narrowing_conversion
@@ -133,11 +174,6 @@ func _draw() -> void:
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
 	for i in range(inputs.size()):
-		if inputs[i].has("group_size") and inputs[i].group_size > 1:
-			var conn_pos1 = get_input_port_position(i)
-			# warning-ignore:narrowing_conversion
-			var conn_pos2 = get_input_port_position(min(i+inputs[i].group_size-1, inputs.size()-1))
-			draw_line(conn_pos1, conn_pos2, color)
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
@@ -146,28 +182,24 @@ func _draw() -> void:
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
 	for i in range(2):
-		if get_parent().locked_preview[i] != null and get_parent().locked_preview[i].generator == generator:
-			preview_port[i] = get_parent().locked_preview[i].output_index
-			preview_locked[i] = true
+		if get_parent().locked_preview[i] != null:
+			if get_parent().locked_preview[i].generator == generator:
+				preview_port[i] = get_parent().locked_preview[i].output_index
+				preview_locked[i] = true
 		elif get_parent().current_preview[i] != null and get_parent().current_preview[i].generator == generator:
 			preview_port[i] = get_parent().current_preview[i].output_index
 	if preview_port[0] == preview_port[1]:
 		preview_port[1] = -1
 		preview_locked[0] = preview_locked[0] || preview_locked[1]
 	for i in range(outputs.size()):
-		if outputs[i].has("group_size") and outputs[i].group_size > 1:
-# warning-ignore:narrowing_conversion
-			var conn_pos1 = get_output_port_position(i)
-			var conn_pos2 = get_output_port_position(min(i+outputs[i].group_size-1, outputs.size()-1))
-			draw_line(conn_pos1, conn_pos2, color)
-		var j = -1
-		if i == preview_port[0]:
-			j = 0
-		elif i == preview_port[1]:
-			j = 1
-		if j != -1:
-			var conn_pos = get_output_port_position(i)
-			draw_texture_rect(PREVIEW_LOCKED_ICON if preview_locked[j] else PREVIEW_ICON, Rect2(conn_pos.x-14, conn_pos.y-4, 7, 7), false, color)
+		var conn_pos = get_output_port_position(i)
+		for preview in range(2):
+			if i == preview_port[preview]:
+				if preview_locked[preview]:
+					draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
+					draw_line(conn_pos+Vector2(-4,4), conn_pos+Vector2(4,-4), portpreview_color, 0.075*portpreview_width, true)
+				else:
+					draw_circle(conn_pos, portpreview_radius, portpreview_color, false, 0.1*portpreview_width, true)
 		if show_outputs:
 			var string : StringName = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else StringName(tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
@@ -177,6 +209,15 @@ func _draw() -> void:
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
 		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
+	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
+		var conn_pos = get_output_port_position(generator.preview)
+		draw_circle(conn_pos, 3, portpreview_color, true)
+	
+	
+func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
+	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * portgroup_width
+	var stylebox_size: Vector2 = Vector2(portgroup_width, last_port.y - first_port.y + portgroup_width)
+	draw_style_box(portgroup_stylebox, Rect2(stylebox_position, stylebox_size))
 
 func set_generator(g) -> void:
 	super.set_generator(g)
@@ -240,7 +281,7 @@ func _on_gui_input(event) -> void:
 						add_child(menu)
 						menu.popup_hide.connect(menu.queue_free)
 						menu.id_pressed.connect(self._on_menu_id_pressed)
-						menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+						mm_globals.popup_menu(menu, self)
 					else:
 						menu.free()
 		elif doubleclicked:
@@ -283,7 +324,6 @@ func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
 			if input_def.has("longdesc"):
 				return MMGraphNodeBase.wrap_string(TranslationServer.translate(input_def.longdesc))
 		"output":
-			
 			var output_def = generator.get_output_defs()[io.index]
 			if output_def.has("longdesc"):
 				return MMGraphNodeBase.wrap_string(TranslationServer.translate(output_def.longdesc))

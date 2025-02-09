@@ -1,0 +1,83 @@
+{
+	"name": "a",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"h": 0.5,
+		"r": 0.4
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// The MIT License",
+			"// Copyright © 2021 Inigo Quilez",
+			"// source: https://www.shadertoy.com/view/stKSzc",
+			"float sdCutSphere( vec3 p, float r, float h )",
+			"{",
+			"\t// sampling independent computations (only depend on shape)",
+			"\tfloat w = sqrt(r*r-h*h);",
+			"",
+			"\t// sampling dependant computations",
+			"\tvec2 q = vec2( length(p.xz), p.y );",
+			"\tfloat s = max( (h-r)*q.x*q.x+w*w*(h+r-2.0*q.y), h*q.x-w*q.y );",
+			"\t",
+			"\tfloat res = 0.0;",
+			"\t",
+			"\tif (s<0.0)",
+			"\t\tres = length(q)-r;",
+			"\telse {",
+			"\t\tif (q.x<w)",
+			"\t\t\tres = h - q.y;",
+			"\t\telse",
+			"\t\t\tres = length(q-vec2(w,h));",
+			"\t}",
+			"\treturn res;",
+			"}"
+		],
+		"inputs": [
+
+		],
+		"instance": "",
+		"longdesc": "Generates a cut sphere as a signed distance function",
+		"name": "Cut Sphere",
+		"outputs": [
+			{
+				"longdesc": "Shows the cut sphere",
+				"sdf3d": "sdCutSphere($uv,$r,$r*min(max($h,0.0)*2.0-1.0,1.0-1e-6))",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Radius1.r",
+				"default": 0.4,
+				"label": "Radius",
+				"longdesc": "Radius of the cut sphere",
+				"max": 1,
+				"min": 0,
+				"name": "r",
+				"shortdesc": "Radius",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Amount",
+				"longdesc": "Portion of the sphere to be cut",
+				"max": 1,
+				"min": 0,
+				"name": "h",
+				"shortdesc": "Amount",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Cut Sphere"
+	},
+	"type": "shader"
+}

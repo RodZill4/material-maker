@@ -1,34 +1,127 @@
-[gd_scene load_steps=4 format=3 uid="uid://in4lqr3eetvc"]
+[gd_scene load_steps=7 format=3 uid="uid://in4lqr3eetvc"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_popup.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://ccm3h8eyt35f5" path="res://material_maker/widgets/gradient_editor/gradient_editor.tscn" id="2"]
+[ext_resource type="Script" uid="uid://h85iv7e2rlbv" path="res://material_maker/widgets/gradient_editor/gradient_popup.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2_fotv7"]
+[ext_resource type="PackedScene" uid="uid://cp6ft7qbucfam" path="res://material_maker/widgets/gradient_editor/gradient_edit.tscn" id="2_uait3"]
+[ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="3_2wy2b"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="4_6ujyx"]
+[ext_resource type="Script" uid="uid://d1a1bkn1evvxv" path="res://material_maker/widgets/gradient_editor/gradient_effects_menu.gd" id="5_sd4bi"]
 
-[sub_resource type="StyleBoxFlat" id="1"]
-bg_color = Color(0, 0, 0.25098, 0.752941)
-
-[node name="GradientPopup" type="Popup"]
-size = Vector2i(420, 40)
-visible = true
+[node name="GradientPopup" type="MarginContainer"]
+top_level = true
+offset_right = 400.0
+offset_bottom = 70.0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 script = ExtResource("1")
 
-[node name="Panel" type="Panel" parent="."]
-offset_right = 420.0
-offset_bottom = 40.0
-theme_override_styles/panel = SubResource("1")
+[node name="Panel" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_type_variation = &"MM_NodeGradientEditPopup"
 
-[node name="Control" parent="Panel" instance=ExtResource("2")]
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="Previous" type="Button" parent="Panel/VBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Offset" parent="Panel/VBox/HBox" instance=ExtResource("2_fotv7")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.001
+float_only = true
+
+[node name="Next" type="Button" parent="Panel/VBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Panel/VBox/HBox"]
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="Interpolation" parent="Panel/VBox/HBox" instance=ExtResource("3_2wy2b")]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "Constant"
+popup/item_0/id = 0
+popup/item_1/text = "Linear"
+popup/item_1/id = 1
+popup/item_2/text = "SmoothStep"
+popup/item_2/id = 2
+popup/item_3/text = "Cubic"
+popup/item_3/id = 3
+
+[node name="EffectsMenu" type="Button" parent="Panel/VBox/HBox"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Tools"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("4_6ujyx")
+icon_name = "settings"
+
+[node name="EffectsMenuPanel" type="PanelContainer" parent="Panel/VBox/HBox/EffectsMenu"]
+unique_name_in_owner = true
+top_level = true
+layout_mode = 0
+offset_left = 493.0
+offset_top = 9.0
+offset_right = 817.0
+offset_bottom = 75.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("5_sd4bi")
+
+[node name="VBox" type="VBoxContainer" parent="Panel/VBox/HBox/EffectsMenu/EffectsMenuPanel"]
+layout_mode = 2
+
+[node name="Pin" type="Button" parent="Panel/VBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Pin"
+toggle_mode = true
+flat = true
+
+[node name="GradientEdit" parent="Panel/VBox" instance=ExtResource("2_uait3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorButton" type="Button" parent="Panel/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Panel/VBox/ColorButton"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = 415.0
-offset_bottom = 37.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
-embedded = false
+mouse_filter = 2
 
-[connection signal="popup_hide" from="." to="." method="_on_GradientPopup_popup_hide"]
-[connection signal="size_changed" from="." to="." method="_on_size_changed"]
-[connection signal="updated" from="Panel/Control" to="." method="_on_Control_updated"]
+[connection signal="pressed" from="Panel/VBox/HBox/Previous" to="." method="_on_previous_pressed"]
+[connection signal="value_changed_undo" from="Panel/VBox/HBox/Offset" to="." method="_on_offset_value_changed_undo"]
+[connection signal="pressed" from="Panel/VBox/HBox/Next" to="." method="_on_next_pressed"]
+[connection signal="item_selected" from="Panel/VBox/HBox/Interpolation" to="." method="_on_interpolation_item_selected"]
+[connection signal="active_cursor_changed" from="Panel/VBox/GradientEdit" to="." method="_on_gradient_edit_active_cursor_changed"]
+[connection signal="updated" from="Panel/VBox/GradientEdit" to="." method="_on_gradient_edit_updated"]
+[connection signal="pressed" from="Panel/VBox/ColorButton" to="." method="_on_color_button_pressed"]

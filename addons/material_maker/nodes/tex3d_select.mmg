@@ -6,7 +6,7 @@
 	},
 	"parameters": {
 		"t": 0.01,
-		"v": 1
+		"v": 0.5
 	},
 	"seed_int": 0,
 	"shader_model": {

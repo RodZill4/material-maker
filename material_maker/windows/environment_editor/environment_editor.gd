@@ -55,6 +55,7 @@ func on_name_updated(index, text):
 	environment_list.set_item_text(index, text)
 
 func on_thumbnail_updated(index, texture):
+	environment_list.set_item_icon(index, null)
 	environment_list.set_item_icon(index, texture)
 
 func read_environment_list(select : int = 0):
@@ -147,7 +148,7 @@ func _on_Environments_gui_input(event):
 	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
-		context_menu.popup(Rect2($Main.get_global_mouse_position(), context_menu.get_contents_minimum_size()))
+		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]

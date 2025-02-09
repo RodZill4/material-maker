@@ -259,6 +259,9 @@ func fix_data(data : Dictionary) -> Dictionary:
 		data.type = "hbao"
 		data.erase("nodes")
 		data.erase("connections")
+	elif data.has("shader_model") and data.shader_model.has("name") and data.shader_model.name == "Levels":
+		data.erase("shader_model")
+		data.type = "height_blend_levels"
 	return data
 
 func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
@@ -319,7 +322,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 	if generator == null:
 		print("LOADER: data not supported:"+str(data))
 	if generator != null:
-		var status = generator.deserialize(data)
+		var status = await generator.deserialize(data)
 	return generator
 
 func get_generator_list() -> Array:

@@ -6,7 +6,10 @@
 [ext_resource type="Script" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 
 [node name="Preferences" type="Window"]
+position = Vector2i(0, 36)
+size = Vector2i(610, 505)
 exclusive = true
+popup_window = true
 script = ExtResource("2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -25,11 +28,13 @@ custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+current_tab = 0
 use_hidden_tabs_for_min_size = true
 
 [node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+metadata/_tab_index = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 layout_mode = 2
@@ -96,7 +101,6 @@ text = "3D preview resolution:"
 [node name="Gui3DPreviewResolution" parent="VBoxContainer/TabContainer/General/Gui3DPreviewResolution" instance=ExtResource("3")]
 layout_mode = 2
 tooltip_text = "Higher values result in better antialiasing, but are more demanding to render."
-text = "2.0"
 config_variable = "ui_3d_preview_resolution"
 value = 2.0
 min_value = 1.0
@@ -120,7 +124,6 @@ layout_mode = 2
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
 Don't increase this setting above 256 on slower machines!
 This only affects the 3D preview when using tesselation, not parallax occlusion mapping."
-text = "256"
 config_variable = "ui_3d_preview_tesselation_detail"
 value = 256.0
 min_value = 256.0
@@ -159,7 +162,6 @@ text = "FPS limit:"
 layout_mode = 2
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
-text = "145"
 config_variable = "fps_limit"
 value = 145.0
 min_value = 20.0
@@ -182,7 +184,6 @@ text = "Idle FPS limit:"
 layout_mode = 2
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
-text = "145"
 config_variable = "idle_fps_limit"
 value = 20.0
 min_value = 1.0
@@ -194,6 +195,7 @@ float_only = true
 visible = false
 layout_mode = 2
 columns = 2
+metadata/_tab_index = 1
 
 [node name="LabelRayCount" type="Label" parent="VBoxContainer/TabContainer/Bake"]
 layout_mode = 2
@@ -249,6 +251,7 @@ float_only = true
 [node name="Graph" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="AutoSizeComment" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
 layout_mode = 2

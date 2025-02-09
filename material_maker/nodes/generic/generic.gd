@@ -37,13 +37,8 @@ func generic_button_create_popup():
 	add_child(popup_menu)
 	popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
 	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
-	popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+	mm_globals.popup_menu(popup_menu, self)
 
-func _draw() -> void:
-	super._draw()
-	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
-		var conn_pos = get_output_port_position(generator.preview)
-		draw_texture(preload("res://material_maker/icons/output_preview.tres"), conn_pos-Vector2(8, 8), get_theme_color("title_color"))
 
 func set_generator(g : MMGenBase) -> void:
 	super.set_generator(g)
@@ -139,7 +134,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.path = v
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.do_set_image_path(v)
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			var gradient : MMGradient = MMGradient.new()
 			gradient.deserialize(v)
 			o.value = gradient
@@ -151,6 +146,18 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			var polygon : MMPolygon = MMPolygon.new()
 			polygon.deserialize(v)
 			o.value = polygon
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/splines_edit/splines_edit.tscn":
+			var splines : MMSplines = MMSplines.new()
+			splines.deserialize(v)
+			o.value = splines
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/pixels_edit/pixels_edit.tscn":
+			var pixels : MMPixels = MMPixels.new()
+			pixels.deserialize(v)
+			o.value = pixels
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/lattice_edit/lattice_edit.tscn":
+			var lattice : MMLattice = MMLattice.new()
+			lattice.deserialize(v)
+			o.value = lattice
 		else:
 			print("unsupported widget "+str(o))
 
@@ -190,12 +197,18 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("file_selected",Callable(object,"_on_file_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
 			o.connect("on_file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_editor.tscn":
+		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			o.connect("updated",Callable(object,"_on_gradient_changed").bind( o.name ))
 		elif o is Button and o.scene_file_path == "res://material_maker/widgets/curve_edit/curve_edit.tscn":
 			o.connect("updated",Callable(object,"_on_curve_changed").bind( o.name ))
 		elif o is Button and o.scene_file_path == "res://material_maker/widgets/polygon_edit/polygon_edit.tscn":
 			o.connect("updated",Callable(object,"_on_polygon_changed").bind( o.name ))
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/splines_edit/splines_edit.tscn":
+			o.connect("updated",Callable(object,"_on_splines_changed").bind( o.name ))
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/pixels_edit/pixels_edit.tscn":
+			o.connect("updated",Callable(object,"_on_pixels_changed").bind( o.name ))
+		elif o is Button and o.scene_file_path == "res://material_maker/widgets/lattice_edit/lattice_edit.tscn":
+			o.connect("updated",Callable(object,"_on_lattice_changed").bind( o.name ))
 		else:
 			print("unsupported widget "+str(o))
 
@@ -252,6 +265,15 @@ func _on_curve_changed(new_curve, old_value, variable : String) -> void:
 func _on_polygon_changed(new_polygon, old_value, variable : String) -> void:
 	set_generator_parameter_ext(variable, new_polygon, MMType.serialize_value(old_value))
 
+func _on_splines_changed(new_splines, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_splines, MMType.serialize_value(old_value))
+
+func _on_pixels_changed(new_pixels, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_pixels, MMType.serialize_value(old_value))
+
+func _on_lattice_changed(new_lattice, old_value, variable : String) -> void:
+	set_generator_parameter_ext(variable, new_lattice, MMType.serialize_value(old_value))
+
 static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> String:
 	var tooltip : String
 	if p.has("shortdesc"):
@@ -284,7 +306,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.max_size = p.last
 		control.size_value = p.first if !p.has("default") else p.default
 	elif p.type == "enum":
-		control = OptionButton.new()
+		control = preload("res://material_maker/widgets/option_edit/option_edit.tscn").instantiate()
 		for i in range(p.values.size()):
 			var value = p.values[i]
 			control.add_item(value.name)
@@ -292,12 +314,13 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 80
 	elif p.type == "boolean":
 		control = CheckBox.new()
+		control.theme_type_variation = "MM_NodeCheckbox"
 	elif p.type == "color":
 		control = ColorPickerButton.new()
 		control.set_script(preload("res://material_maker/widgets/color_picker_button/color_picker_button.gd"))
 		control.custom_minimum_size.x = 40
 	elif p.type == "gradient":
-		control = preload("res://material_maker/widgets/gradient_editor/gradient_editor.tscn").instantiate()
+		control = preload("res://material_maker/widgets/gradient_editor/gradient_edit.tscn").instantiate()
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
 	elif p.type == "polygon":
@@ -305,6 +328,12 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 	elif p.type == "polyline":
 		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instantiate()
 		control.set_closed(false)
+	elif p.type == "splines":
+		control = preload("res://material_maker/widgets/splines_edit/splines_edit.tscn").instantiate()
+	elif p.type == "pixels":
+		control = preload("res://material_maker/widgets/pixels_edit/pixels_edit.tscn").instantiate()
+	elif p.type == "lattice":
+		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
 		control = LineEdit.new()
 		control.custom_minimum_size.x = 80
@@ -336,15 +365,27 @@ func restore_preview_widget() -> void:
 			preview.shader_context_defs = get_parent().shader_context_defs
 			preview_timer.one_shot = true
 			preview_timer.connect("timeout", Callable(self, "do_update_preview"))
-			preview.add_child(preview_timer)
+		if preview_timer.get_parent():
+			preview_timer.get_parent().remove_child(preview_timer)
+		if preview.get_parent():
+			preview.get_parent().remove_child(preview)
+		preview.add_child(preview_timer)
 		var child_count = get_child_count()
-		var preview_parent = get_child(child_count-1)
-		while preview_parent is Container:
-			child_count = preview_parent.get_child_count()
-			preview_parent = preview_parent.get_child(child_count-1)
-		if preview_parent == null:
+		#var preview_parent = get_child(child_count-1)
+		#while preview_parent is Container:
+			#child_count = preview_parent.get_child_count()
+			#preview_parent = preview_parent.get_child(child_count-1)
+		#if preview_parent == null:
+			#preview_parent = Control.new()
+			#get_child(get_child_count()-1).add_child(preview_parent)
+		#preview_parent.add_child(preview)
+		var preview_parent: Control = null
+		if has_node("PreviewParent"):
+			preview_parent = get_node("PreviewParent")
+		else:
 			preview_parent = Control.new()
-			get_child(get_child_count()-1).add_child(preview_parent)
+			preview_parent.name = "PreviewParent"
+			add_child(preview_parent)
 		preview_parent.add_child(preview)
 		preview.visible = false
 		update_preview()
@@ -353,21 +394,20 @@ func restore_preview_widget() -> void:
 func update_preview() -> void:
 	if generator == null or generator.preview == -1:
 		return
-	preview_disconnect()
-	preview_timer.start(0.2)
+	if preview and not preview.is_inside_tree():
+		restore_preview_widget()
+	if preview_timer.is_inside_tree():
+		preview_timer.start(0.2)
 
 func do_update_preview() -> void:
-	if !preview.is_inside_tree():
-		restore_preview_widget()
 	preview.set_generator(generator, generator.preview, true)
-	var pos = Vector2(0, 0)
-	var parent = preview.get_parent()
-	while parent != self:
-		pos += parent.position
-		parent = parent.get_parent()
-	preview.position = Vector2(18, 24)-pos
-	preview.size = size-Vector2(38, 28)
-	preview_connect()
+
+	var scale_modifier : float = get_global_transform().get_scale().x
+	var titlebar_stylebox :=  get_theme_stylebox("titlebar", "GraphNode")
+	var title_bar_height := get_titlebar_hbox().size.y +titlebar_stylebox.content_margin_bottom+titlebar_stylebox.content_margin_top
+	var margin: int = 8
+	preview.global_position = Vector2(margin, title_bar_height+margin)*scale_modifier + global_position
+	preview.size = size - Vector2.ONE*margin*2 - Vector2(0,title_bar_height)
 	preview.visible = true
 
 func update_title() -> void:
@@ -382,6 +422,7 @@ func update_title() -> void:
 					break
 
 func update_node() -> void:
+	var minimum_line_height = get_theme_constant("minimum_line_height", "MM_Node") if has_theme_constant("minimum_line_height", "MM_Node") else 25
 	# Clean node
 	clear_all_slots()
 	save_preview_widget()
@@ -400,6 +441,7 @@ func update_node() -> void:
 	# Inputs
 	var inputs = generator.get_input_defs()
 	var index = -1
+	var input_labels := []
 	for i in range(inputs.size()):
 		var input = inputs[i]
 		var enable_left = false
@@ -424,36 +466,30 @@ func update_node() -> void:
 		while get_child_count() < index:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+			hsizer.custom_minimum_size.y = minimum_line_height
 			add_child(hsizer)
-			hsizer.add_child(Control.new())
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
+		hsizer.custom_minimum_size.y = minimum_line_height
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		add_child(hsizer)
 		if label != "":
 			var label_widget : Label = Label.new()
 			label_widget.text = label
+			label_widget.theme_type_variation = "MM_NodePropertyLabel"
 			hsizer.add_child(label_widget)
-		else:
-			var control : Control = Control.new()
-			control.custom_minimum_size.y = 25 if !generator.minimized else 12
-			hsizer.add_child(control)
+			input_labels.append(label_widget)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
-	var input_names_width : int = 0
-	for c in get_children():
-		var width = c.get_child(0).size.x
-		if width > input_names_width:
-			input_names_width = width
-	if input_names_width > 0:
-		input_names_width += 3
-	for c in get_children():
-		c.get_child(0).custom_minimum_size.x = input_names_width
+	
+	
+	
 	# Parameters
 	if !generator.minimized:
 		controls = {}
 		index = -1
 		var previous_focus = null
 		var first_focus = null
+		var property_labels := []
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -468,22 +504,29 @@ func update_node() -> void:
 				if result:
 					index = result.get_string(1).to_int()-1
 					label = result.get_string(2)
+				elif label.substr(0, 2) == "-:":
+					label = label.right(-2)
 				else:
 					index += 1
 				var hsizer : HBoxContainer
 				while index >= get_child_count():
 					hsizer = HBoxContainer.new()
 					hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-					var empty_control : Control = Control.new()
-					empty_control.custom_minimum_size.x = input_names_width
-					hsizer.add_child(empty_control)
+					if not input_labels.is_empty():
+						var empty_control : Control = Control.new()
+						empty_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+						input_labels.append(empty_control)
+						hsizer.add_child(empty_control)
 					add_child(hsizer)
 				hsizer = get_child(index)
+				hsizer.custom_minimum_size.y = minimum_line_height
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label
-					label_widget.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
+					property_labels.append(label_widget)
+					label_widget.theme_type_variation = "MM_NodePropertyLabel"
 					hsizer.add_child(label_widget)
+				
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
 					hsizer.add_child(control)
@@ -493,10 +536,31 @@ func update_node() -> void:
 				else:
 					first_focus = control
 				previous_focus = control
+		
+		var label_max_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		label_max_width = min(100, label_max_width)
+		for label in property_labels:
+			label.custom_minimum_size.x = label_max_width
+			label.size.x = label_max_width
+			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		
+		var input_label_width : int = 0
+		input_label_width = get_children().reduce(
+			func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
+			, 0)
+		
+		if not property_labels.is_empty():
+			input_label_width += 10
+		
+		for i in input_labels:
+			i.custom_minimum_size.x = input_label_width
+		
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
 			first_focus.focus_previous = previous_focus.get_path()
 		initialize_properties()
+	
+			
 	# Outputs
 	var outputs = generator.get_output_defs()
 	output_count = outputs.size()
@@ -519,7 +583,7 @@ func update_node() -> void:
 			add_child(hsizer)
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
-			hsizer.custom_minimum_size.y = 25 if !generator.minimized else 12
+			hsizer.custom_minimum_size.y = minimum_line_height if !generator.minimized else 12
 	# Edit buttons
 	if generator.is_editable():
 		for theme_stylebox in ["frame", "selected_frame"]:
@@ -533,9 +597,10 @@ func update_node() -> void:
 	# Preview
 	restore_preview_widget()
 
+
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
@@ -589,7 +654,6 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 	if ! with_shift:
 		if generator.preview == index:
 			generator.preview = -1
-			preview_disconnect()
 		else:
 			generator.preview = index
 			update_preview()
@@ -598,54 +662,23 @@ func on_clicked_output(index : int, with_shift : bool) -> bool:
 		return true
 	return false
 
-func preview_connect_node(node) -> void:
-	if !node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
-		if node is Popup:
-			node.connect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.connect("popup_hide",Callable(self,"on_mouse_exited"))
+
+func _input(_event:InputEvent) -> void:
+	if not generator.minimized and preview:
+		var rect := get_global_rect()
+		var margin := 8
+		rect.position += Vector2.ONE*margin
+		rect.size -= Vector2.ONE*margin*2
+		if rect.has_point(get_global_mouse_position()):
+			preview.visible = false
 		else:
-			node.connect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.connect("mouse_exited",Callable(self,"on_mouse_exited"))
-		for child in node.get_children():
-			preview_connect_node(child)
+			var preview_parent = preview.get_parent()
+			# Fake move of preview in hierarchy, so it's shown in front of whatever
+			# control that has been created recently
+			if preview_parent:
+				preview_parent.move_child(preview, preview_parent.get_child_count()-1)
+			preview.visible = true
 
-func preview_disconnect_node(node) -> void:
-	if node.is_connected("mouse_entered",Callable(self,"on_mouse_entered")):
-		if node is Popup:
-			node.disconnect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.disconnect("popup_hide",Callable(self,"on_mouse_exited"))
-		else:
-			node.disconnect("mouse_entered",Callable(self,"on_mouse_entered"))
-			node.disconnect("mouse_exited",Callable(self,"on_mouse_exited"))
-		for child in node.get_children():
-			preview_disconnect_node(child)
-
-func preview_connect() -> void:
-	if !get_tree().is_connected("node_added",Callable(self,"on_node_added")):
-		get_tree().connect("node_added",Callable(self,"on_node_added"))
-	preview_connect_node(self)
-
-func preview_disconnect() -> void:
-	if get_tree().is_connected("node_added",Callable(self,"on_node_added")):
-		get_tree().disconnect("node_added",Callable(self,"on_node_added"))
-	preview_disconnect_node(self)
-
-func on_node_added(n : Node):
-	#print("Adding "+str(n)+", parent = "+str(n.get_parent()))
-	if n is Control and is_ancestor_of(n):
-		preview_connect_node(n)
-
-func on_mouse_entered():
-	if !generator.minimized:
-		preview.visible = false
-
-func on_mouse_exited():
-	if !generator.minimized:
-		var preview_parent = preview.get_parent()
-		# Fake move of preview in hierarchy, so it's shown in front of whatever
-		# control that has been created recently
-		preview_parent.move_child(preview, preview_parent.get_child_count()-1)
-		preview.visible = true
 
 func update_from_locale() -> void:
 	update_title()

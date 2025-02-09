@@ -7,7 +7,8 @@ const PREVIEW_SIZES : Array[int] = [ 0, 64, 128, 192]
 func _ready() -> void:
 	super._ready()
 	close_button.visible = false
-	set_theme_type("Reroute")
+	theme_type_variation = "MM_Reroute"
+	#set_theme_type("Reroute")
 	on_connections_changed.call_deferred()
 
 func set_generator(g : MMGenBase) -> void:
@@ -16,12 +17,13 @@ func set_generator(g : MMGenBase) -> void:
 	await set_preview(g.get_parameter("preview"))
 	update_node()
 
-func set_theme_type(type : StringName):
-	var current_theme : Theme = mm_globals.main_window.theme
-	for constant in current_theme.get_constant_list(type):
-		add_theme_constant_override(constant, current_theme.get_constant(constant, type))
-	for stylebox in current_theme.get_stylebox_list(type):
-		add_theme_stylebox_override(stylebox, current_theme.get_stylebox(stylebox, type))
+
+#func set_theme_type(type : StringName):
+	#var current_theme : Theme = mm_globals.main_window.theme
+	#for constant in current_theme.get_constant_list(type):
+		#add_theme_constant_override(constant, current_theme.get_constant(constant, type))
+	#for stylebox in current_theme.get_stylebox_list(type):
+		#add_theme_stylebox_override(stylebox, current_theme.get_stylebox(stylebox, type))
 
 func on_connections_changed():
 	var graph_edit = get_parent()
@@ -55,7 +57,10 @@ func update_preview(preview : Control = null):
 	else:
 		preview.set_generator(preview_source.generator, preview_source.output_index)
 
-func _on_gui_input(event):
+
+func _input(event:InputEvent) -> void:
+	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		accept_event()
 		var menu : PopupMenu = PopupMenu.new()
@@ -65,7 +70,8 @@ func _on_gui_input(event):
 		menu.add_item("Huge preview")
 		add_child(menu)
 		menu.id_pressed.connect(self.on_context_menu)
-		menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+		mm_globals.popup_menu(menu, self)
+
 
 func on_context_menu(id : int):
 	var old_value = generator.get_parameter("preview")
@@ -91,7 +97,8 @@ func set_preview(v : int):
 	if v == 0:
 		if preview:
 			preview.queue_free()
-		set_theme_type("Reroute")
+		theme_type_variation = "MM_Reroute"
+		#set_theme_type("Reroute")
 	else:
 		if ! preview:
 			preview = preload("res://material_maker/panels/preview_2d/preview_2d_node.tscn").instantiate()
@@ -100,7 +107,7 @@ func set_preview(v : int):
 			update_preview(preview)
 		var preview_size : int = PREVIEW_SIZES[v]
 		preview.custom_minimum_size = Vector2(preview_size, preview_size)
-		set_theme_type("ReroutePreview")
+		#set_theme_type("ReroutePreview")
+		theme_type_variation = "MM_ReroutePreview"
 	await get_tree().process_frame
 	size = Vector2(0, 0)
-

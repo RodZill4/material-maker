@@ -34,52 +34,140 @@ class ShaderUniform:
 	extends RefCounted
 	var name : String
 	var type : String
+	var size : int
 	var value
 	
-	func _init(n : String, t : String, v) -> void:
+	func _init(n : String, t : String, v, s : int = 0) -> void:
 		name = n
 		type = t
+		size = s
 		value = v
 	
-	func to_str(keyword : String = "uniform") -> String:
+	func to_str(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
 		var str_value_assign : String = ""
 		match type:
+			"int":
+				if value is int:
+					str_value_assign = " = %d" % value
+				elif value is PackedInt32Array and initialize_vectors:
+					str_value_assign = " = int[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign += "%d" % v
+					str_value_assign += " )"
 			"float":
-				str_value_assign = " = %.9f" % value
+				if value is float:
+					str_value_assign = " = %.9f" % value
+				elif value is PackedFloat32Array and initialize_vectors:
+					str_value_assign = " = float[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign += "%.9f" % v
+					str_value_assign += " )"
 			"vec4":
 				if value is Color:
 					str_value_assign = " = vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
-		return "%s %s %s%s;\n" % [ keyword, type, name, str_value_assign ]
+				elif value is PackedFloat32Array and initialize_vectors:
+					str_value_assign = " = vec4[]( "
+					var first : bool = true
+					for i in range(0, value.size(), 4):
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec4(%.9f, %.9f, %.9f, %.9f)" % [ value[i], value[i+1], value[i+2], value[i+3] ]
+					str_value_assign += " )"
+				elif value is PackedColorArray and initialize_vectors:
+					str_value_assign = " = vec4[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec4(%.9f, %.9f, %.9f, %.9f)" % [ v.r, v.g, v.b, v.a ]
+					str_value_assign += " )"
+		var size_string : String = ""
+		if size > 0:
+			size_string = "[%d]" % size
+		return "%s %s %s%s%s;\n" % [ keyword, type, name, size_string, str_value_assign ]
+
+class GlobalDefs:
+	var code : String
+	var source : String
+
+	func _init(c, s):
+		code = c
+		source = s
 
 class ShaderCode:
 	extends RefCounted
-	var globals : Array[String] = []
+	var globals : Array[GlobalDefs] = []
 	var uniforms : Array[ShaderUniform] = []
 	var defs : String = ""
 	var code : String = ""
 	var textures : Dictionary = {}
 	var output_type : String = ""
 	var output_values : Dictionary = {}
+	var alias : ShaderCode = null
 	
-	func add_globals(new_globals : Array[String]) -> void:
+	func add_global(new_global : String, source: String, index : int = -1) -> void:
+		for eg in globals:
+			if new_global == eg.code:
+				return
+		if index == -1:
+			globals.append(GlobalDefs.new(new_global, source))
+		else:
+			globals.insert(index, GlobalDefs.new(new_global, source))
+	
+	func add_globals(new_globals : Array[GlobalDefs]) -> void:
 		for g in new_globals:
-			if ! g in globals:
-				globals.append(g)
+			add_global(g.code, g.source)
 	
-	func add_uniform(n : String, t : String, v) -> void:
+	func get_globals_string(code : String = "") -> String:
+		var rv : String = ""
+		if true:
+			var reverse_globals : Array[GlobalDefs] = globals.duplicate()
+			reverse_globals.reverse()
+			for g in reverse_globals:
+				var added_declaration : bool = false
+				var reverse_declarations = MMGenBase.split_glsl(g.code)
+				reverse_declarations.reverse()
+				for d in reverse_declarations:
+					var declaration_name : String = MMGenBase.get_glsl_declaration_name(d)
+					if code == "" or declaration_name == "" or code.find(declaration_name) != -1 or rv.find(declaration_name) != -1:
+						rv = "\n// '" + declaration_name + "'\n" + d + "\n" + rv
+						added_declaration = true
+				if added_declaration:
+					rv = ("// #globals: %s\n" % g.source) + rv
+		else:
+			for g in globals:
+				rv += g.code
+				rv += "\n"
+		return rv
+	
+	func add_uniform(n : String, t : String, v, s : int = 0) -> void:
 		for u in uniforms:
 			if n == u.name:
 				return
-		uniforms.append(ShaderUniform.new(n, t, v))
+		uniforms.append(ShaderUniform.new(n, t, v, s))
 
 	func add_uniforms(uniform_list : Array[ShaderUniform]) -> void:
 		for u in uniform_list:
-			add_uniform(u.name, u.type, u.value)
+			add_uniform(u.name, u.type, u.value, u.size)
 
-	func uniforms_as_strings(keyword : String = "uniform") -> String:
+	func uniforms_as_strings(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
 		var rv : String = ""
 		for u in uniforms:
-			rv += u.to_str(keyword)
+			rv += u.to_str(keyword, initialize_vectors)
 		return rv
 
 var position : Vector2 = Vector2(0, 0)
@@ -113,10 +201,10 @@ func _ready() -> void:
 
 static func get_default_generated_shader() -> ShaderCode:
 	var rv : ShaderCode = ShaderCode.new()
-	rv.output_type = "f"
+	rv.output_type = "rgba"
 	rv.output_values.f = "0.0"
 	rv.output_values.rgb = "vec3(0.0)"
-	rv.output_values.rgba = "vec4(0.0, 0.0, 0.0, 1.0)"
+	rv.output_values.rgba = "vec4(0.0, 0.0, 0.0, 0.0)"
 	return rv
 
 func _post_load() -> void:
@@ -265,18 +353,19 @@ func set_parameter(n : String, v) -> void:
 				return
 			elif parameter_def.type == "gradient":
 				if old_value is MMGradient and v is MMGradient and old_value != null:
-					old_value.sort()
-					v.sort()
-					var parameter_changes = {}
-					for i in range(v.points.size()):
-						if i >= old_value.points.size() or v.points[i].v != old_value.points[i].v:
-							var parameter_name = "p_o%d_%s_%d_pos" % [ get_instance_id(), n, i ]
-							parameter_changes[parameter_name] = v.points[i].v
-						if i >= old_value.points.size() or v.points[i].c != old_value.points[i].c:
-							var parameter_name = "p_o%d_%s_%d_col" % [ get_instance_id(), n, i ]
-							parameter_changes[parameter_name] = v.points[i].c
-					mm_deps.dependencies_update(parameter_changes)
+					if old_value.interpolation == v.interpolation and old_value.points.size() == v.points.size():
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
+						return
+			elif parameter_def.type == "polyline" or parameter_def.type == "polygon":
+				if old_value is Dictionary:
+					old_value = MMType.deserialize_value(old_value)
+				if v is Dictionary:
+					v = MMType.deserialize_value(v)
+				if old_value is MMPolygon and v is MMPolygon and old_value != null:
 					if old_value.points.size() == v.points.size():
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
 						return
 			elif parameter_def.type == "curve":
 				if old_value is MMCurve and v is MMCurve and old_value != null:
@@ -292,6 +381,35 @@ func set_parameter(n : String, v) -> void:
 								parameter_changes[parameter_name] = v.points[i][f]
 					mm_deps.dependencies_update(parameter_changes)
 					if old_value.points.size() == v.points.size():
+						return
+			elif parameter_def.type == "splines":
+				if old_value is Dictionary:
+					old_value = MMType.deserialize_value(old_value)
+				if v is Dictionary:
+					v = MMType.deserialize_value(v)
+				if old_value is MMSplines and v is MMSplines and old_value != null:
+					if old_value.splines.size() == v.splines.size():
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
+						return
+			elif parameter_def.type == "pixels":
+				if v is Dictionary:
+					v = MMType.deserialize_value(v)
+				if old_value is Dictionary:
+					old_value = MMType.deserialize_value(old_value)
+				if old_value is MMPixels and v is MMPixels and old_value != null:
+					if old_value.size == v.size and old_value.bpp == v.bpp:
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
+						return
+			elif parameter_def.type == "lattice":
+				if old_value is Dictionary:
+					old_value = MMType.deserialize_value(old_value)
+				if v is Dictionary:
+					v = MMType.deserialize_value(v)
+				if old_value is MMLattice and v is MMLattice and old_value != null:
+					if old_value.size == v.size:
+						# Only values changed, no need to regenerate the shader
+						mm_deps.dependencies_update(v.get_parameter_values("o%d_%s" % [ get_instance_id(), n ]))
 						return
 		all_sources_changed()
 
@@ -367,10 +485,6 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	code += mm_renderer.common_shader
 	code += "\n"
 	code += src_code.uniforms_as_strings()
-	code += "\n"
-	for g in src_code.globals:
-		code += g
-		code += "\n"
 	var shader_code = src_code.defs
 	if src_code.output_type != "":
 		var preview_code : String = mm_io_types.types[type].preview
@@ -378,6 +492,9 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 		preview_code = preview_code.replace("$(value)", src_code.output_values[type])
 		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
+	code += "\n"
+	code += src_code.get_globals_string(shader_code+main_fct)
+	code += "\n"
 	code += shader_code
 	code += main_fct
 	code = remove_constant_declarations(code)
@@ -399,7 +516,8 @@ func generate_output_shader(output_index : int, preview : bool = false):
 		shader = mm_renderer.generate_shader(source)
 	return { shader=shader, output_type=output_type }
 
-func render_expression(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
+func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
+	print("This function is deprecated!")
 	var output_shader : Dictionary = generate_output_shader(output_index, preview)
 	var shader : String = output_shader.shader
 	var output_type : String = output_shader.output_type
@@ -407,13 +525,21 @@ func render_expression(object: Object, output_index : int, size : int, preview :
 	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
 	return renderer
 
-func render(object: Object, output_index : int, size : int, preview : bool = false) -> Object:
-	var output_shader : Dictionary = generate_output_shader(output_index, preview)
-	var shader : String = output_shader.shader
-	var output_type : String = output_shader.output_type
-	var renderer = await mm_renderer.request(object)
-	renderer = await renderer.render_shader(object, shader, size, output_type != "rgba")
-	return renderer
+func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
+	var context : MMGenContext = MMGenContext.new()
+	var source : ShaderCode = get_shader_code("uv", output_index, context)
+	if source.output_type == "f":
+		source.output_type = "rgba"
+	var compute_shader : MMComputeShader = MMComputeShader.new()
+	var shader_status : bool = await compute_shader.set_shader_from_shadercode(source, false)
+	var texture : MMTexture = MMTexture.new()
+	if shader_status:
+		var status = await compute_shader.render_ext([texture], size)
+	return texture
+
+func render_output(output_index : int, size : Vector2i) -> Image:
+	var texture : MMTexture = await render_output_to_texture(output_index, size)
+	return (await texture.get_texture()).get_image()
 
 func get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var rv = _get_shader_code(uv, output_index, context)
@@ -423,13 +549,12 @@ func get_shader_code(uv : String, output_index : int, context : MMGenContext) ->
 		if rv.code.find(variable_name) != -1:
 			found = true
 		for g in rv.globals:
-			if g.find(variable_name) != -1:
+			if g.code.find(variable_name) != -1:
 				found = true
 				break
 		if found:
 			var declaration : String = mm_renderer.get_global_parameter_declaration(v)+";\n"
-			if rv.globals.find(declaration) == -1:
-				rv.globals.push_front(declaration)
+			rv.add_global(declaration, "global_parameters_declaration", 0)
 	if mm_io_types.types.has(rv.output_type):
 		if mm_io_types.types[rv.output_type].has("convert"):
 			for c in mm_io_types.types[rv.output_type].convert:
@@ -447,6 +572,83 @@ func get_output_attributes(output_index : int) -> Dictionary:
 func _get_shader_code(_uv, _output_index, _context) -> ShaderCode:
 	return ShaderCode.new()
 
+# Shader generation utility functions
+
+static func find_matching_parenthesis(string : String, i : int, op : String = '(', cp : String = ')') -> int:
+	var parenthesis_level = 0
+	var length : int = string.length()
+	while i < length:
+		var c = string[i]
+		if c == op:
+			parenthesis_level += 1
+		elif c == cp:
+			parenthesis_level -= 1
+			if parenthesis_level == 0:
+				return i
+		i += 1
+		var next_op = string.find(op, i)
+		var next_cp = string.find(cp, i)
+		var max_p = max(next_op, next_cp)
+		if max_p < 0:
+			return -1
+		var min_p = min(next_op, next_cp)
+		i = max_p if min_p < 0 else min_p
+	return i
+
+static var re_line_comment : RegEx = RegEx.create_from_string("//.*")
+
+static func remove_comments(s : String) -> String:
+	var cont : bool = true
+	while cont:
+		cont = false
+		var comment_begin : int = s.find("/*")
+		if comment_begin != -1:
+			var comment_end : int = s.find("*/", comment_begin)
+			if comment_end != -1:
+				s = s.erase(comment_begin, comment_end-comment_begin+2)
+				cont = true
+	s = re_line_comment.sub(s, "", true)
+	return s
+
+static func split_glsl(s : String) -> Array[String]:
+	s = remove_comments(s)
+	var a : Array[String] = []
+	s = s.strip_edges()
+	while s != "":
+		var next_semicolon = s.find(";")
+		var next_bracket = s.find("{")
+		if next_semicolon != -1 and (next_bracket == -1 or next_semicolon < next_bracket):
+			a.append(s.left(next_semicolon+1))
+			s = s.right(-next_semicolon-1)
+		elif next_bracket != -1:
+			var closing_bracket = find_matching_parenthesis(s, next_bracket, '{', '}')
+			var d : String = s.left(closing_bracket+1)
+			s = s.right(-closing_bracket-1)
+			s = s.strip_edges()
+			if s.length() > 0 and s[0] == ";":
+				d += ";"
+				s = s.trim_prefix(";")
+			a.append(d)
+		else:
+			print("Error: "+s)
+			break
+		s = s.strip_edges()
+	return a
+
+static func get_glsl_declaration_name(s : String) -> String:
+	var words = s.split(" ", false)
+	if words.size() > 2 and (words[0] == "const" or words[0] == "uniform" or words[0] == "varying"):
+		var d : String = words[2]
+		var bracket_pos = d.find("[")
+		if bracket_pos >= 0:
+			d = d.substr(0, bracket_pos)
+		return d
+	var split : PackedStringArray = s.split(" ")
+	if split.size() > 1:
+		split = split[1].split("(")
+		if split.size() > 1:
+			return split[0]
+	return ""
 
 func _serialize(data: Dictionary) -> Dictionary:
 	print("cannot save "+str(name))
@@ -483,7 +685,7 @@ func _deserialize(_data : Dictionary) -> void:
 	pass
 
 func deserialize(data : Dictionary) -> void:
-	_deserialize(data)
+	await _deserialize(data)
 	if data.has("name"):
 		name = data.name
 	if data.has("node_position"):

@@ -5,6 +5,7 @@ extends Window
 @onready var patrons_list = $HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/Patrons
 
 const CONTRIBUTORS = [
+	{ icon="res://material_maker/icons/godot_logo.svg", contribution="99% of Material Maker's code is the awesome Godot Engine GODOT_VERSION" },
 	{ name="Rodolphe Suescun", contribution="Lead developer" },
 	{ name="Kasper Arnklit Frandsen", contribution="Several nodes (including Auto Tones, Mask to SDF, Normal Blend and many Bricks nodes) and node updates, and very nice video tutorials" },
 	{ name="Hugo Locurcio", contribution="Lots of contributions, mostly related to rendering and user interface" },
@@ -47,13 +48,34 @@ func _ready() -> void:
 		application_name_label.text = "Material Maker"
 	else:
 		application_name_label.text = ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release")
+	
+	# Contributors list
 	for c in CONTRIBUTORS:
+		var name_control : Control
+		if c.has("name"):
+			var label : Label = Label.new()
+			label.text = c.name
+			name_control = label
+		elif c.has("icon"):
+			var icon : TextureRect = TextureRect.new()
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+			icon.texture = load(c.icon)
+			name_control = icon
+		name_control.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		authors_grid.add_child(name_control)
+
 		var label : Label = Label.new()
-		label.text = c.name
-		authors_grid.add_child(label)
-		label = Label.new()
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.text = c.contribution
+		var contribution : String = c.contribution
+		var godot_version : Dictionary = Engine.get_version_info()
+		var godot_version_str : String = "v%d.%d" % [ godot_version.major, godot_version.minor ]
+		if godot_version.has("patch") and godot_version.patch > 0:
+			godot_version_str += ".%d" % godot_version.patch
+		if godot_version.has("status"):
+			godot_version_str += godot_version.status
+		contribution = contribution.replace("GODOT_VERSION", godot_version_str)
+		label.text = contribution
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		authors_grid.add_child(label)
 	for p in PATRONS:
 		patrons_list.add_item(p)

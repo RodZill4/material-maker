@@ -1,8 +1,41 @@
-[gd_scene load_steps=8 format=3 uid="uid://cs6b524f2o614"]
+[gd_scene load_steps=12 format=3 uid="uid://cs6b524f2o614"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="1"]
 [ext_resource type="Script" path="res://material_maker/windows/new_painter/new_painter.gd" id="2"]
-[ext_resource type="Script" path="res://material_maker/tools/obj_loader/obj_loader.gd" id="3"]
+
+[sub_resource type="Shader" id="Shader_g4gcc"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.2.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo1 : source_color;
+uniform vec4 albedo2 : source_color;
+uniform float roughness : hint_range(0,1);
+uniform float specular;
+uniform float metallic;
+uniform float grid_size;
+
+void vertex() {
+}
+
+void fragment() {
+	ivec2 grid = ivec2(UV*grid_size);
+	ALBEDO = (((grid.x&1)^(grid.y&1)) == 0) ? albedo1.rgb : albedo2.rgb;
+	METALLIC = metallic;
+	ROUGHNESS = roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5x24r"]
+render_priority = 0
+shader = SubResource("Shader_g4gcc")
+shader_parameter/albedo1 = Color(1, 1, 1, 1)
+shader_parameter/albedo2 = Color(0.866667, 0.866667, 0.866667, 1)
+shader_parameter/roughness = 0.8
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/grid_size = 32.0
 
 [sub_resource type="World3D" id="World3D_pmwks"]
 
@@ -11,6 +44,7 @@
 [sub_resource type="Animation" id="2"]
 resource_name = "rotate"
 length = 10.0
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -29,9 +63,22 @@ _data = {
 "rotate": SubResource("2")
 }
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_elmmt"]
+
+[sub_resource type="Sky" id="Sky_stx2u"]
+sky_material = SubResource("ProceduralSkyMaterial_elmmt")
+
+[sub_resource type="Environment" id="Environment_gdou5"]
+background_mode = 2
+sky = SubResource("Sky_stx2u")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+
 [node name="NewPainterWindow" type="Window"]
+title = "New Paint Project"
 size = Vector2i(500, 300)
 script = ExtResource("2")
+mesh_material = SubResource("ShaderMaterial_5x24r")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(400, 250)
@@ -87,27 +134,35 @@ stretch = true
 own_world_3d = true
 world_3d = SubResource("World3D_pmwks")
 handle_input_locally = false
-size = Vector2i(391, 257)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
 [node name="MeshPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport/MeshPivot"]
+cast_shadow = 0
 mesh = SubResource("1")
 skeleton = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
-autoplay = "rotate"
 libraries = {
 "": SubResource("AnimationLibrary_f1y4a")
 }
+autoplay = "rotate"
 
 [node name="CameraPivot" type="Node3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-far = 50.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+far = 50.65
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
+environment = SubResource("Environment_gdou5")
+
+[node name="Light" type="DirectionalLight3D" parent="VBoxContainer/Main/SubViewportContainer/SubViewport"]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 1, 1)
+light_bake_mode = 0
 
 [node name="Error" type="Label" parent="VBoxContainer/Main/SubViewportContainer"]
 layout_mode = 2
@@ -129,9 +184,6 @@ text = "OK"
 custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 text = "Cancel"
-
-[node name="ObjLoader" type="Node" parent="."]
-script = ExtResource("3")
 
 [connection signal="pressed" from="VBoxContainer/Main/VBoxContainer/GridContainer/ModelFile" to="." method="_on_ModelFile_pressed"]
 [connection signal="pressed" from="VBoxContainer/Main/VBoxContainer/GridContainer/ProjectFile" to="." method="_on_ProjectFile_pressed"]

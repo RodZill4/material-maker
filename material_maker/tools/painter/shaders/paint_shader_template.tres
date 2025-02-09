@@ -311,23 +311,49 @@ DEFINITIONS
 
 void do_paint_rgba(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
 	paint_value = clamp(paint_value, vec4(0.0), vec4(1.0));
+	brush_value = clamp(brush_value, 0.0, 1.0);
 	old_stroke_value = clamp(old_stroke_value, vec4(0.0), vec4(1.0));
 	old_layer_value = clamp(old_layer_value, vec4(0.0), vec4(1.0));
 	float stroke_alpha = paint_value.a*brush_value;
-	float new_alpha = min(max(stroke_alpha, old_stroke_value.a), stroke_alpha + old_stroke_value.a);
-	new_stroke_value = vec4((paint_value.rgb*stroke_alpha+old_stroke_value.rgb*(new_alpha-stroke_alpha))/new_alpha, new_alpha);
+	float new_alpha = min(1.0, max(stroke_alpha, old_stroke_value.a));
+	new_stroke_value = vec4(mix(paint_value.rgb, old_stroke_value.rgb, new_alpha-stroke_alpha), new_alpha);
 	float layer_apply_alpha = new_alpha*brush_opacity;
-	float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
-	new_layer_value = vec4((new_stroke_value.rgb*layer_apply_alpha+old_layer_value.rgb*(layer_alpha_sum-layer_apply_alpha))/layer_alpha_sum, layer_alpha_sum);
+	if (erase) {
+		new_layer_value = vec4(old_layer_value.rgb, max(0.0, old_layer_value.a-layer_apply_alpha));
+	} else {
+		float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
+		new_layer_value = vec4(mix(new_stroke_value.rgb, old_layer_value.rgb, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+	}
 }
 
 void do_paint_ggaa(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
+	paint_value = clamp(paint_value, vec4(0.0), vec4(1.0));
+	brush_value = clamp(brush_value, 0.0, 1.0);
+	old_stroke_value = clamp(old_stroke_value, vec4(0.0), vec4(1.0));
+	old_layer_value = clamp(old_layer_value, vec4(0.0), vec4(1.0));
 	vec2 stroke_alpha = paint_value.ba*brush_value;
-	vec2 new_alpha = min(max(stroke_alpha, old_stroke_value.ba), stroke_alpha + old_stroke_value.ba);
-	new_stroke_value = vec4((paint_value.rg*stroke_alpha+old_stroke_value.rg*(new_alpha-stroke_alpha))/new_alpha, new_alpha);
+	vec2 new_alpha = min(vec2(1.0), stroke_alpha + old_stroke_value.ba);
+	new_stroke_value = vec4(mix(paint_value.rg, old_stroke_value.rg, new_alpha-stroke_alpha), new_alpha);
 	vec2 layer_apply_alpha = new_alpha*brush_opacity;
-	vec2 layer_alpha_sum = min(vec2(1.0), layer_apply_alpha + old_layer_value.ba);
-	new_layer_value = vec4((new_stroke_value.rg*layer_apply_alpha+old_layer_value.rg*(layer_alpha_sum-layer_apply_alpha))/layer_alpha_sum, layer_alpha_sum);
+	if (erase) {
+		new_layer_value = vec4(old_layer_value.rg, max(vec2(0.0), old_layer_value.ba-layer_apply_alpha));
+	} else {
+		vec2 layer_alpha_sum = min(vec2(1.0), layer_apply_alpha + old_layer_value.ba);
+		new_layer_value = vec4(mix(new_stroke_value.rg, old_layer_value.rg, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
+	}
+}
+
+void do_paint_111a(vec4 paint_value, float brush_value, vec4 old_stroke_value, vec4 old_layer_value, out vec4 new_stroke_value, out vec4 new_layer_value) {
+	paint_value = clamp(paint_value, vec4(0.0), vec4(1.0));
+	brush_value = clamp(brush_value, 0.0, 1.0);
+	old_stroke_value = clamp(old_stroke_value, vec4(0.0), vec4(1.0));
+	old_layer_value = clamp(old_layer_value, vec4(0.0), vec4(1.0));
+	float stroke_alpha = paint_value.a*brush_value;
+	float new_alpha = min(1.0, max(stroke_alpha, old_stroke_value.a));
+	new_stroke_value.a = new_alpha;
+	float layer_apply_alpha = new_alpha*brush_opacity;
+	float layer_alpha_sum = min(1.0, layer_apply_alpha + old_layer_value.a);
+	new_layer_value = vec4(mix(vec3(erase ? 0.0 : 1.0), old_layer_value.rgb, layer_alpha_sum-layer_apply_alpha), layer_alpha_sum);
 }
 
 void main() {
@@ -335,6 +361,10 @@ void main() {
 	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
 	ivec2 image_size = imageSize(GENERATED_IMAGE);
 	vec2 UV = vec2(pixel)/image_size;
+
+	if (use_id_mask && length(texture(id_map_tex, UV)-id_mask_color) > 0.001) {
+		return;
+	}
 	
 	vec2 uv; // position in texture space, with seams correction
 	vec2 view_uv; // position in painting view space
@@ -383,10 +413,10 @@ void main() {
 	// Get position in brush
 	vec2 local_uv = p-(b+x*bv);
 	// TODO: local_uv changes go here
-#if TEXTURE_TYPE == \"paint_mask\" or BRUSH_MODE == \"stamp\"
 	float pattern_angle_cos = cos(pattern_angle+jitter_rotation);
 	float pattern_angle_sin = sin(pattern_angle+jitter_rotation);
 	mat2 texture_rotation = mat2(vec2(pattern_angle_cos, pattern_angle_sin), vec2(-pattern_angle_sin, pattern_angle_cos));
+#if TEXTURE_TYPE == \"paint_mask\" or BRUSH_MODE == \"stamp\"
 	local_uv = texture_rotation*local_uv;
 #endif
 	if (!fill && (abs(local_uv.x) > 1.0 || abs(local_uv.y) > 1.0)) {
@@ -410,7 +440,15 @@ void main() {
 		brush_value = min(brush_value, 1.0);
 	}
 
-	vec2 pattern_uv = brush_uv;
+#if BRUSH_MODE == \"stamp\"
+	vec2 pattern_uv = 0.5*texture_rotation*(p-b-bv)+vec2(0.5);
+#elif BRUSH_MODE == \"pattern\"
+	vec2 pattern_uv = pattern_scale*texture_rotation*(vec2(bs.y/bs.x, 1.0)*(view_uv - vec2(0.5, 0.5)));
+#elif BRUSH_MODE == \"uv_pattern\"
+	vec2 pattern_uv = uv;
+#else
+	// unsupported brush mode: BRUSH_MODE
+#endif
 
 	PATTERN_CODE
 }

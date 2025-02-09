@@ -1,8 +1,8 @@
 Translate node
 ..............
 
-The **Translate** node generates a 3D signed distance function of a translated shape
-based on its input. If the input shapes are associated to color indexes, the
+The **Translate** node is variadic and generates 3D signed distance functiosn of translated shapes
+based on its inputs. If the input shapes are associated to color indexes, the
 translate node applies them to the output.
 
 .. image:: images/node_3d_sdf_transforms_translate.png
@@ -11,13 +11,13 @@ translate node applies them to the output.
 Inputs
 ::::::
 
-The **Translate** node accepts an input in 3D signed distance function format.
+The **Translate** node accepts one or more inputs in 3D signed distance function format.
 
 Outputs
 :::::::
 
-The **Translate** node generates a signed distance function of the
-translated input shape.
+The **Translate** node generates signed distance functions of the
+translated input shapes.
 
 Parameters
 ::::::::::

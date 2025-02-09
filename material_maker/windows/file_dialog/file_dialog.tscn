@@ -1,15 +1,16 @@
 [gd_scene load_steps=2 format=3 uid="uid://lys85a60larh"]
 
-[ext_resource type="Script" path="res://material_maker/windows/file_dialog/file_dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://2m7bxcehwc5a" path="res://material_maker/windows/file_dialog/file_dialog.gd" id="1"]
 
 [node name="FileDialog" type="FileDialog"]
 title = "Open a File"
 initial_position = 2
 size = Vector2i(500, 400)
 visible = true
-ok_button_text = "Ouvrir"
+ok_button_text = "Open"
 file_mode = 0
 access = 2
+show_hidden_files = true
 script = ExtResource("1")
 
 [connection signal="canceled" from="." to="." method="_on_FileDialog_popup_hide"]

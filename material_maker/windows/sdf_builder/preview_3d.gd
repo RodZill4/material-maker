@@ -43,7 +43,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		var material = plane.get_surface_override_material(0)
 		var variables : Dictionary = {}
 		variables.GENERATED_GLOBALS = source.uniforms_as_strings()
-		variables.GENERATED_GLOBALS += "\n".join(PackedStringArray(source.globals))
+		variables.GENERATED_GLOBALS += source.get_globals_string()
 		variables.GENERATED_INSTANCE = source.defs
 		variables.GENERATED_CODE = source.code
 		variables.GENERATED_OUTPUT = source.output_values.sdf3d
@@ -52,7 +52,14 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 		variables.COLOR_FCT = node_prefix+"_c"
 		variables.INDEX_UNIFORM = "p_"+node_prefix+"_index"
 		var shader_code : String = mm_preprocessor.preprocess_file("res://material_maker/windows/sdf_builder/preview_3d.gdshader", variables)
-		material = mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(material), shader_code)
+		await mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(material), shader_code)
+		for u in source.uniforms:
+			if u.value:
+				if u.value is Dictionary:
+					if u.value.has("type") and u.value.type == "Color":
+						material.set_shader_parameter(u.name, Color(u.value.r, u.value.g, u.value.b, u.value.a))
+				else:
+					material.set_shader_parameter(u.name, u.value)
 
 var setup_controls_filter : String = ""
 func setup_controls(filter : String = "") -> void:
@@ -114,10 +121,6 @@ func _on_Preview3D_resized():
 		viewport.size = size
 		update_viewport()
 
-func _input(ev):
-	return
-	_unhandled_input(ev)
-	
 func navigation_input(ev) -> bool:
 	if ! get_global_rect().has_point(get_global_mouse_position()):
 		return false
@@ -150,7 +153,6 @@ func navigation_input(ev) -> bool:
 				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
 			return true
 	return false
-
 
 func _on_Background_input_event(_camera, event, _position, _normal, _shape_idx):
 	if navigation_input(event):

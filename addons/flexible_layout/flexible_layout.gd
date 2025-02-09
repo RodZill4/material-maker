@@ -472,18 +472,25 @@ class FlexLayout:
 		if rect.size.x == 0 or rect.size.y == 0:
 			return
 		if top:
-			top.layout(control.get_rect())
+			rect.size = Vector2i(Vector2(rect.size))
+			top.layout(rect)
 		main_control.layout_changed.emit()
 	
-	func move_panel(panel, reference_panel : FlexNode, destination):
+	func move_panel(panel, reference_panel : FlexNode, destination : int, test_only : bool = false) -> bool:
 		var parent_panel : FlexNode = reference_panel.parent.get_ref() as FlexNode
+		# if current container has only 1 tab, it cannot be dropped into or near itself
+		var into_same_tab : bool = false
+		if reference_panel is FlexTab and reference_panel == panel.flex_panel.get_meta("flex_node"):
+			into_same_tab = true
+			if reference_panel.tabs.get_controls().size() == 1:
+				return false
 		var vertical : bool
 		var offset : int
 		var tab : FlexTab = null
 		match destination:
 			0:
-				if not reference_panel is FlexTab:
-					return
+				if not reference_panel is FlexTab or into_same_tab:
+					return false
 				tab = reference_panel
 			1:
 				vertical = true
@@ -498,21 +505,23 @@ class FlexLayout:
 				vertical = true
 				offset = 1
 			_:
-				return
-		if tab == null:
-			var split : FlexSplit
-			if parent_panel is FlexSplit and parent_panel.vertical == vertical:
-				split = parent_panel as FlexSplit
-			else:
-				split = FlexSplit.new(parent_panel, reference_panel.flexible_layout)
-				split.vertical = vertical
-				parent_panel.replace(reference_panel, split)
-				split.insert(reference_panel, 0)
-			tab = FlexTab.new(parent_panel, reference_panel.flexible_layout)
-			var ref_index : int = split.find(reference_panel)
-			split.insert(tab, ref_index+offset, ref_index)
-		tab.add(panel.flex_panel)
-		layout()
+				return false
+		if not test_only:
+			if tab == null:
+				var split : FlexSplit
+				if parent_panel is FlexSplit and parent_panel.vertical == vertical:
+					split = parent_panel as FlexSplit
+				else:
+					split = FlexSplit.new(parent_panel, reference_panel.flexible_layout)
+					split.vertical = vertical
+					parent_panel.replace(reference_panel, split)
+					split.insert(reference_panel, 0)
+				tab = FlexTab.new(parent_panel, reference_panel.flexible_layout)
+				var ref_index : int = split.find(reference_panel)
+				split.insert(tab, ref_index+offset, ref_index)
+			tab.add(panel.flex_panel)
+			layout()
+		return true
 
 	func undock(panel : Control):
 		main_control.subwindows.append(FlexWindow.new(main_control, panel))
@@ -536,6 +545,7 @@ class FlexWindow:
 		if first_panel:
 			position = Vector2i(first_panel.get_global_rect().position)+first_panel.get_window().position
 			size = first_panel.size
+			theme = main_control.owner.theme
 		panel = Control.new()
 		add_child(panel)
 		panel.position = Vector2i(0, 0)
@@ -565,7 +575,10 @@ class FlexWindow:
 		return data
 	
 	func init(data : Dictionary):
-		current_screen = data.screen
+		if data.has("screen"):
+			current_screen = data.screen
+		else:
+			current_screen = 0
 		position = Vector2i(data.x, data.y)
 		size = Vector2i(data.w, data.h)
 		flex_layout.init(data.layout)
@@ -583,7 +596,7 @@ class FlexWindow:
 		overlay = null
 
 
-@onready var allow_undock : bool = false
+@export var allow_undock : bool = false
 
 var panels : Dictionary = {}
 var flex_layout : FlexLayout
@@ -629,6 +642,8 @@ func add(n : String, c : Control):
 	panels[n] = c
 
 func init(layout = null):
+	for p in panels.keys():
+		show_panel(p, false)
 	if layout and layout.has("main"):
 		for w in layout.windows:
 			var subwindow = FlexWindow.new(self)

@@ -45,16 +45,14 @@ func set_brush(brush) -> Texture2D:
 		camera.near = max(0.2, 0.5*(cam_to_center-mesh_size))
 		camera.far = 2.0*(cam_to_center+mesh_size)
 		var transform = camera.global_transform.affine_inverse()*mesh_instance.global_transform
-		painter.update_view(camera, transform, $SubViewport.size)
+		painter.update_view(camera.get_camera_projection(), transform, $SubViewport.size)
 		await get_tree().process_frame
 		await get_tree().process_frame
 	painter.set_texture_size(1024)
-	painter.set_brush_node(brush)
+	painter.set_brush_node(brush, false)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	painter.init_textures(background_material)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await painter.init_textures(background_material)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var paint_parameters : Dictionary = {
@@ -85,7 +83,7 @@ func set_brush(brush) -> Texture2D:
 	await get_tree().process_frame
 	if DEBUG:
 		for i in painter.debug_get_texture_names().size():
-			var t = painter.debug_get_texture(i)
+			var t = await painter.debug_get_texture(i)
 			t.get_data().save_png("d:/debug_brush_preview_%d.png" % i)
 	initialized = true
 	return $SubViewport.get_texture()

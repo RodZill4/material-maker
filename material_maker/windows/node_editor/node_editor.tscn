@@ -40,9 +40,11 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+current_tab = 0
 
 [node name="General" type="VBoxContainer" parent="Sizer/TabBar"]
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="Name" type="HBoxContainer" parent="Sizer/TabBar/General"]
 layout_mode = 2
@@ -103,6 +105,7 @@ flat = true
 [node name="Outputs" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="LabelOutputs" type="Label" parent="Sizer/TabBar/Outputs"]
 layout_mode = 2
@@ -127,15 +130,18 @@ flat = true
 [node name="Main Code" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="Instance Functions" parent="Sizer/TabBar" instance=ExtResource("5_l5uxq")]
 visible = false
 layout_mode = 2
 syntax_highlighter = SubResource("CodeHighlighter_g2tsy")
+metadata/_tab_index = 3
 
 [node name="Global Functions" type="VBoxContainer" parent="Sizer/TabBar"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="Includes" type="HBoxContainer" parent="Sizer/TabBar/Global Functions"]
 layout_mode = 2

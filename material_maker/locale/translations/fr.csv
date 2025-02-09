@@ -628,7 +628,7 @@ Square|
 The generated output UV map, to be connected to a Custom UV node|
 Gaussian Blur|
 Gaussian blur|
-Applys a gaussian blur on its input|
+Applies a gaussian blur on its input|
 Apply the blur filter horizontally, vertically of in both directions|
 Gaussian blur X|
 Gaussian blur Y|
@@ -1217,7 +1217,7 @@ Shows a greyscale image of a sine wave|
 Skew|
 Slope Blur|
 Slope blur|
-Applys a blur effect on its input, following slopes of an input height map|
+Applies a blur effect on its input, following slopes of an input height map|
 A height map whose slopes control the strength and direction of the blur filter|
 Smooth Curvature|
 Creates a smooth curvature map from a height map|

@@ -396,27 +396,6 @@ func set_shader_model(data: Dictionary) -> void:
 # Shader generation
 #
 
-func find_matching_parenthesis(string : String, i : int, op : String = '(', cp : String = ')') -> int:
-	var parenthesis_level = 0
-	var length : int = string.length()
-	while i < length:
-		var c = string[i]
-		if c == op:
-			parenthesis_level += 1
-		elif c == cp:
-			parenthesis_level -= 1
-			if parenthesis_level == 0:
-				return i
-		i += 1
-		var next_op = string.find(op, i)
-		var next_cp = string.find(cp, i)
-		var max_p = max(next_op, next_cp)
-		if max_p < 0:
-			return -1
-		var min_p = min(next_op, next_cp)
-		i = max_p if min_p < 0 else min_p
-	return i
-
 func find_keyword_call(string : String, keyword : String):
 	var search_string : String = "$%s(" % keyword
 	var position : int = string.find(search_string)
@@ -443,49 +422,6 @@ func replace_input_with_function_call(string : String, input : String, seed_para
 			break
 		string = string.replace("$%s(%s)" % [ input+input_suffix, uv ], "%s_input_%s(%s%s)" % [ genname, input, uv, seed_parameter ])
 	return string
-
-func replace_input(string : String, context, input : String, type : String, src : MMGenBase.OutputPort, default : String) -> Dictionary:
-	var required_globals = []
-	var required_defs = ""
-	var required_code = ""
-	var new_pass_required = false
-	while true:
-		var uv = find_keyword_call(string, input)
-		if uv == "#error":
-			print("syntax error (2)")
-			print(string)
-			break
-		elif uv == "":
-			break
-		elif uv.find("$") != -1:
-			new_pass_required = true
-			break
-		var src_code : Dictionary
-		if src == null:
-			src_code = subst(default, context, "(%s)" % uv)
-		else:
-			src_code = {}
-			var src_shader : ShaderCode = src.generator.get_shader_code(uv, src.output_index, context)
-			src_code.globals = src_shader.globals
-			src_code.defs = src_shader.defs
-			src_code.code = src_shader.code
-			if src_shader.output_values.has(type):
-				src_code.string = src_shader.output_values[type]
-			else:
-				src_code.string = "*error missing "+type+"*\n"+JSON.stringify(src_code)
-		# Add global definitions
-		if src_code.has("globals"):
-			for d in src_code.globals:
-				if required_globals.find(d) == -1:
-					required_globals.push_back(d)
-		# Add generated definitions
-		if src_code.has("defs"):
-			required_defs += src_code.defs
-		# Add generated code
-		if src_code.has("code"):
-			required_code += src_code.code
-		string = string.replace("$%s(%s)" % [ input, uv ], src_code.string)
-	return { string=string, globals=required_globals, defs=required_defs, code=required_code, new_pass_required=new_pass_required }
 
 func is_word_letter(l) -> bool:
 	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
@@ -518,167 +454,7 @@ func replace_rndi(string : String, offset : int = 0) -> String:
 			string = string.replace(replace, with)
 	return string
 
-func replace_variables_old(string : String, variables : Dictionary) -> String:
-	while true:
-		var old_string : String = string
-		for variable in variables.keys():
-			string = string.replace("$(%s)" % variable, variables[variable])
-			var keyword_size : int = variable.length()+1
-			var new_string : String = ""
-			while !string.is_empty():
-				var pos : int = string.find("$"+variable)
-				if pos == -1:
-					new_string += string
-					break
-				if pos > 0:
-					new_string += string.left(pos)
-					string = string.right(-pos)
-				if string.length() > keyword_size and is_word_letter(string[keyword_size]):
-					new_string += string.left(keyword_size)
-					string = string.right(-keyword_size)
-					continue
-				if string.is_empty() or !is_word_letter(string[0]):
-					new_string += variables[variable]
-				else:
-					new_string += "$"+variable
-				string = string.right(-keyword_size)
-			string = new_string
-		if string == old_string:
-			break
-	return string
-
 const WORD_LETTERS : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
-
-func replace_input_call(input : String, parameters : Array[String], context : MMGenContext):
-	pass
-
-func subst(string : String, context : MMGenContext, uv : String = "") -> Dictionary:
-	var genname : String = "o"+str(get_instance_id())
-	var parent = get_parent()
-	var required_globals : Array = []
-	if parent.has_method("get_globals"):
-		required_globals = [ parent.get_globals() ]
-	var required_defs : String = ""
-	var required_code : String = ""
-	# Named parameters from parent graph are specified first so they don't
-	# hide locals
-	var variables = {}
-	if ! mm_renderer.get_global_parameters().is_empty():
-		for gp in mm_renderer.get_global_parameters():
-			variables[gp] = "mm_global_"+gp
-	if parent.has_method("get_named_parameters"):
-		var named_parameters : Dictionary = parent.get_named_parameters()
-		for np in named_parameters.keys():
-			variables[np] = named_parameters[np].id
-	variables["name"] = genname
-	if uv != "":
-		var genname_uv : String = genname+"_"+str(context.get_variant(self, uv))
-		variables["name_uv"] = genname_uv
-	if seed_locked:
-		variables["seed"] = "seed_"+genname
-	else:
-		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
-	variables["node_id"] = str(get_instance_id())
-	if shader_model_preprocessed.has("parameters") and typeof(shader_model_preprocessed.parameters) == TYPE_ARRAY:
-		var rnd_offset : int = 0
-		for p in shader_model_preprocessed.parameters:
-			if !p.has("name") or !p.has("type"):
-				continue
-			var value = parameters[p.name]
-			var value_string = null
-			if p.type == "float":
-				if parameters[p.name] is float:
-					value_string = "p_%s_%s" % [ genname, p.name ]
-				elif parameters[p.name] is String:
-					value_string = "("+parameters[p.name]+")"
-					if parameters[p.name].find("$rnd(") != -1:
-						value_string = replace_rnd(value_string, rnd_offset)
-					if parameters[p.name].find("$rndi(") != -1:
-						value_string = replace_rndi(value_string, rnd_offset)
-				else:
-					print("Error in float parameter "+p.name)
-					value_string = "0.0"
-				rnd_offset += 17
-			elif p.type == "size":
-				value_string = "%.9f" % pow(2, value)
-			elif p.type == "enum":
-				if p.values.is_empty():
-					value_string = ""
-				else:
-					if ! ( value is int or value is float ) or value < 0 or value >= p.values.size():
-						value = 0
-					value_string = p.values[value].value
-			elif p.type == "color":
-				value_string = "p_%s_%s" % [ genname, p.name ]
-			elif p.type == "gradient":
-				value_string = genname+"_"+p.name+"_gradient_fct"
-			elif p.type == "curve":
-				value_string = genname+"_"+p.name+"_curve_fct"
-			elif p.type == "polygon" or p.type == "polyline":
-				if !(value is MMPolygon):
-					value = MMPolygon.new()
-					value.deserialize(parameters[p.name])
-				value_string = value.get_shader()
-			elif p.type == "boolean":
-				value_string = "true" if value else "false"
-			else:
-				print("Cannot replace parameter of type "+p.type)
-			if value_string != null:
-				variables[p.name] = value_string
-	if uv != "":
-		if uv[0] == "(" and find_matching_parenthesis(uv, 0) == uv.length()-1:
-			variables["uv"] = uv
-		else:
-			variables["uv"] = "("+uv+")"
-	variables["time"] = "elapsed_time"
-	if shader_model_preprocessed.has("inputs") and typeof(shader_model_preprocessed.inputs) == TYPE_ARRAY:
-		for i in range(shader_model_preprocessed.inputs.size()):
-			var input = shader_model_preprocessed.inputs[i]
-			var source = get_source(i)
-			if source == null:
-				continue
-			var src_attributes = source.generator.get_output_attributes(source.output_index)
-			# TODO: port this to new shader generation
-			if false and src_attributes.has("texture"):
-				var source_globals = source.generator.get_globals(src_attributes.texture)
-				for sg in source_globals:
-					if required_globals.find(sg) == -1:
-						required_globals.push_back(sg)
-			for a in src_attributes.keys():
-				if a == "texture_size":
-					variables[input.name+".size"] = src_attributes.texture_size
-				else:
-					variables[input.name+"."+a] = src_attributes[a]
-	string = replace_variables_old(string, variables)
-	if shader_model_preprocessed.has("inputs") and typeof(shader_model_preprocessed.inputs) == TYPE_ARRAY:
-		var cont = true
-		while cont:
-			var changed : bool = false
-			var new_pass_required : bool = false
-			for i in range(shader_model_preprocessed.inputs.size()):
-				var input = shader_model_preprocessed.inputs[i]
-				var source = get_source(i)
-				if input.has("function") and input.function:
-					string = replace_input_with_function_call(string, input.name)
-					string = replace_input_with_function_call(string, input.name, "", ".variation")
-				else:
-					var result = replace_input(string, context, input.name, input.type, source, input.default)
-					if string != result.string:
-						changed = true
-					if result.new_pass_required:
-						new_pass_required = true
-					string = result.string
-					# Add global definitions
-					for d in result.globals:
-						if required_globals.find(d) == -1:
-							required_globals.push_back(d)
-					# Add generated definitions
-					required_defs += result.defs
-					# Add generated code
-					required_code += result.code
-			cont = changed and new_pass_required
-			string = replace_variables_old(string, variables)
-	return { string=string, globals=required_globals, defs=required_defs, code=required_code }
 
 func generate_parameter_declarations(rv : ShaderCode) -> void:
 	var genname = "o"+str(get_instance_id())
@@ -720,21 +496,13 @@ func generate_input_function(index : int, input: Dictionary, rv : ShaderCode, co
 	rv.defs += "%s\n" % source_rv.code
 	rv.defs += "return %s;\n}\n" % source_rv.output_values[input.type]
 
-func generate_input_declarations(rv : ShaderCode, context : MMGenContext) -> void:
-	var genname = "o"+str(get_instance_id())
-	if shader_model_preprocessed.has("inputs"):
-		for i in range(shader_model_preprocessed.inputs.size()):
-			var input = shader_model_preprocessed.inputs[i]
-			if input.has("function") and input.function:
-				generate_input_function(i, input, rv, context)
-
 func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declarations : bool) -> void:
 	var genname = "o"+str(get_instance_id())
 	var rnd_offset = 0
 	if has_randomness():
 		if generate_declarations:
 			rv.add_uniform("seed_%s" % genname, "float", get_seed())
-		variables.seed = "(seed_%s+_seed_variation_)" % genname
+		variables.seed = "(seed_%s+fract(_seed_variation_))" % genname
 	for p in shader_model_preprocessed.parameters:
 		if p.type == "float":
 			if parameters[p.name] is float:
@@ -784,14 +552,43 @@ func process_parameters(rv : ShaderCode, variables : Dictionary, generate_declar
 			variables[p.name] = genname+"_"+p.name+"_curve_fct"
 		elif p.type == "polygon" or p.type == "polyline":
 			var value = parameters[p.name]
-			if !(value is MMPolygon):
+			if not value is MMPolygon:
 				value = MMPolygon.new()
 				value.deserialize(parameters[p.name])
-			variables[p.name] = value.get_shader()
+			if generate_declarations:
+				rv.add_uniforms(value.get_parameters(genname+"_"+p.name))
+			variables[p.name] = value.get_shader(genname+"_"+p.name)
+		elif p.type == "splines":
+			var value = parameters[p.name]
+			if not value is MMSplines:
+				value = MMSplines.new()
+				value.deserialize(parameters[p.name])
+			if generate_declarations:
+				rv.add_uniforms(value.get_parameters(genname+"_"+p.name))
+			variables[p.name] = value.get_shader(genname+"_"+p.name)
+		elif p.type == "pixels":
+			var g = parameters[p.name]
+			if !(g is MMPixels):
+				g = MMPixels.new()
+				g.deserialize(parameters[p.name])
+			if generate_declarations:
+				rv.add_uniforms(g.get_parameters(genname+"_"+p.name))
+				rv.defs += g.get_shader(genname+"_"+p.name)
+			variables[p.name] = genname+"_"+p.name+"_pixels_fct"
+			variables[p.name+"_size"] = genname+"_"+p.name+"_size"
+		elif p.type == "lattice":
+			var value = parameters[p.name]
+			if not value is MMLattice:
+				value = MMLattice.new()
+				value.deserialize(parameters[p.name])
+			if generate_declarations:
+				rv.add_uniforms(value.get_parameters(genname+"_"+p.name))
+			variables[p.name] = value.get_shader(genname+"_"+p.name)
+			variables[p.name+"_size"] = "ivec2(%d, %d)" % [ value.size.x, value.size.y ]
 		else:
 			print("ERROR: Unsupported parameter "+p.name+" of type "+p.type)
 
-func replace_input_new(input_name : String, suffix : String, parameters : String, variables : Dictionary, rv : ShaderCode, context : MMGenContext, input : int) -> String:
+func replace_input(input_name : String, suffix : String, parameters : String, variables : Dictionary, rv : ShaderCode, context : MMGenContext, input : int) -> String:
 	var input_def : Dictionary = shader_model_preprocessed.inputs[input]
 	var source = get_source(input)
 	if source == null:
@@ -800,7 +597,7 @@ func replace_input_new(input_name : String, suffix : String, parameters : String
 		var replaced : String = replace_variables(input_def.default, variables, rv, context)
 		variables.uv = old_uv
 		return replaced
-	if suffix == "texture" or suffix == "size":
+	if suffix != null:
 		if source.generator.has_method("get_output_attributes"):
 			var attributes = source.generator.get_output_attributes(source.output_index)
 			var attribute_name : String = suffix
@@ -808,18 +605,20 @@ func replace_input_new(input_name : String, suffix : String, parameters : String
 				attribute_name = "texture_size"
 			if attributes != null and attributes is Dictionary and attributes.has(attribute_name):
 				return attributes[attribute_name]
-		return "(error: Cannot find texture for input %s)" % input_name
+		if suffix == "texture" or suffix == "size":
+			return "(error: Cannot find attribute %s for input %s)" % [ suffix, input_name ]
 	if input_def.has("function") and input_def.function:
 		var function_name : String = "o%s_input_%s" % [ str(get_instance_id()), input_def.name ]
 		if suffix == "variation":
 			return function_name+parameters
 		else:
-			return function_name+"("+parameters+", 0.0)"
+			return function_name+"("+parameters+", _seed_variation_)"
 	var source_rv : ShaderCode = source.generator.get_shader_code(parameters, source.output_index, context)
 	rv.add_uniforms(source_rv.uniforms)
 	rv.defs += source_rv.defs
 	rv.add_globals(source_rv.globals)
 	rv.code += source_rv.code
+	rv.alias = source_rv
 	return source_rv.output_values[input_def.type]
 
 func process_inputs(rv : ShaderCode, variables : Dictionary, context : MMGenContext, generate_declarations : bool) -> void:
@@ -829,7 +628,7 @@ func process_inputs(rv : ShaderCode, variables : Dictionary, context : MMGenCont
 		var input = shader_model_preprocessed.inputs[i]
 		if generate_declarations and input.has("function") and input.function:
 			generate_input_function(i, input, rv, context)
-		variables[input.name] = { has_parameters=true, has_suffix=true, replace_callable=self.replace_input_new.bind(i) }
+		variables[input.name] = { has_parameters=true, has_suffix=true, replace_callable=self.replace_input.bind(i) }
 
 func replace_variables(string : String, variables : Dictionary, rv : ShaderCode, context : MMGenContext) -> String:
 	var string_end : String = ""
@@ -859,6 +658,7 @@ func replace_variables(string : String, variables : Dictionary, rv : ShaderCode,
 		if replace_with is String:
 			string += replace_with
 		elif replace_with is Dictionary:
+			var replace_all : bool = (dollar_position == 0)
 			string_end = string_end.strip_edges()
 			var function_parameters : String = ""
 			var function_suffix : String = ""
@@ -870,10 +670,18 @@ func replace_variables(string : String, variables : Dictionary, rv : ShaderCode,
 				string_end = string_end.right(-suffix_end).strip_edges()
 			if replace_with.has("has_parameters") and replace_with.has_parameters and string_end[0] == "(":
 				var parameters_end : int = find_matching_parenthesis(string_end, 0)
+				if parameters_end < string_end.length()-1:
+					replace_all = false
 				function_parameters = string_end.left(parameters_end+1)
+				if function_parameters[1] == "(" and find_matching_parenthesis(function_parameters, 1) == function_parameters.length()-2:
+					function_parameters = function_parameters.left(-1).right(-1)
 				#print("Parameters: "+function_parameters)
 				string_end = string_end.right(-parameters_end-1)
+			else:
+				replace_all = false
 			string += replace_with.replace_callable.call(variable, function_suffix, function_parameters, variables, rv, context)
+			if not replace_all:
+				rv.alias = null
 			#print("replace_with is Dictionary: "+str(replace_with))
 		else:
 			print("unsupported replace_with: "+str(replace_with))
@@ -921,19 +729,27 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 		if shader_model_preprocessed.has("includes"):
 			for i in shader_model_preprocessed.includes:
 				var g = mm_loader.get_predefined_global(i)
-				if g != "" and rv.globals.find(g) == -1:
-					rv.globals.push_back(g)
-		if shader_model_preprocessed.has("global") and rv.globals.find(shader_model_preprocessed.global) == -1:
-			rv.globals.push_back(shader_model_preprocessed.global)
+				if g != "":
+					rv.add_global(g, i)
+		if shader_model_preprocessed.has("global"):
+			rv.add_global(shader_model_preprocessed.global, "%s (%s)" % [ get_hier_name(), genname ])
 		if shader_model_preprocessed.has("instance"):
-			rv.defs += replace_variables(shader_model_preprocessed.instance, variables, rv, context)
+			var instance_code = replace_variables(shader_model_preprocessed.instance, variables, rv, context)
+			instance_code = instance_code.strip_edges()
+			if instance_code != "":
+				rv.defs += "\n// #instance: %s (%s)\n" % [ get_hier_name(), genname ]
+				rv.defs += replace_variables(shader_model_preprocessed.instance, variables, rv, context)
+				rv.defs += "\n\n"
 	# Add inline code
 	if shader_model_preprocessed.has("code") and output[output.type].find("@NOCODE") == -1:
 		var variant_index = context.get_variant(self, uv)
 		var genname_uv : String = genname+"_"+str(context.get_variant(self, uv))
 		variables["name_uv"] = genname_uv
 		if variant_index == -1:
-			rv.code += replace_variables(shader_model_preprocessed.code, variables, rv, context)
+			var code : String = replace_variables(shader_model_preprocessed.code, variables, rv, context)
+			if code != "":
+				rv.code += "\n// #code: %s (%s)\n" % [ get_hier_name(), genname ]
+				rv.code += code
 	# Add output_code
 	var variant_string = uv+","+str(output_index)
 	var variant_index = context.get_variant(self, variant_string)
@@ -941,44 +757,27 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	if variant_index == -1:
 		variant_index = context.get_variant(self, variant_string)
 		assign_output = true
+	var use_alias : bool = false
 	for f in mm_io_types.types.keys():
 		if output.has(f):
-			var expression = replace_variables(output[f].replace("@NOCODE", ""), variables, rv, context)
-			var variable_name : String = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
-			if assign_output:
-				rv.code += "%s %s = %s;\n" % [ mm_io_types.types[f].type, variable_name, expression ]
-			rv.output_values[f] = variable_name
-	rv.output_type = output.type
+			var output_string = output[f].replace("@NOCODE", "").replace("@KEEPTYPE", "").strip_edges()
+			var expression = replace_variables(output_string, variables, rv, context)
+			if rv.alias != null and output[f].find("@KEEPTYPE") != -1:
+					use_alias = true
+			if not use_alias:
+				var variable_name : String = "%s_%d_%d_%s" % [ genname, output_index, variant_index, f ]
+				if assign_output:
+					rv.code += "\n// #output%d: %s (%s)\n" % [ output_index, get_hier_name(), genname ]
+					rv.code += "%s %s = %s;\n" % [ mm_io_types.types[f].type, variable_name, expression ]
+				rv.output_values[f] = variable_name
+	
+	if use_alias:
+		rv.output_values = rv.alias.output_values
+		rv.output_type   = rv.alias.output_type
+	else:
+		rv.output_type = output.type
+	
 	return rv
-
-func remove_comments(s : String) -> String:
-	var re : RegEx = RegEx.new()
-	re.compile("/\\*(.*?)\\*/")
-	s = re.sub(s, "", true)
-	re.compile("//([^\\n]*)\\n")
-	s = re.sub(s, "", true)
-	return s
-
-func split_glsl(s : String) -> Array:
-	s = remove_comments(s)
-	var a : Array = []
-	s = s.strip_edges()
-	while s != "":
-		var next_semicolon = s.find(";")
-		var next_bracket = s.find("{")
-		if next_semicolon != -1 and (next_bracket == -1 or next_semicolon < next_bracket):
-			a.append(s.left(next_semicolon+1))
-			s = s.right(next_semicolon+1)
-		elif next_bracket != -1:
-			var closing_bracket = find_matching_parenthesis(s, next_bracket, '{', '}')
-			a.append(s.left(closing_bracket+1))
-			s = s.right(closing_bracket+1)
-		else:
-			print("Error: "+s)
-			break
-		s = s.strip_edges()
-	return a
-
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.shader_model = shader_model
@@ -1000,7 +799,7 @@ func _deserialize(data : Dictionary) -> void:
 func get_shader_model_for_edit():
 	return shader_model
 
-func do_edit(node, edit_window_scene : PackedScene) -> void:
+func do_edit(node, edit_window_scene : PackedScene, tab : String = "") -> void:
 	if shader_model != null:
 		var edit_window = edit_window_scene.instantiate()
 		mm_globals.main_window.add_dialog(edit_window)
@@ -1008,6 +807,8 @@ func do_edit(node, edit_window_scene : PackedScene) -> void:
 		edit_window.connect("node_changed", Callable(node, "update_shader_generator"))
 		edit_window.connect("popup_hide", Callable(edit_window, "queue_free"))
 		edit_window.popup_centered()
+		if tab != "":
+			edit_window.show_tab(tab)
 
-func edit(node) -> void:
-	do_edit(node, load("res://material_maker/windows/node_editor/node_editor.tscn"))
+func edit(node, tab : String = "") -> void:
+	do_edit(node, load("res://material_maker/windows/node_editor/node_editor.tscn"), tab)

@@ -12,6 +12,8 @@ signal return_paths(path_list)
 
 
 func _ready() -> void:
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = content_scale_factor*Vector2(500, 500)
 	if DIALOG_HACK:
 		var vbox = get_vbox()
 		var hbox = HSplitContainer.new()
@@ -29,7 +31,6 @@ func _ready() -> void:
 			volume_option = vbox.get_child(0).get_child(3)
 			if ! volume_option is OptionButton:
 				volume_option = null
-
 
 func get_full_current_dir() -> String:
 	var prefix = ""

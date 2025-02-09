@@ -38,6 +38,7 @@ func load_library(path : String, ro : bool = false, raw_data : String = "") -> b
 		read_only = ro
 		for i in data.lib:
 			library_items_by_name[i.tree_item] = i
+			i['display_name'] = i.tree_item.get_slice('/', i.tree_item.get_slice_count('/') - 1)
 			var texture : ImageTexture = ImageTexture.new()
 			var image : Image = Image.new()
 			if i.has("icon_data"):
@@ -62,15 +63,56 @@ func get_item(lib_name : String):
 			return { name=i.tree_item, item=i, icon=library_icons[i.tree_item] }
 	return null
 
+## Returns the items of this library that match the filter.
+## Also assigns each returned item a score of how well it matched.
 func get_items(filter : String, disabled_sections : Array, aliased_items : Array) -> Array:
 	var array : Array = []
+	filter = filter.to_lower().strip_edges()
 	for i in library_items:
-		if filter == "" or i.tree_item.to_lower().find(filter) != -1 or aliased_items.find(i.tree_item) != -1:
+		var include := true
+		var result_quality := 1.0
+		if filter:
+			include = false
+			if i.display_name.to_lower().begins_with(filter) or " "+filter in i.display_name.to_lower():
+				include = true
+
+			if not include:
+				include = true
+				result_quality = 0.8
+				for word in filter.split(" "):
+					if not word in i.display_name.to_lower():
+						include = false
+
+			if (not include) and i.has("name"):
+				include = true
+				result_quality = 0.8
+				for word in filter.split(" "):
+					if not word in i.name.to_lower():
+						include = false
+
+			if not include:
+				result_quality = 0.6
+				for alias_dict in aliased_items:
+					for key in alias_dict:
+						if key == i.tree_item and filter in alias_dict[key]:
+							if alias_dict[key].begins_with(filter) or ","+filter in alias_dict[key]:
+								result_quality = 0.9
+							include = true
+
+			if not include:
+				include = true
+				result_quality = 0.4
+				for word in filter.split(" "):
+					if not word in i.tree_item.to_lower():
+						include = false
+
+		if include:
 			var slash_pos = i.tree_item.find("/")
 			var section_name = i.tree_item.left(slash_pos) if slash_pos != -1 else i.tree_item
 			if disabled_sections.find(section_name) == -1:
-				array.push_back({ name=i.tree_item, item=i, icon=library_icons[i.tree_item] })
+				array.push_back({ name=i.tree_item, item=i, icon=library_icons[i.tree_item], quality=result_quality})
 	return array
+
 
 func generate_node_sections(node_sections : Dictionary) -> void:
 	for i in library_items:
@@ -107,7 +149,7 @@ func get_sections() -> Array:
 	return Array(sections)
 
 func save_library() -> void:
-	DirAccess.open("res://").make_dir_recursive(library_path.get_base_dir())
+	DirAccess.make_dir_recursive_absolute(library_path.get_base_dir())
 	var file : FileAccess = FileAccess.open(library_path, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify({name=library_name, lib=library_items}, "\t", true))

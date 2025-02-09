@@ -150,7 +150,7 @@
 					},
 					{
 						"name": "dot(A, B)",
-						"value": "vec3(dot($in1(uv),$in2($uv)))"
+						"value": "vec3(dot($in1($uv),$in2($uv)))"
 					},
 					{
 						"name": "cross(A, B)",
@@ -171,6 +171,22 @@
 					{
 						"name": "snap(A, B)",
 						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
+					},
+					{
+						"name": "sinh(A)",
+						"value": "sinh($in1($uv))"
+					},
+					{
+						"name": "cosh(A)",
+						"value": "cosh($in1($uv))"
+					},
+					{
+						"name": "tanh(A)",
+						"value": "tanh($in1($uv))"
+					},
+					{
+						"name": "log(A, B)",
+						"value": "log($in1($uv))/log($in2($uv))"
 					}
 				]
 			},

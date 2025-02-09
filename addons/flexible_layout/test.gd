@@ -7,7 +7,7 @@ func _ready():
 	var file : FileAccess = FileAccess.open("res://addons/flexible_layout/layout.json", FileAccess.READ)
 	if file:
 		var layout = JSON.parse_string(file.get_as_text())
-		$FlexibleLayout.layout(layout as Dictionary if layout else null)
+		$FlexibleLayout.init(layout as Dictionary if layout else null)
 
 func _on_tree_exiting():
 	var file : FileAccess = FileAccess.open("res://addons/flexible_layout/layout.json", FileAccess.WRITE)

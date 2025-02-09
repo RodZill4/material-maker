@@ -1,0 +1,141 @@
+{
+	"name": "splines",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"splines": {
+			"point_groups": [],
+			"type": "Splines",
+			"values": []
+		}
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"/* https://iquilezles.org/articles/distfunctions2d/, https://www.shadertoy.com/view/4lcBWn */",
+			"vec2 distance_to_segment(vec2 p, vec3 b, vec3 a) {",
+			"\tp  -= a.xy;",
+			"\tb.xy -= a.xy;",
+			"\tfloat h = dot(b.xy, b.xy);",
+			"\tvec2  q = vec2(dot(p,vec2(b.y,-b.x)), dot(p,b.xy))/h;",
+			"   ",
+			"\tq.x = abs(q.x);",
+			"\t",
+			"\tfloat cz = a.z-b.z;",
+			"\tvec2  c = vec2(sqrt(h-cz*cz), cz);",
+			"\t",
+			"\tfloat k = c.x*q.y - c.y*q.x;",
+			"\tfloat m = dot(c, q);",
+			"\tfloat n = dot(q, q);",
+			"\t",
+			"\t\t if( k < 0.0 ) return vec2(sqrt(h*(n)) - a.z, 0.0);",
+			"\telse if( k > c.x ) return vec2(sqrt(h*(n+1.0-2.0*q.y)) - b.z, 1.0);",
+			"\t\t\t\t\t   return vec2(m\t\t\t\t\t   - a.z, k/c.x);",
+			"}",
+			"",
+			"float distance_to_cubic_bezier_2(vec2 uv, vec4 a, vec4 b, vec4 c, vec4 d, float t0, float t1, float s) {",
+			"\tfloat rv = 100000000000.0;",
+			"\tt0 = clamp(t0, 0.0, 1.0);",
+			"\tt1 = clamp(t1, 0.0, 1.0);",
+			"\tfloat bt = t0;",
+			"",
+			"\tvec4 lp = d+t0*(c+t0*(b+t0*a));",
+			"\tfor (float t = t0+s; t < t1+0.5*s; t += s) {",
+			"\t\tvec4 p = d+t*(c+t*(b+t*a));",
+			"\t\tvec2 dts = distance_to_segment(uv, lp.xyz, p.xyz);",
+			"\t\tif (rv > dts.x) {",
+			"\t\t\trv = dts.x;",
+			"\t\t\tbt = t-s*p.y;",
+			"\t\t}",
+			"\t\tlp = p;",
+			"\t}",
+			"\treturn clamp(bt, 0.0, 1.0);",
+			"}",
+			"",
+			"vec4 distance_to_cubic_bezier(vec2 uv, vec4 p0, vec4 p1, vec4 p2, vec4 p3) {",
+			"\tfloat rv = 1000.0;",
+			"\tvec4 a = p3-p0+3.0*(p1-p2);",
+			"\tvec4 b = 3.0*(p0+p2-2.0*p1);",
+			"\tvec4 c = 3.0*(p1-p0);",
+			"\tvec4 d = p0;",
+			"\tfloat t = distance_to_cubic_bezier_2(uv, a, b, c, d, 0.0, 1.0, 0.1);",
+			"\tt = distance_to_cubic_bezier_2(uv, a, b, c, d, t-0.1, t+0.1, 0.01);",
+			"\tt = distance_to_cubic_bezier_2(uv, a, b, c, d, t-0.01, t+0.01, 0.001);",
+			"\tt = distance_to_cubic_bezier_2(uv, a, b, c, d, t-0.001, t+0.001, 0.0001);",
+			"\tvec4 p = d+t*(c+t*(b+t*a));",
+			"\tvec2 tangent = (3.0*a.xy*t+2.0*b.xy)*t+c.xy;",
+			"\ttangent = vec2(tangent.y, -tangent.x);",
+			"\treturn vec4(p.w, sign(dot(uv-p.xy, tangent))*length(p.xy-uv)/p.z, sign(dot(uv-p.xy, tangent))*length(p.xy-uv), 1.0);",
+			"}"
+		],
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "",
+				"name": "in_edge",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"function": true,
+				"label": "",
+				"name": "in_fill",
+				"type": "rgba"
+			},
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"name": "in_guide",
+				"type": "rgba"
+			}
+		],
+		"instance": [
+			"vec4 $(name)_splines(vec2 uv) {",
+			"\tvec2 edge_uv = vec2(0.0, 10000000.0);",
+			"\tfloat closest = 1000.0;",
+			"\tfloat signed_distance = 10000000.0;",
+			"\tfor (int i = 0; i < $splines.length(); i += 4) {",
+			"\t\tvec4 d = distance_to_cubic_bezier(uv, $splines[i], $splines[i+1], $splines[i+2], $splines[i+3]);",
+			"\t\tif (abs(edge_uv.y) > abs(d.y)) {",
+			"\t\t\tedge_uv = d.xy;",
+			"\t\t}",
+			"\t\tif (abs(closest) > abs(d.z)) {",
+			"\t\t\tclosest = d.z;",
+			"\t\t}",
+			"\t}",
+			"\tif (abs(edge_uv.y) < 1.0) {",
+			"\t\treturn $in_edge(vec2(edge_uv.x, 0.5+0.5*edge_uv.y));",
+			"\t} else if (closest > 0.0) {",
+			"\t\treturn $in_fill(uv);",
+			"\t}",
+			"\treturn vec4(0.0);",
+			"}"
+		],
+		"longdesc": "Draws a uniform greyscale image",
+		"name": "Splines",
+		"outputs": [
+			{
+				"longdesc": "A uniform image of the selected value",
+				"rgba": "mix($(name)_splines($uv), $in_guide($uv), 0.5*$in_guide($uv).a)",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"points": [],
+					"type": "Polygon"
+				},
+				"label": "",
+				"name": "splines",
+				"type": "splines"
+			}
+		]
+	},
+	"type": "shader"
+}

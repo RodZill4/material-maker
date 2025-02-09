@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 
 var quitting : bool = false
 
@@ -45,7 +45,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
-const THEMES = [ "Dark", "Default", "Green", "Birch", "Mangosteen",  "Light" ]
+const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -119,35 +119,35 @@ func _ready() -> void:
 	get_window().transparent = false
 	get_window().move_to_foreground()
 	get_window().gui_embed_subwindows = false
-	
+
 	get_window().close_requested.connect(self.on_close_requested)
-	
+
 	get_tree().set_auto_accept_quit(false)
-	
+
 	if mm_globals.get_config("locale") == "":
 		mm_globals.set_config("locale", TranslationServer.get_locale())
-	
+
 	on_config_changed()
-	
+
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
-	
+
 	if mm_globals.config.has_section_key("window", "maximized"):
 		get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
-	
+
 	if get_window().mode != Window.MODE_MAXIMIZED:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
-	
+
 	# Restore the theme
-	var theme_name : String = "default"
+	var theme_name: String = "default dark"
 	if mm_globals.config.has_section_key("window", "theme"):
 		theme_name = mm_globals.config.get_value("window", "theme")
 	change_theme(theme_name)
-	
+
 	# In HTML5 export, copy all examples to the filesystem
 	if OS.get_name() == "HTML5":
 		print("Copying samples")
@@ -161,13 +161,13 @@ func _ready() -> void:
 			if f.ends_with(".ptex"):
 				print(f)
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
-	
+
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
 	get_window().min_size = Vector2(1024, 600)
-	
+
 	# Set window title
 	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
-	
+
 	layout.load_panels()
 	library = get_panel("Library")
 	preview_2d = [ get_panel("Preview2D"), get_panel("Preview2D (2)") ]
@@ -177,22 +177,28 @@ func _ready() -> void:
 	hierarchy = get_panel("Hierarchy")
 	hierarchy.connect("group_selected", self.on_group_selected)
 	brushes = get_panel("Brushes")
-	
+
 	# Load recent projects
 	load_recents()
-	
+
 	get_window().connect("files_dropped", self.on_files_dropped)
-	
+
 	var args : PackedStringArray = OS.get_cmdline_args()
 	for a in args:
-		if a.get_extension() == "ptex":
+		if a.get_extension().to_lower() in [ "ptex", "mmpp" ]:
 			do_load_project(get_file_absolute_path(a))
-		elif a.get_extension() == "obj":
+		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
-			var mesh : Mesh = load(mesh_filename)
+			if mesh_filename == "":
+				push_error("Cannot load mesh from '%s' (no such file or directory)" % a)
+				continue
+			var mesh : Mesh = MMMeshLoader.load_mesh(mesh_filename)
+			if mesh == null:
+				push_error("Cannot load mesh from '%s'" % mesh_filename)
+				continue
 			var project_filename : String = mesh_filename.get_basename()+".mmpp"
 			create_paint_project(mesh, mesh_filename, 1024, project_filename)
-	
+
 	# Rescue unsaved projects
 	if true:
 		var dir : DirAccess = DirAccess.open("user://unsaved_projects")
@@ -201,21 +207,23 @@ func _ready() -> void:
 			dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 			var file_name = dir.get_next()
 			while file_name != "":
-				file_name = dir.get_next()
 				if !dir.current_is_dir() and file_name.get_extension() == "mmcr":
 					files.append("user://unsaved_projects".path_join(file_name))
-					print(file_name)
+				file_name = dir.get_next()
 			if ! files.is_empty():
-				for f in files:
-					var graph_edit = new_graph_panel()
-					graph_edit.load_from_recovery(f)
-					graph_edit.update_tab_title()
-				hierarchy.update_from_graph_edit(get_current_graph_edit())
-				var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
-				dialog.dialog_text = "Oops, it seems Material Maker crashed and rescued unsaved work"
-				add_child(dialog)
-				await dialog.ask()
-	
+				var dialog_text : String = "Oops, it seems Material Maker crashed and rescued unsaved work\nLoad %d unsaved projects?" % files.size()
+				var result = await accept_dialog(dialog_text, true, [ { label="Delete them!", action="delete" } ])
+				match result:
+					"ok":
+						for f in files:
+							var graph_edit = new_graph_panel()
+							graph_edit.load_from_recovery(f)
+							graph_edit.update_tab_title()
+						hierarchy.update_from_graph_edit(get_current_graph_edit())
+					"delete":
+						for f in files:
+							DirAccess.remove_absolute(f)
+
 	if get_current_graph_edit() == null:
 		await get_tree().process_frame
 		new_material()
@@ -223,6 +231,16 @@ func _ready() -> void:
 	update_menus()
 
 	plugin_ui_loaded.call_deferred()
+	size = get_window().size
+	position = Vector2.ZERO
+	set_anchors_preset(Control.PRESET_FULL_RECT)
+	update_menus()
+
+	mm_logger.message("Material Maker "+ProjectSettings.get_setting("application/config/actual_release"))
+
+	size = get_viewport().size/get_viewport().content_scale_factor
+	position = Vector2i(0, 0)
+
 
 var menu_update_requested : bool = false
 
@@ -282,8 +300,10 @@ func on_config_changed() -> void:
 		# This prevents UI elements from being too small on hiDPI displays.
 		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	get_viewport().content_scale_factor = ui_scale
+	size = get_viewport().size/get_viewport().content_scale_factor
+	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
-	
+
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
@@ -465,7 +485,15 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
 func change_theme(theme_name) -> void:
-	theme = load("res://material_maker/theme/"+theme_name+".tres")
+	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
+		theme_name = "default dark"
+	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
+	if _theme == theme:
+		return
+	if _theme is EnhancedTheme:
+		_theme.update()
+	await get_tree().process_frame
+	theme = _theme
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -561,7 +589,7 @@ func get_file_absolute_path(filename : String) -> String:
 	if file == null:
 		return ""
 	return file.get_path_absolute()
-		
+
 func do_load_projects(filenames) -> void:
 	var file_name : String = ""
 	for f in filenames:
@@ -576,7 +604,7 @@ func do_load_project(file_name : String) -> bool:
 	var status : bool = false
 	match file_name.get_extension():
 		"ptex":
-			status = do_load_material(file_name, false)
+			status = await do_load_material(file_name, false)
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
 			status = do_load_painting(file_name)
@@ -604,9 +632,13 @@ func create_new_graph_edit_if_needed() -> MMGraphEdit:
 
 func do_load_material(filename : String, update_hierarchy : bool = true) -> bool:
 	var graph_edit : MMGraphEdit = create_new_graph_edit_if_needed()
-	graph_edit.load_file(filename)
+	await graph_edit.load_file(filename)
 	if update_hierarchy:
 		hierarchy.update_from_graph_edit(get_current_graph_edit())
+	print("Current mesh: ", current_mesh)
+	print("Top generator: ", graph_edit.top_generator)
+	if current_mesh and graph_edit.top_generator:
+		graph_edit.top_generator.set_current_mesh(current_mesh)
 	return true
 
 func do_load_material_from_data(filename : String, data : String, update_hierarchy : bool = true) -> bool:
@@ -669,6 +701,7 @@ func quit() -> void:
 		if !result:
 			quitting = false
 			return
+	await mm_renderer.stop_rendering_thread()
 	dim_window()
 	get_tree().quit()
 	quitting = false
@@ -746,12 +779,11 @@ func edit_select_connected(end1 : String, end2 : String) -> void:
 	var node_list : Array = []
 	for n in graph_edit.get_selected_nodes():
 		node_list.push_back(n.name)
-	print(node_list)
 	while !node_list.is_empty():
 		var new_node_list = []
 		for c in graph_edit.get_connection_list():
 			if c[end1] in node_list:
-				var source = graph_edit.get_node(c[end2])
+				var source = graph_edit.get_node(NodePath(c[end2]))
 				if !source.selected:
 					new_node_list.push_back(c[end2])
 					source.selected = true
@@ -762,14 +794,14 @@ func edit_select_sources_is_disabled() -> bool:
 	return graph_edit == null or graph_edit.get_selected_nodes().is_empty()
 
 func edit_select_sources() -> void:
-	edit_select_connected("to", "from")
+	edit_select_connected("to_node", "from_node")
 
 func edit_select_targets_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	return graph_edit.get_selected_nodes().is_empty() if graph_edit else true
 
 func edit_select_targets() -> void:
-	edit_select_connected("from", "to")
+	edit_select_connected("from_node", "to_node")
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
@@ -899,7 +931,7 @@ func add_brush_to_library(index) -> void:
 	# Create thumbnail
 	var result = await get_current_project().get_brush_preview()
 	var image : Image = Image.new()
-	image.copy_from(result.get_data())
+	image.copy_from(result.get_image())
 	image.resize(32, 32)
 	brush_library_manager.add_item_to_library(index, status.text, image, data)
 
@@ -990,7 +1022,8 @@ func update_preview_2d() -> void:
 		var preview = graph_edit.get_current_preview(i)
 		var generator : MMGenBase = null
 		var output_index : int = -1
-		if preview == null or preview.generator == null:
+		if preview == null or not is_instance_valid(preview.generator):
+			previews[i].clear()
 			continue
 		generator = preview.generator
 		output_index = preview.output_index
@@ -1008,10 +1041,10 @@ func update_preview_3d(previews : Array, _sequential = false) -> void:
 		gen_material = graph_edit.top_generator.get_node("Material")
 	if gen_material != current_gen_material:
 		if current_gen_material != null and is_instance_valid(current_gen_material):
-			current_gen_material.set_3d_previews([])
+			current_gen_material.set_3d_previews([] as Array[ShaderMaterial])
 		current_gen_material = gen_material
 	if current_gen_material != null:
-		var materials : Array = []
+		var materials : Array[ShaderMaterial] = []
 		for p in previews:
 			materials.append_array(p.get_materials())
 		current_gen_material.set_3d_previews(materials)
@@ -1026,10 +1059,6 @@ func _on_Projects_tab_changed(_tab) -> void:
 		project.call("project_selected")
 	var new_tab = projects_panel.get_projects().get_current_tab_control()
 	if new_tab != current_tab:
-# TODO: ???
-#		for c in get_incoming_connections():
-#			if c.method_name == "update_preview" or c.method_name == "update_preview_2d":
-#				c.source.disconnect(c.signal_name,Callable(self,c.method_name))
 		var new_graph_edit = null
 		if new_tab is GraphEdit:
 			new_graph_edit = new_tab
@@ -1171,7 +1200,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		match f.get_extension():
 			"ptex":
 				do_load_material(f)
-			"obj":
+			"obj", "glb", "gltf":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
@@ -1190,8 +1219,8 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
-	$VBoxContainer/StatusBar/Tip.text = tip
-	var tip_timer : Timer = $VBoxContainer/StatusBar/Tip/Timer
+	$VBoxContainer/StatusBar/HBox/Tip.text = tip
+	var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
 	tip_timer.stop()
 	if timeout > 0.0:
 		tip_timer.one_shot = true
@@ -1199,7 +1228,7 @@ func set_tip_text(tip : String, timeout : float = 0.0):
 		tip_timer.start()
 
 func _on_Tip_Timer_timeout():
-	$VBoxContainer/StatusBar/Tip.text = ""
+	$VBoxContainer/StatusBar/HBox/Tip.text = ""
 
 # Add dialog
 
@@ -1211,14 +1240,15 @@ func add_dialog(dialog : Window):
 
 # Accept dialog
 
-func accept_dialog(dialog_text : String, cancel_button : bool = false):
+func accept_dialog(dialog_text : String, cancel_button : bool = false, extra_buttons : Array[Dictionary] = []):
 	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 	dialog.dialog_text = dialog_text
 	if cancel_button:
 		dialog.add_cancel_button("Cancel")
-	add_child(dialog)
-	var result = await dialog.ask()
-	return result
+	for b in extra_buttons:
+		dialog.add_button(b.label, b.right if b.has("right") else false, b.action)
+	add_dialog(dialog)
+	return await dialog.ask()
 
 # Current mesh
 
