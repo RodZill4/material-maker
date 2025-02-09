@@ -607,6 +607,8 @@ static func remove_comments(s : String) -> String:
 			if comment_end != -1:
 				s = s.erase(comment_begin, comment_end-comment_begin+2)
 				cont = true
+
+
 	s = re_line_comment.sub(s, "", true)
 	return s
 

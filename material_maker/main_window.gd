@@ -228,6 +228,9 @@ func _ready() -> void:
 		await get_tree().process_frame
 		new_material()
 
+	update_menus()
+
+	plugin_ui_loaded.call_deferred()
 	size = get_window().size
 	position = Vector2.ZERO
 	set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -246,6 +249,11 @@ func update_menus() -> void:
 		menu_update_requested = true
 		do_update_menus.call_deferred()
 
+func plugin_ui_loaded():
+	var children = mm_plugins.get_children()
+	for child in children:
+		child.ui_ready()
+			
 func do_update_menus() -> void:
 	# Create menus
 	var menu_bar_class

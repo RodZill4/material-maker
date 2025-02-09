@@ -143,7 +143,6 @@ layout_mode = 2
 
 [node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="Layout" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
