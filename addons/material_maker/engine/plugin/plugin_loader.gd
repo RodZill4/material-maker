@@ -18,8 +18,15 @@ func load_plugins():
 	print(directories)
 	
 	for directory in directories:
+		
 		print(directory)
-		var scene_path = "user://plugins/" + directory + "/plugin.tscn"
+		var plugin_folder = "user://plugins/" + directory
+		var plugin_content = DirAccess.open(plugin_folder)
+		var plugin_directories = plugin_content.get_directories()
+		print(plugin_directories)
+		
+		var plugin_id = plugin_directories[0]
+		var scene_path = "user://plugins/" + directory + "/" + plugin_id + "/plugin.tscn"
 		print(scene_path)
 		
 		var real_path = "user://plugins/" + directory
@@ -30,19 +37,19 @@ func load_plugins():
 		for dependency in dependencies:
 			context.load_resource(dependency)
 			
-		print("Dependencies:")
-		print(dependencies)
-		
 		var scene = ResourceLoader.load(scene_path)
+		if scene == null:
+			continue
+		
+		if not scene is PackedScene:
+			continue
 
 		var plugin_node = scene.instantiate()
-		var id = plugin_node.get_id()
-		
 		var addon_instance = instance.instantiate()
 		
-		addon_instance.name = id
+		addon_instance.name = plugin_id
 		addon_instance.context = context
 		
 		mm_plugins.add_child(addon_instance)
 		addon_instance.add_child(plugin_node)
-		print("Finished loading plugin: " + id)
+		print("Finished loading plugin: " + plugin_id)

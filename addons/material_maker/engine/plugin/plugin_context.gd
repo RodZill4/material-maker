@@ -21,6 +21,9 @@ class PluginContext:
 
 		print("Loading dependency: " + file_path)
 		var resource = ResourceLoader.load(file_path)
+		if resource == null:
+			return null
+			
 		print(resource)
 		resource.take_over_path(resource_path)
 		return resource
