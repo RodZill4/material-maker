@@ -7,7 +7,7 @@
 [sub_resource type="ArrayMesh" id="ArrayMesh_iqcsj"]
 
 [sub_resource type="CylinderMesh" id="2"]
-height = 1.25
+height = 1.5707963267948966
 radial_segments = 32
 rings = 1
 
