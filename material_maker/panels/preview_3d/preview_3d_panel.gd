@@ -41,6 +41,7 @@ func on_right_click():
 	$TextureRect.visible = false
 	mm_globals.popup_menu($PopupMenu, self)
 
+
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
 	match id:
@@ -48,6 +49,7 @@ func _on_PopupMenu_id_pressed(id):
 			pivot.transform.origin = Vector3(0, 0, 0)
 		1:
 			pivot.transform.origin = new_pivot_position
+
 
 func _on_Preview3D_mouse_entered():
 	mm_globals.set_tip_text("#LMB: Rotate view, #RMB: Tilt view, Mouse wheel: Zoom", 3)
