@@ -13,6 +13,8 @@ func _ready() -> void:
 	preview_3d_background_panel = $BackgroundPreviews/Preview3D.reattach_menu($MenuBar/HBox)
 	preview_3d_background_panel.hide()
 
+	preview_3d_background.need_update.connect(get_node("/root/MainWindow").update_preview_3d)
+
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
