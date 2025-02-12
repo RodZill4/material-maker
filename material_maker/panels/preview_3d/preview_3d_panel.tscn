@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://cj6b1r8b6jel3"]
+[gd_scene load_steps=7 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
 [ext_resource type="Script" uid="uid://f81isnxjqrub" path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://bqre7xkdgb655" path="res://material_maker/environments/hdris/moonless_golf_1k.hdr" id="3_jy7sc"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type spatial;
@@ -26,21 +25,7 @@ shader = SubResource("1")
 shader_parameter/aabb_position = Vector3(0, 0, 0)
 shader_parameter/aabb_size = Vector3(0, 0, 0)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
-panorama = ExtResource("3_jy7sc")
-
-[sub_resource type="Sky" id="Sky_wye7d"]
-sky_material = SubResource("PanoramaSkyMaterial_40ogr")
-
-[sub_resource type="Environment" id="Environment_qxxdb"]
-background_mode = 1
-background_color = Color(1, 1, 1, 0)
-sky = SubResource("Sky_wye7d")
-ambient_light_source = 3
-reflected_light_source = 2
-
 [sub_resource type="World3D" id="World3D_3xlky"]
-environment = SubResource("Environment_qxxdb")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_p1u4i"]
 

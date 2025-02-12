@@ -113,26 +113,6 @@ tab_close_display_policy = 1
 wait_time = 15.0
 autostart = true
 
-[node name="PreviewUI" type="HBoxContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 11.5
-offset_top = -24.5
-offset_right = 95.5
-offset_bottom = -16.5
-grow_vertical = 0
-mouse_filter = 2
-
-[node name="Panel" type="PanelContainer" parent="PreviewUI"]
-visible = false
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PreviewUI/Panel"]
-layout_mode = 2
-
 [node name="MenuBar" type="ScrollContainer" parent="."]
 unique_name_in_owner = true
 clip_contents = false
@@ -140,6 +120,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
@@ -147,6 +128,7 @@ vertical_scroll_mode = 0
 [node name="HBox" type="HFlowContainer" parent="MenuBar"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="MainGraphMenuBar" type="PanelContainer" parent="MenuBar/HBox"]
 layout_mode = 2
