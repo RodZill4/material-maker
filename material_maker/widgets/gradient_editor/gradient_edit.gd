@@ -322,7 +322,7 @@ func remove_popup_button() -> void:
 
 
 func update_visuals() -> void:
-	if %PopupButton:
+	if has_node("%PopupButton"):
 		%PopupButton.icon = get_theme_icon("dropdown", "MM_Icons")
 	var is_hovered := Rect2(Vector2(), size).has_point(get_local_mouse_position())
 	if is_hovered != hovered:

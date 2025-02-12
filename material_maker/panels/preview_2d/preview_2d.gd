@@ -15,13 +15,9 @@ var last_export_size = 4
 
 signal generator_changed
 
-func _enter_tree():
-	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
-
 
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.output_type, template)
-
 
 func do_update_material(source, target_material : ShaderMaterial, template : String):
 	if source.output_type == "":
@@ -31,6 +27,7 @@ func do_update_material(source, target_material : ShaderMaterial, template : Str
 	if template.find("TIME") != -1:
 		print("Template has time") # This should not happen
 	var code = generate_preview_shader(source, template)
+	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
 	await mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(target_material), code)
 	for u in source.uniforms:
 		if u.value:

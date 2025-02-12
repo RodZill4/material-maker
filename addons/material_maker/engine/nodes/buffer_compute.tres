@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://cefq10ldvkjse"]
 
-[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_iqmcs"]
+[ext_resource type="Script" uid="uid://bc3eljtuurjsd" path="res://addons/material_maker/engine/text_resource.gd" id="1_iqmcs"]
 
 [resource]
 script = ExtResource("1_iqmcs")
@@ -13,6 +13,9 @@ layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
 layout(set = 3, binding = 0, std140) restrict buffer MM {
 	int mm_chunk_y;
 };
+
+const float PI = 3.14159265359;
+const float TAU = 2.0*PI;
 
 @COMMON_SHADER_FUNCTIONS
 

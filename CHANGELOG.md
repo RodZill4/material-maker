@@ -1,3 +1,34 @@
+# Material Maker 1.4a2
+
+## General
+
+- The Add Nodes popup has been improved (contributed by Jowan-Spooner)
+- The 2D preview and References panels have been redesigned (contributed by Jowan-Spooner)
+- Themes have been improved (contributed by Jowan-Spooner)
+- Default layouts have been added for material authoring and painting
+  modes (contributed by Jowan-Spooner)
+- Added new splash screens (Crown Gambit, DroppedBeat)
+
+## Nodes
+
+- Updated the Roman Numerals node (now supports values upto 3999 and
+  has an align parameter)
+- Rewrote the comment node
+- Added Reverse, Evenly Distribute and Simplify tools to the Gradient editor
+  widget (contributed by Jowan-Spooner)
+
+## Bug Fixes
+
+- Started fixing material exports (Godot and static materials for Unreal)
+- Fixed user libraries problem (contributed by NotArme)
+- Fixed splashscreen position with multiple screens (contributed by NotArme)
+- Fixed problems in environment editor
+- Fixed popup menu locations
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 4.4dev7
+
 # Material Maker 1.4a1
 
 ## Known problems

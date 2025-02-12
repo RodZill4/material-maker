@@ -2414,6 +2414,11 @@
      inkscape:label="p1"
      d="M 58.742553,177.9367 H 60.5 c 0.848538,0 1.53169,0.68314 1.53169,1.5317 v 9.0632 c 0,0.84853 -0.683152,1.53168 -1.53169,1.53168 h -1.757447 c -0.84854,0 -1.531692,-0.68315 -1.531692,-1.53168 v -9.0632 c 0,-0.84856 0.683152,-1.5317 1.531692,-1.5317 z" />
   </g>
+ </g>
+ <g
+   inkscape:groupmode="layer"
+   id="layer70"
+   inkscape:label="eleventh_row">
   <g
     inkscape:groupmode="layer"
     id="layer82"
@@ -2716,6 +2721,11 @@
      d="m -56.659361,179.67845 h 5.272113 v 5.60534 h -5.272113 c -0.942338,0 -1.700971,-0.75863 -1.700971,-1.70097 v -2.2034 c 0,-0.94233 0.758633,-1.70097 1.700971,-1.70097 z"
      sodipodi:nodetypes="sccssss" />
   </g>
+ </g>
+ <g
+   inkscape:groupmode="layer"
+   id="layer63"
+   inkscape:label="tenth_row">
   <g
     inkscape:groupmode="layer"
     id="layer74"

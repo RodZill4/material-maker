@@ -143,7 +143,7 @@ class ShaderCode:
 				reverse_declarations.reverse()
 				for d in reverse_declarations:
 					var declaration_name : String = MMGenBase.get_glsl_declaration_name(d)
-					if code == "" or code.find(declaration_name) != -1 or rv.find(declaration_name) != -1:
+					if code == "" or declaration_name == "" or code.find(declaration_name) != -1 or rv.find(declaration_name) != -1:
 						rv = "\n// '" + declaration_name + "'\n" + d + "\n" + rv
 						added_declaration = true
 				if added_declaration:
@@ -528,6 +528,8 @@ func render(object: Object, output_index : int, size : int, preview : bool = fal
 func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 	var context : MMGenContext = MMGenContext.new()
 	var source : ShaderCode = get_shader_code("uv", output_index, context)
+	if source.output_type == "f":
+		source.output_type = "rgba"
 	var compute_shader : MMComputeShader = MMComputeShader.new()
 	var shader_status : bool = await compute_shader.set_shader_from_shadercode(source, false)
 	var texture : MMTexture = MMTexture.new()
@@ -620,8 +622,13 @@ static func split_glsl(s : String) -> Array[String]:
 			s = s.right(-next_semicolon-1)
 		elif next_bracket != -1:
 			var closing_bracket = find_matching_parenthesis(s, next_bracket, '{', '}')
-			a.append(s.left(closing_bracket+1))
+			var d : String = s.left(closing_bracket+1)
 			s = s.right(-closing_bracket-1)
+			s = s.strip_edges()
+			if s.length() > 0 and s[0] == ";":
+				d += ";"
+				s = s.trim_prefix(";")
+			a.append(d)
 		else:
 			print("Error: "+s)
 			break
@@ -630,9 +637,18 @@ static func split_glsl(s : String) -> Array[String]:
 
 static func get_glsl_declaration_name(s : String) -> String:
 	var words = s.split(" ", false)
-	if words.size() > 2 and words[0] == "const":
-		return words[2]
-	return s.split(" ")[1].split("(")[0]
+	if words.size() > 2 and (words[0] == "const" or words[0] == "uniform" or words[0] == "varying"):
+		var d : String = words[2]
+		var bracket_pos = d.find("[")
+		if bracket_pos >= 0:
+			d = d.substr(0, bracket_pos)
+		return d
+	var split : PackedStringArray = s.split(" ")
+	if split.size() > 1:
+		split = split[1].split("(")
+		if split.size() > 1:
+			return split[0]
+	return ""
 
 func _serialize(data: Dictionary) -> Dictionary:
 	print("cannot save "+str(name))

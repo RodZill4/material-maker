@@ -228,6 +228,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_type_variation = &"MM_AddNodePanelList"
+same_column_width = true
 fixed_icon_size = Vector2i(18, 18)
 
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button1" to="." method="add_node"]
