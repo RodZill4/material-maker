@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bb76ty33yvxj2"]
+[gd_scene load_steps=10 format=3 uid="uid://bb76ty33yvxj2"]
 
 [ext_resource type="PackedScene" uid="uid://cdkj3jrppq51u" path="res://material_maker/windows/environment_editor/environment_editor_scene.tscn" id="1"]
 [ext_resource type="Texture2D" uid="uid://by6042vpo6i1o" path="res://material_maker/environments/hdris/epping_forest_01_1k.hdr" id="1_r627v"]
+[ext_resource type="PackedScene" uid="uid://dw4wghi1pn4qr" path="res://material_maker/windows/environment_editor/camera_controller.tscn" id="3_iommd"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f7v0t"]
 panorama = ExtResource("1_r627v")
@@ -30,16 +31,12 @@ render_target_update_mode = 3
 
 [node name="Objects" parent="." instance=ExtResource("1")]
 
-[node name="CameraPosition" type="Node3D" parent="."]
-
-[node name="CameraRotation1" type="Node3D" parent="CameraPosition"]
-
-[node name="CameraRotation2" type="Node3D" parent="CameraPosition/CameraRotation1"]
-
-[node name="Camera3D" type="Camera3D" parent="CameraPosition/CameraRotation1/CameraRotation2"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2, 4)
-environment = SubResource("2")
-current = true
+[node name="CameraTargetPosition" parent="." instance=ExtResource("3_iommd")]
+camera_path = NodePath("../Camera3D")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+environment = SubResource("2")
+current = true

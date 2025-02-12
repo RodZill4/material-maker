@@ -9,6 +9,8 @@ extends Window
 @onready var asset_preview : TextureRect = $MarginContainer/VBoxContainer/HBoxContainer/Preview
 
 
+var previews : Array[Texture2D]
+var current_preview : int = 0
 var my_assets : Array = []
 
 
@@ -33,7 +35,11 @@ func ask(data : Dictionary) -> Dictionary:
 		for a in my_assets:
 			if a.type == data.type:
 				asset_target.add_item("Update - %s (%d)" % [ a.name, a.id ], a.id)
-	asset_preview.texture = data.preview
+	previews = data.previews
+	_on_preview_select_item_selected(0)
+	if previews.size() > 1:
+		for p in data.preview_names:
+			%PreviewSelect.add_item(p)
 	asset_license.clear()
 	for l in data.licenses:
 		asset_license.add_item(l.name)
@@ -48,7 +54,8 @@ func ask(data : Dictionary) -> Dictionary:
 			name=asset_name.text,
 			license=asset_license.selected,
 			tags=asset_tags.text,
-			description=asset_description.text
+			description=asset_description.text,
+			preview_texture=%Preview.texture
 		}
 		if asset_target.selected > 0:
 			rv.id = asset_target.get_item_id(asset_target.selected)
@@ -77,3 +84,6 @@ func _on_Target_item_selected(index):
 				asset_description.text = a.description
 				break
 	validate_form()
+
+func _on_preview_select_item_selected(index):
+	%Preview.texture = previews[index]

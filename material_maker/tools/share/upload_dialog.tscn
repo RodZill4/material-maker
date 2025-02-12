@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d17uy3m4dh388"]
 
-[ext_resource type="Script" path="res://material_maker/tools/share/upload_dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://bkpwlw0cvm7a3" path="res://material_maker/tools/share/upload_dialog.gd" id="1"]
 
 [node name="UploadDialog" type="Window"]
 title = "Share asset"
@@ -26,11 +26,18 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Preview" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
 size_flags_horizontal = 3
 expand_mode = 1
 stretch_mode = 5
+
+[node name="PreviewSelect" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer/Preview"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 20.0
 
 [node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -108,6 +115,7 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_UploadDialog_popup_hide"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer/Preview/PreviewSelect" to="." method="_on_preview_select_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Target" to="." method="_on_Target_item_selected"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/GridContainer/Name" to="." method="_on_Name_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Buttons/OK" to="." method="_on_OKButton_pressed"]

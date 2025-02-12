@@ -1,8 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cj6b1r8b6jel3"]
 
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://brlp703awvxbn" path="res://material_maker/panels/preview_3d/preview_3d_ui.tscn" id="2"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" id="3"]
+[ext_resource type="Script" uid="uid://f81isnxjqrub" path="res://material_maker/panels/preview_3d/preview_3d_panel.gd" id="3"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type spatial;
@@ -23,41 +22,72 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="2"]
 render_priority = 0
 shader = SubResource("1")
-shader_parameter/aabb_position = null
-shader_parameter/aabb_size = null
+shader_parameter/aabb_position = Vector3(0, 0, 0)
+shader_parameter/aabb_size = Vector3(0, 0, 0)
 
 [sub_resource type="World3D" id="World3D_3xlky"]
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_p1u4i"]
+
 [node name="Preview3D" instance=ExtResource("1")]
 custom_minimum_size = Vector2(250, 200)
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -1.0
+offset_top = -2.0
+offset_right = 248.0
+offset_bottom = 253.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("3")
 click_material = SubResource("2")
 
-[node name="MaterialPreview" parent="." index="0"]
-world_3d = SubResource("World3D_3xlky")
-size = Vector2i(250, 200)
+[node name="BG" type="Panel" parent="." index="0"]
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"MM_PanelBackground"
 
-[node name="TextureRect" type="TextureRect" parent="." index="1"]
+[node name="MaterialPreview" parent="." index="1"]
+world_3d = SubResource("World3D_3xlky")
+size = Vector2i(250, 256)
+
+[node name="TextureRect" type="TextureRect" parent="." index="2"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 
-[node name="UI" type="PanelContainer" parent="." index="2"]
-layout_mode = 2
-
-[node name="Preview3DUI" parent="UI" index="0" instance=ExtResource("2")]
-layout_mode = 2
-
 [node name="PopupMenu" type="PopupMenu" parent="." index="3"]
+size = Vector2i(215, 100)
 item_count = 2
 item_0/text = "Reset center"
+item_0/id = 0
 item_1/text = "Center on clicked surface"
 item_1/id = 1
 
+[node name="MenuBar" type="ScrollContainer" parent="." index="4"]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBackground"
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="HBox" type="HFlowContainer" parent="MenuBar" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Speed_Pause" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" index="0"]
+button_group = SubResource("ButtonGroup_p1u4i")
+
+[node name="Speed_Slow" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" index="1"]
+button_group = SubResource("ButtonGroup_p1u4i")
+
+[node name="Speed_Medium" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" index="2"]
+button_group = SubResource("ButtonGroup_p1u4i")
+
+[node name="Speed_Fast" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" index="3"]
+button_group = SubResource("ButtonGroup_p1u4i")
+
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
+[connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="id_pressed" from="PopupMenu" to="." method="_on_PopupMenu_id_pressed"]

@@ -12,12 +12,23 @@ func _ready() -> void:
 	toggle_mode = true
 	button_mask = MOUSE_BUTTON_MASK_LEFT | MOUSE_BUTTON_MASK_RIGHT
 	toggled.connect(_on_toggled)
-	owner.resized.connect(position_panel)
 
 	panel.hide()
 
 	theme_arrow_icon = get_theme_icon("arrow", "OptionButton")
 	icon = get_theme_icon(icon_name, "MM_Icons")
+
+
+func _enter_tree() -> void:
+	var menu_container: Node = get_parent().get_parent()
+	while not menu_container is ScrollContainer:
+		menu_container = menu_container.get_parent()
+		if menu_container == get_tree().root:
+			break
+	if menu_container is ScrollContainer:
+		menu_container.item_rect_changed.connect(position_panel)
+	else:
+		owner.item_rect_changed.connect(position_panel)
 
 
 func _draw() -> void:
@@ -39,6 +50,7 @@ func _on_toggled(pressed:bool) -> void:
 
 
 func position_panel() -> void:
+	panel.size = Vector2(0,0)
 	var at_position := global_position
 	at_position.x += size.x/2 - panel.size.x/2
 	at_position.x = max(at_position.x, get_parent().get_child(0).global_position.x)
@@ -55,7 +67,7 @@ func _input(event:InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var node := get_viewport().gui_get_hovered_control()
-		if node != self and not is_ancestor_of(node) and (not pinned or (node and node.script == self.script)):
+		if node != self and not is_ancestor_of(node) and (not pinned or (node and node.script == self.script) and node.owner == owner):
 			button_pressed = false
 
 

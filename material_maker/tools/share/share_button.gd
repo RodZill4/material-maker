@@ -34,6 +34,7 @@ func set_logged_in(user_name : String) -> void:
 		$ConnectButton.tooltip_text = "Logged in as "+user_name+".\nMaterials can be submitted."
 	$SendButton.disabled = false
 	connect_button.disabled = false
+	create_preview_viewport()
 
 func set_logged_out(message : String = "") -> void:
 	$ConnectButton.texture_normal = preload("res://material_maker/tools/share/broken_link.tres")
@@ -95,17 +96,6 @@ func _on_ConnectButton_pressed() -> void:
 				update_my_assets()
 	connect_button.disabled = false
 
-func update_preview_texture():
-	create_preview_viewport()
-	await mm_globals.main_window.update_preview_3d([ preview_viewport ], true)
-	preview_viewport.get_materials()[0].set_shader_parameter("uv1_scale", Vector3(4, 2, 4))
-	preview_viewport.get_materials()[0].set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
-	preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)
-	preview_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
-	preview_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	await get_tree().process_frame
-	await get_tree().process_frame
-
 func get_preview_texture():
 	return preview_viewport.get_texture()
 
@@ -115,27 +105,22 @@ func can_share():
 func _on_SendButton_pressed():
 	var main_window = mm_globals.main_window
 	var asset_type : String
-	var preview_texture : Texture2D
+	var preview_textures : Array[Texture2D] = []
+	var preview_textures_names : Array[String] = []
 	match main_window.get_current_project().get_project_type():
 		"material":
 			asset_type = "material"
-			create_preview_viewport()
-			await main_window.update_preview_3d([ preview_viewport ], true)
-			preview_viewport.get_materials()[0].set_shader_parameter("uv1_scale", Vector3(4, 2, 4))
-			preview_viewport.get_materials()[0].set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
-			preview_viewport.get_materials()[0].set_shader_parameter("depth_offset", 0.8)
-			preview_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
-			preview_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-			await get_tree().process_frame
-			await get_tree().process_frame
-			preview_texture = preview_viewport.get_texture()
+			await main_window.update_preview_3d([ preview_viewport ])
+			for i in range(4):
+				preview_textures.append(await preview_viewport.get_preview(i))
+			preview_textures_names = [ "Sphere", "Cylinder", "Cube", "3D Preview" ]
 		"paint":
 			asset_type = "brush"
 			var status = await main_window.get_current_project().get_brush_preview()
-			preview_texture = status
+			preview_textures.append(status)
 		_:
 			return
-	send_asset(asset_type, main_window.get_current_graph_edit().top_generator.serialize(), preview_texture)
+	send_asset(asset_type, main_window.get_current_graph_edit().top_generator.serialize(), preview_textures, preview_textures_names)
 
 func find_in_parameter_values(node : Dictionary, keywords : Array) -> bool:
 	if node.has("parameters") and node.parameters is Dictionary:
@@ -150,13 +135,13 @@ func find_in_parameter_values(node : Dictionary, keywords : Array) -> bool:
 				return true
 	return false
 
-func send_asset(asset_type : String, asset_data : Dictionary, preview_texture : Texture2D) -> void:
-	var data : Dictionary = { type=asset_type, preview=preview_texture, licenses=licenses, my_assets=my_assets }
+func send_asset(asset_type : String, asset_data : Dictionary, preview_textures : Array[Texture2D], preview_texture_names : Array[String] = []) -> void:
+	var data : Dictionary = { type=asset_type, previews=preview_textures, preview_names=preview_texture_names, licenses=licenses, my_assets=my_assets }
 	var upload_dialog = load("res://material_maker/tools/share/upload_dialog.tscn").instantiate()
 	var asset_info = await upload_dialog.ask(data)
 	if asset_info.is_empty():
 		return
-	var png_image = preview_texture.get_image().save_png_to_buffer()
+	var png_image = asset_info.preview_texture.get_image().save_png_to_buffer()
 	asset_info.type = asset_type
 	asset_info.mm_version = ProjectSettings.get_setting("application/config/actual_release")
 	asset_info.image_text = "data:image/png;base64,"+Marshalls.raw_to_base64(png_image)

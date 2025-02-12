@@ -170,3 +170,24 @@ static func propagate_shortcuts(control : Control, event : InputEvent):
 	if not control.shortcut_context.get_global_rect().has_point(control.get_global_mouse_position()):
 		return
 	do_propagate_shortcuts(control, event)
+
+
+func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}) -> String:
+	for i in additional_identifiers:
+		file_name = file_name.replace(i, additional_identifiers[i])
+
+	var current_graph: MMGraphEdit = get_node("/root/MainWindow").get_current_graph_edit()
+	if current_graph.save_path:
+		file_name = file_name.replace("$project", current_graph.save_path.get_file().trim_suffix("."+current_graph.save_path.get_extension()))
+	else:
+		file_name = file_name.replace("$project", "unnamed_project")
+
+	if "$idx" in file_name:
+		if path:
+			var idx := 1
+			while FileAccess.file_exists(path.path_join(file_name).replace("$idx", str(idx).pad_zeros(2))):
+				idx += 1
+			file_name = file_name.replace("$idx", str(idx).pad_zeros(2))
+		else:
+			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
+	return file_name

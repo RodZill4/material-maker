@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw4wghi1pn4qr"]
+
+[ext_resource type="Script" uid="uid://yamgbb24fo4g" path="res://material_maker/windows/environment_editor/camera_controller.gd" id="1_i358n"]
+
+[node name="CameraController" type="Node3D"]
+script = ExtResource("1_i358n")
+
+[node name="CameraRotation1" type="Node3D" parent="."]
+
+[node name="CameraRotation2" type="Node3D" parent="CameraRotation1"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
+
+[node name="Camera3D" type="RemoteTransform3D" parent="CameraRotation1/CameraRotation2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)

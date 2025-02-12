@@ -6,6 +6,10 @@ extends "res://material_maker/panels/preview_3d/preview_3d.gd"
 var new_pivot_position : Vector3
 
 
+func _ready() -> void:
+	reattach_menu($MenuBar/HBox)
+
+
 func on_right_click():
 	# Hide viewport while we capture the position
 	var hide_texture : ImageTexture = ImageTexture.new()
@@ -37,6 +41,7 @@ func on_right_click():
 	$TextureRect.visible = false
 	mm_globals.popup_menu($PopupMenu, self)
 
+
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
 	match id:
@@ -45,8 +50,15 @@ func _on_PopupMenu_id_pressed(id):
 		1:
 			pivot.transform.origin = new_pivot_position
 
+
 func _on_Preview3D_mouse_entered():
 	mm_globals.set_tip_text("#LMB: Rotate view, #RMB: Tilt view, Mouse wheel: Zoom", 3)
 
+
 func on_drop_model_file(file_name : String):
 	do_load_custom_mesh(file_name)
+
+
+func _on_resized() -> void:
+	$BG.size = size
+	%MenuBar.size.x = size.x
