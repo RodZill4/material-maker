@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=131 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=132 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -346,7 +346,7 @@ metadata/scale = 1.0
 [sub_resource type="AtlasTexture" id="AtlasTexture_hht3q"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 128, 16, 16)
-metadata/scale = 2.0
+metadata/scale = 1.0
 metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_60g77"]
@@ -595,6 +595,12 @@ border_width_right = 1
 border_width_bottom = 1
 corner_detail = 1
 shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_2ai3t"]
+base_font = ExtResource("1_5tfb1")
+opentype_features = {
+1953396077: 1
+}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uujf1"]
 content_margin_left = 6.0
@@ -1090,6 +1096,8 @@ MM_NodePortGroup/constants/width = 4
 MM_NodePortGroup/styles/panel = SubResource("StyleBoxFlat_k2ns1")
 MM_NodePropertyLabel/base_type = &"Label"
 MM_NodePropertyLabel/font_sizes/font_size = 15
+MM_NumberLabel/base_type = &"Label"
+MM_NumberLabel/fonts/font = SubResource("FontVariation_2ai3t")
 MM_PanelBackground/base_type = &"PanelContainer"
 MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")
 MM_PanelMenuBackground/base_type = &"ScrollContainer"

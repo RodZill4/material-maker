@@ -6,7 +6,15 @@ extends Control
 @onready var preview_2d_background_button = %"2DPreview"
 @onready var preview_3d_background = $BackgroundPreviews/Preview3D
 @onready var preview_3d_background_button = %"3DPreview"
-@onready var preview_3d_background_panel = $PreviewUI/Panel
+@onready var preview_3d_background_panel
+
+var current_graph_edit: GraphEdit = null:
+	set(value):
+		if current_graph_edit:
+			current_graph_edit.item_rect_changed.disconnect(update_menu_position)
+		current_graph_edit = value
+		if value:
+			current_graph_edit.item_rect_changed.connect(update_menu_position)
 
 
 func _ready() -> void:
@@ -35,17 +43,22 @@ func _on_projects_panel_resized():
 	$BackgroundPreviews.position = preview_position
 	$BackgroundPreviews.size = preview_size
 	$MenuBar.position = preview_position
+	update_menu_position()
+
 
 func show_background_preview_2d(button_pressed):
 	preview_2d_background.visible = button_pressed
 	if button_pressed:
 		preview_3d_background_button.button_pressed = false
 
+
 func show_background_preview_3d(button_pressed):
 	preview_3d_background.visible = button_pressed
 	preview_3d_background_panel.visible = button_pressed
+	%ControlView.visible = button_pressed
 	if button_pressed:
 		preview_2d_background_button.button_pressed = false
+
 
 func _on_projects_no_more_tabs():
 	mm_globals.main_window.new_material()
@@ -54,5 +67,28 @@ func _on_projects_no_more_tabs():
 
 func _on_projects_tab_changed(tab : int):
 	mm_globals.main_window._on_Projects_tab_changed(tab)
+
+	print(mm_globals.main_window.current_mode)
+	if mm_globals.main_window.current_mode == "paint":
+		%PreviewsMenu.hide()
+		preview_2d_background.hide()
+		preview_3d_background.hide()
+		current_graph_edit = %Projects.get_current_tab_control().get_graph_edit()
+	else:
+		%PreviewsMenu.show()
+		preview_2d_background.visible = preview_2d_background_button.button_pressed
+		preview_3d_background.visible = preview_3d_background_button.button_pressed
+		current_graph_edit = %Projects.get_current_tab_control()
+
 	await get_tree().process_frame
 	_on_projects_panel_resized()
+
+
+
+func update_menu_position() -> void:
+	if not current_graph_edit:
+		%MenuBar.position = Vector2()
+		return
+	%MenuBar.global_position = current_graph_edit.global_position
+	%MenuBar.size.x = current_graph_edit.size.x
+	%MenuBar.item_rect_changed.emit()

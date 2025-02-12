@@ -49,8 +49,14 @@ func _on_grid_size_value_changed(value: Variant) -> void:
 
 func update_view_settings(_arg_ignore:Variant = null) -> void:
 	for n in %Projects.get_children():
+		var graph: GraphEdit = null
 		if n is GraphEdit:
-			n.minimap_enabled = %Minimap.button_pressed
-			n.show_grid = %GridVisibility.button_pressed
-			n.snapping_distance = %GridSize.get_value()
-			n.snapping_enabled = %GridSnapping.button_pressed
+			graph = n
+		elif n.has_method("get_graph_edit"):
+			graph = n.get_graph_edit()
+		else:
+			continue
+		graph.minimap_enabled = %Minimap.button_pressed
+		graph.show_grid = %GridVisibility.button_pressed
+		graph.snapping_distance = %GridSize.get_value()
+		graph.snapping_enabled = %GridSnapping.button_pressed
