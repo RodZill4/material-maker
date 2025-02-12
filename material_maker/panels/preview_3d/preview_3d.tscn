@@ -1,7 +1,47 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpaxvlnn2u1f6"]
+[gd_scene load_steps=20 format=3 uid="uid://dpaxvlnn2u1f6"]
 
 [ext_resource type="Script" uid="uid://ciayi8gvd2e1b" path="res://material_maker/panels/preview_3d/preview_3d.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://dpulty2lkvcht" path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" id="2"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="3_tpwu6"]
+[ext_resource type="Script" uid="uid://bntvqam28c8qx" path="res://material_maker/panels/preview_3d/model_menu.gd" id="4_13pve"]
+[ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="5_xygyl"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="6_osyun"]
+[ext_resource type="Script" uid="uid://k528bu7vevi0" path="res://material_maker/panels/preview_3d/environment_menu.gd" id="7_8m40s"]
+[ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="8_13pve"]
+[ext_resource type="Script" uid="uid://cy7mimh863mo4" path="res://material_maker/panels/preview_3d/export_menu.gd" id="8_w881c"]
+[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="9_iu7lt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yosc0"]
+atlas = ExtResource("6_osyun")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ktg12"]
+atlas = ExtResource("6_osyun")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_v4mxh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3qsog"]
+atlas = ExtResource("6_osyun")
+region = Rect2(48, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ldw5"]
+atlas = ExtResource("6_osyun")
+region = Rect2(64, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boljp"]
+atlas = ExtResource("6_osyun")
+region = Rect2(80, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwjbu"]
+atlas = ExtResource("6_osyun")
+region = Rect2(96, 176, 16, 16)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ysrta"]
+
+[sub_resource type="FontVariation" id="FontVariation_kcuqo"]
+base_font = ExtResource("9_iu7lt")
+variation_transform = Transform2D(1, 0.22, 0, 1, 0, 0)
 
 [node name="Preview3D" type="SubViewportContainer" groups=["preview"]]
 custom_minimum_size = Vector2(200, 200)
@@ -26,4 +66,362 @@ render_target_update_mode = 4
 
 [node name="Preview3d" parent="MaterialPreview" instance=ExtResource("2")]
 
+[node name="MainMenu" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="MainMenu"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="ModelMenu" type="Button" parent="MainMenu/HBox"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Model"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("3_tpwu6")
+icon_name = "model"
+
+[node name="ModelMenuPanel" type="PanelContainer" parent="MainMenu/HBox/ModelMenu"]
+top_level = true
+layout_mode = 0
+offset_left = 284.0
+offset_top = 3.0
+offset_right = 495.0
+offset_bottom = 69.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("4_13pve")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel"]
+layout_mode = 2
+
+[node name="Model" type="GridContainer" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="ModelLabel" type="Label" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Model"
+
+[node name="HBox" type="HBoxContainer" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+layout_mode = 2
+
+[node name="Model" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox" instance=ExtResource("5_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 6
+popup/item_0/text = "Cube"
+popup/item_0/id = 0
+popup/item_1/text = "Cylinder"
+popup/item_1/id = 1
+popup/item_2/text = "Sphere"
+popup/item_2/id = 2
+popup/item_3/text = "Prism"
+popup/item_3/id = 3
+popup/item_4/text = "Plane"
+popup/item_4/id = 4
+popup/item_5/text = "Custom"
+popup/item_5/icon = SubResource("AtlasTexture_yosc0")
+popup/item_5/id = 5
+
+[node name="ModelConfigurate" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Configure"
+icon = SubResource("AtlasTexture_ktg12")
+
+[node name="HSeparator" type="HSeparator" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+visible = false
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+visible = false
+layout_mode = 2
+
+[node name="RotationLabel" type="Label" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Rotate"
+
+[node name="RotationSpeeds" type="HBoxContainer" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+layout_mode = 2
+
+[node name="Speed_Pause" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Paused"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_v4mxh")
+icon = SubResource("AtlasTexture_3qsog")
+icon_alignment = 1
+
+[node name="Speed_Slow" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Slow"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_v4mxh")
+icon = SubResource("AtlasTexture_1ldw5")
+icon_alignment = 1
+
+[node name="Speed_Medium" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Medium"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_v4mxh")
+icon = SubResource("AtlasTexture_boljp")
+icon_alignment = 1
+
+[node name="Speed_Fast" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Fast"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_v4mxh")
+icon = SubResource("AtlasTexture_xwjbu")
+icon_alignment = 1
+
+[node name="EnvironmentMenu" type="Button" parent="MainMenu/HBox"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Environment"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("3_tpwu6")
+icon_name = "environment"
+
+[node name="EnvironmentMenuPanel" type="PanelContainer" parent="MainMenu/HBox/EnvironmentMenu"]
+top_level = true
+layout_mode = 0
+offset_left = 282.0
+offset_top = 85.0
+offset_right = 540.0
+offset_bottom = 179.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("7_8m40s")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel"]
+layout_mode = 2
+
+[node name="Box" type="BoxContainer" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnvironmentLabel" type="Label" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Environment"
+
+[node name="EnvironmentEditorButton" type="Button" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = " Environment Editor"
+script = ExtResource("8_13pve")
+icon_name = "draw"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="EnvironmentList" type="ItemList" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/v_separation = 5
+theme_override_constants/h_separation = 5
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ysrta")
+item_count = 4
+max_columns = 0
+fixed_icon_size = Vector2i(55, 55)
+
+[node name="VBox" type="GridContainer" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="ClearBackground_Label" type="Label" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Clear BG"
+
+[node name="ClearBackground" type="CheckBox" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="TonemapLabel" type="Label" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Tonemap"
+
+[node name="ToneMap" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" instance=ExtResource("5_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "Linear"
+popup/item_0/id = 0
+popup/item_1/text = "Reinhard"
+popup/item_1/id = 1
+popup/item_2/text = "Filmic"
+popup/item_2/id = 2
+popup/item_3/text = "ACES"
+popup/item_3/id = 3
+
+[node name="ExportMenu" type="Button" parent="MainMenu/HBox"]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Export"
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("3_tpwu6")
+icon_name = "export"
+
+[node name="ExportMenuPanel" type="PanelContainer" parent="MainMenu/HBox/ExportMenu"]
+top_level = true
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 0
+offset_left = 285.0
+offset_top = 255.0
+offset_right = 550.0
+offset_bottom = 426.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("8_w881c")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="GenerateMapLabel" type="Label" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer"]
+layout_mode = 2
+text = "Generate Maps"
+
+[node name="GenerateMapsSection" type="GridContainer" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="MapTypeLabel" type="Label" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Type"
+
+[node name="MapType" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" instance=ExtResource("5_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 6
+popup/item_0/text = "Position"
+popup/item_0/id = 0
+popup/item_1/text = "Normal"
+popup/item_1/id = 1
+popup/item_2/text = "Curvature"
+popup/item_2/id = 2
+popup/item_3/text = "Ambient Occlusion"
+popup/item_3/id = 3
+popup/item_4/text = "Bent Normals"
+popup/item_4/id = 4
+popup/item_5/text = "Thickness"
+popup/item_5/id = 5
+
+[node name="MapResolutionLabel" type="Label" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Resolution"
+
+[node name="MapResolution" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection" instance=ExtResource("5_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 5
+popup/item_0/text = "256x256"
+popup/item_0/id = 0
+popup/item_1/text = "512x512"
+popup/item_1/id = 1
+popup/item_2/text = "1024x1024"
+popup/item_2/id = 2
+popup/item_3/text = "2048x2048"
+popup/item_3/id = 3
+popup/item_4/text = "4096x4096"
+popup/item_4/id = 4
+
+[node name="MapResolutionLabel2" type="Label" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "File"
+
+[node name="ExportFile" type="BoxContainer" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection"]
+layout_mode = 2
+theme_override_constants/separation = 2
+vertical = true
+
+[node name="BoxContainer" type="BoxContainer" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile"]
+layout_mode = 2
+
+[node name="MapExportFile" type="LineEdit" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The file-name to use. 
+Use $project, $type and $idx to make it auto-adjust."
+theme_override_font_sizes/font_size = 15
+text = "$project_$type_map"
+
+[node name="MapFileType" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer" instance=ExtResource("5_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = ".png"
+popup/item_0/id = 0
+popup/item_1/text = ".exr"
+popup/item_1/id = 1
+
+[node name="MapExportFileResultLabel" type="Label" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 0
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+theme_override_fonts/font = SubResource("FontVariation_kcuqo")
+text_overrun_behavior = 3
+
+[node name="GenerateMapButton" type="Button" parent="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer"]
+layout_mode = 2
+text = "Generate Map"
+
 [connection signal="gui_input" from="." to="." method="on_gui_input"]
+[connection signal="item_selected" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox/Model" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_item_selected"]
+[connection signal="pressed" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox/ModelConfigurate" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_configurate_pressed"]
+[connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Pause" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_pause_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Slow" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_slow_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Medium" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_medium_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Fast" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_fast_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box/EnvironmentEditorButton" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_editor_button_pressed"]
+[connection signal="item_selected" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer/EnvironmentList" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_list_item_selected"]
+[connection signal="toggled" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ClearBackground" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_clear_background_toggled"]
+[connection signal="item_selected" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ToneMap" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_tone_map_item_selected"]
+[connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapType" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_type_item_selected"]
+[connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapResolution" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_resolution_item_selected"]
+[connection signal="text_changed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapExportFile" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_export_file_text_changed"]
+[connection signal="pressed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapButton" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_generate_map_button_pressed"]

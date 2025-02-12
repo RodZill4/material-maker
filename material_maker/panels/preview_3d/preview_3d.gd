@@ -45,6 +45,8 @@ var _mouse_start_position : Vector2 = Vector2.ZERO
 var clear_background := true
 var current_environment := 0
 
+@onready var main_menu := $MainMenu
+
 
 func _enter_tree():
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
@@ -64,6 +66,12 @@ func _ready() -> void:
 	# attempts to read the setting before the configuration file is loaded.
 	await get_tree().process_frame
 	sun.shadow_enabled = mm_globals.get_config("ui_3d_preview_sun_shadow")
+
+
+func reattach_menu(node:Node) -> Node:
+	main_menu.get_parent().remove_child(main_menu)
+	node.add_child(main_menu)
+	return main_menu
 
 
 func _notification(what: int) -> void:
@@ -280,6 +288,7 @@ func on_gui_input(event : InputEvent) -> void:
 
 func on_right_click():
 	pass
+
 
 func generate_map(generate_function : String, image_size : int) -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()

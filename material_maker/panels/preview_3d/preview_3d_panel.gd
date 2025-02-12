@@ -6,6 +6,10 @@ extends "res://material_maker/panels/preview_3d/preview_3d.gd"
 var new_pivot_position : Vector3
 
 
+func _ready() -> void:
+	reattach_menu($MenuBar/HBox)
+
+
 func on_right_click():
 	# Hide viewport while we capture the position
 	var hide_texture : ImageTexture = ImageTexture.new()

@@ -53,24 +53,24 @@ func _ready() -> void:
 		add_valid_connection_type(42, t)
 
 func _exit_tree():
-	save_config()
+	#save_config()
 	remove_crash_recovery_file()
+#
+#func load_config():
+	#if mm_globals.has_config("graphedit_use_snap"):
+		#snapping_enabled = mm_globals.get_config("graphedit_use_snap")
+	#if mm_globals.has_config("graphedit_snap_distance"):
+		#snapping_distance = mm_globals.get_config("graphedit_snap_distance")
+#
+#func save_config():
+	#mm_globals.set_config("graphedit_use_snap", snapping_enabled)
+	#mm_globals.set_config("graphedit_snap_distance", snapping_distance)
 
-func load_config():
-	if mm_globals.has_config("graphedit_use_snap"):
-		snapping_enabled = mm_globals.get_config("graphedit_use_snap")
-	if mm_globals.has_config("graphedit_snap_distance"):
-		snapping_distance = mm_globals.get_config("graphedit_snap_distance")
-
-func save_config():
-	mm_globals.set_config("graphedit_use_snap", snapping_enabled)
-	mm_globals.set_config("graphedit_snap_distance", snapping_distance)
-
-func _on_GraphEdit_visibility_changed():
-	if is_visible_in_tree():
-		load_config()
-	else:
-		save_config()
+#func _on_GraphEdit_visibility_changed():
+	#if is_visible_in_tree():
+		#load_config()
+	#else:
+		#save_config()
 
 func get_project_type() -> String:
 	return "material"
@@ -849,7 +849,7 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 		var current_zoom = get_zoom()
 		var node_rect = node.get_rect()
 		node_rect.size = node_rect.size * current_zoom
-		
+
 		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
@@ -904,9 +904,9 @@ func set_current_preview(slot: int, node: GraphNode, output_index: int = 0, lock
 		if force_unlock:
 			locked_preview[slot] = null
 		current_preview[slot] = preview
-	
+
 	preview_changed.emit(self)
-	
+
 	if is_instance_valid(node):
 		node.queue_redraw()
 	if old_preview != null or old_locked_preview != null:

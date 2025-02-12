@@ -3,10 +3,15 @@ extends Control
 
 @onready var projects = $Projects
 @onready var preview_2d_background = $BackgroundPreviews/Preview2D
-@onready var preview_2d_background_button = $PreviewUI/Preview2DButton
+@onready var preview_2d_background_button = %"2DPreview"
 @onready var preview_3d_background = $BackgroundPreviews/Preview3D
-@onready var preview_3d_background_button = $PreviewUI/Preview3DButton
+@onready var preview_3d_background_button = %"3DPreview"
 @onready var preview_3d_background_panel = $PreviewUI/Panel
+
+
+func _ready() -> void:
+	preview_3d_background_panel = $BackgroundPreviews/Preview3D.reattach_menu($MenuBar/HBox)
+	preview_3d_background_panel.hide()
 
 
 func _notification(what: int) -> void:
@@ -27,6 +32,7 @@ func _on_projects_panel_resized():
 	preview_size.y -= $Projects/TabBar.size.y
 	$BackgroundPreviews.position = preview_position
 	$BackgroundPreviews.size = preview_size
+	$MenuBar.position = preview_position
 
 func show_background_preview_2d(button_pressed):
 	preview_2d_background.visible = button_pressed
