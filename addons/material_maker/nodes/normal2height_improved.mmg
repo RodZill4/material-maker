@@ -1,0 +1,257 @@
+{
+	"name": "normal_to_ao_2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"base": 0.5,
+		"contrast": 50.0,
+		"edge": 0,
+		"format": 0.0,
+		"invert": false,
+		"samples": 1024.0,
+		"seq": 0,
+		"spread": 0.25,
+		"weight": 0.0,
+		"weight_param": 2.0
+	},
+	"seed_int": 783741888,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// https://www.shadertoy.com/view/DtBXDt",
+			"vec2 r2(in float seed, in float i) {",
+			"\tconst float phi2 = pow((9. + sqrt(69.)) / 18., 1./3.) + pow((9. - sqrt(69.)) / 18., 1./3.); ",
+			"\tconst float C1 = 1. - 1. / phi2;",
+			"\tconst float C2 = 1. - 1. / (phi2 * phi2);",
+			"",
+			"\treturn vec2(fract(seed + i * C1), fract(seed + i * C2));",
+			"}",
+			"",
+			"vec2 seq_reg(in float seed, in float i, in float samples) {",
+			"\tconst float directions = 128.0;",
+			"\tconst float d_theta = 1.0 / directions;",
+			"\tfloat angle = fract(i * d_theta + seed);",
+			"\tfloat dist = (floor(i * d_theta) + 1.0) * (directions / samples);",
+			"\treturn vec2(angle, dist);",
+			"}",
+			"",
+			"vec2 seq_r2(in float seed, in float i, in float samples) {",
+			"\treturn vec2(r2(seed, i));",
+			"}",
+			"",
+			"vec2 edge_repeat(vec2 uv) {",
+			"\treturn fract(fract(uv) + 1.0);",
+			"}",
+			"vec2 edge_clamp(vec2 uv) {",
+			"\treturn uv;",
+			"}",
+			"vec2 edge_mirror(vec2 uv) {",
+			"\treturn 1.0 - abs(fract(fract(uv * 0.5) + 1.0) * 2.0 - 1.0);",
+			"}",
+			"",
+			"float weight_lin(float x, float a) {",
+			"\treturn x;",
+			"}",
+			"float weight_cos(float x, float a) {",
+			"\treturn 1.0 - cos(x * 1.57079632679);",
+			"}",
+			"float weight_pow(float x, float a) {",
+			"\treturn pow(x, a);",
+			"}",
+			"float weight_ss(float x, float a) {",
+			"\treturn smoothstep(0.0, 1.0, x);",
+			"}"
+		],
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"function": true,
+				"label": "Normal Texture",
+				"name": "in",
+				"type": "rgb"
+			}
+		],
+		"instance": [
+			"float normal_to_ao_$(name)(vec2 uv, float seed) {",
+			"\tconst float tau = 6.28318530718;",
+			"\tfloat seq_seed = fract(seed);",
+			"\tfloat total_weight = 0.0;",
+			"\tfloat total_ao = 0.0;",
+			"\tfor(float i = 0.0; i < $samples; i += 1.0) {",
+			"\t\tvec2 seq_val = seq_$(seq)(seq_seed, i, $samples);",
+			"\t\tvec2 offset = vec2(cos(seq_val.x * tau), sin(seq_val.x * tau));",
+			"\t\toffset *= weight_$(weight)(seq_val.y, $weight_param);",
+			"\t\toffset *= $spread;",
+			"\t\tif(offset.x == 0.0 && offset.y == 0.0) continue;",
+			"\t\t",
+			"\t\tvec2 sample_dir = normalize(offset);",
+			"\t\tvec2 sample_uv = uv + offset;",
+			"\t\tsample_uv = edge_$edge(sample_uv);",
+			"\t\t",
+			"\t\tvec3 value = $in(sample_uv).xyz;",
+			"\t\tif($format == 2) value.y = 1.0 - value.y;",
+			"\t\tvalue = value * 2.0 - 1.0;",
+			"\t",
+			"\t\tfloat ao = dot(value, vec3(sample_dir, 0.0));",
+			"\t\ttotal_weight += 1.0;",
+			"\t\ttotal_ao += ao;",
+			"\t}",
+			"\t",
+			"\tfloat result = total_ao / total_weight;",
+			"\tresult = result * 0.5 + 0.5;",
+			"\tif($invert ^^ ($format == 0)) result = 1.0 - result;",
+			"\tresult = ( result - 0.5 ) * $contrast + $base;",
+			"\treturn result;",
+			"}"
+		],
+		"name": "Normal To AO",
+		"outputs": [
+			{
+				"f": "normal_to_ao_$(name)($uv, $seed)",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 1024.0,
+				"label": "Samples",
+				"max": 4096.0,
+				"min": 512.0,
+				"name": "samples",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.25,
+				"label": "Spread",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "spread",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"default": 0.0,
+				"label": "Sequence",
+				"name": "seq",
+				"type": "enum",
+				"values": [
+					{
+						"name": "R2",
+						"value": "r2"
+					},
+					{
+						"name": "Regular",
+						"value": "reg"
+					}
+				]
+			},
+			{
+				"default": 3.0,
+				"label": "Weight",
+				"name": "weight",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Linear",
+						"value": "lin"
+					},
+					{
+						"name": "Cos",
+						"value": "cos"
+					},
+					{
+						"name": "Power",
+						"value": "pow"
+					},
+					{
+						"name": "Smoothstep",
+						"value": "ss"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 2.0,
+				"label": "Weight Param",
+				"longdesc": "Used by pow as the exponent",
+				"max": 2.0,
+				"min": 0.0,
+				"name": "weight_param",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Base",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "base",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 50.0,
+				"label": "Contrast",
+				"max": 500.0,
+				"min": 1.0,
+				"name": "contrast",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Invert",
+				"name": "invert",
+				"type": "boolean"
+			},
+			{
+				"default": 2.0,
+				"label": "Format",
+				"name": "format",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Internal",
+						"value": "0"
+					},
+					{
+						"name": "DirectX",
+						"value": "1"
+					},
+					{
+						"name": "OpenGL",
+						"value": "2"
+					}
+				]
+			},
+			{
+				"default": 2.0,
+				"label": "Edge Wrap",
+				"name": "edge",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Repeat",
+						"value": "repeat"
+					},
+					{
+						"name": "Clamp",
+						"value": "clamp"
+					},
+					{
+						"name": "Mirror",
+						"value": "mirror"
+					}
+				]
+			}
+		]
+	},
+	"type": "shader"
+}
