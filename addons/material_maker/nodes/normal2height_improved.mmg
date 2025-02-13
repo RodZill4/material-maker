@@ -127,7 +127,7 @@
 					"\tif(total_weight == 0.0) return $base;",
 					"\tfloat result = total_ao / total_weight;",
 					"\tresult = result * 0.5 + 0.5;",
-					"\tif($invert ^^ ($format == 0)) result = 1.0 - result;",
+					"\tif($invert != ($format == 0)) result = 1.0 - result;",
 					"\tresult = ( result - 0.5 ) * $contrast + $base;",
 					"\treturn result;",
 					"}"
