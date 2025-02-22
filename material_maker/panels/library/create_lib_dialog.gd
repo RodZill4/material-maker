@@ -8,8 +8,7 @@ signal return_info(status)
 
 
 func _ready():
-	$VBoxContainer/GridContainer/FilePickerButton.set_mode(FileDialog.FILE_MODE_SAVE_FILE)
-	$VBoxContainer/GridContainer/FilePickerButton.add_filter("*.json;Material Maker library")
+	$VBoxContainer/GridContainer/FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
 	popup_centered()
 
 func set_value(v) -> void:

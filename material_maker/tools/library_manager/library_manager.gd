@@ -130,7 +130,8 @@ func get_items(filter : String, sorted := false) -> Array:
 func save_library_list() -> void:
 	var library_list = []
 	for i in range(2, get_child_count()):
-		library_list.push_back(get_child(i).library_path)
+		var lib_path: String = get_child(i).library_path
+		library_list.push_back(lib_path)
 	mm_globals.config.set_value(config_section, "libraries", library_list)
 
 func has_library(path : String) -> bool:
@@ -145,6 +146,7 @@ func create_library(path : String, library_name : String) -> void:
 	var library = LIBRARY.new()
 	library.create_library(path, library_name)
 	add_child(library)
+	library.save_library()
 	save_library_list()
 
 func load_library(path : String, data : String = "") -> void:

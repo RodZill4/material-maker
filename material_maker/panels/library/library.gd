@@ -283,7 +283,7 @@ func _on_Libraries_id_pressed(id : int) -> void:
 			add_child(dialog)
 			var status = await dialog.enter_info()
 			if status.ok:
-				library_manager.create_library(status.path, status.name)
+				library_manager.create_library(status.path + "/" + status.name + ".json", status.name)
 		MENU_LOAD_LIBRARY:
 			if OS.get_name() == "HTML5":
 				pass
