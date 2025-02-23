@@ -17,7 +17,7 @@ var preview_parameters : Dictionary = {}
 var preview_textures = {}
 var preview_texture_dependencies = {}
 
-var external_previews : Array[ShaderMaterial] = []
+var external_previews : Dictionary[Node, Array] = {}
 var export_output_def : Dictionary
 
 
@@ -129,13 +129,14 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		return false
 	if buffer_name == buffer_name_prefix:
 		preview_parameters[parameter_name] = value
-		for p in external_previews:
-			if value is MMTexture:
-				var texture = await value.get_texture()
-				p.set_shader_parameter(parameter_name, texture)
-				preview_texture_dependencies[parameter_name] = texture
-			else:
-				p.set_shader_parameter(parameter_name, value)
+		for ppn in external_previews.keys():
+			for p in external_previews[ppn]:
+				if value is MMTexture:
+					var texture = await value.get_texture()
+					p.set_shader_parameter(parameter_name, texture)
+					preview_texture_dependencies[parameter_name] = texture
+				else:
+					p.set_shader_parameter(parameter_name, value)
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
@@ -154,8 +155,9 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	var size = get_image_size()
 	await preview_textures[texture_name].shader_compute.render(preview_textures[texture_name].texture, size)
 	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
-	for p in external_previews:
-		p.set_shader_parameter(texture_name, await preview_textures[texture_name].texture.get_texture())
+	for ppn in external_previews.keys():
+		for p in external_previews[ppn]:
+			p.set_shader_parameter(texture_name, await preview_textures[texture_name].texture.get_texture())
 	if size <= TEXTURE_FILTERING_LIMIT:
 		pass
 		#preview_textures[texture_name].texture.flags &= ~Texture2D.FLAG_FILTER
@@ -171,18 +173,17 @@ func update_materials(material_list, sequential : bool = false) -> void:
 func update_material(m, sequential : bool = false) -> void:
 	if m is ShaderMaterial:
 		m.shader = preview_material.shader
+		for t in preview_textures.keys():
+			m.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
+		for t in preview_texture_dependencies.keys():
+			m.set_shader_parameter(t, preview_texture_dependencies[t])
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
-	for p in external_previews:
-		p.shader = preview_material.shader
-		for t in preview_textures.keys():
-			p.set_shader_parameter(t, preview_material.get_shader_parameter(t))
-		for t in preview_texture_dependencies.keys():
-			p.set_shader_parameter(t, preview_material.get_shader_parameter(t))
-		for u in preview_parameters.keys():
-			p.set_shader_parameter(u, preview_material.get_shader_parameter(u))
+	for ppn in external_previews.keys():
+		for p in external_previews[ppn]:
+			update_material(p)
 
 func update() -> void:
 	if preview_material == null:
@@ -317,8 +318,9 @@ func process_shader(shader_text : String, custom_script : String = "", force_uni
 			shader_code += "\n"
 	return { shader_code = shader_code, uniforms = rv.uniforms }
 
-func set_3d_previews(previews : Array[ShaderMaterial]):
-	external_previews = previews
+func set_3d_previews(previews : Dictionary[Node, Array]):
+	for k in previews:
+		external_previews[k] = previews[k]
 	update_external_previews()
 
 # Export filters

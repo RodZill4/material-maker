@@ -1033,13 +1033,11 @@ func update_preview_3d(previews : Array) -> void:
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		gen_material = graph_edit.top_generator.get_node("Material")
 	if gen_material != current_gen_material:
-		if current_gen_material != null and is_instance_valid(current_gen_material):
-			current_gen_material.set_3d_previews([] as Array[ShaderMaterial])
 		current_gen_material = gen_material
 	if current_gen_material != null:
-		var materials : Array[ShaderMaterial] = []
+		var materials : Dictionary[Node, Array] = {}
 		for p in previews:
-			materials.append_array(p.get_materials())
+			materials[p] = p.get_materials()
 		await current_gen_material.set_3d_previews(materials)
 
 func on_preview_changed(graph) -> void:
@@ -1243,7 +1241,9 @@ func accept_dialog(dialog_text : String, cancel_button : bool = false, extra_but
 
 func set_current_mesh(m : Mesh):
 	current_mesh = m
-	get_current_graph_edit().top_generator.set_current_mesh(m)
+	var current_graph_edit = get_current_graph_edit()
+	if current_graph_edit:
+		current_graph_edit.top_generator.set_current_mesh(m)
 
 # Use this to investigate the connect bug
 
