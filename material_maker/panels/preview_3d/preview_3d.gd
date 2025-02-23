@@ -18,14 +18,15 @@ var trigger_on_right_click = true
 
 var moving = false
 
-signal need_update(me)
-
 var _mouse_start_position : Vector2 = Vector2.ZERO
 
 var clear_background := true
 var current_environment := 0
 
 @onready var main_menu := $MainMenu
+
+
+signal need_update(me)
 
 
 func _enter_tree():
@@ -56,23 +57,24 @@ func _notification(what: int) -> void:
 		set_environment(current_environment)
 
 
-func set_model(id:int) -> bool:
+func set_model(id : int, custom_model_path : String = "") -> bool:
 	if id == objects.get_child_count()-1:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-		dialog.min_size = Vector2(500, 500)
-		dialog.access = FileDialog.ACCESS_FILESYSTEM
-		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		for f in MMMeshLoader.get_file_dialog_filters():
-			dialog.add_filter(f)
-		if mm_globals.config.has_section_key("path", "mesh"):
-			dialog.current_dir = mm_globals.config.get_value("path", "mesh")
-		var files = await dialog.select_files()
-		if files.size() == 1:
-			do_load_custom_mesh(files[0])
-		else:
-			return false
-	else:
-		select_object(id)
+		if custom_model_path == "":
+			var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+			dialog.min_size = Vector2(500, 500)
+			dialog.access = FileDialog.ACCESS_FILESYSTEM
+			dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+			for f in MMMeshLoader.get_file_dialog_filters():
+				dialog.add_filter(f)
+			if mm_globals.config.has_section_key("path", "mesh"):
+				dialog.current_dir = mm_globals.config.get_value("path", "mesh")
+			var files = await dialog.select_files()
+			if files.size() == 1:
+				custom_model_path = files[0]
+			else:
+				return false
+		do_load_custom_mesh(custom_model_path)
+	select_object(id)
 	return true
 
 
@@ -87,6 +89,10 @@ func do_load_custom_mesh(file_path) -> void:
 		mm_globals.main_window.set_current_mesh(mesh)
 		select_object(id)
 
+func get_current_model_path() -> String:
+	if current_object.mesh.has_meta("file_path"):
+		return current_object.mesh.get_meta("file_path")
+	return ""
 
 func select_object(id) -> void:
 	current_object.visible = false
@@ -98,6 +104,8 @@ func select_object(id) -> void:
 	var aabb : AABB = current_object.get_aabb()
 	current_object.transform.origin = -(aabb.position+0.5*aabb.size)
 
+func _on_Environment_item_selected(id) -> void:
+	set_environment(id)
 
 func set_environment(id:int) -> void:
 	if id >= 0:

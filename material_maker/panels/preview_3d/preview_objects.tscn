@@ -1,10 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxcw0mi4sfl2x"]
+[gd_scene load_steps=9 format=3 uid="uid://cxcw0mi4sfl2x"]
 
 [ext_resource type="ArrayMesh" uid="uid://kvgtp30latgq" path="res://material_maker/meshes/suzanne.obj" id="1"]
 [ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
 [ext_resource type="Script" uid="uid://m5lpqku28wub" path="res://material_maker/panels/preview_3d/preview_mesh.gd" id="3"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_iqcsj"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_mgw7t"]
+resource_local_to_scene = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_obs4a"]
+resource_local_to_scene = true
 
 [sub_resource type="SphereMesh" id="3"]
 radius = 0.75
@@ -12,14 +16,16 @@ height = 1.5
 radial_segments = 32
 rings = 16
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_yq4er"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_tqjv1"]
+resource_local_to_scene = true
 
 [sub_resource type="PrismMesh" id="4"]
 
 [node name="Objects" type="Node3D"]
 
 [node name="Cube" type="MeshInstance3D" parent="."]
-mesh = SubResource("ArrayMesh_iqcsj")
+visible = false
+mesh = SubResource("ArrayMesh_mgw7t")
 script = ExtResource("1_2ljk2")
 compute_shader = "#version 450
 // VERTEX COUNT: 6*(size+1)*(size+1)
@@ -165,7 +171,8 @@ parameters = [{
 }]
 
 [node name="Cylinder" type="MeshInstance3D" parent="."]
-mesh = SubResource("ArrayMesh_iqcsj")
+visible = false
+mesh = SubResource("ArrayMesh_obs4a")
 script = ExtResource("1_2ljk2")
 compute_shader = "#version 450
 // VERTEX COUNT: (size+1)*(size+1)
@@ -259,7 +266,7 @@ uv_scale = Vector2(4, 2)
 
 [node name="Plane" type="MeshInstance3D" parent="."]
 visible = false
-mesh = SubResource("ArrayMesh_yq4er")
+mesh = SubResource("ArrayMesh_tqjv1")
 script = ExtResource("1_2ljk2")
 compute_shader = "#version 450
 

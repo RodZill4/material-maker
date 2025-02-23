@@ -753,7 +753,6 @@ func select_invert() -> void:
 
 func send_changed_signal() -> void:
 	set_need_save(true)
-	timer.stop()
 	timer.start(0.2)
 
 func do_send_changed_signal() -> void:
