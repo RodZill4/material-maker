@@ -2,13 +2,14 @@ extends Window
 
 
 var file_path = ""
+var file_name = ""
 
 
 signal return_info(status)
 
 
 func _ready():
-	$VBoxContainer/GridContainer/FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
+	$VBoxContainer/GridContainer/HBoxContainerPath/FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
 	popup_centered()
 
 func set_value(v) -> void:
@@ -21,12 +22,30 @@ func popup_centered_(window_size : Vector2i = Vector2i(0, 0)) -> void:
 func _on_LineEdit_text_entered(_new_text) -> void:
 	pass
 
+func _on_line_edit_text_changed(new_text: String) -> void:
+	file_name = $VBoxContainer/GridContainer/LineEdit.text
+	$VBoxContainer/HBoxContainer/OK.disabled = ((file_path == "") || (file_name == ""))
+
+func _on_line_edit_2_text_changed(new_text: String) -> void:
+	file_path = new_text
+	$VBoxContainer/HBoxContainer/OK.disabled = ((file_path == "") || (file_name == ""))
+	
 func _on_FilePickerButton_file_selected(f):
-	file_path = f
-	$VBoxContainer/HBoxContainer/OK.disabled = (file_path == "")
+	if file_name == "":
+		$VBoxContainer/GridContainer/HBoxContainerPath/LineEdit2.text = f + "/"
+	else:
+		$VBoxContainer/GridContainer/HBoxContainerPath/LineEdit2.text = f + "/" + file_name.validate_filename() + ".json"
+	file_path = $VBoxContainer/GridContainer/HBoxContainerPath/LineEdit2.text
+	$VBoxContainer/HBoxContainer/OK.disabled = ((file_path == "") || (file_name == ""))
+	
 
 func _on_OK_pressed() -> void:
-	emit_signal("return_info", { ok=true, name=$VBoxContainer/GridContainer/LineEdit.text, path=file_path })
+	var fp
+	if file_path.ends_with(".json"):
+		fp = file_path
+	else:
+		fp = file_path + "/" + file_name.validate_filename() + ".json"
+	emit_signal("return_info", { ok=true, name=$VBoxContainer/GridContainer/LineEdit.text, path=fp })
 
 func _on_Cancel_pressed():
 	emit_signal("return_info", { ok=false })

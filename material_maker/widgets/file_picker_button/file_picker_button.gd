@@ -16,7 +16,6 @@ func set_mode(m):
 
 func set_path(p : String) -> void:
 	path = p
-	text = path.get_file()
 
 func add_filter(f : String) -> void:
 	filters.append(f)
