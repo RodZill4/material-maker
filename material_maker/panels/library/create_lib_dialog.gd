@@ -10,6 +10,7 @@ signal return_info(status)
 
 func _ready():
 	$VBoxContainer/GridContainer/HBoxContainerPath/FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
+	$VBoxContainer/GridContainer/HBoxContainerPath/FilePickerButton.icon = get_parent().get_theme_icon("folder", "MM_Icons")
 	popup_centered()
 
 func set_value(v) -> void:

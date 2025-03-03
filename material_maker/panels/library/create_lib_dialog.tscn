@@ -6,6 +6,7 @@
 [sub_resource type="ImageTexture" id="ImageTexture_8pecb"]
 
 [node name="CreateLibDialog" type="Window"]
+position = Vector2i(0, 36)
 size = Vector2i(600, 100)
 exclusive = true
 script = ExtResource("1")
@@ -55,6 +56,7 @@ size_flags_horizontal = 8
 size_flags_vertical = 4
 text = ""
 icon = SubResource("ImageTexture_8pecb")
+icon_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
