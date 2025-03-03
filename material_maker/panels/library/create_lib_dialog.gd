@@ -51,6 +51,9 @@ func _on_OK_pressed() -> void:
 func _on_Cancel_pressed():
 	emit_signal("return_info", { ok=false })
 
+func _on_close_requested() -> void:
+	emit_signal("return_info", { ok=false })
+
 func enter_info(value : String = "") -> Dictionary:
 	set_value(value)
 	$VBoxContainer/GridContainer/LineEdit.grab_focus()

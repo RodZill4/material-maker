@@ -74,6 +74,7 @@ custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Cancel"
 
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="text_changed" from="VBoxContainer/GridContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="text_submitted" from="VBoxContainer/GridContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
