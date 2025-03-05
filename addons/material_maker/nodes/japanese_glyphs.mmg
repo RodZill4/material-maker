@@ -872,7 +872,7 @@
 		"name": "Japanese Glyphs",
 		"outputs": [
 			{
-				"f": "1.0 - c_$sys($uv-0.5, int($char), $scale, int($gs), $bevel*$bevel_map($uv), $rad)",
+				"f": "1.0 - c_$sys($uv-0.5, int($char), $scale, int($gs), $rad*$bevel*$bevel_map($uv), $rad)",
 				"shortdesc": "Output",
 				"type": "f"
 			}
