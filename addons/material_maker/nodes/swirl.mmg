@@ -43,8 +43,8 @@
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
 				"longdesc": "The input image",
-				"name": "i",
-				"shortdesc": "Input",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			}
 		],
@@ -54,8 +54,8 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the swirled image",
-				"rgba": "$i(swirl_tile_$tile($uv, vec2(0.5+$cx, 0.5+$cy), $radius, $angle*0.01745329251))",
-				"shortdesc": "Output",
+				"rgba": "$i#(swirl_tile_$tile($uv, vec2(0.5+$cx, 0.5+$cy), $radius, $angle*0.01745329251))",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],
