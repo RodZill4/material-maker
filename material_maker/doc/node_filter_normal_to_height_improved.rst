@@ -27,13 +27,13 @@ The **Normal to Height** node has the following parameters:
 
 * the *Samples* used to calculate the height map
 
-* the *Area* used for sampling, in terms of image size
-
 * the *Sequence* used to generate sample positions. R2 and Fibonacci are quasi-random sequences.
+
+* the *Area* used for sampling, in terms of image size
 
 * the *Sharpness* acts as an edge sharpness filter by altering the sample distribution.
 
-* the *Base height* of the generated height map
+* the *Base Height* of the generated height map
 
 * the *Strength* of the effect, that affect the slopes (the contrast) of the generated height map
 

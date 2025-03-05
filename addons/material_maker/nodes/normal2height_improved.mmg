@@ -7,21 +7,45 @@
 			"to_port": 0
 		},
 		{
-			"from": "shader_1",
+			"from": "_2",
 			"from_port": 0,
-			"to": "buffer_2",
+			"to": "gen_outputs",
 			"to_port": 0
 		},
 		{
-			"from": "buffer_2",
+			"from": "uniform",
 			"from_port": 0,
-			"to": "gen_outputs",
+			"to": "iterate_buffer",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "shader_1",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "shader_1",
+			"to_port": 1
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "_2",
 			"to_port": 0
 		}
 	],
 	"label": "Normal to Height",
 	"longdesc": "Generates a Height Map from a Normal Map.",
-	"name": "normal2height_improved",
+	"name": "normal_to_ao-wip",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -30,21 +54,18 @@
 		{
 			"name": "shader_1",
 			"node_position": {
-				"x": -460.0,
-				"y": -60.0
+				"x": -399.0,
+				"y": 180.0
 			},
 			"parameters": {
-				"base": 0.5,
-				"contrast": 20.0,
+				"area": 1.0,
 				"edge": 0.0,
 				"format": 0.0,
-				"invert": false,
-				"samples": 4096.0,
+				"samples": 256.0,
 				"seq": 0.0,
-				"sharpness": 0.0,
-				"spread": 0.5
+				"sharpness": 1.0
 			},
-			"seed_int": 2651353856,
+			"seed_int": 3892465664,
 			"shader_model": {
 				"code": "",
 				"global": [
@@ -65,7 +86,7 @@
 					"\tconst float phi = 0.3819660112500799;",
 					"\tfloat dist = (i + 1.0) / samples;",
 					"\tfloat angle = i * phi;",
-					"\treturn vec2(angle, dist);",
+					"\treturn vec2(fract(angle + seed), dist);",
 					"}",
 					"",
 					"vec2 edge_repeat(vec2 uv) {",
@@ -85,27 +106,41 @@
 						"label": "Normal Texture",
 						"name": "in",
 						"type": "rgb"
+					},
+					{
+						"default": "vec3(0.0)",
+						"label": "Loop",
+						"name": "loop",
+						"type": "rgb"
 					}
 				],
 				"instance": [
-					"float normal_to_ao_$(name)(vec2 uv, float seed) {",
+					"vec3 normal_to_ao_$(name)(vec2 uv, float seed) {",
 					"\tconst float tau = 6.28318530718;",
+					"\tfloat total_samples = $samples * 32.0;",
+					"\tfloat inv_samples = 1.0 / $samples;",
+					"\t",
+					"\tvec3 loop_in = texture($loop.texture, uv).xyz;",
+					"\tfloat iter = loop_in.z;",
+					"\tfloat iter_start = iter * $samples;",
+					"\t",
 					"\tfloat seq_seed = fract(seed);",
-					"\tfloat total_weight = 0.0;",
-					"\tfloat total_ao = 0.0;",
 					"\tfloat angle_jitter = rand(uv * 2048.0 + seed);",
 					"\t",
-					"\tfor(float i = 0.0; i < $samples; i += 1.0) {",
-					"\t\tvec2 seq_val = seq_$(seq)(seq_seed, i, $samples);",
+					"\tfloat sum_weight = 0.0;",
+					"\tfloat sum_visibility = 0.0;",
+					"\tfor(float i = 1.0; i < $samples; i += 1.0) {",
+					"\t\tvec2 seq_val = seq_$(seq)(seq_seed, i + iter_start, total_samples);",
 					"\t\t",
 					"\t\tfloat angle = (seq_val.x + angle_jitter) * tau;",
 					"\t\tvec2 dir = vec2(cos(angle), sin(angle));",
-					"\t\tvec2 offset = dir;",
-					"\t\tif($sharpness == 0.0)",
-					"\t\t\toffset *= seq_val.y;",
+					"\t\tvec2 offset = dir * seq_val.y;",
+					"\t\tif($sharpness == 0.0) {}",
+					"\t\telse if($sharpness == 1.0)",
+					"\t\t\toffset *= (i+1.0) / $samples;",
 					"\t\telse",
-					"\t\t\toffset *= pow(seq_val.y, $sharpness + 1.0);",
-					"\t\toffset *= $spread;",
+					"\t\t\toffset *= pow((i+1.0) / $samples, $sharpness);",
+					"\t\toffset *= $area;",
 					"\t\t",
 					"\t\tif(offset.x == 0.0 && offset.y == 0.0) continue;",
 					"\t\t",
@@ -120,43 +155,38 @@
 					"\t\tfloat visibility = dot(value, vec3(sample_dir, 0.0));",
 					"\t\t// A weight of pow(x, a) counteracts the change of a distribution of pow(x, a+1).",
 					"\t\t// I tested a lot of different distributions and weights, but nothing really improved the result.",
-					"\t\tconst float weight = 1.0;",
-					"\t\ttotal_weight += weight;",
-					"\t\ttotal_ao += visibility * weight;",
+					"\t\tsum_weight += 1.0;",
+					"\t\tsum_visibility += visibility;",
 					"\t}",
-					"\tif(total_weight == 0.0) return $base;",
-					"\tfloat result = total_ao / total_weight;",
-					"\tresult = result * 0.5 + 0.5;",
-					"\tif($invert != ($format == 0)) result = 1.0 - result;",
-					"\tresult = ( result - 0.5 ) * $contrast + $base;",
-					"\treturn result;",
+					"\t",
+					"\treturn loop_in + vec3(sum_visibility, sum_weight, 1.0);",
 					"}"
 				],
 				"name": "Normal To Height",
 				"outputs": [
 					{
-						"f": "normal_to_ao_$(name)($uv, $seed)",
-						"type": "f"
+						"rgb": "normal_to_ao_$(name)($uv, $seed) + (0.0 * $loop($uv))",
+						"type": "rgb"
 					}
 				],
 				"parameters": [
 					{
 						"control": "None",
-						"default": 4096.0,
+						"default": 256.0,
 						"label": "Samples",
-						"max": 16384.0,
-						"min": 512.0,
+						"max": 2048.0,
+						"min": 64.0,
 						"name": "samples",
 						"step": 8.0,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 1.0,
 						"label": "Area",
 						"max": 1.0,
 						"min": 0.1,
-						"name": "spread",
+						"name": "area",
 						"step": 0.01,
 						"type": "float"
 					},
@@ -178,39 +208,13 @@
 					},
 					{
 						"control": "None",
-						"default": 0.0,
+						"default": 1.0,
 						"label": "Sharpness",
 						"max": 3.0,
 						"min": 0.0,
 						"name": "sharpness",
 						"step": 0.01,
 						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 0.5,
-						"label": "Base Height",
-						"max": 1.0,
-						"min": 0.0,
-						"name": "base",
-						"step": 0.01,
-						"type": "float"
-					},
-					{
-						"control": "None",
-						"default": 20.0,
-						"label": "Strength",
-						"max": 100.0,
-						"min": 1.0,
-						"name": "contrast",
-						"step": 0.1,
-						"type": "float"
-					},
-					{
-						"default": false,
-						"label": "Invert",
-						"name": "invert",
-						"type": "boolean"
 					},
 					{
 						"default": 0.0,
@@ -259,8 +263,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -940.0,
-				"y": -40.0
+				"x": -1040.0,
+				"y": 100.0
 			},
 			"parameters": {
 
@@ -279,8 +283,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 220.0,
-				"y": -60.0
+				"x": 440.0,
+				"y": -100.0
 			},
 			"parameters": {
 
@@ -303,14 +307,14 @@
 				"y": -500.0
 			},
 			"parameters": {
-				"area": 0.5,
+				"area": 1.0,
 				"base_height": 0.5,
 				"edge_wrap": 0.0,
 				"format": 0.0,
 				"invert": false,
-				"samples": 4096.0,
+				"samples": 256.0,
 				"sequence": 0.0,
-				"sharpness": 0.0,
+				"sharpness": 1.0,
 				"size": 10.0,
 				"strength": 20.0
 			},
@@ -321,7 +325,11 @@
 					"label": "Size",
 					"linked_widgets": [
 						{
-							"node": "buffer_2",
+							"node": "iterate_buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer",
 							"widget": "size"
 						}
 					],
@@ -344,19 +352,6 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "Area",
-					"linked_widgets": [
-						{
-							"node": "shader_1",
-							"widget": "spread"
-						}
-					],
-					"longdesc": "The maximum extend of the sample region.\nA value of 1.0 samples the entire image.\nLower values reduce accuracy but need fewer samples.",
-					"name": "area",
-					"shortdesc": "Sample Area",
-					"type": "linked_control"
-				},
-				{
 					"label": "Sequence",
 					"linked_widgets": [
 						{
@@ -367,6 +362,19 @@
 					"longdesc": "R2 and Fibonacci are quasi-random sequences.\nTheir results are very similar.\n",
 					"name": "sequence",
 					"shortdesc": "Sampling Sequence",
+					"type": "linked_control"
+				},
+				{
+					"label": "Area",
+					"linked_widgets": [
+						{
+							"node": "shader_1",
+							"widget": "area"
+						}
+					],
+					"longdesc": "The maximum extend of the sample region.\nA value of 1.0 samples the entire image.\nLower values reduce accuracy but need fewer samples.",
+					"name": "area",
+					"shortdesc": "Sample Area",
 					"type": "linked_control"
 				},
 				{
@@ -383,10 +391,23 @@
 					"type": "linked_control"
 				},
 				{
+					"label": "Strength",
+					"linked_widgets": [
+						{
+							"node": "_2",
+							"widget": "strength"
+						}
+					],
+					"longdesc": "Adjusts the contrast of the result.",
+					"name": "strength",
+					"shortdesc": "Result Contrast",
+					"type": "linked_control"
+				},
+				{
 					"label": "Base Height",
 					"linked_widgets": [
 						{
-							"node": "shader_1",
+							"node": "_2",
 							"widget": "base"
 						}
 					],
@@ -396,23 +417,10 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "Strength",
-					"linked_widgets": [
-						{
-							"node": "shader_1",
-							"widget": "contrast"
-						}
-					],
-					"longdesc": "Adjusts the contrast of the result.",
-					"name": "strength",
-					"shortdesc": "Result Contrast",
-					"type": "linked_control"
-				},
-				{
 					"label": "Invert",
 					"linked_widgets": [
 						{
-							"node": "shader_1",
+							"node": "_2",
 							"widget": "invert"
 						}
 					],
@@ -426,6 +434,10 @@
 					"linked_widgets": [
 						{
 							"node": "shader_1",
+							"widget": "format"
+						},
+						{
+							"node": "_2",
 							"widget": "format"
 						}
 					],
@@ -450,28 +462,160 @@
 			]
 		},
 		{
-			"name": "buffer_2",
+			"name": "iterate_buffer",
 			"node_position": {
-				"x": -60.0,
-				"y": -60.0
+				"x": -360.0,
+				"y": -100.0
 			},
 			"parameters": {
+				"autostop": false,
+				"f32": false,
+				"filter": false,
+				"iterations": 32.0,
+				"mipmap": false,
+				"shrink": false,
+				"size": 10.0
+			},
+			"seed": 29168.0,
+			"seed_locked": true,
+			"type": "iterate_buffer"
+		},
+		{
+			"name": "_2",
+			"node_position": {
+				"x": 141.0,
+				"y": -100.0
+			},
+			"parameters": {
+				"base": 0.5,
+				"format": 0.0,
+				"invert": false,
+				"strength": 20.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"label": "input",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": [
+					"float fct_$name(vec2 value) {",
+					"\tfloat result = value.x / value.y;",
+					"\tif(value.y == 0.0) result = 0.0;",
+					"\tresult = result * 0.5 + 0.5;",
+					"\tif($invert != ($format == 0)) result = 1.0 - result;",
+					"\tresult = ( result - 0.5 ) * $strength + $base;",
+					"\treturn result;",
+					"}"
+				],
+				"name": "Finalize",
+				"outputs": [
+					{
+						"f": "fct_$name($in($uv).xy)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 20.0,
+						"label": "Strength",
+						"max": 100.0,
+						"min": 1.0,
+						"name": "strength",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Base Height",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "base",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": false,
+						"label": "Invert",
+						"name": "invert",
+						"type": "boolean"
+					},
+					{
+						"default": 2.0,
+						"label": "Format",
+						"name": "format",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Internal",
+								"value": "0"
+							},
+							{
+								"name": "DirectX",
+								"value": "1"
+							},
+							{
+								"name": "OpenGL",
+								"value": "2"
+							}
+						]
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "uniform",
+			"node_position": {
+				"x": -570.799987792969,
+				"y": -98.7000122070313
+			},
+			"parameters": {
+				"color": {
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0,
+					"type": "Color"
+				}
+			},
+			"seed_int": 0,
+			"type": "uniform"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -100.0,
+				"y": -100.0
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
 				"size": 10.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
-			"version": 1
+			"version": 2
 		}
 	],
 	"parameters": {
-		"area": 0.5,
+		"area": 1.0,
 		"base_height": 0.5,
 		"edge_wrap": 0.0,
 		"format": 0.0,
 		"invert": false,
-		"samples": 4096.0,
+		"samples": 256.0,
 		"sequence": 0.0,
-		"sharpness": 0.0,
+		"sharpness": 1.0,
 		"size": 10.0,
 		"strength": 20.0
 	},
