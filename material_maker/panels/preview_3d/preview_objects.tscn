@@ -4,12 +4,11 @@
 [ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
 [ext_resource type="Script" uid="uid://m5lpqku28wub" path="res://material_maker/panels/preview_3d/preview_mesh.gd" id="3"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_iqcsj"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_mgw7t"]
+resource_local_to_scene = true
 
-[sub_resource type="CylinderMesh" id="2"]
-height = 1.25
-radial_segments = 32
-rings = 1
+[sub_resource type="ArrayMesh" id="ArrayMesh_obs4a"]
+resource_local_to_scene = true
 
 [sub_resource type="SphereMesh" id="3"]
 radius = 0.75
@@ -17,16 +16,20 @@ height = 1.5
 radial_segments = 32
 rings = 16
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_yq4er"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_tqjv1"]
+resource_local_to_scene = true
 
 [sub_resource type="PrismMesh" id="4"]
 
 [node name="Objects" type="Node3D"]
 
 [node name="Cube" type="MeshInstance3D" parent="."]
-mesh = SubResource("ArrayMesh_iqcsj")
+visible = false
+mesh = SubResource("ArrayMesh_mgw7t")
 script = ExtResource("1_2ljk2")
 compute_shader = "#version 450
+// VERTEX COUNT: 6*(size+1)*(size+1)
+// INDEX COUNT: 12*size*(size+2)-2
 
 layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
 
@@ -36,13 +39,16 @@ layout(set = 3, binding = 0, std140) restrict buffer MM {
 	int mm_chunk_y;
 };
 
-void set_face_point(int vertex_index, vec3 vertex, vec3 normal, vec3 tangent, vec2 tex_uvs) {
+void set_face_point(int vertex_index, vec3 vertex, vec3 normal, vec3 tangent, vec2 tex_uvs, mat3 mat) {
+	vertex = mat*vertex;
 	mm_out.vertices[3*vertex_index+0] = vertex.x;
 	mm_out.vertices[3*vertex_index+1] = vertex.y;
 	mm_out.vertices[3*vertex_index+2] = vertex.z;
+	normal = mat*normal;
 	mm_out.normals[3*vertex_index+0] = normal.x;
 	mm_out.normals[3*vertex_index+1] = normal.y;
 	mm_out.normals[3*vertex_index+2] = normal.z;
+	tangent = mat*tangent;
 	mm_out.tangents[4*vertex_index+0] = tangent.x;
 	mm_out.tangents[4*vertex_index+1] = tangent.y;
 	mm_out.tangents[4*vertex_index+2] = tangent.z;
@@ -96,12 +102,26 @@ void set_point(int x, int y) {
 	vertex = vec3(base.x, 0.5-0.709*radius, base.y)+radius*normal;
 	tangent = normalize(vec3(1.0, 0.0, 0.0));
 	tex_uvs = scale*vec2(x, y)/vec2(3.0, 2.0);
-	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);
-	set_face_point(vertex_index+vertex_offset, vertex.yzx, normal.yzx, tangent.yzx, tex_uvs+vec2(1.0/3.0, 0.0/2.0));
-	set_face_point(vertex_index+2*vertex_offset, vertex.zxy, normal.zxy, tangent.zxy, tex_uvs+vec2(2.0/3.0, 0.0/2.0));
-	set_face_point(vertex_index+3*vertex_offset, -vertex.xzy, -normal.xzy, -tangent.xzy, tex_uvs+vec2(0.0/3.0, 1.0/2.0));
-	set_face_point(vertex_index+4*vertex_offset, -vertex.yxz, -normal.yxz, -tangent.yxz, tex_uvs+vec2(1.0/3.0, 1.0/2.0));
-	set_face_point(vertex_index+5*vertex_offset, -vertex.zyx, -normal.zyx, -tangent.zyx, tex_uvs+vec2(2.0/3.0, 1.0/2.0));
+	mat3 mat;
+	vec2 uv_offset;
+	mat = mat3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+	uv_offset = vec2(0.0, 0.0);
+	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(-1, 0, 0, 0, 0, -1, 0, -1, 0);
+	uv_offset = vec2(1.0, 0.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(1, 0, 0, 0, 0, 1, 0, -1, 0);
+	uv_offset = vec2(2.0, 0.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+2*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(0, 0, -1, 1, 0, 0, 0, -1, 0);
+	uv_offset = vec2(0.0, 1.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+3*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(0, 0, 1, -1, 0, 0, 0, -1, 0);
+	uv_offset = vec2(1.0, 1.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+4*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
+	mat = mat3(1, 0, 0, 0, -1, 0, 0, 0, -1);
+	uv_offset = vec2(2.0, 1.0)/vec2(3.0, 2.0);
+	set_face_point(vertex_index+5*vertex_offset, vertex, normal, tangent, tex_uvs+uv_offset, mat);
 }
 
 void main() {
@@ -139,20 +159,104 @@ void main() {
 "
 vertex_count_expression = "6*(size+1)*(size+1)"
 index_count_expression = "12*size*(size+2)-2"
+can_tesselate = false
 uv_scale = Vector2(3, 2)
 parameters = [{
 "default_value": 0.2,
 "label": "Chamfer",
 "max_value": "1",
 "min_value": "0",
-"name": "chamfer"
+"name": "chamfer",
+"save_in_config": true
 }]
 
 [node name="Cylinder" type="MeshInstance3D" parent="."]
 visible = false
-mesh = SubResource("2")
-script = ExtResource("3")
-uv_scale = Vector2(2, 2)
+mesh = SubResource("ArrayMesh_obs4a")
+script = ExtResource("1_2ljk2")
+compute_shader = "#version 450
+// VERTEX COUNT: (size+1)*(size+1)
+// INDEX COUNT: 2*size*(size+2)-2
+
+layout(local_size_x = @LOCAL_SIZE, local_size_y = 1, local_size_z = 1) in;
+
+@DECLARATIONS
+
+layout(set = 3, binding = 0, std140) restrict buffer MM {
+	int mm_chunk_y;
+};
+
+const float TAU = 6.28318530718;
+
+void set_face_point(int vertex_index, vec3 vertex, vec3 normal, vec3 tangent, vec2 tex_uvs) {
+	mm_out.vertices[3*vertex_index+0] = vertex.x;
+	mm_out.vertices[3*vertex_index+1] = vertex.y;
+	mm_out.vertices[3*vertex_index+2] = vertex.z;
+	mm_out.normals[3*vertex_index+0] = normal.x;
+	mm_out.normals[3*vertex_index+1] = normal.y;
+	mm_out.normals[3*vertex_index+2] = normal.z;
+	mm_out.tangents[4*vertex_index+0] = tangent.x;
+	mm_out.tangents[4*vertex_index+1] = tangent.y;
+	mm_out.tangents[4*vertex_index+2] = tangent.z;
+	mm_out.tangents[4*vertex_index+3] = 1.0;
+	mm_out.tex_uvs[2*vertex_index+0] = tex_uvs.x;
+	mm_out.tex_uvs[2*vertex_index+1] = tex_uvs.y;
+}
+
+void set_point(int x, int y) {
+	int vertex_index = x+(size+1)*y;
+	int vertex_offset = (size+1)*(size+1);
+	float scale = 1.0/float(size);
+	vec2 vertex_2d = vec2(0.4, scale*y-0.5);
+	vec2 normal_2d = vec2(1.0, 0.0);
+	if (abs(vertex_2d.y) > 0.5*(1.0-chamfer)) {
+		float s = sign(vertex_2d.y);
+		float r = 2.0*chamfer/TAU;
+		float a = 0.5*TAU*(0.5-abs(vertex_2d.y))/chamfer;
+		normal_2d = vec2(sin(a), s*cos(a));
+		vertex_2d = vec2(vertex_2d.x-r, s*0.5*(1.0-chamfer))+r*normal_2d;
+	}
+	float a = float(x)*TAU/float(size);	
+	vec3 vertex = vec3(vertex_2d.x*cos(a), vertex_2d.y, vertex_2d.x*sin(a));
+	vec3 normal = normalize(vec3(normal_2d.x*cos(a), normal_2d.y, normal_2d.x*sin(a)));
+	vec3 tangent = vec3(-sin(a), 0, cos(a));
+	vec2 tex_uvs =vec2(1.0, 1.0)-scale*vec2(x, y);
+	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);
+}
+
+void main() {
+	ivec2 c = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
+	set_point(c.x, c.y);
+	mm_out.indexes[2*(c.x+(size+2)*c.y)] = c.x+(size+1)*(c.y+1);
+	mm_out.indexes[2*(c.x+(size+2)*c.y)+1] = c.x+(size+1)*c.y;
+	if (c.x == size-1) {
+		mm_out.indexes[2*(size+(size+2)*c.y)] = size+(size+1)*(c.y+1);
+		mm_out.indexes[2*(size+(size+2)*c.y)+1] = size+(size+1)*c.y;
+		set_point(size, c.y);
+		if (c.y == size-1) {
+			set_point(size, size);
+		} else {
+			mm_out.indexes[2*(size+(size+2)*c.y)+2] = size+(size+1)*c.y;
+			mm_out.indexes[2*(size+(size+2)*c.y)+3] = (size+1)*(c.y+2);
+		}
+	}
+	if (c.y == size-1) {
+		set_point(c.x, size);
+	}
+}
+"
+vertex_count_expression = "(size+1)*(size+1)"
+index_count_expression = "2*size*(size+2)-2"
+can_tesselate = false
+uv_scale = Vector2(3, 1)
+parameters = [{
+"default_value": 0.2,
+"label": "Chamfer",
+"max_value": "1",
+"min_value": "0",
+"name": "chamfer",
+"save_in_config": true
+}]
 
 [node name="Sphere" type="MeshInstance3D" parent="."]
 visible = false
@@ -162,7 +266,7 @@ uv_scale = Vector2(4, 2)
 
 [node name="Plane" type="MeshInstance3D" parent="."]
 visible = false
-mesh = SubResource("ArrayMesh_yq4er")
+mesh = SubResource("ArrayMesh_tqjv1")
 script = ExtResource("1_2ljk2")
 compute_shader = "#version 450
 
@@ -217,13 +321,15 @@ void main() {
 "
 vertex_count_expression = "(size+1)*(size+1)"
 index_count_expression = "2*size*(size+2)-2"
+can_tesselate = false
 uv_scale = Vector2(2, 2)
 parameters = [{
-"default_value": 2.0,
+"default_value": 0.5,
 "label": "Curvature",
 "max_value": "5",
 "min_value": "0",
-"name": "curvature"
+"name": "curvature",
+"save_in_config": true
 }]
 
 [node name="Prism" type="MeshInstance3D" parent="."]

@@ -941,8 +941,10 @@ func _on_PaintEnvironment_id_pressed(id) -> void:
 		paint.set_environment(id)
 
 
-func environment_editor() -> void:
-	add_child(load("res://material_maker/windows/environment_editor/environment_editor.tscn").instantiate())
+func environment_editor() -> Node:
+	var env_editor : Node = load("res://material_maker/windows/environment_editor/environment_editor.tscn").instantiate()
+	add_child(env_editor)
+	return env_editor
 
 # -----------------------------------------------------------------------
 #                             Help menu
@@ -1025,20 +1027,18 @@ func update_preview_2d() -> void:
 			projects_panel.preview_2d_background.set_generator(generator, output_index)
 
 var current_gen_material = null
-func update_preview_3d(previews : Array, _sequential = false) -> void:
+func update_preview_3d(previews : Array) -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	var gen_material = null
 	if graph_edit != null and graph_edit.top_generator != null and graph_edit.top_generator.has_node("Material"):
 		gen_material = graph_edit.top_generator.get_node("Material")
 	if gen_material != current_gen_material:
-		if current_gen_material != null and is_instance_valid(current_gen_material):
-			current_gen_material.set_3d_previews([] as Array[ShaderMaterial])
 		current_gen_material = gen_material
 	if current_gen_material != null:
-		var materials : Array[ShaderMaterial] = []
+		var materials : Dictionary[Node, Array] = {}
 		for p in previews:
-			materials.append_array(p.get_materials())
-		current_gen_material.set_3d_previews(materials)
+			materials[p] = p.get_materials()
+		await current_gen_material.set_3d_previews(materials)
 
 func on_preview_changed(graph) -> void:
 	if graph == get_current_graph_edit():
@@ -1053,16 +1053,12 @@ func _on_Projects_tab_changed(_tab) -> void:
 		var new_graph_edit = null
 		if new_tab is GraphEdit:
 			new_graph_edit = new_tab
-			$VBoxContainer/Layout/FlexibleLayout/Main/BackgroundPreviews.show()
-			$VBoxContainer/Layout/FlexibleLayout/Main/PreviewUI.show()
 			set_current_mode("material")
 			if current_mesh and new_graph_edit.top_generator:
 				new_graph_edit.top_generator.set_current_mesh(current_mesh)
 		else:
 			if new_tab.has_method("get_graph_edit"):
 				new_graph_edit = new_tab.get_graph_edit()
-			$VBoxContainer/Layout/FlexibleLayout/Main/BackgroundPreviews.hide()
-			$VBoxContainer/Layout/FlexibleLayout/Main/PreviewUI.hide()
 			set_current_mode("paint")
 		current_tab = new_tab
 		if new_graph_edit != null:
@@ -1245,7 +1241,9 @@ func accept_dialog(dialog_text : String, cancel_button : bool = false, extra_but
 
 func set_current_mesh(m : Mesh):
 	current_mesh = m
-	get_current_graph_edit().top_generator.set_current_mesh(m)
+	var current_graph_edit = get_current_graph_edit()
+	if current_graph_edit:
+		current_graph_edit.top_generator.set_current_mesh(m)
 
 # Use this to investigate the connect bug
 
