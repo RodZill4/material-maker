@@ -56,11 +56,11 @@ class PanelInfo:
 	
 	func _init(fp : Control):
 		flex_panel = fp
-		flex_panel.get_meta("flex_layout").start_drag()
+		flex_panel.get_meta("flex_layout").start_flexlayout_drag()
 	
 	func _notification(what):
 		if what == NOTIFICATION_PREDELETE:
-			flex_panel.get_meta("flex_layout").end_drag()
+			flex_panel.get_meta("flex_layout").end_flexlayout_drag()
 
 
 class FlexTop:
@@ -234,7 +234,7 @@ class FlexSplit:
 				c.layout(Rect2(x, r.position.y, width, r.size.y))
 				x += width
 	
-	func start_drag(dragger_index : int, p : int) -> Vector2i:
+	func start_flexlayout_drag(dragger_index : int, p : int) -> Vector2i:
 		var c1 = children[dragger_index]
 		var c2 = children[dragger_index+1]
 		var min_c1_size : Vector2i = c1.get_minimum_size()
@@ -584,14 +584,14 @@ class FlexWindow:
 		flex_layout.init(data.layout)
 		resize()
 	
-	func start_drag():
+	func start_flexlayout_drag():
 		overlay = OVERLAY_SCENE.instantiate()
 		overlay.position = Vector2(0, 0)
 		overlay.size = panel.size
 		overlay.flex_layout = flex_layout
 		panel.add_child(overlay)
 	
-	func end_drag():
+	func end_flexlayout_drag():
 		overlay.queue_free()
 		overlay = null
 
@@ -677,20 +677,20 @@ func serialize() -> Dictionary:
 		data.windows.append(w.serialize())
 	return data
 
-func start_drag():
+func start_flexlayout_drag():
 	overlay = OVERLAY_SCENE.instantiate()
 	overlay.position = Vector2(0, 0)
 	overlay.size = size
 	overlay.flex_layout = flex_layout
 	add_child(overlay)
 	for w in subwindows:
-		w.start_drag()
+		w.start_flexlayout_drag()
 
-func end_drag():
+func end_flexlayout_drag():
 	overlay.queue_free()
 	overlay = null
 	for w in subwindows:
-		w.end_drag()
+		w.end_flexlayout_drag()
 
 func _on_resized():
 	flex_layout.layout()
