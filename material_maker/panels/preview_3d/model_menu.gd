@@ -16,6 +16,7 @@ var custom_models : PackedStringArray = PackedStringArray()
 @onready var SpeedMedium := %Speed_Medium
 @onready var SpeedFast := %Speed_Fast
 
+
 func _ready() -> void:
 	await preview3D.ready
 	
@@ -52,7 +53,6 @@ func update_model_selector() -> void:
 		var o: Node = preview3D.objects.get_child(i)
 		Model.add_item(o.name, i)
 	for i in custom_models.size():
-		print(custom_models[i])
 		Model.add_item(custom_models[i].get_file(), i+objects_count)
 
 func _on_model_item_selected(index: int, custom_model_path : String = "") -> void:

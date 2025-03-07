@@ -62,7 +62,7 @@ func do_update_mesh() -> void:
 		set_surface_override_material(0, material)
 
 var need_update : bool = false
-static var updating : bool = false
+var updating : bool = false
 
 func update_mesh() -> void:
 	need_update = true

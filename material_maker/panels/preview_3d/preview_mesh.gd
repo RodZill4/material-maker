@@ -26,7 +26,6 @@ func _ready():
 				parameter_values[p.name] = mm_globals.get_config("3D_preview_objects/"+name.to_snake_case()+"_"+p.name)
 		if not parameter_values.has(p.name):
 			parameter_values[p.name] = p.default_value
-	update_mesh.call_deferred()
 
 func get_material() -> Material:
 	if get_surface_override_material_count() > 0:
