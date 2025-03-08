@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bct66q7hliai2"]
+
+[ext_resource type="Script" path="res://addons/material_maker/engine/plugin/plugin_instance.gd" id="1_51jwo"]
+
+[node name="plugin_instance" type="Node"]
+script = ExtResource("1_51jwo")

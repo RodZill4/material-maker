@@ -40,6 +40,7 @@ mm_deps="*res://addons/material_maker/engine/dependencies.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
 mm_sdf_builder="*res://addons/material_maker/sdf_builder/sdf_builder.tscn"
 mm_preprocessor="*res://addons/material_maker/engine/preprocessor.gd"
+mm_plugins="*res://addons/material_maker/engine/plugin/plugin_loader.gd"
 Html5="*res://material_maker/html5.gd"
 
 [debug]

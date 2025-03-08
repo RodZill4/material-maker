@@ -96,6 +96,9 @@ func _on_Export_pressed():
 	dialog.add_filter("*.png;PNG image files")
 	add_child(dialog)
 	var files = await dialog.select_files()
+	do_export(files)
+
+func do_export(files):
 	if files.size() > 0:
 		var filename : String = files[0]
 		var size : int = 1 << value_size.size_value
