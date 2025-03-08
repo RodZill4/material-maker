@@ -22,8 +22,8 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A fill companion node that fills each area with a random greyscale value",
-		"name": "Fill to Random Grey",
+		"longdesc": "A fill companion node that fills each area with a random grayscale value",
+		"name": "Fill to Random Gray",
 		"outputs": [
 			{
 				"f": "mix($edgecolor, rand(vec2(float($seed), rand(vec2(rand($(name_uv)_bb.xy), rand($(name_uv)_bb.zw))))), step(0.0000001, dot($(name_uv)_bb.zw, vec2(1.0))))",
@@ -46,7 +46,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "Fill to random grey"
+		"shortdesc": "Fill to random gray"
 	},
 	"type": "shader"
 }

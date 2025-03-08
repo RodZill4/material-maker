@@ -34,11 +34,11 @@ target interval and a step for the output values. For example; using random nois
 it's *Max* value to 1 and it's *Step* value to 0.5 and you would get randomly rotated instances
 snapped to 90 degree intervals.
 
-The **HeightToAngle** node can be used to easily generate a *Rotate* map from a
+The **Height To Angle** node can be used to easily generate a *Rotate* map from a
 heightmap. All instances will be rotated depending on the slope. When using this
 node to generate the *Rotate* map, the *Rotate* parameter must be set to 180.
 
-The **HeightToOffset** node can be used to easily generate a *Translate* map from a
+The **Height To Offset** node can be used to easily generate a *Translate* map from a
 heightmap. Outputs must be connected to the Translate X and Y inputs of the Tiler node.
 All instances will be translated depending on the slope, to reach the
 specified level, and to be accurate, the slopes must be homogeneous. When using this
@@ -60,7 +60,7 @@ The **Advanced Tiler** node accepts the following parameters:
 * *Tile X* and *Tile Y*, the number of columns and rows of of the tile pattern.
 * *Overlap* is the number of overlapping instances for each instance.
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
-  shapes can easily be created using the **Tile2x2** node.
+  shapes can easily be created using the **Tile 2x2** node.
 * The *Translate X* and *Translate Y* parameters are used to offset each instance.
 * The *Rotate* parameter is used to rotate each instance.
 * The *Scale X* and *Scale Y* parameters are used to scale each instance.

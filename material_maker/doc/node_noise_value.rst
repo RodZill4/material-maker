@@ -41,7 +41,7 @@ Variations
 
 * The **Color Value** node generates an RGB image made of 3 greyscale Value Noise images.
 
-* The **Value Warp1** and **Value Warp2** nodes generate Value noise with domain warping.
+* The **Value Warp 1** and **Value Warp 2** nodes generate Value noise with domain warping.
 
 .. image:: images/node_value_variations.png
 	:align: center
