@@ -120,6 +120,7 @@ func save_to_file(file_name : String):
 		var export_image : Image = image
 		match file_name.get_extension():
 			"png":
+				export_image.convert(Image.FORMAT_RGBA8) # force RGBA8 to preserve alpha
 				export_image.save_png(file_name)
 			"jpg":
 				export_image.save_jpg(file_name, 1.0)
