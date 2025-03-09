@@ -580,7 +580,7 @@ func load_from_recovery(filename) -> bool:
 
 func save() -> bool:
 	var status = false
-	if save_path != null:
+	if save_path != "":
 		status = save_file(save_path)
 	else:
 		status = await save_as()
@@ -616,14 +616,20 @@ func save_file(filename:String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
+	var e: Error
 	if OS.get_name() == "HTML5":
 		JavaScriptBridge.download_buffer(JSON.stringify(data, "\t", true).to_ascii_buffer(), filename)
 	else:
 		var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
 		if file != null:
 			file.store_string(JSON.stringify(data, "\t", true))
+			e = file.get_error()
 		else:
-			return false
+			e = FileAccess.get_open_error()
+	if e != OK:
+		var message = "Could not save in %s \n\nERROR: %s" % [filename, error_string(e)]
+		mm_globals.main_window.accept_dialog(message, false)
+		return false
 	set_save_path(filename)
 	set_need_save(false)
 	remove_crash_recovery_file()
