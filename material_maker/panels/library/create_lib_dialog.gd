@@ -1,19 +1,17 @@
 extends Window
 
-var file_path_line_edit: LineEdit
-var file_path = ""
-var file_name_line_edit: LineEdit
+@onready var file_name_line_edit : LineEdit = %LibraryNameLineEdit
+@onready var file_path_line_edit : LineEdit = %LibraryPathLineEdit
 var file_name = ""
+var file_path = ""
 
 
 signal return_info(status)
 
 
 func _ready():
-	$VBoxContainer/GridContainer/HBoxContainerPath/FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
-	$VBoxContainer/GridContainer/HBoxContainerPath/FilePickerButton.icon = get_parent().get_theme_icon("folder", "MM_Icons")
-	file_name_line_edit = $VBoxContainer/GridContainer/LineEdit
-	file_path_line_edit = $VBoxContainer/GridContainer/HBoxContainerPath/LineEdit2
+	%FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
+	%FilePickerButton.icon = get_parent().get_theme_icon("folder", "MM_Icons")
 	popup_centered()
 
 func set_value(v) -> void:
@@ -27,7 +25,7 @@ func _on_LineEdit_text_entered(_new_text) -> void:
 	pass
 
 func validate_ok_button(fpath: String, fname: String):
-	$VBoxContainer/HBoxContainer/OK.disabled = ((fpath == "") || (fname == ""))
+	%OK.disabled = ((fpath == "") || (fname == ""))
 
 func _on_line_edit_text_changed(new_text: String) -> void:
 	file_name = new_text
@@ -69,4 +67,4 @@ func enter_info(value : String = "") -> Dictionary:
 	return result
 
 func _on_VBoxContainer_minimum_size_changed():
-	size = $VBoxContainer.size+Vector2(4, 4)
+	min_size = $MarginContainer.get_combined_minimum_size()
