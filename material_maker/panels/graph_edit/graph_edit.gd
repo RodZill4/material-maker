@@ -632,7 +632,7 @@ func save_file(filename:String) -> bool:
 		return false
 	set_save_path(filename)
 	set_need_save(false)
-	mm_globals.set_tip_text("Project saved on \"%s\"" % filename, 5)
+	mm_globals.set_tip_text("Project saved on \"%s\"" % filename, 5, 1)
 	remove_crash_recovery_file()
 	return true
 
