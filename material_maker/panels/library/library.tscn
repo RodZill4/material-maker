@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
 
-[ext_resource type="Script" path="res://material_maker/panels/library/library_tree.gd" id="1"]
-[ext_resource type="Script" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
+[ext_resource type="Script" uid="uid://byotadn432paf" path="res://material_maker/panels/library/library_tree.gd" id="1"]
+[ext_resource type="Script" uid="uid://cg0s65b0doku6" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -75,6 +75,7 @@ clip_text = true
 unique_name_in_owner = true
 item_count = 5
 item_0/text = "Rename item"
+item_0/id = 0
 item_1/text = "Update thumbnail"
 item_1/id = 1
 item_2/text = "Remove item"
