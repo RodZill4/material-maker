@@ -46,6 +46,8 @@ func get_adjusted_uv(uv : String) -> String:
 
 	if get_parameter("clamp"):
 		uv = "clamp(%s, 0.0, 1.0)" % uv
+	else:
+		uv = "mod(%s, 1.0)" % uv
 
 	return uv
 
