@@ -1202,19 +1202,24 @@ func on_files_dropped(files : PackedStringArray) -> void:
 						mm_loader.save_export_target(data.material, data.name, data)
 						mm_loader.load_external_export_targets()
 
-func set_tip_text(tip : String, timeout : float = 0.0):
+var tip_priority: int = 0
+
+func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
-	$VBoxContainer/StatusBar/HBox/Tip.text = tip
-	var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
-	tip_timer.stop()
-	if timeout > 0.0:
-		tip_timer.one_shot = true
-		tip_timer.wait_time = timeout
-		tip_timer.start()
+	if priority >= tip_priority:
+		tip_priority = priority
+		$VBoxContainer/StatusBar/HBox/Tip.text = tip
+		var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
+		tip_timer.stop()
+		if timeout > 0.0:
+			tip_timer.one_shot = true
+			tip_timer.wait_time = timeout
+			tip_timer.start()
 
 func _on_Tip_Timer_timeout():
+	tip_priority = 0
 	$VBoxContainer/StatusBar/HBox/Tip.text = ""
 
 # Add dialog
