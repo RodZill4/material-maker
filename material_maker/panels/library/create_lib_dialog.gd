@@ -68,3 +68,4 @@ func enter_info(value : String = "") -> Dictionary:
 
 func _on_VBoxContainer_minimum_size_changed():
 	min_size = $MarginContainer.get_combined_minimum_size()
+	max_size = Vector2(max_size.x, $MarginContainer.get_minimum_size().y)
