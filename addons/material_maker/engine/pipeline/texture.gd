@@ -113,7 +113,7 @@ func get_width() -> int:
 func get_height() -> int:
 	return texture_size.y
 
-func save_to_file(file_name : String):
+func save_to_file(file_name : String) -> Error:
 	var texture : ImageTexture = await get_texture()
 	var image : Image = texture.get_image()
 	if image != null:
@@ -121,14 +121,15 @@ func save_to_file(file_name : String):
 		match file_name.get_extension():
 			"png":
 				export_image.convert(Image.FORMAT_RGBA8) # force RGBA8 to preserve alpha
-				export_image.save_png(file_name)
+				return export_image.save_png(file_name)
 			"jpg":
-				export_image.save_jpg(file_name, 1.0)
+				return export_image.save_jpg(file_name, 1.0)
 			"webp":
-				export_image.save_webp(file_name)
+				return export_image.save_webp(file_name)
 			"exr":
 				match image.get_format():
 					Image.FORMAT_RF,Image.FORMAT_RH:
-						export_image.save_exr(file_name, true)
+						return export_image.save_exr(file_name, true)
 					_:
-						export_image.save_exr(file_name, false)
+						return export_image.save_exr(file_name, false)
+	return ERR_DOES_NOT_EXIST
