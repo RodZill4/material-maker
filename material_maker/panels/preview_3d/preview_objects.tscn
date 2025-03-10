@@ -207,7 +207,7 @@ void set_point(int x, int y) {
 	int vertex_index = x+(size+1)*y;
 	int vertex_offset = (size+1)*(size+1);
 	float scale = 1.0/float(size);
-	vec2 vertex_2d = vec2(0.4, scale*y-0.5);
+	vec2 vertex_2d = vec2(0.5, scale*y-0.5);
 	vec2 normal_2d = vec2(1.0, 0.0);
 	if (abs(vertex_2d.y) > 0.5*(1.0-chamfer)) {
 		float s = sign(vertex_2d.y);
