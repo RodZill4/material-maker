@@ -28,6 +28,8 @@ The **Pixelize** node accepts the following parameters:
 
 * *Dither* is the amount of dithering in the result
 
+* *Dither type* is the dither algorithm (Random, Bayer 2x2, Bayer 4x4, Bayer 8x8 or Bayer 16x16)
+
 Example images
 ++++++++++++++
 
