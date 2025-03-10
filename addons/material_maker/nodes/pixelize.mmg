@@ -48,7 +48,7 @@
 		"outputs": [
 			{
 				"longdesc": "A pixelated version of the input image",
-				"rgb": "floor($i($(name_uv)_uv/vec2($x, $y))*$c+$d*($(name_uv)_dither-vec3(0.5)))/$c",
+				"rgb": "floor($i($(name_uv)_uv/vec2($x, $y))*$c+$d*($(name_uv)_dither))/$c",
 				"shortdesc": "Output",
 				"type": "rgb"
 			}
@@ -103,7 +103,7 @@
 				"type": "float"
 			},
 			{
-				"default": 4,
+				"default": 0,
 				"label": "Dither type",
 				"name": "t",
 				"type": "enum",
