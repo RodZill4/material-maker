@@ -145,8 +145,8 @@ func parse_paste_data(data : String):
 static func popup_menu(menu : PopupMenu, parent : Control):
 	menu.popup(Rect2(parent.get_local_mouse_position()+parent.get_screen_position(), Vector2(0, 0)))
 
-func set_tip_text(tip : String, timeout : float = 0.0):
-	main_window.set_tip_text(tip, timeout)
+func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
+	main_window.set_tip_text(tip, timeout, priority)
 
 static func do_propagate_shortcuts(control : Control, event : InputEvent):
 	for child in control.get_children():
