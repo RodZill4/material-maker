@@ -212,7 +212,7 @@ func _ready() -> void:
 				file_name = dir.get_next()
 			if ! files.is_empty():
 				var dialog_text : String = "Oops, it seems Material Maker crashed and rescued unsaved work\nLoad %d unsaved projects?" % files.size()
-				var result = await accept_dialog(dialog_text, true, [ { label="Delete them!", action="delete" } ])
+				var result = await accept_dialog(dialog_text, true, false, [ { label="Delete them!", action="delete" } ])
 				match result:
 					"ok":
 						for f in files:
@@ -1232,9 +1232,12 @@ func add_dialog(dialog : Window):
 
 # Accept dialog
 
-func accept_dialog(dialog_text : String, cancel_button : bool = false, extra_buttons : Array[Dictionary] = []):
+func accept_dialog(dialog_text : String, cancel_button : bool = false, autowrap : bool = false, extra_buttons : Array[Dictionary] = []):
 	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 	dialog.dialog_text = dialog_text
+	if autowrap:
+		dialog.dialog_autowrap = autowrap
+		dialog.min_size.x = 500
 	if cancel_button:
 		dialog.add_cancel_button("Cancel")
 	for b in extra_buttons:

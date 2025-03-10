@@ -627,8 +627,8 @@ func save_file(filename:String) -> bool:
 		else:
 			e = FileAccess.get_open_error()
 	if e != OK:
-		var message = "Could not save in %s \n\nERROR: %s" % [filename, error_string(e)]
-		mm_globals.main_window.accept_dialog(message, false)
+		var message = "Could not save in \"%s\" \n\nERROR: %s" % [filename, error_string(e)]
+		mm_globals.main_window.accept_dialog(message, false, true)
 		return false
 	set_save_path(filename)
 	set_need_save(false)
