@@ -758,7 +758,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 		mm_globals.main_window.accept_dialog("Could not export files to \"%s\"" % prefix.get_base_dir(), false, true)
 		return
 	if error_files < total_files:
-		mm_globals.set_tip_text("%s errors encountered when exporting files" % error_files, 5, 1)
+		mm_globals.set_tip_text("%d errors encountered when exporting files" % error_files, 5, 1)
 		return
 
 func _serialize_data(data: Dictionary) -> Dictionary:
