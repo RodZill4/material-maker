@@ -141,13 +141,19 @@ func has_library(path : String) -> bool:
 	return false
 
 func create_library(path : String, library_name : String) -> void:
+	var e: Error
 	if has_library(path):
 		return
 	var library = LIBRARY.new()
 	library.create_library(path, library_name)
+	e = library.save_library()
+	if e != OK:
+		var message = "Could not create library \"%s\" in \"%s\" \n\nERROR: %s" % [library_name, path, error_string(e)]
+		mm_globals.main_window.accept_dialog(message, false, true)
+		return
 	add_child(library)
-	library.save_library()
 	save_library_list()
+	mm_globals.set_tip_text("Library \"%s\" created at \"%s\"" % [library_name, path], 5, 1)
 
 func load_library(path : String, data : String = "") -> void:
 	if has_library(path):
