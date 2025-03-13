@@ -1,3 +1,7 @@
+float dot2(vec2 x) {
+	return dot(x, x);
+}
+
 float rand(vec2 x) {
     return fract(cos(mod(dot(x, vec2(13.9898, 8.141)), 3.14)) * 43758.5);
 }

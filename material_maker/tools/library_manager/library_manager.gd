@@ -40,7 +40,7 @@ func _ready():
 func _exit_tree():
 	if item_usage_file == "":
 		return
-	DirAccess.open("res://").make_dir_recursive(item_usage_file.get_base_dir())
+	DirAccess.make_dir_recursive_absolute(item_usage_file.get_base_dir())
 	var file = FileAccess.open(item_usage_file, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(item_usage, "\t", true))
@@ -55,6 +55,7 @@ func init_libraries() -> void:
 		add_child(library)
 		library.generate_node_sections(node_sections)
 	library = LIBRARY.new()
+	DirAccess.make_dir_recursive_absolute(user_lib.get_base_dir())
 	if library.load_library(user_lib):
 		if library.library_name == "":
 			library.library_name = user_lib_name
@@ -92,24 +93,22 @@ func get_item(item_name : String):
 					return item
 	return null
 
-func get_items(filter : String, sorted = false) -> Array:
-	var array : Array = []
-	var aliased_items = []
-	for al in [ base_item_aliases, user_item_aliases ]:
-		for a in al.keys():
-			if al[a].find(filter) != -1 and aliased_items.find(a) == -1:
-				aliased_items.push_back(a)
+func get_items(filter : String, sorted := false) -> Array:
+	var array: Array = []
+	var aliased_items := [base_item_aliases, user_item_aliases]
+
 	for li in get_child_count():
 		var l = get_child(li)
 		if disabled_libraries.find(l.library_path) == -1:
 			for i in l.get_items(filter, disabled_sections, aliased_items):
 				i.library_index = li
 				array.push_back(i)
+
 	if sorted:
-		var sorted_array : Array = []
+		var sorted_array: Array = []
 		for i in array:
 			var u1 = item_usage[i.name] if item_usage.has(i.name) else 0
-			var inserted = false
+			var inserted := false
 			for p in sorted_array.size():
 				var i2 = sorted_array[p]
 				var u2 = item_usage[i2.name] if item_usage.has(i2.name) else 0
@@ -120,12 +119,19 @@ func get_items(filter : String, sorted = false) -> Array:
 			if !inserted:
 				sorted_array.push_back(i)
 		array = sorted_array
+		var idx := 0
+		for item in array:
+			item["idx"] = idx
+			idx += 1
+
 	return array
+
 
 func save_library_list() -> void:
 	var library_list = []
 	for i in range(2, get_child_count()):
-		library_list.push_back(get_child(i).library_path)
+		var lib_path: String = get_child(i).library_path
+		library_list.push_back(lib_path)
 	mm_globals.config.set_value(config_section, "libraries", library_list)
 
 func has_library(path : String) -> bool:
@@ -140,6 +146,7 @@ func create_library(path : String, library_name : String) -> void:
 	var library = LIBRARY.new()
 	library.create_library(path, library_name)
 	add_child(library)
+	library.save_library()
 	save_library_list()
 
 func load_library(path : String, data : String = "") -> void:

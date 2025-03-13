@@ -53,10 +53,8 @@ var mask : MMTexture = MMTexture.new()
 
 @onready var view_3d = $VSplitContainer/HSplitContainer/Painter/View
 @onready var main_view = $VSplitContainer/HSplitContainer/Painter/View/MainView
-@onready var camera : Camera3D = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera3D
-@onready var camera_position = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition
-@onready var camera_rotation1 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1
-@onready var camera_rotation2 = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2
+@onready var camera : Camera3D = $VSplitContainer/HSplitContainer/Painter/View/MainView/Camera3D
+@onready var camera_controller = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraController
 @onready var painted_mesh = $VSplitContainer/HSplitContainer/Painter/View/MainView/PaintedMesh
 @onready var painter = $Painter
 @onready var tools = $VSplitContainer/HSplitContainer/Painter/Tools
@@ -85,9 +83,6 @@ var stroke_angle : float = 0.0
 var stroke_seed : float = 0.0
 
 
-const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
-
-
 signal update_material
 
 
@@ -113,7 +108,8 @@ func _ready():
 	image.fill(Color(1, 1, 1))
 	mask_texture.set_image(image)
 	mask.set_texture(mask_texture)
-
+	_on_Brush_value_changed(%BrushSize.value, "brush_size")
+	_on_Brush_value_changed(%BrushHardness.value, "brush_hardness")
 
 func update_tab_title() -> void:
 	if !get_parent().has_method("set_tab_title"):
@@ -169,9 +165,12 @@ func update_brush() -> void:
 	brush_node = graph_edit.generator.get_node("Brush")
 	brush_node.parameter_changed.connect(self.on_brush_changed)
 	painter.set_brush_preview_material(brush_view_3d.material)
-	painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+	if layers.selected_layer:
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 
 func set_brush(data) -> void:
+	#print("Setting brush")
+	#print(data)
 	var parameters_panel = mm_globals.main_window.get_panel("Parameters")
 	parameters_panel.set_generator(null)
 	graph_edit.new_material(data)
@@ -198,18 +197,13 @@ func init_project(mesh : Mesh, mesh_file_path : String, resolution : int, projec
 	mi.mesh = mesh
 	layers.add_layer()
 	model_path = mesh_file_path
-	set_object(mi)
+	set_object(mi, true)
 	set_project_path(project_file_path)
 	initialize_layers_history()
 
-func set_object(o):
+func set_object(o, init_material : bool = false):
 	object_name = o.name
 	set_project_path(null)
-	var mat = o.get_surface_override_material(0)
-	if mat == null:
-		mat = o.mesh.surface_get_material(0)
-	if mat == null:
-		mat = StandardMaterial3D.new()
 	preview_material = StandardMaterial3D.new()
 	preview_material.albedo_texture = layers.get_albedo_texture()
 	#preview_material.albedo_texture.flags = Texture2D.FLAGS_DEFAULT
@@ -238,14 +232,20 @@ func set_object(o):
 	preview_material.ao_texture_channel = StandardMaterial3D.TEXTURE_CHANNEL_RED
 	painted_mesh.mesh = o.mesh
 	painted_mesh.set_surface_override_material(0, preview_material)
-	# Center camera on  mesh
+	# Center camera on mesh
 	var aabb : AABB = painted_mesh.get_aabb()
-	camera_position.transform.origin = aabb.position+0.5*aabb.size
+	camera_controller.transform.origin = aabb.position+0.5*aabb.size
 	update_camera()
 	# Set the painter target mesh
 	painter.set_mesh(o.mesh)
 	update_view()
-	painter.init_textures(mat)
+	if init_material:
+		var mat = o.get_surface_override_material(0)
+		if mat == null:
+			mat = o.mesh.surface_get_material(0)
+		if mat == null:
+			mat = StandardMaterial3D.new()
+		painter.init_textures(mat)
 
 func get_settings() -> Dictionary:
 	return settings
@@ -324,7 +324,7 @@ func set_current_tool(m):
 		tools.get_node(MODE_NAMES[i]).button_pressed = (i == current_tool)
 
 func _on_Fill_pressed():
-	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC:
 		return
 	painter.fill(eraser_button.button_pressed)
 	set_need_save()
@@ -333,15 +333,15 @@ func _on_Eraser_toggled(button_pressed):
 	view_3d.mouse_default_cursor_shape = Control.CURSOR_CROSS if button_pressed else Control.CURSOR_POINTING_HAND
 
 func _physics_process(delta):
-	camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
-	camera_rotation2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
+	# TODO: Move this to the CameraController scene?
+	#camera_rotation1.rotate(camera.global_transform.basis.x.normalized(), -key_rotate.y*delta)
+	#camera_rotation2.rotate(Vector3(0, 1, 0), -key_rotate.x*delta)
 	update_view()
 
 func __input(ev : InputEvent):
 	if ev is InputEventKey:
-		if ev.keycode == KEY_CTRL:
-			#TODO: move this to another shortcut, this is too annoying
-			#painter.show_pattern(ev.pressed)
+		if ev.keycode == KEY_P:
+			painter.show_pattern(ev.pressed)
 			accept_event()
 		elif ev.keycode == KEY_LEFT or ev.keycode == KEY_RIGHT or ev.keycode == KEY_UP or ev.keycode == KEY_DOWN:
 			var new_key_rotate = Vector2(0.0, 0.0)
@@ -456,7 +456,7 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 				painter_update_brush_params( { pattern_scale=brush_parameters.pattern_scale, pattern_angle=brush_parameters.pattern_angle } )
 				%BrushAngle.set_value(brush_parameters.pattern_angle*57.2957795131)
 			elif current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
-				paint(mouse_position, pressure, ev.tilt, painting_mode)
+				await paint(mouse_position, pressure, ev.tilt, painting_mode)
 				last_tilt = ev.tilt
 			painter_update_brush_params( { brush_size=brush_parameters.brush_size, brush_hardness=brush_parameters.brush_hardness } )
 		else:
@@ -493,36 +493,11 @@ func handle_stroke_input(ev : InputEvent, painting_mode : int = PAINTING_MODE_VI
 					reset_stroke()
 
 func _on_View_gui_input(ev : InputEvent):
+	if camera_controller.process_event(ev):
+		update_view()
+		accept_event()
 	handle_stroke_input(ev, PAINTING_MODE_TEXTURE_FROM_VIEW if paint_engine_button.button_pressed else PAINTING_MODE_VIEW)
-	if ev is InputEventPanGesture:
-		camera_rotation1.rotate_y(-0.1*ev.delta.x)
-		camera_rotation2.rotate_x(-0.1*ev.delta.y)
-		update_view()
-		accept_event()
-	elif ev is InputEventMagnifyGesture:
-		camera.translate(Vector3(0.0, 0.0, ev.factor-1.0))
-		update_view()
-		accept_event()
-	elif ev is InputEventMouseMotion:
-		if ev.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0:
-			if ev.shift_pressed:
-				var factor = 0.0025*camera.position.z
-				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
-				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
-				#update_view()
-				accept_event()
-			elif ev.is_command_or_control_pressed():
-				camera.translate(Vector3(0.0, 0.0, -0.01*ev.relative.y*camera.transform.origin.z))
-				#update_view()
-				accept_event()
-			else:
-				camera_rotation1.rotate_y(-0.01*ev.relative.x)
-				camera_rotation2.rotate_x(-0.01*ev.relative.y)
-				#update_view()
-				accept_event()
-	elif ev is InputEventMouseButton:
-		if !ev.pressed and ev.button_index == MOUSE_BUTTON_MIDDLE:
-			update_view()
+	if ev is InputEventMouseButton:
 		# Mouse wheel
 		if ev.is_command_or_control_pressed():
 			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -533,16 +508,6 @@ func _on_View_gui_input(ev : InputEvent):
 				return
 			update_view()
 			accept_event()
-		else:
-			var zoom = 0.0
-			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom -= 1.0
-			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				zoom += 1.0
-			if zoom != 0.0:
-				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
-				update_view()
-				accept_event()
 	else:
 		__input(ev)
 
@@ -604,14 +569,12 @@ func _on_Texture_resized():
 var procedural_update_changed_scheduled : bool = false
 
 func update_procedural_layer() -> void:
-	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == Layer.LAYER_PROC and ! procedural_update_changed_scheduled:
+	if layers.selected_layer != null and layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC and ! procedural_update_changed_scheduled:
 		procedural_update_changed_scheduled = true
-		for i in range(10):
-			await get_tree().process_frame
-		do_update_procedural_layer()
+		await do_update_procedural_layer()
 
 func do_update_procedural_layer() -> void:
-	painter.fill(false, true, false)
+	await painter.fill(false, true, false)
 	layers.selected_layer.material = $VSplitContainer/GraphEdit.top_generator.serialize()
 	set_need_save()
 	procedural_update_changed_scheduled = false
@@ -620,7 +583,7 @@ var saved_brush = null
 
 func _on_PaintLayers_layer_selected(layer):
 	var brush_updated : bool = false
-	if layer.get_layer_type() == Layer.LAYER_PROC:
+	if layer.get_layer_type() == MMLayer.LAYER_PROC:
 		if saved_brush == null:
 			saved_brush = $VSplitContainer/GraphEdit.top_generator.serialize()
 		if ! layer.material.is_empty():
@@ -631,7 +594,7 @@ func _on_PaintLayers_layer_selected(layer):
 		saved_brush = null
 		brush_updated = true
 	if not brush_updated:
-		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+		painter.set_brush_node(graph_edit.generator.get_node("Brush"), layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 
 var brush_changed_scheduled : bool = false
 
@@ -677,14 +640,14 @@ func reset_stroke() -> void:
 	previous_position = null
 
 func paint(pos : Vector2, pressure : float = 1.0, tilt : Vector2 = Vector2(0, 0), painting_mode : int = PAINTING_MODE_VIEW, end_of_stroke : bool = false):
-	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == Layer.LAYER_PROC:
+	if layers.selected_layer == null or layers.selected_layer.get_layer_type() == MMLayer.LAYER_PROC:
 		return
 	if current_tool == MODE_FREEHAND_DOTS or current_tool == MODE_FREEHAND_LINE:
 		if ! end_of_stroke and (pos-last_painted_position).length() < brush_spacing_control.value:
 			return
 		if current_tool == MODE_FREEHAND_DOTS:
 			previous_position = null
-	do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == Layer.LAYER_MASK)
+	await do_paint(pos, pressure, tilt, painting_mode, end_of_stroke, layers.selected_layer.get_layer_type() == MMLayer.LAYER_MASK)
 	last_painted_position = pos
 
 var next_paint_to = null
@@ -749,17 +712,27 @@ func update_camera():
 	camera.near = max(0.01, 0.99*(cam_to_center-mesh_size))
 	camera.far = 1.01*(cam_to_center+mesh_size)
 
+var updating : bool = false
+var need_update : bool = false
+
 func update_view():
-	update_camera()
-	var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
-	if painter != null:
-		painter.update_view(camera.get_camera_projection(), transform, main_view.size)
-		# DEBUG: show tex2view texture on model
-		#for i in range(10):
-		#	await get_tree().process_frame
-		#painted_mesh.get_surface_override_material(0).albedo_texture = painter.debug_get_texture(1)
-	# Force recalculate brush size parameter
-	#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
+	need_update = true
+	if updating:
+		return
+	updating = true
+	while need_update:
+		need_update = false
+		update_camera()
+		var transform = camera.global_transform.affine_inverse()*painted_mesh.global_transform
+		if painter != null:
+			await painter.update_view(camera.get_camera_projection(), transform, main_view.size)
+			# DEBUG: show tex2view texture on model
+			#for i in range(10):
+			#	await get_tree().process_frame
+			#painted_mesh.get_surface_override_material(0).albedo_texture = await painter.debug_get_texture(1)
+		# Force recalculate brush size parameter
+		#_on_Brush_value_changed(brush_parameters.brush_size, "brush_size")
+	updating = false
 
 func _on_resized():
 	call_deferred("update_view")
@@ -844,11 +817,12 @@ func load_project(file_name) -> bool:
 	initialize_layers_history()
 	return true
 
-func save():
+func save() -> bool:
 	if save_path != null:
 		do_save_project(save_path)
 	else:
 		save_as()
+	return true
 
 func save_as():
 	show_file_dialog(FileDialog.FILE_MODE_SAVE_FILE, "*.mmpp;Model painter project", "do_save_project")
@@ -911,8 +885,8 @@ func _on_ChannelSelect_item_selected(ID):
 func debug_get_texture_names():
 	return [ "Mask" ]
 
-func debug_get_texture(_ID):
-	return mask
+func debug_get_texture(_ID) -> Texture2D:
+	return await mask.get_texture()
 
 # Brush options UI
 
@@ -945,7 +919,7 @@ func _on_Brush_value_changed(value, brush_parameter):
 
 func set_environment(index) -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2/Camera3D.environment
+	var environment = camera.environment
 	var sun = $VSplitContainer/HSplitContainer/Painter/View/MainView/Sun
 	environment_manager.apply_environment(index, environment, sun)
 
@@ -953,22 +927,22 @@ func set_environment(index) -> void:
 
 var stroke_history = { layers={} }
 
+var redo_index : int = 0
+
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
 		"reload_layer_state":
 			var layer = command.layer
 			var state = stroke_history.layers[layer].history[command.index]
+			if false:
+				for c in state.keys():
+					state[c].save_png("d:/redo_%d_%s.png" % [ redo_index, c ])
+			redo_index += 1
+			layer.set_state(state)
 			if layer == layers.selected_layer:
-				painter.set_state(state)
+				layers.select_layer(layers.selected_layer, true, false)
 			else:
-				layer.set_state(state)
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			await get_tree().process_frame
-			layers._on_layers_changed()
+				layers._on_layers_changed()
 			stroke_history.layers[layer].current = command.index
 
 func initialize_layer_history(layer):
@@ -980,12 +954,10 @@ func initialize_layer_history(layer):
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for c in layer.get_channels():
-		var texture = layer.get_channel_texture(c)
-		if texture is ViewportTexture:
-			var image = texture.get_image()
-			texture = ImageTexture.new()
-			texture.set_image(image)
-		channels[c] = texture
+		var texture : Texture = layer.get_channel_texture(c)
+		var image : Image = Image.new()
+		image.copy_from(texture.get_image())
+		channels[c] = image
 	stroke_history.layers[layer] = { history=[channels], current=0 }
 
 func initialize_layers_history(layer_list = null):
@@ -997,6 +969,8 @@ func initialize_layers_history(layer_list = null):
 		initialize_layer_history(l)
 		initialize_layers_history(l.layers)
 
+var undo_index : int = 0
+
 # Undo/Redo for strokes
 func _on_Painter_end_of_stroke(stroke_state):
 	var layer = layers.selected_layer
@@ -1007,7 +981,12 @@ func _on_Painter_end_of_stroke(stroke_state):
 	# Copy relevant channels into stroke state
 	for c in stroke_state.keys():
 		if c in layer.get_channels():
-			new_history_item[c] = stroke_state[c]
+			var channel_image : Image = Image.new()
+			channel_image.copy_from((await stroke_state[c].get_texture()).get_image())
+			if false:
+				channel_image.save_png("d:/undo_%d_%s.png" % [ undo_index, c ])
+			new_history_item[c] = channel_image
+	undo_index += 1
 	layer_history.history.push_back(new_history_item)
 	var undo_command = { type="reload_layer_state", layer=layer, index=layer_history.current }
 	layer_history.current += 1

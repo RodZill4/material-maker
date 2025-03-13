@@ -74,11 +74,18 @@ const MESH_MAPS : Array[Dictionary] = [
 		output_type="f",
 		map="thickness",
 		output="texture($TEXTURE, $UV).r"
+	},
+	{
+		name="Adjacency",
+		output_type="rgb",
+		map="adjacency",
+		output="texture($TEXTURE, $UV).rgb"
 	}
 ]
 
 
 func _ready() -> void:
+	super._ready()
 	if get_parent() is MMGenGraph:
 		set_current_mesh(get_parent().get_current_mesh())
 
@@ -108,6 +115,7 @@ func get_output_defs(_show_hidden : bool = false) -> Array:
 
 func set_current_mesh(m : Mesh) -> void:
 	if current_mesh != m:
+		print("Setting mesh ", m)
 		current_mesh = m
 		update_map()
 

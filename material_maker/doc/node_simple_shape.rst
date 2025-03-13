@@ -23,7 +23,7 @@ Parameters
 
 The **Shape** node has the following parameters:
 
-* the shape type: Circle, Polygon, Star, Curved star or Rays
+* the shape type: Circle, Polygon, Star, Curved Star or Rays
 * the edge, corners or rays count
 * the shape size
 * the size of the gradient at the edge of the shape

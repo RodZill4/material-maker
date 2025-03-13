@@ -1,19 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://e06xegp2tp3f"]
+[gd_scene load_steps=3 format=3 uid="uid://e06xegp2tp3f"]
 
-[ext_resource type="Script" path="res://addons/flexible_layout/flexible_tab.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://xuy6dfh1rsne" path="res://addons/flexible_layout/undock.png" id="2_nx0qp"]
+[ext_resource type="Script" uid="uid://ywxnr7grll4s" path="res://addons/flexible_layout/flexible_tab.gd" id="1"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bok24"]
 size = Vector2(16, 16)
 
-[node name="Tab" type="MarginContainer"]
+[node name="Tab" type="PanelContainer"]
 offset_right = 41.0
 offset_bottom = 26.0
 size_flags_horizontal = 0
-size_flags_vertical = 0
-mouse_filter = 0
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_right = 3
+size_flags_vertical = 8
+theme_type_variation = &"MM_FlexibleTab"
 script = ExtResource("1")
 
 [node name="Container" type="HBoxContainer" parent="."]
@@ -24,18 +21,20 @@ size_flags_vertical = 0
 mouse_filter = 2
 
 [node name="Label" type="Label" parent="Container"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="Undock" type="TextureButton" parent="Container"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("2_nx0qp")
 
 [node name="Close" type="TextureButton" parent="Container"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4

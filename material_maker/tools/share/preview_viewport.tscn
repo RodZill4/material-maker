@@ -1,9 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://d0quoeux821as"]
 
-[ext_resource type="Script" path="res://material_maker/tools/share/preview_viewport.gd" id="1"]
+[ext_resource type="Script" uid="uid://sc5o50e7nv1i" path="res://material_maker/tools/share/preview_viewport.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cq4jf2i8qyhqw" path="res://material_maker/tools/share/preview_scene.tscn" id="2"]
 
 [node name="PreviewViewport" type="SubViewport"]
+own_world_3d = true
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 0

@@ -1,25 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://b08bcbwwosrrk"]
+[gd_scene load_steps=6 format=3 uid="uid://b08bcbwwosrrk"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1_a4o1g"]
-[ext_resource type="Script" path="res://material_maker/widgets/splines_edit/splines_editor.gd" id="2_tepru"]
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3_lfcdr"]
+[ext_resource type="Script" uid="uid://c4mrqp5wc4qg5" path="res://material_maker/widgets/splines_edit/splines_editor.gd" id="2_tepru"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4_2po4g"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_66qgq"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_w4n15"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_t30sn"]
-atlas = ExtResource("3_lfcdr")
-region = Rect2(192, 128, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b45mn"]
-atlas = ExtResource("3_lfcdr")
-region = Rect2(192, 96, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3lo2j"]
-atlas = ExtResource("3_lfcdr")
-region = Rect2(176, 96, 16, 16)
+[sub_resource type="Curve2D" id="Curve2D_koywa"]
 
 [node name="SplinesEditor" instance=ExtResource("1_a4o1g")]
 offset_left = 0.0
@@ -40,105 +27,112 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Buttons" type="PanelContainer" parent="." index="1"]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 86.0
-offset_bottom = 26.0
+[node name="SplinesMenu" type="PanelContainer" parent="." index="1"]
+layout_mode = 0
+offset_right = 466.0
+offset_bottom = 25.0
+theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="HSizer" type="HBoxContainer" parent="Buttons" index="0"]
+[node name="HBox" type="HBoxContainer" parent="SplinesMenu" index="0"]
 layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="DrawMode" type="Button" parent="Buttons/HSizer" index="0"]
+[node name="DrawMode" type="Button" parent="SplinesMenu/HBox" index="0"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
+tooltip_text = "Draw"
+theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
-button_group = SubResource("ButtonGroup_66qgq")
-text = "D"
+button_pressed = true
+button_group = SubResource("ButtonGroup_w4n15")
 
-[node name="SelectMode" type="Button" parent="Buttons/HSizer" index="1"]
+[node name="SelectMode" type="Button" parent="SplinesMenu/HBox" index="1"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
+tooltip_text = "Select"
+theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_w4n15")
-text = "S"
 
-[node name="Spacer1" type="Control" parent="Buttons/HSizer" index="2"]
+[node name="VSeparator" type="VSeparator" parent="SplinesMenu/HBox" index="2"]
 layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSeparator"
 
-[node name="DeleteControlPoints3" type="Button" parent="Buttons/HSizer" index="3"]
-layout_mode = 2
-icon = SubResource("AtlasTexture_t30sn")
-
-[node name="Spacer2" type="Control" parent="Buttons/HSizer" index="4"]
-layout_mode = 2
-
-[node name="UnlinkControlPoints" type="Button" parent="Buttons/HSizer" index="5"]
-layout_mode = 2
-icon = SubResource("AtlasTexture_b45mn")
-
-[node name="LinkControlPoints" type="Button" parent="Buttons/HSizer" index="6"]
-layout_mode = 2
-icon = SubResource("AtlasTexture_3lo2j")
-
-[node name="Editors" type="PanelContainer" parent="." index="2"]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -31.0
-offset_right = 67.0
-offset_bottom = -2.0
-grow_vertical = 0
-
-[node name="HSizer" type="HBoxContainer" parent="Editors" index="0"]
-layout_mode = 2
-
-[node name="Progressive" type="Button" parent="Editors/HSizer" index="0"]
+[node name="DeleteControlPoints" type="Button" parent="SplinesMenu/HBox" index="3"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
+tooltip_text = "Delete Point"
+theme_type_variation = &"MM_PanelMenuButton"
+
+[node name="UnlinkControlPoints" type="Button" parent="SplinesMenu/HBox" index="4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Unlink Points"
+theme_type_variation = &"MM_PanelMenuButton"
+
+[node name="LinkControlPoints" type="Button" parent="SplinesMenu/HBox" index="5"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Link Points"
+theme_type_variation = &"MM_PanelMenuButton"
+
+[node name="VSeparator2" type="VSeparator" parent="SplinesMenu/HBox" index="6"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSeparator"
+
+[node name="Progressive" type="Button" parent="SplinesMenu/HBox" index="7"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Progressive"
+theme_type_variation = &"MM_PanelMenuButton"
 toggle_mode = true
-text = ">"
 
-[node name="ReverseSelection" type="Button" parent="Editors/HSizer" index="1"]
+[node name="ReverseSelection" type="Button" parent="SplinesMenu/HBox" index="8"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
-text = "!"
+tooltip_text = "Reverse Order"
+theme_type_variation = &"MM_PanelMenuButton"
 
-[node name="Spacer1" type="Control" parent="Editors/HSizer" index="2"]
+[node name="WidthLabel" type="Label" parent="SplinesMenu/HBox" index="9"]
 layout_mode = 2
-
-[node name="WidthLabel" type="Label" parent="Editors/HSizer" index="3"]
-layout_mode = 2
+theme_type_variation = &"MM_NodePropertyLabel"
 text = "Width:"
 
-[node name="Width" parent="Editors/HSizer" index="4" instance=ExtResource("4_2po4g")]
+[node name="Width" parent="SplinesMenu/HBox" index="10" instance=ExtResource("4_2po4g")]
 layout_mode = 2
+theme_type_variation = &"MM_PanelMenuFloatEdit"
 value = 0.05
 max_value = 0.2
 float_only = true
 
-[node name="Spacer2" type="Control" parent="Editors/HSizer" index="5"]
-layout_mode = 2
+[node name="Path2D" type="Path2D" parent="SplinesMenu/HBox/Width" index="2"]
+curve = SubResource("Curve2D_koywa")
 
-[node name="OffsetLabel" type="Label" parent="Editors/HSizer" index="6"]
+[node name="OffsetLabel" type="Label" parent="SplinesMenu/HBox" index="11"]
 layout_mode = 2
-text = "U:"
+theme_type_variation = &"MM_NodePropertyLabel"
+text = "Offset:"
 
-[node name="Offset" parent="Editors/HSizer" index="7" instance=ExtResource("4_2po4g")]
+[node name="Offset" parent="SplinesMenu/HBox" index="12" instance=ExtResource("4_2po4g")]
 layout_mode = 2
+theme_type_variation = &"MM_PanelMenuFloatEdit"
 value = 0.0
 max_value = 10.0
 step = 0.01
 float_only = true
 
 [connection signal="gui_input" from="." to="." method="_on_SplinesEditor_gui_input"]
-[connection signal="pressed" from="Buttons/HSizer/DeleteControlPoints3" to="." method="_on_delete_control_points_pressed"]
-[connection signal="pressed" from="Buttons/HSizer/UnlinkControlPoints" to="." method="_on_unlink_control_points_pressed"]
-[connection signal="pressed" from="Buttons/HSizer/LinkControlPoints" to="." method="_on_link_control_points_pressed"]
-[connection signal="pressed" from="Editors/HSizer/Progressive" to="." method="queue_redraw"]
-[connection signal="pressed" from="Editors/HSizer/ReverseSelection" to="." method="_on_reverse_selection_pressed"]
-[connection signal="value_changed" from="Editors/HSizer/Width" to="." method="_on_width_value_changed"]
-[connection signal="value_changed" from="Editors/HSizer/Offset" to="." method="_on_offset_value_changed"]
+[connection signal="pressed" from="SplinesMenu/HBox/DeleteControlPoints" to="." method="_on_delete_control_points_pressed"]
+[connection signal="pressed" from="SplinesMenu/HBox/UnlinkControlPoints" to="." method="_on_unlink_control_points_pressed"]
+[connection signal="pressed" from="SplinesMenu/HBox/LinkControlPoints" to="." method="_on_link_control_points_pressed"]
+[connection signal="toggled" from="SplinesMenu/HBox/Progressive" to="." method="_on_progressive_toggled"]
+[connection signal="pressed" from="SplinesMenu/HBox/ReverseSelection" to="." method="_on_reverse_selection_pressed"]
+[connection signal="value_changed" from="SplinesMenu/HBox/Width" to="." method="_on_width_value_changed"]
+[connection signal="value_changed" from="SplinesMenu/HBox/Offset" to="." method="_on_offset_value_changed"]

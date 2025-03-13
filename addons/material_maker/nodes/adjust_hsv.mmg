@@ -49,7 +49,7 @@
 		],
 		"instance": "",
 		"longdesc": "Adjusts the Hue, Saturation and Value of its input",
-		"name": "AdjustHSV",
+		"name": "Adjust HSV",
 		"outputs": [
 			{
 				"longdesc": "Shows the image with adjusted Hue, Saturation and Value",

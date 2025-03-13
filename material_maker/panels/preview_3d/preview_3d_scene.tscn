@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpulty2lkvcht"]
+[gd_scene load_steps=9 format=3 uid="uid://dpulty2lkvcht"]
 
-[ext_resource type="PackedScene" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://cxcw0mi4sfl2x" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dw4wghi1pn4qr" path="res://material_maker/windows/environment_editor/camera_controller.tscn" id="2_g4ldw"]
+[ext_resource type="Texture2D" uid="uid://bqre7xkdgb655" path="res://material_maker/environments/hdris/moonless_golf_1k.hdr" id="2_ks6fo"]
 
 [sub_resource type="Animation" id="3"]
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -18,17 +21,21 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sxr5g"]
 _data = {
-"rotate": SubResource("3")
+&"rotate": SubResource("3")
 }
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_40ogr"]
+panorama = ExtResource("2_ks6fo")
 
 [sub_resource type="Sky" id="Sky_wye7d"]
 sky_material = SubResource("PanoramaSkyMaterial_40ogr")
 
 [sub_resource type="Environment" id="Environment_qxxdb"]
-background_mode = 2
+background_mode = 1
+background_color = Color(1, 1, 1, 0)
 sky = SubResource("Sky_wye7d")
+ambient_light_source = 3
+reflected_light_source = 2
 
 [node name="Preview3dScene" type="Node3D"]
 
@@ -36,19 +43,18 @@ sky = SubResource("Sky_wye7d")
 
 [node name="Objects" parent="ObjectsPivot" instance=ExtResource("2")]
 
-[node name="CameraPivot" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, 0)
+[node name="CameraController" parent="." instance=ExtResource("2_g4ldw")]
+camera_path = NodePath("../Camera3D")
 
-[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 2.57115, 3.06418)
 current = true
 fov = 50.0
 
 [node name="ObjectRotate" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_sxr5g")
+&"": SubResource("AnimationLibrary_sxr5g")
 }
-autoplay = "rotate"
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 shadow_enabled = true

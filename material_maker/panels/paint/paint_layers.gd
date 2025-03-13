@@ -7,8 +7,8 @@ extends Node
 var shaders = []
 
 var texture_size = 0
-var layers : Array = []
-var selected_layer : Layer
+var layers : Array[MMLayer] = []
+var selected_layer : MMLayer
 
 @onready var albedo = $Albedo
 @onready var metallic = $Metallic
@@ -25,7 +25,6 @@ var generate_nm : bool = true
 
 @onready var layers_pane = mm_globals.main_window.layout.get_panel("Layers")
 
-const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
 const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")
 const LayerProcedural = preload("res://material_maker/panels/paint/layer_types/layer_procedural.gd")
 const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_mask.gd")
@@ -61,7 +60,7 @@ func set_texture_size(s : float):
 	await select_layer(selected_layer_save)
 	_on_Painter_painted()
 
-func find_parent_array(layer : Layer, layer_array : Array = layers):
+func find_parent_array(layer : MMLayer, layer_array : Array[MMLayer] = layers):
 	for l in layer_array:
 		if l == layer:
 			return layer_array
@@ -70,7 +69,7 @@ func find_parent_array(layer : Layer, layer_array : Array = layers):
 			return rv
 	return null
 
-func resize_layers(size : int, layers_array : Array = layers):
+func resize_layers(size : int, layers_array : Array[MMLayer] = layers):
 	for l in layers_array:
 		for c in CHANNELS:
 			if l.get(c) != null:
@@ -106,12 +105,12 @@ func get_occlusion_texture():
 func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeItem) -> void:
 	select_layer(new_selected.get_meta("layer"))
 
-func select_layer(layer : Layer) -> void:
-	if layer == selected_layer:
+func select_layer(layer : MMLayer, force : bool = false, update_last : bool = true) -> void:
+	if layer == selected_layer and not force:
 		return
 	if painter_node == null:
 		painter_node = get_node(painter)
-	if selected_layer != null:
+	if selected_layer != null and update_last:
 		for c in selected_layer.get_channels():
 			var old_texture : Texture2D = selected_layer.get(c)
 			var new_texture = ImageTexture.new()
@@ -125,7 +124,7 @@ func select_layer(layer : Layer) -> void:
 				await painter_node.init_rgba_texture_by_name(c, Color(1.0, 1.0, 1.0, 1.0), layer.get(c))
 			else:
 				await painter_node.init_rgba_texture_by_name(c)
-			layer.set(c, painter_node.get_texture_by_name(c))
+			layer.set(c, await painter_node.get_texture_by_name(c))
 		emit_signal("layer_selected", layer)
 	selected_layer = layer
 	await get_tree().process_frame
@@ -139,7 +138,7 @@ func select_layer(layer : Layer) -> void:
 func get_unused_layer_name(_layers_array : Array) -> String:
 	return "New layer"
 
-func layer_index_is_used(index : int, layers_array : Array) -> bool:
+func layer_index_is_used(index : int, layers_array : Array[MMLayer]) -> bool:
 	for l in layers_array:
 		if l.index == index or layer_index_is_used(index, l.layers):
 			return true
@@ -154,11 +153,11 @@ func get_unused_layer_index() -> int:
 func add_layer(layer_type : int = 0) -> void:
 	if layer_type < 0 or layer_type >= LAYER_TYPES.size():
 		return
-	var layers_array : Array = layers
-	if layer_type == Layer.LAYER_MASK:
+	var layers_array : Array[MMLayer] = layers
+	if layer_type == MMLayer.LAYER_MASK:
 		if selected_layer == null:
 			return
-		elif selected_layer.get_layer_type() == Layer.LAYER_MASK:
+		elif selected_layer.get_layer_type() == MMLayer.LAYER_MASK:
 			layers_array = find_parent_array(selected_layer)
 		else:
 			layers_array = selected_layer.layers
@@ -175,13 +174,13 @@ func add_layer(layer_type : int = 0) -> void:
 	layers_array.push_front(layer)
 	select_layer(layer)
 
-func duplicate_layer(source_layer : Layer) -> void:
+func duplicate_layer(source_layer : MMLayer) -> void:
 	var layers_array : Array = find_parent_array(source_layer)
 	var layer = source_layer.duplicate()
 	layers_array.push_front(layer)
 	select_layer(layer)
 
-func remove_layer(layer : Layer) -> void:
+func remove_layer(layer : MMLayer) -> void:
 	var need_reselect : bool = (layer == selected_layer)
 	var layers_array : Array = find_parent_array(layer)
 	layers_array.erase(layer)
@@ -192,9 +191,9 @@ func remove_layer(layer : Layer) -> void:
 			return
 	_on_layers_changed()
 
-func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> void:
+func move_layer_into(layer : MMLayer, target_layer : MMLayer, index : int = -1) -> void:
 	assert(layer != null)
-	if layer.get_layer_type() == Layer.LAYER_MASK and (target_layer == null or target_layer.get_layer_type() == Layer.LAYER_MASK):
+	if layer.get_layer_type() == MMLayer.LAYER_MASK and (target_layer == null or target_layer.get_layer_type() == MMLayer.LAYER_MASK):
 		return
 	var array : Array = find_parent_array(layer)
 	var orig_index = array.find(layer)
@@ -207,7 +206,7 @@ func move_layer_into(layer : Layer, target_layer : Layer, index : int = -1) -> v
 	target_array.insert(index, layer)
 	_on_layers_changed()
 
-func move_layer_up(layer : Layer) -> void:
+func move_layer_up(layer : MMLayer) -> void:
 	var array : Array = find_parent_array(layer)
 	var orig_index = array.find(layer)
 	if orig_index > 0:
@@ -215,7 +214,7 @@ func move_layer_up(layer : Layer) -> void:
 		array.insert(orig_index-1, layer)
 		_on_layers_changed()
 
-func move_layer_down(layer : Layer) -> void:
+func move_layer_down(layer : MMLayer) -> void:
 	var array : Array = find_parent_array(layer)
 	var orig_index = array.find(layer)
 	if orig_index < array.size()-1:
@@ -236,14 +235,14 @@ func _on_layers_changed() -> void:
 		update_alpha(c)
 	layers_pane.call_deferred("set_layers", self)
 
-func get_visible_layers(list : Array, layers_array : Array = layers, mask_array : Array = []) -> void:
+func get_visible_layers(list : Array, layers_array : Array[MMLayer] = layers, mask_array : Array = []) -> void:
 	for i in range(layers_array.size()-1, -1, -1):
 		var l = layers_array[i]
-		if l.hidden or l.get_layer_type() == Layer.LAYER_MASK:
+		if l.hidden or l.get_layer_type() == MMLayer.LAYER_MASK:
 			continue
 		var m = mask_array.duplicate()
 		for cl in l.layers:
-			if !cl.hidden and cl.get_layer_type() == Layer.LAYER_MASK:
+			if !cl.hidden and cl.get_layer_type() == MMLayer.LAYER_MASK:
 				m.push_back(cl.mask)
 		get_visible_layers(list, l.layers, m)
 		list.push_back({ layer=l, masks=m })
@@ -275,7 +274,8 @@ func apply_masks(material : ShaderMaterial, masks : Array) -> void:
 func update_layers_renderer(visible_layers : Array) -> void:
 	for viewport in [ albedo, metallic, roughness, emission, normal, depth, occlusion ]:
 		while viewport.get_child_count() > 0:
-			viewport.remove_child(viewport.get_child(0))
+			var child = viewport.get_child(0)
+			viewport.remove_child(child)
 	var color_rect : ColorRect
 	color_rect = ColorRect.new()
 	color_rect.size = normal.size
@@ -395,9 +395,9 @@ func load(data : Dictionary, file_name : String):
 			await get_tree().process_frame
 		select_layer(layers[0])
 
-func load_layers(data_layers : Array, layers_array : Array, path : String, first_index : int = 0) -> int:
+func load_layers(data_layers : Array, layers_array : Array[MMLayer], path : String, first_index : int = 0) -> int:
 	for l in data_layers:
-		var layer : Layer = LAYER_TYPES[l.type if l.has("type") else 0].new()
+		var layer : MMLayer = LAYER_TYPES[l.type if l.has("type") else 0].new()
 		layer.load_layer(l, first_index, path)
 		layer.name = l.name
 		if l.has("index"):
@@ -421,7 +421,7 @@ func save(file_name : String) -> Dictionary:
 	var dir_name = file_name.left(file_name.rfind("."))
 	DirAccess.make_dir_absolute(dir_name)
 	var data = {}
-	data.layers = Layer.save_layers(layers, dir_name)
+	data.layers = MMLayer.save_layers(layers, dir_name)
 	return data
 
 func _on_Painter_painted():
@@ -446,19 +446,20 @@ func debug_get_texture_names():
 # tr("Depth")
 # tr("Occlusion")
 
-func debug_get_texture(ID):
+func debug_get_texture(ID) -> Texture2D:
 	match ID:
 		0:
-			return get_albedo_texture()
+			return await get_albedo_texture()
 		1:
-			return $Metallic.get_texture()
+			return await get_metallic_texture()
 		2:
-			return $Roughness.get_texture()
+			return await get_roughness_texture()
 		3:
-			return get_emission_texture()
+			return await get_emission_texture()
 		4:
-			return get_normal_map()
+			return await get_normal_map()
 		5:
-			return get_depth_texture()
+			return await get_depth_texture()
 		6:
-			return get_occlusion_texture()
+			return await get_occlusion_texture()
+	return null

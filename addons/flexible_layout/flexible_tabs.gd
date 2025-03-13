@@ -1,4 +1,4 @@
-extends Control
+extends Container
 
 
 var flex_tab : WeakRef
@@ -24,7 +24,6 @@ func add(ft : Control):
 	var tab = load("res://addons/flexible_layout/flexible_tab.tscn").instantiate()
 	tab.init(ft)
 	$Tabs.add_child(tab)
-	custom_minimum_size.y = $Tabs.get_minimum_size().y
 	if current == -1:
 		set_current(0)
 	else:
@@ -51,7 +50,7 @@ func set_current(c : int):
 	current = c
 	for i in range($Tabs.get_child_count()):
 		$Tabs.get_child(i).flex_panel.visible = (i == current)
-		$Tabs.get_child(i).queue_redraw()
+		$Tabs.get_child(i).update()
 
 func _on_resized():
 	#print("%s: %s - %s" % [ str(self), str(position), str(size) ])

@@ -1,16 +1,15 @@
 [gd_scene load_steps=2 format=3 uid="uid://cpwg6da5kpsef"]
 
-[ext_resource type="Script" path="res://addons/flexible_layout/flexible_tabs.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg1byost6nv7c" path="res://addons/flexible_layout/flexible_tabs.gd" id="1"]
 
-[node name="TabBar" type="Control"]
-clip_contents = true
-layout_mode = 3
-anchors_preset = 0
+[node name="TabBar" type="ScrollContainer"]
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
 script = ExtResource("1")
 
 [node name="Tabs" type="HBoxContainer" parent="."]
 clip_contents = true
-layout_mode = 0
+layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_constants/separation = 0
+theme_type_variation = &"MM_FlexibleTab"

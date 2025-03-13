@@ -599,6 +599,8 @@
 						"file_name": "$(path_prefix).py",
 						"template": [
 							"import unreal",
+							"import sys",
+							"sys.path.append('$(material_maker_path)$(path_separator)export')",
 							"import mm",
 							"from importlib import reload",
 							"reload(mm)",

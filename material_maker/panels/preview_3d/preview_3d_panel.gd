@@ -6,6 +6,10 @@ extends "res://material_maker/panels/preview_3d/preview_3d.gd"
 var new_pivot_position : Vector3
 
 
+func _ready() -> void:
+	reattach_menu($MenuBar/HBox)
+
+
 func on_right_click():
 	# Hide viewport while we capture the position
 	var hide_texture : ImageTexture = ImageTexture.new()
@@ -23,12 +27,10 @@ func on_right_click():
 	#todo $MaterialPreview.keep_3d_linear = true
 	await get_tree().process_frame
 	await get_tree().process_frame
-	await get_tree().process_frame
 	# Pick position in image
 	var texture : ViewportTexture = $MaterialPreview.get_texture()
 	var image : Image = texture.get_image()
 	var mouse_position = get_local_mouse_position()*Vector2($MaterialPreview.size)/size
-	mouse_position.y = $MaterialPreview.size.y-mouse_position.y
 	var position_color : Color = image.get_pixelv(mouse_position)
 	var pos : Vector3 = Vector3(position_color.r, position_color.g, position_color.b)
 	pos -= Vector3(0.5, 0.5, 0.5)
@@ -37,7 +39,8 @@ func on_right_click():
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$TextureRect.visible = false
-	$PopupMenu.popup(Rect2(get_global_mouse_position(), Vector2(0.0, 0.0)))
+	mm_globals.popup_menu($PopupMenu, self)
+
 
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
@@ -47,8 +50,15 @@ func _on_PopupMenu_id_pressed(id):
 		1:
 			pivot.transform.origin = new_pivot_position
 
+
 func _on_Preview3D_mouse_entered():
 	mm_globals.set_tip_text("#LMB: Rotate view, #RMB: Tilt view, Mouse wheel: Zoom", 3)
 
+
 func on_drop_model_file(file_name : String):
 	do_load_custom_mesh(file_name)
+
+
+func _on_resized() -> void:
+	$BG.size = size
+	%MenuBar.size.x = size.x

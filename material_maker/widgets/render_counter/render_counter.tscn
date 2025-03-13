@@ -9,11 +9,9 @@ script = ExtResource("1")
 
 [node name="FpsCounter" type="Label" parent="."]
 layout_mode = 2
-size_flags_vertical = 1
 
 [node name="GpuRam" type="Label" parent="."]
 layout_mode = 2
-size_flags_vertical = 1
 mouse_filter = 0
 
 [node name="ProgressBar" type="ProgressBar" parent="."]

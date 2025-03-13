@@ -16,7 +16,7 @@ func get_type() -> String:
 	return "sdf"
 
 func get_type_name() -> String:
-	return "EasySDF"
+	return "Easy SDF"
 
 func get_filtered_parameter_defs(parameters_filter : String) -> Array:
 	if parameters_filter == "":
@@ -186,7 +186,7 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("sdf_scene"):
 		set_sdf_scene(mm_sdf_builder.deserialize_scene(data.sdf_scene))
 
-func edit(node) -> void:
+func edit(node, tab : String = "") -> void:
 	if scene != null:
 		var edit_window = load("res://material_maker/windows/sdf_builder/sdf_builder.tscn").instantiate()
 		node.get_parent().add_child(edit_window)

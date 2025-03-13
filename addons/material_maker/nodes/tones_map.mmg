@@ -26,7 +26,7 @@
 		],
 		"instance": "",
 		"longdesc": "Maps linearly an input tones interval to an output tones interval.",
-		"name": "Tones map",
+		"name": "Tones Map",
 		"outputs": [
 			{
 				"longdesc": "Shows the generated remapped image",

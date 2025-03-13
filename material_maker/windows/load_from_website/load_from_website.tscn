@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b13dighio76a7"]
 
-[ext_resource type="Script" path="res://material_maker/windows/load_from_website/load_from_website.gd" id="1"]
+[ext_resource type="Script" uid="uid://cwdsenmji25k1" path="res://material_maker/windows/load_from_website/load_from_website.gd" id="1"]
 
 [node name="LoadFromWebsite" type="Window"]
 title = "Load from website"

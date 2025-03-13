@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://dnttargjmhjh8"]
 
 [ext_resource type="Texture2D" path="res://material_maker/tools/share/broken_link.tres" id="1"]
-[ext_resource type="Script" path="res://material_maker/tools/share/share_button.gd" id="2"]
-[ext_resource type="Script" path="res://material_maker/tools/share/share_http_request.gd" id="3"]
+[ext_resource type="Script" uid="uid://kj7il6wl1325" path="res://material_maker/tools/share/share_button.gd" id="2"]
+[ext_resource type="Script" uid="uid://8x545jr4bcm3" path="res://material_maker/tools/share/share_http_request.gd" id="3"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="4"]
 
 [sub_resource type="AtlasTexture" id="1"]

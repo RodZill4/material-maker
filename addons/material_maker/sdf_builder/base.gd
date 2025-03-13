@@ -36,5 +36,12 @@ static func get_color_code_smooth_union(scene : Dictionary, ctxt : Dictionary = 
 			color_code += "\ncurrent_color_%d = tmp_%d;" % [ scene.index, scene.index ]
 	if color_code == "":
 		return { distance = "_n%d" % scene.index }
-	color_code = ("%s sum_%d;\n%s tmp_%d;\n%s current_color_%d;\nfloat coef_%d;\nfloat coefsum_%d = 0.0;\n" % [ ctxt.glsl_type, scene.index, ctxt.glsl_type, scene.index, ctxt.glsl_type, scene.index, scene.index, scene.index ])+color_code+("%s = sum_%d/coefsum_%d;" % [ ctxt.target, scene.index, scene.index ])
+	var init_code : String = ""
+	init_code += "%s sum_%d = %s(0.0);\n" % [ ctxt.glsl_type, scene.index, ctxt.glsl_type ]
+	init_code += "%s tmp_%d;\n" % [ ctxt.glsl_type, scene.index ]
+	init_code += "%s current_color_%d = %s;\n" % [ ctxt.glsl_type, scene.index, ctxt.channel ]
+	init_code += "float coef_%d;\n" % [ scene.index ]
+	init_code += "float coefsum_%d = 0.0;\n" % [ scene.index ]
+	color_code = init_code+color_code
+	color_code += "\n%s = sum_%d/coefsum_%d;" % [ ctxt.target, scene.index, scene.index ]
 	return { color = color_code, distance = "_n%d" % scene.index }

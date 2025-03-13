@@ -1,46 +1,42 @@
-[gd_scene load_steps=2 format=3 uid="uid://rflulhsuy3ax"]
+[gd_scene load_steps=3 format=3 uid="uid://rflulhsuy3ax"]
 
 [ext_resource type="Script" path="res://material_maker/widgets/float_edit/float_edit.gd" id="1"]
 
-[node name="FloatEdit" type="LineEdit"]
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -1280.0
-offset_right = -1222.0
-offset_bottom = -696.0
-focus_mode = 1
-text = "0.5"
-context_menu_enabled = false
-virtual_keyboard_enabled = false
-shortcut_keys_enabled = false
-caret_blink = true
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t5q7m"]
+content_margin_left = 3.0
+content_margin_top = 2.0
+content_margin_right = 3.0
+content_margin_bottom = 2.0
+
+[node name="FloatEdit" type="PanelContainer"]
+clip_children = 1
+offset_right = 198.0
+offset_bottom = 27.0
+theme_type_variation = &"MM_NodeFloatEdit"
 script = ExtResource("1")
 
-[node name="Slider" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(0, 2)
-layout_mode = 0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -3.0
-offset_right = -2.0
-offset_bottom = -3.0
+[node name="Slider" type="ProgressBar" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
 mouse_filter = 2
-color = Color(0.501961, 0.501961, 0.501961, 1)
+value = 30.43
+show_percentage = false
 
-[node name="Cursor" type="ColorRect" parent="Slider"]
-custom_minimum_size = Vector2(3, 2)
-layout_mode = 0
-offset_right = 3.0
-offset_bottom = 1.0
+[node name="Edit" type="LineEdit" parent="."]
+layout_mode = 2
 mouse_filter = 2
+theme_type_variation = &"MM_NodeFloatEdit"
+theme_override_styles/focus = SubResource("StyleBoxEmpty_t5q7m")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_t5q7m")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_t5q7m")
+text = "Value"
+alignment = 2
+context_menu_enabled = false
 
-[connection signal="focus_entered" from="." to="." method="_on_FloatEdit_focus_entered"]
-[connection signal="focus_exited" from="." to="." method="_on_LineEdit_focus_exited"]
-[connection signal="resized" from="." to="." method="do_update"]
-[connection signal="text_changed" from="." to="." method="_on_LineEdit_text_changed"]
-[connection signal="text_submitted" from="." to="." method="_on_LineEdit_text_entered"]
-[connection signal="resized" from="Slider" to="." method="do_update"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="draw" from="Edit" to="." method="_on_edit_draw"]
+[connection signal="focus_entered" from="Edit" to="." method="_on_edit_focus_entered"]
+[connection signal="focus_exited" from="Edit" to="." method="_on_edit_focus_exited"]
+[connection signal="gui_input" from="Edit" to="." method="_gui_input"]
+[connection signal="text_submitted" from="Edit" to="." method="_on_edit_text_submitted"]

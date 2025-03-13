@@ -28,7 +28,7 @@
 		],
 		"instance": "",
 		"longdesc": "Emphasizes dark and light tones around a specified value",
-		"name": "Tones step",
+		"name": "Tones Step",
 		"outputs": [
 			{
 				"longdesc": "Shows the generated high contrast image",

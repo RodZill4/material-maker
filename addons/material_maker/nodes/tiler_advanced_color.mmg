@@ -141,7 +141,7 @@
 			""
 		],
 		"longdesc": "Tiles several occurences of an input image while adding randomness.",
-		"name": "Advanced Tiler Color",
+		"name": "Advanced Color Tiler",
 		"outputs": [
 			{
 				"longdesc": "Shows the generated pattern",

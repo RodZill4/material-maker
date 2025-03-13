@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://bavx4h3o65uam"]
 
-[ext_resource type="Script" path="res://material_maker/panels/layers/layers_tree.gd" id="1"]
-[ext_resource type="Script" path="res://material_maker/panels/layers/layers.gd" id="2"]
+[ext_resource type="Script" uid="uid://cp4vtravrn71b" path="res://material_maker/panels/layers/layers_tree.gd" id="1"]
+[ext_resource type="Script" uid="uid://djq2pdmkcmyal" path="res://material_maker/panels/layers/layers.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -28,58 +28,65 @@ region = Rect2(96, 160, 16, 16)
 atlas = ExtResource("3")
 region = Rect2(0, 0, 16, 16)
 
-[node name="Layers" type="VBoxContainer"]
+[node name="Layers" type="PanelContainer"]
+offset_top = 224.0
 offset_right = 150.0
 offset_bottom = 224.0
+theme_type_variation = &"MM_PanelBackground"
 script = ExtResource("2")
 
-[node name="Buttons" type="HBoxContainer" parent="."]
+[node name="Layers" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Layers"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Add" type="TextureButton" parent="Buttons"]
+[node name="Add" type="TextureButton" parent="Layers/Buttons"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = SubResource("1")
 stretch_mode = 3
 
-[node name="Duplicate" type="TextureButton" parent="Buttons"]
+[node name="Duplicate" type="TextureButton" parent="Layers/Buttons"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = SubResource("2")
 stretch_mode = 3
 
-[node name="Remove" type="TextureButton" parent="Buttons"]
+[node name="Remove" type="TextureButton" parent="Layers/Buttons"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = SubResource("3")
 stretch_mode = 3
 
-[node name="Up" type="TextureButton" parent="Buttons"]
+[node name="Up" type="TextureButton" parent="Layers/Buttons"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = SubResource("4")
 stretch_mode = 3
 
-[node name="Down" type="TextureButton" parent="Buttons"]
+[node name="Down" type="TextureButton" parent="Layers/Buttons"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = SubResource("5")
 stretch_mode = 3
 
-[node name="Config" type="TextureButton" parent="Buttons"]
+[node name="Config" type="TextureButton" parent="Layers/Buttons"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = SubResource("6")
 stretch_mode = 3
 
-[node name="Tree" type="Tree" parent="."]
+[node name="Tree" type="Tree" parent="Layers"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 200)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -87,16 +94,18 @@ size_flags_vertical = 3
 focus_mode = 0
 columns = 2
 hide_root = true
+select_mode = 1
 script = ExtResource("1")
 
-[connection signal="pressed" from="Buttons/Add" to="." method="_on_Add_pressed"]
-[connection signal="pressed" from="Buttons/Duplicate" to="." method="_on_Duplicate_pressed"]
-[connection signal="pressed" from="Buttons/Remove" to="." method="_on_Remove_pressed"]
-[connection signal="pressed" from="Buttons/Up" to="." method="_on_Up_pressed"]
-[connection signal="pressed" from="Buttons/Down" to="." method="_on_Down_pressed"]
-[connection signal="pressed" from="Buttons/Config" to="." method="_on_Config_pressed"]
-[connection signal="button_clicked" from="Tree" to="Tree" method="_on_Tree_button_pressed"]
-[connection signal="cell_selected" from="Tree" to="Tree" method="_on_Tree_cell_selected"]
-[connection signal="gui_input" from="Tree" to="Tree" method="_on_Tree_gui_input"]
-[connection signal="item_edited" from="Tree" to="Tree" method="_on_Tree_item_edited"]
-[connection signal="selection_changed" from="Tree" to="." method="_on_Tree_selection_changed"]
+[connection signal="pressed" from="Layers/Buttons/Add" to="." method="_on_Add_pressed"]
+[connection signal="pressed" from="Layers/Buttons/Duplicate" to="." method="_on_Duplicate_pressed"]
+[connection signal="pressed" from="Layers/Buttons/Remove" to="." method="_on_Remove_pressed"]
+[connection signal="pressed" from="Layers/Buttons/Up" to="." method="_on_Up_pressed"]
+[connection signal="pressed" from="Layers/Buttons/Down" to="." method="_on_Down_pressed"]
+[connection signal="pressed" from="Layers/Buttons/Config" to="." method="_on_Config_pressed"]
+[connection signal="button_clicked" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_button_pressed"]
+[connection signal="cell_selected" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_cell_selected"]
+[connection signal="gui_input" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_gui_input"]
+[connection signal="item_edited" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_item_edited"]
+[connection signal="item_selected" from="Layers/Tree" to="Layers/Tree" method="_on_Tree_cell_selected"]
+[connection signal="selection_changed" from="Layers/Tree" to="." method="_on_Tree_selection_changed"]

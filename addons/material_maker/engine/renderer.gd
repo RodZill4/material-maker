@@ -86,10 +86,11 @@ func render_material(object : Object, material : Material, render_size : int, wi
 	$ColorRect.material = null
 	return self
 
-func render_shader(object : Object, shader : String, render_size : int, with_hdr : bool = true) -> Object:
+func render_shader(object : Object, shader_code : String, render_size : int, with_hdr : bool = true) -> Object:
 	var shader_material = ShaderMaterial.new()
-	shader_material.shader = Shader.new() 
-	shader_material.shader.code = shader
+	var shader : Shader = Shader.new() 
+	shader.code = shader_code
+	shader_material.shader = shader
 	mm_deps.material_update_params(MMShaderMaterial.new(shader_material))
 	var status = await render_material(object, shader_material, render_size, with_hdr)
 	return self
@@ -111,6 +112,10 @@ func save_to_file(fn : String, is_greyscale : bool = false) -> void:
 		match fn.get_extension():
 			"png":
 				export_image.save_png(fn)
+			"jpg":
+				export_image.save_jpg(fn, 1.0)
+			"webp":
+				export_image.save_webp(fn)
 			"exr":
 				if is_greyscale:
 					export_image = Image.new()

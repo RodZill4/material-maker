@@ -76,10 +76,9 @@ size_flags_vertical = 0
 
 [node name="Denoise" type="OptionButton" parent="VBoxContainer/Denoise"]
 layout_mode = 2
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "No denoise"
-popup/item_0/id = 0
 popup/item_1/text = "Simple denoise"
 popup/item_1/id = 1
 popup/item_2/text = "Smart denoise"
@@ -95,7 +94,6 @@ text = "Radius:"
 
 [node name="Radius" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
 layout_mode = 2
-text = "1"
 value = 1.0
 max_value = 3.0
 step = 1.0
@@ -107,7 +105,6 @@ text = "Sigma:"
 
 [node name="Sigma" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
 layout_mode = 2
-text = "1"
 value = 3.0
 min_value = 0.005
 max_value = 10.0
@@ -120,7 +117,6 @@ text = "kSigma:"
 
 [node name="kSigma" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
 layout_mode = 2
-text = "1"
 value = 4.0
 max_value = 10.0
 step = 0.001
@@ -132,7 +128,6 @@ text = "Threshold:"
 
 [node name="Threshold" parent="VBoxContainer/Denoise" instance=ExtResource("2_ltlj8")]
 layout_mode = 2
-text = "1"
 value = 0.7
 step = 0.001
 float_only = true

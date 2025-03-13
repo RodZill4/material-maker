@@ -1,15 +1,9 @@
-extends VBoxContainer
+extends Control
 
 # The layer object
 var layers
 
-@onready var tree = $Tree
-
-
-const Layer = preload("res://material_maker/panels/paint/layer_types/layer.gd")
-const LayerPaint = preload("res://material_maker/panels/paint/layer_types/layer_paint.gd")
-const LayerProcedural = preload("res://material_maker/panels/paint/layer_types/layer_procedural.gd")
-const LayerMask = preload("res://material_maker/panels/paint/layer_types/layer_mask.gd")
+@onready var tree = %Tree
 
 
 func _ready():
@@ -27,7 +21,7 @@ func _on_Tree_selection_changed(_old_selected : TreeItem, new_selected : TreeIte
 func _on_Add_pressed():
 	var menu = preload("res://material_maker/panels/layers/add_layer_menu.tscn").instantiate()
 	add_child(menu)
-	var button_rect = $Buttons/Add.get_global_rect()
+	var button_rect = %Buttons/Add.get_global_rect()
 	menu.connect("id_pressed", Callable(self, "_on_add_layer_menu"))
 	menu.connect("id_pressed", Callable(menu, "queue_free"))
 	menu.connect("popup_hide", Callable(menu, "queue_free"))
@@ -61,8 +55,8 @@ func _on_Down_pressed():
 func _on_Config_pressed():
 	var current = tree.get_selected()
 	if current != null:
-		var layer : Layer = current.get_meta("layer")
-		if layer.get_layer_type() == Layer.LAYER_MASK:
+		var layer : MMLayer = current.get_meta("layer")
+		if layer.get_layer_type() == MMLayer.LAYER_MASK:
 			return
 		var popup = preload("res://material_maker/panels/layers/layer_config_popup.tscn").instantiate()
 		add_child(popup)

@@ -5,10 +5,12 @@ class_name MMGraphEdit
 class Preview:
 	var generator
 	var output_index : int
-	
-	func _init(g, i : int = 0):
+	var node : Node
+
+	func _init(g, i : int = 0, n = null):
 		generator = g
 		output_index = i
+		node = n
 
 
 # warning-ignore:unused_class_variable
@@ -16,7 +18,7 @@ class Preview:
 
 var node_factory = null
 
-var save_path = null: set = set_save_path
+var save_path := "": set = set_save_path
 var need_save : bool = false
 var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
@@ -51,30 +53,16 @@ func _ready() -> void:
 		add_valid_connection_type(42, t)
 
 func _exit_tree():
-	save_config()
 	remove_crash_recovery_file()
 
-func load_config():
-	if mm_globals.has_config("graphedit_use_snap"):
-		snapping_enabled = mm_globals.get_config("graphedit_use_snap")
-	if mm_globals.has_config("graphedit_snap_distance"):
-		snapping_distance = mm_globals.get_config("graphedit_snap_distance")
-
-func save_config():
-	mm_globals.set_config("graphedit_use_snap", snapping_enabled)
-	mm_globals.set_config("graphedit_snap_distance", snapping_distance)
-
-func _on_GraphEdit_visibility_changed():
-	if is_visible_in_tree():
-		load_config()
-	else:
-		save_config()
 
 func get_project_type() -> String:
 	return "material"
 
+
 func get_graph_edit():
 	return self
+
 
 func do_zoom(factor : float):
 	accept_event()
@@ -91,23 +79,21 @@ func get_nodes_under_mouse() -> Array:
 	var array : Array = []
 	for c in get_children():
 		if c is GraphNode:
-			var rect : Rect2 = c.get_global_rect()
-			var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-			rect = Rect2(rect.position, rect.size*transform_scale)
+			var rect : Rect2 = get_padded_node_rect(c)
 			if rect.has_point(get_global_mouse_position()):
 				array.push_back(c)
 	return array
 
 func process_port_click(pressed : bool):
 	for c in get_nodes_under_mouse():
-		var rect : Rect2 = c.get_global_rect()
-		var pos : Vector2 = get_global_mouse_position()-rect.position
+		#var rect : Rect2 = c.get_global_rect()
+		var pos : Vector2 = c.get_local_mouse_position()#get_global_mouse_position()-rect.position
 		var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-		rect = Rect2(rect.position, rect.size*transform_scale)
+		#rect = Rect2(rect.position, rect.size*transform_scale)
 		var output_count : int = c.get_output_port_count()
 		if output_count > 0:
-			var output_1 : Vector2 = c.get_output_port_position(0)-5*transform_scale
-			var output_2 : Vector2 = c.get_output_port_position(output_count-1)+5*transform_scale
+			var output_1 : Vector2 = c.get_output_port_position(0)-8*transform_scale
+			var output_2 : Vector2 = c.get_output_port_position(output_count-1)+8*transform_scale
 			var in_output : bool = Rect2(output_1, output_2-output_1).has_point(pos)
 			if in_output:
 				for i in range(output_count):
@@ -157,9 +143,7 @@ func _gui_input(event) -> void:
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
-				var rect : Rect2 = c.get_global_rect()
-				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-				rect = Rect2(rect.position, rect.size*transform_scale)
+				var rect = get_padded_node_rect(c)
 				if rect.has_point(get_global_mouse_position()):
 					print("Node: "+c.name)
 					if c.has_method("get_slot_from_position"):
@@ -210,18 +194,14 @@ func _gui_input(event) -> void:
 				var found_tip : bool = false
 				for c in get_children():
 					if c.has_method("set_slot_tip_text"):
-						var rect = c.get_global_rect()
-						var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-						rect = Rect2(rect.position, rect.size*transform_scale)
+						var rect = get_padded_node_rect(c)
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
 	elif event is InputEventMouseMotion:
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
-				var rect = c.get_global_rect()
-				var transform_scale : Vector2 = Vector2(1, 1) # c.get_global_transform().get_scale()
-				rect = Rect2(rect.position, rect.size*transform_scale)
+				var rect = get_padded_node_rect(c)
 				if rect.has_point(get_global_mouse_position()):
 					var mouse_pos : Vector2 = get_global_mouse_position()
 					var slot : Dictionary = c.get_slot_from_position(mouse_pos)
@@ -231,11 +211,17 @@ func _gui_input(event) -> void:
 				else:
 					c.clear_connection_labels()
 		if !found_tip:
-			var rect : Rect2 = get_global_rect()
-			var transform_scale : Vector2 = Vector2(1, 1) # get_global_transform().get_scale()
-			rect = Rect2(rect.position, rect.size*transform_scale)
+			var rect = get_global_rect()
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
+
+func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
+	var rect : Rect2 = graph_node.get_global_rect()
+	var padding := 8 * graph_node.get_global_transform().get_scale().x
+	rect.position.x -= padding
+	rect.size.x += padding*2
+	return Rect2(rect.position, rect.size)
+
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -364,7 +350,7 @@ func update_tab_title() -> void:
 		#print("no set_tab_title method")
 		return
 	var title = "[unnamed]"
-	if save_path != null:
+	if not save_path.is_empty():
 		title = save_path.right(-(save_path.rfind("/")+1))
 	if need_save:
 		title += " *"
@@ -377,7 +363,7 @@ func set_need_save(ns = true) -> void:
 		update_tab_title()
 	need_save_crash_recovery = true
 
-func set_save_path(path) -> void:
+func set_save_path(path: String) -> void:
 	if path != save_path:
 		remove_crash_recovery_file()
 		need_save_crash_recovery = false
@@ -485,7 +471,7 @@ func new_material(init_nodes = {nodes=[{name="Material", type="material",paramet
 		move_child(top_generator, 0)
 		update_view(top_generator)
 		center_view()
-		set_save_path(null)
+		set_save_path("")
 		set_need_save(false)
 
 func get_free_name(type) -> String:
@@ -626,7 +612,7 @@ func save_as() -> bool:
 				return true
 	return false
 
-func save_file(filename) -> bool:
+func save_file(filename:String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
@@ -663,14 +649,14 @@ func export_material(export_prefix, profile) -> void:
 func get_selected_nodes() -> Array:
 	var selected_nodes = []
 	for n in get_children():
-		if n is GraphNode and n.selected:
+		if n is GraphElement and n.selected:
 			selected_nodes.append(n)
 	return selected_nodes
 
 func remove_selection() -> void:
 	var prev = generator.serialize()
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+		if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
 			do_remove_node(c)
 	var next = generator.serialize()
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
@@ -680,7 +666,7 @@ func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
 	if nodes.is_empty():
 		for c in get_children():
-			if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+			if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
 				nodes.append(c)
 	if nodes.is_empty():
 		return {}
@@ -705,7 +691,7 @@ func serialize_selection(nodes = []) -> Dictionary:
 
 func can_copy() -> bool:
 	for c in get_children():
-		if c is GraphNode and c.selected and c.name != "Material" and c.name != "Brush":
+		if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
 			return true
 	return false
 
@@ -721,7 +707,7 @@ func do_paste(data) -> void:
 	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
 		node_position = offset_from_global_position(get_global_mouse_position())
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = false
 	var new_nodes = await create_nodes(data, node_position)
 	if new_nodes != null:
@@ -750,24 +736,23 @@ func duplicate_selected() -> void:
 
 func select_all() -> void:
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = true
 
 func select_none() -> void:
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = false
 
 func select_invert() -> void:
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			c.selected = not c.selected
 
 # Delay after graph update
 
 func send_changed_signal() -> void:
 	set_need_save(true)
-	timer.stop()
 	timer.start(0.2)
 
 func do_send_changed_signal() -> void:
@@ -843,19 +828,19 @@ func highlight_connections() -> void:
 		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
 	highlighting_connections = false
 
-func _on_GraphEdit_node_selected(node : GraphNode) -> void:
-	# TODO: Rewrite that comment node related feature
-	if false: # node.comment:
+func _on_GraphEdit_node_selected(node : GraphElement) -> void:
+	if node is MMGraphComment:
 		# Need to account for zoom level when checking for contained nodes within comment
 		var current_zoom = get_zoom()
 		var node_rect = node.get_rect()
 		node_rect.size = node_rect.size * current_zoom
-		
+
+		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
 				var c_rect = c.get_rect()
 				c_rect.size = c_rect.size * current_zoom
-				
+
 				if node_rect.encloses(c_rect):
 					c.selected = true
 	else:
@@ -865,7 +850,11 @@ func _on_GraphEdit_node_selected(node : GraphNode) -> void:
 			for n in get_selected_nodes():
 				if n.generator == current_preview[0].generator:
 					return
-		set_current_preview(0, node)
+		if node.get_output_port_count():
+			if Input.is_key_pressed(KEY_SHIFT):
+				set_current_preview(1, node)
+			else:
+				set_current_preview(0, node)
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
@@ -874,17 +863,19 @@ func _on_GraphEdit_node_unselected(_node):
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
-func get_current_preview(slot : int = 0):
+
+func get_current_preview(slot : int = 0) -> Preview:
 	if locked_preview[slot] != null:
 		return locked_preview[slot]
 	return current_preview[slot]
 
-func set_current_preview(slot : int, node, output_index : int = 0, locked = false) -> void:
+
+func set_current_preview(slot: int, node: GraphNode, output_index: int = 0, locked := false, force_unlock := false) -> void:
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
 	if is_instance_valid(node):
-		preview = Preview.new(node.generator, output_index)
+		preview = Preview.new(node.generator, output_index, node)
 	if locked:
 		if is_instance_valid(node) and locked_preview[slot] != null and locked_preview[slot].generator != node.generator:
 			old_locked_preview = locked_preview[slot].generator
@@ -895,14 +886,19 @@ func set_current_preview(slot : int, node, output_index : int = 0, locked = fals
 	else:
 		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
+		if force_unlock:
+			locked_preview[slot] = null
 		current_preview[slot] = preview
-	emit_signal("preview_changed", self)
+
+	preview_changed.emit(self)
+
 	if is_instance_valid(node):
 		node.queue_redraw()
 	if old_preview != null or old_locked_preview != null:
 		for c in get_children():
 			if c is GraphNode and (c.generator == old_preview or c.generator == old_locked_preview):
 				c.queue_redraw()
+
 
 func request_popup(node_name : String , slot_index : int, _release_position : Vector2, connect_output : bool) -> void:
 	# Check if the connector was actually  dragged
@@ -987,10 +983,10 @@ func undoredo_command(command : Dictionary) -> void:
 		"remove_generators":
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for n in command.generators:
-				var g = parent_generator.get_node(n)
+				var g = parent_generator.get_node(NodePath(n))
 				if generator == parent_generator:
 					if has_node("node_"+g.name):
-						do_remove_node(get_node("node_"+g.name))
+						do_remove_node(get_node(NodePath("node_"+g.name)))
 					else:
 						print("Cannot find node_"+g.name)
 						for c in get_children():
@@ -1260,7 +1256,7 @@ func get_propagation_targets(source : MMGenGraph, parent : MMGenGraph = null) ->
 func propagate_node_changes(source : MMGenGraph) -> void:
 	for c in get_propagation_targets(source):
 		c.apply_diff_from(source)
-	
+
 	var main_window = mm_globals.main_window
 	main_window.hierarchy.update_from_graph_edit(self)
 	update_view(generator)

@@ -25,7 +25,7 @@ func _on_ItemList_item_activated(index) -> void:
 	if only_return_index:
 		emit_signal("return_asset", { index=displayed_assets[index] })
 	else:
-		var error = $HTTPRequest.request("https://www.materialmaker.org/api/getMaterial?id="+str(displayed_assets[index]))
+		var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(displayed_assets[index]))
 		if error != OK:
 			return
 		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
@@ -66,6 +66,7 @@ func fill_list(filter : String):
 func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 	# Hide the window until the asset list is loaded
 	visible = false
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	mm_globals.main_window.add_dialog(self)
 	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:
@@ -83,7 +84,9 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 			var image : Image = Image.create(256, 256, false, Image.FORMAT_RGBA8)
 			for i in range(tmp_assets.size()):
 				var m = tmp_assets[i]
-				if int(m.type) & 15 == type:
+				m.id = int(m.id)
+				m.type = int(m.type)
+				if m.type & 15 == type:
 					m.texture = ImageTexture.new()
 					m.texture.set_image(image)
 					assets.push_back(m)
@@ -109,7 +112,8 @@ func update_thumbnails() -> void:
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
-			var error = $ImageHTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp")
+			var address : String = MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp"
+			var error = $ImageHTTPRequest.request(address)
 			if error == OK:
 				var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
 				image.load_webp_from_buffer(data)
@@ -125,7 +129,7 @@ func _on_ItemList_nothing_selected():
 	$VBoxContainer/Buttons/OK.disabled = true
 
 func _on_VBoxContainer_minimum_size_changed():
-	size = $VBoxContainer.size+Vector2(4, 4)
+	size = ($VBoxContainer.size+Vector2(4, 4))*content_scale_factor
 
 
 func _on_Filter_changed(new_text):

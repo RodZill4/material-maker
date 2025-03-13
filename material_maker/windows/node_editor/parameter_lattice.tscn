@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://htfysgsqhog8"]
+
+[ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_lattice.gd" id="1_h2y8c"]
+[ext_resource type="PackedScene" uid="uid://dbhof8v2eiop8" path="res://material_maker/widgets/lattice_edit/lattice_edit.tscn" id="2_bp6bw"]
+
+[node name="lattice" type="HBoxContainer"]
+offset_right = 148.0
+offset_bottom = 24.0
+script = ExtResource("1_h2y8c")
+
+[node name="LabelDefault" type="Label" parent="."]
+layout_mode = 2
+text = "Default:"
+
+[node name="Default" parent="." instance=ExtResource("2_bp6bw")]
+layout_mode = 2

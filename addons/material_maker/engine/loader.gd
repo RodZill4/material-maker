@@ -275,7 +275,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 	if generator == null:
 		print("LOADER: data not supported:"+str(data))
 	if generator != null:
-		var status = generator.deserialize(data)
+		var status = await generator.deserialize(data)
 	return generator
 
 func get_generator_list() -> Array:

@@ -22,13 +22,12 @@
 		"metallic": 0,
 		"normal": 1,
 		"roughness": 1,
-		"size": 11,
+		"size": 7,
 		"sss": 1
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "",
-		"custom": "",
 		"exports": {
 			"Blender": {
 				"export_extension": "tres",
@@ -2091,6 +2090,8 @@
 						"file_name": "$(path_prefix).py",
 						"template": [
 							"import unreal",
+							"import sys",
+							"sys.path.append('$(material_maker_path)$(path_separator)export')",
 							"import mm",
 							"from importlib import reload",
 							"reload(mm)",
@@ -2384,6 +2385,10 @@
 			"",
 			"void fragment() {",
 			"\tvec2 base_uv = UV;",
+			"\tint texture_size = textureSize(texture_albedo, 0).x;",
+			"\tif (texture_size < 256) {",
+			"\t\tbase_uv = floor(float(texture_size)*base_uv+0.5)/float(texture_size);",
+			"\t}",
 			"$if $(connected:depth_tex)",
 			"\t{",
 			"$begin_generate",

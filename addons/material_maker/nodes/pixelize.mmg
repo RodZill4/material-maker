@@ -14,10 +14,24 @@
 	"shader_model": {
 		"code": [
 			"vec2 $(name_uv)_uv = floor(($uv*vec2($x, $y)))+vec2(0.5);",
-			"vec3 $(name_uv)_dither = fract(vec3(dot(vec2(171.0, 231.0), $(name_uv)_uv))/vec3(103.0, 71.0, 97.0));",
+			"vec3 $(name_uv)_dither = $t;",
 			""
 		],
-		"global": "",
+		"global": [
+			"float bayer_matrix(vec2 uv, int rounds) {",
+			"\tivec2 iuv = ivec2(uv);",
+			"\tint b[4] = int[4]( 0, 2, 3, 1 );",
+			"\tfloat divisor = 1.0;",
+			"\tint rv = 0;",
+			"\tfor (int i = 0; i < rounds; ++i) {",
+			"\t\trv *= 4;",
+			"\t\tdivisor *= 4.0;",
+			"\t\trv += b[(iuv.x%2)+2*(iuv.y%2)];",
+			"\t\tiuv >>= 1;",
+			"\t}",
+			"\treturn float(rv)/divisor;",
+			"}"
+		],
 		"inputs": [
 			{
 				"default": "vec3(1.0)",
@@ -34,7 +48,7 @@
 		"outputs": [
 			{
 				"longdesc": "A pixelated version of the input image",
-				"rgb": "floor($i($(name_uv)_uv/vec2($x, $y))*$c+$d*($(name_uv)_dither-vec3(0.5)))/$c",
+				"rgb": "floor($i($(name_uv)_uv/vec2($x, $y))*$c+$d*($(name_uv)_dither))/$c",
 				"shortdesc": "Output",
 				"type": "rgb"
 			}
@@ -87,6 +101,34 @@
 				"shortdesc": "Dithering",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Dither type",
+				"name": "t",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Random",
+						"value": "fract(vec3(dot(vec2(171.0, 231.0), $(name_uv)_uv))/vec3(103.0, 71.0, 97.0))"
+					},
+					{
+						"name": "Bayer 2x2",
+						"value": "vec3(bayer_matrix($(name_uv)_uv, 1))"
+					},
+					{
+						"name": "Bayer 4x4",
+						"value": "vec3(bayer_matrix($(name_uv)_uv, 2))"
+					},
+					{
+						"name": "Bayer 8x8",
+						"value": "vec3(bayer_matrix($(name_uv)_uv, 3))"
+					},
+					{
+						"name": "Bayer 16x16",
+						"value": "vec3(bayer_matrix($(name_uv)_uv, 4))"
+					}
+				]
 			}
 		]
 	},

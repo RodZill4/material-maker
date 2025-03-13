@@ -1,7 +1,7 @@
-CustomUV node
+Custom UV node
 ~~~~~~~~~~~~~
 
-The **CustomUV** node deforms an input image according to a custom UV map given as input.
+The **Custom UV** node deforms an input image according to a custom UV map given as input.
 
 .. image:: images/node_transform_customuv.png
 	:align: center
@@ -9,7 +9,7 @@ The **CustomUV** node deforms an input image according to a custom UV map given 
 Inputs
 ++++++
 
-The **CustomUV** node accepts two inputs:
+The **Custom UV** node accepts two inputs:
 
 * The *Source* inputs is the image to be deformed.
 
@@ -20,12 +20,12 @@ The **CustomUV** node accepts two inputs:
 Outputs
 +++++++
 
-The **CustomUV** node outputs the deformed image.
+The **Custom UV** node outputs the deformed image.
 
 Parameters
 ++++++++++
 
-The **CustomUV** node accepts the following parameters:
+The **Custom UV** node accepts the following parameters:
 
 * *Inputs* is the number of alternate shapes in the input (1, 4 or 16). Images containing several
   shapes can easily be created using the **Tile2x2** node.
