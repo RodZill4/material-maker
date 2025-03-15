@@ -224,5 +224,6 @@ func get_list_drag_data(m_position):
 
 func _on_list_item_activated(index: int) -> void:
 	var data = %List.get_item_metadata(index)
-	add_node(data.item)
-	todo_renamed_hide()
+	if not data == null:
+		add_node(data.item)
+		todo_renamed_hide()
