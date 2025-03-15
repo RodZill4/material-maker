@@ -9,12 +9,12 @@ The **Quantize** node approximates the colors of the input image.
 Inputs
 ++++++
 
-The **Quantize** node accepts an RGBA input texture.
+The **Quantize** node accepts one or more RGBA input textures.
 
 Outputs
 +++++++
 
-The **Quantize** node provides a single RGBA texture.
+The **Quantize** node outputs RGBA textures.
 
 Parameters
 ++++++++++
