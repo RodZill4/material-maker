@@ -143,7 +143,8 @@ func parse_paste_data(data : String):
 # Misc. UI functions
 
 static func popup_menu(menu : PopupMenu, parent : Control):
-	menu.popup(Rect2(parent.get_local_mouse_position()+parent.get_screen_position(), Vector2(0, 0)))
+	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor + parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	main_window.set_tip_text(tip, timeout, priority)
