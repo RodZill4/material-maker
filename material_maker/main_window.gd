@@ -839,6 +839,7 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:

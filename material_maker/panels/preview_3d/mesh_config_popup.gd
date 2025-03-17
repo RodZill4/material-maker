@@ -3,6 +3,8 @@ extends PopupPanel
 var mesh : MeshInstance3D
 
 func _ready() -> void:
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = get_contents_minimum_size() * content_scale_factor
 	%ScaleLinked.icon = get_theme_icon("link", "MM_Icons")
 
 func configure_mesh(m : MeshInstance3D) -> void:
@@ -32,7 +34,7 @@ func configure_mesh(m : MeshInstance3D) -> void:
 		%Parameters.add_child(float_edit)
 		float_edit.value_changed.connect(mesh.set_parameter.bind(p.name))
 
-	popup(Rect2(get_mouse_position(), $VBoxContainer.get_minimum_size()))
+	popup(Rect2(get_mouse_position()*content_scale_factor, $VBoxContainer.get_minimum_size()*content_scale_factor))
 
 
 func _on_scale_linked_toggled(toggled_on: bool) -> void:
