@@ -59,5 +59,7 @@ func _on_Config_pressed():
 		if layer.get_layer_type() == MMLayer.LAYER_MASK:
 			return
 		var popup = preload("res://material_maker/panels/layers/layer_config_popup.tscn").instantiate()
+		popup.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		popup.min_size = Vector2(228, 245) * popup.content_scale_factor
 		add_child(popup)
 		popup.configure_layer(layers, current.get_meta("layer"))
