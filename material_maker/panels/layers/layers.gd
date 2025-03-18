@@ -25,7 +25,8 @@ func _on_Add_pressed():
 	menu.connect("id_pressed", Callable(self, "_on_add_layer_menu"))
 	menu.connect("id_pressed", Callable(menu, "queue_free"))
 	menu.connect("popup_hide", Callable(menu, "queue_free"))
-	menu.popup(Rect2(Vector2(button_rect.position.x, button_rect.end.y), Vector2(0, 0)))
+	menu.popup(Rect2(Vector2(button_rect.position.x, button_rect.end.y) *
+		mm_globals.main_window.get_window().content_scale_factor, Vector2(0, 0)))
 
 func _on_add_layer_menu(id):
 	layers.add_layer(id)
