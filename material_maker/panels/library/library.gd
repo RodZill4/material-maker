@@ -346,6 +346,8 @@ func _on_PopupMenu_index_pressed(index):
 		4: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			dialog.min_size = Vector2(400, 90) * dialog.content_scale_factor
 			add_child(dialog)
 			var status = await dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
 			if ! status.ok:
