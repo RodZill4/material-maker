@@ -32,7 +32,10 @@ func _open() -> void:
 	
 	if mm_globals.has_config("ui_3d_preview_tonemap_white"):
 		$VBoxContainer/VBox/White.set_value(mm_globals.get_config("ui_3d_preview_tonemap_white"))
-
+	
+	$VBoxContainer/VBox/White.visible = tonemap_mode > 0 && tonemap_mode <= 3
+	$VBoxContainer/VBox/WhiteLabel.visible = tonemap_mode > 0 && tonemap_mode <= 3
+	
 func update_environment_selector() -> void:
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 	if not environment_manager:
