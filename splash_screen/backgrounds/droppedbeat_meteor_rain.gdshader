@@ -48,7 +48,7 @@ vec2 rotate(vec2 uv, float rotate) {
  	vec2 rv;
 	rv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;
 	rv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;
-	return rv;	
+	return rv;
 }
 float shape_circle(vec2 uv, float sides, float size, float edge) {
 	uv = 2.0*uv-1.0;
@@ -378,6 +378,8 @@ vec4 supersample_o150412(vec2 uv, float size, int count, float width, float _see
 void fragment() {
 	float _seed_variation_ = variation;
 	vec2 uv = fract(UV);
+	uv *= vec2(1.76744186, 1)*0.5;
+	uv += vec2(0.0,0.65);
 vec4 o150416_0_1_rgba = supersample_o150416((uv), 1024.000000000, int(p_o150416_count), p_o150416_width, _seed_variation_);
 vec4 o150412_0_1_rgba = supersample_o150412(((uv)-vec2(p_o150411_translate_x, p_o150411_translate_y)), 256.000000000, int(p_o150412_count), p_o150412_width, _seed_variation_);
 vec4 o150411_0_1_rgba = o150412_0_1_rgba;
