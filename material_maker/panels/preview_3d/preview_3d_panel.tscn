@@ -112,7 +112,7 @@ text = "Exposure"
 [node name="Exposure" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" index="5" instance=ExtResource("4_dlxub")]
 layout_mode = 2
 value = 1.0
-max_value = 4.0
+max_value = 16.0
 step = 0.01
 float_only = true
 
@@ -124,7 +124,7 @@ text = "White"
 [node name="White" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" index="7" instance=ExtResource("4_dlxub")]
 layout_mode = 2
 value = 1.0
-max_value = 4.0
+max_value = 16.0
 step = 0.01
 float_only = true
 
