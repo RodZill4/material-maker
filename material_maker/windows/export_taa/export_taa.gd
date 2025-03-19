@@ -28,7 +28,7 @@ func set_source(generator, output):
 	extra_parameters.append({ name="mm_iteration", type="int", value=0 })
 	extra_parameters.append({ name="mm_accumulate_previous", type="sampler2D", value=acc_texture })
 	var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=MMPipeline.TEXTURE_TYPE_RGBA32F, writeonly=false, keep=true}]
-	await accumulate_render.set_shader_from_shadercode_ext(shader_template, source, output_textures, null, extra_parameters, true)
+	await accumulate_render.set_shader_from_shadercode_ext(shader_template, source, output_textures, extra_parameters, true, [])
 	divide_render.add_parameter_or_texture("mm_iteration", "float", 0)
 	divide_render.add_parameter_or_texture("mm_texture_acc", "sampler2D", acc_texture)
 	divide_render.add_parameter_or_texture("mm_exponent", "float", 1)
@@ -93,5 +93,3 @@ func _on_denoise_item_selected(index):
 
 func _on_denoise_value_changed(value):
 	force_update = true
-
-

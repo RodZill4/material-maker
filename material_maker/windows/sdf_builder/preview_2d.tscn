@@ -26,26 +26,27 @@ shader = SubResource("4")
 
 [node name="Preview2D" instance=ExtResource("1")]
 material = SubResource("3")
+offset_right = 428.0
+offset_bottom = 210.0
 script = ExtResource("2")
 shader_accumulate = ""
 shader_divide = ""
 
-[node name="View" parent="ContextMenu" index="3"]
-item_count = 4
-
 [node name="Iteration" parent="Accumulate" index="0"]
 material = SubResource("5")
 
-[node name="UI" type="HBoxContainer" parent="." index="17"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PanelContainer" type="PanelContainer" parent="MenuBar/HBox" index="1"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="View" type="OptionButton" parent="UI" index="0"]
+[node name="UI" type="HBoxContainer" parent="MenuBar/HBox/PanelContainer" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="View" type="OptionButton" parent="MenuBar/HBox/PanelContainer/UI" index="0"]
 layout_mode = 2
 item_count = 6
 popup/item_0/text = "SDF+Albedo"
-popup/item_0/id = 0
 popup/item_1/text = "SDF"
 popup/item_1/id = 1
 popup/item_2/text = "Albedo"
@@ -57,4 +58,4 @@ popup/item_4/id = 4
 popup/item_5/text = "Emission"
 popup/item_5/id = 5
 
-[connection signal="item_selected" from="UI/View" to="." method="_on_View_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/PanelContainer/UI/View" to="." method="_on_View_item_selected"]

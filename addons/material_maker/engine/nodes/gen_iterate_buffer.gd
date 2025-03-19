@@ -20,7 +20,7 @@ var iteration_param_name : String
 var used_named_parameters : Array = []
 
 
-func _ready():
+func _init():
 	#texture.flags = Texture2D.FLAG_REPEAT
 	shader_computes.append(MMShaderCompute.new())
 	shader_computes.append(MMShaderCompute.new())
@@ -114,10 +114,19 @@ func do_update_shaders() -> void:
 	for i in 2:
 		var shader_compute : MMShaderCompute = shader_computes[i]
 		var buffer_name : String = buffer_names[i]
+		var output_texture_type : int = 0 if new_is_greyscale else 1
+		if f32:
+			output_texture_type |= 2
 		if i == 1 and get_parameter("autostop"):
-			await shader_compute.set_shader_from_shadercode(sources[i], f32, texture)
+			var shader_template : String = load("res://addons/material_maker/engine/nodes/iterate_buffer_compute.tres").text
+			var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
+			var extra_parameters : Array[Dictionary] = [{name="mm_compare", type="sampler2D", value=texture}]
+			var extra_output_parameters : Array[Dictionary] = [{name="mm_highest_diff", type="int"}]
+			await shader_compute.compute_shader.set_shader_from_shadercode_ext(shader_template, sources[i], output_textures, extra_parameters, false, extra_output_parameters)
 		else:
-			await shader_compute.set_shader_from_shadercode(sources[i], f32)
+			var shader_template : String = load("res://addons/material_maker/engine/nodes/buffer_compute.tres").text
+			var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
+			await shader_compute.compute_shader.set_shader_from_shadercode_ext(shader_template, sources[i], output_textures, [], false, [])
 		mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
 	mm_deps.update()
 	if new_is_greyscale != is_greyscale:
@@ -132,6 +141,7 @@ func set_parameter(n : String, v) -> void:
 			mm_deps.dependency_update("o%s_it_tex_size" % get_instance_id(), pow(2, v))
 	super.set_parameter(n, v)
 	set_current_iteration(0)
+	mm_deps.buffer_invalidate(buffer_names[0])
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	if parameter_name != buffer_names[2] and parameter_name != iteration_param_name and (buffer_name != buffer_names[1] or ! value is Texture2D):
@@ -169,10 +179,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		iterations = 1
 	if current_iteration > iterations:
+		print("Bad iteration for buffer %s (%d > %d)" % [ buffer_name, current_iteration, iterations ])
 		await get_tree().process_frame
 		mm_deps.dependency_update(buffer_name, null, true)
 		is_rendering = false
-		print("Bad iteration for buffer %s (%d > %d)" % [ buffer_name, current_iteration, iterations ])
 		return true
 	var check_current_iteration : int = current_iteration
 	var autostop : bool = get_parameter("autostop")
@@ -185,7 +195,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		if size < 4:
 			size = 4
 	
-	var status : bool = await shader_compute.render(texture, size)
+	var output_parameter_values : Dictionary = { }
+	if current_iteration > 0:
+		output_parameter_values.mm_highest_diff = 0
+	var status : bool = await shader_compute.compute_shader.render(texture, Vector2i(size, size), output_parameter_values)
 	if not status:
 		print("Error while rendering %s" % buffer_name)
 	
@@ -199,8 +212,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	#print("iteration %d" % current_iteration)
 	
 	# Calculate iteration index
-	if autostop and shader_compute.get_difference() == 0:
-		#print("autostop at %d" % (current_iteration))
+	if autostop and output_parameter_values.has("mm_highest_diff") and output_parameter_values["mm_highest_diff"] == 0:
+		print("autostop at %d" % (current_iteration))
 		set_current_iteration(iterations+1)
 	else:
 		set_current_iteration(current_iteration+1)
@@ -238,6 +251,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 	var genname = "o"+str(get_instance_id())
 	var shader_code = _get_shader_code_lod(uv, output_index, context, is_greyscale, -1.0, "_it_tex" if output_index == 0 else "_loop_tex")
 	shader_code.add_uniform("%s_it_tex_size" % genname, "float", pow(2, get_parameter("size")))
+	shader_code.add_uniform(iteration_param_name, "int", current_iteration)
 	return shader_code
 
 func get_output_attributes(output_index : int) -> Dictionary:

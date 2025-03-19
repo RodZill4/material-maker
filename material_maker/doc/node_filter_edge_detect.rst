@@ -1,7 +1,7 @@
-Edge detect node
+Edge Detect node
 ~~~~~~~~~~~~~~~~
 
-There are 4 different **Edge detect** nodes that apply an edge detect
+There are 4 different **Edge Detect** nodes that apply an edge detect
 filter to their input. Them main edge detect node has more parameters,
 the 3 others are simplified (and faster) filters.
 
@@ -11,17 +11,17 @@ the 3 others are simplified (and faster) filters.
 Inputs
 ++++++
 
-The **Edge detect** node has a single input.
+The **Edge Detect** node has a single input.
 
 Outputs
 +++++++
 
-The **Edge detect** node outputs the result of the edge detect operation.
+The **Edge Detect** node outputs the result of the edge detect operation.
 
 Parameters
 ++++++++++
 
-The **Edge detect** node accepts the following parameters:
+The **Edge Detect** node accepts the following parameters:
 
 * The *size* at which the input is sampled
 

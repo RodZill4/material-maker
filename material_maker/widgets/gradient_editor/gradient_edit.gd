@@ -25,21 +25,21 @@ var active_cursor := 0:
 		value = wrap(value, 0, %Gradient.get_child_count())
 		active_cursor = value
 		active_cursor_changed.emit()
-		
+
 		for i in %Gradient.get_children():
 			i.queue_redraw()
 
 # Reference of the preview cursor (when dropping in a color)
 var preview_cursor: GradientEditCursor = null
 # Reference to the popup
-var popup: Control = null
+var popup : Control = null
 
-var hovered := false
+var hovered : bool = false
 
 
 func _ready() -> void:
 	%Gradient.material = %Gradient.material.duplicate(true)
-	
+
 	update_visuals()
 
 
@@ -47,15 +47,15 @@ func set_value(v: MMGradient) -> void:
 	for c in %Gradient.get_children():
 		c.queue_free()
 		c.get_parent().remove_child(c)
-	
+
 	if value == null:
 		return
 
 	for p in value.points:
 		add_cursor(p.v, p.c)
-	
+
 	sort_cursors()
-	
+
 	update_shader()
 	value_was_set.emit()
 
@@ -68,17 +68,17 @@ func set_interpolation(interpolation_type:int) -> void:
 
 func update_from_value(merge_undos := true) -> void:
 	value.clear()
-	
+
 	for c in %Gradient.get_children():
 		value.add_point(c.get_cursor_offset(), c.color)
-	
+
 	update_shader()
-	
+
 	if is_instance_valid(popup):
 		popup.set_gradient(value, active_cursor)
-	
+
 	sort_cursors()
-	
+
 	updated.emit(value, merge_undos)
 
 
@@ -91,7 +91,7 @@ func _gui_input(ev:InputEvent) -> void:
 			sort_cursors()
 			active_cursor = cursor.cursor_index
 			update_from_value(false)
-	
+
 	if preview_cursor:
 		preview_cursor.set_cursor_offset(position_to_offset(get_local_mouse_position()))
 
@@ -99,22 +99,22 @@ func _gui_input(ev:InputEvent) -> void:
 func select_color(cursor:GradientEditCursor) -> void:
 	active_cursor = cursor.cursor_index
 	mode = Modes.SELECTING_COLOR
-	
+
 	var color_picker_popup := preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
 	add_child(color_picker_popup)
-	
+
 	var color_picker := color_picker_popup.get_node("ColorPicker")
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
-	
+
 	var _scale := get_global_transform().get_scale()
 	color_picker_popup.position.x = global_position.x + size.x*_scale.x + 10
 	color_picker_popup.position.y = global_position.y
 	color_picker_popup.position += get_window().position
-	
+
 	color_picker_popup.popup_hide.connect(color_picker_popup.queue_free)
 	color_picker_popup.popup_hide.connect(set.bind("mode", Modes.IDLE))
-	
+
 	color_picker_popup.popup()
 
 
@@ -178,27 +178,29 @@ func add_cursor(offset, color) -> GradientEditCursor:
 func update_shader() -> void:
 	if value == null:
 		return
-	var shader := ""
-	shader = "shader_type canvas_item;\n"
-	shader += value.get_shader_params("")
-	shader += """
+	var shader_code := ""
+	shader_code = "shader_type canvas_item;\n"
+	shader_code += value.get_shader_params("")
+	shader_code += """
 uniform vec2 size = vec2(25.0, 25.0);
 uniform vec3 background_color_1 = vec3(0.4);
 uniform vec3 background_color_2 = vec3(0.6);
 	"""
-	shader += value.get_shader("")
-	shader += """void fragment() {
+	shader_code += value.get_shader("")
+	shader_code += """void fragment() {
 	vec2 uv = UV*size;
 	float checkerboard = mod(floor(uv.x*0.2)+floor(uv.y*0.2), 2.0);
 	vec4 gradient = _gradient_fct(UV.x);
 	vec3 gradient_with_checkerboard = mix(mix(background_color_1, background_color_2, checkerboard).rgb, gradient.rgb, gradient.a);
 	if (UV.y < 0.75){
 		COLOR.rgb = gradient_with_checkerboard;
-	}else{
+	} else {
 		COLOR.rgb = gradient.rgb;
 	}
 	}"""
-	%Gradient.material.shader.set_code(shader)
+	var shader : Shader = Shader.new()
+	shader.code = shader_code
+	%Gradient.material.shader = shader
 	update_shader_parameters()
 
 
@@ -222,7 +224,7 @@ func _on_popup_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		popup = load("res://material_maker/widgets/gradient_editor/gradient_popup.tscn").instantiate()
 		add_child(popup)
-		
+
 		popup.updated.connect(
 			func(val, merge_undos):
 				value = val
@@ -230,12 +232,12 @@ func _on_popup_button_toggled(toggled_on: bool) -> void:
 				)
 		popup.about_to_close.connect(%PopupButton.call_deferred.bind("set_pressed_no_signal", false))
 		popup.active_cursor_changed.connect(func(val): active_cursor = val)
-		
+
 		popup.set_gradient(value, active_cursor)
 
 		update_popup_position()
 		set_notify_transform(true)
-	
+
 	else:
 		if is_instance_valid(popup):
 			popup.close()
@@ -281,7 +283,7 @@ func _drop_data(pos: Vector2, data: Variant) -> void:
 		if gradient != null:
 			value = MMType.deserialize_value(gradient)
 			updated.emit(value, false)
-	
+
 	if preview_cursor:
 		preview_cursor.queue_free()
 		preview_cursor = null
@@ -291,7 +293,7 @@ func _drop_data(pos: Vector2, data: Variant) -> void:
 func _input(ev:InputEvent) -> void:
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
-	
+
 	if mode == Modes.IDLE:
 		if ev is InputEventKey and ev.is_command_or_control_pressed():
 			if not ev.pressed:
@@ -302,10 +304,10 @@ func _input(ev:InputEvent) -> void:
 					val = Color.from_string(DisplayServer.clipboard_get(), Color.WHITE)
 				else:
 					val = str_to_var(DisplayServer.clipboard_get())
-				
+
 				_drop_data(get_local_mouse_position(), val)
 				accept_event()
-			
+
 			if ev.keycode == KEY_C:
 				DisplayServer.clipboard_set(var_to_str(MMType.serialize_value(value)))
 				accept_event()
@@ -320,6 +322,8 @@ func remove_popup_button() -> void:
 
 
 func update_visuals() -> void:
+	if has_node("%PopupButton"):
+		%PopupButton.icon = get_theme_icon("dropdown", "MM_Icons")
 	var is_hovered := Rect2(Vector2(), size).has_point(get_local_mouse_position())
 	if is_hovered != hovered:
 		hovered = is_hovered
@@ -330,11 +334,19 @@ func update_visuals() -> void:
 
 
 func _notification(what: int) -> void:
+	if not is_node_ready():
+		return
+	if get_meta("doing_theme_change", false):
+		return
+
 	match what:
 		NOTIFICATION_TRANSFORM_CHANGED:
 			update_popup_position()
 		NOTIFICATION_THEME_CHANGED:
+			set_meta("doing_theme_change", true)
 			update_visuals()
+			await get_tree().process_frame
+			set_meta("doing_theme_change", false)
 
 
 func _draw() -> void:

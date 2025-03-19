@@ -597,7 +597,7 @@ func replace_input(input_name : String, suffix : String, parameters : String, va
 		var replaced : String = replace_variables(input_def.default, variables, rv, context)
 		variables.uv = old_uv
 		return replaced
-	if suffix == "texture" or suffix == "size":
+	if suffix != null:
 		if source.generator.has_method("get_output_attributes"):
 			var attributes = source.generator.get_output_attributes(source.output_index)
 			var attribute_name : String = suffix
@@ -605,7 +605,8 @@ func replace_input(input_name : String, suffix : String, parameters : String, va
 				attribute_name = "texture_size"
 			if attributes != null and attributes is Dictionary and attributes.has(attribute_name):
 				return attributes[attribute_name]
-		return "(error: Cannot find texture for input %s)" % input_name
+		if suffix == "texture" or suffix == "size":
+			return "(error: Cannot find attribute %s for input %s)" % [ suffix, input_name ]
 	if input_def.has("function") and input_def.function:
 		var function_name : String = "o%s_input_%s" % [ str(get_instance_id()), input_def.name ]
 		if suffix == "variation":

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://7wslfieqleli"]
 
 [ext_resource type="PackedScene" uid="uid://0b6d65sghy3s" path="res://material_maker/widgets/histogram/histogram.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/nodes/tones/tones.gd" id="2"]
+[ext_resource type="Script" uid="uid://nbk6k40bfmwi" path="res://material_maker/nodes/tones/tones.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -58,6 +58,7 @@ layout_mode = 2
 [node name="Mode" type="OptionButton" parent="Bar"]
 layout_mode = 2
 size_flags_horizontal = 3
+selected = 0
 item_count = 5
 popup/item_0/text = "Luminance"
 popup/item_0/id = 0

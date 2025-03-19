@@ -3,11 +3,11 @@ extends Window
 
 #onready var shape_names = mm_sdf_builder.get_shape_names()
 
-@onready var tree : Tree = $VBoxContainer/Main/Tree
-@onready var preview_2d : ColorRect = $VBoxContainer/Main/Preview2D
-@onready var preview_3d : SubViewportContainer = $VBoxContainer/Main/Preview3D
-@onready var node_parameters_panel : GridContainer = $VBoxContainer/Main/ScrollContainer/Parameters/NodeParameters
-@onready var item_parameters_panel : GridContainer = $VBoxContainer/Main/ScrollContainer/Parameters/ItemParameters
+@onready var tree : Tree = %Tree
+@onready var preview_2d : ColorRect = %Preview2D
+@onready var preview_3d : SubViewportContainer = %Preview3D
+@onready var node_parameters_panel : GridContainer = %NodeParameters
+@onready var item_parameters_panel : GridContainer = %ItemParameters
 
 var node_parameter_mode : bool = true
 
@@ -79,8 +79,8 @@ func set_node_parameter_mode(b : bool = true):
 	if b == node_parameter_mode:
 		return
 	node_parameter_mode = b
-	$VBoxContainer/Main/ScrollContainer/Parameters/NodeParams.button_pressed = b
-	$VBoxContainer/Main/ScrollContainer/Parameters/ItemParams.button_pressed = not b
+	%NodeParametersButton.button_pressed = b
+	%ItemParametersButton.button_pressed = not b
 	$GenSDF.expressions = node_parameter_mode
 	set_preview(scene)
 	_on_Tree_item_selected()
@@ -290,7 +290,7 @@ func show_menu(current_item : TreeItem):
 	add_child(menu)
 	menu.id_pressed.connect(self._on_menu.bind(current_item))
 	menu.popup_hide.connect(menu.queue_free)
-	menu.popup(Rect2($VBoxContainer.get_local_mouse_position()+$VBoxContainer.get_screen_position(), Vector2(0, 0)))
+	mm_globals.popup_menu(menu, $TopContainer)
 
 func _on_Tree_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
@@ -694,7 +694,7 @@ func _input(event):
 					if item != null:
 						delete_item(item)
 				KEY_X:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							copy_item(item)
@@ -702,27 +702,27 @@ func _input(event):
 					else:
 						return
 				KEY_C:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							copy_item(item)
 					else:
 						return
 				KEY_V:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						var item : TreeItem = tree.get_selected()
 						if item != null:
 							paste_item(item)
 					else:
 						return
 				KEY_Z:
-					if event.control:
+					if event.is_command_or_control_pressed():
 						pass
 					else:
 						return
 				_:
 					return
-		$VBoxContainer.accept_event()
+		$TopContainer.accept_event()
 
 func _on_VBoxContainer_minimum_size_changed():
-	min_size = $VBoxContainer.get_minimum_size()+Vector2(4, 4)
+	min_size = $TopContainer.get_combined_minimum_size()+Vector2(4, 4)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://boy8werx31h7b"]
 
-[ext_resource type="Script" path="res://addons/material_maker/map_generator/test.gd" id="1_h34mq"]
+[ext_resource type="Script" uid="uid://7f38moq6kxet" path="res://addons/material_maker/map_generator/test.gd" id="1_h34mq"]
 
 [node name="test" type="TextureRect"]
 anchors_preset = 15

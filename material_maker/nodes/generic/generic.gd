@@ -37,8 +37,7 @@ func generic_button_create_popup():
 	add_child(popup_menu)
 	popup_menu.connect("popup_hide",Callable(popup_menu,"queue_free"))
 	popup_menu.connect("id_pressed",Callable(self,"update_generic"))
-	popup_menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
-
+	mm_globals.popup_menu(popup_menu, self)
 
 
 func set_generator(g : MMGenBase) -> void:
@@ -403,7 +402,7 @@ func update_preview() -> void:
 func do_update_preview() -> void:
 	preview.set_generator(generator, generator.preview, true)
 
-	var scale_modifier: float = get_global_transform().get_scale().x
+	var scale_modifier : float = get_global_transform().get_scale().x
 	var titlebar_stylebox :=  get_theme_stylebox("titlebar", "GraphNode")
 	var title_bar_height := get_titlebar_hbox().size.y +titlebar_stylebox.content_margin_bottom+titlebar_stylebox.content_margin_top
 	var margin: int = 8
@@ -423,6 +422,7 @@ func update_title() -> void:
 					break
 
 func update_node() -> void:
+	var minimum_line_height = get_theme_constant("minimum_line_height", "MM_Node") if has_theme_constant("minimum_line_height", "MM_Node") else 25
 	# Clean node
 	clear_all_slots()
 	save_preview_widget()
@@ -441,6 +441,7 @@ func update_node() -> void:
 	# Inputs
 	var inputs = generator.get_input_defs()
 	var index = -1
+	var input_labels := []
 	for i in range(inputs.size()):
 		var input = inputs[i]
 		var enable_left = false
@@ -465,23 +466,22 @@ func update_node() -> void:
 		while get_child_count() < index:
 			hsizer = HBoxContainer.new()
 			hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-			hsizer.custom_minimum_size.y = 25
+			hsizer.custom_minimum_size.y = minimum_line_height
 			add_child(hsizer)
 			set_slot(get_child_count()-1, false, 0, Color(), false, 0, Color())
 		hsizer = HBoxContainer.new()
-		hsizer.custom_minimum_size.y = 25
+		hsizer.custom_minimum_size.y = minimum_line_height
 		hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 		add_child(hsizer)
 		if label != "":
 			var label_widget : Label = Label.new()
 			label_widget.text = label
+			label_widget.theme_type_variation = "MM_NodePropertyLabel"
 			hsizer.add_child(label_widget)
+			input_labels.append(label_widget)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
 	
-	var input_names_width : int = 0
-	input_names_width = get_children().reduce(
-		func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
-		, 0)
+	
 	
 	# Parameters
 	if !generator.minimized:
@@ -489,7 +489,7 @@ func update_node() -> void:
 		index = -1
 		var previous_focus = null
 		var first_focus = null
-		var labels := []
+		var property_labels := []
 		for p in generator.get_parameter_defs():
 			if !p.has("name") or !p.has("type"):
 				continue
@@ -512,19 +512,21 @@ func update_node() -> void:
 				while index >= get_child_count():
 					hsizer = HBoxContainer.new()
 					hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-					if input_names_width > 0:
+					if not input_labels.is_empty():
 						var empty_control : Control = Control.new()
-						empty_control.custom_minimum_size.x = input_names_width
+						empty_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+						input_labels.append(empty_control)
 						hsizer.add_child(empty_control)
 					add_child(hsizer)
 				hsizer = get_child(index)
-				hsizer.custom_minimum_size.y = 25
+				hsizer.custom_minimum_size.y = minimum_line_height
 				if label != "":
 					var label_widget = Label.new()
 					label_widget.text = label
-					labels.append(label_widget)
+					property_labels.append(label_widget)
 					label_widget.theme_type_variation = "MM_NodePropertyLabel"
 					hsizer.add_child(label_widget)
+				
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
 					hsizer.add_child(control)
@@ -535,16 +537,30 @@ func update_node() -> void:
 					first_focus = control
 				previous_focus = control
 		
-		var label_max_width = labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		var label_max_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
 		label_max_width = min(100, label_max_width)
-		for label in labels:
+		for label in property_labels:
 			label.custom_minimum_size.x = label_max_width
 			label.size.x = label_max_width
 			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		
+		var input_label_width : int = 0
+		input_label_width = get_children().reduce(
+			func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
+			, 0)
+		
+		if not property_labels.is_empty():
+			input_label_width += 10
+		
+		for i in input_labels:
+			i.custom_minimum_size.x = input_label_width
+		
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
 			first_focus.focus_previous = previous_focus.get_path()
 		initialize_properties()
+	
+			
 	# Outputs
 	var outputs = generator.get_output_defs()
 	output_count = outputs.size()
@@ -567,7 +583,7 @@ func update_node() -> void:
 			add_child(hsizer)
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
-			hsizer.custom_minimum_size.y = 25 if !generator.minimized else 12
+			hsizer.custom_minimum_size.y = minimum_line_height if !generator.minimized else 12
 	# Edit buttons
 	if generator.is_editable():
 		for theme_stylebox in ["frame", "selected_frame"]:
@@ -584,7 +600,7 @@ func update_node() -> void:
 
 func load_generator() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	dialog.custom_minimum_size = Vector2(500, 500)
+	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")

@@ -1,14 +1,15 @@
-[gd_scene load_steps=45 format=3 uid="uid://qx02gvymgb5o"]
+[gd_scene load_steps=46 format=3 uid="uid://qx02gvymgb5o"]
 
-[ext_resource type="Script" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="1"]
+[ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ftx52hy53io2" path="res://material_maker/panels/paint/export.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="5"]
+[ext_resource type="PackedScene" uid="uid://dw4wghi1pn4qr" path="res://material_maker/windows/environment_editor/camera_controller.tscn" id="6_il7on"]
 [ext_resource type="PackedScene" uid="uid://dot3yy7v6xa8g" path="res://material_maker/panels/paint/collapse_button.tscn" id="7_q2p7g"]
 [ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="7_xm5h4"]
 [ext_resource type="PackedScene" uid="uid://d12t30rjvol15" path="res://material_maker/tools/painter/painter.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://drudtoqh4ks4n" path="res://material_maker/panels/paint/paint_layers.tscn" id="13"]
-[ext_resource type="Script" path="res://material_maker/panels/paint/paint.gd" id="16"]
+[ext_resource type="Script" uid="uid://dcabyce4hnfr7" path="res://material_maker/panels/paint/paint.gd" id="16"]
 [ext_resource type="PackedScene" uid="uid://dy1u50we7gtru" path="res://material_maker/panels/graph_edit/graph_edit.tscn" id="17"]
 
 [sub_resource type="Shader" id="Shader_dye6v"]
@@ -228,16 +229,13 @@ stretch = true
 [node name="MainView" type="SubViewport" parent="VSplitContainer/HSplitContainer/Painter/View"]
 own_world_3d = true
 handle_input_locally = false
-size = Vector2i(10, 10)
+size = Vector2i(800, 480)
 render_target_update_mode = 4
 
-[node name="CameraPosition" type="Node3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
+[node name="CameraController" parent="VSplitContainer/HSplitContainer/Painter/View/MainView" instance=ExtResource("6_il7on")]
+camera_path = NodePath("../Camera3D")
 
-[node name="CameraRotation1" type="Node3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition"]
-
-[node name="CameraRotation2" type="Node3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1"]
-
-[node name="Camera3D" type="Camera3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView/CameraPosition/CameraRotation1/CameraRotation2"]
+[node name="Camera3D" type="Camera3D" parent="VSplitContainer/HSplitContainer/Painter/View/MainView"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 environment = SubResource("3")
 current = true
@@ -643,9 +641,11 @@ mouse_filter = 2
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 1
+scroll_offset = Vector2(0, -308)
 shader_context_defs = "uniform sampler2D mesh_normal_tex;
 "
 
+[connection signal="end_of_stroke" from="Painter" to="." method="_on_Painter_end_of_stroke"]
 [connection signal="painted" from="Painter" to="PaintLayers" method="_on_Painter_painted"]
 [connection signal="layer_selected" from="PaintLayers" to="." method="_on_PaintLayers_layer_selected"]
 [connection signal="dragged" from="VSplitContainer" to="." method="_on_v_split_container_dragged"]

@@ -19,11 +19,11 @@ on:
         default: "true"
 
 env:
-  GODOT_VERSION: 4.3
+  GODOT_VERSION: 4.4
   GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.3-stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.4-stable
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_4a1
+  MM_RELEASE: 1_4a3
 
 jobs:
   export_windows_linux:
@@ -36,6 +36,7 @@ jobs:
           submodules: true
       - name: Setup 💻
         run: |
+          cp -f material_maker/theme/default_theme_icons.svg material_maker/theme/default_theme_icons_export.svg
           wget -q ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64.zip
           unzip Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64.zip
           wget -q ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
@@ -118,6 +119,7 @@ jobs:
           submodules: true
       - name: Setup environment 🔧
         run: |
+          cp -f material_maker/theme/default_theme_icons.svg material_maker/theme/default_theme_icons_export.svg
           export GODOT_VERSION=${GODOT_VERSION}
           export EXPORT_NAME=material_maker
       - name: Install the Apple certificate and provisioning profile
@@ -199,7 +201,7 @@ jobs:
           #hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker material_maker_${{ env.MM_RELEASE }}.dmg
           wget https://github.com/create-dmg/create-dmg/archive/refs/tags/v1.2.2.zip
           unzip v1.2.2.zip
-          create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background splash_screen/backgrounds/pavel_oliva_vintage_luggage.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg ./build/mac
+          create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background ./.github/workflows/bg.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg ./build/mac
       - name: Notarizing ✍️
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         env:

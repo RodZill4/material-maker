@@ -38,7 +38,7 @@
 			"}"
 		],
 		"longdesc": "Generates an offset map to be used by Advanced Tiler nodes from a heightmap",
-		"name": "Height To Offset",
+		"name": "Height to Offset",
 		"outputs": [
 			{
 				"f": "$(name_uv)_xy.x",
@@ -67,7 +67,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "Height to offset"
+		"shortdesc": "Height to Offset"
 	},
 	"type": "shader"
 }

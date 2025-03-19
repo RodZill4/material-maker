@@ -82,7 +82,7 @@ func randomness_button_create_popup():
 	if ! generator.is_seed_locked() and DisplayServer.clipboard_get().left(5) == "seed=":
 		menu.add_item(tr("Paste seed"), 2)
 	add_child(menu)
-	menu.popup(Rect2i(get_global_mouse_position(), Vector2i(0, 0)))
+	mm_globals.popup_menu(menu, self)
 	menu.connect("popup_hide", Callable(menu, "queue_free"))
 	menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
 
@@ -96,7 +96,7 @@ func buffer_button_create_popup():
 		menu.add_separator()
 		menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 	add_child(menu)
-	menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+	mm_globals.popup_menu(menu, self)
 	menu.connect("popup_hide",Callable(menu,"queue_free"))
 	menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
 
@@ -148,7 +148,7 @@ func on_theme_changed() -> void:
 	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
 
 
-func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
+func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 	if left:
 		var inputs = generator.get_input_defs()
 		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
@@ -163,7 +163,7 @@ func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color):
 			var conn_pos1 = get_output_port_position(slot_index)
 			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
-	draw_circle(position, 5, color, true, -1, true)
+	draw_circle(pos, 5, color, true, -1, true)
 
 
 func _draw() -> void:
@@ -281,7 +281,7 @@ func _on_gui_input(event) -> void:
 						add_child(menu)
 						menu.popup_hide.connect(menu.queue_free)
 						menu.id_pressed.connect(self._on_menu_id_pressed)
-						menu.popup(Rect2(get_global_mouse_position(), Vector2(0, 0)))
+						mm_globals.popup_menu(menu, self)
 					else:
 						menu.free()
 		elif doubleclicked:
@@ -324,7 +324,6 @@ func get_slot_tooltip(pos : Vector2, io : Dictionary = {}) -> String:
 			if input_def.has("longdesc"):
 				return MMGraphNodeBase.wrap_string(TranslationServer.translate(input_def.longdesc))
 		"output":
-
 			var output_def = generator.get_output_defs()[io.index]
 			if output_def.has("longdesc"):
 				return MMGraphNodeBase.wrap_string(TranslationServer.translate(output_def.longdesc))

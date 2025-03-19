@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bqm3uffhyqjqt"]
 
-[ext_resource type="Script" path="res://material_maker/windows/accept_dialog/accept_dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://cadawccuorvkf" path="res://material_maker/windows/accept_dialog/accept_dialog.gd" id="1"]
 
 [node name="AcceptDialog" type="AcceptDialog"]
 always_on_top = true

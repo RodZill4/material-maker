@@ -1,91 +1,92 @@
-[gd_scene load_steps=3 format=3 uid="uid://c0ir88hj07hh5"]
+[gd_scene load_steps=4 format=3 uid="uid://c0ir88hj07hh5"]
 
-[ext_resource type="Script" path="res://material_maker/panels/library/create_lib_dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://4b20sg0x1nvu" path="res://material_maker/panels/library/create_lib_dialog.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cfyio0a1b27t0" path="res://material_maker/widgets/file_picker_button/file_picker_button.tscn" id="2"]
 
-[node name="CreateLibDialog" type="Window"]
-offset_right = 321.0
-offset_bottom = 76.0
-exclusive = true
-window_title = "New library"
-script = ExtResource("1")
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[sub_resource type="ImageTexture" id="ImageTexture_8pecb"]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="CreateLibDialog" type="Window"]
+title = "Create Library"
+position = Vector2i(0, 36)
+size = Vector2i(400, 1)
+exclusive = true
+script = ExtResource("1")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
-theme_override_constants/separation = 5
-__meta__ = {
-"_edit_use_anchors_": false
-}
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
-offset_right = 317.0
-offset_bottom = 48.0
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 columns = 2
 
-[node name="Label1" type="Label" parent="VBoxContainer/GridContainer"]
-offset_top = 5.0
-offset_right = 87.0
-offset_bottom = 19.0
+[node name="LibraryNameLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
 text = "Library name:"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/GridContainer"]
-offset_left = 91.0
-offset_right = 317.0
-offset_bottom = 24.0
+[node name="LibraryNameLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
 size_flags_horizontal = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label2" type="Label" parent="VBoxContainer/GridContainer"]
-offset_top = 31.0
-offset_right = 87.0
-offset_bottom = 45.0
-text = "Library file:"
+[node name="LibraryPathLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Library path:"
 
-[node name="FilePickerButton" parent="VBoxContainer/GridContainer" instance=ExtResource("2")]
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 91.0
-offset_top = 28.0
-offset_right = 317.0
-offset_bottom = 48.0
-text = "Click to enter a path"
+[node name="HBoxContainerPath" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-offset_left = 96.0
-offset_top = 53.0
-offset_right = 220.0
-offset_bottom = 73.0
+[node name="LibraryPathLineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainerPath"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+emoji_menu_enabled = false
+
+[node name="FilePickerButton" parent="MarginContainer/VBoxContainer/GridContainer/HBoxContainerPath" instance=ExtResource("2")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+text = ""
+icon = SubResource("ImageTexture_8pecb")
+icon_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
-offset_right = 60.0
-offset_bottom = 20.0
+[node name="OK" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 disabled = true
 text = "OK"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-offset_left = 64.0
-offset_right = 124.0
-offset_bottom = 20.0
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
 text = "Cancel"
 
-[connection signal="popup_hide" from="." to="." method="_on_Cancel_pressed"]
-[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="text_submitted" from="VBoxContainer/GridContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
-[connection signal="file_selected" from="VBoxContainer/GridContainer/FilePickerButton" to="." method="_on_FilePickerButton_file_selected"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="minimum_size_changed" from="MarginContainer/VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/GridContainer/LibraryNameLineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="text_submitted" from="MarginContainer/VBoxContainer/GridContainer/LibraryNameLineEdit" to="." method="_on_LineEdit_text_entered"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/GridContainer/HBoxContainerPath/LibraryPathLineEdit" to="." method="_on_line_edit_2_text_changed"]
+[connection signal="file_selected" from="MarginContainer/VBoxContainer/GridContainer/HBoxContainerPath/FilePickerButton" to="." method="_on_FilePickerButton_file_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

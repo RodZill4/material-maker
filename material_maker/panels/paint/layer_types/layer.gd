@@ -1,7 +1,9 @@
+class_name MMLayer
+
 var name : String
 var index : int
 var hidden : bool
-var layers : Array = []
+var layers : Array[MMLayer] = []
 
 const LAYER_NONE  : int = -1
 const LAYER_PAINT : int = 0
@@ -56,6 +58,7 @@ func save_layer(path : String) -> Dictionary:
 			var file_name : String = "%s_%d.png" % [ c, index ]
 			var file_path : String = path.path_join(file_name)
 			var image : Image = get(c).get_image()
+			image.convert(Image.FORMAT_RGBA8)
 			image.save_png(file_path)
 			layer_data[c] = file_name
 	_save_layer(layer_data)
@@ -72,9 +75,8 @@ static func save_layers(layers_array : Array, path : String) -> Array:
 	return layers_data
 
 func set_state(s):
-	print(s)
 	for c in s.keys():
 		if c in get_channels():
-			set(c, s[c])
+			get(c).set_image(s[c])
 		else:
 			print("Useless channel %s in layer state" % c)

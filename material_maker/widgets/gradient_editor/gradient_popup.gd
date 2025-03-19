@@ -7,12 +7,20 @@ signal active_cursor_changed(index:int)
 
 func _ready() -> void:
 	%GradientEdit.remove_popup_button()
+	%Pin.icon = get_theme_icon("pin_unpinned", "MM_Icons")
+	%Previous.icon = get_theme_icon("arrow_left", "MM_Icons")
+	%Next.icon = get_theme_icon("arrow_right", "MM_Icons")
+
+	%EffectsMenuPanel.add_effects_button("Reverse", gradient_effect.bind("effect_reverse"))
+	%EffectsMenuPanel.add_effects_button("Evenly Distribute", gradient_effect.bind("effect_evenly_distribute"))
+	%EffectsMenuPanel.add_effects_button("Simplify", gradient_effect.bind("effect_simplify"))
+	%EffectsMenuPanel.add_effects_button("Strong Simplify", gradient_effect.bind("effect_simplify", [0.2]))
 
 
 func set_gradient(value:MMGradient, cursor_index := 0) -> void:
 	%GradientEdit.value = value
-	
-	# Usually the gradient isn't instantly loaded, 
+
+	# Usually the gradient isn't instantly loaded,
 	# because the nodes size isn't yet correct, so we wait until the Cursors are loaded
 	await %GradientEdit.value_was_set
 	%Interpolation.selected = value.interpolation
@@ -22,7 +30,7 @@ func set_gradient(value:MMGradient, cursor_index := 0) -> void:
 # Handle closing the popup
 func _input(event:InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
-		if not get_global_rect().has_point(get_global_mouse_position()):
+		if not get_global_rect().has_point(get_global_mouse_position()) and not %EffectsMenuPanel.visible:
 			if not %Pin.button_pressed:
 				close()
 				accept_event()
@@ -36,7 +44,7 @@ func close() -> void:
 func _on_gradient_edit_updated(value: Variant, merge_undos: bool) -> void:
 	# Propagate changes to the parent GradientEdit
 	updated.emit(value, merge_undos)
-	
+
 	# Update values of the active cursor
 	_on_gradient_edit_active_cursor_changed()
 
@@ -68,3 +76,12 @@ func _on_previous_pressed() -> void:
 
 func _on_next_pressed() -> void:
 	%GradientEdit.active_cursor += 1
+
+
+func gradient_effect(effect_method:String, args := []) -> void:
+	if not %GradientEdit.value.has_method(effect_method):
+		return
+	%GradientEdit.value.callv(effect_method, args)
+	%GradientEdit.set_value(%GradientEdit.value)
+	_on_gradient_edit_updated(%GradientEdit.value, false)
+	$Panel/VBox/HBox/EffectsMenu.button_pressed = false

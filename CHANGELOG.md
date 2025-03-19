@@ -1,6 +1,137 @@
+# Material Maker 1.4a3
+
+## General
+
+- The 3D preview panel has been completely redesigned (contributed by Jowan-Spooner)
+- The Create Library dialog has been updated (contributed by NotArme)
+- When uploading materials, it is now possible to select the preview
+- Camera controls are now consistent in all 3D views
+
+## Nodes
+
+- The default nodes library now has more consistent node names (contributed by NotArme)
+- The wavelet node now loops correctly (contributed by NotArme)
+- The Pixelize node now has support for Bayer matrix dithering
+- The Japanese Glyphs node now has a normalized bevel range (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed a few bugs in shader generation
+- Fixed problems in the EasySDF node and editor
+- Fixed greyscale images export
+- Fixed export of images with transparency (contributed by karmaral)
+- Fixed problem with saving environments
+- When saving, errors will now be showed to the user in an alert window (contributed by NotArme)
+- Messages in the status bar have been improved (contributed by NotArme)
+- Fixed window scaling problems with high DPI screens
+- Fixes in several Bricks nodes and Tones node
+- Fixes in the Generalized Kuwahara node (contributed by williamchange)
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 4.4
+- The MacOS disk image background has been improved (contributed by williamchange)
+
+# Material Maker 1.4a2
+
+## General
+
+- The Add Nodes popup has been improved (contributed by Jowan-Spooner)
+- The 2D preview and References panels have been redesigned (contributed by Jowan-Spooner)
+- Themes have been improved (contributed by Jowan-Spooner)
+- Default layouts have been added for material authoring and painting
+  modes (contributed by Jowan-Spooner)
+- Added new splash screens (Crown Gambit, DroppedBeat)
+
+## Nodes
+
+- Updated the Roman Numerals node (now supports values upto 3999 and
+  has an align parameter)
+- Rewrote the comment node
+- Added Reverse, Evenly Distribute and Simplify tools to the Gradient editor
+  widget (contributed by Jowan-Spooner)
+
+## Bug Fixes
+
+- Started fixing material exports (Godot and static materials for Unreal)
+- Fixed user libraries problem (contributed by NotArme)
+- Fixed splashscreen position with multiple screens (contributed by NotArme)
+- Fixed problems in environment editor
+- Fixed popup menu locations
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 4.4dev7
+
+# Material Maker 1.4a1
+
+## Known problems
+
+- User settings are saved in a different directory (so using 1.4 alphas should not
+  affect your 1.3 configuration)
+- Subwindows are not scaled correctly if the UI scale is not 1
+
+## General
+
+- Added flexible UI layout: panels can be moved anywhere in the window or
+  undocked (Material authoring and Painting have different layouts)
+- Improved theme support (especially made many custom UI components themeable),
+  added a new Modern theme and improved old themes (contributed by Jowan-Spooner)
+- Added basic support for GLTF 3D models
+- Dropping a .obj or .glb file into the 3D preview panel will use it as preview model
+- In the 3D preview replaced the default cube mesh with a chamfered cube and the
+  plane with a bent plane (chamfer and curvature can be modified in the mesh
+  configuration popup)
+- Improved the Add Node popup so it's themeable, more performant and has better search
+  capabilities (contributed by Jowan-Spooner)
+- Improved the Library panel's design (contributed by Jowan-Spooner)
+- Added an editor for polygon parameters in the 2D preview
+- Added a shader error diagnostic tool
+- Added easy stylus pressure configuration in painting tool
+- Added a Find/Replace tool to code editor
+- Added an option to delete rescued unsaved projects at startup
+- Added support for hover copy+paste on float, color and gradient editors
+
+## Nodes
+
+- Added a MeshMap node that automatically bakes maps (position, normal, tangent,
+  curvature, occlusion or thickness) for the current custom mesh.
+- Added many new 2D and 3D SDF nodes (contributed by Theaninova and williamchange)
+- Added new operations to the Math and Vec3 Math nodes (contributed by williamchange)
+- Added a Shard FBM noise node (contributed by williamchange)
+- Added a Tex3D Uniform node (contributed by williamchange)
+- Added Classic, Generalized and Anisotropic Kuwahara filter nodes (contributed by williamchange)
+- Redesigned the Float and Gradient parameter editor widgets (contributed by Jowan-Spooner)
+- Improved the image picker UI (contributed by Jowan-Spooner)
+- Added a new Splines parameter type (that can be edited in the 2D preview directly)
+  and a new Splines node
+- Added a new Pixels parameter type, that can describe tiny images with 2, 4, 8 or 16 colors,
+  and can be edited in the 2D preview directly. Added new Pixels and Smooth Pixels nodes
+- Added a new Lattice parameter type and a new Distort node
+- Added a new Webcam node that can output a Webcam feed (MacOS only)
+- Added a density input to the Noise node
+- The 2D and 3D SDF Boolean and Transform nodes, the 3D SDF Color node and the
+  Tex3D Transform, Blend Select and Shape Select nodes are now variadic (contributed by williamchange)
+- The Blend node now has Hue, Saturation, Color and Value blend modes (contributed
+  by williamchange)
+- The Spherize node has been improved (contributed by williamchange)
+- Updated documentation for many nodes (contributed by williamchange)
+ 
+## Bug Fixes
+
+- Small fixes in the GLSL parser
+- Optimized polygon/polyline parameter
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 4.3. While porting to Godot 4, many features
+  have been rewritten completely, including shader code generation and shader rendering
+- The MacOS export has been modified so Material Maker can be installed
+  easily (contributed by williamchange)
+
 # Material Maker 1.3
 
-# General
+## General
 
 - Updated interface to the website to login and upload assets without the need
   of a web browser
@@ -19,7 +150,7 @@
 - Added Cairo tiles node
 - Added a Spherize node (contributed by williamchange)
 
-# Bug Fixes
+## Bug Fixes
 
 - Fixed an update problem in the Iterate Buffer node
 - Fixed a NaN problem in the sdArc node (contributed by myaaaaaaaaa)
@@ -27,19 +158,19 @@
 - Fixed an export problem in the Painting tool
 - Fixed a problem with the Fill nodes where areas could leak though corners
 
-# Miscellaneous
+## Miscellaneous
 
 - Material Maker is now based on Godot 3.5.2
 
 # Material Maker 1.2p1
 
-# New features
+## New features
 
 - Added Unreal Engine 5 export targets that generate a Python script for UE5 to
   build automatically the generated material (it's necessary to setup a path for
   Python in UE, this is described in the documentation)
 
-# Bug Fixes
+## Bug Fixes
 
 - Fixed several small problems in the Export Editor window
 - Fixed a problem that caused the 3D preview to update incorrectly

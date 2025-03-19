@@ -34,24 +34,25 @@ func add_node(node_data) -> void:
 	current_graph.undoredo.start_group()
 	var nodes : Array = current_graph.create_nodes(node_data, insert_position)
 	if not nodes.is_empty():
-		var node : GraphNode = nodes[0]
-		if qc_node != "": # dragged from port
-			var port_position : Vector2
-			if qc_is_output:
-				for new_slot in node.get_output_port_count():
-					var slot_type : int = node.get_output_port_type(new_slot)
-					if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
-						current_graph.on_connect_node(node.name, new_slot, qc_node, qc_slot)
-						port_position = node.get_output_port_position(new_slot)
-						break
-			else:
-				for new_slot in node.get_input_port_count():
-					var slot_type : int = node.get_input_port_type(new_slot)
-					if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
-						current_graph.on_connect_node(qc_node, qc_slot, node.name, new_slot)
-						port_position = node.get_input_port_position(new_slot)
-						break
-			node.position_offset -= port_position/current_graph.zoom
+		var node : GraphNode = nodes[0] as GraphNode
+		if node != null:
+			if qc_node != "": # dragged from port
+				var port_position : Vector2
+				if qc_is_output:
+					for new_slot in node.get_output_port_count():
+						var slot_type : int = node.get_output_port_type(new_slot)
+						if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
+							current_graph.on_connect_node(node.name, new_slot, qc_node, qc_slot)
+							port_position = node.get_output_port_position(new_slot)
+							break
+				else:
+					for new_slot in node.get_input_port_count():
+						var slot_type : int = node.get_input_port_type(new_slot)
+						if qc_slot_type == slot_type or slot_type == 42 or qc_slot_type == 42:
+							current_graph.on_connect_node(qc_node, qc_slot, node.name, new_slot)
+							port_position = node.get_input_port_position(new_slot)
+							break
+				node.position_offset -= port_position/current_graph.zoom
 	current_graph.undoredo.end_group()
 	get_node("/root/MainWindow/NodeLibraryManager").item_created(node_data.tree_item)
 	todo_renamed_hide()
@@ -63,6 +64,7 @@ func todo_renamed_hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
+	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	var current_graph = get_current_graph()
 	insert_position = current_graph.offset_from_global_position(current_graph.get_global_mouse_position())
 	popup()
@@ -81,7 +83,7 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 			b.enable()
 	if filter.text != "":
 		filter.text = ""
-		update_list(filter.text)
+	update_list(filter.text)
 	filter.grab_focus()
 
 
@@ -163,7 +165,9 @@ func update_list(filter_text : String = "") -> void:
 
 	%List.clear()
 	var idx := 0
-	for i in library_manager.get_items(filter_text, true):
+	var items: Array = library_manager.get_items(filter_text, true)
+	items.sort_custom(func(a,b): return a.idx < b.idx if a.quality == b.quality else a.quality > b.quality)
+	for i in items:
 		var obj = i.item
 		if not obj.has("type"):
 			continue
@@ -172,17 +176,20 @@ func update_list(filter_text : String = "") -> void:
 		var section = obj.tree_item.get_slice("/", 0)
 		var color : Color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
 		color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
-		
-		%List.add_item(obj.display_name, i.icon)
+		#print(i)
+		var _name = obj.display_name
+		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
+		#if obj.has("shortdesc")
+
+		%List.add_item(_name, i.icon)
 		%List.set_item_custom_fg_color(idx, color)
 		%List.set_item_metadata(idx, i)
 		%List.set_item_tooltip_enabled(idx, false)
 
 		idx += 1
-	
+
 	%List.select(0)
 	%List.ensure_current_is_visible()
-
 
 func _unhandled_input(event) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -192,14 +199,19 @@ func _unhandled_input(event) -> void:
 func _on_filter_gui_input(event: InputEvent) -> void:
 	if event.is_action("ui_down"):
 		%List.grab_focus()
-		%List.select(1)
+		%List.select(0)
 
 
 func _on_list_gui_input(event: InputEvent) -> void:
 	if event.is_action("ui_up"):
 		if not %List.item_count or %List.is_selected(0):
 			%Filter.grab_focus()
-	
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
+		if idx != -1:
+			_on_list_item_activated(idx)
+
 
 func get_list_drag_data(m_position):
 	var data = %List.get_item_metadata(%List.get_item_at_position(m_position))
@@ -210,12 +222,8 @@ func get_list_drag_data(m_position):
 	return data.item.tree_item
 
 
-
-func _on_list_item_clicked(index: int, at_position:= Vector2(), mouse_button_index:= 0) -> void:
-	pass
-
-
 func _on_list_item_activated(index: int) -> void:
 	var data = %List.get_item_metadata(index)
-	add_node(data.item)
-	todo_renamed_hide()
+	if not data == null:
+		add_node(data.item)
+		todo_renamed_hide()

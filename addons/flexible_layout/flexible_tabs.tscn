@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cpwg6da5kpsef"]
 
-[ext_resource type="Script" path="res://addons/flexible_layout/flexible_tabs.gd" id="1"]
+[ext_resource type="Script" uid="uid://dg1byost6nv7c" path="res://addons/flexible_layout/flexible_tabs.gd" id="1"]
 
 [node name="TabBar" type="ScrollContainer"]
 horizontal_scroll_mode = 3

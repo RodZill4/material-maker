@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://duqci7ecjbnyx"]
+[gd_scene load_steps=8 format=3 uid="uid://duqci7ecjbnyx"]
 
 [ext_resource type="Script" path="res://material_maker/windows/sdf_builder/gizmo_arrow.gd" id="1"]
 
@@ -6,39 +6,23 @@
 shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="StandardMaterial3D" id="1"]
-resource_name = "None"
-albedo_color = Color(0.8, 0.8, 0.8, 1)
-metallic = 0.8
+[sub_resource type="CylinderMesh" id="CylinderMesh_mevst"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.9
+radial_segments = 12
+rings = 1
 
-[sub_resource type="ArrayMesh" id="6"]
-_surfaces = [{
-"aabb": AABB(0, 0, 0, 0, 0, 0),
-"format": 34359738368,
-"material": SubResource("1"),
-"name": "None",
-"primitive": 5,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 0,
-"vertex_data": PackedByteArray()
-}]
+[sub_resource type="CylinderMesh" id="CylinderMesh_ujfrw"]
+top_radius = 0.0
+bottom_radius = 0.05
+height = 0.155
+radial_segments = 12
+rings = 1
 
-[sub_resource type="StandardMaterial3D" id="7"]
-resource_name = "None"
-albedo_color = Color(0.8, 0.8, 0.8, 1)
-metallic = 0.8
-
-[sub_resource type="ArrayMesh" id="8"]
-_surfaces = [{
-"aabb": AABB(0, 0, 0, 0, 0, 0),
-"format": 34359738368,
-"material": SubResource("7"),
-"name": "None",
-"primitive": 5,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 0,
-"vertex_data": PackedByteArray()
-}]
+[sub_resource type="TorusMesh" id="TorusMesh_33igc"]
+inner_radius = 0.475
+outer_radius = 0.525
 
 [sub_resource type="CylinderShape3D" id="4"]
 margin = 0.01
@@ -53,14 +37,22 @@ script = ExtResource("1")
 material = SubResource("3")
 
 [node name="Arrow" type="MeshInstance3D" parent="."]
-mesh = SubResource("6")
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.45, 0, 0)
+mesh = SubResource("CylinderMesh_mevst")
 skeleton = NodePath("../..")
-material/0 = SubResource("3")
+surface_material_override/0 = SubResource("3")
+
+[node name="Tip" type="MeshInstance3D" parent="Arrow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.07646e-08, 0.47504, 0)
+mesh = SubResource("CylinderMesh_ujfrw")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("3")
 
 [node name="Torus" type="MeshInstance3D" parent="."]
-mesh = SubResource("8")
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("TorusMesh_33igc")
 skeleton = NodePath("../..")
-material/0 = SubResource("3")
+surface_material_override/0 = SubResource("3")
 
 [node name="TranslateArea" type="Area3D" parent="."]
 input_capture_on_drag = true

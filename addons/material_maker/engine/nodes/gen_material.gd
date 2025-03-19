@@ -17,7 +17,7 @@ var preview_parameters : Dictionary = {}
 var preview_textures = {}
 var preview_texture_dependencies = {}
 
-var external_previews : Array = []
+var external_previews : Dictionary[Node, Array] = {}
 var export_output_def : Dictionary
 
 
@@ -129,13 +129,14 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 		return false
 	if buffer_name == buffer_name_prefix:
 		preview_parameters[parameter_name] = value
-		for p in external_previews:
-			if value is MMTexture:
-				p.set_shader_parameter(parameter_name, await value.get_texture())
-			else:
-				p.set_shader_parameter(parameter_name, value)
-		if preview_texture_dependencies.has(parameter_name):
-			preview_texture_dependencies[parameter_name] = value
+		for ppn in external_previews.keys():
+			for p in external_previews[ppn]:
+				if value is MMTexture:
+					var texture = await value.get_texture()
+					p.set_shader_parameter(parameter_name, texture)
+					preview_texture_dependencies[parameter_name] = texture
+				else:
+					p.set_shader_parameter(parameter_name, value)
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
@@ -154,8 +155,9 @@ func on_dep_update_buffer(buffer_name) -> bool:
 	var size = get_image_size()
 	await preview_textures[texture_name].shader_compute.render(preview_textures[texture_name].texture, size)
 	mm_deps.dependency_update(preview_textures[texture_name].buffer, preview_textures[texture_name].texture, true)
-	for p in external_previews:
-		p.set_shader_parameter(texture_name, await preview_textures[texture_name].texture.get_texture())
+	for ppn in external_previews.keys():
+		for p in external_previews[ppn]:
+			p.set_shader_parameter(texture_name, await preview_textures[texture_name].texture.get_texture())
 	if size <= TEXTURE_FILTERING_LIMIT:
 		pass
 		#preview_textures[texture_name].texture.flags &= ~Texture2D.FLAG_FILTER
@@ -169,22 +171,19 @@ func update_materials(material_list, sequential : bool = false) -> void:
 		update_material(m, sequential)
 
 func update_material(m, sequential : bool = false) -> void:
-	if m is StandardMaterial3D:
-		pass
-	elif m is ShaderMaterial:
-		m.shader.code = preview_material.shader.code
+	if m is ShaderMaterial:
+		m.shader = preview_material.shader
+		for t in preview_textures.keys():
+			m.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
+		for t in preview_texture_dependencies.keys():
+			m.set_shader_parameter(t, preview_texture_dependencies[t])
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
-	for p in external_previews:
-		p.shader.code = preview_material.shader.code
-		for t in preview_textures.keys():
-			p.set_shader_parameter(t, await preview_textures[t].texture.get_texture())
-		for t in preview_texture_dependencies.keys():
-			p.set_shader_parameter(t, preview_texture_dependencies[t])
-		for u in preview_parameters.keys():
-			p.set_shader_parameter(u, preview_parameters[u])
+	for ppn in external_previews.keys():
+		for p in external_previews[ppn]:
+			update_material(p)
 
 func update() -> void:
 	if preview_material == null:
@@ -196,12 +195,13 @@ func update() -> void:
 	preview_texture_dependencies = {}
 	for u in result.uniforms:
 		if u.value:
-			preview_material.set_shader_parameter(u.name, u.value)
-			preview_parameters[u.name] = u.value
-	for p in RenderingServer.get_shader_parameter_list(preview_material.shader.get_rid()):
-		if p.hint_string == "Texture2D" and preview_textures.keys().find(p.name) == -1:
-			var value = preview_material.get_shader_parameter(p.name)
-			preview_texture_dependencies[p.name] = value
+			if u.type == "sampler2D":
+				var texture = await u.value.get_texture()
+				preview_texture_dependencies[u.name] = texture
+				preview_material.set_shader_parameter(u.name, texture)
+			else:
+				preview_material.set_shader_parameter(u.name, u.value)
+				preview_parameters[u.name] = u.value
 	update_shaders()
 	update_external_previews()
 
@@ -238,7 +238,7 @@ func apply_gen_options(s : String, gen_options : Array, custom_options, definiti
 			print("No implementation of option '%s'" % o)
 	return s
 
-func process_shader(shader_text : String, custom_script : String = ""):
+func process_shader(shader_text : String, custom_script : String = "", force_uniforms_init : bool = false):
 	var custom_options = CustomOptions.new()
 	if custom_script != "" and check_custom_script(custom_script):
 		print("Using custom script")
@@ -293,7 +293,10 @@ func process_shader(shader_text : String, custom_script : String = ""):
 				mm_deps.create_buffer(buffer_name, self)
 			shader_code += l+"\n"
 	var definitions : String = get_template_text("glsl_defs.tmpl")+"\n"
-	definitions += rv.uniforms_as_strings()
+	if force_uniforms_init:
+		definitions += rv.uniforms_as_strings("uniform", true)
+	else:
+		definitions += rv.uniforms_as_strings("uniform", false)
 	for d in rv.globals:
 		definitions += "// #globals: %s\n" % d.source
 		definitions += d.code+"\n"
@@ -315,8 +318,9 @@ func process_shader(shader_text : String, custom_script : String = ""):
 			shader_code += "\n"
 	return { shader_code = shader_code, uniforms = rv.uniforms }
 
-func set_3d_previews(previews : Array):
-	external_previews = previews
+func set_3d_previews(previews : Dictionary[Node, Array]):
+	for k in previews:
+		external_previews[k] = previews[k]
 	update_external_previews()
 
 # Export filters
@@ -570,23 +574,23 @@ func process_uids(template : String) -> String:
 		template = template.replace(result.strings[0], uid)
 	return template
 
-func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
+func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> Error:
 	template = get_template_text(template)
 	var processed_template : String = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
 	var custom_script = ""
 	if export_context.has("@mm_custom_script"):
 		custom_script = export_context["@mm_custom_script"]
-	processed_template = process_shader(processed_template, custom_script).shader_code
+	processed_template = process_shader(processed_template, custom_script, true).shader_code
 	if file_name == "clipboard":
 		DisplayServer.clipboard_set("\n".join(processed_template.split("\n", false)))
 	else:
 		DirAccess.remove_absolute(file_name)
 		var out_file = FileAccess.open(file_name, FileAccess.WRITE)
-		if out_file == null:
-			print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
-			return false
+		if FileAccess.get_open_error() != OK:
+			print("Cannot write file '"+file_name+"' ("+str(FileAccess.get_open_error())+")")
+			return FileAccess.get_open_error()
 		out_file.store_string(processed_template)
-	return true
+	return OK
 
 func get_connections_and_parameters_context() -> Dictionary:
 	var context : Dictionary = {}
@@ -619,6 +623,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	export_context["$(path_prefix)"] = prefix
 	export_context["$(file_prefix)"] = prefix.get_file()
 	export_context["$(dir_prefix)"] = prefix.get_base_dir()
+	export_context["$(material_maker_path)"] = MMPaths.get_resource_dir()
+	export_context["$(path_separator)"] = "/"
 	var exported_files : Array = []
 	var overwrite_files : Array = []
 	var export_profile = get_export(profile)
@@ -665,8 +671,10 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				total_files += 1
 			"buffers", "buffer_templates":
 				total_files += preview_texture_dependencies.size()
-	var saved_files = 0
+	var processed_files = 0
+	var error_files = 0
 	for f in exported_files:
+		var e: Error = OK
 		match f.type:
 			"texture":
 				# Wait until the render queue is empty
@@ -690,27 +698,28 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					output_index = EXPORT_OUTPUT_DEF_INDEX
 				else:
 					# Error! Just ignore it
-					saved_files += 1
-					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					e = FAILED
+					processed_files += 1
+					error_files += 1
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 					continue
-				var result = await render(self, output_index, size)
-				var is_greyscale : bool = false
-				var output = get_preprocessed_output_def(output_index)
-				if output != null:
-					is_greyscale = output.has("type") and output.type == "f"
-				result.save_to_file(file_name, is_greyscale)
-				result.release(self)
-				saved_files += 1
-				progress_dialog.set_progress(float(saved_files)/float(total_files))
+				var result : MMTexture = await render_output_to_texture(output_index, Vector2i(size, size))
+				e = await result.save_to_file(file_name)
+				if e != OK:
+					error_files += 1
+				processed_files += 1
+				progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"template":
 				var file_export_context = export_context.duplicate()
 				if f.has("file_params"):
 					for p in f.file_params.keys():
 						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 				var file_name = subst_string(f.file_name, export_context)
-				create_file_from_template(f.template, file_name, file_export_context)
-				saved_files += 1
-				progress_dialog.set_progress(float(saved_files)/float(total_files))
+				e = create_file_from_template(f.template, file_name, file_export_context)
+				if e != OK:
+					error_files += 1
+				processed_files += 1
+				progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"buffers":
 				var index : int = 1
 				if mm_deps.get_render_queue_size() > 0:
@@ -718,10 +727,12 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					preview_texture_dependencies[t].get_data().save_png(file_name)
+					e = preview_texture_dependencies[t].get_image().save_png(file_name)
+					if e != OK:
+						error_files += 1
 					index += 1
-					saved_files += 1
-					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					processed_files += 1
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"buffer_templates":
 				var index : int = 1
 				for t in preview_texture_dependencies.keys():
@@ -732,12 +743,23 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 							file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					create_file_from_template(f.template, file_name, file_export_context)
+					e = create_file_from_template(f.template, file_name, file_export_context)
+					if e != OK:
+						error_files += 1
 					index += 1
-					saved_files += 1
-					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					processed_files += 1
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 	if progress_dialog != null:
 		progress_dialog.queue_free()
+	if error_files == 0:
+		mm_globals.set_tip_text("Files succesfully exported as \"%s\"" % prefix, 5, 1)
+		return
+	if error_files >= total_files:
+		mm_globals.main_window.accept_dialog("Could not export files to \"%s\"" % prefix.get_base_dir(), false, true)
+		return
+	if error_files < total_files:
+		mm_globals.set_tip_text("%d errors encountered when exporting files" % error_files, 5, 1)
+		return
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = super._serialize_data(data)

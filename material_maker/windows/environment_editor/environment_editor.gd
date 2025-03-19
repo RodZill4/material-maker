@@ -3,10 +3,8 @@ extends Window
 @onready var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
 
 @onready var environment_list : ItemList = $Main/HSplitContainer/Environments
-@onready var camera : Camera3D = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition/CameraRotation1/CameraRotation2/Camera3D
-@onready var camera_position = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition
-@onready var camera_rotation1 = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition/CameraRotation1
-@onready var camera_rotation2 = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraPosition/CameraRotation1/CameraRotation2
+@onready var camera : Camera3D = $Main/HSplitContainer/SubViewportContainer/SubViewport/Camera3D
+@onready var camera_controller = $Main/HSplitContainer/SubViewportContainer/SubViewport/CameraTargetPosition
 @onready var environment : Environment = camera.environment
 @onready var sun : DirectionalLight3D = $Main/HSplitContainer/SubViewportContainer/SubViewport/Sun
 @onready var ui : GridContainer = $Main/HSplitContainer/UI
@@ -55,6 +53,7 @@ func on_name_updated(index, text):
 	environment_list.set_item_text(index, text)
 
 func on_thumbnail_updated(index, texture):
+	environment_list.set_item_icon(index, null)
 	environment_list.set_item_icon(index, texture)
 
 func read_environment_list(select : int = 0):
@@ -77,34 +76,18 @@ func _on_ViewportContainer_resized():
 func _on_name_text_entered(new_text : String):
 	environment_list.set_item_text(current_environment, new_text)
 
-func _on_ViewportContainer_gui_input(ev : InputEvent):
-	if ev is InputEventMouseMotion:
-		if ev.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0:
-			if ev.shift_pressed:
-				var factor = 0.0025*camera.position.z
-				camera_position.translate(-factor*ev.relative.x*camera.global_transform.basis.x)
-				camera_position.translate(factor*ev.relative.y*camera.global_transform.basis.y)
-			else:
-				camera_rotation2.rotate_x(-0.01*ev.relative.y)
-				camera_rotation1.rotate_y(-0.01*ev.relative.x)
-	elif ev is InputEventMouseButton:
-		if ev.is_command_or_control_pressed():
-			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
+func _on_ViewportContainer_gui_input(event : InputEvent):
+	if camera_controller.process_event(event, get_viewport()):
+		$Main.accept_event()
+	elif event is InputEventMouseButton:
+		if event.is_command_or_control_pressed():
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 				camera.fov += 1
-			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				camera.fov -= 1
 			else:
 				return
 			$Main.accept_event()
-		else:
-			var zoom = 0.0
-			if ev.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom -= 1.0
-			elif ev.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				zoom += 1.0
-			if zoom != 0.0:
-				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
-				$Main.accept_event()
 
 func _update_environment_variable(value, variable):
 	environment.set(variable, value)
@@ -147,7 +130,7 @@ func _on_Environments_gui_input(event):
 	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
-		context_menu.popup(Rect2($Main.get_global_mouse_position(), context_menu.get_contents_minimum_size()))
+		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]

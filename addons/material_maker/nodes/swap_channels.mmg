@@ -26,7 +26,7 @@
 		],
 		"instance": "",
 		"longdesc": "Swaps the channels of its RGBA input",
-		"name": "Swap channels",
+		"name": "Swap Channels",
 		"outputs": [
 			{
 				"longdesc": "The output RGBA image",

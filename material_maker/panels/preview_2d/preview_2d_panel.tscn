@@ -1,28 +1,60 @@
-[gd_scene load_steps=17 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=29 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
+[ext_resource type="Script" uid="uid://cj476fi1ociuw" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://djura7a50b2aq" path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" id="4_gd40d"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
+[ext_resource type="Script" uid="uid://p2topj3y4p63" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://b08bcbwwosrrk" path="res://material_maker/widgets/splines_edit/splines_editor.tscn" id="5_5hlfo"]
-[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://b51634rcdiyr" path="res://material_maker/widgets/pixels_edit/pixels_editor.tscn" id="6_m4663"]
 [ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="7_u2w4r"]
+[ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="10_83edi"]
+[ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="12_4017l"]
+[ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="12_nrhap"]
+[ext_resource type="Script" uid="uid://5r7ncawc0gx7" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="14_qr76f"]
+[ext_resource type="Script" uid="uid://ca5sfnwa05qm2" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
+[ext_resource type="Script" uid="uid://pielyrq85378" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
+[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
 
-[sub_resource type="Shader" id="1"]
+[sub_resource type="Shader" id="Shader_0mwcg"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
+uniform vec2 preview_2d_size = vec2(100.0);
+uniform float preview_2d_scale = 1.2;
+uniform vec2 preview_2d_center = vec2(0.5);
+uniform int mode = 0;
+uniform vec4 background_color = vec4(0.0);
+uniform vec4 background_color_1 = vec4(0.0);
+uniform vec4 background_color_2 = vec4(1.0);
+
 void fragment() {
-	COLOR = vec4(0.0, 0.0, 0.0, 1.0);
+	vec2 ratio = preview_2d_size;
+	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
+	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
+		COLOR = background_color;
+	} else {
+		if (mode == 1) {
+			uv = fract(uv);
+		}
+		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		COLOR = vec4(mix(background_color_1, background_color_2, checkerboard).rgb, 1.0);
+	}
 }
 "
 
 [sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource("1")
+shader = SubResource("Shader_0mwcg")
+shader_parameter/preview_2d_size = Vector2(100, 100)
+shader_parameter/preview_2d_scale = 1.655
+shader_parameter/preview_2d_center = Vector2(0.46, 0.56)
+shader_parameter/mode = 2
+shader_parameter/background_color = Vector4(0, 0, 0, 0.575)
+shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 1)
+shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 1)
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("1")
@@ -40,11 +72,37 @@ resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("5")
 
-[node name="Preview2D" instance=ExtResource("3")]
+[sub_resource type="InputEventKey" id="InputEventKey_83edi"]
+command_or_control_autoremap = true
+pressed = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_r76ng"]
+events = [SubResource("InputEventKey_83edi")]
+
+[sub_resource type="FontVariation" id="FontVariation_wkuuo"]
+base_font = ExtResource("18_kn37y")
+variation_transform = Transform2D(1, 0.22, 0, 1, 0, 0)
+
+[sub_resource type="InputEventKey" id="InputEventKey_rhw4u"]
+device = -1
+command_or_control_autoremap = true
+keycode = 69
+
+[sub_resource type="Shortcut" id="Shortcut_llf02"]
+events = [SubResource("InputEventKey_rhw4u")]
+
+[node name="Preview2D" node_paths=PackedStringArray("shortcut_context") instance=ExtResource("3")]
 material = SubResource("2")
 custom_minimum_size = Vector2(100, 100)
-offset_right = -758.0
-offset_bottom = -267.0
+offset_left = 8.0
+offset_top = -5.0
+offset_right = 481.0
+offset_bottom = 414.0
+grow_horizontal = 2
+grow_vertical = 2
+shortcut_context = NodePath(".")
+color = Color(1, 1, 1, 0)
 script = ExtResource("4")
 config_var_suffix = ""
 shader_accumulate = "uniform sampler2D sum;
@@ -82,6 +140,7 @@ shader = "uniform vec2 preview_2d_size = vec2(100.0);
 uniform float preview_2d_scale = 1.2;
 uniform vec2 preview_2d_center = vec2(0.5);
 uniform int mode = 0;
+uniform vec4 background_color = vec4(0.0);
 uniform vec4 background_color_1 = vec4(0.0);
 uniform vec4 background_color_2 = vec4(1.0);
 
@@ -89,7 +148,7 @@ void fragment() {
 	vec2 ratio = preview_2d_size;
 	vec2 uv = preview_2d_center+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	if (mode == 2 && (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)) {
-		COLOR = vec4(0.0);
+		COLOR = background_color;
 	} else {
 		if (mode == 1) {
 			uv = fract(uv);
@@ -306,52 +365,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="ContextMenu" type="PopupMenu" parent="." index="19"]
-item_count = 1
-item_0/text = "Reset view"
-
-[node name="View" type="PopupMenu" parent="ContextMenu" index="3"]
-item_count = 5
-item_0/text = "Extend"
-item_0/checkable = 2
-item_0/checked = true
-item_1/text = "Repeat"
-item_1/checkable = 2
-item_1/id = 1
-item_2/text = "Clamp"
-item_2/checkable = 2
-item_2/id = 2
-item_3/text = "Temporal AA"
-item_3/checkable = 2
-item_3/id = 3
-item_4/text = "Temporal AA 2.2"
-item_4/checkable = 2
-item_4/id = 4
-
-[node name="Guides" type="PopupMenu" parent="ContextMenu" index="4"]
-
-[node name="Grid" type="Popup" parent="ContextMenu/Guides" index="3"]
-
-[node name="Panel" type="PanelContainer" parent="ContextMenu/Guides/Grid" index="0"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="GridSize" parent="ContextMenu/Guides/Grid/Panel" index="0" instance=ExtResource("6")]
-layout_mode = 2
-value = 4.0
-min_value = 2.0
-max_value = 64.0
-step = 1.0
-float_only = true
-
-[node name="Export" type="PopupMenu" parent="ContextMenu" index="5"]
-
-[node name="Reference" type="PopupMenu" parent="ContextMenu" index="6"]
-
-[node name="PostProcess" type="PopupMenu" parent="ContextMenu" index="7"]
-
-[node name="Accumulate" type="SubViewport" parent="." index="20"]
+[node name="Accumulate" type="SubViewport" parent="." index="19"]
 disable_3d = true
 handle_input_locally = false
 gui_snap_controls_to_pixels = false
@@ -364,15 +378,365 @@ material = SubResource("6")
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="ComplexParameters" type="OptionButton" parent="." index="21"]
-visible = false
+[node name="MenuBar" type="ScrollContainer" parent="." index="20"]
+unique_name_in_owner = true
+clip_contents = false
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-offset_left = -32.0
-offset_bottom = 20.0
-grow_horizontal = 0
+offset_bottom = 25.0
+grow_horizontal = 2
+theme_type_variation = &"MM_PanelMenuBackground"
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="HBox" type="HFlowContainer" parent="MenuBar" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" index="0"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainMenu" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center View (Ctrl+R)"
+tooltip_auto_translate_mode = 2
+shortcut = SubResource("Shortcut_r76ng")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("10_83edi")
+icon_name = "reset_view"
+
+[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1" node_paths=PackedStringArray("shortcut_context")]
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "View"
+shortcut_context = NodePath("../../../../..")
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("12_nrhap")
+icon_name = "view"
+
+[node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu" index="0"]
+top_level = true
+layout_mode = 0
+offset_left = 493.0
+offset_top = 9.0
+offset_right = 817.0
+offset_bottom = 145.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("13_5w2hy")
+
+[node name="VBox" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" index="0"]
+layout_mode = 2
+columns = 2
+
+[node name="Control" type="Control" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="0"]
+visible = false
+layout_mode = 2
+
+[node name="ViewModeLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="1"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "View"
+
+[node name="ViewMode" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="2" instance=ExtResource("12_4017l")]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Extend"
+popup/item_0/id = 0
+popup/item_1/text = "Repeat"
+popup/item_1/id = 1
+popup/item_2/text = "Clamp"
+popup/item_2/id = 2
+
+[node name="PostProcessingLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="3"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Filter"
+
+[node name="PostProcessing" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="4" instance=ExtResource("12_4017l")]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 6
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Lowres 32x32"
+popup/item_1/id = 1
+popup/item_2/text = "Lowres 64x64"
+popup/item_2/id = 2
+popup/item_3/text = "Lowres 128x128"
+popup/item_3/id = 3
+popup/item_4/text = "Lowres 256x256"
+popup/item_4/id = 4
+popup/item_5/text = "Lowres 512x512"
+popup/item_5/id = 5
+
+[node name="GuidesLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="5"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Guides"
+
+[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="6"]
+layout_mode = 2
+
+[node name="Guides" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer" index="0" instance=ExtResource("12_4017l")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 4
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Corners"
+popup/item_1/id = 1
+popup/item_2/text = "Lines"
+popup/item_2/id = 2
+popup/item_3/text = "Grid"
+popup/item_3/id = 3
+
+[node name="CustomGridSize" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer" index="1" instance=ExtResource("14_qr76f")]
+unique_name_in_owner = true
+layout_mode = 2
+value = 10.0
+min_value = 1.0
+max_value = 32.0
+step = 1.0
+float_only = true
+
+[node name="GuidesColor" type="ColorPickerButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer" index="2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+
+[node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2" node_paths=PackedStringArray("shortcut_context")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 25)
+layout_mode = 2
+tooltip_text = "Export"
+shortcut_context = NodePath("../../../../..")
+theme_type_variation = &"MM_PanelMenuButton"
+toggle_mode = true
+button_mask = 3
+script = ExtResource("12_nrhap")
+icon_name = "export"
+
+[node name="ExportMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu" index="0"]
+top_level = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 0
+offset_left = 491.0
+offset_top = 189.0
+offset_right = 896.0
+offset_bottom = 380.0
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("16_0fl4g")
+
+[node name="VBox" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" index="0"]
+layout_mode = 2
+vertical = true
+
+[node name="Grid" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="0"]
+layout_mode = 2
+columns = 2
+
+[node name="ExportFolderLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Folder"
+
+[node name="ExportFolder" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="1"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ExportFolder" type="LineEdit" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
+
+[node name="ExportFolderButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder" index="1"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+icon_alignment = 1
+
+[node name="ExportFileLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="2"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "File Name"
+
+[node name="ExportFile" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="3"]
+layout_mode = 2
+theme_override_constants/separation = 2
+vertical = true
+
+[node name="BoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile" index="0"]
+layout_mode = 2
+
+[node name="ExportFile" type="LineEdit" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "The file-name to use. 
+
+You can use $project, $node and $idx to make the file-name auto-adjust."
+theme_override_font_sizes/font_size = 15
+text = "$project_$node"
+
+[node name="FileType" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer" index="1" instance=ExtResource("12_4017l")]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = ".png"
+popup/item_0/id = 0
+popup/item_1/text = ".exr"
+popup/item_1/id = 1
+
+[node name="ExportFileResultLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+theme_override_fonts/font = SubResource("FontVariation_wkuuo")
+
+[node name="ResolutionLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="4"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Resolution"
+
+[node name="ResolutionSection" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="5"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Resolution" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection" index="0" instance=ExtResource("12_4017l")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 4
+item_count = 9
+popup/item_0/text = "64x64"
+popup/item_0/id = 0
+popup/item_1/text = "128x128"
+popup/item_1/id = 1
+popup/item_2/text = "256x256"
+popup/item_2/id = 2
+popup/item_3/text = "512x512"
+popup/item_3/id = 3
+popup/item_4/text = "1024x1024"
+popup/item_4/id = 4
+popup/item_5/text = "2048x2048"
+popup/item_5/id = 5
+popup/item_6/text = "4096x4096"
+popup/item_6/id = 6
+popup/item_7/text = "8192x8192"
+popup/item_7/id = 7
+popup/item_8/text = "Custom"
+popup/item_8/id = 8
+
+[node name="CustomResolutionSection" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CustomResolutionX" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection" index="0" instance=ExtResource("14_qr76f")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Width"
+value = 512.0
+min_value = 16.0
+max_value = 2048.0
+step = 1.0
+float_only = true
+
+[node name="x" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection" index="1"]
+layout_mode = 2
+text = "x"
+
+[node name="CustomResolutionY" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection" index="2" instance=ExtResource("14_qr76f")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Width"
+value = 512.0
+min_value = 16.0
+max_value = 2048.0
+step = 1.0
+float_only = true
+
+[node name="ExportLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="6"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Export"
+
+[node name="BoxContainer" type="GridContainer" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid" index="7"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Image" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_llf02")
+text = "Image"
+
+[node name="Reference" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "To Reference"
+
+[node name="Animation" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer" index="2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Animation"
+
+[node name="TAA_Render" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer" index="3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TAA Render"
+
+[node name="ExportNotificationLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox" index="1"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+theme_override_colors/font_color = Color(0.52, 0.52, 0.52, 1)
+theme_override_fonts/font = SubResource("FontVariation_wkuuo")
+autowrap_mode = 1
+
+[node name="PreviewLocked" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Lock this preview"
+toggle_mode = true
+icon_alignment = 1
+script = ExtResource("17_07kc5")
+icon_normal_name = "lock_unlocked"
+icon_pressed_name = "lock_locked"
+
+[node name="ComplexParameters" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox" index="4"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
@@ -380,11 +744,20 @@ grow_horizontal = 0
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
-[connection signal="id_pressed" from="ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/View" to="." method="_on_View_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Guides" to="." method="_on_Guides_id_pressed"]
-[connection signal="value_changed" from="ContextMenu/Guides/Grid/Panel/GridSize" to="." method="_on_GridSize_value_changed"]
-[connection signal="id_pressed" from="ContextMenu/Export" to="." method="_on_Export_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/Reference" to="." method="_on_Reference_id_pressed"]
-[connection signal="id_pressed" from="ContextMenu/PostProcess" to="." method="_on_PostProcess_id_pressed"]
-[connection signal="item_selected" from="ComplexParameters" to="." method="_on_complex_parameters_item_selected"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ResetViewButton" to="." method="reset_view"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ViewMode" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_view_mode_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/PostProcessing" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_post_processing_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/Guides" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_item_selected"]
+[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/CustomGridSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_custom_grid_size_value_changed"]
+[connection signal="color_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/GuidesColor" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_color_color_changed"]
+[connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder/ExportFolder" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_text_changed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder/ExportFolderButton" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_button_pressed"]
+[connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/ExportFile" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_file_text_changed"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/FileType" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_file_type_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/Resolution" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_resolution_item_selected"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Image" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_image_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Reference" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_reference_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Animation" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_animation_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/TAA_Render" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_taa_render_pressed"]
+[connection signal="toggled" from="MenuBar/HBox/MainMenu/HBox/PreviewLocked" to="." method="_on_preview_locked_toggled"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ComplexParameters" to="." method="_on_complex_parameters_item_selected"]
