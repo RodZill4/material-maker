@@ -143,8 +143,12 @@ func parse_paste_data(data : String):
 # Misc. UI functions
 
 static func popup_menu(menu : PopupMenu, parent : Control):
+	var zoom_fac = 1.0
+	if parent is GraphNode:
+		zoom_fac *= mm_globals.main_window.get_current_graph_edit().zoom
+	
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor + parent.get_screen_position(), Vector2(0, 0)))
+	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	main_window.set_tip_text(tip, timeout, priority)
