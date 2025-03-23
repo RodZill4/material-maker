@@ -106,10 +106,15 @@ func select_color(cursor:GradientEditCursor) -> void:
 	var color_picker := color_picker_popup.get_node("ColorPicker")
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
+	
+	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	color_picker_popup.content_scale_factor = content_scale_factor
+	color_picker_popup.min_size = color_picker_popup.get_contents_minimum_size() * content_scale_factor
 
 	var _scale := get_global_transform().get_scale()
-	color_picker_popup.position.x = global_position.x + size.x*_scale.x + 10
-	color_picker_popup.position.y = global_position.y
+	
+	color_picker_popup.position.x = (global_position.x + size.x*_scale.x) * content_scale_factor
+	color_picker_popup.position.y = global_position.y * content_scale_factor
 	color_picker_popup.position += get_window().position
 
 	color_picker_popup.popup_hide.connect(color_picker_popup.queue_free)
