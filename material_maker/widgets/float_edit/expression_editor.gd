@@ -9,7 +9,8 @@ var accept_empty : bool = false
 @onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 
 func _ready():
-	pass # Replace with function body.
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(300, 100) * content_scale_factor
 
 func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
 	object = o
