@@ -33,8 +33,3 @@ func enter_text(window_title : String, label : String, value : String) -> Dictio
 
 func _on_VBoxContainer_minimum_size_changed():
 	size = $VBoxContainer.get_minimum_size()+Vector2(20, 4)
-
-
-func _on_ready() -> void:
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	min_size = Vector2(250, 90) * content_scale_factor

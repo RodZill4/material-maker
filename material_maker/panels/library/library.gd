@@ -330,6 +330,8 @@ func _on_PopupMenu_index_pressed(index):
 	match index:
 		0: # Rename
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 			add_child(dialog)
 			var status = await dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
 			if status.ok:

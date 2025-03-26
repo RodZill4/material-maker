@@ -106,6 +106,8 @@ func select_file(i : int) -> void:
 
 func _on_Create_Export_pressed():
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("Export", "Enter the export target name", "")
 	if status.ok and get_export_index(status.text) == -1:
