@@ -13,6 +13,6 @@ Material Maker can also be used to export several .ptex file with the following 
 
 Where:
 
-* **engine** is the target engine (Godot, Unity or Unreal)
+* **engine** is the target engine/platform (Blender, Godot, Unity or Unreal)
 * **output_path** is the path where files will be generated
 * **input_files** is the list of input files (wildcards are accepted)
