@@ -4,16 +4,28 @@ extends FileDialog
 var left_panel = null
 var volume_option = null
 
+var _context_menu: PopupMenu = null
+
+var _content_scale_factor: float = 1.0
 
 const DIALOG_HACK : bool = true
 
 
 signal return_paths(path_list)
 
+func _context_menu_about_to_popup():
+	_context_menu.position =  get_window().position + Vector2i( get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	min_size = content_scale_factor*Vector2(650, 500)
+	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = _content_scale_factor
+	min_size = _content_scale_factor * Vector2(650, 500)
+	
+	for child in get_children():
+		if child is PopupMenu:
+			_context_menu = child
+			_context_menu.about_to_popup.connect(_context_menu_about_to_popup)
+
 	if DIALOG_HACK:
 		var vbox = get_vbox()
 		var hbox = HSplitContainer.new()
