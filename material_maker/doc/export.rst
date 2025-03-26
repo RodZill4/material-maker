@@ -34,7 +34,7 @@ describes a fully configured material. It is thus possible to export materials d
 into one of your project assets directory, and Unity will automatically detect the newly
 exported materials.
 
-Depending one the Material node type, several Unity targets may be available.
+Depending on the Material node type, several Unity targets may be available.
 
 Unreal game engine
 ------------------
