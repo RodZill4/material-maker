@@ -10,6 +10,16 @@ specific files for the target game engine.
 In all cases, the generated PNG files (and especially the normal map) are generated in the
 correct format.
 
+Blender
+-----------------
+
+When exporting for Blender, Material Maker will only generate PNG/EXR images, thus the material must be built manually using the shader editor.
+
+The `Add Principled Texture Setup <https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html#add-principled-texture-setup>`_ feature from the `Node Wrangler <https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html>`_ add-on can be helpful to automate the process down to several clicks:
+
+.. image:: images/blender_mat_demo.gif
+  :align: center
+
 Godot game engine
 -----------------
 
