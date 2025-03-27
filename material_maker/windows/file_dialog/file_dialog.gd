@@ -76,3 +76,16 @@ func select_files() -> Array:
 func add_favorite():
 	if DIALOG_HACK:
 		left_panel.add_favorite(get_full_current_dir())
+
+func _on_child_entered_tree(node: Node) -> void:
+	if node is ConfirmationDialog or node is AcceptDialog:
+		node.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		var min_size_scale = Vector2(0,0)
+		match node.title:
+			"Alert!":
+				min_size_scale = Vector2(300,60)
+			"Create Folder":
+				min_size_scale = Vector2(200,100)
+			"Please Confirm...":
+				min_size_scale = Vector2(350,100)
+		node.min_size = min_size_scale * node.content_scale_factor
