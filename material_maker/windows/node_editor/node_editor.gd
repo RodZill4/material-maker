@@ -29,12 +29,15 @@ func _on_ready() -> void:
 		$"Sizer/TabBar/Global Functions/Includes/Includes".get_menu(),
 		$Sizer/TabBar/General/Name/Name.get_menu()
 	]
-	
 	for menu in context_menus:
 		menu.about_to_popup.connect(_context_menu_about_to_popup.bind(menu))
 
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()
+	if object is HBoxContainer:
+		for child in object.get_children():
+			if child is LineEdit:
+				child.get_menu().about_to_popup.connect(_context_menu_about_to_popup.bind(child.get_menu()))
 	parent.add_child(object)
 	parent.move_child(object, parent.get_child_count()-2)
 	return object
