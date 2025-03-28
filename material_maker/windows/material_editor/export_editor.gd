@@ -25,10 +25,15 @@ const GEN_MATERIAL = preload("res://addons/material_maker/engine/nodes/gen_mater
 signal node_changed(model_data)
 signal editor_window_closed
 
+func _context_menu_about_to_popup(context_menu):
+	context_menu.position =  get_window().position + Vector2i( get_mouse_position() * content_scale_factor)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	export_file_expression.parent_dialog = self
+	var custom_script_edit = $"MarginContainer/VBoxContainer/TabBar/Custom Script"
+	custom_script_edit.get_menu().about_to_popup.connect(
+		_context_menu_about_to_popup.bind(custom_script_edit.get_menu()))
 
 func update_export_list() -> void:
 	export_target.clear()
