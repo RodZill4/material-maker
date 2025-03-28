@@ -1,13 +1,11 @@
 extends FileDialog
 
+var _content_scale_factor: float = 1.0
 
 var left_panel = null
 var volume_option = null
 
-var _content_scale_factor: float = 1.0
-
 const DIALOG_HACK : bool = true
-
 
 signal return_paths(path_list)
 
