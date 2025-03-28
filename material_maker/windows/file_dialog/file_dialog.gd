@@ -87,5 +87,5 @@ func _on_child_entered_tree(node: Node) -> void:
 			"Create Folder":
 				min_size_scale = Vector2(200,100)
 			"Please Confirm...":
-				min_size_scale = Vector2(350,100)
+				min_size_scale = Vector2(430,100)
 		node.min_size = min_size_scale * node.content_scale_factor
