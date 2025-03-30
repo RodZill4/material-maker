@@ -37,9 +37,20 @@ var popup : Control = null
 var hovered : bool = false
 
 
-func _ready() -> void:
-	%Gradient.material = %Gradient.material.duplicate(true)
+const DEFAULT_VALUE = {
+		interpolation=1,
+		points=[
+			{"a":1.0,"b":0.0,"g":0.0,"pos":0.0,"r":0.0},
+			{"a":1.0,"b":1.0,"g":1.0,"pos":1.0,"r":1.0}
+		],
+		type="Gradient",
+}
 
+
+func _ready() -> void:
+	if value == null:
+		value = MMType.deserialize_value(DEFAULT_VALUE)
+	%Gradient.material = %Gradient.material.duplicate(true)
 	update_visuals()
 
 
