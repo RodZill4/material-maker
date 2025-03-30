@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://bg24jri8a0t08"]
 
-[ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter.gd" id="1"]
+[ext_resource type="Script" uid="uid://cqomu1bquv6sn" path="res://material_maker/windows/node_editor/parameter.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="PackedScene" uid="uid://dn13ybhfpg52k" path="res://material_maker/windows/node_editor/parameter_float.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://da6i1l17ydbri" path="res://material_maker/windows/node_editor/parameter_size.tscn" id="4"]
@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dij6o75etamwy" path="res://material_maker/windows/node_editor/parameter_polyline.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://r8sldb05e3fj" path="res://material_maker/windows/node_editor/parameter_splines.tscn" id="13_vf8fr"]
 [ext_resource type="PackedScene" path="res://material_maker/windows/node_editor/parameter_pixels.tscn" id="14_0c2vs"]
-[ext_resource type="PackedScene" uid="uid://g5ls3j2c3jfe" path="res://material_maker/windows/node_editor/parameter_lattice.tscn" id="15_rnq7j"]
+[ext_resource type="PackedScene" uid="uid://htfysgsqhog8" path="res://material_maker/windows/node_editor/parameter_lattice.tscn" id="15_rnq7j"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2")
