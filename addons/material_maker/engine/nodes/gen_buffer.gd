@@ -139,9 +139,9 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 func get_adjusted_uv(uv : String) -> String:
 	if version == VERSION_COMPLEX and not get_parameter("filter"):
 		var genname = "o"+str(get_instance_id())
-		return "((floor(%s * %s_tex_size)+vec2(0.5))/%s_tex_size)" % [ uv, genname, genname ]
+		return "((floor(fract(%s) * %s_tex_size)+vec2(0.5))/%s_tex_size)" % [ uv, genname, genname ]
 	else:
-		return uv
+		return "fract(%s)" % uv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())

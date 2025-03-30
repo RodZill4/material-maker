@@ -243,9 +243,9 @@ func get_globals__(texture_name : String) -> Array[String]:
 func get_adjusted_uv(uv : String) -> String:
 	if not get_parameter("filter"):
 		var genname = "o"+str(get_instance_id())
-		return "((floor(%s * %s_it_tex_size)+vec2(0.5))/%s_it_tex_size)" % [ uv, genname, genname ]
+		return "((floor(fract(%s) * %s_it_tex_size)+vec2(0.5))/%s_it_tex_size)" % [ uv, genname, genname ]
 	else:
-		return uv
+		return "fract(%s)" % uv
 
 func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
 	var genname = "o"+str(get_instance_id())
