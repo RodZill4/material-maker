@@ -683,14 +683,14 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc6mb"]
-bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+bg_color = Color(0.314672, 0.3147, 0.348323, 1)
 corner_radius_top_left = 24
 corner_radius_top_right = 24
 corner_radius_bottom_right = 24
 corner_radius_bottom_left = 24
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24h6y"]
-bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+bg_color = Color(0.423468, 0.423541, 0.463838, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
