@@ -72,6 +72,28 @@ class ShaderUniform:
 							str_value_assign += ", "
 						str_value_assign += "%.9f" % v
 					str_value_assign += " )"
+			"vec2":
+				print(value)
+				if value is PackedFloat32Array and initialize_vectors:
+					str_value_assign = " = vec2[]( "
+					var first : bool = true
+					for i in range(0, value.size(), 2):
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec2(%.9f, %.9f)" % [ value[i], value[i+1] ]
+					str_value_assign += " )"
+				elif value is PackedVector2Array and initialize_vectors:
+					str_value_assign = " = vec2[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec2(%.9f, %.9f)" % [ v.x, v.y ]
+					str_value_assign += " )"
 			"vec4":
 				if value is Color:
 					str_value_assign = " = vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
