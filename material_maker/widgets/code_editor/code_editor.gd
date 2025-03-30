@@ -24,9 +24,10 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 
 func _context_menu_about_to_popup():
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	get_menu().position =  get_window().position + Vector2i(get_global_mouse_position() * content_scale_factor)
+	get_menu().position = get_window().position + Vector2i(get_global_mouse_position() * content_scale_factor)
 
 func _ready():
+	get_menu().about_to_popup.connect(_context_menu_about_to_popup)
 	for t in KEYWORDS:
 		syntax_highlighter.add_keyword_color(t, Color(1.0, 0.6, 0.6))
 	for t in TYPES:
