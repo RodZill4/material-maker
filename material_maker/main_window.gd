@@ -212,7 +212,7 @@ func _ready() -> void:
 				file_name = dir.get_next()
 			if ! files.is_empty():
 				var dialog_text : String = "Oops, it seems Material Maker crashed and rescued unsaved work\nLoad %d unsaved projects?" % files.size()
-				var result = await accept_dialog(dialog_text, true, [ { label="Delete them!", action="delete" } ])
+				var result = await accept_dialog(dialog_text, true, false, [ { label="Delete them!", action="delete" } ])
 				match result:
 					"ok":
 						for f in files:
@@ -1202,19 +1202,24 @@ func on_files_dropped(files : PackedStringArray) -> void:
 						mm_loader.save_export_target(data.material, data.name, data)
 						mm_loader.load_external_export_targets()
 
-func set_tip_text(tip : String, timeout : float = 0.0):
+var tip_priority: int = 0
+
+func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
-	$VBoxContainer/StatusBar/HBox/Tip.text = tip
-	var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
-	tip_timer.stop()
-	if timeout > 0.0:
-		tip_timer.one_shot = true
-		tip_timer.wait_time = timeout
-		tip_timer.start()
+	if priority >= tip_priority:
+		tip_priority = priority
+		$VBoxContainer/StatusBar/HBox/Tip.text = tip
+		var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
+		tip_timer.stop()
+		if timeout > 0.0:
+			tip_timer.one_shot = true
+			tip_timer.wait_time = timeout
+			tip_timer.start()
 
 func _on_Tip_Timer_timeout():
+	tip_priority = 0
 	$VBoxContainer/StatusBar/HBox/Tip.text = ""
 
 # Add dialog
@@ -1227,9 +1232,12 @@ func add_dialog(dialog : Window):
 
 # Accept dialog
 
-func accept_dialog(dialog_text : String, cancel_button : bool = false, extra_buttons : Array[Dictionary] = []):
+func accept_dialog(dialog_text : String, cancel_button : bool = false, autowrap : bool = false, extra_buttons : Array[Dictionary] = []):
 	var dialog = preload("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 	dialog.dialog_text = dialog_text
+	if autowrap:
+		dialog.dialog_autowrap = autowrap
+		dialog.min_size.x = 500
 	if cancel_button:
 		dialog.add_cancel_button("Cancel")
 	for b in extra_buttons:

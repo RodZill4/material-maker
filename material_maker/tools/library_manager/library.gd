@@ -148,12 +148,16 @@ func get_sections() -> Array:
 			sections.push_back(section_name)
 	return Array(sections)
 
-func save_library() -> void:
+func save_library() -> Error:
+	var e: Error
 	DirAccess.make_dir_recursive_absolute(library_path.get_base_dir())
 	var file : FileAccess = FileAccess.open(library_path, FileAccess.WRITE)
-	if file != null:
+	e = FileAccess.get_open_error()
+	if file != null && e == OK:
 		file.store_string(JSON.stringify({name=library_name, lib=library_items}, "\t", true))
+		e = file.get_error()
 		file.close()
+	return e
 
 func add_item(item_name : String, image : Image, data : Dictionary) -> void:
 	if read_only:

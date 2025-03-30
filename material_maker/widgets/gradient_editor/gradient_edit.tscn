@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cp6ft7qbucfam"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/gradient_editor/gradient_edit.gd" id="1_51wqf"]
+[ext_resource type="Script" uid="uid://b12ou6mx2bt2m" path="res://material_maker/widgets/gradient_editor/gradient_edit.gd" id="1_51wqf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j7yhr"]
 content_margin_left = 3.0
