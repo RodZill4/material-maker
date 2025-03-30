@@ -35,6 +35,24 @@
 			"from_port": 0,
 			"to": "switch",
 			"to_port": 0
+		},
+		{
+			"from": "math",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "math_2",
+			"to_port": 1
+		},
+		{
+			"from": "math_2",
+			"from_port": 0,
+			"to": "math",
+			"to_port": 0
 		}
 	],
 	"label": "Normal Map",
@@ -96,6 +114,10 @@
 						{
 							"node": "edge_detect_1",
 							"widget": "amount"
+						},
+						{
+							"node": "math",
+							"widget": "default_in2"
 						}
 					],
 					"longdesc": "The strength of the normal map filter",
@@ -137,8 +159,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -458.663818359375,
-				"y": 73.04736328125
+				"x": -320,
+				"y": 120
 			},
 			"parameters": {
 
@@ -148,8 +170,14 @@
 					"group_size": 0,
 					"longdesc": "Shows the generated normal map",
 					"name": "Normal",
-					"shortdesc": "Output",
+					"shortdesc": "Normal",
 					"type": "rgb"
+				},
+				{
+					"longdesc": "The corresponding depth map ready to be connected to the material",
+					"name": "Depth",
+					"shortdesc": "Depth",
+					"type": "f"
 				}
 			],
 			"seed": -6314,
@@ -158,8 +186,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1147.91015625,
-				"y": 77.9473648071289
+				"x": -1200,
+				"y": 140
 			},
 			"parameters": {
 
@@ -336,6 +364,36 @@
 			},
 			"seed_int": 0,
 			"type": "ensure_greyscale"
+		},
+		{
+			"name": "math",
+			"node_position": {
+				"x": -600,
+				"y": 380
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 0,
+				"default_in2": 1,
+				"op": 2
+			},
+			"seed_int": 0,
+			"type": "math"
+		},
+		{
+			"name": "math_2",
+			"node_position": {
+				"x": -820,
+				"y": 380
+			},
+			"parameters": {
+				"clamp": false,
+				"default_in1": 1,
+				"default_in2": 1,
+				"op": 1
+			},
+			"seed_int": 0,
+			"type": "math"
 		}
 	],
 	"parameters": {
