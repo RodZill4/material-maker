@@ -43,7 +43,7 @@ class ShaderUniform:
 		size = s
 		value = v
 	
-	func to_str(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
+	func to_str(keyword : String = "uniform", initialize_vectors : bool = false, texture_hints : bool = false) -> String:
 		var str_value_assign : String = ""
 		match type:
 			"int":
@@ -72,6 +72,28 @@ class ShaderUniform:
 							str_value_assign += ", "
 						str_value_assign += "%.9f" % v
 					str_value_assign += " )"
+			"vec2":
+				print(value)
+				if value is PackedFloat32Array and initialize_vectors:
+					str_value_assign = " = vec2[]( "
+					var first : bool = true
+					for i in range(0, value.size(), 2):
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec2(%.9f, %.9f)" % [ value[i], value[i+1] ]
+					str_value_assign += " )"
+				elif value is PackedVector2Array and initialize_vectors:
+					str_value_assign = " = vec2[]( "
+					var first : bool = true
+					for v in value:
+						if first:
+							first = false
+						else:
+							str_value_assign += ", "
+						str_value_assign +="vec2(%.9f, %.9f)" % [ v.x, v.y ]
+					str_value_assign += " )"
 			"vec4":
 				if value is Color:
 					str_value_assign = " = vec4(%.9f, %.9f, %.9f, %.9f)" % [ value.r, value.g, value.b, value.a ]
@@ -95,6 +117,9 @@ class ShaderUniform:
 							str_value_assign += ", "
 						str_value_assign +="vec4(%.9f, %.9f, %.9f, %.9f)" % [ v.r, v.g, v.b, v.a ]
 					str_value_assign += " )"
+			"sampler2D":
+				if texture_hints:
+					str_value_assign = " : repeat_enable"
 		var size_string : String = ""
 		if size > 0:
 			size_string = "[%d]" % size
@@ -164,10 +189,10 @@ class ShaderCode:
 		for u in uniform_list:
 			add_uniform(u.name, u.type, u.value, u.size)
 
-	func uniforms_as_strings(keyword : String = "uniform", initialize_vectors : bool = false) -> String:
+	func uniforms_as_strings(keyword : String = "uniform", initialize_vectors : bool = false, texture_hints : bool = false) -> String:
 		var rv : String = ""
 		for u in uniforms:
-			rv += u.to_str(keyword, initialize_vectors)
+			rv += u.to_str(keyword, initialize_vectors, texture_hints)
 		return rv
 
 var position : Vector2 = Vector2(0, 0)
@@ -484,7 +509,7 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	code += "uniform vec3 mesh_aabb_size;\n"
 	code += mm_renderer.common_shader
 	code += "\n"
-	code += src_code.uniforms_as_strings()
+	code += src_code.uniforms_as_strings("uniform", false, true)
 	var shader_code = src_code.defs
 	if src_code.output_type != "":
 		var preview_code : String = mm_io_types.types[type].preview

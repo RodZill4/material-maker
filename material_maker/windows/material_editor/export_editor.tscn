@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://cwjtvrgb2al2x"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
-[ext_resource type="Script" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
+[ext_resource type="Script" uid="uid://bp8x8ej3d6k4e" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://lt2wnsnw4af6" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
 
 [sub_resource type="AtlasTexture" id="2"]
@@ -34,6 +34,7 @@ region = Rect2(32, 0, 16, 16)
 
 [node name="ExportEditor" type="Window"]
 title = "Material Export Editor"
+position = Vector2i(0, 36)
 script = ExtResource("2")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -116,11 +117,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+current_tab = 0
 
 [node name="Files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabBar"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+metadata/_tab_index = 0
 
 [node name="Files" type="ItemList" parent="MarginContainer/VBoxContainer/TabBar/Files"]
 custom_minimum_size = Vector2(200, 0)
@@ -166,6 +169,15 @@ text = "Type:"
 [node name="type" type="OptionButton" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
 layout_mode = 2
 size_flags_horizontal = 3
+item_count = 4
+popup/item_0/text = "Texture"
+popup/item_0/id = 0
+popup/item_1/text = "Template"
+popup/item_1/id = 1
+popup/item_2/text = "Buffers"
+popup/item_2/id = 2
+popup/item_3/text = "Buffer templates"
+popup/item_3/id = 3
 
 [node name="LabelExpression" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
 layout_mode = 2
@@ -188,6 +200,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_default_cursor_shape = 0
+metadata/_tab_index = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2

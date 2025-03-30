@@ -145,15 +145,15 @@
 			"name": "normal_map",
 			"node_position": {
 				"x": -684.409057617188,
-				"y": 680
+				"y": 680.0
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 1,
-				"param2": 0,
-				"param4": 1
+				"param0": 12,
+				"param1": 1.0,
+				"param2": 0.0,
+				"param4": 1.0
 			},
-			"seed": -9340,
+			"seed": -9340.0,
 			"type": "normal_map"
 		},
 		{
@@ -163,10 +163,10 @@
 				"y": 903.779296875
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 4
+				"amount": 1.0,
+				"blend_type": 4.0
 			},
-			"seed": 64581,
+			"seed": 64581.0,
 			"type": "blend"
 		},
 		{
@@ -176,10 +176,10 @@
 				"y": 803.91552734375
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 4
+				"amount": 1.0,
+				"blend_type": 4.0
 			},
-			"seed": 64737,
+			"seed": 64737.0,
 			"type": "blend"
 		},
 		{
@@ -189,10 +189,10 @@
 				"y": 702.279174804688
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 4
+				"amount": 1.0,
+				"blend_type": 4.0
 			},
-			"seed": 57885,
+			"seed": 57885.0,
 			"type": "blend"
 		},
 		{
@@ -202,10 +202,10 @@
 				"y": 600.279174804688
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 4
+				"amount": 1.0,
+				"blend_type": 4.0
 			},
-			"seed": 58107,
+			"seed": 58107.0,
 			"type": "blend"
 		},
 		{
@@ -217,7 +217,7 @@
 			"parameters": {
 
 			},
-			"seed": 43797,
+			"seed": 43797.0,
 			"type": "invert"
 		},
 		{
@@ -231,14 +231,14 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input height map",
 					"name": "port0",
 					"shortdesc": "Height map",
 					"type": "f"
 				}
 			],
-			"seed": -22897,
+			"seed": -22897.0,
 			"type": "ios"
 		},
 		{
@@ -252,14 +252,14 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The generated curvature map",
 					"name": "port0",
 					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
-			"seed": 25504,
+			"seed": 25504.0,
 			"type": "ios"
 		},
 		{
@@ -269,10 +269,10 @@
 				"y": 350.266235351563
 			},
 			"parameters": {
-				"param0": 11,
-				"param2": 1
+				"param0": 12,
+				"param2": 1.0
 			},
-			"seed": -46329,
+			"seed": -46329.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -350,11 +350,11 @@
 				"y": 510.526458740234
 			},
 			"parameters": {
-				"amount": 1,
-				"size": 11,
-				"width": 1
+				"amount": 1.0,
+				"size": 12,
+				"width": 1.0
 			},
-			"seed": -27808,
+			"seed": -27808.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_emboss = $(name)_fct($uv);",
 				"global": "",
@@ -391,31 +391,31 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "Size",
-						"last": 12,
+						"last": 12.0,
 						"name": "size",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Amount",
-						"max": 10,
-						"min": 0,
+						"max": 10.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.1,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Width",
-						"max": 5,
-						"min": 1,
+						"max": 5.0,
+						"min": 1.0,
 						"name": "width",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
@@ -429,11 +429,11 @@
 				"y": 638.757873535156
 			},
 			"parameters": {
-				"amount": 1,
-				"size": 11,
-				"width": 2
+				"amount": 1.0,
+				"size": 12,
+				"width": 2.0
 			},
-			"seed": -10854,
+			"seed": -10854.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_emboss = $(name)_fct($uv);",
 				"global": "",
@@ -470,31 +470,31 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "Size",
-						"last": 12,
+						"last": 12.0,
 						"name": "size",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Amount",
-						"max": 10,
-						"min": 0,
+						"max": 10.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.1,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Width",
-						"max": 5,
-						"min": 1,
+						"max": 5.0,
+						"min": 1.0,
 						"name": "width",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
@@ -508,11 +508,11 @@
 				"y": 755.803344726563
 			},
 			"parameters": {
-				"amount": 1,
-				"size": 11,
-				"width": 4
+				"amount": 1.0,
+				"size": 12,
+				"width": 4.0
 			},
-			"seed": -51278,
+			"seed": -51278.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_emboss = $(name)_fct($uv);",
 				"global": "",
@@ -549,31 +549,31 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "Size",
-						"last": 12,
+						"last": 12.0,
 						"name": "size",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Amount",
-						"max": 10,
-						"min": 0,
+						"max": 10.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.1,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Width",
-						"max": 5,
-						"min": 1,
+						"max": 5.0,
+						"min": 1.0,
 						"name": "width",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
@@ -587,11 +587,11 @@
 				"y": 877.621520996094
 			},
 			"parameters": {
-				"amount": 1,
-				"size": 11,
-				"width": 8
+				"amount": 1.0,
+				"size": 12,
+				"width": 8.0
 			},
-			"seed": -36846,
+			"seed": -36846.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_emboss = $(name)_fct($uv);",
 				"global": "",
@@ -628,31 +628,31 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "Size",
-						"last": 12,
+						"last": 12.0,
 						"name": "size",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Amount",
-						"max": 10,
-						"min": 0,
+						"max": 10.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.1,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Width",
-						"max": 5,
-						"min": 1,
+						"max": 5.0,
+						"min": 1.0,
 						"name": "width",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
@@ -666,11 +666,11 @@
 				"y": 992.8486328125
 			},
 			"parameters": {
-				"amount": 1,
-				"size": 11,
-				"width": 16
+				"amount": 1.0,
+				"size": 12,
+				"width": 16.0
 			},
-			"seed": -11460,
+			"seed": -11460.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_emboss = $(name)_fct($uv);",
 				"global": "",
@@ -707,31 +707,31 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "Size",
-						"last": 12,
+						"last": 12.0,
 						"name": "size",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Amount",
-						"max": 10,
-						"min": 0,
+						"max": 10.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.1,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Width",
-						"max": 5,
-						"min": 1,
+						"max": 5.0,
+						"min": 1.0,
 						"name": "width",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
@@ -745,12 +745,12 @@
 				"y": 638.560974121094
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 5,
-				"param2": 1,
-				"param3": 1
+				"param0": 12,
+				"param1": 5.0,
+				"param2": 2.0,
+				"param3": 1.0
 			},
-			"seed": 20295,
+			"seed": 20295.0,
 			"type": "fast_blur"
 		},
 		{
@@ -760,12 +760,12 @@
 				"y": 756.742797851563
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 8,
-				"param2": 1,
-				"param3": 1
+				"param0": 12,
+				"param1": 8.0,
+				"param2": 2.0,
+				"param3": 1.0
 			},
-			"seed": 52033,
+			"seed": 52033.0,
 			"type": "fast_blur"
 		},
 		{
@@ -775,12 +775,12 @@
 				"y": 877.651916503906
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 16,
-				"param2": 1,
-				"param3": 1
+				"param0": 12,
+				"param1": 16.0,
+				"param2": 2.0,
+				"param3": 1.0
 			},
-			"seed": 20052,
+			"seed": 20052.0,
 			"type": "fast_blur"
 		},
 		{
@@ -790,12 +790,12 @@
 				"y": 992.197326660156
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 34,
-				"param2": 1,
-				"param3": 1
+				"param0": 12,
+				"param1": 34.0,
+				"param2": 2.0,
+				"param3": 1.0
 			},
-			"seed": 43382,
+			"seed": 43382.0,
 			"type": "fast_blur"
 		},
 		{
@@ -808,9 +808,9 @@
 				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 11
+				"size": 12
 			},
-			"seed": -52020,
+			"seed": -52020.0,
 			"type": "buffer",
 			"version": 2
 		},
@@ -821,18 +821,18 @@
 				"y": 501.102722167969
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 2,
-				"param2": 1,
-				"param3": 1
+				"param0": 11.0,
+				"param1": 2.0,
+				"param2": 2.0,
+				"param3": 1.0
 			},
-			"seed": 20295,
+			"seed": 20295.0,
 			"type": "fast_blur"
 		}
 	],
 	"parameters": {
-		"param0": 11,
-		"param2": 1
+		"param0": 12,
+		"param2": 1.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Smooth Curvature",

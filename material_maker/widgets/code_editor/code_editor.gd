@@ -27,15 +27,14 @@ func _context_menu_about_to_popup():
 	get_menu().position =  get_window().position + Vector2i(get_global_mouse_position() * content_scale_factor)
 
 func _ready():
-	get_menu().about_to_popup.connect(_context_menu_about_to_popup)
-	add_comment_delimiter("//", "", true)
-	add_comment_delimiter("/*", "*/", false)
 	for t in KEYWORDS:
 		syntax_highlighter.add_keyword_color(t, Color(1.0, 0.6, 0.6))
 	for t in TYPES:
 		syntax_highlighter.add_keyword_color(t, Color(1.0, 1.0, 0.5))
 	for t in FUNCTIONS:
 		syntax_highlighter.add_keyword_color(t, Color(0.5, 0.5, 1.0))
+	syntax_highlighter.add_color_region("//", "", Color(0.0, 0.5, 0.0), true)
+	syntax_highlighter.add_color_region("/*", "*/", Color(0.0, 0.5, 0.0), false)
 
 func _on_gui_input(event):
 	if event is InputEventKey:

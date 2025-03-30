@@ -84,7 +84,7 @@ func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
 	%PreviewLocked.visible = g != null and preview_mode != Modes.CUSTOM_PREVIEW
 
 	if preview_mode != Modes.CUSTOM_PREVIEW and is_inside_tree():
-		var current_graph: MMGraphEdit = find_parent("MainWindow").get_current_graph_edit()
+		var current_graph: MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
 		if current_graph:
 			%PreviewLocked.button_pressed = current_graph.locked_preview[preview_mode-1] != null
 
