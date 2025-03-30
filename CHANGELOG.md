@@ -1,3 +1,37 @@
+# Material Maker 1.4a3
+
+## General
+
+- The 3D preview panel has been completely redesigned (contributed by Jowan-Spooner)
+- The Create Library dialog has been updated (contributed by NotArme)
+- When uploading materials, it is now possible to select the preview
+- Camera controls are now consistent in all 3D views
+
+## Nodes
+
+- The default nodes library now has more consistent node names (contributed by NotArme)
+- The wavelet node now loops correctly (contributed by NotArme)
+- The Pixelize node now has support for Bayer matrix dithering
+- The Japanese Glyphs node now has a normalized bevel range (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed a few bugs in shader generation
+- Fixed problems in the EasySDF node and editor
+- Fixed greyscale images export
+- Fixed export of images with transparency (contributed by karmaral)
+- Fixed problem with saving environments
+- When saving, errors will now be showed to the user in an alert window (contributed by NotArme)
+- Messages in the status bar have been improved (contributed by NotArme)
+- Fixed window scaling problems with high DPI screens
+- Fixes in several Bricks nodes and Tones node
+- Fixes in the Generalized Kuwahara node (contributed by williamchange)
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 4.4
+- The MacOS disk image background has been improved (contributed by williamchange)
+
 # Material Maker 1.4a2
 
 ## General

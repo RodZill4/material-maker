@@ -574,7 +574,7 @@ func process_uids(template : String) -> String:
 		template = template.replace(result.strings[0], uid)
 	return template
 
-func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> bool:
+func create_file_from_template(template : String, file_name : String, export_context : Dictionary) -> Error:
 	template = get_template_text(template)
 	var processed_template : String = process_uids(process_buffers(process_conditionals(process_template(template, export_context))))
 	var custom_script = ""
@@ -586,11 +586,11 @@ func create_file_from_template(template : String, file_name : String, export_con
 	else:
 		DirAccess.remove_absolute(file_name)
 		var out_file = FileAccess.open(file_name, FileAccess.WRITE)
-		if out_file == null:
-			print("Cannot write file '"+file_name+"' ("+str(out_file.get_error())+")")
-			return false
+		if FileAccess.get_open_error() != OK:
+			print("Cannot write file '"+file_name+"' ("+str(FileAccess.get_open_error())+")")
+			return FileAccess.get_open_error()
 		out_file.store_string(processed_template)
-	return true
+	return OK
 
 func get_connections_and_parameters_context() -> Dictionary:
 	var context : Dictionary = {}
@@ -671,8 +671,10 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				total_files += 1
 			"buffers", "buffer_templates":
 				total_files += preview_texture_dependencies.size()
-	var saved_files = 0
+	var processed_files = 0
+	var error_files = 0
 	for f in exported_files:
+		var e: Error = OK
 		match f.type:
 			"texture":
 				# Wait until the render queue is empty
@@ -696,22 +698,28 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					output_index = EXPORT_OUTPUT_DEF_INDEX
 				else:
 					# Error! Just ignore it
-					saved_files += 1
-					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					e = FAILED
+					processed_files += 1
+					error_files += 1
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 					continue
 				var result : MMTexture = await render_output_to_texture(output_index, Vector2i(size, size))
-				await result.save_to_file(file_name)
-				saved_files += 1
-				progress_dialog.set_progress(float(saved_files)/float(total_files))
+				e = await result.save_to_file(file_name)
+				if e != OK:
+					error_files += 1
+				processed_files += 1
+				progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"template":
 				var file_export_context = export_context.duplicate()
 				if f.has("file_params"):
 					for p in f.file_params.keys():
 						file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 				var file_name = subst_string(f.file_name, export_context)
-				create_file_from_template(f.template, file_name, file_export_context)
-				saved_files += 1
-				progress_dialog.set_progress(float(saved_files)/float(total_files))
+				e = create_file_from_template(f.template, file_name, file_export_context)
+				if e != OK:
+					error_files += 1
+				processed_files += 1
+				progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"buffers":
 				var index : int = 1
 				if mm_deps.get_render_queue_size() > 0:
@@ -719,10 +727,12 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					preview_texture_dependencies[t].get_image().save_png(file_name)
+					e = preview_texture_dependencies[t].get_image().save_png(file_name)
+					if e != OK:
+						error_files += 1
 					index += 1
-					saved_files += 1
-					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					processed_files += 1
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"buffer_templates":
 				var index : int = 1
 				for t in preview_texture_dependencies.keys():
@@ -733,12 +743,23 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 							file_export_context["$(file_param:"+p+")"] = f.file_params[p]
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					create_file_from_template(f.template, file_name, file_export_context)
+					e = create_file_from_template(f.template, file_name, file_export_context)
+					if e != OK:
+						error_files += 1
 					index += 1
-					saved_files += 1
-					progress_dialog.set_progress(float(saved_files)/float(total_files))
+					processed_files += 1
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 	if progress_dialog != null:
 		progress_dialog.queue_free()
+	if error_files == 0:
+		mm_globals.set_tip_text("Files succesfully exported as \"%s\"" % prefix, 5, 1)
+		return
+	if error_files >= total_files:
+		mm_globals.main_window.accept_dialog("Could not export files to \"%s\"" % prefix.get_base_dir(), false, true)
+		return
+	if error_files < total_files:
+		mm_globals.set_tip_text("%d errors encountered when exporting files" % error_files, 5, 1)
+		return
 
 func _serialize_data(data: Dictionary) -> Dictionary:
 	data = super._serialize_data(data)

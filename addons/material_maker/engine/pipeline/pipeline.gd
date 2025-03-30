@@ -425,9 +425,9 @@ func get_texture_uniforms(rd : RenderingDevice, shader : RID, rids : RIDs) -> RI
 	if input_textures.is_empty():
 		return RID()
 	var sampler_state : RDSamplerState = RDSamplerState.new()
-	sampler_state.mag_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
-	sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
-	sampler_state.mip_filter = RenderingDevice.SAMPLER_FILTER_NEAREST
+	sampler_state.mag_filter = RenderingDevice.SAMPLER_FILTER_LINEAR
+	sampler_state.min_filter = RenderingDevice.SAMPLER_FILTER_LINEAR
+	sampler_state.mip_filter = RenderingDevice.SAMPLER_FILTER_LINEAR
 	sampler_state.repeat_u = RenderingDevice.SAMPLER_REPEAT_MODE_REPEAT
 	sampler_state.repeat_v = RenderingDevice.SAMPLER_REPEAT_MODE_REPEAT
 	var sampler : RID = rd.sampler_create(sampler_state)

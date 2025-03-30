@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://ddgb7ul6fncx8"]
 
 [ext_resource type="FontFile" uid="uid://c4vhxy5kgdp8s" path="res://material_maker/fonts/hack.ttf" id="1_o6uhb"]
-[ext_resource type="Script" path="res://material_maker/widgets/code_editor/code_editor.gd" id="2_b3eoo"]
+[ext_resource type="Script" uid="uid://d2ggou7kt4qxd" path="res://material_maker/widgets/code_editor/code_editor.gd" id="2_b3eoo"]
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_cib74"]
 number_color = Color(1, 0.756863, 0, 1)
