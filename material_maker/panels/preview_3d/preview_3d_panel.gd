@@ -62,3 +62,15 @@ func on_drop_model_file(file_name : String):
 func _on_resized() -> void:
 	$BG.size = size
 	%MenuBar.size.x = size.x
+
+
+func _on_exposure_value_changed(value: Variant) -> void:
+	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+	environment.tonemap_exposure = value
+	mm_globals.set_config("ui_3d_preview_tonemap_exposure", value)
+
+
+func _on_white_value_changed(value: Variant) -> void:
+	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+	environment.tonemap_white = value
+	mm_globals.set_config("ui_3d_preview_tonemap_white", value)
