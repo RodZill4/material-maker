@@ -1,3 +1,34 @@
+# Material Maker 1.4b1
+
+## General
+
+- Added AgX tonemapper and tonemap exposure and white parameters in the 3D preview (contributed by williamchange)
+
+## Nodes
+
+- Added a Custom Tiles node that can accepts the shape of a tile as SDF input
+- Added a Fill Select node that can select a single area in a Fill result
+- Fixed the smooth curvature node by increasing blur quality
+- Fixed Japanese Glyphs nodes
+- Updated the reroute node's color so it's more visible
+
+## Bug Fixes
+
+- Fixed single click edit of float parameter edit control (contributed by wojtekpil)
+- Fixed icons problem in undocked panels
+- Added missing file options in export editor
+- Fixed shadertoy shader export for polygon/polyline parameters
+- Fixed texture filtering and repeat problems
+- Fixed status bar tip on 3D preview
+- Fixed comment highlighting in code editor
+- Fixed message when closing with unsaved projects (contributed by williamchange)
+- Small fix for the meteor rain splash screen (contributed by williamchange)
+
+## Miscellaneous
+
+- Material Maker is now based on Godot 4.4.1
+- Updated documentation to include Blender export (contributed by williamchange)
+
 # Material Maker 1.4a3
 
 ## General
