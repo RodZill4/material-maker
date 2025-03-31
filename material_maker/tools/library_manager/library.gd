@@ -164,6 +164,7 @@ func add_item(item_name : String, image : Image, data : Dictionary) -> void:
 		return
 	data.tree_item = item_name
 	data.icon_data = Marshalls.raw_to_base64(image.save_png_to_buffer())
+	data.display_name = data.tree_item.get_slice('/', data.tree_item.get_slice_count('/') - 1)
 	var new_library_items = []
 	var inserted = false
 	for i in library_items:
