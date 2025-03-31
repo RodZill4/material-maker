@@ -67,6 +67,8 @@ func check_save_tab(tab) -> bool:
 			save_path = "[unnamed]"
 		else:
 			save_path = save_path.get_file()
+		if save_path == "":
+			save_path = "file"
 		dialog.dialog_text = "Save "+save_path+" before closing?"
 		#dialog.dialog_autowrap = true
 		dialog.get_ok_button().text = "Save and close"
