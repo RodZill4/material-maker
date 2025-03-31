@@ -2,7 +2,7 @@ extends PanelContainer
 
 const SETTING_PREVIEW_CLEAR_BG := "3D_preview_panel_clear_background"
 
-const TONEMAPS : Array = ["Linear", "Reinhard", "Filmic", "ACES"]
+const TONEMAPS : Array = ["Linear", "Reinhard", "Filmic", "ACES", "AgX"]
 
 @onready var preview3D := owner
 
