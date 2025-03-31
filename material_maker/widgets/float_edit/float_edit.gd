@@ -128,7 +128,7 @@ func _gui_input(event: InputEvent) -> void:
 	if mode == Modes.IDLE:
 
 		# Handle Drag-Start
-		if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		if event is InputEventMouseMotion and event.relative.length() > 0.0 and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			if $Edit.text.is_valid_float():
 				mode = Modes.SLIDING
 				start_position = event.position.x
