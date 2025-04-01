@@ -18,8 +18,11 @@ const MINIMUM_ITEM_HEIGHT : int = 30
 const MENU_CREATE_LIBRARY : int = 1000
 const MENU_LOAD_LIBRARY : int =   1001
 
+func _context_menu_about_to_popup(context_menu):
+	context_menu.position = get_window().position + Vector2i(get_global_mouse_position() * get_window().content_scale_factor)
 
 func _ready() -> void:
+	%Filter.get_menu().about_to_popup.connect(_context_menu_about_to_popup.bind(%Filter.get_menu()))
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
