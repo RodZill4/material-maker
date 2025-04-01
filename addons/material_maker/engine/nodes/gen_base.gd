@@ -555,6 +555,16 @@ func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 	var source : ShaderCode = get_shader_code("uv", output_index, context)
 	if source.output_type == "f":
 		source.output_type = "rgba"
+	if not source.output_values.has("rgba"):
+		var preview_code : String = mm_io_types.types[source.output_type].preview
+		preview_code = preview_code.replace("uniform", "const")
+		preview_code = preview_code.replace("preview_size", "64")
+		preview_code = preview_code.replace("$(code)", source.code)
+		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])
+		source.defs += preview_code
+		source.code = ""
+		source.output_values.rgba = "preview_2d(uv)"
+		source.output_type = "rgba"
 	var compute_shader : MMComputeShader = MMComputeShader.new()
 	var shader_status : bool = await compute_shader.set_shader_from_shadercode(source, false)
 	var texture : MMTexture = MMTexture.new()
