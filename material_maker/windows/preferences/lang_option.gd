@@ -17,6 +17,8 @@ func init_from_locales():
 func init_from_config(config : ConfigFile) -> void:
 	if config.has_section_key("config", config_variable):
 		selected = locales.find(config.get_value("config", config_variable))
+	if selected == -1:
+		selected = 0
 
 func update_config(config : ConfigFile) -> void:
 	config.set_value("config", config_variable, locales[selected])
