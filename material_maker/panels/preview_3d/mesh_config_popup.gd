@@ -40,7 +40,7 @@ func configure_mesh(m : MeshInstance3D) -> void:
 func _on_scale_linked_toggled(toggled_on: bool) -> void:
 	%UV_Scale_Y.visible = not toggled_on
 	_on_UV_value_changed(%UV_Scale_X.value)
-	size = $VBoxContainer.get_minimum_size() * content_scale_factor
+	size = ($VBoxContainer.get_minimum_size() + Vector2(10,0)) * content_scale_factor
 
 
 func _on_MeshConfiguration_popup_hide():
