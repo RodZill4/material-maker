@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c4r2t41ej37cr"]
 
-[ext_resource type="Script" path="res://material_maker/windows/preferences/language_download.gd" id="1"]
+[ext_resource type="Script" uid="uid://scs3aa1rmw53" path="res://material_maker/windows/preferences/language_download.gd" id="1"]
 
 [node name="LanguageDownload" type="PopupPanel"]
 visible = true
