@@ -1,0 +1,158 @@
+{
+	"name": "custom_tiles",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"bevel": 0.05,
+		"columns": 7.0,
+		"mirror": true,
+		"mortar": 0.0,
+		"row_offset": 0.125,
+		"rows": 10.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "vec3 $(name_uv)_tile = tile_$(name)($uv, vec2($columns, $rows), $row_offset);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The shape of a tile",
+				"name": "shape",
+				"shortdesc": "Shape",
+				"type": "sdf2d"
+			},
+			{
+				"default": "1.0",
+				"label": "5:",
+				"longdesc": "A map that affects the Mortar parameter",
+				"name": "mortar_map",
+				"shortdesc": "Mortar map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "A map that affects the Bevel parameter",
+				"name": "bevel_map",
+				"shortdesc": "Bevel map",
+				"type": "f"
+			}
+		],
+		"instance": [
+			"vec3 tile_$(name)(vec2 p, vec2 size, float offset) {",
+			"\tfloat best_d = -10.0;",
+			"\tvec2 best_corner;",
+			"\tfor (float x = -1.0; x <= 1.0; x += 1.0) {",
+			"\t\tfor (float y = -1.0; y <= 1.0; y += 1.0) {",
+			"\t\t\tvec2 corner = floor(p*size+vec2(x, y));",
+			"\t\t\tcorner.x -= fract(offset*corner.y);",
+			"\t\t\tvec2 uv = p*size-corner;",
+			"\t\t\tif ($mirror && (int(corner.y) & 1) == 1) {",
+			"\t\t\t\tuv.x = 1.0-uv.x;",
+			"\t\t\t\tuv.y = 1.0-uv.y;",
+			"\t\t\t}",
+			"\t\t\tfloat d = -$shape(uv);",
+			"\t\t\tif (d > best_d) {",
+			"\t\t\t\tbest_d = d;",
+			"\t\t\t\tbest_corner = fract(round(corner/size*4096.0)/4096.0);",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"\treturn vec3(clamp((best_d-$mortar)/$bevel, 0.0, 1.0), best_corner);",
+			"}"
+		],
+		"longdesc": "Generates a custom tiles pattern, whose shape is defined by an SDF input.",
+		"name": "Custom Tiles",
+		"outputs": [
+			{
+				"f": "$(name_uv)_tile.x",
+				"longdesc": "A greyscale image that shows the tiles pattern",
+				"shortdesc": "Tiles pattern",
+				"type": "f"
+			},
+			{
+				"fill": "vec4($(name_uv)_tile.yz, 1.0/$columns, 1.0/$rows)",
+				"longdesc": "An output that should be plugged into a Fill companion node",
+				"shortdesc": "Tiles Fill",
+				"type": "fill"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 6.0,
+				"label": "Rows",
+				"longdesc": "The number of rows of a pattern",
+				"max": 64.0,
+				"min": 1.0,
+				"name": "rows",
+				"shortdesc": "Rows",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 3.0,
+				"label": "Columns",
+				"longdesc": "The number of columns of a pattern",
+				"max": 64.0,
+				"min": 1.0,
+				"name": "columns",
+				"shortdesc": "Columns",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Offset",
+				"longdesc": "The offset of each row of the pattern",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "row_offset",
+				"shortdesc": "Row Offset",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Mirror",
+				"longdesc": "Mirror every other row",
+				"name": "mirror",
+				"shortdesc": "Mirror",
+				"type": "boolean"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Mortar",
+				"longdesc": "The width of the space between tiles",
+				"max": 0.5,
+				"min": 0.0,
+				"name": "mortar",
+				"shortdesc": "Mortar",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Bevel",
+				"longdesc": "The width of the edge of each tile",
+				"max": 0.5,
+				"min": 0.0,
+				"name": "bevel",
+				"shortdesc": "Bevel",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Custom Tiles"
+	},
+	"type": "shader"
+}

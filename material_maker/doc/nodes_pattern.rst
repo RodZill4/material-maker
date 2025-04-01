@@ -14,6 +14,8 @@ The generator nodes are nodes that do not accept any input and generate one or s
 	node_pattern_unevenbricks3
 	node_pattern_skewed_bricks
 	node_pattern_skewed_unevenbricks
+	node_pattern_cairo
+	node_pattern_custom_tiles
 	node_pattern_weave
 	node_pattern_random_weave
 	node_pattern_truchet
@@ -25,4 +27,3 @@ The generator nodes are nodes that do not accept any input and generate one or s
 	node_pattern_sine_wave
 	node_pattern_mesh
 	node_pattern_diagonal_weave
-	node_pattern_cairo

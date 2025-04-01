@@ -1,0 +1,67 @@
+{
+	"name": "fill_select",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"x": 0.0,
+		"y": 0.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec4 $(name_uv)_f = $in($uv);",
+			"vec4 $(name_uv)_p = $in(fract(vec2($x+0.5, $y+0.5)));",
+			"float $(name_uv)_m = step(dot(abs($(name_uv)_f-$(name_uv)_p), vec4(1.0)), 0.001);"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "",
+				"longdesc": "The input fill data, to be connected to the output of a Fill node",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "fill"
+			}
+		],
+		"instance": "",
+		"longdesc": "A fill companion node that selects a single area",
+		"name": "Fill Select",
+		"outputs": [
+			{
+				"f": "$(name_uv)_m",
+				"longdesc": "The mask for the selected area",
+				"shortdesc": "Mask",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.x",
+				"default": 0.0,
+				"label": "X",
+				"longdesc": "The position of the selected area on the horizontal axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "x",
+				"shortdesc": "X",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": 0.0,
+				"label": "Y",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "y",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Fill Select"
+	},
+	"type": "shader"
+}
