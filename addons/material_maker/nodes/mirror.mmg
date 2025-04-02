@@ -26,8 +26,8 @@
 				"default": "vec4($uv, 0, 1)",
 				"label": "",
 				"longdesc": "The input image",
-				"name": "i",
-				"shortdesc": "Input",
+				"name": "i#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			}
 		],
@@ -37,8 +37,8 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the mirrored image",
-				"rgba": "$i(uvmirror_$direction($uv, $offset, $flip_sides ? -1.0 : 1.0))",
-				"shortdesc": "Output",
+				"rgba": "$i#(uvmirror_$direction($uv, $offset, $flip_sides ? -1.0 : 1.0))",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],

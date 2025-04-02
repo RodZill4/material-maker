@@ -1,7 +1,7 @@
 Swirl node
 ~~~~~~~~~~
 
-The **Swirl** node applies a swirl effect on its input.
+The **Swirl** node is variadic and applies a swirl effect on its inputs.
 
 .. image:: images/node_transform_swirl.png
 	:align: center
@@ -9,12 +9,12 @@ The **Swirl** node applies a swirl effect on its input.
 Inputs
 ++++++
 
-The **Swirl** node accepts a single RGBA input, interpreted as a heightmap.
+The **Swirl** node accepts one or more RGBA inputs, interpreted as a heightmap.
 
 Outputs
 +++++++
 
-The **Swirl** node outputs the transformed image as RGBA.
+The **Swirl** node outputs the transformed images as RGBA.
 
 Parameters
 ++++++++++
