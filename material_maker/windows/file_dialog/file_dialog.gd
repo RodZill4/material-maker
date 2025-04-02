@@ -9,8 +9,9 @@ const DIALOG_HACK : bool = true
 
 signal return_paths(path_list)
 
-func _context_menu_about_to_popup(context_menu):
-	context_menu.position =  get_window().position + Vector2i( get_mouse_position() * _content_scale_factor)
+func _context_menu_about_to_popup(context_menu : PopupMenu):
+	context_menu.position =  get_window().position + Vector2i(
+			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
 	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
@@ -26,7 +27,8 @@ func _ready() -> void:
 			for line_edit in hbox.get_children():
 				if line_edit is LineEdit:
 					var context_menu = line_edit.get_menu()
-					context_menu.about_to_popup.connect(_context_menu_about_to_popup.bind(context_menu))
+					context_menu.about_to_popup.connect(
+							_context_menu_about_to_popup.bind(context_menu))
 
 	if DIALOG_HACK:
 		var vbox = get_vbox()

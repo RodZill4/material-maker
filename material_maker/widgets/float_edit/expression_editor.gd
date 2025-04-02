@@ -9,7 +9,8 @@ var accept_empty : bool = false
 @onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 
 func _context_menu_about_to_popup(context_menu):
-	context_menu.position =  get_window().position + Vector2i( get_mouse_position() * mm_globals.main_window.get_window().content_scale_factor)
+	context_menu.position =  get_window().position + Vector2i(
+			get_mouse_position() * mm_globals.main_window.get_window().content_scale_factor)
 
 func _ready():
 	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
