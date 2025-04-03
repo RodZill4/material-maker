@@ -120,6 +120,8 @@ func set_environment(id:int) -> void:
 		environment_manager.apply_environment(current_environment, environment, sun)
 
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
+	environment.tonemap_exposure = mm_globals.get_config("ui_3d_preview_tonemap_exposure")
+	environment.tonemap_white = mm_globals.get_config("ui_3d_preview_tonemap_white")
 
 
 func set_tonemap(id) -> void:
