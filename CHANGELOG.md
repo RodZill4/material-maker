@@ -23,6 +23,10 @@
 - Fixed comment highlighting in code editor
 - Fixed message when closing with unsaved projects (contributed by williamchange)
 - Small fix for the meteor rain splash screen (contributed by williamchange)
+- Fixed preview export for non-image types
+- Fixed spline edit dialog
+- Fixed Preference window, that vanished when trying to download languages
+- Show locale as english if it's not found
 
 ## Miscellaneous
 
