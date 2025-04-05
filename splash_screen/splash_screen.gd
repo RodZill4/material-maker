@@ -4,6 +4,7 @@ extends MarginContainer
 var resource_path : String
 var tween : Tween
 var background_index : int
+var background_subindex : int
 var delay_start : bool = false
 var mm_scene : PackedScene = null
 
@@ -12,53 +13,93 @@ var mm_scene : PackedScene = null
 
 const BACKGROUNDS_DIR : String = "res://splash_screen/backgrounds/"
 const BACKGROUNDS : Array[Dictionary] = [
-	{ title="Beanbag Chair", author="Angel", file="angel_beanbag_chair.png" },
-	{ title="Soft Nurball", author="Angel", file="angel_soft_nurball.png" },
-	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds", file="oneiric_worlds_zefyr.png", url="https://store.steampowered.com/app/1344990/Zefyr_A_Thiefs_Melody" },
-	{ title="Carved Wood", author="Pavel Oliva", file="pavel_oliva_carved_wood.png" },
-	{ title="Celestial Floor", author="Pavel Oliva", file="pavel_oliva_celestial_floor.png" },
-	{ title="Cursed Planks", author="Pavel Oliva", file="pavel_oliva_cursed_planks.png" },
-	{ title="Flowing Lava", author="Pavel Oliva", file="pavel_oliva_flowing_lava.png" },
-	{ title="Lace", author="Pavel Oliva", file="pavel_oliva_lace.png" },
-	{ title="Pavement Generator", author="Pavel Oliva", file="pavel_oliva_pavement_generator.png" },
-	{ title="Stylized Pavement", author="Pavel Oliva", file="pavel_oliva_stylized_pavement.png" },
-	{ title="Treasures", author="Pavel Oliva", file="pavel_oliva_treasures.png" },
-	{ title="Vintage Luggage", author="Pavel Oliva", file="pavel_oliva_vintage_luggage.png" },
+	{ author="Angel", entries=[
+		{ title="Beanbag Chair", file="angel_beanbag_chair.png" },
+		{ title="Soft Nurball", file="angel_soft_nurball.png" },
+	] },
+	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds",  odds = 2, file="oneiric_worlds_zefyr.png", url="https://store.steampowered.com/app/1344990/Zefyr_A_Thiefs_Melody" },
+	{ author="Pavel Oliva", odds = 1.5, entries=[
+		{ title="Carved Wood", file="pavel_oliva_carved_wood.png" },
+		{ title="Celestial Floor", file="pavel_oliva_celestial_floor.png" },
+		{ title="Cursed Planks", file="pavel_oliva_cursed_planks.png" },
+		{ title="Flowing Lava", file="pavel_oliva_flowing_lava.png" },
+		{ title="Lace", file="pavel_oliva_lace.png" },
+		{ title="Pavement Generator", file="pavel_oliva_pavement_generator.png" },
+		{ title="Stylized Pavement", file="pavel_oliva_stylized_pavement.png" },
+		{ title="Treasures", file="pavel_oliva_treasures.png" },
+		{ title="Vintage Luggage", file="pavel_oliva_vintage_luggage.png" },
+	] },
 	{ title="Golden Tiles", author="PixelMuncher", file="pixelmuncher_golden_tiles.png" },
-	{ title="Spiral Trails", author="DroppedBeat", file="droppedbeat_spiral_trails.tres" },
-	{ title="Star Trails", author="DroppedBeat", file="droppedbeat_star_trails.tres" },
-	{ title="Matrix Rain", author="DroppedBeat", file="droppedbeat_matrix_rain.tres" },
-	{ title="Meteor Rain", author="DroppedBeat", file="droppedbeat_meteor_rain.tres" },
-	{ title="Procedural Material", author="DroppedBeat", file="droppedbeat_procedural_material.png" },
-	{ title="Vending Machines", author="DroppedBeat", file="droppedbeat_vending_machines.png" },
-	{ title="Path Traced Green Thing", author="Paulo Falcao", file="paulo_falcao_green_thing.png" },
-	{ title="Terminator Ball", author="Paulo Falcao", file="paulo_falcao_terminator_ball.tres" },
-	{ title="Fractal Octahedron", author="Paulo Falcao", file="paulo_falcao_fractal_octahedron.tres" },
-	{ title="Dirty Tiles", author="cybereality", file="cybereality_dirty_tiles.png" },
-	{ title="Future Visions", author="cybereality", file="cybereality_future_visions.png" },
-	{ title="Brutalism", author="cybereality", file="cybereality_brutalism.png" },
+	{ author="DroppedBeat", odds = 1.5, entries=[
+		{ title="Spiral Trails", file="droppedbeat_spiral_trails.tres" },
+		{ title="Star Trails", file="droppedbeat_star_trails.tres" },
+		{ title="Matrix Rain", file="droppedbeat_matrix_rain.tres" },
+		{ title="Meteor Rain", file="droppedbeat_meteor_rain.tres" },
+		{ title="Procedural Material", file="droppedbeat_procedural_material.png" },
+		{ title="Vending Machines", file="droppedbeat_vending_machines.png" },
+	] },
+	{ author="Paulo Falcao", entries=[
+		{ title="Path Traced Green Thing", file="paulo_falcao_green_thing.png" },
+		{ title="Terminator Ball", file="paulo_falcao_terminator_ball.tres" },
+		{ title="Fractal Octahedron", file="paulo_falcao_fractal_octahedron.tres" },
+	] },
+	{ author="cybereality", odds = 1.5, entries=[
+		{ title="Dirty Tiles", file="cybereality_dirty_tiles.png" },
+		{ title="Future Visions", file="cybereality_future_visions.png" },
+		{ title="Brutalism", file="cybereality_brutalism.png" },
+	] },
 	{ title="Old Doors", author="cgmytro", file="cgmytro_old_doors.png" },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_1.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_2.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_3.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_4.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_5.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_6.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_7.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
-	{ title="Crown Gambit", author="Wild Wits", file="wild_wits_crown_gambit_8.png", url="https://store.steampowered.com/app/2447980/Crown_Gambit", odds=0.4 },
+	{ author="Wild Mage Games",
+	  title="Neverlooted Dungeon",
+	  url="https://store.steampowered.com/app/1171980/Neverlooted_Dungeon",
+	  odds = 3,
+	  entries=[
+		{ file="wild_mage_neverlooted_dungeon_1.png" },
+		{ file="wild_mage_neverlooted_dungeon_2.png" },
+		{ file="wild_mage_neverlooted_dungeon_3.png" },
+		{ file="wild_mage_neverlooted_dungeon_4.png" },
+		{ file="wild_mage_neverlooted_dungeon_5.png" },
+	] },
+	{ author="Wild Wits",
+	  title="Crown Gambit",
+	  url="https://store.steampowered.com/app/2447980/Crown_Gambit",
+	  odds = 3,
+	  entries=[
+		{ file="wild_wits_crown_gambit_1.png" },
+		{ file="wild_wits_crown_gambit_2.png" },
+		{ file="wild_wits_crown_gambit_3.png" },
+		{ file="wild_wits_crown_gambit_4.png" },
+		{ file="wild_wits_crown_gambit_5.png" },
+		{ file="wild_wits_crown_gambit_6.png" },
+		{ file="wild_wits_crown_gambit_7.png" },
+		{ file="wild_wits_crown_gambit_8.png" },
+	] },
 ]
 
 
 func _enter_tree():
 	var date : Dictionary = Time.get_date_dict_from_system()
 	var date_int : int = date.month*33+date.day
-	var screen : int
+	var screen : int = 0
 	match date_int:
 		_:
 			randomize()
-			screen = randi() % BACKGROUNDS.size()
-			while BACKGROUNDS[screen].has("odds") and BACKGROUNDS[screen].odds < randf():
-				screen = randi() % BACKGROUNDS.size()
+			var sum : float = 0.0
+			for i in BACKGROUNDS.size():
+				if BACKGROUNDS[i].has("odds"):
+					sum += BACKGROUNDS[i].odds
+				else:
+					sum += 1
+			var value : float = randf_range(0, sum)
+			sum = 0.0
+			for i in BACKGROUNDS.size():
+				if BACKGROUNDS[i].has("odds"):
+					sum += BACKGROUNDS[i].odds
+				else:
+					sum += 1
+				if sum >= value:
+					screen = i
+					break
 	set_screen(screen)
 	var window : Window = get_window()
 	var current_screen_index = window.current_screen
@@ -67,20 +108,39 @@ func _enter_tree():
 	window.size = ui_scale*size
 	window.content_scale_factor = ui_scale
 
-func set_screen(bi : int) -> void:
+func set_screen(bi : int, sub_index = -1) -> void:
 	background_index = bi
 	var background : Dictionary = BACKGROUNDS[background_index]
-	match background.file.get_extension():
+	var author : String = background.author if background.has("author") else ""
+	var file : String = background.file if background.has("file") else ""
+	var title : String = background.title if background.has("title") else ""
+	var url : String = background.url if background.has("url") else ""
+	if background.has("entries"):
+		if sub_index < 0:
+			sub_index = randi_range(0, background.entries.size()-1)
+		elif sub_index >= background.entries.size():
+			sub_index = background.entries.size()-1
+		background_subindex = sub_index
+		background = background.entries[sub_index]
+		if background.has("author"):
+			author = background.author
+		if background.has("file"):
+			file = background.file
+		if background.has("title"):
+			title = background.title
+		if background.has("url"):
+			url = background.url
+	match file.get_extension():
 		"png":
 			$SplashScreen.texture = load(BACKGROUNDS_DIR+background.file)
 			$SplashScreen.material = null
 		"tres":
 			$SplashScreen.material = load(BACKGROUNDS_DIR+background.file)
-	%Title.text = background.title
-	%Author.text = background.author
+	%Title.text = title
+	%Author.text = author
 	%Version.text = ProjectSettings.get_setting("application/config/actual_release")
-	if "url" in background:
-		%Title.gui_input.connect(self._on_title_gui_input.bind(background.url))
+	if url != "":
+		%Title.gui_input.connect(self._on_title_gui_input.bind(url))
 		%Title.mouse_filter = MOUSE_FILTER_STOP
 		%Title.mouse_default_cursor_shape = CURSOR_POINTING_HAND
 	else:
@@ -163,10 +223,16 @@ func _on_secret_button_gui_input(event):
 			$BackgroundSelect.visible = true
 
 func _on_previous_pressed():
-	set_screen((background_index+BACKGROUNDS.size()-1) % BACKGROUNDS.size())
+	if BACKGROUNDS[background_index].has("entries") and background_subindex > 0:
+		set_screen(background_index, background_subindex-1)
+	else:
+		set_screen(background_index-1 if background_index > 0 else BACKGROUNDS.size()-1, 1000)
 
 func _on_next_pressed():
-	set_screen((background_index+1) % BACKGROUNDS.size())
+	if BACKGROUNDS[background_index].has("entries") and background_subindex < BACKGROUNDS[background_index].entries.size()-1:
+		set_screen(background_index, background_subindex+1)
+	else:
+		set_screen(background_index+1 if background_index < BACKGROUNDS.size()-1 else 0, 0)
 
 func _on_title_gui_input(event, url : String):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
