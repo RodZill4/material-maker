@@ -184,6 +184,9 @@ func _gui_input(event: InputEvent) -> void:
 							current_step = 0.1
 				elif event.shift_pressed:
 					delta *= 0.2
+				elif event.alt_pressed:
+					current_step *= 0.01
+					delta *= 0.1
 
 
 				var v: float = start_value + delta / (size.x / abs(max_value - min_value))
