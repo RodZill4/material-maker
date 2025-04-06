@@ -17,7 +17,7 @@ const BACKGROUNDS : Array[Dictionary] = [
 		{ title="Beanbag Chair", file="angel_beanbag_chair.png" },
 		{ title="Soft Nurball", file="angel_soft_nurball.png" },
 	] },
-	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds",  odds = 2, file="oneiric_worlds_zefyr.png", url="https://store.steampowered.com/app/1344990/Zefyr_A_Thiefs_Melody" },
+	{ title="Zefyr: A Thief's Melody (stone ground texture)", author="Oneiric Worlds", odds = 2, file="oneiric_worlds_zefyr.png", url="https://store.steampowered.com/app/1344990/Zefyr_A_Thiefs_Melody" },
 	{ author="Pavel Oliva", odds = 1.5, entries=[
 		{ title="Carved Wood", file="pavel_oliva_carved_wood.png" },
 		{ title="Celestial Floor", file="pavel_oliva_celestial_floor.png" },
