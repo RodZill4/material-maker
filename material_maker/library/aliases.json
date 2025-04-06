@@ -11,7 +11,7 @@
 	"Filter/Colorspace Roundtrip": "colourspace roundtrip",
 	"Filter/Combine": "compose,rgba",
 	"Filter/Decompose": "split,rgba",
-	"Filter/Grayscale": "desaturate.greyscale",
+	"Filter/Grayscale": "desaturate,greyscale",
 	"Filter/Invert": "negative",
 	"Filter/Fill/To Random Gray": "to random grey",
 	"Filter/Fill/From Colors": "from colours",
