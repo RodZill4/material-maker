@@ -16,6 +16,7 @@
 	"Filter/Fill/To Random Gray": "to random grey",
 	"Filter/Fill/From Colors": "from colours",
 	"Filter/Math": "add,subtract,multiply,divide,log,log2,pow,abs,round,floor,ceil,trunc,fract,min,max,cos,sin,tan,sqrt,compare,greater,less,smoothstep,pingpong,sign,mod,atan2,asin,atan,acos,atan,sinh,cosh,tanh,exp,snap,radians,degrees",
+	"Filter/Math/Vec3": "add,subtract,multiply,divide,log,log2,pow,abs,round,floor,ceil,trunc,fract,min,max,less,cos,sin,tan,sqrt,length,distance,dot,cross,normalize,sign,mod,snap,sinh,cosh,tanh,log",
 	"Filter/Supersample": "antialias,smoothen",
 	"Filter/Swap Channels": "shuffle,change,bind",
 	"Filter/Tonality": "curves",
