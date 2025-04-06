@@ -31,14 +31,16 @@ func read_translations():
 		var file_name = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir():
+				#print("Reading locale ", file_name)
 				match file_name.get_extension():
 					"po", "position":
 						var t : Translation = load(LOCALE_DIR+"/"+file_name)
-						if translations.has(t.locale):
-							add_translations(translations[t.locale], t)
-						else:
-							translations[t.locale] = t
-							TranslationServer.add_translation(t)
+						if t:
+							if translations.has(t.locale):
+								add_translations(translations[t.locale], t)
+							else:
+								translations[t.locale] = t
+								TranslationServer.add_translation(t)
 					"csv":
 						csv_files.push_back(file_name)
 			file_name = dir.get_next()
