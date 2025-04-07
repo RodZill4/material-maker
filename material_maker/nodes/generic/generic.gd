@@ -299,7 +299,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.step = 0.005 if !p.has("step") else p.step
 		if p.has("default"):
 			control.value = p.default
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 60
 	elif p.type == "size":
 		control = SizeOptionButton.new()
 		control.min_size = p.first
@@ -476,13 +476,14 @@ func update_node() -> void:
 		if label != "":
 			var label_widget : Label = Label.new()
 			label_widget.text = label
+			label_widget.name = "InputLabel"
 			label_widget.theme_type_variation = "MM_NodePropertyLabel"
 			hsizer.add_child(label_widget)
 			input_labels.append(label_widget)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
-	
-	
-	
+
+
+
 	# Parameters
 	if !generator.minimized:
 		controls = {}
@@ -495,7 +496,7 @@ func update_node() -> void:
 				continue
 			var control = MMGraphNodeGeneric.create_parameter_control(p, generator.accept_float_expressions())
 			if control != null:
-				var label = p.name
+				var label: String = p.name
 				control.name = label
 				controls[control.name] = control
 				if p.has("label"):
@@ -514,6 +515,7 @@ func update_node() -> void:
 					hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 					if not input_labels.is_empty():
 						var empty_control : Control = Control.new()
+						empty_control.name = "InputLabelPlaceholder"
 						empty_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 						input_labels.append(empty_control)
 						hsizer.add_child(empty_control)
@@ -522,11 +524,12 @@ func update_node() -> void:
 				hsizer.custom_minimum_size.y = minimum_line_height
 				if label != "":
 					var label_widget = Label.new()
+					label_widget.name = "PropertyLabel"
 					label_widget.text = label
 					property_labels.append(label_widget)
 					label_widget.theme_type_variation = "MM_NodePropertyLabel"
 					hsizer.add_child(label_widget)
-				
+
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
 					hsizer.add_child(control)
@@ -536,31 +539,32 @@ func update_node() -> void:
 				else:
 					first_focus = control
 				previous_focus = control
-		
+
 		var label_max_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
 		label_max_width = min(100, label_max_width)
 		for label in property_labels:
 			label.custom_minimum_size.x = label_max_width
 			label.size.x = label_max_width
 			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		
+
 		var input_label_width : int = 0
-		input_label_width = get_children().reduce(
-			func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
-			, 0)
-		
+		input_label_width = input_labels.reduce(
+			func(accum, label):
+				#printt(child, child.get_child(0).size.x)
+				return max(accum, label.size.x), 0)
+
 		if not property_labels.is_empty():
 			input_label_width += 10
-		
+
 		for i in input_labels:
 			i.custom_minimum_size.x = input_label_width
-		
+
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
 			first_focus.focus_previous = previous_focus.get_path()
 		initialize_properties()
-	
-			
+
+
 	# Outputs
 	var outputs = generator.get_output_defs()
 	output_count = outputs.size()
