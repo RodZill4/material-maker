@@ -1,8 +1,8 @@
 Kaleidoscope node
 ~~~~~~~~~~~~~~~~~
 
-The **Kaleidoscope** node applies a kaleidoscope effect, i.e. copies an angle (by default the
-upper one) all around the image to its input.
+The **Kaleidoscope** node is variadic and applies a kaleidoscope effect, i.e. copies
+an angle (by default the upper one) all around the image to its inputs.
 
 .. image:: images/node_transform_kaleidoscope.png
 	:align: center
@@ -10,12 +10,12 @@ upper one) all around the image to its input.
 Inputs
 ++++++
 
-The **Kaleidoscope** node accepts a single RGBA input.
+The **Kaleidoscope** node accepts one or more RGBA inputs.
 
 Outputs
 +++++++
 
-The **Kaleidoscope** node outputs the result as RGBA.
+The **Kaleidoscope** node outputs the results as RGBA.
 
 Parameters
 ++++++++++
