@@ -1,17 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://rflulhsuy3ax"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/float_edit/float_edit.gd" id="1"]
+[ext_resource type="Script" uid="uid://c4own5hljyjue" path="res://material_maker/widgets/float_edit/float_edit.gd" id="1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t5q7m"]
 content_margin_left = 3.0
-content_margin_top = 2.0
 content_margin_right = 3.0
-content_margin_bottom = 2.0
 
 [node name="FloatEdit" type="PanelContainer"]
 clip_children = 1
 offset_right = 198.0
-offset_bottom = 27.0
+offset_bottom = 25.0
 theme_type_variation = &"MM_NodeFloatEdit"
 script = ExtResource("1")
 
