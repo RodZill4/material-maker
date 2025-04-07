@@ -144,7 +144,7 @@
 					"type": "Lattice"
 				},
 				"label": "",
-				"longdesc": "The lattice that describes the distorsion",
+				"longdesc": "The lattice that describes the distortion",
 				"name": "lattice",
 				"shortdesc": "Lattice",
 				"type": "lattice"
