@@ -29,15 +29,16 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 				camera_rotation2.rotate_x(-0.01*event.relative.y)
 				camera_rotation1.rotate_y(-0.01*event.relative.x)
 			return true
+		elif Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and event.is_command_or_control_pressed():
+			zoom(event.relative.y * 0.1 * (1.0 if event.shift_pressed else 0.1))
+			return true
 	elif event is InputEventMouseButton:
 		if not event.is_command_or_control_pressed():
-			var zoom = 0.0
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-				zoom -= 1.0
+				zoom(-1.0 * (1.0 if event.shift_pressed else 0.1))
+				return true
 			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-				zoom += 1.0
-			if zoom != 0.0:
-				camera_position.translate(Vector3(0.0, 0.0, zoom*(1.0 if event.shift_pressed else 0.1)))
+				zoom(1.0 * (1.0 if event.shift_pressed else 0.1))
 				return true
 		if capture_mouse and event.button_index == MOUSE_BUTTON_MIDDLE:
 			if event.pressed:
@@ -57,3 +58,8 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 		camera_position.position.z /= event.factor
 		return true
 	return false
+
+
+func zoom(zoom_amount) -> void:
+	if zoom_amount != 0.0:
+		camera_position.translate(Vector3(0.0, 0.0, zoom_amount))
