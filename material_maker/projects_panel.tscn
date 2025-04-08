@@ -109,6 +109,7 @@ anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 tab_close_display_policy = 1
+drag_to_rearrange_enabled = true
 
 [node name="CrashRecoveryTimer" type="Timer" parent="Projects"]
 wait_time = 15.0
