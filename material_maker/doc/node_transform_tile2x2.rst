@@ -1,5 +1,5 @@
 Tile 2x2 node
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 The **Tile 2x2** node combines 4 input images into a single output by tiling them.
 

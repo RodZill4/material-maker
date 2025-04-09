@@ -1,5 +1,5 @@
 Adjust HSV node
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 The **Adjust HSV** node adjusts the hue, saturation and value of the input image.
 

@@ -1,5 +1,5 @@
 Create Map node
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 The **Create Map** node creates a map holding height, orientation and offset information
 used to combine simple materials.

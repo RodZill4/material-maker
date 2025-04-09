@@ -1,5 +1,5 @@
 Custom UV node
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 The **Custom UV** node deforms an input image according to a custom UV map given as input.
 
