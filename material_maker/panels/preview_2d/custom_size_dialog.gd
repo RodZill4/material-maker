@@ -5,7 +5,7 @@ signal close(apply)
 
 
 func ask() -> Dictionary:
-	title = "Custom size"
+	window_title = "Custom size"
 	popup_centered()
 	_on_WindowDialog_minimum_size_changed()
 	var rv : Dictionary
