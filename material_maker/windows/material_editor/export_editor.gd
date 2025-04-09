@@ -32,9 +32,13 @@ func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	export_file_expression.parent_dialog = self
-	var context_menus = [
-		$"MarginContainer/VBoxContainer/TabBar/Custom Script".get_menu(),
-		$MarginContainer/VBoxContainer/TabBar/Files/File/template.get_menu(),
+	var context_menus : Array[PopupMenu] = [
+		export_custom_script.get_menu(),
+		export_file_template.get_menu(),
+		export_file_name.get_menu(),
+		export_file_conditions.get_menu(),
+		export_file_expression.get_menu(),
+		export_extension_edit.get_menu(),
 	]
 	for context_menu in context_menus:
 		context_menu.about_to_popup.connect(
