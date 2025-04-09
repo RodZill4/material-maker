@@ -26,7 +26,7 @@ func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 
 func _on_ready() -> void:
 	await get_tree().process_frame
-	var context_menus = [
+	var context_menus : Array[PopupMenu] = [
 		$"Sizer/TabBar/Global Functions/Includes/Includes".get_menu(),
 		$Sizer/TabBar/General/Name/Name.get_menu(),
 	]

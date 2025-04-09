@@ -26,7 +26,7 @@ func _ready() -> void:
 		if hbox is HBoxContainer:
 			for line_edit in hbox.get_children():
 				if line_edit is LineEdit:
-					var context_menu = line_edit.get_menu()
+					var context_menu : PopupMenu = line_edit.get_menu()
 					context_menu.about_to_popup.connect(
 							_context_menu_about_to_popup.bind(context_menu))
 

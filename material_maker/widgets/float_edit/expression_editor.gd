@@ -16,7 +16,8 @@ func _ready():
 	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	min_size = Vector2(300, 100) * content_scale_factor
 	
-	editor.get_menu().about_to_popup.connect(_context_menu_about_to_popup.bind(editor.get_menu()))
+	editor.get_menu().about_to_popup.connect(
+			_context_menu_about_to_popup.bind(editor.get_menu()))
 
 func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
 	object = o
