@@ -977,7 +977,7 @@ func show_library_item_doc() -> void:
 		var doc_name = library.get_selected_item_doc_name()
 		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			if DirAccess.open("res://").file_exists(doc_path):
+			if FileAccess.file_exists(doc_path):
 				OS.shell_open(doc_path)
 				break
 			doc_name = doc_name.left(doc_name.rfind("_"))
