@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bay8he3yeaj1q"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/debug/debug_popup.gd" id="1"]
+[ext_resource type="Script" uid="uid://knk1qxod1t7o" path="res://material_maker/nodes/debug/debug_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="2_tw3os"]
 
 [sub_resource type="Shader" id="2"]
@@ -27,8 +27,8 @@ layout_mode = 2
 
 [node name="ShaderType" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-item_count = 4
 selected = 0
+item_count = 4
 popup/item_0/text = "Shadertoy"
 popup/item_0/id = 0
 popup/item_1/text = "Godot Canvas item"
@@ -54,5 +54,6 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [connection signal="close_requested" from="." to="." method="queue_free"]
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/ShaderType" to="." method="_on_ShaderType_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/CopyToClipboard" to="." method="_on_CopyToClipboard_pressed"]

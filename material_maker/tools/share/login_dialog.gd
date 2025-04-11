@@ -5,6 +5,7 @@ signal return_status(status)
 
 
 func _ready():
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	await get_tree().process_frame
 	_on_MarginContainer_minimum_size_changed()
 
@@ -35,7 +36,7 @@ func ask(user : String, password : String) -> Dictionary:
 	return {}
 
 func _on_MarginContainer_minimum_size_changed():
-	size = $MarginContainer.get_minimum_size()
+	size = $MarginContainer.get_minimum_size() * content_scale_factor
 
 func _on_RegisterButton_pressed():
 	OS.shell_open(MMPaths.WEBSITE_ADDRESS+"/register")
