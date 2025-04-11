@@ -43,12 +43,15 @@ func on_right_click():
 
 
 func _on_PopupMenu_id_pressed(id):
+	var objs_pivot : Node3D = get_node("MaterialPreview/Preview3d/ObjectsPivot")
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
 	match id:
 		0:
 			pivot.transform.origin = Vector3(0, 0, 0)
 		1:
 			pivot.transform.origin = new_pivot_position
+		2:
+			objs_pivot.rotation = Vector3(0, 0, 0)
 
 
 func _on_Preview3D_mouse_entered():
