@@ -26,3 +26,14 @@ func _on_CurveEdit_pressed():
 func on_value_changed(v) -> void:
 	set_value(v)
 	emit_signal("updated", v.duplicate(), null)
+
+func _get_drag_data(_position) -> MMCurve:
+	return value.duplicate()
+
+func _can_drop_data(_position, data) -> bool:
+	return data is MMCurve
+
+func _drop_data(_position, data) -> void:
+	var old_curve : MMCurve = value
+	value = data
+	emit_signal("updated", value, old_curve)
