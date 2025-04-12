@@ -768,7 +768,14 @@ func do_send_changed_signal() -> void:
 # Drag and drop
 
 func _can_drop_data(_position, data) -> bool:
-	return typeof(data) == TYPE_COLOR or typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
+	return (
+		(typeof(data) == TYPE_OBJECT and data is MMCurve)
+		or typeof(data) == TYPE_COLOR
+		or typeof(data) == TYPE_DICTIONARY
+		and (data.has('type')
+		or (data.has('nodes')
+		and data.has('connections')))
+		)
 
 func _drop_data(node_position, data) -> void:
 	if typeof(data) == TYPE_DICTIONARY and data.has("tree_item"):
@@ -780,6 +787,8 @@ func _drop_data(node_position, data) -> void:
 		do_paste({type="uniform", color={ r=data.r, g=data.g, b=data.b, a=data.a }})
 	elif typeof(data) == TYPE_DICTIONARY and data.has("type") and data.type == "Gradient" and data.has("points"):
 		do_paste({type="colorize", gradient=data})
+	elif typeof(data) == TYPE_OBJECT and data is MMCurve:
+		do_paste({type="tonality", curve=data})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform() * node_position))
 
