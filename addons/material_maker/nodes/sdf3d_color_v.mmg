@@ -14,7 +14,7 @@
 		"global": "",
 		"inputs": [
 			{
-				"default": "0.0",
+				"default": "1.0",
 				"label": "",
 				"longdesc": "The input 3D object",
 				"name": "in#",
