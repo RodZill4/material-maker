@@ -1104,17 +1104,13 @@
 			"display_name": "Extrusion",
 			"icon": "3d_sdf_operators_extrusion",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAyNJREFUeJzlWsFu2zAMfTKMHYv9QHsb+kH9iF0SoB+yo/NthQPkOGBDkUMxdHObGu2h9Wp7lkRSpKxtvCSQ+fhERpH1JLm2bZ+dc+CaBFMirvqfkweAqqTOrIFjFaDUJFJwdUmdWYOLNAL+1eQBQgE0OtQ0DZqmYWGkXFyc2+/3z1YdiiW92WzUuKQ4bwE4gXe7nagTId5xcWK+Ug7A8xeQBk61+d+G6ivlABYKUELyg/mKoPl3qWIOOSzEOy+C9lxRxxykgTXx4yJst1vV+DW1E5TgNzffAQBd9xPX11/efADA4enphPv7H7i7O+J4/Ibb2684nR5xdfUZzlWo6w8AgL4/4eGhQ9/3Ix6g637h7Owj2ha4vHwU9W/Jastffkg+4hXB0/2nWJofeSnMDU5Lfu7//j1H8oCpGpz7hXB6ky93RGdRg+/46WfA04sNxzcSQ9LgU/z0U9vMxFBK8EBE4TMPImEij06CORZHUoqUvg3Y4AhYa2VIMY3kgcBrMH/ynFemTvLAqmqQw6HTn6gY8jnpGjf+1F97vkhWg7YFc5PvFpNlRXGiBA7j3exz6dkQZ7nd5x8zMzXIT94Xh8VK96QejNgO+7eNR697aGSM+Yh0v/0NDkb4wefJc5J0nnYCa0liKHV+tE4eMBRD8uRdYD8gxPdXiSFdSxFDZkdjMsurBIGMYkiyCRLDa+xnFiGGZDtEOqMlqxiShbVLHijoaGzZ7FTgYOxdYU5wYgSldo93pH9JalCyRZ6yPuAqQtYtsRzJp/nwjHVLLF/ybqFtHlv2bOpHz4etBnV++dgzvT2/mCVPgnRb7pjmS8dUDEkJXnHLbfQhTfGRrQ3ML0oux6K1hdqnPvKFEakAafvwZM8/MNbJA0oXJX3XVlIGTY7kAUU1OC+C9YraVAxJCS4uPrExNJtvnRuKoVSC83NuEWLL26XFFJMhQOAOh8Pkqmyu06FSMKuowZIwmdRguZgMarBsjLEaTLMcBTNUg2m4XKMlixosNXnSwYgGSWkcY4zpRcnSkwcMzwZzTJTmYkiLxAJjLoY0SbQx5mJIm0QTo83xAnM/Tvtiu6YYAAAAAElFTkSuQmCC",
-			"name": "sdf3d_extrusion",
+			"name": "sdf3d_extrusion2",
 			"parameters": {
-				"a": 0.0,
-				"d": 0.3,
-				"s": 1.0,
-				"x": 0.35,
-				"y": 0.0,
-				"z": 0.0
+				"axis": 1.0,
+				"d": 0.3
 			},
 			"tree_item": "3D/SDF/Operators/Extrusion",
-			"type": "sdf3d_extrusion"
+			"type": "sdf3d_extrusion2"
 		},
 		{
 			"display_name": "Revolution",
