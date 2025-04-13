@@ -1,7 +1,7 @@
 Tones Map node
 ~~~~~~~~~~~~~~
 
-The **Tones Map** node remaps the image, given input and output tone intervals.
+The **Tones Map** node is variadic and remaps images, given input and output tone intervals.
 This node will not affect the alpha channel of the image. If necessary, the remap
 operation is extrapolated linearly beyond the specified intervals.
 
@@ -11,12 +11,12 @@ operation is extrapolated linearly beyond the specified intervals.
 Inputs
 ++++++
 
-The **Tones Map** node requires an RGBA input texture.
+The **Tones Map** node accepts one or more RGBA input textures.
 
 Outputs
 +++++++
 
-The **Tones Map** node provides a single RGBA texture.
+The **Tones Map** node outputs one or more RGBA textures.
 
 Parameters
 ++++++++++
