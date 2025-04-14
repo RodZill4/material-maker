@@ -54,7 +54,7 @@ func get_parameter_defs() -> Array:
 	var parameter_defs : Array = [ { name="size",label="Size", type="size", first=4, last=13, default=4 } ]
 	match version:
 		VERSION_OLD:
-			parameter_defs.push_back({ name="lod", lanel="Lod", type="float", min=0, max=10.0, step=0.01, default=0 })
+			parameter_defs.push_back({ name="lod", label="Lod", type="float", min=0, max=10.0, step=0.01, default=0 })
 		VERSION_COMPLEX:
 			parameter_defs.push_back({ name="filter", label="Filter", type="boolean", default=true })
 			parameter_defs.push_back({ name="mipmap", label="Mipmap", type="boolean", default=true })
