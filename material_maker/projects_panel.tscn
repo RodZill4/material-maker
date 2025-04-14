@@ -223,10 +223,13 @@ offset_bottom = 179.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("8_nl2qi")
 
-[node name="VBoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel"]
 layout_mode = 2
 
-[node name="GridVisibility" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridVisibility" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -239,7 +242,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "grid"
 
-[node name="GridSnapping" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="GridSnapping" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -252,7 +255,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "snapping"
 
-[node name="GridSize" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" instance=ExtResource("8_1w3oe")]
+[node name="GridSize" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Grid Size"
@@ -262,7 +265,7 @@ max_value = 40.0
 step = 1.0
 float_only = true
 
-[node name="Minimap" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="Minimap" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -274,6 +277,42 @@ shortcut_in_tooltip = false
 icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "minimap"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Curvature" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="CurvatureLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature"]
+layout_mode = 2
+text = "Curvature"
+
+[node name="LineCurvature" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature" instance=ExtResource("8_1w3oe")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Connection lines curvature"
+max_value = 2.0
+step = 0.01
+float_only = true
+
+[node name="Thickness" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="ThicknessLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness"]
+layout_mode = 2
+text = "Thickness"
+
+[node name="LineThickness" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" instance=ExtResource("8_1w3oe")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "Connection lines thickness"
+value = 4.0
+max_value = 16.0
+step = 0.01
+float_only = true
 
 [node name="ArrangeNodes" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox"]
 visible = false
@@ -342,10 +381,13 @@ Scroll to zoom the 3D Preview."
 [connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomOut" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_out_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomIn" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_in_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomReset" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_reset_pressed"]
-[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/GridVisibility" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_visibility_toggled"]
-[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/GridSnapping" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_snapping_toggled"]
-[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/GridSize" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_size_value_changed"]
-[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/Minimap" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_minimap_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridVisibility" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_visibility_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridSnapping" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_snapping_toggled"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridSize" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_size_value_changed"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/Minimap" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_minimap_toggled"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu" method="_on_line_curvature_value_changed"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_curvature_value_changed"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness/LineThickness" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_thickness_value_changed"]
 [connection signal="toggled" from="MenuBar/HBox/PreviewsMenu/HBox/2DPreview" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="MenuBar/HBox/PreviewsMenu/HBox/3DPreview" to="." method="show_background_preview_3d"]
 [connection signal="gui_input" from="MenuBar/HBox/PreviewsMenu/HBox/ControlView" to="BackgroundPreviews/Preview3D" method="on_gui_input"]
