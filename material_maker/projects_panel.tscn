@@ -278,6 +278,9 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "minimap"
 
+[node name="HSeparator" type="HSeparator" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+layout_mode = 2
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
 layout_mode = 2
 
@@ -291,7 +294,7 @@ text = "Curvature"
 [node name="LineCurvature" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature" instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 3
 tooltip_text = "Connection lines curvature"
 max_value = 2.0
 step = 0.01
@@ -307,7 +310,7 @@ text = "Thickness"
 [node name="LineThickness" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 3
 tooltip_text = "Connection lines thickness"
 value = 4.0
 max_value = 16.0
