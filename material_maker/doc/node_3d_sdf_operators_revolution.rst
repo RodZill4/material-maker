@@ -2,7 +2,7 @@ Revolution node
 ...............
 
 The **Revolution** node generates a 3D signed distance function of a shape based on
-the revolution along the Z axis of its (2D signed function) input.
+the revolution along the specified axis of its (2D signed function) input.
 
 .. image:: images/node_3d_sdf_operators_revolution.png
 	:align: center
@@ -21,7 +21,8 @@ revolution of the input shape.
 Parameters
 ::::::::::
 
-The **Revolution** node accepts the *the radius* of the revolution operation as parameter. 
+The **Revolution** node accepts the *axis* and *radius* of the revolution
+operation as parameter. 
 
 Example images
 ::::::::::::::
