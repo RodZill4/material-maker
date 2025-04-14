@@ -22,7 +22,7 @@ Parameters
 ::::::::::
 
 The **Revolution** node accepts the *axis* and *radius* of the revolution
-operation as parameter. 
+operation as parameters. 
 
 Example images
 ::::::::::::::
