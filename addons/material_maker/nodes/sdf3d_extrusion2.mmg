@@ -11,9 +11,7 @@
 	"seed_int": 0,
 	"shader_model": {
 		"code": [
-			"vec2 $(name_uv)_w_x = vec2($in($uv.yz+vec2(0.5)),abs($uv.x)-$d);",
-			"vec2 $(name_uv)_w_y = vec2($in($uv.xz+vec2(0.5)),abs($uv.y)-$d);",
-			"vec2 $(name_uv)_w_z = vec2($in($uv.xy+vec2(0.5)),abs($uv.z)-$d);"
+			"vec2 $(name_uv)_w = vec2($in($axis.xy+vec2(0.5)),abs($axis.z)-$d);"
 		],
 		"global": "",
 		"inputs": [
@@ -32,7 +30,7 @@
 		"outputs": [
 			{
 				"longdesc": "The extruded shape",
-				"sdf3d": "min(max($(name_uv)_w_$axis.x,$(name_uv)_w_$axis.y),0.0)+length(max($(name_uv)_w_$axis,0.0))",
+				"sdf3d": "min(max($(name_uv)_w.x,$(name_uv)_w.y),0.0)+length(max($(name_uv)_w,0.0))",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
@@ -48,15 +46,15 @@
 				"values": [
 					{
 						"name": "X",
-						"value": "x"
+						"value": "$uv.yzx"
 					},
 					{
 						"name": "Y",
-						"value": "y"
+						"value": "$uv.xzy"
 					},
 					{
 						"name": "Z",
-						"value": "z"
+						"value": "$uv.xyz"
 					}
 				]
 			},
