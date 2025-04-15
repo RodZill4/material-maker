@@ -4,7 +4,7 @@ const SETTING_GRAPH_MINIMAP := "graph_minimap"
 const SETTING_GRAPH_GRID_VISIBILITY := "graph_grid_visibility"
 const SETTING_GRAPH_GRID_SIZE := "graph_grid_size"
 const SETTING_GRAPH_GRID_SNAPPING := "graph_grid_snapping"
-const SETTING_GRAPH_LINE_CURVATURE := "graph_line_curvaature"
+const SETTING_GRAPH_LINE_CURVATURE := "graph_line_curvature"
 const SETTING_GRAPH_LINE_THICKNESS := "graph_line_thickness"
 
 func _ready() -> void:
