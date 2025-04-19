@@ -249,7 +249,7 @@
 		"name": "Nordic Runes",
 		"outputs": [
 			{
-				"f": "nordic_runes($uv-0.5, int($rune), vec2($w, $h)*0.75, $sca*0.5, $r*$b*$bevel_map($uv), $r)",
+				"f": "nordic_runes($uv-0.5, int($rune), vec2($w, $h)*0.75, $sca*0.5, $r*$b*$bevel_map($uv)*0.5, $r)",
 				"shortdesc": "Output",
 				"type": "f"
 			}
