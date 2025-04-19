@@ -29,6 +29,7 @@ uniform int mode = 0;
 uniform vec4 background_color = vec4(0.0);
 uniform vec4 background_color_1 = vec4(0.0);
 uniform vec4 background_color_2 = vec4(1.0);
+uniform float checker_size = 32.0;
 
 void fragment() {
 	vec2 ratio = preview_2d_size;
@@ -39,7 +40,7 @@ void fragment() {
 		if (mode == 1) {
 			uv = fract(uv);
 		}
-		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		float checkerboard = mod(floor(uv.x*checker_size)+floor(uv.y*checker_size), 2.0);
 		COLOR = vec4(mix(background_color_1, background_color_2, checkerboard).rgb, 1.0);
 	}
 }
@@ -55,6 +56,7 @@ shader_parameter/mode = 2
 shader_parameter/background_color = Vector4(0, 0, 0, 0.575)
 shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 1)
 shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 1)
+shader_parameter/checker_size = 32.0
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("1")
@@ -143,6 +145,7 @@ uniform int mode = 0;
 uniform vec4 background_color = vec4(0.0);
 uniform vec4 background_color_1 = vec4(0.0);
 uniform vec4 background_color_2 = vec4(1.0);
+uniform float checker_size = 32.0;
 
 void fragment() {
 	vec2 ratio = preview_2d_size;
@@ -154,7 +157,7 @@ void fragment() {
 			uv = fract(uv);
 		}
 		vec4 image = preview_2d_postprocessed(uv);
-		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		float checkerboard = mod(floor(uv.x*checker_size)+floor(uv.y*checker_size), 2.0);
 		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
 		COLOR = vec4(image_with_background, 1.0);
 	}
@@ -521,6 +524,40 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 
+[node name="AlphaLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="7"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Alpha"
+
+[node name="BoxContainer2" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="8"]
+layout_mode = 2
+
+[node name="CheckerBrightness" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Transparency checkers brightness"
+selected = 1
+item_count = 3
+popup/item_0/text = "Light"
+popup/item_0/id = 0
+popup/item_1/text = "Mid-tones"
+popup/item_1/id = 1
+popup/item_2/text = "Dark"
+popup/item_2/id = 2
+
+[node name="CheckerSize" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Transparency checkers size"
+selected = 1
+item_count = 3
+popup/item_0/text = "Small"
+popup/item_0/id = 0
+popup/item_1/text = "Medium"
+popup/item_1/id = 1
+popup/item_2/text = "Large"
+popup/item_2/id = 2
+
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 25)
@@ -750,6 +787,8 @@ layout_mode = 2
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/Guides" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_item_selected"]
 [connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/CustomGridSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_custom_grid_size_value_changed"]
 [connection signal="color_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/GuidesColor" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_color_color_changed"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2/CheckerBrightness" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_checker_brightness_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2/CheckerSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_checker_size_item_selected"]
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder/ExportFolder" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_text_changed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder/ExportFolderButton" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_button_pressed"]
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/ExportFile" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_file_text_changed"]
