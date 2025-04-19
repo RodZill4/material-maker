@@ -13,6 +13,9 @@ func _open() -> void:
 
 	%GuidesColor.color = owner.get_node("Guides").color
 
+	%AlphaColA.color = owner.alpha_color_a;
+	%AlphaColB.color = owner.alpha_color_b;
+
 	size = Vector2()
 
 
@@ -36,3 +39,11 @@ func _on_guides_color_color_changed(color: Color) -> void:
 
 func _on_custom_grid_size_value_changed(value: Variant) -> void:
 	owner.get_node("Guides").grid_size = value
+
+
+func _on_alpha_col_a_color_changed(color: Color) -> void:
+	owner.alpha_color_a = color
+
+
+func _on_alpha_col_b_color_changed(color: Color) -> void:
+	owner.alpha_color_b = color
