@@ -37,6 +37,22 @@ var view_filter : int = 0:
 		set_generator(generator, output, true)
 		mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", view_filter)
 
+var alpha_color_a : Color = Color(0.4,0.4,0.4):
+	set(v):
+		if v == alpha_color_a:
+			return
+		alpha_color_a = v
+		material.set_shader_parameter("background_color_1", alpha_color_a)
+		mm_globals.set_config("preview"+config_var_suffix+"_alpha_color_a", alpha_color_a)
+
+var alpha_color_b : Color = Color(0.6,0.6,0.6):
+	set(v):
+		if v == alpha_color_b:
+			return
+		alpha_color_b = v
+		material.set_shader_parameter("background_color_2", alpha_color_b)
+		mm_globals.set_config("preview"+config_var_suffix+"_alpha_color_b", alpha_color_b)
+
 const POSTPROCESS_OPTIONS : Array = [
 	{ name="None", function="preview_2d(uv)" },
 	{ name="Lowres 32x32", function="preview_2d((floor(uv*32.0)+vec2(0.5))/32.0)" },
@@ -54,7 +70,10 @@ func _ready():
 		view_mode = mm_globals.get_config("preview"+config_var_suffix+"_view_mode")
 	if mm_globals.has_config("preview"+config_var_suffix+"_view_postprocess"):
 		view_filter = mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess")
-
+	if mm_globals.has_config("preview"+config_var_suffix+"_alpha_color_a"):
+		alpha_color_a = mm_globals.get_config("preview"+config_var_suffix+"_alpha_color_a")
+	if mm_globals.has_config("preview"+config_var_suffix+"_alpha_color_b"):
+		alpha_color_b = mm_globals.get_config("preview"+config_var_suffix+"_alpha_color_b")
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
@@ -89,8 +108,8 @@ func update_material(source):
 	super.update_material(source)
 	material.set_shader_parameter("mode", view_mode)
 	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
-	material.set_shader_parameter("background_color_1", Color(0.4, 0.4, 0.4))
-	material.set_shader_parameter("background_color_2", Color(0.6, 0.6, 0.6))
+	material.set_shader_parameter("background_color_1", alpha_color_a)
+	material.set_shader_parameter("background_color_2", alpha_color_b)
 
 
 func set_preview_shader_parameter(parameter_name, value):
