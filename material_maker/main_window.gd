@@ -82,7 +82,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Save Selection", command="edit_save_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/-" },
 	{ menu="Edit/Set theme", submenu="set_theme" },
-	{ menu="Edit/Preferences", command="edit_preferences" },
+	{ menu="Edit/Preferences", command="edit_preferences", shortcut="Control+Comma" },
 
 	{ menu="View/Center view", command="view_center", shortcut="C" },
 	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
