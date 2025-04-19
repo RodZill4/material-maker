@@ -7850,6 +7850,20 @@
 			"seed_int": 0,
 			"tree_item": "Filter/Fill/Select",
 			"type": "fill_select"
+		},
+		{
+			"display_name": "Nordic Runes",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAoRJREFUaIHtWT/OqkAQX2woPYAXsNDQGs5AqUFLCy5gYqsWnsADWFJQ2XEAEksSE0JMaEg8Ax1kX/G9zJvA83uwO/vJ5vGrJsNv/rgz7i4DYwMG9BhxHMdx/OksRJFlGeecc55l2adz6Q7TNDmCaZqKAhmK/HLO65EMJbFGKpzebreWSnkoWRVY/sfjwRizLOt3MAVFoPeIm+cr46aGEMQtdD6fQZ5OpzWhRugjYNspyxLry7KER7QRKQv6fasoaiSyFtpsNiAvl8smASsxWRJkK9FmgVUUgcZL+8zIfwNBC83nc5CPx+P3ZEzAhsIgWIOui0pbBNkKpGkKcstsMA2bfwCGYcDuHgRBe8MgCMBQsghSxjLNQNVI4i2El3w06uwHm3SqHhmgB4T7OE1TRfeLf8PzPJLY4MTzPKrcOscuikLMQ1EUH6sAY8z3fQjvOE5Xc8dxwNz3feE0tN+FZA9CsTwID2PZk3i73YJ8uVzamGAaNheD9neh4TrNGGNsMpmA/Hw+39HwI2zSC0RRBNsiDIIwLMsCQhRFVHG1f6knHjO9y1LdbIt4sHU4HEDe7/c1oUYggfajRbXD3XowBcNdJeP1xWLRUtlf5HnOEfI8VxRI1Rcaprj1/3hW5Lf5N9DpE9N6vW6plIf2u5D25wBxC12vV5BXq1VNqBH6CNg3q6rC+qqqFA0gtL+NkrXQ6/UCeTweNwlYicm9gG3b0CFhGL6jhWEINNu2SUJr/06s/VRC9j9wOp1A3u12bUwwDZuLQfvJnPazUfEWut/vIM9ms67m2AS7+iHgz3tJkog5SZIEnKh7Yfg7XNcluRqAE9d1qXJri6/rjbyf5sVpwIAB/xN+ATvH/yUpl1iHAAAAAElFTkSuQmCC",
+			"parameters": {
+				"b": 0.1,
+				"h": 1,
+				"r": 0.08,
+				"rune": 14,
+				"sca": 1,
+				"w": 1
+			},
+			"tree_item": "Simple/Nordic Runes",
+			"type": "nordic_runes"
 		}
 	],
 	"name": "Base library"
