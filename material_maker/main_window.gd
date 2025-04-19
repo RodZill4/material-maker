@@ -1254,6 +1254,8 @@ func _notification(what : int) -> void:
 			# Return to the normal FPS limit when the window is focused.
 			@warning_ignore("narrowing_conversion")
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+		NOTIFICATION_WM_ABOUT:
+			about.call_deferred()
 
 func on_close_requested():
 	await get_tree().process_frame
