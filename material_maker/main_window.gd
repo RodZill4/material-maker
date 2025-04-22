@@ -1,5 +1,7 @@
 extends Control
 
+signal config_changed()
+
 var quitting : bool = false
 
 var recent_files = []
@@ -328,6 +330,8 @@ func on_config_changed() -> void:
 			WinTabletDriver.DISABLED:
 				DisplayServer.tablet_set_current_driver("dummy")
 
+	emit_signal("config_changed")
+	
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 
