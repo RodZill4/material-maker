@@ -12,9 +12,9 @@ func _open() -> void:
 	#%CustomGridSizeLabel.visible = %Guides.selected == GUIDES_GRID
 
 	%GuidesColor.color = owner.get_node("Guides").color
-
-	%AlphaColA.color = owner.alpha_color_a;
-	%AlphaColB.color = owner.alpha_color_b;
+	
+	%CheckerSize.selected = owner.checker_size
+	%CheckerBrightness.selected = owner.checker_brightness
 
 	size = Vector2()
 
@@ -41,9 +41,9 @@ func _on_custom_grid_size_value_changed(value: Variant) -> void:
 	owner.get_node("Guides").grid_size = value
 
 
-func _on_alpha_col_a_color_changed(color: Color) -> void:
-	owner.alpha_color_a = color
+func _on_checker_size_item_selected(index: int) -> void:
+	owner.checker_size = index
 
 
-func _on_alpha_col_b_color_changed(color: Color) -> void:
-	owner.alpha_color_b = color
+func _on_checker_brightness_item_selected(index: int) -> void:
+	owner.checker_brightness = index
