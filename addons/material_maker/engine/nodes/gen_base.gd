@@ -515,6 +515,27 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 		var preview_code : String = mm_io_types.types[type].preview
 		preview_code = preview_code.replace("$(code)", src_code.code)
 		preview_code = preview_code.replace("$(value)", src_code.output_values[type])
+	
+		var vec3_str = "vec3(%s, %s, %s)"
+		var bg : Color = mm_globals.get_config("ui_preview_sdf2d_background_color")
+		var fg1 : Color = mm_globals.get_config("ui_preview_sdf2d_foreground_color1")
+		var fg2 : Color = mm_globals.get_config("ui_preview_sdf2d_foreground_color2")
+		var border_thickness = mm_globals.get_config("ui_preview_sdf2d_border_thickness")
+		var isoline_density = mm_globals.get_config("ui_preview_sdf2d_isoline_density")
+		var isoline_thickness = mm_globals.get_config("ui_preview_sdf2d_isoline_thickness")
+		var isoline_opacity = mm_globals.get_config("ui_preview_sdf2d_isoline_opacity")
+		var isoline_smoothness = mm_globals.get_config("ui_preview_sdf2d_isoline_smoothness")
+		var shadow_opacity = mm_globals.get_config("ui_preview_sdf2d_shadow_opacity")
+		preview_code = preview_code.replace("$(bg)",  vec3_str % [bg.r, bg.g, bg.b])
+		preview_code = preview_code.replace("$(fg1)", vec3_str % [fg1.r, fg1.g, fg1.b])
+		preview_code = preview_code.replace("$(fg2)", vec3_str % [fg2.r, fg2.g, fg2.b])
+		preview_code = preview_code.replace("$(border_thickness)", str(border_thickness))
+		preview_code = preview_code.replace("$(isolines_density)", str(isoline_density))
+		preview_code = preview_code.replace("$(isolines_thickness)", str(isoline_thickness))
+		preview_code = preview_code.replace("$(isolines_opacity)", str(isoline_opacity))
+		preview_code = preview_code.replace("$(isolines_smoothness)", str(isoline_smoothness))
+		preview_code = preview_code.replace("$(shadow_opacity)", str(shadow_opacity))
+	
 		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += "\n"
@@ -558,9 +579,30 @@ func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 	if not source.output_values.has("rgba"):
 		var preview_code : String = mm_io_types.types[source.output_type].preview
 		preview_code = preview_code.replace("uniform", "const")
-		preview_code = preview_code.replace("preview_size", "64")
+		preview_code = preview_code.replace("preview_size", "1000")
 		preview_code = preview_code.replace("$(code)", source.code)
 		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])
+		
+		var vec3_str = "vec3(%s, %s, %s)"
+		var bg : Color = mm_globals.get_config("ui_preview_sdf2d_background_color")
+		var fg1 : Color = mm_globals.get_config("ui_preview_sdf2d_foreground_color1")
+		var fg2 : Color = mm_globals.get_config("ui_preview_sdf2d_foreground_color2")
+		var border_thickness = mm_globals.get_config("ui_preview_sdf2d_border_thickness")
+		var isoline_density = mm_globals.get_config("ui_preview_sdf2d_isoline_density")
+		var isoline_thickness = mm_globals.get_config("ui_preview_sdf2d_isoline_thickness")
+		var isoline_opacity = mm_globals.get_config("ui_preview_sdf2d_isoline_opacity")
+		var isoline_smoothness = mm_globals.get_config("ui_preview_sdf2d_isoline_smoothness")
+		var shadow_opacity = mm_globals.get_config("ui_preview_sdf2d_shadow_opacity")
+		preview_code = preview_code.replace("$(bg)",  vec3_str % [bg.r, bg.g, bg.b])
+		preview_code = preview_code.replace("$(fg1)", vec3_str % [fg1.r, fg1.g, fg1.b])
+		preview_code = preview_code.replace("$(fg2)", vec3_str % [fg2.r, fg2.g, fg2.b])
+		preview_code = preview_code.replace("$(border_thickness)", str(border_thickness))
+		preview_code = preview_code.replace("$(isolines_density)", str(isoline_density))
+		preview_code = preview_code.replace("$(isolines_thickness)", str(isoline_thickness))
+		preview_code = preview_code.replace("$(isolines_opacity)", str(isoline_opacity))
+		preview_code = preview_code.replace("$(isolines_smoothness)", str(isoline_smoothness))
+		preview_code = preview_code.replace("$(shadow_opacity)", str(shadow_opacity))
+		
 		source.defs += preview_code
 		source.code = ""
 		source.output_values.rgba = "preview_2d(uv)"
