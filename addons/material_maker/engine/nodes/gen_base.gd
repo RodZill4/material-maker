@@ -579,7 +579,7 @@ func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 	if not source.output_values.has("rgba"):
 		var preview_code : String = mm_io_types.types[source.output_type].preview
 		preview_code = preview_code.replace("uniform", "const")
-		preview_code = preview_code.replace("preview_size", "1000")
+		preview_code = preview_code.replace("preview_size", "64")
 		preview_code = preview_code.replace("$(code)", source.code)
 		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])
 		
