@@ -175,6 +175,8 @@ func _gui_input(event) -> void:
 		if event.pressed:
 			var scancode_with_modifiers = event.get_keycode_with_modifiers()
 			match scancode_with_modifiers:
+				KEY_H:
+					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE:
 					remove_selection()
 				KEY_LEFT:
@@ -667,6 +669,11 @@ func remove_selection() -> void:
 			do_remove_node(c)
 	var next = generator.serialize()
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
+
+func minimize_selection() -> void:
+	for c in get_children():
+		if c is GraphElement and c.selected:
+			c.on_minimize_pressed()
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = []) -> Dictionary:
