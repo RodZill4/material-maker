@@ -6,6 +6,7 @@ extends ColorPickerButton
 
 func _ready() -> void:
 	pass
+
 func init_from_config(config : ConfigFile) -> void:
 	if config.has_section_key("config", config_variable):
 		color = config.get_value("config", config_variable)
