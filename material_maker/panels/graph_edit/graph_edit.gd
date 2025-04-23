@@ -1378,10 +1378,10 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			var mid = (from + to) / 2.0
 			var ma = Vector2(max(mid.x, from.x + off), mid.y)
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
-			
+
 			var f1 = Vector2(max(mid.x, from.x + off), from.y)
 			var t1 = Vector2(mb.x, to.y)
-			
+
 			points.append(from)
 			points.append(f1)
 			points.append(ma)
@@ -1397,8 +1397,11 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 
 		ConnectionStyle.DIAGONAL:
 			var off = 20.0 * zoom
+			if to.x > from.x:
+				off += (to.x-from.x) * 0.1
+
 			var mid = (from + to) / 2.0
-			var ma = Vector2(max(mid.x, from.x + off), mid.y)
+			var ma = Vector2(max(mid.x, from.x + off ), mid.y)
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
 			
 			var f1 = Vector2(from.x + off, from.y)
