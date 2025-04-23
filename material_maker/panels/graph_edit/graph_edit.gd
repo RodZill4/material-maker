@@ -39,6 +39,9 @@ var locked_preview : Array = [ null, null ]
 @onready var undoredo = $UndoRedo
 var undoredo_move_node_selection_changed : bool = true
 
+enum ConnectionStyle {DIRECT, BEZIER, MANHATTAN, DIAGONAL}
+var connection_line_style : int = ConnectionStyle.BEZIER
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -46,6 +49,9 @@ signal preview_changed
 
 
 func _ready() -> void:
+	for c in get_children():
+		if c is GraphNode:
+			c.add_theme_color_override("panel_selected",Color(1.0,0.0,0.0,1.0))
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
@@ -1339,3 +1345,77 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 		do_create_nodes({nodes=[ reroute_node ],connections=reroute_connections})
 	var next = generator.serialize()
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)
+
+func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
+	var points = PackedVector2Array()
+	match connection_line_style:
+		ConnectionStyle.DIRECT:	
+			points.append(from)
+			points.append(to)
+			return points
+
+		ConnectionStyle.BEZIER:
+		# default behavior, adapted from:
+		# github.com/godotengine/godot/blob/master/scene/gui/graph_edit.cpp#L1507
+			var x_diff = (to.x - from.x)
+			var cp_offset = x_diff * connection_lines_curvature;
+			if (x_diff < 0):
+				cp_offset *= -1; 
+
+			var curve = Curve2D.new();
+			curve.add_point(from);
+			curve.set_point_out(0, Vector2(cp_offset, 0));
+			curve.add_point(to);
+			curve.set_point_in(1, Vector2(-cp_offset, 0));
+			
+			if (connection_lines_curvature > 0):
+				return curve.tessellate(5, 2.0);
+			else:
+				return curve.tessellate(1);
+
+		ConnectionStyle.MANHATTAN:
+			var off = 20.0 * zoom
+			var mid = (from + to) / 2.0
+			var ma = Vector2(max(mid.x, from.x + off), mid.y)
+			var mb = Vector2(min(mid.x, to.x - off), mid.y)
+			
+			var f1 = Vector2(mid.x, from.y)
+			f1.x = max(f1.x, from.x + off)
+			var t1 = Vector2(mb.x, to.y)
+			
+			points.append(from)
+			points.append(f1)
+			points.append(ma)
+			points.append(mb)
+			points.append(t1)
+			points.append(to)
+
+			if (abs(from.y - to.y) < zoom * 0.5):
+				points.clear()
+				points.append(from)
+				points.append(to)
+			return points
+
+		ConnectionStyle.DIAGONAL:
+			var off = 20.0 * zoom
+			var mid = (from + to) / 2.0
+			var ma = Vector2(max(mid.x, from.x + off), mid.y)
+			var mb = Vector2(min(mid.x, to.x - off), mid.y)
+			
+			var f1 = Vector2(from.x + off, from.y)
+			f1.x = max(f1.x, from.x + off)
+			var t1 = Vector2(to.x - off, to.y)
+			
+			points.append(from)
+			points.append(f1)
+			points.append((f1+ma)/2.0)
+			points.append((t1+mb)/2.0)
+			points.append(t1)
+			points.append(to)
+			if (abs(from.y - to.y) < zoom * 0.5):
+				points.clear()
+				points.append(from)
+				points.append(to)
+			return points
+		_:
+			return points
