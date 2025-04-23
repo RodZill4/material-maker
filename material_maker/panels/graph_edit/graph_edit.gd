@@ -1349,7 +1349,7 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 	var points = PackedVector2Array()
 	match connection_line_style:
-		ConnectionStyle.DIRECT:	
+		ConnectionStyle.DIRECT:
 			points.append(from)
 			points.append(to)
 			return points
@@ -1379,8 +1379,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			var ma = Vector2(max(mid.x, from.x + off), mid.y)
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
 			
-			var f1 = Vector2(mid.x, from.y)
-			f1.x = max(f1.x, from.x + off)
+			var f1 = Vector2(max(mid.x, from.x + off), from.y)
 			var t1 = Vector2(mb.x, to.y)
 			
 			points.append(from)
@@ -1403,7 +1402,6 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
 			
 			var f1 = Vector2(from.x + off, from.y)
-			f1.x = max(f1.x, from.x + off)
 			var t1 = Vector2(to.x - off, to.y)
 			
 			points.append(from)
@@ -1412,6 +1410,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			points.append((t1+mb)/2.0)
 			points.append(t1)
 			points.append(to)
+
 			if (abs(from.y - to.y) < zoom * 0.5):
 				points.clear()
 				points.append(from)
