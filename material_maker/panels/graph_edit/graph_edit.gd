@@ -49,9 +49,6 @@ signal preview_changed
 
 
 func _ready() -> void:
-	for c in get_children():
-		if c is GraphNode:
-			c.add_theme_color_override("panel_selected",Color(1.0,0.0,0.0,1.0))
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
@@ -1401,7 +1398,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 				off += (to.x-from.x) * 0.1
 
 			var mid = (from + to) / 2.0
-			var ma = Vector2(max(mid.x, from.x + off ), mid.y)
+			var ma = Vector2(max(mid.x, from.x + off), mid.y)
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
 			
 			var f1 = Vector2(from.x + off, from.y)
