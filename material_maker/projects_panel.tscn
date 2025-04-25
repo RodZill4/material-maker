@@ -308,6 +308,7 @@ layout_mode = 2
 tooltip_text = "Bezier Connections"
 tooltip_auto_translate_mode = 2
 toggle_mode = true
+button_pressed = true
 button_group = ExtResource("10_lbgjg")
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false

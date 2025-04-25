@@ -27,6 +27,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	bake_denoise_radius = 3,
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
+	graph_line_style = 1,
 }
 
 
