@@ -8,7 +8,7 @@ const SETTING_GRAPH_LINE_CURVATURE := "graph_line_curvature"
 const SETTING_GRAPH_LINE_THICKNESS := "graph_line_thickness"
 const SETTING_GRAPH_LINE_STYLE := "graph_line_style"
 
-enum ConnectionStyle {DIRECT, BEZIER, MANHATTAN, DIAGONAL}
+enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 
 func _ready() -> void:
 	if mm_globals.has_config(SETTING_GRAPH_MINIMAP):
@@ -32,6 +32,7 @@ func _ready() -> void:
 	var line_style_buttons = [
 		%DirectConnection,
 		%BezierConnection,
+		%RoundedConnection,
 		%ManhattanConnection,
 		%DiagonalConnection,
 	]
@@ -86,14 +87,33 @@ func _on_bezier_connection_toggled(toggled_on: bool) -> void:
 	update_view_settings()
 
 
+func _on_rounded_connection_toggled(toggled_on: bool) -> void:
+	set_curvature_slot_enabled(true)
+	%CurvatureLabel.text = "Corner" if toggled_on else "Curvature"
+	var conn_lines = "Connection lines %s"
+	%LineCurvature.tooltip_text = (
+			conn_lines % "corner radius" if toggled_on else "curvature")
+	mm_globals.set_config(SETTING_GRAPH_LINE_STYLE, ConnectionStyle.ROUNDED)
+	update_view_settings()
+
+
 func _on_manhattan_connection_toggled(toggled_on: bool) -> void:
-	set_curvature_slot_enabled(false)
+	set_curvature_slot_enabled(true)
+	%CurvatureLabel.text = "Offset" if toggled_on else "Curvature"
+	%LineCurvature.tooltip_text = ("
+	Port Offset\nSignificant for vertically-stacked nodes"
+			 if toggled_on else "Connection lines curvature")
 	mm_globals.set_config(SETTING_GRAPH_LINE_STYLE, ConnectionStyle.MANHATTAN)
 	update_view_settings()
 
 
 func _on_diagonal_connection_toggled(toggled_on: bool) -> void:
-	set_curvature_slot_enabled(false)
+	set_curvature_slot_enabled(true)
+	%CurvatureLabel.text = "Offset" if toggled_on else "Curvature"
+	%LineCurvature.tooltip_text = ("
+	Port Offset\nSignificant for vertically-stacked nodes"
+			 if toggled_on else "Connection lines curvature")
+	
 	mm_globals.set_config(SETTING_GRAPH_LINE_STYLE, ConnectionStyle.DIAGONAL)
 	update_view_settings()
 
@@ -119,15 +139,18 @@ func update_view_settings(_arg_ignore:Variant = null) -> void:
 		graph.snapping_enabled = %GridSnapping.button_pressed
 		graph.connection_lines_curvature = %LineCurvature.value
 		graph.connection_lines_thickness = %LineThickness.value
-
+		
+		if %DirectConnection.button_pressed:
+			graph.connection_line_style = ConnectionStyle.DIRECT
 		if %BezierConnection.button_pressed:
 			graph.connection_line_style = ConnectionStyle.BEZIER
+		if %RoundedConnection.button_pressed:
+			graph.connection_line_style = ConnectionStyle.ROUNDED
 		if %ManhattanConnection.button_pressed:
 			graph.connection_line_style = ConnectionStyle.MANHATTAN
 		if %DiagonalConnection.button_pressed:
 			graph.connection_line_style = ConnectionStyle.DIAGONAL
-		if %DirectConnection.button_pressed:
-			graph.connection_line_style = ConnectionStyle.DIRECT
+
 		# force minimap to redraw immediately after style change
 		if %Minimap.button_pressed:
 			graph.minimap_enabled = !graph.minimap_enabled

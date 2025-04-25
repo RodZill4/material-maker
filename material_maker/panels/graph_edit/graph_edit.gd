@@ -12,7 +12,6 @@ class Preview:
 		output_index = i
 		node = n
 
-
 # warning-ignore:unused_class_variable
 @export var shader_context_defs : String = "" # (String, MULTILINE)
 
@@ -39,7 +38,7 @@ var locked_preview : Array = [ null, null ]
 @onready var undoredo = $UndoRedo
 var undoredo_move_node_selection_changed : bool = true
 
-enum ConnectionStyle {DIRECT, BEZIER, MANHATTAN, DIAGONAL}
+enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 var connection_line_style : int = ConnectionStyle.BEZIER
 
 signal save_path_changed
@@ -1344,38 +1343,37 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)
 
 func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
+	var off = 15.0 * connection_lines_curvature * 0.5 * zoom
 	var points = PackedVector2Array()
 	match connection_line_style:
 		ConnectionStyle.DIRECT:
-			points.append(from)
-			points.append(to)
-			return points
+			return PackedVector2Array([from,to])
 
 		ConnectionStyle.BEZIER:
 		# default behavior, adapted from:
 		# github.com/godotengine/godot/blob/master/scene/gui/graph_edit.cpp#L1507
-			var x_diff = (to.x - from.x)
-			var cp_offset = x_diff * connection_lines_curvature;
-			if (x_diff < 0):
-				cp_offset *= -1; 
+			var x_diff = to.x - from.x
+			var cp_offset = x_diff * connection_lines_curvature
+			if x_diff < 0:
+				cp_offset *= -1
 
-			var curve = Curve2D.new();
-			curve.add_point(from);
-			curve.set_point_out(0, Vector2(cp_offset, 0));
-			curve.add_point(to);
-			curve.set_point_in(1, Vector2(-cp_offset, 0));
+			var curve = Curve2D.new()
+			curve.add_point(from)
+			curve.set_point_out(0, Vector2(cp_offset, 0))
+			curve.add_point(to)
+			curve.set_point_in(1, Vector2(-cp_offset, 0))
 			
-			if (connection_lines_curvature > 0):
-				return curve.tessellate(5, 2.0);
+			if connection_lines_curvature > 0:
+				return curve.tessellate(5, 2.0)
 			else:
-				return curve.tessellate(1);
+				return curve.tessellate(1)
 
 		ConnectionStyle.MANHATTAN:
-			var off = 20.0 * zoom
+			if abs(from.x - to.x) < 0.5 or abs(from.y - to.y) < 0.5:
+				return PackedVector2Array([from,to])
 			var mid = (from + to) / 2.0
 			var ma = Vector2(max(mid.x, from.x + off), mid.y)
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
-
 			var f1 = Vector2(max(mid.x, from.x + off), from.y)
 			var t1 = Vector2(mb.x, to.y)
 
@@ -1385,36 +1383,109 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			points.append(mb)
 			points.append(t1)
 			points.append(to)
+			return points
 
-			if (abs(from.y - to.y) < zoom * 0.5):
-				points.clear()
-				points.append(from)
-				points.append(to)
+		ConnectionStyle.ROUNDED:
+			if abs(from.x - to.x) < 0.5 or abs(from.y - to.y) < 0.5:
+				return PackedVector2Array([from,to])
+			var mid = (from + to) / 2.0
+			var mb = mid
+			points.append(from)
+
+			const pts = 12.0 # corner arc resolution
+			var max_radius = 75 # max. arc radius when from < to
+			var inv_max_radius = 25 # max. arc radius when from > to
+
+			var round_fac = clamp(connection_lines_curvature * 0.5, 0.0,1.0)
+			max_radius = max(max_radius * round_fac, 4.0)
+			inv_max_radius = max(inv_max_radius * round_fac , 2.0)
+
+			var r = min(min(abs(to.y - from.y) * 0.25,
+					abs(from.x - to.x) * 0.25), max_radius)
+			
+			if from.x < to.x:
+				for i in range(pts):
+					var x = lerp(mid.x - r, mid.x, i/pts)
+					var y = lerp(from.y, from.y + r * sign(to.y - from.y), i/pts)
+					points.append(lerp(Vector2(x, from.y), Vector2(mid.x, y), i/pts))
+
+				for i in range(pts):
+					var x = lerp(mid.x, mid.x + r, i/pts)
+					var y = lerp(to.y + r * sign(from.y - to.y), to.y, i/pts)
+					points.append(lerp(Vector2(mid.x, y),Vector2(x , to.y), i/pts))
+			else:
+				r = min(r, inv_max_radius)
+				for i in range(pts):
+					var x = lerp(from.x, from.x + r, i/pts)
+					var y = lerp(from.y, from.y + r * sign(to.y - from.y), i/pts)
+					points.append(lerp(Vector2(x , from.y), Vector2(from.x + r, y), i/pts))
+
+				var last = points[points.size() - 1]
+				mb.x = last.x
+				var voff =  last.y + 0.01 * sign(mid.y - last.y)
+				mb.y = min(mid.y + r, voff) if from.y > to.y else max(mid.y - r, voff)
+				points.append(mb)
+
+				if from.y < to.y:
+					var t1 = Vector2(points[points.size() - 1].x, mb.y)
+					for i in range(pts):
+						var x = lerp(t1.x, t1.x - r, i/pts)
+						var y = lerp(t1.y, t1.y + r, i/pts)
+						points.append(lerp(Vector2(t1.x, y),Vector2(x , t1.y + r), i/pts))
+
+					var t2 = Vector2(to.x, mb.y + r)
+					r = min(abs(t2.y - to.y) * 0.5, r)
+					for i in range(1, pts):
+						var x = lerp(t2.x, t2.x - r, i/pts)
+						var y = lerp(t2.y, t2.y + r, i/pts)
+						points.append(lerp(Vector2(x, t2.y),Vector2(t2.x - r, y), i/pts))
+
+					var t3 = Vector2(to.x - r, to.y - r)
+
+					for i in range(pts):
+						var x = lerp(t3.x, t3.x + r, i/pts)
+						var y = lerp(t3.y, t3.y + r, i/pts)
+						points.append(lerp(Vector2(t3.x, y),Vector2(x , t3.y + r), i/pts))
+				else:
+					var t4 = points[points.size() - 1]
+
+					r = min(abs(t4.y - to.y) * 0.5, r)
+					for i in range(pts):
+						var x = lerp(t4.x, t4.x - r, i/pts)
+						var y = lerp(t4.y, t4.y - r, i/pts)
+						points.append(lerp(Vector2(t4.x, y),Vector2(x, t4.y - r),i/pts))
+					var t5 = Vector2(to.x, t4.y - r)
+
+					r = min(abs(t5.y - to.y) * 0.5, r)
+					for i in range(pts):
+						var x = lerp(t5.x, t5.x - r, i/pts)
+						var y = lerp(t5.y, t5.y - r, i/pts)
+						points.append(lerp(Vector2(x, t5.y),Vector2(t5.x - r ,y), i/pts))
+
+					var t6 = Vector2(to.x - r, to.y + r)
+					for i in range(pts):
+						var x = lerp(t6.x, t6.x + r, i/pts)
+						var y = lerp(t6.y, t6.y - r, i/pts)
+						points.append(lerp(Vector2(t6.x, y),Vector2(x , t6.y - r), i/pts))
+			points.append(to)
 			return points
 
 		ConnectionStyle.DIAGONAL:
-			var off = 20.0 * zoom
 			if to.x > from.x:
 				off += (to.x-from.x) * 0.1
 
 			var mid = (from + to) / 2.0
 			var ma = Vector2(max(mid.x, from.x + off), mid.y)
 			var mb = Vector2(min(mid.x, to.x - off), mid.y)
-			
 			var f1 = Vector2(from.x + off, from.y)
 			var t1 = Vector2(to.x - off, to.y)
-			
+
 			points.append(from)
 			points.append(f1)
-			points.append((f1+ma)/2.0)
-			points.append((t1+mb)/2.0)
+			points.append((f1 + ma) * 0.5)
+			points.append((t1 + mb) * 0.5)
 			points.append(t1)
 			points.append(to)
-
-			if (abs(from.y - to.y) < zoom * 0.5):
-				points.clear()
-				points.append(from)
-				points.append(to)
 			return points
 		_:
 			return points

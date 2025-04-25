@@ -285,11 +285,11 @@ layout_mode = 2
 
 [node name="VBoxContainer3" type="GridContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
 layout_mode = 2
-columns = 4
+columns = 5
 
 [node name="DirectConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 25)
+custom_minimum_size = Vector2(25.6, 25)
 layout_mode = 2
 tooltip_text = "Direct Connections"
 tooltip_auto_translate_mode = 2
@@ -303,7 +303,7 @@ icon_name = "connection_direct"
 
 [node name="BezierConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 25)
+custom_minimum_size = Vector2(25.6, 25)
 layout_mode = 2
 tooltip_text = "Bezier Connections"
 tooltip_auto_translate_mode = 2
@@ -315,9 +315,23 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "connection_bezier"
 
+[node name="RoundedConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25.6, 25)
+layout_mode = 2
+tooltip_text = "Rounded Connections"
+tooltip_auto_translate_mode = 2
+toggle_mode = true
+button_group = ExtResource("10_lbgjg")
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "connection_rounded"
+
 [node name="ManhattanConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 25)
+custom_minimum_size = Vector2(25.6, 25)
 layout_mode = 2
 tooltip_text = "Manhattan Connections"
 tooltip_auto_translate_mode = 2
@@ -331,7 +345,7 @@ icon_name = "connection_manhattan"
 
 [node name="DiagonalConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 25)
+custom_minimum_size = Vector2(25.6, 25)
 layout_mode = 2
 tooltip_text = "Diagonal Connections"
 tooltip_auto_translate_mode = 2
@@ -369,6 +383,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="CurvatureLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Curvature"
 
@@ -454,6 +469,7 @@ Scroll to zoom the 3D Preview."
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/Minimap" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_minimap_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/DirectConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_direct_connection_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/BezierConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_bezier_connection_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/RoundedConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_rounded_connection_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/ManhattanConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_manhattan_connection_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/DiagonalConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_diagonal_connection_toggled"]
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness/LineThickness" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_thickness_value_changed"]
