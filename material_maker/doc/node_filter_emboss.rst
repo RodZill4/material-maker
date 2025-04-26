@@ -25,7 +25,9 @@ The **Emboss** node the following parameters:
 
 * the *angle* of the light source used for the emboss effect.
 
-* the *strength* of the emboss effect.
+* the *amount* defines the strength of the emboss effect.
+
+* the *width* of the emboss effect.
 
 Notes
 +++++
