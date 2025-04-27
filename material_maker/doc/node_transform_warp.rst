@@ -1,7 +1,8 @@
 Warp node
 ~~~~~~~~~
 
-The **Warp** node deforms an input image according to the derivative of the second input image.
+The **Warp** node is variadic and deform one or more input images according to the
+derivative of a greyscale image.
 
 .. image:: images/node_transform_warp.png
 	:align: center
@@ -11,7 +12,7 @@ Inputs
 
 The **Warp** node accepts two inputs:
 
-* The *Source* inputs is the image to be deformed.
+* The *Source* input is the image to be deformed.
 
 * The *Displace* input is a greyscale image whose derivative will be used to deform the source.
 
