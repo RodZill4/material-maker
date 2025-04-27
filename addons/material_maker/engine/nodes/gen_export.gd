@@ -27,8 +27,8 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	return [
-			{ name="size", type="size", first=4, last=13, default=10 },
-			{ name="suffix", type="string", default="suffix" }
+			{ name="size", label="Size", type="size", first=4, last=13, default=10 },
+			{ name="suffix", label="Suffix", type="string", default="suffix" }
 		]
 
 func get_input_defs() -> Array:

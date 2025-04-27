@@ -1,15 +1,15 @@
 [gd_scene load_steps=5 format=3 uid="uid://c1j6a4jdggjm6"]
 
 [ext_resource type="PackedScene" uid="uid://drg0s4lftblx3" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
+[ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
+[ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 
 [node name="Preferences" type="Window"]
+title = "Preferences"
 position = Vector2i(0, 36)
 size = Vector2i(610, 505)
 exclusive = true
-popup_window = true
 script = ExtResource("2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -257,6 +257,21 @@ metadata/_tab_index = 2
 layout_mode = 2
 text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
+
+[node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="AnimationLabel" type="Label" parent="VBoxContainer/TabContainer/Export"]
+layout_mode = 2
+text = "Animation"
+
+[node name="RememberAnimExport" parent="VBoxContainer/TabContainer/Export" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Whether to save export parameters in the export animation dialog (i.e. size, begin, end etc.)"
+text = "Remember last export settings"
+config_variable = "remember_anim_export"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2

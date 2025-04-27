@@ -32,6 +32,19 @@ func _ready():
 	for i in range(BUFFER_NAMES.size()):
 		mm_deps.create_buffer(BUFFER_NAMES[i], self)
 
+	if mm_globals.get_config("remember_anim_export"):
+		if mm_globals.has_config("export_animation_size"):
+			value_size.selected = mm_globals.get_config("export_animation_size")
+		if mm_globals.has_config("export_animation_begin"):
+			value_begin.value = mm_globals.get_config("export_animation_begin")
+		if mm_globals.has_config("export_animation_end"):
+			value_end.value = mm_globals.get_config("export_animation_end")
+		if mm_globals.has_config("export_animation_images"):
+			value_images.value = mm_globals.get_config("export_animation_images")
+		if mm_globals.has_config("export_animation_spritesheet"):
+			value_spritesheet.selected = mm_globals.get_config("export_animation_spritesheet")
+
+
 func set_source(g, o):
 	generator = g
 	output = o
@@ -147,6 +160,13 @@ func _on_Export_pressed():
 		image_anim.material.set_shader_parameter("end", end)
 		image_anim.material.set_shader_parameter("mm_chunk_size", 1.0)
 		image_anim.material.set_shader_parameter("mm_chunk_offset", Vector2(0.0, 0.0))
+
+	if mm_globals.get_config("remember_anim_export"):
+		mm_globals.set_config("export_animation_size", value_size.selected)
+		mm_globals.set_config("export_animation_begin", value_begin.value)
+		mm_globals.set_config("export_animation_end", value_end.value)
+		mm_globals.set_config("export_animation_images", value_images.value)
+		mm_globals.set_config("export_animation_spritesheet", value_spritesheet.selected)
 
 
 func _on_VBox_minimum_size_changed():

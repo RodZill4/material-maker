@@ -83,6 +83,8 @@ func update_controls() -> void:
 
 
 func update_control_positions() -> void:
+	if control_points == null:
+		return
 	for control_point in control_points.get_children():
 		var pi : int = control_point.get_meta("point")
 		control_point.setpos(transform_point(splines.get_point_by_index(pi).position))

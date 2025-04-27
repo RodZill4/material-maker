@@ -21,8 +21,8 @@
 				"default": "vec4(sin($uv.x*20.0)*0.5+0.5, sin($uv.y*20.0)*0.5+0.5, 0, 1)",
 				"label": "",
 				"longdesc": "The input image to be warped",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			},
 			{
@@ -45,8 +45,8 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the warped image",
-				"rgba": "$in($uv+$amount*$(name_uv)_warp)",
-				"shortdesc": "Output",
+				"rgba": "$in#($uv+$amount*$(name_uv)_warp)",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],
