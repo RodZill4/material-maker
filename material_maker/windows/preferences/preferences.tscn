@@ -273,6 +273,21 @@ layout_mode = 2
 text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
 
+[node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="AnimationLabel" type="Label" parent="VBoxContainer/TabContainer/Export"]
+layout_mode = 2
+text = "Animation"
+
+[node name="RememberAnimExport" parent="VBoxContainer/TabContainer/Export" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Whether to save export parameters in the export animation dialog (i.e. size, begin, end etc.)"
+text = "Remember last export settings"
+config_variable = "remember_anim_export"
+
 [node name="Preview" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2

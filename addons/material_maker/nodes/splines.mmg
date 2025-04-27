@@ -115,11 +115,10 @@
 			"\treturn vec4(0.0);",
 			"}"
 		],
-		"longdesc": "Draws a uniform greyscale image",
+		"longdesc": "Draws splines",
 		"name": "Splines",
 		"outputs": [
 			{
-				"longdesc": "A uniform image of the selected value",
 				"rgba": "mix($(name)_splines($uv), $in_guide($uv), 0.5*$in_guide($uv).a)",
 				"shortdesc": "Output",
 				"type": "rgba"
