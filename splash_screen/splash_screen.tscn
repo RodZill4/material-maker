@@ -220,6 +220,11 @@ scale = Vector2(0.255, 0.185)
 mouse_filter = 2
 texture = SubResource("AtlasTexture_587d8")
 
+[node name="SplashFade" type="ColorRect" parent="."]
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
 [connection signal="gui_input" from="SplashScreen/TextureRect/SecretButton" to="." method="_on_secret_button_gui_input"]
 [connection signal="gui_input" from="SplashScreen/URL" to="." method="_on_url_gui_input"]
 [connection signal="pressed" from="BackgroundSelect/Previous" to="." method="_on_previous_pressed"]
