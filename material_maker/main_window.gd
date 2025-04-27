@@ -116,6 +116,11 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	$SplashFade.visible = true
+
+	# unset clear color set from splash screen (use default)
+	RenderingServer.set_default_clear_color(Color(0.3,0.3,0.3,1.0))
+
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
@@ -130,9 +135,6 @@ func _ready() -> void:
 
 	on_config_changed()
 
-	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	get_window().min_size = Vector2(1024, 600) * get_window().content_scale_factor
-
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
@@ -140,10 +142,14 @@ func _ready() -> void:
 	if mm_globals.config.has_section_key("window", "maximized"):
 		get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
 
+	#Set a minimum window size to prevent UI elements from collapsing on each other.
+	get_window().min_size = Vector2(1024, 600)
+
 	if get_window().mode != Window.MODE_MAXIMIZED:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
 		else:
+			get_window().min_size *= get_window().content_scale_factor
 			get_window().move_to_center()
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
@@ -228,7 +234,6 @@ func _ready() -> void:
 							DirAccess.remove_absolute(f)
 
 	if get_current_graph_edit() == null:
-		await get_tree().process_frame
 		new_material()
 
 	size = get_window().size
@@ -245,6 +250,8 @@ func _ready() -> void:
 var menu_update_requested : bool = false
 
 func update_menus() -> void:
+	while has_node("root/MainWindow/SplashFade"):
+		await get_tree().process_frame
 	if ! menu_update_requested:
 		menu_update_requested = true
 		do_update_menus.call_deferred()
@@ -541,6 +548,18 @@ func new_graph_panel() -> GraphEdit:
 
 func new_material() -> void:
 	var graph_edit = new_graph_panel()
+
+	if has_node("/root/MainWindow/SplashFade"):
+		var tween = get_tree().create_tween()
+		tween.tween_property($SplashFade, "color",Color(0.0,0.0,0.0,0.0),
+				0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_delay(0.25)
+		tween.tween_callback(func():
+			$SplashFade.hide()
+			$SplashFade.free()
+		)
+	while has_node("/root/MainWindow/SplashFade"):
+		await get_tree().process_frame 
+
 	graph_edit.new_material()
 	graph_edit.top_generator.set_current_mesh(current_mesh)
 	graph_edit.update_tab_title()
