@@ -117,6 +117,13 @@ func select_color(cursor:GradientEditCursor) -> void:
 	var color_picker := color_picker_popup.get_node("ColorPicker")
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
+	
+	# find and focus/highlight hex code
+	for node in color_picker.get_child(0,true).get_child(0,true).get_children(true):
+		for hex in node.get_children(true):
+			if hex is LineEdit:
+				hex.grab_focus()
+				hex.select_all()
 
 	var _scale := get_global_transform().get_scale()
 	color_picker_popup.position.x = global_position.x + size.x*_scale.x + 10

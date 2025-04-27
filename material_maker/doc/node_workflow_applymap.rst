@@ -1,5 +1,5 @@
 Apply Map node
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 The **Apply Map** node applies a map to a simple material by adjusting its orientation and offset,
 and outputs the modified map and the height information.

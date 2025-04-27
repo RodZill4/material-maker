@@ -36,5 +36,5 @@ vec4 preview_2d(vec2 uv) {
     float o = step(p.z, 0.001);
     float shadow = 1.0-0.75*step(raymarch(l, -ld), length(l-p)-0.01);
     float light = 0.3+0.7*dot(n, ld)*shadow;
-    return vec4(calcColor(vec4(p, 0.0))*light, 1.0);
+    return vec4(calcColor(vec4(p, 0.0))*light-o, 1.0);
 }

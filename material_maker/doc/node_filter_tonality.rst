@@ -1,7 +1,7 @@
 Tonality node
 ~~~~~~~~~~~~~
 
-The **Tonality** node applies a user-defined curve to a greyscale image.
+The **Tonality** node is variadic and applies a user-defined curve to greyscale images.
 
 .. image:: images/node_filter_tonality.png
 	:align: center
@@ -9,12 +9,12 @@ The **Tonality** node applies a user-defined curve to a greyscale image.
 Inputs
 ++++++
 
-The **Tonality** node requires a greyscale input texture.
+The **Tonality** node accepts one or more greyscale input textures.
 
 Outputs
 +++++++
 
-The **Tonality** node provides a single greyscale texture.
+The **Tonality** node outputs greyscale textures.
 
 Parameters
 ++++++++++

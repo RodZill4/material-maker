@@ -32,8 +32,8 @@
 				"default": "$uv.x",
 				"label": "",
 				"longdesc": "The input greyscale image",
-				"name": "input",
-				"shortdesc": "Input",
+				"name": "input#",
+				"shortdesc": "Input#",
 				"type": "f"
 			}
 		],
@@ -42,9 +42,9 @@
 		"name": "Tonality",
 		"outputs": [
 			{
-				"f": "$curve($input($uv))",
+				"f": "$curve($input#($uv))",
 				"longdesc": "The remapped greyscale image",
-				"shortdesc": "Output",
+				"shortdesc": "Output#",
 				"type": "f"
 			}
 		],

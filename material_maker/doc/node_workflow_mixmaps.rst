@@ -1,5 +1,5 @@
 Mix Maps node
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 The **Mix Maps** node combines up to 4 maps holding height, orientation and offset information.
 
