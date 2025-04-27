@@ -1,5 +1,5 @@
 Poly Curve node
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 The **Poly Curve** node outputs a simple RGBA image showing a curve defined by several control points.
 
