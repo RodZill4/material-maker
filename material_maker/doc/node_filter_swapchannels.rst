@@ -1,5 +1,5 @@
 Swap Channels node
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 The **Swap Channels** node can be used to replace each channel (R, G, B and A) of
 an with 0, 1 or a channel of its input (inverted or not).
