@@ -2,6 +2,10 @@ extends HBoxContainer
 
 const CONTROLS = [ "None", "P1.x", "P1.y", "P1.a", "P1.r", "P2.x", "P2.y", "P2.a", "P2.r", "P3.x", "P3.y", "P4.x", "P4.y", "Rect1.x", "Rect1.y", "Radius1.r", "Radius1.a", "Radius11.r", "Radius11.a", "Scale1.x", "Scale1.y", "Angle1.a", "Angle2.a" ]
 
+const CONTROLS_PXY : Array[String] = ["P1.x", "P2.x", "P3.x", "P4.x", "P1.y", "P2.y", "P3.y", "P4.y"]
+
+enum GizmoSize {SMALL, LARGE}
+
 func _ready() -> void:
 	$Control.clear()
 	for c in CONTROLS:
@@ -13,7 +17,8 @@ func get_model_data() -> Dictionary:
 		max = $Max.value,
 		step = $Step.value,
 		default = $Default.value,
-		control = $Control.get_item_text($Control.selected)
+		control = $Control.get_item_text($Control.selected),
+		control_size = int($ControlSize/ControlLarge.visible),
 	}
 	return data
 
@@ -34,8 +39,18 @@ func set_model_data(data) -> void:
 		for i in range($Control.get_item_count()):
 			if data.control == $Control.get_item_text(i):
 				$Control.selected = i
+				_on_control_item_selected(i)
 				break
-
+		if data.control in CONTROLS_PXY:
+			if data.has("control_size"):
+				if data.control_size == GizmoSize.SMALL:
+					$ControlSize/ControlSmall.show()
+					$ControlSize/ControlLarge.hide()
+				else:
+					$ControlSize/ControlLarge.show()
+					$ControlSize/ControlSmall.hide()
+		else:
+			$ControlSize.hide()
 
 func _on_Min_value_changed(v : float) -> void:
 	$Default.min_value = v
@@ -45,3 +60,15 @@ func _on_Max_value_changed(v : float) -> void:
 
 func _on_Step_value_changed(v : float) -> void:
 	$Default.step = v
+
+func _on_control_small_pressed() -> void:
+	$ControlSize/ControlSmall.hide()
+	$ControlSize/ControlLarge.show()
+
+func _on_control_large_pressed() -> void:
+	$ControlSize/ControlSmall.show()
+	$ControlSize/ControlLarge.hide()
+
+func _on_control_item_selected(index: int) -> void:
+	$ControlSize.visible = CONTROLS_PXY.any(func(g: String):
+		return CONTROLS[index] == g)

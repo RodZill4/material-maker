@@ -1,6 +1,5 @@
-[gd_scene load_steps=29 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=56 format=3 uid="uid://b7x7yqgsurxhv"]
 
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
 [ext_resource type="Script" uid="uid://cj476fi1ociuw" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
@@ -9,13 +8,13 @@
 [ext_resource type="PackedScene" uid="uid://b08bcbwwosrrk" path="res://material_maker/widgets/splines_edit/splines_editor.tscn" id="5_5hlfo"]
 [ext_resource type="PackedScene" uid="uid://b51634rcdiyr" path="res://material_maker/widgets/pixels_edit/pixels_editor.tscn" id="6_m4663"]
 [ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="7_u2w4r"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/simple_button.gd" id="10_83edi"]
+[ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="10_83edi"]
 [ext_resource type="PackedScene" uid="uid://dj5q8sxvd3gci" path="res://material_maker/widgets/option_edit/option_edit.tscn" id="12_4017l"]
 [ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="12_nrhap"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
+[ext_resource type="Script" uid="uid://5r7ncawc0gx7" path="res://material_maker/panels/preview_2d/view_menu.gd" id="13_5w2hy"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="14_qr76f"]
 [ext_resource type="Script" uid="uid://ca5sfnwa05qm2" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
+[ext_resource type="Script" uid="uid://pielyrq85378" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
 
 [sub_resource type="Shader" id="Shader_0mwcg"]
@@ -56,12 +55,109 @@ shader_parameter/background_color = Vector4(0, 0, 0, 0.575)
 shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 1)
 shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 1)
 
-[sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("1")
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wgulb"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_83edi"]
+atlas = SubResource("CompressedTexture2D_wgulb")
 region = Rect2(64, 48, 32, 32)
 
-[sub_resource type="AtlasTexture" id="4"]
-atlas = ExtResource("1")
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_r76ng"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63a3x"]
+atlas = SubResource("CompressedTexture2D_r76ng")
+region = Rect2(64, 48, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_083ld"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ddtyk"]
+atlas = SubResource("CompressedTexture2D_083ld")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dps6m"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4q6r"]
+atlas = SubResource("CompressedTexture2D_dps6m")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h3gsw"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nuc3o"]
+atlas = SubResource("CompressedTexture2D_h3gsw")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hpbbd"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b14i0"]
+atlas = SubResource("CompressedTexture2D_hpbbd")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_rm552"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0r70u"]
+atlas = SubResource("CompressedTexture2D_rm552")
+region = Rect2(64, 48, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8jmg3"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ktdc"]
+atlas = SubResource("CompressedTexture2D_8jmg3")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7bs5l"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7xo2"]
+atlas = SubResource("CompressedTexture2D_7bs5l")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ywwu1"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akdui"]
+atlas = SubResource("CompressedTexture2D_ywwu1")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qr4p0"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qylr4"]
+atlas = SubResource("CompressedTexture2D_qr4p0")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_83edi"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r76ng"]
+atlas = SubResource("CompressedTexture2D_83edi")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m66kb"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g35k8"]
+atlas = SubResource("CompressedTexture2D_m66kb")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mjbcq"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xo6pd"]
+atlas = SubResource("CompressedTexture2D_mjbcq")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m8aks"]
+load_path = "res://.godot/imported/icons.svg-7e4b30239fa94a02566e96134c06aedb.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4pk1k"]
+atlas = SubResource("CompressedTexture2D_m8aks")
 region = Rect2(16, 64, 16, 16)
 
 [sub_resource type="Shader" id="5"]
@@ -202,7 +298,7 @@ offset_left = 5.0
 offset_top = 29.0
 offset_right = 37.0
 offset_bottom = 61.0
-texture = SubResource("3")
+texture = SubResource("AtlasTexture_83edi")
 
 [node name="P2" parent="." index="6" instance=ExtResource("2")]
 visible = false
@@ -212,7 +308,7 @@ offset_left = 5.0
 offset_top = 29.0
 offset_right = 37.0
 offset_bottom = 61.0
-texture = SubResource("3")
+texture = SubResource("AtlasTexture_63a3x")
 
 [node name="P11" parent="." index="7" instance=ExtResource("2")]
 visible = false
@@ -222,7 +318,7 @@ offset_left = 5.0
 offset_top = 29.0
 offset_right = 37.0
 offset_bottom = 61.0
-texture = SubResource("3")
+texture = SubResource("AtlasTexture_ddtyk")
 parent_control = "P1"
 apply_local_transform = true
 
@@ -235,7 +331,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_c4q6r")
 parent_control = "P11"
 control_type = 2
 
@@ -247,7 +343,7 @@ offset_left = 5.0
 offset_top = 29.0
 offset_right = 37.0
 offset_bottom = 61.0
-texture = SubResource("3")
+texture = SubResource("AtlasTexture_nuc3o")
 parent_control = "P1"
 apply_local_transform = true
 
@@ -259,17 +355,17 @@ offset_left = 5.0
 offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_b14i0")
 
 [node name="P4" parent="." index="11" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0, 1, 1)
 layout_mode = 0
 offset_left = 5.0
-offset_top = 29.0
+offset_top = 50.0
 offset_right = 37.0
-offset_bottom = 61.0
-texture = SubResource("3")
+offset_bottom = 82.0
+texture = SubResource("AtlasTexture_0r70u")
 
 [node name="Rect1" parent="." index="12" instance=ExtResource("2")]
 visible = false
@@ -279,7 +375,7 @@ offset_left = 5.0
 offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_2ktdc")
 parent_control = "P1"
 control_type = 1
 apply_local_transform = true
@@ -293,7 +389,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_v7xo2")
 parent_control = "P1"
 control_type = 2
 
@@ -306,7 +402,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_akdui")
 parent_control = "P2"
 control_type = 2
 
@@ -319,7 +415,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_qylr4")
 parent_control = "Radius1"
 control_type = 2
 
@@ -332,7 +428,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_r76ng")
 parent_control = "P1"
 control_type = 3
 
@@ -345,7 +441,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_g35k8")
 parent_control = "P1"
 control_type = 4
 
@@ -358,7 +454,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_xo6pd")
 parent_control = "P1"
 control_type = 2
 
@@ -371,7 +467,7 @@ offset_top = 29.0
 offset_right = 21.0
 offset_bottom = 45.0
 mouse_default_cursor_shape = 10
-texture = SubResource("4")
+texture = SubResource("AtlasTexture_4pk1k")
 parent_control = "P1"
 control_type = 2
 
