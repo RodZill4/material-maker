@@ -42,13 +42,10 @@ func set_model_data(data) -> void:
 				_on_control_item_selected(i)
 				break
 		if data.control in CONTROLS_PXY:
-			if data.has("control_size"):
-				if data.control_size == GizmoSize.SMALL:
-					$ControlSize/ControlSmall.show()
-					$ControlSize/ControlLarge.hide()
-				else:
-					$ControlSize/ControlLarge.show()
-					$ControlSize/ControlSmall.hide()
+			if "control_size" not in data:
+				data.control_size = ControlPoint.DEFAULT_GIZMO_SIZES[data.control.split(".")[0]]
+			$ControlSize/ControlSmall.visible = data.control_size == GizmoSize.SMALL
+			$ControlSize/ControlLarge.visible = data.control_size == GizmoSize.LARGE
 		else:
 			$ControlSize.hide()
 

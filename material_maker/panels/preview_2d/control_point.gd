@@ -1,3 +1,5 @@
+class_name  ControlPoint
+
 extends TextureRect
 
 @export var parent_control : String = ""
@@ -23,7 +25,7 @@ const LARGE_ATLAS_REGION : Rect2 = Rect2(64.0,48.0,32.0,32.0)
 const DEFAULT_GIZMO_SIZES : Dictionary[String, GizmoSize] = {
 	"P1": GizmoSize.LARGE,
 	"P2": GizmoSize.LARGE,
-	"P3": GizmoSize.LARGE,
+	"P3": GizmoSize.SMALL,
 	"P4": GizmoSize.LARGE,
 	"Scale1": GizmoSize.SMALL,
 	"Rect1": GizmoSize.SMALL,
