@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dpaxvlnn2u1f6"]
+[gd_scene load_steps=21 format=3 uid="uid://dpaxvlnn2u1f6"]
 
 [ext_resource type="Script" uid="uid://ciayi8gvd2e1b" path="res://material_maker/panels/preview_3d/preview_3d.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://dpulty2lkvcht" path="res://material_maker/panels/preview_3d/preview_3d_scene.tscn" id="2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="8_13pve"]
 [ext_resource type="Script" uid="uid://cy7mimh863mo4" path="res://material_maker/panels/preview_3d/export_menu.gd" id="8_w881c"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="9_iu7lt"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="9_xygyl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yosc0"]
 atlas = ExtResource("6_osyun")
@@ -285,6 +286,30 @@ popup/item_3/id = 3
 popup/item_4/text = "AgX"
 popup/item_4/id = 4
 
+[node name="ExposureLabel" type="Label" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Exposure"
+
+[node name="Exposure" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" instance=ExtResource("9_xygyl")]
+layout_mode = 2
+value = 1.0
+max_value = 16.0
+step = 0.01
+float_only = true
+
+[node name="WhiteLabel" type="Label" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "White"
+
+[node name="White" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox" instance=ExtResource("9_xygyl")]
+layout_mode = 2
+value = 1.0
+max_value = 16.0
+step = 0.01
+float_only = true
+
 [node name="ExportMenu" type="Button" parent="MainMenu/HBox"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
@@ -423,6 +448,8 @@ text = "Generate Map"
 [connection signal="item_selected" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer/EnvironmentList" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_list_item_selected"]
 [connection signal="toggled" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ClearBackground" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_clear_background_toggled"]
 [connection signal="item_selected" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ToneMap" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_tone_map_item_selected"]
+[connection signal="value_changed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/Exposure" to="." method="_on_exposure_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/White" to="." method="_on_white_value_changed"]
 [connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapType" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_type_item_selected"]
 [connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapResolution" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_resolution_item_selected"]
 [connection signal="text_changed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapExportFile" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_export_file_text_changed"]
