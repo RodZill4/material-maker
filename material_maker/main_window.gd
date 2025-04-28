@@ -991,7 +991,6 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
-	about_box.connect("popup_hide", Callable(about_box, "queue_free"))
 	about_box.popup_centered()
 
 # Preview
