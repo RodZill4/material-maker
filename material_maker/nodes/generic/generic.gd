@@ -491,8 +491,6 @@ func update_node() -> void:
 			input_labels.append(label_widget)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
 	
-	
-	
 	# Parameters
 	if !generator.minimized:
 		controls = {}
@@ -583,7 +581,6 @@ func update_node() -> void:
 			first_focus.focus_previous = previous_focus.get_path()
 		initialize_properties()
 	
-			
 	# Outputs
 	var outputs = generator.get_output_defs()
 	output_count = outputs.size()
@@ -607,6 +604,7 @@ func update_node() -> void:
 		hsizer = get_child(i)
 		if hsizer.get_child_count() == 0:
 			hsizer.custom_minimum_size.y = minimum_line_height if !generator.minimized else 12
+	
 	# Edit buttons
 	if generator.is_editable():
 		for theme_stylebox in ["frame", "selected_frame"]:

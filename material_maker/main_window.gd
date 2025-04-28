@@ -1113,36 +1113,36 @@ func generate_graph_screenshot():
 	var minimap_save : bool = graph_edit.minimap_enabled
 	graph_edit.minimap_enabled = false
 	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
+	print("scroll offset: ", save_scroll_offset)
 	var save_zoom : float = graph_edit.zoom
 	graph_edit.zoom = 1
 	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
-	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(30, 180))
+	var scale_factor : float = get_window().content_scale_factor
+	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(25, 90))
+	graph_edit_rect = Rect2(scale_factor*graph_edit_rect.position, scale_factor*graph_edit_rect.size)
 	var graph_rect = null
 	for c in graph_edit.get_children():
-		if c is GraphNode:
-			var node_rect = Rect2(c.global_position, c.size)
+		if c is GraphElement:
+			var node_rect = Rect2(c.position_offset, c.size)
 			if graph_rect == null:
 				graph_rect = node_rect
 			else:
 				graph_rect = graph_rect.expand(node_rect.position)
 				graph_rect = graph_rect.expand(node_rect.end)
 	graph_rect = graph_rect.grow_individual(50, 20, 50, 80)
-	var image : Image = Image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
-	var origin = graph_edit.scroll_offset+graph_rect.position-graph_edit_rect.position
-	var small_image : Image = Image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
+	graph_rect = Rect2(scale_factor*graph_rect.position, scale_factor*graph_rect.size)
+	print("graph rect: ", graph_rect)
+	var image : Image = Image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_image().get_format())
+	var origin = graph_rect.position
+	var small_image : Image = Image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_image().get_format())
 	for x in range(0, graph_rect.size.x, graph_edit_rect.size.x):
 		for y in range(0, graph_rect.size.y, graph_edit_rect.size.y):
-			graph_edit.scroll_offset = origin+Vector2(x, y)
-			var timer : Timer = Timer.new()
-			add_child(timer)
-			timer.wait_time = 0.05
-			timer.one_shot = true
-			timer.start()
-			await timer.timeout
-			timer.queue_free()
-			small_image.blit_rect(get_viewport().get_texture().get_data(), graph_edit_rect, Vector2(0, 0))
-			small_image.flip_y()
+			graph_edit.scroll_offset = (origin+Vector2(x, y))/scale_factor-Vector2(15, 80)
+			print("scroll offset (target): ", (origin+Vector2(x, y))/scale_factor)
+			await get_tree().process_frame
+			print("scroll offset: ", graph_edit.scroll_offset)
+			small_image.blit_rect(get_viewport().get_texture().get_image(), graph_edit_rect, Vector2(0, 0))
 			image.blit_rect(small_image, Rect2(Vector2(0, 0), graph_edit_rect.size), Vector2(x, y))
 	graph_edit.scroll_offset = save_scroll_offset
 	graph_edit.zoom = save_zoom
