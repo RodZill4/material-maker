@@ -1113,7 +1113,6 @@ func generate_graph_screenshot():
 	var minimap_save : bool = graph_edit.minimap_enabled
 	graph_edit.minimap_enabled = false
 	var save_scroll_offset : Vector2 = graph_edit.scroll_offset
-	print("scroll offset: ", save_scroll_offset)
 	var save_zoom : float = graph_edit.zoom
 	graph_edit.zoom = 1
 	await get_tree().process_frame
@@ -1132,16 +1131,13 @@ func generate_graph_screenshot():
 				graph_rect = graph_rect.expand(node_rect.end)
 	graph_rect = graph_rect.grow_individual(50, 20, 50, 80)
 	graph_rect = Rect2(scale_factor*graph_rect.position, scale_factor*graph_rect.size)
-	print("graph rect: ", graph_rect)
 	var image : Image = Image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_image().get_format())
 	var origin = graph_rect.position
 	var small_image : Image = Image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_image().get_format())
 	for x in range(0, graph_rect.size.x, graph_edit_rect.size.x):
 		for y in range(0, graph_rect.size.y, graph_edit_rect.size.y):
 			graph_edit.scroll_offset = (origin+Vector2(x, y))/scale_factor-Vector2(15, 80)
-			print("scroll offset (target): ", (origin+Vector2(x, y))/scale_factor)
 			await get_tree().process_frame
-			print("scroll offset: ", graph_edit.scroll_offset)
 			small_image.blit_rect(get_viewport().get_texture().get_image(), graph_edit_rect, Vector2(0, 0))
 			image.blit_rect(small_image, Rect2(Vector2(0, 0), graph_edit_rect.size), Vector2(x, y))
 	graph_edit.scroll_offset = save_scroll_offset
