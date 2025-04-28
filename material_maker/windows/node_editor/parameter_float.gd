@@ -4,8 +4,6 @@ const CONTROLS = [ "None", "P1.x", "P1.y", "P1.a", "P1.r", "P2.x", "P2.y", "P2.a
 
 const CONTROLS_PXY : Array[String] = ["P1.x", "P2.x", "P3.x", "P4.x", "P1.y", "P2.y", "P3.y", "P4.y"]
 
-enum GizmoSize {SMALL, LARGE}
-
 func _ready() -> void:
 	$Control.clear()
 	for c in CONTROLS:
@@ -44,8 +42,8 @@ func set_model_data(data) -> void:
 		if data.control in CONTROLS_PXY:
 			if "control_size" not in data:
 				data.control_size = ControlPoint.DEFAULT_GIZMO_SIZES[data.control.split(".")[0]]
-			$ControlSize/ControlSmall.visible = data.control_size == GizmoSize.SMALL
-			$ControlSize/ControlLarge.visible = data.control_size == GizmoSize.LARGE
+			$ControlSize/ControlSmall.visible = data.control_size == ControlPoint.GizmoSize.SMALL
+			$ControlSize/ControlLarge.visible = data.control_size == ControlPoint.GizmoSize.LARGE
 		else:
 			$ControlSize.hide()
 
