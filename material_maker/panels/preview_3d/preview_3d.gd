@@ -144,6 +144,9 @@ func set_rotate_model_speed(speed: float) -> void:
 
 
 func get_materials() -> Array:
+	# Update 3D scale
+	$MaterialPreview.scaling_3d_scale = mm_globals.main_window.preview_rendering_scale_factor
+	# Return materials
 	if current_object != null and current_object.get_material() != null:
 		return [ current_object.get_material() ]
 	return []
