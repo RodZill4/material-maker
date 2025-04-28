@@ -1,5 +1,3 @@
-class_name  ControlPoint
-
 extends TextureRect
 
 @export var parent_control : String = ""
@@ -249,9 +247,9 @@ func _on_Point_gui_input(event : InputEvent):
 		for c in children_control_nodes:
 			c.update_position(c.get_value())
 
-func set_control_atlas(size : int = GizmoSize.SMALL):
+func set_control_atlas(gizmo_size : int = GizmoSize.SMALL):
 	var atlas : AtlasTexture = texture
-	if size == GizmoSize.SMALL:
+	if gizmo_size == GizmoSize.SMALL:
 		atlas.region = SMALL_ATLAS_REGION
 		stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
 	else:
