@@ -1,3 +1,5 @@
+class_name ControlPoint
+
 extends TextureRect
 
 @export var parent_control : String = ""
@@ -91,11 +93,11 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 				show()
 				parameter_y = p.name
 			elif p.control == String(name)+".r":
-				set_control_atlas(GizmoSize.SMALL)
+				set_control_atlas()
 				show()
 				parameter_r = p.name
 			elif p.control == String(name)+".a":
-				set_control_atlas(GizmoSize.SMALL)
+				set_control_atlas()
 				show()
 				parameter_a = p.name
 
