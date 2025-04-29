@@ -117,6 +117,26 @@ func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_
 		else:
 			cp.select(true)
 			selected_control_points.append(cp.get_meta("point"))
+	elif is_shift_pressed:
+		if cp.is_selected:
+			return
+		else:
+			cp.select(true)
+			if selected_control_points.is_empty():
+				selected_control_points.append(cp.get_meta("point"))
+			else:
+				var last_selection = selected_control_points.back()
+				var curr_selection = cp.get_meta("point")
+				
+				var next_selection = last_selection
+				var increment = 1 if curr_selection > last_selection else -1
+				while next_selection != curr_selection:
+					next_selection += increment
+					if splines.is_linked(0, next_selection):
+						continue
+					selected_control_points.append(next_selection)
+				queue_redraw()
+				update_controls()
 	else:
 		if not cp.is_selected:
 			for c in control_points.get_children():
