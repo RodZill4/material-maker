@@ -16,6 +16,9 @@ var mode := Modes.DRAW
 
 var progressive := false
 
+var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.tres")
+var font_size = 16
+var text_bg_width = 12
 
 func _ready():
 	%DrawMode.button_group.pressed.connect(func(button):mode = Modes.DRAW if button.name == "DrawMode" else Modes.SELECT)
@@ -40,7 +43,14 @@ func _draw():
 		for c in control_points.get_children():
 			if c.is_selected:
 				var index = 1+selected_control_points.find(c.get_meta("point"))
-				draw_string(get_theme_font("default"), c.position+Vector2(10, 10), str(index), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(1.0, 0.0, 0.0))
+				var square_bg: Rect2
+				if index >= 10:
+					square_bg = Rect2(c.position+Vector2(12, -3), Vector2(text_bg_width * 2, 16))
+				else:
+					square_bg = Rect2(c.position+Vector2(12, -3), Vector2(text_bg_width, 16))
+				draw_rect(square_bg, Color(0.05, 0.05, 0.05, 0.95), true, -1.0, true)
+				draw_rect(square_bg, Color(1, 1, 1, 0.50), false, 1, false)
+				draw_string(spline_font, c.position+Vector2(12, 10), str(index), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1.0, 1.0, 1.0, 1.0))
 	super._draw()
 
 func set_splines(p : MMSplines) -> void:
