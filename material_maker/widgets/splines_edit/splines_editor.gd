@@ -271,6 +271,11 @@ func _on_progressive_toggled(toggled_on: bool) -> void:
 
 
 func handle_select_mode(event : InputEvent) -> bool:
+	if event is InputEventMouseButton:
+		for c in control_points.get_children():
+			c.select(false)
+		selected_control_points.clear()
+		queue_redraw()
 	return false
 
 
