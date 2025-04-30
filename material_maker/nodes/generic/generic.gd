@@ -557,24 +557,27 @@ func update_node() -> void:
 					first_focus = control
 				previous_focus = control
 		
-		var label_max_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
-		label_max_width = min(100, label_max_width)
-		for r in get_children():
-			var label : Control = r.get_child(1)
-			label.custom_minimum_size.x = label_max_width
-			if label is Label:
-				label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		var param_label_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		param_label_width = min(100, param_label_width)
 		
 		var input_label_width : int = 0
 		input_label_width = get_children().reduce(
 			func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
 			, 0)
-		
-		if not property_labels.is_empty():
+		if input_label_width > 0 and not property_labels.is_empty():
 			input_label_width += 10
 		
-		for i in input_labels:
-			i.custom_minimum_size.x = input_label_width
+		for r in get_children():
+			if not (r.get_child(0) is Label or r.get_child(1) is Label):
+				continue
+			var input_label : Control = r.get_child(0)
+			input_label.custom_minimum_size.x = input_label_width
+			if input_label is Label:
+				input_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			var param_label : Control = r.get_child(1)
+			param_label.custom_minimum_size.x = param_label_width
+			if param_label is Label:
+				param_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
