@@ -50,7 +50,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
+				"default": 5,
 				"label": "",
 				"longdesc": "The number of replications of an angle of the input",
 				"max": 10,
