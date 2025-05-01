@@ -72,14 +72,14 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": 283.308715820313,
+				"x": 283.308715820312,
 				"y": -510.988342285156
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 11.0
 			},
-			"seed": 32897,
+			"seed": 32897.0,
 			"type": "buffer"
 		},
 		{
@@ -89,13 +89,13 @@
 				"y": -773.95361328125
 			},
 			"parameters": {
-				"param0": 10,
-				"param1": 0.27,
-				"param2": 0,
-				"param3": 0,
+				"param0": 11.0,
+				"param1": 0.1,
+				"param2": 0.0,
+				"param3": 0.0,
 				"param4": true
 			},
-			"seed": 1419,
+			"seed": 1419.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -201,21 +201,21 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input mask whose white areas will be dilated",
 					"name": "mask",
 					"shortdesc": "Mask",
 					"type": "f"
 				},
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The optional source for colors",
 					"name": "source",
 					"shortdesc": "Source",
 					"type": "rgb"
 				}
 			],
-			"seed": 317,
+			"seed": 317.0,
 			"type": "ios"
 		},
 		{
@@ -229,14 +229,14 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the dilated image",
 					"name": "out",
 					"shortdesc": "Output",
 					"type": "rgb"
 				}
 			],
-			"seed": -14401,
+			"seed": -14401.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
@@ -247,24 +247,24 @@
 				"y": -100.695678710938
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 11.0
 			},
-			"seed": 65483,
+			"seed": 65483.0,
 			"type": "buffer"
 		},
 		{
 			"name": "dilate_pass_1",
 			"node_position": {
-				"x": 547.301208496094,
-				"y": -542.369018554688
+				"x": 564.301208496094,
+				"y": -553.369018554688
 			},
 			"parameters": {
-				"d": 0.27,
-				"s": 10,
+				"d": 0.1,
+				"s": 11.0,
 				"tile": true
 			},
-			"seed": 71939,
+			"seed": 71939.0,
 			"seed_locked": true,
 			"shader_model": {
 				"code": "",
@@ -320,8 +320,8 @@
 						"control": "None",
 						"default": 0.1,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
@@ -340,15 +340,15 @@
 			"name": "dilate_pass_4",
 			"node_position": {
 				"x": 558.310546875,
-				"y": -294.577270507813
+				"y": -285.577270507812
 			},
 			"parameters": {
-				"d": 0.27,
-				"distance": 0,
-				"s": 10,
+				"d": 0.1,
+				"distance": 0.0,
+				"s": 11.0,
 				"tile": true
 			},
-			"seed": 50297,
+			"seed": 50297.0,
 			"shader_model": {
 				"code": "",
 				"global": [
@@ -422,16 +422,16 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 0.1,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
-						"default": 2,
+						"default": 2.0,
 						"label": "",
 						"name": "distance",
 						"type": "enum",
@@ -464,13 +464,13 @@
 			"name": "buffer_2_3",
 			"node_position": {
 				"x": 899.033874511719,
-				"y": -345.711547851563
+				"y": -345.711547851562
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 11.0
 			},
-			"seed": -38802,
+			"seed": -38802.0,
 			"type": "buffer"
 		},
 		{
@@ -481,14 +481,14 @@
 			},
 			"parameters": {
 				"default": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				}
 			},
-			"seed": 939,
+			"seed": 939.0,
 			"type": "default_color"
 		},
 		{
@@ -498,9 +498,9 @@
 				"y": -172.368988037109
 			},
 			"parameters": {
-				"amount": 0
+				"amount": 0.0
 			},
-			"seed": 50311,
+			"seed": 50311.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -529,10 +529,10 @@
 				"parameters": [
 					{
 						"control": "None",
-						"default": 0,
+						"default": 0.0,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.01,
 						"type": "float"
@@ -551,7 +551,7 @@
 				"f32": true,
 				"filter": false,
 				"mipmap": false,
-				"size": 9
+				"size": 11.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -559,10 +559,10 @@
 		}
 	],
 	"parameters": {
-		"param0": 10,
-		"param1": 0.27,
-		"param2": 0,
-		"param3": 0,
+		"param0": 11.0,
+		"param1": 0.1,
+		"param2": 0.0,
+		"param3": 0.0,
 		"param4": true
 	},
 	"seed_int": 0,

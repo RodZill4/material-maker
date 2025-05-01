@@ -40,25 +40,25 @@
 				"y": -255.75
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 9
+				"lod": 0.0,
+				"size": 9.0
 			},
-			"seed": 20527,
+			"seed": 20527.0,
 			"type": "buffer"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -456.666626,
-				"y": -433.666656
+				"x": -456.666625976562,
+				"y": -433.666656494141
 			},
 			"parameters": {
-				"param0": 9,
-				"param1": 50,
-				"param2": 45,
-				"param3": 0
+				"param0": 9.0,
+				"param1": 50.0,
+				"param2": 45.0,
+				"param3": 0.0
 			},
-			"seed": 343,
+			"seed": 343.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -122,66 +122,66 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -779.666626,
-				"y": -247.392853
+				"x": -779.666625976562,
+				"y": -247.392852783203
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input image",
 					"name": "in",
 					"shortdesc": "Input",
 					"type": "rgba"
 				},
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "A map that controls the strength of the blur filter",
 					"name": "amount",
 					"shortdesc": "Strength map",
 					"type": "f"
 				}
 			],
-			"seed": 91624,
+			"seed": 91624.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -45.452393,
-				"y": -195.392853
+				"x": -45.452392578125,
+				"y": -195.392852783203
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the generated blurred image",
 					"name": "port0",
 					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
-			"seed": 30896,
+			"seed": 30896.0,
 			"type": "ios"
 		},
 		{
 			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -357.725464,
-				"y": -153.178955
+				"x": -357.725463867188,
+				"y": -153.178955078125
 			},
 			"parameters": {
-				"angle": 45,
-				"mode": 0,
-				"sigma": 50,
-				"size": 9
+				"angle": 45.0,
+				"mode": 0.0,
+				"sigma": 50.0,
+				"size": 9.0
 			},
-			"seed": -47470,
+			"seed": -47470.0,
 			"seed_locked": true,
 			"shader_model": {
 				"code": "",
@@ -233,7 +233,7 @@
 						"type": "size"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "Mode",
 						"name": "mode",
 						"type": "enum",
@@ -250,20 +250,20 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 50.0,
 						"label": "Sigma",
-						"max": 50,
-						"min": 0,
+						"max": 50.0,
+						"min": 0.0,
 						"name": "sigma",
 						"step": 0.1,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 0,
+						"default": 45.0,
 						"label": "Angle",
-						"max": 180,
-						"min": -180,
+						"max": 180.0,
+						"min": -180.0,
 						"name": "angle",
 						"step": 0.1,
 						"type": "float"
@@ -274,10 +274,10 @@
 		}
 	],
 	"parameters": {
-		"param0": 9,
-		"param1": 50,
-		"param2": 45,
-		"param3": 0
+		"param0": 9.0,
+		"param1": 50.0,
+		"param2": 45.0,
+		"param3": 0.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Directional blur",
