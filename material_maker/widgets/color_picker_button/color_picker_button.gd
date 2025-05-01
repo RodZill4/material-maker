@@ -42,10 +42,13 @@ func on_picker_created():
 
 func on_about_to_show():
 	previous_color = color
+	if mm_globals.has_config("color_picker_color_mode"):
+		get_picker().color_mode = mm_globals.get_config("color_picker_color_mode")
 
 
 func on_popup_closed():
 	emit_signal("color_changed_undo", color, previous_color)
+	mm_globals.set_config("color_picker_color_mode", get_picker().color_mode)
 
 
 func _input(event:InputEvent) -> void:

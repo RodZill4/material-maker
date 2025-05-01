@@ -118,6 +118,9 @@ func select_color(cursor:GradientEditCursor) -> void:
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
 	
+	if mm_globals.has_config("color_picker_color_mode"):
+		color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
+
 	# find and focus/highlight hex code
 	for node in color_picker.get_child(0,true).get_child(0,true).get_children(true):
 		for hex in node.get_children(true):
@@ -132,6 +135,9 @@ func select_color(cursor:GradientEditCursor) -> void:
 
 	color_picker_popup.popup_hide.connect(color_picker_popup.queue_free)
 	color_picker_popup.popup_hide.connect(set.bind("mode", Modes.IDLE))
+	color_picker_popup.popup_hide.connect(func():
+			mm_globals.set_config("color_picker_color_mode",
+				color_picker.color_mode))
 
 	color_picker_popup.popup()
 
