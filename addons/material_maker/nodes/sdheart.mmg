@@ -54,7 +54,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": 0,
+				"default": 0.05,
 				"label": "Center Y",
 				"longdesc": "The position of the center on the Y axis",
 				"max": 0.5,

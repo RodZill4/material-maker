@@ -33,7 +33,7 @@
 		"parameters": [
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Height",
 				"longdesc": "The height of the uneven capsule",
 				"max": 1,
@@ -44,7 +44,7 @@
 			},
 			{
 				"control": "Rect1.x",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Top Radius",
 				"longdesc": "Top radius of the uneven capule",
 				"max": 1,
@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.2,
 				"label": "Bottom Radius",
 				"longdesc": "Bottom radius of the uneven capsule",
 				"max": 1,
@@ -66,7 +66,7 @@
 			},
 			{
 				"control": "P1.x",
-				"default": 0.2,
+				"default": 0.0,
 				"label": "Center X",
 				"longdesc": "The position of the center on the X axis",
 				"max": 0.5,

@@ -105,7 +105,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 10,
+				"default": 25,
 				"label": "Count",
 				"longdesc": "The number of occurences of the input image",
 				"max": 100,
@@ -187,7 +187,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.0,
 				"label": "Rnd Value",
 				"longdesc": "The random greyscale value applied to each image instance",
 				"max": 1,

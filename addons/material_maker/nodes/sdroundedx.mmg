@@ -32,7 +32,7 @@
 		"parameters": [
 			{
 				"control": "Rect1.x",
-				"default": 0.15,
+				"default": 0.1,
 				"label": "Radius",
 				"longdesc": "Radius of the rounded X",
 				"max": 1,

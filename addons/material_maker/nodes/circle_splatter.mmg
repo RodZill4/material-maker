@@ -115,7 +115,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 10,
+				"default": 20,
 				"label": "Count",
 				"longdesc": "The number of occurences of the input image",
 				"max": 256,
@@ -127,7 +127,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 2,
 				"label": "Rings",
 				"longdesc": "The number of rings of the circle pattern",
 				"max": 16,
@@ -185,7 +185,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.25,
+				"default": 0.4,
 				"label": "Radius",
 				"longdesc": "The radius of the outer circle pattern",
 				"max": 0.5,
@@ -257,7 +257,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.0,
 				"label": "Rnd Value",
 				"longdesc": "The random greyscale value applied to each image instance",
 				"max": 1,

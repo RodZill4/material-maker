@@ -75,7 +75,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Width",
 				"longdesc": "The width of scratches",
 				"max": 1,
@@ -87,7 +87,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 5,
 				"label": "Layers",
 				"longdesc": "The number of scratches layers",
 				"max": 10,
@@ -99,7 +99,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.51,
 				"label": "Waviness",
 				"longdesc": "The waviness of scratches",
 				"max": 1,
@@ -111,7 +111,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": -1,
 				"label": "Angle",
 				"longdesc": "The average angle of the scratches (0 generates horizontal scratches)",
 				"max": 180,
@@ -123,7 +123,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.44,
 				"label": "Randomness",
 				"longdesc": "The randomness of the scratches angles",
 				"max": 1,

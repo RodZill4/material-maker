@@ -140,7 +140,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.75,
+				"default": 1.0,
 				"label": "Intensity",
 				"longdesc": "A value factor for greyscale outputs",
 				"max": 1,
@@ -152,7 +152,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 0.85,
 				"label": "Randomness",
 				"longdesc": "The randomness of cell centers positions",
 				"max": 1,

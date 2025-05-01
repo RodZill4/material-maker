@@ -87,7 +87,7 @@
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 0.0,
 						"label": "Width",
 						"longdesc": "The width (in tones space) of the transition area",
 						"max": 1,

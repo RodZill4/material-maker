@@ -33,7 +33,7 @@
 		"parameters": [
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.15,
 				"label": "Top Width",
 				"longdesc": "Top width of the trapezoid",
 				"max": 1,
@@ -44,7 +44,7 @@
 			},
 			{
 				"control": "Rect1.x",
-				"default": 0.3,
+				"default": 0.4,
 				"label": "Bottom Width",
 				"longdesc": "Bottom width of the trapezoid",
 				"max": 1,
@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Height",
 				"longdesc": "Height of the trapezoid",
 				"max": 1,

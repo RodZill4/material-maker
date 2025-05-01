@@ -129,7 +129,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 2,
 				"label": "Tiling",
 				"longdesc": "The number of times the pattern tiles",
 				"max": 16,

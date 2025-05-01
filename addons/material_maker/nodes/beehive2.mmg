@@ -53,7 +53,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 2,
+				"default": 4,
 				"label": "Size X",
 				"longdesc": "The number of columns of the pattern",
 				"max": 64,
@@ -65,7 +65,7 @@
 			},
 			{
 				"control": "None",
-				"default": 2,
+				"default": 4,
 				"label": "Size Y",
 				"longdesc": "The number of rows of the pattern",
 				"max": 64,

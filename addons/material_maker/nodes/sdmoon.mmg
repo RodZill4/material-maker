@@ -33,7 +33,7 @@
 		"parameters": [
 			{
 				"control": "Rect1.y",
-				"default": 0.6,
+				"default": 0.45,
 				"label": "Radius",
 				"longdesc": "Radius of the moon",
 				"max": 1,
@@ -44,7 +44,7 @@
 			},
 			{
 				"control": "Radius11.r",
-				"default": 0.5,
+				"default": 0.35,
 				"label": "Inner Radius",
 				"longdesc": "Radius of the inner circle",
 				"max": 1,
@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.4,
+				"default": 0.2,
 				"label": "Distance",
 				"longdesc": "Distance of the inner circle away from the origin",
 				"max": 1,
@@ -66,7 +66,7 @@
 			},
 			{
 				"control": "P1.x",
-				"default": 0.2,
+				"default": 0.0,
 				"label": "Center X",
 				"longdesc": "The position of the center on the X axis",
 				"max": 0.5,
@@ -78,7 +78,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": -0.25,
+				"default": 0.0,
 				"label": "Center Y",
 				"longdesc": "The position of the center on the Y axis",
 				"max": 0.5,

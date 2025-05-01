@@ -236,7 +236,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 4.0,
 						"label": "Intensity",
 						"max": 16,
 						"min": 0,
@@ -246,7 +246,7 @@
 					},
 					{
 						"control": "None",
-						"default": 50,
+						"default": 15,
 						"label": "Quality",
 						"max": 50,
 						"min": 1,

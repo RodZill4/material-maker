@@ -94,7 +94,7 @@
 		"parameters": [
 			{
 				"control": "P1.x",
-				"default": -0.3,
+				"default": -0.35,
 				"label": "AX",
 				"longdesc": "Position on X axis of the first control point",
 				"max": 0.5,
@@ -106,7 +106,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": -0.1,
+				"default": -0.2,
 				"label": "AY",
 				"longdesc": "Position on Y axis of the first control point",
 				"max": 0.5,
@@ -130,7 +130,7 @@
 			},
 			{
 				"control": "P3.y",
-				"default": 0.2,
+				"default": 0.5,
 				"label": "BY",
 				"longdesc": "Position on Y axis of the second control point",
 				"max": 0.5,
@@ -142,7 +142,7 @@
 			},
 			{
 				"control": "P2.x",
-				"default": 0.3,
+				"default": 0.35,
 				"label": "CX",
 				"longdesc": "Position on X axis of the third control point",
 				"max": 0.5,
@@ -154,7 +154,7 @@
 			},
 			{
 				"control": "P2.y",
-				"default": -0.1,
+				"default": -0.2,
 				"label": "CY",
 				"longdesc": "Position on Y axis of the third control point",
 				"max": 0.5,
@@ -166,7 +166,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.1,
+				"default": 0.05,
 				"label": "Width",
 				"longdesc": "Width of the curve pattern",
 				"max": 0.5,

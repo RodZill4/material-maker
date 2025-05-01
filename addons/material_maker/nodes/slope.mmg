@@ -329,7 +329,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 0.1,
 						"label": "",
 						"max": 1,
 						"min": 0,
@@ -418,7 +418,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 0.1,
 						"label": "",
 						"max": 1,
 						"min": 0,
@@ -552,7 +552,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 0.1,
 						"label": "",
 						"max": 1,
 						"min": 0,
@@ -641,7 +641,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 0.1,
 						"label": "",
 						"max": 1,
 						"min": 0,

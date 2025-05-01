@@ -36,7 +36,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.1,
 				"label": "Bevel",
 				"longdesc": "The width of the gradient at the edges of the shape",
 				"max": 1,

@@ -64,7 +64,7 @@ func get_parameter_defs() -> Array:
 		{ name="size", label="Size", type="size", first=4, last=13, default=4 },
 		{ name="shrink", label="Shrink", type="boolean", default=false },
 		{ name="autostop", label="Auto stop", type="boolean", default=false },
-		{ name="iterations", label="Iterations", type="float", min=1, max=50, step=1, default=5 },
+		{ name="iterations", label="Iterations", type="float", min=1, max=50, step=1, default=10 },
 		{ name="filter", label="Filter", type="boolean", default=true },
 		{ name="mipmap", label="Mipmap", type="boolean", default=true },
 		{ name="f32", label="32 bits", type="boolean", default=false }

@@ -83,7 +83,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.8,
+				"default": 0.9,
 				"label": "Width X",
 				"longdesc": "The width of each row/column",
 				"max": 1,
@@ -95,7 +95,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.8,
+				"default": 0.9,
 				"label": "Width Y",
 				"max": 1,
 				"min": 0,

@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 1.0,
 				"label": "",
 				"longdesc": "The amount of the transform",
 				"max": 1,

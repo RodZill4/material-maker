@@ -249,7 +249,7 @@
 				],
 				"parameters": [
 					{
-						"default": 10,
+						"default": 6,
 						"first": 4,
 						"label": "",
 						"last": 13,
@@ -268,7 +268,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 1.0,
 						"label": "Eccentricity",
 						"max": 2,
 						"min": 0,

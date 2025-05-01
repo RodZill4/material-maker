@@ -33,7 +33,7 @@
 		"parameters": [
 			{
 				"control": "Rect1.x",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Width",
 				"longdesc": "Width of the parallelogram",
 				"max": 1,
@@ -44,7 +44,7 @@
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Height",
 				"longdesc": "Height of the parallelogram",
 				"max": 1,
@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.1,
 				"label": "Skew",
 				"longdesc": "Amount of skew of the parallelogram",
 				"max": 1,

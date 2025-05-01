@@ -44,7 +44,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.1,
 				"label": "Width",
 				"longdesc": "The width of each generated ripple",
 				"max": 1,

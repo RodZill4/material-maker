@@ -141,7 +141,7 @@
 				"type": "float"
 			},
 			{
-				"default": 0,
+				"default": 2,
 				"label": "Y",
 				"longdesc": "Pattern generated along the Y axis",
 				"name": "y_wave",
@@ -176,7 +176,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 2,
 				"label": "3:",
 				"longdesc": "Repetitions of the pattern along Y axis",
 				"max": 32,
@@ -187,7 +187,7 @@
 				"type": "float"
 			},
 			{
-				"default": 0,
+				"default": 2,
 				"label": "Z",
 				"longdesc": "Pattern generated along the Z axis",
 				"name": "z_wave",

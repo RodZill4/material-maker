@@ -266,7 +266,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 8,
 				"label": "Scale X",
 				"longdesc": "The scale of the first octave along the X axis",
 				"max": 32,
@@ -278,7 +278,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 8,
 				"label": "Scale Y",
 				"longdesc": "The scale of the first octave along the Y axis",
 				"max": 32,
@@ -290,7 +290,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 8,
 				"label": "Scale Z",
 				"longdesc": "The scale of the first octave along the Z axis",
 				"max": 32,
@@ -302,7 +302,7 @@
 			},
 			{
 				"control": "None",
-				"default": 3,
+				"default": 1,
 				"label": "Iterations",
 				"longdesc": "The number of noise octaves",
 				"max": 10,
