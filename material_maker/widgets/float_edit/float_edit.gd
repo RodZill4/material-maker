@@ -1,6 +1,16 @@
 extends Container
 
 var float_value: float = 0.5
+var default_float_value: float = 0.0
+
+enum ContextMenu {RESET_VALUE, EDIT_EXPRESSION}
+
+@export var default_value: float = 0.0 :
+	get:
+		return default_float_value
+	set(default_value):
+		default_float_value = default_value
+
 @export var value: float = 0.5 :
 	get:
 		return float_value
@@ -213,14 +223,30 @@ func _gui_input(event: InputEvent) -> void:
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
 		if event is InputEventMouseButton:
-			# Handle Right Click (Expression Editor)
-			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and not float_only:
-				var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
-				add_child(expression_editor)
-				expression_editor.edit_parameter(
-					"Expression editor - " + name,
-					$Edit.text, self,
-					"set_value_from_expression_editor")
+
+			# Handle Right Click
+			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+				var context_menu : PopupMenu = PopupMenu.new()
+				context_menu.position = get_local_mouse_position() + get_screen_position()
+				context_menu.add_item("Reset value")
+
+				if not float_only:
+					context_menu.add_item("Edit expression")
+
+				context_menu.id_pressed.connect(func(id):
+					match id:
+						ContextMenu.RESET_VALUE:
+							set_value(default_float_value, true, true)
+						ContextMenu.EDIT_EXPRESSION:
+							var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
+							add_child(expression_editor)
+							expression_editor.edit_parameter(
+									"Expression editor - " + name,
+									$Edit.text, self,
+									"set_value_from_expression_editor")
+				)
+				add_child(context_menu)
+				context_menu.popup()
 				accept_event()
 
 			# Handle CTRL+Scrolling
