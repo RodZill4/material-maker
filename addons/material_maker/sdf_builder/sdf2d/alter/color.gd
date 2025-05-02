@@ -1,4 +1,4 @@
-extends "res://addons/material_maker/sdf_builder/sdf3d/boolean/union.gd"
+extends "res://addons/material_maker/sdf_builder/sdf2d/boolean/union.gd"
 
 
 @export var channel_name : String
@@ -20,7 +20,6 @@ func get_includes():
 	return [ ]
 
 func scene_to_shader_model(scene : Dictionary, uv : String = "$uv", editor : bool = false) -> Dictionary:
-	var output_name = "$(name_uv)_n%d" % scene.index
 	var data : Dictionary = { parameters=[] }
 	for s in scene.children:
 		var data2 = mm_sdf_builder.scene_to_shader_model(s, uv, editor)
@@ -32,7 +31,7 @@ func get_color_code(scene : Dictionary, ctxt : Dictionary = { uv="$uv" }, editor
 	if channel_name != ctxt.channel:
 		return {}
 	var ctxt2 : Dictionary = ctxt.duplicate()
-	ctxt2.geometry = "sdf3d"
+	ctxt2.geometry = "sdf2d"
 	if scene.parameters.has("local") and scene.parameters.local:
 		ctxt2.uv = ctxt.local_uv
 	for s in scene.children:
