@@ -61,8 +61,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="25.46875"
-     inkscape:cy="41.875"
+     inkscape:cx="25.28125"
+     inkscape:cy="37.9375"
      inkscape:document-units="px"
      inkscape:current-layer="g31"
      showgrid="true"
@@ -120,14 +120,14 @@
          id="path36"
          transform="matrix(-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0)"
          sodipodi:type="arc"
-         sodipodi:cx="-144.32422"
-         sodipodi:cy="93.716675"
+         sodipodi:cx="-144.36156"
+         sodipodi:cy="93.754044"
          sodipodi:rx="1.6701822"
          sodipodi:ry="1.6701822"
          sodipodi:start="0"
          sodipodi:end="4.712389"
          sodipodi:arc-type="slice"
-         d="m -142.65404,93.716675 a 1.6701822,1.6701822 0 0 1 -1.03103,1.543047 1.6701822,1.6701822 0 0 1 -1.82015,-0.36205 1.6701822,1.6701822 0 0 1 -0.36205,-1.820148 1.6701822,1.6701822 0 0 1 1.54305,-1.031031 v 1.670182 z" />
+         d="m -142.69137,93.754044 a 1.6701822,1.6701822 0 0 1 -1.03104,1.543047 1.6701822,1.6701822 0 0 1 -1.82014,-0.36205 1.6701822,1.6701822 0 0 1 -0.36205,-1.820149 1.6701822,1.6701822 0 0 1 1.54304,-1.031031 v 1.670183 z" />
     </g>
     <g
        inkscape:label="Cross"
