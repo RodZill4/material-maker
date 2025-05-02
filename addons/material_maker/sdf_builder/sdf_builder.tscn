@@ -38,17 +38,25 @@
 [ext_resource type="Script" uid="uid://baudod22wcpnh" path="res://addons/material_maker/sdf_builder/tex/deform.gd" id="49"]
 [ext_resource type="Script" uid="uid://bvgayngn0h1ri" path="res://addons/material_maker/sdf_builder/tex/brightness_contrast.gd" id="50"]
 
-[sub_resource type="AtlasTexture" id="1"]
-atlas = ExtResource("9")
-region = Rect2(0, 0, 16, 16)
-
 [sub_resource type="AtlasTexture" id="2"]
 atlas = ExtResource("9")
 region = Rect2(16, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("9")
+region = Rect2(0, 0, 16, 16)
+
 [sub_resource type="AtlasTexture" id="10"]
 atlas = ExtResource("9")
 region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("9")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="6"]
+atlas = ExtResource("9")
+region = Rect2(80, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="11"]
 atlas = ExtResource("9")
@@ -58,29 +66,21 @@ region = Rect2(96, 0, 16, 16)
 atlas = ExtResource("9")
 region = Rect2(48, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id="12"]
-atlas = ExtResource("9")
-region = Rect2(112, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("9")
-region = Rect2(32, 0, 16, 16)
-
 [sub_resource type="AtlasTexture" id="4"]
 atlas = ExtResource("9")
 region = Rect2(48, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="6"]
+[sub_resource type="AtlasTexture" id="13"]
 atlas = ExtResource("9")
-region = Rect2(80, 0, 16, 16)
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="12"]
+atlas = ExtResource("9")
+region = Rect2(112, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="5"]
 atlas = ExtResource("9")
 region = Rect2(64, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="13"]
-atlas = ExtResource("9")
-region = Rect2(144, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="7"]
 atlas = ExtResource("9")
@@ -101,17 +101,17 @@ script = ExtResource("2")
 
 [node name="Shape" type="Node" parent="SDF2D"]
 
-[node name="Circle" type="Node" parent="SDF2D/Shape"]
-script = ExtResource("1")
-item_type = "Circle"
-item_category = "SDF2D"
-icon = SubResource("1")
-
 [node name="Box" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("22")
 item_type = "Box"
 item_category = "SDF2D"
 icon = SubResource("2")
+
+[node name="Circle" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("1")
+item_type = "Circle"
+item_category = "SDF2D"
+icon = SubResource("1")
 
 [node name="Ellipse" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("22")
@@ -119,6 +119,19 @@ shape = 4
 item_type = "Ellipse"
 item_category = "SDF2D"
 icon = SubResource("10")
+
+[node name="IsoscelesTriangle" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("22")
+shape = 2
+item_type = "IsoTriangle"
+item_category = "SDF2D"
+icon = SubResource("3")
+
+[node name="Line" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("8")
+item_type = "Line"
+item_category = "SDF2D"
+icon = SubResource("6")
 
 [node name="NGon" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("14")
@@ -132,19 +145,6 @@ item_type = "Polygon"
 item_category = "SDF2D"
 icon = SubResource("AtlasTexture_minv8")
 
-[node name="Star" type="Node" parent="SDF2D/Shape"]
-script = ExtResource("16")
-item_type = "Star"
-item_category = "SDF2D"
-icon = SubResource("12")
-
-[node name="IsoscelesTriangle" type="Node" parent="SDF2D/Shape"]
-script = ExtResource("22")
-shape = 2
-item_type = "IsoTriangle"
-item_category = "SDF2D"
-icon = SubResource("3")
-
 [node name="Rhombus" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("22")
 shape = 1
@@ -152,11 +152,17 @@ item_type = "Rhombus"
 item_category = "SDF2D"
 icon = SubResource("4")
 
-[node name="Line" type="Node" parent="SDF2D/Shape"]
-script = ExtResource("8")
-item_type = "Line"
+[node name="Stairs" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("19")
+item_type = "Stairs"
 item_category = "SDF2D"
-icon = SubResource("6")
+icon = SubResource("13")
+
+[node name="Star" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("16")
+item_type = "Star"
+item_category = "SDF2D"
+icon = SubResource("12")
 
 [node name="Tunnel" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("22")
@@ -164,12 +170,6 @@ shape = 3
 item_type = "Tunnel"
 item_category = "SDF2D"
 icon = SubResource("5")
-
-[node name="Stairs" type="Node" parent="SDF2D/Shape"]
-script = ExtResource("19")
-item_type = "Stairs"
-item_category = "SDF2D"
-icon = SubResource("13")
 
 [node name="Boolean" type="Node" parent="SDF2D"]
 
