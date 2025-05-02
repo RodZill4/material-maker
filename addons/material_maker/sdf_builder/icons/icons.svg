@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="58.75"
-     inkscape:cy="17.875"
+     inkscape:cx="64.375"
+     inkscape:cy="17.5"
      inkscape:document-units="px"
-     inkscape:current-layer="g26"
+     inkscape:current-layer="g48"
      showgrid="true"
      units="px"
      inkscape:snap-global="false"
@@ -164,6 +164,41 @@
          cy="168.3298"
          r="1.4717448"
          transform="translate(-4.3986979,0.62549057)" />
+    </g>
+    <g
+       inkscape:label="Arc"
+       inkscape:groupmode="layer"
+       id="g48"
+       inkscape:highlight-color="#4d98e1"
+       transform="matrix(1.2019802,0,0,1.2019802,-3.2335699,-33.976931)">
+      <path
+         style="fill:none;fill-opacity:1;stroke:#999999;stroke-width:1.21904;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         id="path49"
+         transform="scale(1,-1)"
+         sodipodi:type="arc"
+         sodipodi:cx="14.899348"
+         sodipodi:cy="-168.4592"
+         sodipodi:rx="1.0417968"
+         sodipodi:ry="1.0417968"
+         sodipodi:start="1.7182492"
+         sodipodi:end="5.9081041"
+         sodipodi:arc-type="arc"
+         d="m 14.746288,-167.42871 a 1.0417968,1.0417968 0 0 1 -0.888365,-1.00265 1.0417968,1.0417968 0 0 1 0.83353,-1.04868 1.0417968,1.0417968 0 0 1 1.177264,0.63918"
+         sodipodi:open="true" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#acc7e1;stroke-width:0.827002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         id="path48"
+         transform="scale(1,-1)"
+         sodipodi:type="arc"
+         sodipodi:cx="14.899348"
+         sodipodi:cy="-168.4592"
+         sodipodi:rx="1.0417968"
+         sodipodi:ry="1.0417968"
+         sodipodi:start="1.7182492"
+         sodipodi:end="5.9081041"
+         sodipodi:arc-type="arc"
+         d="m 14.746288,-167.42871 a 1.0417968,1.0417968 0 0 1 -0.888365,-1.00265 1.0417968,1.0417968 0 0 1 0.83353,-1.04868 1.0417968,1.0417968 0 0 1 1.177264,0.63918"
+         sodipodi:open="true" />
     </g>
     <g
        inkscape:label="Polygon"
