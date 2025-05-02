@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://bvsuo5y7vh1y2"]
+[gd_scene load_steps=60 format=3 uid="uid://bvsuo5y7vh1y2"]
 
 [ext_resource type="Script" uid="uid://d16yu8rdgx4hx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/circle.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5mnqww2iagdf" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dpbr6os6seffh" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/heart.gd" id="6_21f68"]
 [ext_resource type="Script" uid="uid://jsl0su4hb0gj" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/line.gd" id="8"]
 [ext_resource type="Texture2D" uid="uid://bep620pac8bkb" path="res://addons/material_maker/sdf_builder/icons/icons.svg" id="9"]
+[ext_resource type="Script" uid="uid://bsk8nadxr4pao" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/moon.gd" id="9_1b6vk"]
 [ext_resource type="Script" uid="uid://babtn3710mnq1" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/ngon.gd" id="14"]
 [ext_resource type="Script" uid="uid://df6ecoisttqfr" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/star.gd" id="16"]
 [ext_resource type="Script" uid="uid://d1fnd8u3w6yje" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/stairs.gd" id="19"]
@@ -72,6 +73,10 @@ region = Rect2(32, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="6"]
 atlas = ExtResource("9")
 region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lphbn"]
+atlas = ExtResource("9")
+region = Rect2(112, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="11"]
 atlas = ExtResource("9")
@@ -165,6 +170,12 @@ script = ExtResource("8")
 item_type = "Line"
 item_category = "SDF2D"
 icon = SubResource("6")
+
+[node name="Moon" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("9_1b6vk")
+item_type = "Moon"
+item_category = "SDF2D"
+icon = SubResource("AtlasTexture_lphbn")
 
 [node name="NGon" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("14")
