@@ -10,7 +10,7 @@ class_name MMGraphCommentLine
 var generator : MMGenCommentLine:
 	set(g):
 		generator = g
-		label.text = generator.text.replace("\\n","\n")
+		label.text = generator.text.replace("\\n", "\n")
 		position_offset = generator.position
 
 
@@ -22,14 +22,14 @@ func do_set_position(o : Vector2) -> void:
 func _on_node_selected() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property($PanelContainer, "self_modulate",
-			Color(1.0,1.0,1.0,0.2), 0.4).set_trans(Tween.TRANS_CUBIC)
+			Color(1.0, 1.0, 1.0, 0.2), 0.4).set_trans(Tween.TRANS_CUBIC)
 	_on_raise_request()
 
 
 func _on_node_deselected() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property($PanelContainer, "self_modulate",
-			Color(1.0,1.0,1.0,0.0),0.4).set_trans(Tween.TRANS_CUBIC)
+			Color(1.0, 1.0, 1.0, 0.0), 0.4).set_trans(Tween.TRANS_CUBIC)
 	_on_raise_request()
 
 
@@ -38,8 +38,7 @@ func _on_text_focus_exited() -> void:
 		get_parent().remove_node(self)
 		return
 	editor.visible = false
-	editor.mouse_filter = MOUSE_FILTER_STOP
-	label.text = editor.text.replace("\\n","\n")
+	label.text = editor.text.replace("\\n", "\n")
 	label.visible = true
 	generator.text = editor.text
 
@@ -66,7 +65,7 @@ func _on_raise_request() -> void:
 
 func _on_text_label_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
-		editor.text = label.text.replace("\n","\\n")
+		editor.text = label.text.replace("\n", "\\n")
 		label.visible = false
 		editor.visible = true
 		editor.select_all()
