@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313709"
-     inkscape:cx="117.42392"
-     inkscape:cy="26.693281"
+     inkscape:zoom="22.627417"
+     inkscape:cx="148.77969"
+     inkscape:cy="29.43332"
      inkscape:document-units="px"
      inkscape:current-layer="g26"
      showgrid="true"
@@ -74,6 +74,17 @@
      id="g26"
      transform="translate(4.3986979,-162.15881)"
      inkscape:highlight-color="#4d98e1">
+    <g
+       inkscape:label="Arrow"
+       inkscape:groupmode="layer"
+       id="g30"
+       inkscape:highlight-color="#4d98e1">
+      <path
+         id="rect16"
+         style="fill:#acc7e1;fill-opacity:1;stroke:#989898;stroke-width:0.396182;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m 34.144124,167.4932 1.845004,1.845 -0.810105,0.8101 2.288786,0.01 -0.02374,-2.27445 -0.83024,0.83026 -1.845003,-1.84501 z"
+         sodipodi:nodetypes="cccccccc" />
+    </g>
     <g
        inkscape:label="Versica"
        inkscape:groupmode="layer"
@@ -404,7 +415,7 @@
   <g
      inkscape:label="Empty"
      inkscape:groupmode="layer"
-     id="g30"
+     id="g24"
      transform="translate(4.3986979,-162.15881)"
      inkscape:highlight-color="#4d98e1" />
 </svg>
