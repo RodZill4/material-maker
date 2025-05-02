@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://bvsuo5y7vh1y2"]
+[gd_scene load_steps=68 format=3 uid="uid://bvsuo5y7vh1y2"]
 
 [ext_resource type="Script" uid="uid://d16yu8rdgx4hx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/circle.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5mnqww2iagdf" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://jsl0su4hb0gj" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/line.gd" id="8"]
 [ext_resource type="Texture2D" uid="uid://bep620pac8bkb" path="res://addons/material_maker/sdf_builder/icons/icons.svg" id="9"]
 [ext_resource type="Script" uid="uid://bsk8nadxr4pao" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/moon.gd" id="9_1b6vk"]
+[ext_resource type="Script" uid="uid://dsojbswtc3dgy" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/pie.gd" id="13_sxd1x"]
 [ext_resource type="Script" uid="uid://babtn3710mnq1" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/ngon.gd" id="14"]
 [ext_resource type="Script" uid="uid://cg7y8txer33xf" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/versica.gd" id="14_lphbn"]
 [ext_resource type="Script" uid="uid://df6ecoisttqfr" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/star.gd" id="16"]
@@ -92,6 +93,10 @@ region = Rect2(112, 16, 16, 16)
 [sub_resource type="AtlasTexture" id="11"]
 atlas = ExtResource("9")
 region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0wqc"]
+atlas = ExtResource("9")
+region = Rect2(16, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_minv8"]
 atlas = ExtResource("9")
@@ -209,6 +214,12 @@ script = ExtResource("14")
 item_type = "NGon"
 item_category = "SDF2D"
 icon = SubResource("11")
+
+[node name="Pie" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("13_sxd1x")
+item_type = "Pie"
+item_category = "SDF2D"
+icon = SubResource("AtlasTexture_n0wqc")
 
 [node name="Polygon" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("36")
