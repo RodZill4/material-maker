@@ -26,7 +26,7 @@ The **Splines** node has the following parameters:
 
 * the control points that define the splines
 * the **width** of the curve to be drawn, which is set per control point
-* the **offset** (i'm not sure how to describe this one)
+* the **offset** defines how the edge image is offset at each control point
 
 Notes
 +++++
@@ -44,4 +44,6 @@ Example images
 ++++++++++++++
 
 .. image:: images/node_splines_samples.png
+	:align: center
+.. image:: images/node_splines_samples2.png
 	:align: center
