@@ -188,7 +188,7 @@ func _on_width_value_changed(value):
 	emit_signal("value_changed", splines)
 
 func _on_offset_value_changed(value):
-	splines.set_points_offset(get_selection(), value)
+	splines.set_points_offset(get_selection(), value, progressive)
 	emit_signal("value_changed", splines)
 
 
