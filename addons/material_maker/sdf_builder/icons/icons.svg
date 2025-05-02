@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.313709"
-     inkscape:cx="105.93343"
-     inkscape:cy="15.821514"
+     inkscape:cx="117.42392"
+     inkscape:cy="26.693281"
      inkscape:document-units="px"
-     inkscape:current-layer="g13"
+     inkscape:current-layer="g26"
      showgrid="true"
      units="px"
      inkscape:snap-global="false"
@@ -75,12 +75,22 @@
      transform="translate(4.3986979,-162.15881)"
      inkscape:highlight-color="#4d98e1">
     <g
-       inkscape:label="Moon"
+       inkscape:label="Versica"
        inkscape:groupmode="layer"
        id="g13"
        inkscape:highlight-color="#4d98e1">
       <path
-         id="path13"
+         id="path16"
+         style="fill:#acc7e1;fill-opacity:1;stroke:#989898;stroke-width:0.41248541;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m 31.549118,166.83184 a 1.8762299,1.8762299 0 0 0 -1.141988,1.72299 1.8762299,1.8762299 0 0 0 1.138556,1.72242 1.8762299,1.8762299 0 0 0 1.138556,-1.72242 1.8762299,1.8762299 0 0 0 -1.135124,-1.72299 z" />
+    </g>
+    <g
+       inkscape:label="Moon"
+       inkscape:groupmode="layer"
+       id="g15"
+       inkscape:highlight-color="#4d98e1">
+      <path
+         id="path15"
          style="fill:#acc7e1;fill-opacity:1;stroke:#989898;stroke-width:0.39661;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
          d="m 27.632229,166.89472 a 1.6426556,1.6426556 0 0 0 -1.642341,1.64234 1.6426556,1.6426556 0 0 0 1.642341,1.6429 1.6426556,1.6426556 0 0 0 0.896278,-0.26637 1.3998508,1.3998508 0 0 1 -1.158741,-1.37653 1.3998508,1.3998508 0 0 1 1.158741,-1.37652 1.6426556,1.6426556 0 0 0 -0.896278,-0.26582 z" />
     </g>
