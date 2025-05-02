@@ -17,7 +17,25 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
-     id="defs2" />
+     id="defs2">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect34"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0.96798787,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0.94332455,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0.94204783,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0.95374056,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -26,10 +44,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="22.627417"
-     inkscape:cx="148.77969"
-     inkscape:cy="29.43332"
+     inkscape:cx="10.230951"
+     inkscape:cy="44.547727"
      inkscape:document-units="px"
-     inkscape:current-layer="g26"
+     inkscape:current-layer="g31"
      showgrid="true"
      units="px"
      inkscape:snap-global="false"
@@ -69,11 +87,34 @@
     </rdf:RDF>
   </metadata>
   <g
+     inkscape:label="Row3"
+     inkscape:groupmode="layer"
+     id="g32"
+     inkscape:highlight-color="#4d98e1"
+     transform="translate(4.3986979,-162.15881)">
+    <g
+       inkscape:label="Cross"
+       inkscape:groupmode="layer"
+       id="g31"
+       inkscape:highlight-color="#4d98e1"
+       transform="translate(-38.166088,4.3030394)">
+      <path
+         style="fill:#acc7e1;stroke:#989898;stroke-width:0.4445;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m 35.362285,-166.54729 -3e-5,-0.41283 a 0.96805938,0.96805938 44.997884 0 0 -0.96806,-0.96799 h -0.412781 v -1.0081 h 0.437444 a 0.94332455,0.94332455 135 0 0 0.943325,-0.94332 v -0.43721 h 1.008102 v 0.43848 a 0.94204783,0.94204783 45 0 0 0.942048,0.94205 h 0.43853 v 1.0081 h -0.426837 a 0.95367011,0.95367011 134.99788 0 0 -0.953671,0.95374 l 3.2e-5,0.42708 z"
+         id="path34"
+         inkscape:path-effect="#path-effect34"
+         inkscape:original-d="m 35.362285,-166.54729 -1.02e-4,-1.38082 h -1.380769 v -1.0081 h 1.380769 v -1.38053 h 1.008102 v 1.38053 h 1.380578 v 1.0081 h -1.380578 l 1.02e-4,1.38082 z"
+         sodipodi:nodetypes="ccccccccccccc"
+         transform="matrix(0.90153984,0,0,-0.90153984,3.5665019,16.630623)" />
+    </g>
+  </g>
+  <g
      inkscape:label="Row 2"
      inkscape:groupmode="layer"
      id="g26"
      transform="translate(4.3986979,-162.15881)"
-     inkscape:highlight-color="#4d98e1">
+     inkscape:highlight-color="#4d98e1"
+     sodipodi:insensitive="true">
     <g
        inkscape:label="Arrow"
        inkscape:groupmode="layer"
@@ -92,7 +133,7 @@
        inkscape:highlight-color="#4d98e1">
       <path
          id="path16"
-         style="fill:#acc7e1;fill-opacity:1;stroke:#989898;stroke-width:0.41248541;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         style="fill:#acc7e1;fill-opacity:1;stroke:#989898;stroke-width:0.412485;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
          d="m 31.549118,166.83184 a 1.8762299,1.8762299 0 0 0 -1.141988,1.72299 1.8762299,1.8762299 0 0 0 1.138556,1.72242 1.8762299,1.8762299 0 0 0 1.138556,-1.72242 1.8762299,1.8762299 0 0 0 -1.135124,-1.72299 z" />
     </g>
     <g

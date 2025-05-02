@@ -1,9 +1,10 @@
-[gd_scene load_steps=64 format=3 uid="uid://bvsuo5y7vh1y2"]
+[gd_scene load_steps=66 format=3 uid="uid://bvsuo5y7vh1y2"]
 
 [ext_resource type="Script" uid="uid://d16yu8rdgx4hx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/circle.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5mnqww2iagdf" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
 [ext_resource type="Script" uid="uid://3ih5a3p4fjxv" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/arc.gd" id="2_gtxu3"]
 [ext_resource type="Script" uid="uid://vjlcawp2dcbs" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/arrow.gd" id="4_1ev22"]
+[ext_resource type="Script" uid="uid://dq67pi68mt3vx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/cross.gd" id="5_3hj6h"]
 [ext_resource type="Script" uid="uid://dokw1yqdyk40t" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/hexagram.gd" id="6_4myq4"]
 [ext_resource type="Script" uid="uid://dpbr6os6seffh" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/heart.gd" id="6_21f68"]
 [ext_resource type="Script" uid="uid://jsl0su4hb0gj" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/line.gd" id="8"]
@@ -59,6 +60,10 @@ region = Rect2(16, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("9")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxd1x"]
+atlas = ExtResource("9")
+region = Rect2(0, 32, 16, 16)
 
 [sub_resource type="AtlasTexture" id="10"]
 atlas = ExtResource("9")
@@ -154,6 +159,12 @@ script = ExtResource("1")
 item_type = "Circle"
 item_category = "SDF2D"
 icon = SubResource("1")
+
+[node name="Cross" type="Node" parent="SDF2D/Shape"]
+script = ExtResource("5_3hj6h")
+item_type = "Cross"
+item_category = "SDF2D"
+icon = SubResource("AtlasTexture_sxd1x")
 
 [node name="Ellipse" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("22")
