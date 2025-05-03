@@ -56,6 +56,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 	dialog_dim_background = true,
+	ui_field_sensitivity = 1.0,
 }
 
 
