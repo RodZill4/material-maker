@@ -1,5 +1,5 @@
 {
-	"name": "sdversica",
+	"name": "sdvesica",
 	"node_position": {
 		"x": 0,
 		"y": 0
@@ -20,10 +20,10 @@
 		],
 		"instance": "",
 		"longdesc": "A vesica described as a signed distance function",
-		"name": "sdVesica",
+		"name": "sdVersica",
 		"outputs": [
 			{
-				"longdesc": "The vesica as a signed distance function",
+				"longdesc": "The versica as a signed distance function",
 				"sdf2d": "sdVesica($uv - 0.5 - vec2($cx, $cy), $r, $r - $d)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -34,7 +34,7 @@
 				"control": "Rect1.y",
 				"default": 0.6,
 				"label": "Radius",
-				"longdesc": "Radius of the vesica",
+				"longdesc": "Radius of the versica",
 				"max": 1,
 				"min": 0,
 				"name": "r",
