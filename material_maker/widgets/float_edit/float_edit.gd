@@ -3,7 +3,7 @@ extends Container
 var float_value: float = 0.5
 var default_float_value: float = 0.0
 
-enum ContextMenu {RESET_VALUE, EDIT_EXPRESSION}
+enum ContextMenu {RESET_VALUE, EDIT_EXPRESSION, COPY, PASTE}
 
 @export var default_value: float = 0.0 :
 	get:
@@ -90,7 +90,7 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 		v = float(v)
 
 	if v is String and float_only:
-		v = min_value
+		v = float_value
 
 	if v is float:
 		float_value = v
@@ -228,10 +228,15 @@ func _gui_input(event: InputEvent) -> void:
 			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 				var context_menu : PopupMenu = PopupMenu.new()
 				context_menu.position = get_local_mouse_position() + get_screen_position()
-				context_menu.add_item("Reset value")
 
+				context_menu.add_item("Reset value", ContextMenu.RESET_VALUE)
 				if not float_only:
-					context_menu.add_item("Edit expression")
+					context_menu.add_item("Edit expression", ContextMenu.EDIT_EXPRESSION)
+
+				context_menu.add_separator()
+				context_menu.add_item("Copy", ContextMenu.COPY)
+				if DisplayServer.clipboard_has():
+					context_menu.add_item("Paste", ContextMenu.PASTE)
 
 				context_menu.id_pressed.connect(func(id):
 					match id:
@@ -244,7 +249,12 @@ func _gui_input(event: InputEvent) -> void:
 									"Expression editor - " + name,
 									$Edit.text, self,
 									"set_value_from_expression_editor")
+						ContextMenu.COPY:
+							DisplayServer.clipboard_set(str(get_value()))
+						ContextMenu.PASTE:
+							set_value(DisplayServer.clipboard_get(), true, true)
 				)
+				context_menu.popup_hide.connect(context_menu.queue_free)
 				add_child(context_menu)
 				context_menu.popup()
 				accept_event()
