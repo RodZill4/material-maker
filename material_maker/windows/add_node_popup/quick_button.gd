@@ -36,6 +36,7 @@ func _drop_data(_position, data):
 	set_library_item(data)
 	enable()
 	mm_globals.config.set_value("library", "quick_button_%d" % get_index(), data)
+	mm_globals.config.save("user://mm_config.ini")
 
 
 func _on_gui_input(event):
@@ -45,6 +46,7 @@ func _on_gui_input(event):
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			set_library_item("")
 			mm_globals.config.set_value("library", "quick_button_%d" % get_index(), "")
+			mm_globals.config.save("user://mm_config.ini")
 			disable()
 
 func enable() -> void:
