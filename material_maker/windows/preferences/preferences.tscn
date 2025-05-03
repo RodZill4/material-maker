@@ -278,21 +278,14 @@ config_variable = "remember_anim_export"
 layout_mode = 2
 metadata/_tab_index = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/UI"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/UI/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/UI"]
 layout_mode = 2
 
-[node name="LabelFieldSensitivity" type="Label" parent="VBoxContainer/TabContainer/UI/MarginContainer/HBoxContainer"]
+[node name="LabelFieldSensitivity" type="Label" parent="VBoxContainer/TabContainer/UI/HBoxContainer"]
 layout_mode = 2
-text = "Slider sensitivity"
+text = "Value field sensitivity"
 
-[node name="FieldSensitivity" parent="VBoxContainer/TabContainer/UI/MarginContainer/HBoxContainer" instance=ExtResource("3")]
+[node name="FieldSensitivity" parent="VBoxContainer/TabContainer/UI/HBoxContainer" instance=ExtResource("3")]
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 config_variable = "ui_field_sensitivity"
