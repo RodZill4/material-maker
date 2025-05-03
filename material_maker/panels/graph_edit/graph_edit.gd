@@ -1371,4 +1371,5 @@ func _on_gui_input(event: InputEvent) -> void:
 				var config = mm_globals.config.get_value("library", quick_button_key)
 				if config != "":
 					var library_item = library_manager.get_item(config)
-					do_paste(library_item.item)
+					if library_item != null:
+						do_paste(library_item.item)
