@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://bsk8nadxr4pao" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/moon.gd" id="9_1b6vk"]
 [ext_resource type="Script" uid="uid://dsojbswtc3dgy" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/pie.gd" id="13_sxd1x"]
 [ext_resource type="Script" uid="uid://babtn3710mnq1" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/ngon.gd" id="14"]
-[ext_resource type="Script" uid="uid://cg7y8txer33xf" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/versica.gd" id="14_lphbn"]
+[ext_resource type="Script" uid="uid://cg7y8txer33xf" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/vesica.gd" id="14_lphbn"]
 [ext_resource type="Script" uid="uid://df6ecoisttqfr" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/star.gd" id="16"]
 [ext_resource type="Script" uid="uid://d1fnd8u3w6yje" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/stairs.gd" id="19"]
 [ext_resource type="Script" uid="uid://bvautpidehgf3" path="res://addons/material_maker/sdf_builder/sdf3d/shapes/sphere.gd" id="20"]
@@ -253,9 +253,9 @@ item_type = "Tunnel"
 item_category = "SDF2D"
 icon = SubResource("5")
 
-[node name="Versica" type="Node" parent="SDF2D/Shape"]
+[node name="Vesica" type="Node" parent="SDF2D/Shape"]
 script = ExtResource("14_lphbn")
-item_type = "Versica"
+item_type = "Vesica"
 item_category = "SDF2D"
 icon = SubResource("AtlasTexture_1ev22")
 
