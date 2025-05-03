@@ -28,10 +28,11 @@ custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 4
 use_hidden_tabs_for_min_size = true
 
 [node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_tab_index = 0
@@ -272,6 +273,32 @@ layout_mode = 2
 tooltip_text = "Whether to save export parameters in the export animation dialog (i.e. size, begin, end etc.)"
 text = "Remember last export settings"
 config_variable = "remember_anim_export"
+
+[node name="UI" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/TabContainer/UI"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/UI/MarginContainer"]
+layout_mode = 2
+
+[node name="LabelFieldSensitivity" type="Label" parent="VBoxContainer/TabContainer/UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Slider sensitivity"
+
+[node name="FieldSensitivity" parent="VBoxContainer/TabContainer/UI/MarginContainer/HBoxContainer" instance=ExtResource("3")]
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+config_variable = "ui_field_sensitivity"
+value = 1.0
+step = 0.01
+float_only = true
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
