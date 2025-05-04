@@ -216,7 +216,7 @@ func _on_Files_gui_input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
 		if ! export_files.get_selected_items().is_empty():
 			var current_export = export_target.get_item_text(export_target.selected)
-			exports[current_export].files.remove(export_files.get_selected_items()[0])
+			exports[current_export].files.remove_at(export_files.get_selected_items()[0])
 			update_files(current_export)
 			export_files.deselect_all()
 
