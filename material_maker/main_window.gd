@@ -1188,11 +1188,9 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(file.get_as_text())
-				var parse_result = test_json_conv.get_data()
-				if parse_result.error == OK:
-					var data = parse_result.result
+				var test_json_conv : JSON = JSON.new()
+				if test_json_conv.parse(file.get_as_text()) == OK:
+					var data = test_json_conv.get_data()
 					if data.has("material") and data.has("name"):
 						mm_loader.save_export_target(data.material, data.name, data)
 						mm_loader.load_external_export_targets()
