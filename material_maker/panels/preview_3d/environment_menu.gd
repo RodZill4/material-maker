@@ -78,3 +78,7 @@ func _on_clear_background_toggled(toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_PREVIEW_CLEAR_BG, toggled_on)
 	if preview3D.is_node_ready():
 		preview3D.set_environment(-1)
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()
