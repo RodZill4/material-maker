@@ -188,7 +188,9 @@
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Curve",
+		"longdesc": "3-point bezier curve with image mapping"
 	},
 	"type": "shader"
 }

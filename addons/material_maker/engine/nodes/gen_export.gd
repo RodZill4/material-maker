@@ -25,6 +25,11 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Export"
 
+func get_description() -> String:
+	return "\n".join(["Export",
+			"Defines a texture which will be saved " +
+			"along with other textures on material export"])
+
 func get_parameter_defs() -> Array:
 	return [
 			{ name="size", label="Size", type="size", first=4, last=13, default=10 },
