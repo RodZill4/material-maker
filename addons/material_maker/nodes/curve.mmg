@@ -190,7 +190,7 @@
 			}
 		],
 		"shortdesc": "Curve",
-		"longdesc": "3-point bezier curve with image mapping"
+		"longdesc": "Quadratic bezier curve with image mapping"
 	},
 	"type": "shader"
 }
