@@ -198,7 +198,7 @@
 						"control": "None",
 						"default": 1,
 						"label": "Depth Scale",
-						"longdesc": "Lineary scales depth values afecting cacluated normals & tangents",
+						"longdesc": "Lineary scales depth values affecting cacluated normals & tangents",
 						"max": 1,
 						"min": 0,
 						"name": "depth_scale",
