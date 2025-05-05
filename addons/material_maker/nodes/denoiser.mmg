@@ -167,7 +167,7 @@
 						"control": "None",
 						"default": 0.5,
 						"label": "kSigma",
-						"longdesc": "K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times  more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma",
+						"longdesc": "K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma",
 						"max": 1,
 						"min": 0,
 						"name": "ksigma",
