@@ -32,7 +32,7 @@
 		}
 	],
 	"label": "Multi Warp",
-	"longdesc": "The Multi Warp  node deforms an input image according to the derivative of the second input image. Unlike Warp  node, the derivative of the second texture is sampled at each iteration  producing more varied results at cost of the performance.",
+	"longdesc": "The Multi Warp node deforms an input image according to the derivative of the second input image. Unlike Warp  node, the derivative of the second texture is sampled at each iteration  producing more varied results at cost of the performance.",
 	"name": "multi_warp",
 	"node_position": {
 		"x": 0,
