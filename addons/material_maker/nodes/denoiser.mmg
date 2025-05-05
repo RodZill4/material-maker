@@ -131,7 +131,7 @@
 					"\treturn aBuff/zBuff;",
 					"}"
 				],
-				"longdesc": "Fast  spatial deNoise filter, with circular gaussian kernel.",
+				"longdesc": "Fast spatial deNoise filter, with circular gaussian kernel.",
 				"name": "Denoiser",
 				"outputs": [
 					{
@@ -302,7 +302,7 @@
 							"widget": "ksigma"
 						}
 					],
-					"longdesc": "K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times  more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma",
+					"longdesc": "K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma",
 					"name": "param2",
 					"shortdesc": "kSigma",
 					"type": "linked_control"

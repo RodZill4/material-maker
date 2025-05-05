@@ -340,7 +340,7 @@
 							"widget": "depth_scale"
 						}
 					],
-					"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
+					"longdesc": "Lineary scales depth values affecting cacluated normals & tangents",
 					"name": "param3",
 					"shortdesc": "Depth Scale",
 					"type": "linked_control"
