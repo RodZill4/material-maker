@@ -28,12 +28,12 @@ func on_value_changed(v) -> void:
 
 func _get_drag_data(_position) -> MMCurve:
 	var duplicated_value = value.duplicate()
-	var curve_btn = Button.new()
-	var curve_view = CurveView.new(duplicated_value)
-	curve_btn.size = size
-	curve_view.size = curve_btn.size
-	curve_btn.add_child(curve_view)
-	set_drag_preview(curve_btn)
+	var view = CurveView.new(duplicated_value)
+	view.size = $CurveView.size
+	var button = Button.new()
+	button.size = size
+	button.add_child(view)
+	set_drag_preview(button)
 	return duplicated_value
 
 func _can_drop_data(_position, data) -> bool:
