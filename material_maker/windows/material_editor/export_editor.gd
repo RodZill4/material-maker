@@ -25,10 +25,24 @@ const GEN_MATERIAL = preload("res://addons/material_maker/engine/nodes/gen_mater
 signal node_changed(model_data)
 signal editor_window_closed
 
+func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
+	context_menu.position =  get_window().position + Vector2i(
+			get_mouse_position() * content_scale_factor)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	export_file_expression.parent_dialog = self
+	var context_menus : Array[PopupMenu] = [
+		export_custom_script.get_menu(),
+		export_file_template.get_menu(),
+		export_file_name.get_menu(),
+		export_file_conditions.get_menu(),
+		export_file_expression.get_menu(),
+		export_extension_edit.get_menu(),
+	]
+	for context_menu in context_menus:
+		context_menu.about_to_popup.connect(
+			_context_menu_about_to_popup.bind(context_menu))
 
 func update_export_list() -> void:
 	export_target.clear()
@@ -106,6 +120,8 @@ func select_file(i : int) -> void:
 
 func _on_Create_Export_pressed():
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("Export", "Enter the export target name", "")
 	if status.ok and get_export_index(status.text) == -1:
@@ -161,6 +177,8 @@ func _on_Rename_Export_pressed():
 		return
 	var old_export : String = export_target.get_item_text(old_export_index)
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("Export", "Enter the export target name", old_export)
 	if status.ok and get_export_index(status.text) == -1:
@@ -186,6 +204,8 @@ func _on_Duplicate_Export_pressed():
 		return
 	var old_export : String = export_target.get_item_text(old_export_index)
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("Export", "Enter the export target name", old_export)
 	if status.ok and get_export_index(status.text) == -1:

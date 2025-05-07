@@ -551,8 +551,12 @@ func load_file(filename) -> bool:
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
 		add_child(dialog)
+		var content_scale_factor = (mm_globals.main_window
+				.get_window().content_scale_factor)
+		dialog.content_scale_factor = content_scale_factor
 		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
+		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false

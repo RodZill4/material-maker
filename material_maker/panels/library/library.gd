@@ -18,8 +18,13 @@ const MINIMUM_ITEM_HEIGHT : int = 30
 const MENU_CREATE_LIBRARY : int = 1000
 const MENU_LOAD_LIBRARY : int =   1001
 
+func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
+	context_menu.position = get_window().position+ Vector2i(
+			get_global_mouse_position() * get_window().content_scale_factor)
 
 func _ready() -> void:
+	%Filter.get_menu().about_to_popup.connect(
+			_context_menu_about_to_popup.bind(%Filter.get_menu()))
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
@@ -183,31 +188,29 @@ func _on_Filter_text_changed(_filter : String) -> void:
 	update_tree()
 
 # Should be moved to library manager
-func generate_screenshots(graph_edit, parent_item : TreeItem = null) -> int:
+func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null) -> int:
 	var count : int = 0
 	if parent_item == null:
 		parent_item = tree.get_root()
+		var stylebox : StyleBoxFlat = StyleBoxFlat.new()
+		stylebox.bg_color = Color(1.0, 1.0, 1.0)
+		graph_edit.add_theme_stylebox_override("panel", stylebox)
 	var items : Array[TreeItem] = parent_item.get_children()
 	for item in items:
 		if item.get_metadata(0) != null:
-			var timer : Timer = Timer.new()
-			add_child(timer)
 			var new_nodes = graph_edit.create_nodes(item.get_metadata(0))
-			timer.wait_time = 0.05
-			timer.one_shot = true
-			timer.start()
-			await timer.timeout
-			var image = get_viewport().get_texture().get_data()
-			image.flip_y()
-			image = image.get_rect(Rect2(new_nodes[0].global_position, new_nodes[0].size+Vector2(0, 2)))
+			await get_tree().create_timer(0.05).timeout
+			var image = get_viewport().get_texture().get_image()
+			image = image.get_region(Rect2(new_nodes[0].global_position-Vector2(6, 6), new_nodes[0].size+Vector2(14, 12)))
 			print(get_icon_name(get_item_path(item)))
 			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
 			for n in new_nodes:
 				graph_edit.remove_node(n)
-			timer.queue_free()
 			count += 1
 		var result = await generate_screenshots(graph_edit, item)
 		count += result
+	if parent_item == null:
+		graph_edit.remove_theme_stylebox_override("panel")
 	return count
 
 func _on_Tree_item_collapsed(item) -> void:
@@ -330,6 +333,8 @@ func _on_PopupMenu_index_pressed(index):
 	match index:
 		0: # Rename
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 			add_child(dialog)
 			var status = await dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
 			if status.ok:
@@ -346,6 +351,8 @@ func _on_PopupMenu_index_pressed(index):
 		4: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			dialog.min_size = Vector2(400, 90) * dialog.content_scale_factor
 			add_child(dialog)
 			var status = await dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
 			if ! status.ok:

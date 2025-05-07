@@ -9,11 +9,11 @@ The generator nodes are nodes that do not accept any input and generate one or s
 	node_pattern_generic
 	node_pattern_bricks
 	node_pattern_arc_pavement
-	node_pattern_unevenbricks
-	node_pattern_unevenbricks2
-	node_pattern_unevenbricks3
+	node_pattern_uneven_bricks
+	node_pattern_uneven_bricks_2
+	node_pattern_uneven_bricks_3
 	node_pattern_skewed_bricks
-	node_pattern_skewed_unevenbricks
+	node_pattern_skewed_uneven_bricks
 	node_pattern_cairo
 	node_pattern_custom_tiles
 	node_pattern_weave

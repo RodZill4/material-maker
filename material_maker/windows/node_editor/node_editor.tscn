@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cbpg2wtvf7fc1"]
 
-[ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor.gd" id="1"]
-[ext_resource type="Script" path="res://material_maker/windows/node_editor/node_editor_item_list.gd" id="2"]
+[ext_resource type="Script" uid="uid://ce61t4udbuwna" path="res://material_maker/windows/node_editor/node_editor.gd" id="1"]
+[ext_resource type="Script" uid="uid://c53hfh1qg7i8o" path="res://material_maker/windows/node_editor/node_editor_item_list.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://ddgb7ul6fncx8" path="res://material_maker/widgets/code_editor/code_editor.tscn" id="5_l5uxq"]
@@ -191,6 +191,7 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="minimum_size_changed" from="Sizer" to="." method="_on_Sizer_minimum_size_changed"]
 [connection signal="pressed" from="Sizer/TabBar/General/Parameters/Sizer/AddParameter" to="." method="_on_AddParameter_pressed"]
 [connection signal="pressed" from="Sizer/TabBar/General/Inputs/Sizer/AddInput" to="." method="_on_AddInput_pressed"]
