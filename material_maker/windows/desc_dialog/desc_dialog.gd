@@ -28,3 +28,16 @@ func _on_WindowDialog_popup_hide():
 
 func _on_WindowDialog_minimum_size_changed():
 	size = $VBoxContainer.size+Vector2(4, 4)
+
+func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
+	context_menu.position = get_window().position+ Vector2i(
+			get_mouse_position() * get_window().content_scale_factor)
+
+func _on_ready() -> void:
+	var context_menus : Array[PopupMenu] = [
+		$VBoxContainer/LongDesc.get_menu(),
+		$VBoxContainer/HBoxContainer/ShortDesc.get_menu()
+	]
+	for context_menu in context_menus:
+		context_menu.about_to_popup.connect(
+				_context_menu_about_to_popup.bind(context_menu))

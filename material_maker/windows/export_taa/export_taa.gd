@@ -11,13 +11,13 @@ var force_update : bool = false
 var render_size : Vector2i = Vector2i(512, 512)
 
 func _ready():
-	min_size = $VBoxContainer.get_combined_minimum_size()
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
 	acc_texture = MMTexture.new()
 	avg_texture = MMTexture.new()
 	accumulate_render = MMComputeShader.new()
 	divide_render = MMComputeShader.new()
 	_on_denoise_item_selected(0)
-	$VBoxContainer.size = size
 
 func set_source(generator, output):
 	var context : MMGenContext = MMGenContext.new()
@@ -87,9 +87,6 @@ func _on_Export_pressed():
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		await avg_texture.save_to_file(files[0])
-
-func _on_size_changed():
-	$VBoxContainer.set_size(size)
 
 func _on_denoise_item_selected(index):
 	force_update = true

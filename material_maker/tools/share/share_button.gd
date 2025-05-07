@@ -138,6 +138,8 @@ func find_in_parameter_values(node : Dictionary, keywords : Array) -> bool:
 func send_asset(asset_type : String, asset_data : Dictionary, preview_textures : Array[Texture2D], preview_texture_names : Array[String] = []) -> void:
 	var data : Dictionary = { type=asset_type, previews=preview_textures, preview_names=preview_texture_names, licenses=licenses, my_assets=my_assets }
 	var upload_dialog = load("res://material_maker/tools/share/upload_dialog.tscn").instantiate()
+	upload_dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	upload_dialog.min_size = Vector2(600, 500) * upload_dialog.content_scale_factor
 	var asset_info = await upload_dialog.ask(data)
 	if asset_info.is_empty():
 		return

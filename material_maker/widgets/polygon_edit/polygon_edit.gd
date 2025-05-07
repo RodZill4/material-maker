@@ -21,6 +21,8 @@ func set_value(v) -> void:
 
 func _on_PolygonEdit_pressed():
 	var dialog = preload("res://material_maker/widgets/polygon_edit/polygon_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(500, 500) * dialog.content_scale_factor
 	dialog.set_closed(closed)
 	mm_globals.main_window.add_dialog(dialog)
 	dialog.polygon_changed.connect(self.on_value_changed)
