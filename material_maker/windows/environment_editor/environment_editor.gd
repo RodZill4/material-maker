@@ -16,6 +16,15 @@ var new_environment_icon = preload("res://material_maker/windows/environment_edi
 var current_environment = -1
 
 func _ready():
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(900, 600) * content_scale_factor
+	
+	for color_picker in $Main/HSplitContainer/UI.get_children():
+		if color_picker is ColorPickerButton:
+			var picker = color_picker.get_popup()
+			picker.content_scale_factor = content_scale_factor
+			picker.min_size = picker.get_contents_minimum_size() * content_scale_factor
+	
 	popup_centered()
 	_on_ViewportContainer_resized()
 	connect_controls()

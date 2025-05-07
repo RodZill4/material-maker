@@ -31,6 +31,11 @@ func _ready():
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
+	
+	await get_tree().process_frame
+	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	get_window().min_size = get_window().get_contents_minimum_size() * get_window().content_scale_factor
+	get_window().popup_centered()
 
 	super._ready()
 	update_controls()

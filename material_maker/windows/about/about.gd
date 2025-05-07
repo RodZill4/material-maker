@@ -44,6 +44,8 @@ const PATRONS2 = [
 ]
 
 func _ready() -> void:
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(600, 500) * content_scale_factor
 	if Engine.is_editor_hint():
 		application_name_label.text = "Material Maker"
 	else:

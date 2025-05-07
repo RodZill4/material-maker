@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c63kkteeal25t"]
 
-[ext_resource type="Script" path="res://material_maker/windows/line_dialog/line_dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://brjipglk57vch" path="res://material_maker/windows/line_dialog/line_dialog.gd" id="1"]
 
 [node name="LineDialog" type="Window"]
 script = ExtResource("1")
@@ -39,6 +39,7 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="text_submitted" from="VBoxContainer/LineEdit" to="." method="_on_LineEdit_text_entered"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
