@@ -118,7 +118,7 @@ func _on_Load_Export_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
-	dialog.window_title = "Load export target from file"
+	dialog.title = "Load export target from file"
 	dialog.add_filter("*.mme;Material Maker Export target")
 	var files = await dialog.select_files()
 	if files.size() > 0:
@@ -141,7 +141,7 @@ func _on_Save_Export_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	dialog.window_title = "Save export target to file"
+	dialog.title = "Save export target to file"
 	dialog.add_filter("*.mme;Material Maker Export target")
 	var files = await dialog.select_files()
 	if files.size() > 0:
@@ -216,7 +216,7 @@ func _on_Files_gui_input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
 		if ! export_files.get_selected_items().is_empty():
 			var current_export = export_target.get_item_text(export_target.selected)
-			exports[current_export].files.remove(export_files.get_selected_items()[0])
+			exports[current_export].files.remove_at(export_files.get_selected_items()[0])
 			update_files(current_export)
 			export_files.deselect_all()
 
