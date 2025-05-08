@@ -41,7 +41,7 @@ The available SDF item types are:
 
 * For 2D:
 
-  * Shapes: Circle, Ellipse, NGon, Star, Isoceles triangle, Rhombus, Line, Tunnel, Stairs
+  * Shapes: Arc, Arrow, Box, Cricle, Cross, Heart, Hexagram, IsoscelesTriangle, Line, Moon, N-gon, Pie, Polygon, Stairs, Star, Versica
   * Boolean operations:
 
     * Union joins its children into a single shape
