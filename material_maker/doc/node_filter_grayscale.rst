@@ -3,7 +3,7 @@ Grayscale node
 
 The **Grayscale** node converts a color image into grayscale.
 
-.. image:: images/node_filter_greyscale.png
+.. image:: images/node_filter_grayscale.png
 	:align: center
 
 Inputs
@@ -25,5 +25,5 @@ The **Grayscale** node accepts the *conversion algorithm* (*lightness*, *average
 Example images
 ++++++++++++++
 
-.. image:: images/node_greyscale_samples.png
+.. image:: images/node_grayscale_samples.png
 	:align: center
