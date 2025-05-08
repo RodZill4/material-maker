@@ -16,6 +16,15 @@ var new_environment_icon = preload("res://material_maker/windows/environment_edi
 var current_environment = -1
 
 func _ready():
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(900, 600) * content_scale_factor
+	
+	for color_picker in $Main/HSplitContainer/UI.get_children():
+		if color_picker is ColorPickerButton:
+			var picker = color_picker.get_popup()
+			picker.content_scale_factor = content_scale_factor
+			picker.min_size = picker.get_contents_minimum_size() * content_scale_factor
+	
 	popup_centered()
 	_on_ViewportContainer_resized()
 	connect_controls()
@@ -32,15 +41,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func connect_controls() -> void:
 	for c in ui.get_children():
-		if c is LineEdit:
-			if c.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
-				c.connect("value_changed", Callable(self, "set_environment_value").bind(c.name))
-			else:
-				c.connect("text_submitted", Callable(self, "set_environment_value").bind(c.name))
+		if c is FloatEdit:
+			c.value_changed.connect(set_environment_value.bind(c.name))
+		elif c is LineEdit:
+			c.text_submitted.connect(set_environment_value.bind(c.name))
 		elif c is ColorPickerButton:
-			c.connect("color_changed", Callable(self, "set_environment_value").bind(c.name))
+			c.color_changed.connect(set_environment_value.bind(c.name))
 		elif c is CheckBox:
-			c.connect("toggled", Callable(self, "set_environment_value").bind(c.name))
+			c.toggled.connect(set_environment_value.bind(c.name))
 
 func set_environment_value(value, variable):
 	environment_manager.set_value(current_environment, variable, value)
@@ -110,6 +118,8 @@ func set_current_environment(index : int) -> void:
 	var read_only : bool = environment_manager.is_read_only(index)
 	for c in ui.get_children():
 		if c is LineEdit:
+			c.editable = !read_only
+		elif c is FloatEdit:
 			c.editable = !read_only
 		elif c is ColorPickerButton or c is CheckBox:
 			c.disabled = read_only
