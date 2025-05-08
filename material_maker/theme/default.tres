@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=134 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=139 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -142,7 +142,7 @@ content_margin_left = 10.0
 content_margin_top = 8.0
 content_margin_right = 10.0
 content_margin_bottom = 8.0
-bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+bg_color = Color(0.067, 0.067, 0.078, 1)
 border_width_left = 1
 border_width_right = 1
 border_width_bottom = 1
@@ -368,6 +368,26 @@ region = Rect2(48, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_j13i3"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 160, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovvp6"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(16, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8tn7x"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(48, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfiqs"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfsii"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(32, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1lfk8"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(64, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
 atlas = ExtResource("1_s43fy")
@@ -1048,6 +1068,11 @@ MM_Icons/icons/arrange_nodes = SubResource("AtlasTexture_60g77")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
+MM_Icons/icons/connection_bezier = SubResource("AtlasTexture_ovvp6")
+MM_Icons/icons/connection_diagonal = SubResource("AtlasTexture_8tn7x")
+MM_Icons/icons/connection_direct = SubResource("AtlasTexture_pfiqs")
+MM_Icons/icons/connection_manhattan = SubResource("AtlasTexture_pfsii")
+MM_Icons/icons/connection_rounded = SubResource("AtlasTexture_1lfk8")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
