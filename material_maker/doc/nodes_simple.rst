@@ -20,3 +20,4 @@ The simple nodes are nodes that do not accept any input and generate one or seve
 	node_simple_seven_segment_display
 	node_simple_sixteen_segment_display
 	node_simple_roman_numerals
+	node_simple_nordic_runes
