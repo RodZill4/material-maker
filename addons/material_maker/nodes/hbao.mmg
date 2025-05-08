@@ -160,7 +160,7 @@
 				"parameters": [
 					{
 						"control": "None",
-						"default": 0.01,
+						"default": 0.1,
 						"label": "Radius",
 						"longdesc": "The scale along the X axis",
 						"max": 1,
@@ -172,7 +172,7 @@
 					},
 					{
 						"control": "None",
-						"default": 30,
+						"default": 15,
 						"label": "Angle Bias",
 						"longdesc": "Angle bias for AO",
 						"max": 90,
@@ -184,7 +184,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.2,
+						"default": 1.0,
 						"label": "Intensity",
 						"longdesc": "Change intensity of AO",
 						"max": 5,
@@ -196,7 +196,7 @@
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 0.08,
 						"label": "Depth Scale",
 						"longdesc": "Lineary scales depth values afecting  cacluated normals & tangents",
 						"max": 1,

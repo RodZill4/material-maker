@@ -153,7 +153,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 3.0,
 						"label": "Sigma",
 						"longdesc": "Standard Deviation sigma radius",
 						"max": 1,
@@ -165,7 +165,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 4.0,
 						"label": "kSigma",
 						"longdesc": "K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times  more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma",
 						"max": 1,
@@ -177,7 +177,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 0.7,
 						"label": "Sharpening",
 						"longdesc": "Edge sharpening threshold",
 						"max": 1,

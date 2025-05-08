@@ -68,7 +68,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 2,
 				"label": "Width",
 				"max": 5,
 				"min": 1,
@@ -78,7 +78,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Threshold",
 				"max": 1,
 				"min": 0,
