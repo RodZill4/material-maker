@@ -4,7 +4,7 @@ extends PanelContainer
 const SETTING_3D_PREVIEW_MODEL : String = "3D_preview_model"
 const SETTING_3D_PREVIEW_CUSTOM_MODELS : String = "3D_preview_custom_models"
 const SETTING_3D_PREVIEW_ROTATION_SPEED : String = "3D_preview_rotation_speed"
-
+const MAX_CUSTOM_MODELS : int = 5
 
 var custom_models : PackedStringArray = PackedStringArray()
 
@@ -52,7 +52,7 @@ func update_model_selector() -> void:
 	for i in objects_count:
 		var o: Node = preview3D.objects.get_child(i)
 		Model.add_item(o.name, i)
-	for i in custom_models.size():
+	for i in min(custom_models.size(), MAX_CUSTOM_MODELS):
 		Model.add_item(custom_models[i].get_file(), i+objects_count)
 
 func _on_model_item_selected(index: int, custom_model_path : String = "") -> void:

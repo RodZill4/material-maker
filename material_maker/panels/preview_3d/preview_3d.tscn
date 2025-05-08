@@ -444,6 +444,7 @@ text = "Generate Map"
 [connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Slow" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_slow_toggled"]
 [connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Medium" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_medium_toggled"]
 [connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Fast" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_fast_toggled"]
+[connection signal="minimum_size_changed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_minimum_size_changed"]
 [connection signal="pressed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box/EnvironmentEditorButton" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_editor_button_pressed"]
 [connection signal="item_selected" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer/EnvironmentList" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_list_item_selected"]
 [connection signal="toggled" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/VBox/ClearBackground" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_clear_background_toggled"]

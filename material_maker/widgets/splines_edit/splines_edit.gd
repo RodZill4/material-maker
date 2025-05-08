@@ -29,7 +29,15 @@ func on_value_changed(v) -> void:
 	emit_signal("updated", v.duplicate(), null)
 
 func _get_drag_data(_position):
-	return value.duplicate()
+	var duplicated_value = value.duplicate()
+	var view = SplinesView.new(duplicated_value)
+	view.size = $SplinesView.size
+	view.position -= Vector2(15,15)
+	var button = Button.new()
+	button.size = size
+	button.add_child(view)
+	set_drag_preview(button)
+	return duplicated_value
 
 func _can_drop_data(_position, data) -> bool:
 	return data is MMSplines

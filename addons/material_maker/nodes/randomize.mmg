@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "Takes a set of RGB color ids as  input and generates a new set of random values.",
+		"longdesc": "Takes a set of RGB color ids as input and generates a new set of random values.",
 		"name": "Randomize",
 		"outputs": [
 			{
