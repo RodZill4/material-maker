@@ -853,9 +853,6 @@ func view_reset_zoom() -> void:
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
 
-func toggle_console() -> void:
-	$VBoxContainer/Layout.toggle_console()
-
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
