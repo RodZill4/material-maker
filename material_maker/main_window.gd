@@ -853,6 +853,8 @@ func view_reset_zoom() -> void:
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
 
+func toggle_console() -> void:
+	$VBoxContainer/Layout.toggle_console()
 
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1264,3 +1266,7 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+
+func _on_console_resizer_container_mouse_entered() -> void:
+	pass # Replace with function body.

@@ -47,6 +47,9 @@ func _ready() -> void:
 func toggle_side_panels() -> void:
 	pass
 
+func toggle_console() -> void:
+	%Console.toggle()
+
 func load_panels() -> void:
 	# Create panels
 	for panel in PANELS:
