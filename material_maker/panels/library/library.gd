@@ -193,7 +193,7 @@ func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null)
 	if parent_item == null:
 		parent_item = tree.get_root()
 		var stylebox : StyleBoxFlat = StyleBoxFlat.new()
-		stylebox.bg_color = Color("2E3236") # documentation page bg color
+		stylebox.bg_color = Color("303236") # documentation page bg color
 		graph_edit.add_theme_stylebox_override("panel", stylebox)
 	var items : Array[TreeItem] = parent_item.get_children()
 	for item in items:
