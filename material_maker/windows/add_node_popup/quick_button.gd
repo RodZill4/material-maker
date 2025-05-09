@@ -31,12 +31,12 @@ func set_library_item(li : String):
 	else:
 		material.set_shader_parameter("tex", get_theme_icon("radio_unchecked", "PopupMenu"))
 		tooltip_text = "Drag a node from the list to this slot to add it to the quick access."
+	mm_globals.config.set_value("library", "quick_button_%d" % get_index(), li)
+	mm_globals.config.save("user://mm_config.ini")
 
 func _drop_data(_position, data):
 	set_library_item(data)
 	enable()
-	mm_globals.config.set_value("library", "quick_button_%d" % get_index(), data)
-
 
 func _on_gui_input(event):
 	if !disabled and event is InputEventMouseButton:
@@ -44,7 +44,6 @@ func _on_gui_input(event):
 			emit_signal("object_selected", library_item.item)
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			set_library_item("")
-			mm_globals.config.set_value("library", "quick_button_%d" % get_index(), "")
 			disable()
 
 func enable() -> void:
