@@ -71,5 +71,5 @@ func _on_console_resizer_gui_input(event: InputEvent) -> void:
 		custom_minimum_size.y -= get_local_mouse_position().y
 		if custom_minimum_size.y < 10:
 			toggle()
-		custom_minimum_size.y = clamp(custom_minimum_size.y, 100, 650)
+		custom_minimum_size.y = min(max(custom_minimum_size.y, 100),650)
 		mm_globals.set_config("ui_console_height", custom_minimum_size.y)

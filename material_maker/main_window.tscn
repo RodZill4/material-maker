@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2cpsi"]
-bg_color = Color(0.294118, 0.294118, 0.294118, 0.733333)
+bg_color = Color(0.294, 0.294, 0.294, 0.7)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -172,7 +172,6 @@ offset_bottom = 32.0
 
 [node name="ConsoleResizer" type="Control" parent="VBoxContainer"]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_default_cursor_shape = 9
