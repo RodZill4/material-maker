@@ -35,7 +35,6 @@ region = Rect2(32, 0, 16, 16)
 [node name="ExportEditor" type="Window"]
 title = "Material Export Editor"
 position = Vector2i(0, 36)
-size = Vector2i(1200, 430)
 script = ExtResource("2")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
