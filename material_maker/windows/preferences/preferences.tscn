@@ -71,6 +71,7 @@ text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
 [node name="EnableGlobalMenu" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 button_pressed = true
