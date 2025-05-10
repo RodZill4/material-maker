@@ -26,9 +26,11 @@ func get_type_name() -> String:
 	return "Export"
 
 func get_description() -> String:
-	return "\n".join(["Export",
-			"Defines a texture which will be saved " +
-			"along with other textures on material export"])
+	var shortdesc = "Export"
+	var longdesc = ("Defines a texture which will be saved " +
+			"along with other textures on material export")
+	return "\n".join([TranslationServer.translate(shortdesc),
+			TranslationServer.translate(longdesc)])
 
 func get_parameter_defs() -> Array:
 	return [
