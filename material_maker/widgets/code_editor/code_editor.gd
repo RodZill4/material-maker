@@ -34,9 +34,10 @@ func _ready():
 	for t in TYPES:
 		syntax_highlighter.add_keyword_color(t, get_theme_color("type_color", "CodeEdit"))
 	for t in FUNCTIONS:
-		syntax_highlighter.add_keyword_color(t, get_theme_color("function_color", "CodeEdit"))
+		syntax_highlighter.add_keyword_color(t, get_theme_color("built_in_function_color", "CodeEdit"))
 	syntax_highlighter.symbol_color = get_theme_color("symbol_color", "CodeEdit")
 	syntax_highlighter.number_color = get_theme_color("number_color", "CodeEdit")
+	syntax_highlighter.function_color = get_theme_color("function_color", "CodeEdit")
 	syntax_highlighter.member_variable_color = get_theme_color("member_variable_color", "CodeEdit")
 	syntax_highlighter.add_color_region("//", "", get_theme_color("single_line_comment_color", "CodeEdit"), true)
 	syntax_highlighter.add_color_region("/*", "*/", get_theme_color("multi_line_comment_color", "CodeEdit"), false)
