@@ -30,13 +30,13 @@ func _context_menu_about_to_popup() -> void:
 func _ready():
 	get_menu().about_to_popup.connect(_context_menu_about_to_popup)
 	for t in KEYWORDS:
-		syntax_highlighter.add_keyword_color(t, Color(1.0, 0.6, 0.6))
+		syntax_highlighter.add_keyword_color(t, get_theme_color("keyword_color", "CodeEdit"))
 	for t in TYPES:
-		syntax_highlighter.add_keyword_color(t, Color(1.0, 1.0, 0.5))
+		syntax_highlighter.add_keyword_color(t, get_theme_color("type_color", "CodeEdit"))
 	for t in FUNCTIONS:
-		syntax_highlighter.add_keyword_color(t, Color(0.5, 0.5, 1.0))
-	syntax_highlighter.add_color_region("//", "", Color(0.0, 0.5, 0.0), true)
-	syntax_highlighter.add_color_region("/*", "*/", Color(0.0, 0.5, 0.0), false)
+		syntax_highlighter.add_keyword_color(t, get_theme_color("function_color", "CodeEdit"))
+	syntax_highlighter.add_color_region("//", "", get_theme_color("single_line_comment_color", "CodeEdit"), true)
+	syntax_highlighter.add_color_region("/*", "*/", get_theme_color("multi_line_comment_color", "CodeEdit"), false)
 
 func _on_gui_input(event):
 	if event is InputEventKey:
