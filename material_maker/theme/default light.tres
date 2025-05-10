@@ -202,7 +202,7 @@ metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 script = ExtResource("4_rhf2q")
 name = "BG Color"
 orig = Color(0.207843, 0.215686, 0.235294, 1)
-target = Color(0.207843, 0.215686, 0.235294, 1)
+target = Color(0.82, 0.82, 0.82, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
 [resource]
