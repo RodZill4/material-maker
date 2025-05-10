@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=116 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=117 format=3 uid="uid://42cileyfwaca"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_l05jd"]
@@ -83,6 +83,9 @@ region = Rect2(64, 112, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_vngdy"]
 atlas = ExtResource("1_7p32q")
 region = Rect2(96, 112, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m1w7u"]
 atlas = ExtResource("1_7p32q")
@@ -775,19 +778,21 @@ CheckBox/icons/radio_unchecked = SubResource("AtlasTexture_rdh87")
 CheckBox/icons/radio_unchecked_disabled = SubResource("AtlasTexture_8fbk7")
 CheckBox/icons/unchecked = SubResource("AtlasTexture_5s2d2")
 CheckBox/icons/unchecked_disabled = SubResource("AtlasTexture_vngdy")
+CodeEdit/colors/built_in_function_color = Color(0.278431, 0.54902, 0.705882, 1)
 CodeEdit/colors/caret_color = Color(0.87451, 0.87451, 0.87451, 1)
 CodeEdit/colors/current_line_color = Color(0.25, 0.25, 0.26, 0.8)
 CodeEdit/colors/font_color = Color(0.875, 0.875, 0.875, 1)
-CodeEdit/colors/function_color = Color(0.501961, 0.501961, 1, 1)
+CodeEdit/colors/function_color = Color(0.278431, 0.54902, 0.705882, 1)
 CodeEdit/colors/keyword_color = Color(1, 0.576471, 0.592157, 1)
 CodeEdit/colors/line_number_color = Color(0.67, 0.67, 0.67, 0.4)
 CodeEdit/colors/member_variable_color = Color(0.945098, 0.231373, 0.317647, 1)
 CodeEdit/colors/multi_line_comment_color = Color(0, 0.509804, 0, 1)
-CodeEdit/colors/number_color = Color(0.341176, 0.34902, 1, 1)
+CodeEdit/colors/number_color = Color(0.905882, 0.521569, 0.0313726, 1)
 CodeEdit/colors/selection_color = Color(0.501961, 0.501961, 0.501961, 1)
 CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
-CodeEdit/colors/symbol_color = Color(1, 1, 0.407843, 1)
-CodeEdit/colors/type_color = Color(1, 1, 0.407843, 1)
+CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
+CodeEdit/colors/type_color = Color(1, 1, 1, 1)
+CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/constants/port_hotzone_inner_extent = 8
