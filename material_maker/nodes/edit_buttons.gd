@@ -7,6 +7,7 @@ func connect_buttons(object, edit_fct, load_fct, save_fct) -> void:
 
 func _on_ready() -> void:
 	# fix button icon colors (light theme)
-	$Edit.add_theme_color_override("icon_normal_color", Color.WHITE)
-	$Load.add_theme_color_override("icon_normal_color", Color.WHITE)
-	$Save.add_theme_color_override("icon_normal_color", Color.WHITE)
+	for button in get_children():
+		button.add_theme_color_override("icon_normal_color", Color.WHITE)
+		button.add_theme_color_override("icon_focus_color", Color("656565"))
+		button.add_theme_color_override("icon_pressed_color", Color("656565"))
