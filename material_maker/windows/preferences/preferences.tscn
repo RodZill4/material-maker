@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 
 [node name="Preferences" type="Window"]
+oversampling_override = 1.0
 title = "Preferences"
 position = Vector2i(0, 36)
 size = Vector2i(800, 450)
@@ -141,6 +142,24 @@ size_flags_horizontal = 10
 text = "On"
 flat = false
 config_variable = "confirm_close_project"
+
+[node name="PreferGlobalMenu" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/PreferGlobalMenu"]
+layout_mode = 2
+text = "Prefer global menu (requires restart)"
+
+[node name="GuiPreferGlobalMenu" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/PreferGlobalMenu" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+text = "On"
+flat = false
+config_variable = "prefer_global_menu"
 
 [node name="Spacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
