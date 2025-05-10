@@ -43,6 +43,10 @@ func _ready():
 	for context_menu in context_menus:
 		context_menu.about_to_popup.connect(
 			_context_menu_about_to_popup.bind(context_menu))
+	# fix button icon colors (light theme)
+	for button in $MarginContainer/VBoxContainer/Export.get_children():
+		if button is Button:
+			button.add_theme_color_override("icon_normal_color", Color.WHITE)
 
 func update_export_list() -> void:
 	export_target.clear()
