@@ -35,11 +35,10 @@
 		"global": "",
 		"inputs": [],
 		"instance": "",
-		"longdesc": "Draws a uniform greyscale image",
+		"longdesc": "Draws a tiny image",
 		"name": "Pixels",
 		"outputs": [
 			{
-				"longdesc": "A uniform image of the selected value",
 				"rgba": "$pixels(ivec2(floor(vec2(float($pixels_size.x), float($pixels_size.y))*$uv)))",
 				"shortdesc": "Output",
 				"type": "rgba"
@@ -73,7 +72,9 @@
 				},
 				"label": "",
 				"name": "pixels",
-				"type": "pixels"
+				"type": "pixels",
+				"longdesc": "Pixel data of the image",
+				"shortdesc": "Pixels"
 			}
 		]
 	},

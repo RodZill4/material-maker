@@ -47,6 +47,10 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Iterate Buffer"
 
+func get_description() -> String:
+	return "\n".join(["Iterate Buffer",
+			"Samples input into a texture and applies a \"loop subgraph\" repeatedly"])
+
 func set_paused(v : bool) -> void:
 	if v == is_paused:
 		return
@@ -61,12 +65,12 @@ func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 
 func get_parameter_defs() -> Array:
 	return [
-		{ name="size", type="size", first=4, last=13, default=4 },
-		{ name="shrink", type="boolean", default=false },
-		{ name="autostop", type="boolean", default=false },
-		{ name="iterations", type="float", min=1, max=50, step=1, default=5 },
-		{ name="filter", type="boolean", default=true },
-		{ name="mipmap", type="boolean", default=true },
+		{ name="size", label="Size", type="size", first=4, last=13, default=4 },
+		{ name="shrink", label="Shrink", type="boolean", default=false },
+		{ name="autostop", label="Auto stop", type="boolean", default=false },
+		{ name="iterations", label="Iterations", type="float", min=1, max=50, step=1, default=5 },
+		{ name="filter", label="Filter", type="boolean", default=true },
+		{ name="mipmap", label="Mipmap", type="boolean", default=true },
 		{ name="f32", label="32 bits", type="boolean", default=false }
 	]
 
