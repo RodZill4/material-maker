@@ -4,6 +4,11 @@ func _ready() -> void:
 	$Type.clear()
 	for t in $Types.get_children():
 		$Type.add_item(t.name)
+	for child in $Types/color.get_children():
+		if child is ColorPickerButton:
+			var picker_popup = child.get_popup()
+			picker_popup.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			picker_popup.min_size = picker_popup.get_contents_minimum_size() * picker_popup.content_scale_factor
 	_on_Type_item_selected($Type.selected)
 
 func update_up_down_button() -> void:

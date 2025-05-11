@@ -47,6 +47,10 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Iterate Buffer"
 
+func get_description() -> String:
+	return "\n".join(["Iterate Buffer",
+			"Samples input into a texture and applies a \"loop subgraph\" repeatedly"])
+
 func set_paused(v : bool) -> void:
 	if v == is_paused:
 		return

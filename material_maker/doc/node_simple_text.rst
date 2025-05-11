@@ -9,12 +9,12 @@ The text node outputs a single texture that shows a text.
 Inputs
 ++++++
 
-The image node does not accept any input.
+The text node does not accept any input.
 
 Outputs
 +++++++
 
-The image node provides a single greyscale texture.
+The text node provides a single texture.
 
 Parameters
 ++++++++++
@@ -27,4 +27,11 @@ The text node accepts the following parameters:
 
 * the font size
 
+* whether the text is centered
+
 * the X and Y coordinates of the location of the text in the generated image
+
+Notes
++++++
+
+The text node can render any unicode character, including emojis.

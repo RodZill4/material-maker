@@ -66,7 +66,9 @@
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Cone",
+		"longdesc": "Generates an infinite cone as a signed distance function"
 	},
 	"type": "shader"
 }

@@ -5,7 +5,6 @@ class_name MMGenText
 
 # Texture generator from text
 
-
 var updating : bool = false
 var update_again : bool = false
 
@@ -17,6 +16,9 @@ func get_type() -> String:
 
 func get_type_name() -> String:
 	return "Text"
+
+func get_description() -> String:
+	return "\n".join(["Text", "Text as a greyscale image"])
 
 func get_parameter_defs() -> Array:
 	return [

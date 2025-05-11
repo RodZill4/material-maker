@@ -3,6 +3,13 @@ extends HBoxContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if mm_globals.has_config("ui_console_height"):
+		custom_minimum_size.y = mm_globals.get_config("ui_console_height")
+		custom_minimum_size.y = clamp(custom_minimum_size.y, 100, 650)
+	if mm_globals.has_config("ui_console_open"):
+		visible = mm_globals.get_config("ui_console_open")
+		%ConsoleResizer.visible = visible
+		
 	mm_logger.set_logger(self)
 
 func url_data_from_string(s : String) -> Dictionary:
@@ -55,3 +62,14 @@ func update_shader_generator(shader_model) -> void:
 
 func toggle():
 	visible = not visible
+	%ConsoleResizer.visible = visible
+	mm_globals.set_config("ui_console_open", visible)
+		
+
+func _on_console_resizer_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+		custom_minimum_size.y -= get_local_mouse_position().y
+		if custom_minimum_size.y < 10:
+			toggle()
+		custom_minimum_size.y = min(max(custom_minimum_size.y, 100),650)
+		mm_globals.set_config("ui_console_height", custom_minimum_size.y)

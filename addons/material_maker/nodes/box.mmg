@@ -39,10 +39,9 @@
 			"\treturn tN;",
 			"}"
 		],
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
+		"longdesc": "Generates depth of a 3D Box",
 		"name": "Box",
 		"outputs": [
 			{
@@ -161,7 +160,8 @@
 				"step": 0.1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Box"
 	},
 	"type": "shader"
 }
