@@ -30,6 +30,7 @@ func _on_Cancel_pressed():
 func edit_lattice(lattice : MMLattice) -> Dictionary:
 	previous_value = lattice.duplicate()
 	$VBoxContainer/EditorContainer/LatticeEditor.set_lattice(lattice)
+	hide()
 	popup_centered()
 	var result = await self.return_lattice
 	queue_free()

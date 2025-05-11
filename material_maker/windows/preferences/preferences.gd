@@ -15,6 +15,7 @@ func edit_preferences(c : ConfigFile) -> void:
 	config_changed.connect(main_window.on_config_changed)
 	update_controls(self)
 	size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
+	hide()
 	popup_centered(size)
 
 func update_controls(p : Node) -> void:

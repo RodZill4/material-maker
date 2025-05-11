@@ -26,6 +26,7 @@ func enter_text(window_title : String, label : String, value : String) -> Dictio
 	set_value(value)
 	$VBoxContainer/LineEdit.grab_focus()
 	$VBoxContainer/LineEdit.grab_click_focus()
+	hide()
 	popup_centered()
 	var result = await self.return_string
 	queue_free()
