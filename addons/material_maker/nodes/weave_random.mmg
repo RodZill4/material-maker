@@ -100,7 +100,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 2,
 				"label": "Stitch",
 				"max": 10,
 				"min": 1,

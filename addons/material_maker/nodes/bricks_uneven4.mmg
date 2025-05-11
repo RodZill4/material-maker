@@ -193,7 +193,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.51,
 				"label": "Randomness",
 				"longdesc": "The randomness of the pattern",
 				"max": 1,

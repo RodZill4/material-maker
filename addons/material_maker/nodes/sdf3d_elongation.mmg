@@ -37,7 +37,7 @@
 		"parameters": [
 			{
 				"control": "P1.x",
-				"default": 0,
+				"default": 0.2,
 				"label": "X",
 				"longdesc": "The elongation along the X axis",
 				"max": 1,

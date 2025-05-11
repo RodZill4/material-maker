@@ -78,32 +78,33 @@
 		{
 			"name": "iterate_buffer",
 			"node_position": {
-				"x": 76.700005,
-				"y": -249.817047
+				"x": 76.7000045776367,
+				"y": -249.817047119141
 			},
 			"parameters": {
 				"autostop": false,
+				"f32": false,
 				"filter": false,
-				"iterations": 30,
+				"iterations": "$mask_to_sdf_iter",
 				"mipmap": false,
 				"shrink": false,
-				"size": 10
+				"size": 10.0
 			},
-			"seed": 29168,
+			"seed": 29168.0,
 			"seed_locked": true,
 			"type": "iterate_buffer"
 		},
 		{
 			"name": "2434_8",
 			"node_position": {
-				"x": 91.099991,
-				"y": -9.031479
+				"x": 91.0999908447266,
+				"y": -9.03147888183594
 			},
 			"parameters": {
-				"distance": 0,
-				"size": 10
+				"distance": 0.0,
+				"size": 10.0
 			},
-			"seed": -4110,
+			"seed": -4110.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -155,15 +156,15 @@
 				],
 				"parameters": [
 					{
-						"default": 10,
-						"first": 0,
+						"default": 10.0,
+						"first": 0.0,
 						"label": "",
-						"last": 13,
+						"last": 13.0,
 						"name": "size",
 						"type": "size"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "",
 						"name": "distance",
 						"type": "enum",
@@ -189,13 +190,13 @@
 		{
 			"name": "1823",
 			"node_position": {
-				"x": -269.899872,
-				"y": -18.741766
+				"x": -269.899871826172,
+				"y": -18.7417659759521
 			},
 			"parameters": {
 
 			},
-			"seed": 45955,
+			"seed": 45955.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -215,37 +216,35 @@
 						"type": "rgb"
 					}
 				],
-				"parameters": [
-
-				]
+				"parameters": []
 			},
 			"type": "shader"
 		},
 		{
 			"name": "edge_detect",
 			"node_position": {
-				"x": -286.951447,
-				"y": -137.078964
+				"x": -286.951446533203,
+				"y": -137.078964233398
 			},
 			"parameters": {
-				"size": 10,
+				"size": 10.0,
 				"threshold": 0.4,
-				"width": 1
+				"width": 1.0
 			},
-			"seed": 50217,
+			"seed": 50217.0,
 			"type": "edge_detect"
 		},
 		{
 			"name": "6520",
 			"node_position": {
-				"x": 364.156525,
-				"y": -261.873169
+				"x": 364.156524658203,
+				"y": -261.873168945312
 			},
 			"parameters": {
-				"distance": 0,
-				"tiled": false
+				"distance": 0.0,
+				"tiled": true
 			},
-			"seed": -16657,
+			"seed": -16657.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -294,7 +293,7 @@
 						"type": "boolean"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "",
 						"name": "distance",
 						"type": "enum",
@@ -320,58 +319,58 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -735.85144,
-				"y": -352.006775
+				"x": -735.851440429688,
+				"y": -352.006774902344
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The greyscale mask to be converted",
 					"name": "mask",
 					"shortdesc": "Mask",
 					"type": "f"
 				}
 			],
-			"seed": 23391,
+			"seed": 23391.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 646.256348,
-				"y": -263.285461
+				"x": 646.25634765625,
+				"y": -263.285461425781
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The genrated distance field",
 					"name": "sdf",
 					"shortdesc": "Output",
 					"type": "sdf2d"
 				}
 			],
-			"seed": -35133,
+			"seed": -35133.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -47.67952,
-				"y": -541.979187
+				"x": -47.6795196533203,
+				"y": -541.979187011719
 			},
 			"parameters": {
-				"param0": 10,
-				"param1": 30,
-				"param2": false,
-				"param3": 0
+				"mask_to_sdf_iter": 30.0,
+				"param0": 10.0,
+				"param2": true,
+				"param3": 0.0
 			},
-			"seed": 46252,
+			"seed": 46252.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -400,17 +399,15 @@
 					"type": "linked_control"
 				},
 				{
+					"default": 30.0,
 					"label": "Iterations",
-					"linked_widgets": [
-						{
-							"node": "iterate_buffer",
-							"widget": "iterations"
-						}
-					],
 					"longdesc": "The number of iterations the jump flood algorithm performs to calculate the distances",
-					"name": "param1",
+					"max": 100.0,
+					"min": 0.0,
+					"name": "mask_to_sdf_iter",
 					"shortdesc": "Iterations",
-					"type": "linked_control"
+					"step": 1.0,
+					"type": "named_parameter"
 				},
 				{
 					"label": "Tiled",
@@ -450,40 +447,40 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -297.702789,
-				"y": -348.41391
+				"x": -297.702789306641,
+				"y": -348.413909912109
 			},
 			"parameters": {
-				"size": 10
+				"size": 10.0
 			},
-			"seed": 7085,
+			"seed": 7085.0,
 			"type": "buffer",
 			"version": 1
 		},
 		{
 			"name": "tones_step",
 			"node_position": {
-				"x": -294.947968,
-				"y": -258.84549
+				"x": -294.947967529297,
+				"y": -258.845489501953
 			},
 			"parameters": {
 				"invert": false,
 				"value": 0.5,
-				"width": 0
+				"width": 0.0
 			},
-			"seed": 48280,
+			"seed": 48280.0,
 			"type": "tones_step"
 		},
 		{
 			"name": "24282_2",
 			"node_position": {
-				"x": 114.391708,
-				"y": -90.765732
+				"x": 114.391708374023,
+				"y": -90.7657318115234
 			},
 			"parameters": {
-				"tiled": false
+				"tiled": true
 			},
-			"seed": -56216,
+			"seed": -56216.0,
 			"shader_model": {
 				"code": [
 					"vec3 $(name_uv)_in = $in(fract($uv));",
@@ -633,39 +630,40 @@
 			"longdesc": "",
 			"name": "graph_3",
 			"node_position": {
-				"x": 515.555786,
-				"y": -545.049744
+				"x": 515.555786132812,
+				"y": -545.049743652344
 			},
 			"nodes": [
 				{
 					"name": "iterate_buffer",
 					"node_position": {
-						"x": 64.900002,
-						"y": -259.215881
+						"x": 64.9000015258789,
+						"y": -259.215881347656
 					},
 					"parameters": {
 						"autostop": false,
+						"f32": false,
 						"filter": false,
-						"iterations": 30,
+						"iterations": 30.0,
 						"mipmap": false,
 						"shrink": false,
-						"size": 9
+						"size": 9.0
 					},
-					"seed": 29168,
+					"seed": 29168.0,
 					"seed_locked": true,
 					"type": "iterate_buffer"
 				},
 				{
 					"name": "2434_8",
 					"node_position": {
-						"x": 102.099998,
-						"y": 15.367363
+						"x": 102.099998474121,
+						"y": 15.3673629760742
 					},
 					"parameters": {
-						"distance": 0,
-						"size": 9
+						"distance": 0.0,
+						"size": 9.0
 					},
-					"seed": 26197,
+					"seed": 26197.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -719,15 +717,15 @@
 						],
 						"parameters": [
 							{
-								"default": 10,
-								"first": 0,
+								"default": 10.0,
+								"first": 0.0,
 								"label": "",
-								"last": 13,
+								"last": 13.0,
 								"name": "size",
 								"type": "size"
 							},
 							{
-								"default": 2,
+								"default": 2.0,
 								"label": "",
 								"name": "distance",
 								"type": "enum",
@@ -753,13 +751,13 @@
 				{
 					"name": "1823",
 					"node_position": {
-						"x": -269.899872,
-						"y": -17.741766
+						"x": -269.899871826172,
+						"y": -17.7417659759521
 					},
 					"parameters": {
 
 					},
-					"seed": 45954,
+					"seed": 45954.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -779,37 +777,35 @@
 								"type": "rgb"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
 				{
 					"name": "edge_detect",
 					"node_position": {
-						"x": -286.951447,
-						"y": -137.078964
+						"x": -286.951446533203,
+						"y": -137.078964233398
 					},
 					"parameters": {
-						"size": 9,
+						"size": 9.0,
 						"threshold": 0.4,
-						"width": 1
+						"width": 1.0
 					},
-					"seed": 50217,
+					"seed": 50217.0,
 					"type": "edge_detect"
 				},
 				{
 					"name": "6520",
 					"node_position": {
-						"x": 347.356567,
-						"y": -346.449127
+						"x": 347.356567382812,
+						"y": -346.449127197266
 					},
 					"parameters": {
-						"distance": 0,
+						"distance": 0.0,
 						"length": 0.1
 					},
-					"seed": -11869,
+					"seed": -11869.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -856,14 +852,14 @@
 								"control": "None",
 								"default": 0.1,
 								"label": "Length",
-								"max": 1,
-								"min": -1,
+								"max": 1.0,
+								"min": -1.0,
 								"name": "length",
 								"step": 0.01,
 								"type": "float"
 							},
 							{
-								"default": 2,
+								"default": 2.0,
 								"label": "",
 								"name": "distance",
 								"type": "enum",
@@ -889,66 +885,66 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -793.451477,
-						"y": -236.812195
+						"x": -793.451477050781,
+						"y": -236.812194824219
 					},
 					"parameters": {
 
 					},
 					"ports": [
 						{
-							"group_size": 0,
+							"group_size": 0.0,
 							"longdesc": "The greyscale mask to be converted",
 							"name": "mask",
 							"shortdesc": "Mask",
 							"type": "f"
 						},
 						{
-							"group_size": 0,
+							"group_size": 0.0,
 							"longdesc": "",
 							"name": "source",
 							"shortdesc": "Source",
 							"type": "rgb"
 						}
 					],
-					"seed": 26605,
+					"seed": 26605.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": 885.056335,
-						"y": -247.896317
+						"x": 885.056335449219,
+						"y": -247.89631652832
 					},
 					"parameters": {
 
 					},
 					"ports": [
 						{
-							"group_size": 0,
+							"group_size": 0.0,
 							"longdesc": "Shows the dilated image",
 							"name": "out",
 							"shortdesc": "Output",
 							"type": "rgb"
 						}
 					],
-					"seed": -38622,
+					"seed": -38622.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": 61.520477,
-						"y": -639.339172
+						"x": 61.5204772949219,
+						"y": -639.339172363281
 					},
 					"parameters": {
-						"param0": 9,
+						"param0": 9.0,
 						"param1": 0.1,
-						"param2": 0,
-						"param3": 0,
-						"param4": 30
+						"param2": 0.0,
+						"param3": 0.0,
+						"param4": 30.0
 					},
-					"seed": -26654,
+					"seed": -26654.0,
 					"type": "remote",
 					"widgets": [
 						{
@@ -1036,40 +1032,40 @@
 				{
 					"name": "buffer_2",
 					"node_position": {
-						"x": -294.502808,
-						"y": -340.816589
+						"x": -294.502807617188,
+						"y": -340.816589355469
 					},
 					"parameters": {
-						"size": 9
+						"size": 9.0
 					},
-					"seed": 48330,
+					"seed": 48330.0,
 					"type": "buffer",
 					"version": 1
 				},
 				{
 					"name": "tones_step",
 					"node_position": {
-						"x": -285.347992,
-						"y": -253.248215
+						"x": -285.347991943359,
+						"y": -253.24821472168
 					},
 					"parameters": {
 						"invert": false,
 						"value": 0.5,
-						"width": 0
+						"width": 0.0
 					},
-					"seed": 42366,
+					"seed": 42366.0,
 					"type": "tones_step"
 				},
 				{
 					"name": "24282_2",
 					"node_position": {
-						"x": 109.591705,
-						"y": -88.567284
+						"x": 109.591705322266,
+						"y": -88.5672836303711
 					},
 					"parameters": {
 						"tiled": true
 					},
-					"seed": -16485,
+					"seed": -16485.0,
 					"shader_model": {
 						"code": [
 							"vec3 $(name_uv)_in = $in(fract($uv));",
@@ -1107,13 +1103,13 @@
 				{
 					"name": "2153",
 					"node_position": {
-						"x": 368.85202,
-						"y": -157.100906
+						"x": 368.852020263672,
+						"y": -157.10090637207
 					},
 					"parameters": {
 
 					},
-					"seed": -48141,
+					"seed": -48141.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1145,22 +1141,20 @@
 								"type": "rgb"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				},
 				{
 					"name": "11582",
 					"node_position": {
-						"x": 609.343445,
-						"y": -239.746399
+						"x": 609.343444824219,
+						"y": -239.746398925781
 					},
 					"parameters": {
-						"fill": 0
+						"fill": 0.0
 					},
-					"seed": -2130,
+					"seed": -2130.0,
 					"shader_model": {
 						"code": [
 							"float $(name_uv)_dist = $distance($uv);",
@@ -1202,10 +1196,10 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 0,
+								"default": 0.0,
 								"label": "Fill",
-								"max": 1,
-								"min": 0,
+								"max": 1.0,
+								"min": 0.0,
 								"name": "fill",
 								"step": 0.01,
 								"type": "float"
@@ -1217,13 +1211,13 @@
 				{
 					"name": "8064",
 					"node_position": {
-						"x": -282.533325,
-						"y": -433.011169
+						"x": -282.533325195312,
+						"y": -433.011169433594
 					},
 					"parameters": {
 
 					},
-					"seed": 18837,
+					"seed": 18837.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -1243,30 +1237,28 @@
 								"type": "rgb"
 							}
 						],
-						"parameters": [
-
-						]
+						"parameters": []
 					},
 					"type": "shader"
 				}
 			],
 			"parameters": {
-				"param0": 9,
+				"param0": 9.0,
 				"param1": 0.1,
-				"param2": 0,
-				"param3": 0,
-				"param4": 30
+				"param2": 0.0,
+				"param3": 0.0,
+				"param4": 30.0
 			},
-			"seed": -39294,
+			"seed": -39294.0,
 			"shortdesc": "",
 			"type": "graph"
 		}
 	],
 	"parameters": {
-		"param0": 10,
-		"param1": 30,
-		"param2": false,
-		"param3": 0
+		"mask_to_sdf_iter": 30.0,
+		"param0": 10.0,
+		"param2": true,
+		"param3": 0.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Mask to SDF",
