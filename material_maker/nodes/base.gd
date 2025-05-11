@@ -11,8 +11,8 @@ var show_outputs : bool = false
 
 
 const MINIMIZE_ICON : Texture2D = preload("res://material_maker/icons/minimize.tres")
-const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomness_unlocked.tres")
-const RANDOMNESS_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
+@onready var randomness_icon : Texture2D = get_theme_icon("dice", "MM_Icons")
+@onready var randomness_locked_icon : Texture2D = get_theme_icon("dice_locked", "MM_Icons")
 const BUFFER_ICON : Texture2D = preload("res://material_maker/icons/buffer.tres")
 const BUFFER_PAUSED_ICON : Texture2D = preload("res://material_maker/icons/buffer_paused.tres")
 const CUSTOM_ICON : Texture2D = preload("res://material_maker/icons/custom.png")
@@ -59,7 +59,7 @@ func init_buttons():
 	super.init_buttons()
 	minimize_button = add_button(MINIMIZE_ICON, on_minimize_pressed)
 	minimize_button.tooltip_text = tr("Minimize the node")
-	randomness_button = add_button(RANDOMNESS_ICON, on_randomness_pressed, randomness_button_create_popup)
+	randomness_button = add_button(randomness_icon, on_randomness_pressed, randomness_button_create_popup)
 	randomness_button.visible = false
 	randomness_button.tooltip_text = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 	buffer_button = add_button(BUFFER_ICON, null, buffer_button_create_popup)
@@ -118,7 +118,7 @@ func update():
 	super.update()
 	if generator != null and generator.has_randomness():
 		randomness_button.visible = true
-		randomness_button.texture_normal = RANDOMNESS_LOCKED_ICON if generator.is_seed_locked() else RANDOMNESS_ICON
+		randomness_button.texture_normal = randomness_locked_icon if generator.is_seed_locked() else randomness_icon
 	else:
 		randomness_button.visible = false
 	buffer_button.visible = ! generator.get_buffers().is_empty()

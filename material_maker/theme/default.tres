@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=134 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=136 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -372,6 +372,14 @@ region = Rect2(64, 160, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovvp6"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(96, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfsii"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(112, 64, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oy0ko"]
 atlas = ExtResource("1_s43fy")
@@ -1049,6 +1057,8 @@ MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
+MM_Icons/icons/dice = SubResource("AtlasTexture_ovvp6")
+MM_Icons/icons/dice_locked = SubResource("AtlasTexture_pfsii")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
