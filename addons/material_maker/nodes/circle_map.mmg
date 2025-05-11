@@ -17,8 +17,8 @@
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
 				"longdesc": "The input image to be remapped",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			}
 		],
@@ -28,7 +28,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the remapped image",
-				"rgba": "$in(vec2(fract($repeat*atan($uv.y-0.5, $uv.x-0.5)*0.15915494309), min(0.99999, 2.0/$radius*length($uv-vec2(0.5)))))",
+				"rgba": "$in#(vec2(fract($repeat*atan($uv.y-0.5, $uv.x-0.5)*0.15915494309), min(0.99999, 2.0/$radius*length($uv-vec2(0.5)))))",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}

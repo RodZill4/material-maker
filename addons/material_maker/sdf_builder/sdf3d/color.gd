@@ -1,4 +1,4 @@
-extends "res://addons/material_maker/sdf_builder/sdf3d/union.gd"
+extends "res://addons/material_maker/sdf_builder/sdf3d/boolean/union.gd"
 
 
 @export var channel_name : String

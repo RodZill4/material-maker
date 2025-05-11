@@ -1,4 +1,6 @@
 @tool
+class_name PixelsView
+
 extends Control
 
 
@@ -11,9 +13,12 @@ var pixels : MMPixels
 var draw_size : Vector2 = Vector2(1, 1)
 var draw_offset : Vector2 = Vector2(0, 0)
 
+func _init(v : MMPixels = null) -> void:
+	pixels = v
 
 func _ready() -> void:
-	pixels = MMPixels.new()
+	if pixels == null:
+		pixels = MMPixels.new()
 	connect("resized", Callable(self, "_on_resize"))
 	_on_resize()
 

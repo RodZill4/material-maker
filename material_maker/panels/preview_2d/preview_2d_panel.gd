@@ -48,6 +48,10 @@ const POSTPROCESS_OPTIONS : Array = [
 
 
 func _ready():
+	var content_scale_factor = mm_globals.get_window().content_scale_factor
+	%GuidesColor.get_popup().content_scale_factor = content_scale_factor
+	%GuidesColor.get_popup().min_size = %GuidesColor.get_popup().get_contents_minimum_size() * content_scale_factor
+
 	clear()
 	reset_view()
 	if mm_globals.has_config("preview"+config_var_suffix+"_view_mode"):
