@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb6iar0tbj2qt"]
 
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d.gd" id="1"]
+[ext_resource type="Script" uid="uid://b74wyskjqeq6e" path="res://material_maker/panels/preview_2d/preview_2d.gd" id="1"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
@@ -36,5 +36,6 @@ void fragment() {
 	COLOR = vec4(image_with_background, step(max(uv.x, uv.y), 0.5)*0.8+0.2);
 }"
 
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="resized" from="." to="." method="on_resized"]
 [connection signal="visibility_changed" from="." to="." method="_on_Preview2D_visibility_changed"]
