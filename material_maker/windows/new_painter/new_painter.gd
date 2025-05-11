@@ -103,6 +103,7 @@ func ask(obj_file_name = null) -> Dictionary:
 	mm_globals.main_window.add_dialog(self)
 	if obj_file_name != null:
 		set_mesh(obj_file_name)
+	hide()
 	popup_centered()
 	_on_ViewportContainer_resized()
 	var result = await self.return_status
