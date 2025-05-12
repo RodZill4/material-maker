@@ -9,7 +9,7 @@ and the first input gets applied on top of it using the *Reorient* method descri
 
 __ normalblendpage_
 
-.. image:: images/node_filter_normal_blend.png
+.. image:: images/node_filter_normal_map_blend.png
 	:align: center
 
 Inputs

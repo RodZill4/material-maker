@@ -3,7 +3,7 @@ Dirt node
 
 The **Dirt** noise node outputs various dirt noises.
 
-.. image:: images/node_noise_dirt.png
+.. image:: images/node_noise_composite_dirt.png
 	:align: center
 
 Inputs
