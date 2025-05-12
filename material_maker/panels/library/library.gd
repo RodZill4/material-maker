@@ -234,10 +234,7 @@ func _on_Section_Button_pressed(category : String) -> void:
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			for node in tree.get_children(true):
-				if node is VScrollBar:
-					node.value = tree.get_item_area_rect(item).position.y
-					break
+			tree.scroll_to_item(item, true)
 			break
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
