@@ -4,7 +4,7 @@ Uneven Bricks node
 The **Uneven Bricks** node outputs an uneven brick pattern texture that can be used for walls
 or pavement. It generates an uneven pattern by randomly splitting bricks.
 
-.. image:: images/node_pattern_unevenbricks.png
+.. image:: images/node_pattern_uneven_bricks.png
 	:align: center
 
 Inputs
