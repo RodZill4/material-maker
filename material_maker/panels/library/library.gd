@@ -230,12 +230,18 @@ func _on_Tree_item_collapsed(item) -> void:
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:
+	var match_item : TreeItem
 	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			tree.scroll_to_item(item, true)
+			match_item = item
 			break
+	var last_item : TreeItem = (
+			tree.get_root().get_children()[-1].get_children()[-1])
+	tree.scroll_to_item(last_item)
+	tree.scroll_to_item(match_item)
+
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
