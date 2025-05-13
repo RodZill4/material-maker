@@ -237,9 +237,7 @@ func _on_Section_Button_pressed(category : String) -> void:
 			item.collapsed = false
 			match_item = item
 			break
-	var last_item : TreeItem = (
-			tree.get_root().get_children()[-1].get_children()[-1])
-	tree.scroll_to_item(last_item)
+	tree.scroll_to_item(tree.get_last_item(tree.get_root()))
 	tree.scroll_to_item(match_item)
 
 
