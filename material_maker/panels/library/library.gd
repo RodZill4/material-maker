@@ -230,6 +230,8 @@ func _on_Tree_item_collapsed(item) -> void:
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:
+	if not library_manager.is_section_enabled(category):
+		return
 	var match_item : TreeItem
 	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
