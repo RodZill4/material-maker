@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dqsbfik7ccygu"]
 
-[ext_resource type="Script" path="res://material_maker/windows/desc_dialog/desc_dialog.gd" id="1"]
+[ext_resource type="Script" uid="uid://3rcb1a63iu8s" path="res://material_maker/windows/desc_dialog/desc_dialog.gd" id="1"]
 
 [node name="Window" type="Window"]
 position = Vector2i(0, 36)
@@ -50,5 +50,6 @@ size_flags_horizontal = 3
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Cancel" to="." method="_on_Cancel_pressed"]

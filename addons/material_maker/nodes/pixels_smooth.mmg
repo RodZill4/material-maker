@@ -43,11 +43,10 @@
 		"global": "",
 		"inputs": [],
 		"instance": "",
-		"longdesc": "Draws a uniform greyscale image",
+		"longdesc": "Draws a tiny image with pixel smoothing",
 		"name": "Smooth Pixels",
 		"outputs": [
 			{
-				"longdesc": "A uniform image of the selected value",
 				"rgba": "mix(mix($(name_uv)_color0, $(name_uv)_color1, $(name_uv)_fract.x), mix($(name_uv)_color2, $(name_uv)_color3, $(name_uv)_fract.x), $(name_uv)_fract.y)",
 				"shortdesc": "Output",
 				"type": "rgba"
@@ -81,7 +80,9 @@
 				},
 				"label": "",
 				"name": "pixels",
-				"type": "pixels"
+				"type": "pixels",
+				"shortdesc":"Pixels",
+				"longdesc":"Pixel data of the image"
 			}
 		]
 	},

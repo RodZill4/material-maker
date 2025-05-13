@@ -9,8 +9,7 @@ The **Fast Blur** node applies an approximated Gaussian blur algorithm to its in
 Inputs
 ++++++
 
-The **Fast Blur** node accepts an RGBA input to be blurred and an optional blur mask
-that defines the intensity of the blur effect.
+The **Fast Blur** node accepts an RGBA input to be blurred.
 
 Outputs
 +++++++

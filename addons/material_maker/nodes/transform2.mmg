@@ -36,7 +36,7 @@
 			{
 				"default": "vec4($uv, 0.0, 1.0)",
 				"label": "",
-				"longdesc": "An  input image to be transformed",
+				"longdesc": "An input image to be transformed",
 				"name": "i#",
 				"shortdesc": "Input#",
 				"type": "rgba"

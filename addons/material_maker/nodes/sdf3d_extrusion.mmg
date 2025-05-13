@@ -38,7 +38,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.25,
+				"default": 0.30,
 				"label": "",
 				"longdesc": "The length of the extrusion operation",
 				"max": 1,

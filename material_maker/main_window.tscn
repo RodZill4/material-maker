@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene load_steps=21 format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" uid="uid://cbfcjtm6e4t8h" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="1_2qcba"]
@@ -14,6 +14,13 @@
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
 [ext_resource type="Script" uid="uid://ds4jcblbferbu" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
 [ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2cpsi"]
+bg_color = Color(0.294, 0.294, 0.294, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="GDScript" id="6"]
 script/source = "extends Label
@@ -163,8 +170,29 @@ offset_top = 4.0
 offset_right = 263.0
 offset_bottom = 32.0
 
+[node name="ConsoleResizer" type="Control" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_default_cursor_shape = 9
+
+[node name="ResizerBar" type="PanelContainer" parent="VBoxContainer/ConsoleResizer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2cpsi")
+
 [node name="Console" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
 visible = false
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 script = ExtResource("8_1tb00")
 
@@ -256,6 +284,9 @@ script = ExtResource("9")
 visible = false
 
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
+[connection signal="gui_input" from="VBoxContainer/ConsoleResizer" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
+[connection signal="gui_input" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
+[connection signal="mouse_exited" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_mouse_exited"]
 [connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/HBox/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
 [connection signal="pressed" from="VBoxContainer/StatusBar/HBox/ConsoleButton" to="VBoxContainer/Console" method="toggle"]
