@@ -1,6 +1,6 @@
 [gd_resource type="ImageTexture" load_steps=2 format=3 uid="uid://c0j4px4n72di5"]
 
-[ext_resource type="Script" path="res://material_maker/icons/icons.gd" id="1_vcwwg"]
+[ext_resource type="Script" uid="uid://cp2p2ayhrvewg" path="res://material_maker/icons/icons.gd" id="1_vcwwg"]
 
 [resource]
 script = ExtResource("1_vcwwg")
