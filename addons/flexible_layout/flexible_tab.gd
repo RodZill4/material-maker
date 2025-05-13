@@ -44,8 +44,12 @@ func _on_close_pressed():
 	flex_tab.flexible_layout.layout()
 
 func _gui_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		get_parent().get_parent().set_current(get_index())
+	if event is InputEventMouseButton and event.pressed:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				get_parent().get_parent().set_current(get_index())
+			MOUSE_BUTTON_MIDDLE:
+				%Close.emit_signal("pressed")
 
 func _get_drag_data(_position):
 	return preload("res://addons/flexible_layout/flexible_layout.gd").PanelInfo.new(flex_panel)
