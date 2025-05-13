@@ -232,6 +232,7 @@ var current_category = ""
 func _on_Section_Button_pressed(category : String) -> void:
 	if not library_manager.is_section_enabled(category):
 		return
+
 	var match_item : TreeItem
 	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
@@ -239,6 +240,7 @@ func _on_Section_Button_pressed(category : String) -> void:
 			item.collapsed = false
 			match_item = item
 			break
+
 	tree.scroll_to_item(tree.get_last_item(tree.get_root()))
 	tree.scroll_to_item(match_item)
 
