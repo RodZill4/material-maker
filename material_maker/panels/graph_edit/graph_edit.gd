@@ -175,6 +175,8 @@ func _gui_input(event) -> void:
 		if event.pressed:
 			var scancode_with_modifiers = event.get_keycode_with_modifiers()
 			match scancode_with_modifiers:
+				KEY_H:
+					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE:
 					remove_selection()
 				KEY_LEFT:
@@ -549,8 +551,12 @@ func load_file(filename) -> bool:
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
 		add_child(dialog)
+		var content_scale_factor = (mm_globals.main_window
+				.get_window().content_scale_factor)
+		dialog.content_scale_factor = content_scale_factor
 		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
+		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false
@@ -668,6 +674,11 @@ func remove_selection() -> void:
 	var next = generator.serialize()
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
 
+func minimize_selection() -> void:
+	for c in get_children():
+		if c is GraphElement and c.selected:
+			c.on_minimize_pressed()
+
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = []) -> Dictionary:
 	var data = { nodes = [], connections = [] }
@@ -768,7 +779,14 @@ func do_send_changed_signal() -> void:
 # Drag and drop
 
 func _can_drop_data(_position, data) -> bool:
-	return typeof(data) == TYPE_COLOR or typeof(data) == TYPE_DICTIONARY and (data.has('type') or (data.has('nodes') and data.has('connections')))
+	return (
+		(typeof(data) == TYPE_OBJECT and data is MMCurve)
+		or typeof(data) == TYPE_COLOR
+		or typeof(data) == TYPE_DICTIONARY
+		and (data.has('type')
+		or (data.has('nodes')
+		and data.has('connections')))
+		)
 
 func _drop_data(node_position, data) -> void:
 	if typeof(data) == TYPE_DICTIONARY and data.has("tree_item"):
@@ -780,6 +798,8 @@ func _drop_data(node_position, data) -> void:
 		do_paste({type="uniform", color={ r=data.r, g=data.g, b=data.b, a=data.a }})
 	elif typeof(data) == TYPE_DICTIONARY and data.has("type") and data.type == "Gradient" and data.has("points"):
 		do_paste({type="colorize", gradient=data})
+	elif typeof(data) == TYPE_OBJECT and data is MMCurve:
+		do_paste({type="tonality", curve=data})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform() * node_position))
 

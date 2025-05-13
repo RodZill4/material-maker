@@ -3,7 +3,8 @@ extends Window
 signal return_values(values)
 
 func _ready():
-	pass # Replace with function body.
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(450, 60) * content_scale_factor
 
 func _on_OK_pressed() -> void:
 	emit_signal("return_values", { min=$VBoxContainer/float/Min.value, max=$VBoxContainer/float/Max.value, step=$VBoxContainer/float/Step.value, default=$VBoxContainer/float/Default.value} )

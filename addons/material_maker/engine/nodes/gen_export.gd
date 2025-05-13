@@ -25,10 +25,15 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Export"
 
+func get_description() -> String:
+	return "\n".join(["Export",
+			"Defines a texture which will be saved " +
+			"along with other textures on material export"])
+
 func get_parameter_defs() -> Array:
 	return [
-			{ name="size", type="size", first=4, last=13, default=10 },
-			{ name="suffix", type="string", default="suffix" }
+			{ name="size", label="Size", type="size", first=4, last=13, default=10 },
+			{ name="suffix", label="Suffix", type="string", default="suffix" }
 		]
 
 func get_input_defs() -> Array:

@@ -28,6 +28,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Control2" type="Control" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
 [node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
@@ -42,7 +46,7 @@ texture = ExtResource("6")
 expand_mode = 3
 
 [node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/HBoxContainer3"]
-custom_minimum_size = Vector2(20, 0)
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer3"]
@@ -84,7 +88,6 @@ theme_override_constants/h_separation = 16
 columns = 2
 
 [node name="Donors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -92,6 +95,10 @@ metadata/_tab_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
 layout_mode = 2
@@ -104,6 +111,7 @@ texture = ExtResource("12")
 expand_mode = 1
 
 [node name="Node" type="Control" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/HBoxContainer"]
@@ -136,19 +144,26 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+editable = false
 wrap_mode = 1
-scroll_vertical = 7.0
 metadata/_tab_index = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SocialNetworks" type="VBoxContainer" parent="HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SocialNetworks" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RZLogo" type="TextureRect" parent="HBoxContainer/SocialNetworks"]
+[node name="RZLogo" type="TextureRect" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -157,7 +172,7 @@ size_flags_vertical = 6
 texture = ExtResource("8")
 expand_mode = 1
 
-[node name="Patreon" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="Patreon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -168,7 +183,7 @@ texture_normal = ExtResource("11")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="ItchIo" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="ItchIo" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -179,7 +194,7 @@ texture_normal = ExtResource("5")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="Github" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="Github" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -190,7 +205,7 @@ texture_normal = ExtResource("2")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="Discord" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="Discord" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -201,7 +216,7 @@ texture_normal = ExtResource("10")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="Twitter" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="Twitter" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -212,7 +227,7 @@ texture_normal = ExtResource("3")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="Youtube" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="Youtube" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -223,7 +238,7 @@ texture_normal = ExtResource("7")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="Facebook" type="TextureButton" parent="HBoxContainer/SocialNetworks"]
+[node name="Facebook" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -235,10 +250,10 @@ texture_normal = ExtResource("9")
 stretch_mode = 4
 
 [connection signal="close_requested" from="." to="." method="queue_free"]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/Patreon" to="." method="open_url" binds= ["https://www.patreon.com/rodzlabs"]]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/ItchIo" to="." method="open_url" binds= ["https://rodzilla.itch.io/material-maker"]]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/Github" to="." method="open_url" binds= ["https://github.com/RodZill4/godot-procedural-textures"]]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/Discord" to="." method="open_url" binds= ["https://discord.gg/PF5V3mFwFM"]]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/Twitter" to="." method="open_url" binds= ["https://twitter.com/R0dZill4"]]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/Youtube" to="." method="open_url" binds= ["https://www.youtube.com/channel/UCTDByv9i3ul_qQ98zUYlNAQ"]]
-[connection signal="pressed" from="HBoxContainer/SocialNetworks/Facebook" to="." method="open_url" binds= ["https://www.facebook.com/RodzLabs"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Patreon" to="." method="open_url" binds= ["https://www.patreon.com/rodzlabs"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/ItchIo" to="." method="open_url" binds= ["https://rodzilla.itch.io/material-maker"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Github" to="." method="open_url" binds= ["https://github.com/RodZill4/godot-procedural-textures"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Discord" to="." method="open_url" binds= ["https://discord.gg/PF5V3mFwFM"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Twitter" to="." method="open_url" binds= ["https://twitter.com/R0dZill4"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Youtube" to="." method="open_url" binds= ["https://www.youtube.com/channel/UCTDByv9i3ul_qQ98zUYlNAQ"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Facebook" to="." method="open_url" binds= ["https://www.facebook.com/RodzLabs"]]

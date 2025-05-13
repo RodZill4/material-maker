@@ -2,7 +2,7 @@ Extrusion node
 ..............
 
 The **Extrusion** node generates a 3D signed distance function of a shape based on
-its (2D signed function) input extruded along the Y axis.
+its (2D signed function) input extruded along the specified axis.
 
 .. image:: images/node_3d_sdf_operators_extrusion.png
 	:align: center
@@ -21,7 +21,8 @@ extruded version of the input shape.
 Parameters
 ::::::::::
 
-The **Extrusion** node accepts the *the length* of the extruded shape as parameter. 
+The **Extrusion** node accepts the *length* of the extruded shape 
+and *axis* to be extruded from as parameters. 
 
 Example images
 ::::::::::::::

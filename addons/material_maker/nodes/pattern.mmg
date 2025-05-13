@@ -205,7 +205,9 @@
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Pattern",
+		"longdesc": "Generates pattern from common waveform shapes"
 	},
 	"type": "shader"
 }
