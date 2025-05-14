@@ -17,3 +17,4 @@ Miscellaneous nodes
 	node_miscellaneous_variations
 	node_miscellaneous_randomize
 	node_miscellaneous_mesh_map
+	node_miscellaneous_mesh_triplanar
