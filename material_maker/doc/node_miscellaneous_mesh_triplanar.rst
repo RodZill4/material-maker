@@ -2,7 +2,7 @@ Mesh Triplanar node
 ~~~~~~~~~~~~~~~~~~~
 
 The **Mesh Triplanar** node samples the input image three times and
-projects them onto a model from orthogonal axises using position map
+projects them onto a model from orthogonal axes using position map
 and blends them using surface normals generated from the Mesh Map node.
 
 This makes it possible to texture a model without relying on proper UVs,
