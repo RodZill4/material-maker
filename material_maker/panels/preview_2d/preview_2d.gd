@@ -110,6 +110,7 @@ func export_animation() -> void:
 	mm_globals.main_window.add_dialog(window)
 	window.set_source(generator, output)
 	window.exclusive = true
+	window.hide()
 	window.popup_centered()#e(get_window(), Rect2(get_window().size())
 
 
