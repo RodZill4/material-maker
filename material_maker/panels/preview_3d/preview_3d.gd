@@ -132,6 +132,7 @@ func set_tonemap(id) -> void:
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instantiate()
+	popup.hide()
 	add_child(popup)
 	popup.configure_mesh(current_object)
 
