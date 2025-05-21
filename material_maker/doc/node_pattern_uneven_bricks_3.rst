@@ -4,7 +4,7 @@ Uneven Bricks 3 node
 The **Uneven Bricks 3** node outputs an uneven brick pattern texture that can be used for walls
 or pavement. It generates an uneven pattern by randomly offsetting brick intersections.
 
-.. image:: images/node_pattern_unevenbricks3.png
+.. image:: images/node_pattern_uneven_bricks_3.png
 	:align: center
 
 Inputs
