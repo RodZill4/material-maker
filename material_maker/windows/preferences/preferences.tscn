@@ -258,6 +258,11 @@ layout_mode = 2
 text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
 
+[node name="MmbButtonPasteComment" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
+layout_mode = 2
+text = "Paste to comment text box with middle mouse button"
+config_variable = "mmb_paste_comment"
+
 [node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -298,6 +303,7 @@ text = "Cancel"
 
 [connection signal="about_to_popup" from="." to="." method="_on_Preferences_about_to_show"]
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
