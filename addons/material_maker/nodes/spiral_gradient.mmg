@@ -68,7 +68,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Zoom",
 				"max": 10,
 				"min": 0,
