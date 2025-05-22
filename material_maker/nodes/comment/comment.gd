@@ -126,6 +126,16 @@ func _on_title_edit_text_submitted(_new_text):
 
 # Text edit
 
+func _on_text_gui_input(event):
+	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
+		editor.editable = true
+		editor.mouse_filter = MOUSE_FILTER_STOP
+		editor.select_all()
+		editor.grab_focus()
+		accept_event()
+	if mm_globals.has_config("mmb_paste_comment"):
+		%Text.middle_mouse_paste_enabled = mm_globals.get_config("mmb_paste_comment")
+
 func _on_text_focus_exited():
 	editor.editable = false
 	editor.mouse_filter = MOUSE_FILTER_IGNORE
