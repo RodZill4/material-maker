@@ -227,7 +227,7 @@
 					],
 					"type": "Gradient"
 				},
-				"perspective": 0.285821,
+				"perspective": 0.3,
 				"use_perspective": true
 			},
 			"tree_item": "Simple/Gradient/Spiral",
