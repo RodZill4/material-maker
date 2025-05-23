@@ -886,6 +886,7 @@ func do_send_changed_signal() -> void:
 func _can_drop_data(_position, data) -> bool:
 	return (
 		(typeof(data) == TYPE_OBJECT and data is MMCurve)
+		or (typeof(data) == TYPE_OBJECT and data is MMSplines)
 		or typeof(data) == TYPE_COLOR
 		or typeof(data) == TYPE_DICTIONARY
 		and (data.has('type')
@@ -905,6 +906,8 @@ func _drop_data(node_position, data) -> void:
 		do_paste({type="colorize", gradient=data})
 	elif typeof(data) == TYPE_OBJECT and data is MMCurve:
 		do_paste({type="tonality", curve=data})
+	elif typeof(data) == TYPE_OBJECT and data is MMSplines:
+		do_paste({type="splines", splines=data})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform() * node_position))
 
