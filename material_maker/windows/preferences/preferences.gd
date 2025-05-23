@@ -72,4 +72,4 @@ func _on_ready() -> void:
 	%WinTabletDriver.visible = OS.get_name() == "Windows"
 	%WinTabletDriverSpacer.visible = OS.get_name() == "Windows"
 	# if OS.get_name() == "Linux":
-		# $VBoxContainer/TabContainer/Graph/MmbButtonPasteComment.visible = true
+	# 	$VBoxContainer/TabContainer/Graph/MmbButtonPasteSelection.visible = true
