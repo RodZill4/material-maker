@@ -117,7 +117,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
-	get_window().move_to_foreground()
+	get_window().grab_focus()
 	get_window().gui_embed_subwindows = false
 
 	get_window().close_requested.connect(self.on_close_requested)
