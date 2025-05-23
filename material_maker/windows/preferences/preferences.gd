@@ -80,4 +80,4 @@ func _on_DownloadLanguage_closed():
 
 func _on_ready() -> void:
 	if OS.get_name() == "Linux":
-		$VBoxContainer/TabContainer/Graph/MmbButtonPasteComment.visible = true
+		$VBoxContainer/TabContainer/Graph/MmbButtonPasteSelection.visible = true

@@ -28,10 +28,11 @@ custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 2
 use_hidden_tabs_for_min_size = true
 
 [node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_tab_index = 0
@@ -249,7 +250,6 @@ step = 1.0
 float_only = true
 
 [node name="Graph" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -258,10 +258,10 @@ layout_mode = 2
 text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
 
-[node name="MmbButtonPasteComment" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
+[node name="MmbButtonPasteSelection" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
 layout_mode = 2
-text = "Paste to comment text box with middle mouse button"
-config_variable = "mmb_paste_comment"
+text = "Paste selection with middle mouse button"
+config_variable = "mmb_paste_selection"
 
 [node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
