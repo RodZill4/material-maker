@@ -377,7 +377,7 @@ func set_save_path(path: String) -> void:
 func clear_view() -> void:
 	clear_connections()
 	for c in get_children():
-		if c is GraphNode:
+		if c is GraphElement:
 			remove_child(c)
 			c.free()
 
