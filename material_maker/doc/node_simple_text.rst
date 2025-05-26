@@ -1,7 +1,8 @@
 Text node
 ~~~~~~~~~
 
-The text node outputs a single texture that shows a text.
+The text node outputs a single texture that shows a text. New lines
+can be added by using the '\n' character (without single quotes)
 
 .. image:: images/node_simple_text.png
 	:align: center
@@ -26,6 +27,10 @@ The text node accepts the following parameters:
 * the font (both TTF and OTF formats are supported)
 
 * the font size
+
+* the (extra, can be negative) line spacing, if there are multiple lines
+
+* horizontal alignment(left, right or center) of the text
 
 * whether the text is centered
 
