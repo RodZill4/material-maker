@@ -408,7 +408,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Center View (Ctrl+R)"
-tooltip_auto_translate_mode = 2
 shortcut = SubResource("Shortcut_r76ng")
 shortcut_in_tooltip = false
 icon_alignment = 1
