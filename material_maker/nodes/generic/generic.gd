@@ -337,7 +337,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 	elif p.type == "lattice":
 		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
-		control = LineEdit.new()
+		control = TextLineEdit.new()
 		control.custom_minimum_size.x = 80
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()

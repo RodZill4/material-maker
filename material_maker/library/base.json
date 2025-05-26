@@ -113,22 +113,13 @@
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAa5JREFUeJztmNuNgzAQRW2gBZQyqCQlpCcKpAL++QO8X8laiW0Gx85ZbeZISECG8fXN+AHWGOPMF9PQAmjUAFoAjRpAC6BRA2gBNGoALYBGDaAF0KgBtAAaNYAWQKMG0AJo1ABaAE0Xuulc/mdCa232swRfXwHWnPgq7FfGX/ync/R9fQWoAbQAmo8Y4Jx7OYZhSMZJ8sWuQ23GqD4JHnXmOc9RG6HfJct2TG9wH1CKWGdy9xmxfCEj8FUgJSZlhsSokktw9Tmg7/vg/VQnjkq/JNXmgHtsKi4V47fVNI3Z912cT6LvTpU5wBeyLEtWDmvtI4+k8+/gpIePNE5CLM/tdhO3eUaff1QZAmfHayxXaoI8ikeHgE9u2Y7j+HLPOVd8GFSpgLZtzbquh3GStp7X+NKTYJVlcNu2x3nO8pV6pvRy+JF3gWmaxLFd9zsqQ7s9Y8qaUPVdQCJ0nmdzuVxEbUjaP7t7rFoBEpOu1+vj/KiDNargVAX8R/SDCC2ARg2gBdCoAbQAGjWAFkCjBtACaNQAWgCNGkALoFEDaAE0agAtgEYNoAXQqAG0AJofyDhQx506hhgAAAAASUVORK5CYII=",
 			"name": "text",
 			"parameters": {
+				"alignment": 0,
+				"bg": { "a": 1.0, "b": 0.0, "g": 0.0, "r": 0.0, "type": "Color" },
+				"center": false,
+				"fg": { "a": 1.0, "b": 1.0, "g": 1.0, "r": 1.0, "type": "Color" },
 				"font": "",
 				"font_size": 64.0,
-				"fg": {
-					"r": 1.0,
-					"g": 1.0,
-					"b": 1.0,
-					"a": 1.0,
-					"type": "Color"
-				},
-				"bg": {
-					"r": 0.0,
-					"g": 0.0,
-					"b": 0.0,
-					"a": 1.0,
-					"type": "Color"
-				},
+				"line_spacing": 0.0,
 				"text": "Text",
 				"x": -0.4,
 				"y": -0.4
