@@ -16,7 +16,7 @@ func request(object : Object) -> Object:
 	return self
 
 var current_font : String = ""
-func render_text(object : Object, text : String, font_path : String, font_size : int, line_spacing : float,alignment : int, x : float, y : float, center : bool = false) -> Object:
+func render_text(object : Object, text : String, font_path : String, font_size : int, line_spacing : float, alignment : int, x : float, y : float, center : bool = false) -> Object:
 	assert(render_owner == object)
 	var font : Font = load(font_path)
 	if font == null:
