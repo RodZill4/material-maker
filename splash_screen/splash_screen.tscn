@@ -221,5 +221,6 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_587d8")
 
 [connection signal="gui_input" from="SplashScreen/TextureRect/SecretButton" to="." method="_on_secret_button_gui_input"]
+[connection signal="gui_input" from="SplashScreen/URL" to="." method="_on_url_gui_input"]
 [connection signal="pressed" from="BackgroundSelect/Previous" to="." method="_on_previous_pressed"]
 [connection signal="pressed" from="BackgroundSelect/Next" to="." method="_on_next_pressed"]

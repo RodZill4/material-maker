@@ -839,6 +839,7 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
@@ -851,7 +852,6 @@ func view_reset_zoom() -> void:
 
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
-
 
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -888,6 +888,8 @@ func add_selection_to_library(index) -> void:
 	if selected_nodes.is_empty():
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var current_item_name = ""
 	if library.is_inside_tree():
@@ -913,6 +915,8 @@ func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 
 func add_brush_to_library(index) -> void:
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
 	if ! status.ok:
@@ -977,7 +981,7 @@ func show_library_item_doc() -> void:
 		var doc_name = library.get_selected_item_doc_name()
 		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			if DirAccess.open("res://").file_exists(doc_path):
+			if FileAccess.file_exists(doc_path):
 				OS.shell_open(doc_path)
 				break
 			doc_name = doc_name.left(doc_name.rfind("_"))
@@ -1188,11 +1192,9 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(file.get_as_text())
-				var parse_result = test_json_conv.get_data()
-				if parse_result.error == OK:
-					var data = parse_result.result
+				var test_json_conv : JSON = JSON.new()
+				if test_json_conv.parse(file.get_as_text()) == OK:
+					var data = test_json_conv.get_data()
 					if data.has("material") and data.has("name"):
 						mm_loader.save_export_target(data.material, data.name, data)
 						mm_loader.load_external_export_targets()
@@ -1261,3 +1263,7 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+
+func _on_console_resizer_container_mouse_entered() -> void:
+	pass # Replace with function body.

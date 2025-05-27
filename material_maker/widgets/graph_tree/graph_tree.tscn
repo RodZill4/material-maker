@@ -52,14 +52,14 @@ Tree/styles/title_button_normal = null
 Tree/styles/title_button_pressed = null
 
 [node name="GraphTree" type="Popup"]
-offset_right = 335.0
-offset_bottom = 339.0
 script = ExtResource("1")
 
 [node name="Tree" type="Tree" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = SubResource("2")
 
+[connection signal="ready" from="." to="." method="_ready"]
 [connection signal="item_activated" from="Tree" to="." method="_on_Tree_item_double_clicked"]
 [connection signal="item_icon_double_clicked" from="Tree" to="." method="_on_Tree_item_double_clicked"]

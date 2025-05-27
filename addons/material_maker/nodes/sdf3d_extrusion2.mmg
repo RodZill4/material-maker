@@ -1,0 +1,77 @@
+{
+	"name": "sdf3d_extrusion2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"axis": 1,
+		"d": 0.3
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec2 $(name_uv)_w = vec2($in($axis.xy+vec2(0.5)),abs($axis.z)-$d);"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "100.0",
+				"label": "",
+				"longdesc": "The input 2D shape as a signed distance function",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "sdf2d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Extrudes its 2D input shape along a specific axis",
+		"name": "Extrusion",
+		"outputs": [
+			{
+				"longdesc": "The extruded shape",
+				"sdf3d": "min(max($(name_uv)_w.x,$(name_uv)_w.y),0.0)+length(max($(name_uv)_w,0.0))",
+				"shortdesc": "Output",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1.0,
+				"label": "Axis",
+				"longdesc": "Axis to extrude the shape from",
+				"name": "axis",
+				"shortdesc": "Axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "$uv.yzx"
+					},
+					{
+						"name": "Y",
+						"value": "$uv.xzy"
+					},
+					{
+						"name": "Z",
+						"value": "$uv.xyz"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.30,
+				"label": "",
+				"longdesc": "The length of the extrusion operation",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d",
+				"shortdesc": "Length",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Extrusion"
+	},
+	"type": "shader"
+}

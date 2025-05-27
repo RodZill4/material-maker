@@ -20,10 +20,9 @@
 			"}",
 			""
 		],
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
+		"longdesc": "Generates depth of a 3D Sphere",
 		"name": "Sphere",
 		"outputs": [
 			{
@@ -39,8 +38,8 @@
 				"default": 0.5,
 				"label": "Center X",
 				"longdesc": "Position of the center along the X axis",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "cx",
 				"shortdesc": "Center.x",
 				"step": 0.01,
@@ -70,7 +69,8 @@
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Sphere"
 	},
 	"type": "shader"
 }

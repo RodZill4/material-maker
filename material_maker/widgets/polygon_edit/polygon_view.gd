@@ -1,4 +1,6 @@
 @tool
+class_name PolygonView
+
 extends Control
 
 
@@ -11,13 +13,16 @@ var draw_size : Vector2 = Vector2(1, 1)
 var draw_offset : Vector2 = Vector2(0, 0)
 var closed : bool = true
 
+func _init(v : MMPolygon = null) -> void:
+	polygon = v
 
 func set_closed(c : bool = true):
 	closed = c
 	queue_redraw()
 
 func _ready() -> void:
-	polygon = MMPolygon.new()
+	if polygon == null:
+		polygon = MMPolygon.new()
 	connect("resized", Callable(self, "_on_resize"))
 	_on_resize()
 

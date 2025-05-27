@@ -10,6 +10,7 @@ signal return_info(status)
 
 
 func _ready():
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	%FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
 	%FilePickerButton.icon = get_parent().get_theme_icon("folder", "MM_Icons")
 	popup_centered()
@@ -67,5 +68,5 @@ func enter_info(value : String = "") -> Dictionary:
 	return result
 
 func _on_VBoxContainer_minimum_size_changed():
-	min_size = $MarginContainer.get_combined_minimum_size()
+	min_size = $MarginContainer.get_combined_minimum_size() * content_scale_factor
 	max_size = Vector2(max_size.x, $MarginContainer.get_minimum_size().y)

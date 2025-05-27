@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://d3kv286hwj17n"]
+
+[ext_resource type="Texture2D" uid="uid://bp4yrfym7oapw" path="res://material_maker/theme/dark/curve_presets.svg" id="1"]
+
+[resource]
+atlas = ExtResource("1")
+region = Rect2(32, 16, 16, 16)
