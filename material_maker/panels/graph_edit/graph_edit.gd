@@ -870,8 +870,8 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 
 				if node_rect.encloses(c_rect):
 					c.selected = true
-	#elif node is MMGraphCommentLine:
-		#pass
+	elif node is MMGraphCommentLine:
+		pass
 	else:
 		highlight_connections()
 		await get_tree().process_frame
