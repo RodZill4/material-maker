@@ -50,6 +50,9 @@ func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 		return []
 	return [ self ]
 
+func get_description() -> String:
+	return "\n".join(["Buffer", "Samples input into a texture of a given resolution"])
+
 func get_parameter_defs() -> Array:
 	var parameter_defs : Array = [ { name="size",label="Size", type="size", first=4, last=13, default=4 } ]
 	match version:

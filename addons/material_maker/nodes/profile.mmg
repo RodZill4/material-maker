@@ -124,7 +124,9 @@
 				"step": 0.01,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Profile",
+		"longdesc": "Generates profile as a greyscale image from specified gradient"
 	},
 	"type": "shader"
 }

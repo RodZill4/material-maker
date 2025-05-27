@@ -1,3 +1,4 @@
+class_name FloatEdit
 extends Container
 
 var float_value: float = 0.5
@@ -69,9 +70,9 @@ var mode := Modes.IDLE:
 var editable := true:
 	set(val):
 		if val:
-			mode = Modes.UNEDITABLE
-		else:
 			mode = Modes.IDLE
+		else:
+			mode = Modes.UNEDITABLE
 	get:
 		return mode != Modes.UNEDITABLE
 

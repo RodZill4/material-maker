@@ -13,7 +13,7 @@ func configure_layer(layers : Node, l : Object) -> void:
 	$GridContainer/Normal.set_value(l.normal_alpha)
 	$GridContainer/Depth.set_value(l.depth_alpha)
 	$GridContainer/Occlusion.set_value(l.occlusion_alpha)
-	popup(Rect2($GridContainer.get_global_mouse_position(), $GridContainer.get_minimum_size()))
+	popup(Rect2($GridContainer.get_global_mouse_position() * content_scale_factor, $GridContainer.get_minimum_size()))
 
 func _on_LayerConfigPopup_popup_hide():
 	queue_free()
