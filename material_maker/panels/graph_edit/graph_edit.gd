@@ -856,7 +856,7 @@ func highlight_connections() -> void:
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
-	if node is MMGraphComment or node is MMGraphCommentLine:
+	if node is MMGraphComment:
 		# Need to account for zoom level when checking for contained nodes within comment
 		var current_zoom = get_zoom()
 		var node_rect = node.get_rect()
@@ -870,6 +870,8 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 
 				if node_rect.encloses(c_rect):
 					c.selected = true
+	#elif node is MMGraphCommentLine:
+		#pass
 	else:
 		highlight_connections()
 		await get_tree().process_frame
