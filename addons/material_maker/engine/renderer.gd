@@ -25,6 +25,8 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	var label_settings : LabelSettings = LabelSettings.new()
 	label_settings.font = font
 	label_settings.font_size = font_size
+	line_spacing = max(line_spacing,
+			-font.get_string_size(text, 0, -1, font_size).y)
 	label_settings.line_spacing = line_spacing
 	$Font/Label.label_settings = label_settings
 	$Font/Label.horizontal_alignment = alignment
