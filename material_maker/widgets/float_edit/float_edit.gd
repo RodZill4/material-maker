@@ -4,7 +4,7 @@ extends Container
 var float_value: float = 0.5
 var default_float_value: float = 0.0
 
-enum ContextMenu {RESET_VALUE, EDIT_EXPRESSION, COPY, PASTE}
+enum ContextMenu {RESET_VALUE, EDIT_EXPRESSION, COPY, PASTE, COPY_REFERENCE}
 
 @export var default_value: float = 0.0 :
 	get:
@@ -228,6 +228,7 @@ func _gui_input(event: InputEvent) -> void:
 			# Handle Right Click
 			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 				var context_menu : PopupMenu = PopupMenu.new()
+				var copy_submenu : PopupMenu = null
 				context_menu.position = get_local_mouse_position() + get_screen_position()
 
 				context_menu.add_item("Reset value", ContextMenu.RESET_VALUE)
@@ -235,9 +236,26 @@ func _gui_input(event: InputEvent) -> void:
 					context_menu.add_item("Edit expression", ContextMenu.EDIT_EXPRESSION)
 
 				context_menu.add_separator()
-				context_menu.add_item("Copy", ContextMenu.COPY)
+
+				if not float_only:
+					copy_submenu = PopupMenu.new()
+					copy_submenu.add_item("Value", ContextMenu.COPY)
+					copy_submenu.add_item("Reference", ContextMenu.COPY_REFERENCE)
+					context_menu.add_submenu_node_item("Copy", copy_submenu)
+				else:
+					context_menu.add_item("Copy", ContextMenu.COPY)
+
 				if DisplayServer.clipboard_has():
 					context_menu.add_item("Paste", ContextMenu.PASTE)
+
+				if copy_submenu != null:
+					copy_submenu.id_pressed.connect(func(id):
+						match id:
+							ContextMenu.COPY_REFERENCE:
+								DisplayServer.clipboard_set("$" + str(name))
+							ContextMenu.COPY:
+								DisplayServer.clipboard_set(str(get_value()))
+						)
 
 				context_menu.id_pressed.connect(func(id):
 					match id:
@@ -253,6 +271,14 @@ func _gui_input(event: InputEvent) -> void:
 						ContextMenu.COPY:
 							DisplayServer.clipboard_set(str(get_value()))
 						ContextMenu.PASTE:
+							var clipboard = DisplayServer.clipboard_get()
+							if name in clipboard:
+								var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+								dialog.dialog_text = TranslationServer.translate("Result paste will cause parameter to reference itself")
+								dialog.dialog_text += " ( $%s )" % [ name ]
+								add_child(dialog)
+								await dialog.ask()
+								return
 							set_value(DisplayServer.clipboard_get(), true, true)
 				)
 				context_menu.popup_hide.connect(context_menu.queue_free)
