@@ -25,6 +25,7 @@ func edit_text(wt : String, value : String, o : Object, m : String):
 	method = m
 	title = wt
 	editor.text = value.replace("\\n", "\n")
+	hide()
 	popup_centered()
 	editor.set_caret_column(editor.text.length())
 	editor.grab_focus()
