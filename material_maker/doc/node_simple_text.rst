@@ -2,7 +2,9 @@ Text node
 ~~~~~~~~~
 
 The text node outputs a single texture that shows a text. New lines
-can be added by using the '\n' character (without single quotes)
+can be added by using the '\n' character (without single quotes).
+
+Right clicking on the text box will also bring up a text editor.
 
 .. image:: images/node_simple_text.png
 	:align: center
