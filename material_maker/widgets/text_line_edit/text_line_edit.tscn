@@ -14,5 +14,4 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tiioq")
 
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="ready" from="." to="." method="_on_ready"]
