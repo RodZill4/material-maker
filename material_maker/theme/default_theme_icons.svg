@@ -28,6 +28,17 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
+<<<<<<< HEAD
+     inkscape:zoom="22.627417"
+     inkscape:cx="120.25235"
+     inkscape:cy="135.72031"
+     inkscape:window-width="1728"
+     inkscape:window-height="982"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer61">
+=======
      inkscape:zoom="32"
      inkscape:cx="119.76563"
      inkscape:cy="132.6875"
@@ -37,6 +48,7 @@
      inkscape:window-y="38"
      inkscape:window-maximized="1"
      inkscape:current-layer="g11">
+>>>>>>> master
     <inkscape:grid
        id="grid2"
        units="px"
@@ -72,6 +84,42 @@
   </sodipodi:namedview>
   <defs
      id="defs1">
+<<<<<<< HEAD
+    <linearGradient
+       id="swatch113"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop113" />
+    </linearGradient>
+    <linearGradient
+       id="swatch112"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop112" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect106"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 | F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+=======
+>>>>>>> master
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect85"
@@ -2384,12 +2432,29 @@
        y1="25"
        x2="126"
        y2="25" />
+<<<<<<< HEAD
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch25"
+       id="linearGradient148"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0442364,0,0,1.0442364,-0.41450398,6.0007634)"
+       x1="5.3657527"
+       y1="-130.16422"
+       x2="10.565775"
+       y2="-130.16422" />
+=======
+>>>>>>> master
   </defs>
   <g
      inkscape:groupmode="layer"
      id="layer77"
+<<<<<<< HEAD
+     inkscape:label="twelvth_row">
+=======
      inkscape:label="twelvth_row"
      style="display:inline">
+>>>>>>> master
     <g
        inkscape:groupmode="layer"
        id="layer66"
@@ -2419,8 +2484,12 @@
   <g
      inkscape:groupmode="layer"
      id="layer70"
+<<<<<<< HEAD
+     inkscape:label="eleventh_row">
+=======
      inkscape:label="eleventh_row"
      style="display:inline">
+>>>>>>> master
     <g
        inkscape:groupmode="layer"
        id="layer82"
@@ -2840,7 +2909,12 @@
      inkscape:groupmode="layer"
      id="g2"
      inkscape:label="tenth_row"
+<<<<<<< HEAD
+     sodipodi:insensitive="true"
+     style="display:inline">
+=======
      sodipodi:insensitive="true">
+>>>>>>> master
     <g
        inkscape:groupmode="layer"
        id="layer69"
@@ -3055,8 +3129,12 @@
      inkscape:groupmode="layer"
      id="layer61"
      inkscape:label="ninth_row"
+<<<<<<< HEAD
+     style="display:inline">
+=======
      style="display:inline"
      sodipodi:insensitive="true">
+>>>>>>> master
     <g
        inkscape:groupmode="layer"
        id="layer80"
@@ -3229,6 +3307,22 @@
     <g
        inkscape:groupmode="layer"
        id="g11"
+<<<<<<< HEAD
+       inkscape:label="Paste"
+       transform="translate(112)">
+      <path
+         id="path145"
+         style="display:inline;fill:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;paint-order:stroke fill markers"
+         d="m 4.3965655,-129.67919 c -0.9210803,0 -1.6833472,-0.76227 -1.6833472,-1.68335 v -9.28272 c 0,-0.92108 0.7622669,-1.68335 1.6833472,-1.68335 h 7.2102695 c 0.921081,0 1.683347,0.76227 1.683347,1.68335 v 9.28272 c 0,0.92108 -0.762266,1.68335 -1.683347,1.68335 h -0.23784 v -1.37847 h 0.23784 c 0.180683,0 0.304873,-0.1242 0.304873,-0.30488 v -9.28272 c 0,-0.18068 -0.12419,-0.30487 -0.304873,-0.30487 H 4.3965655 c -0.1806828,0 -0.3048729,0.12419 -0.3048729,0.30487 v 9.28272 c 0,0.18068 0.1241901,0.30488 0.3048729,0.30488 h 0.2340993 v 1.37847 z"
+         transform="matrix(1.0442364,0,0,-1.0442364,-0.35469,-5.4762767)"
+         sodipodi:nodetypes="ssssssssccssssssssccs" />
+      <path
+         id="path150"
+         style="display:inline;fill:url(#linearGradient148);stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;paint-order:stroke fill markers"
+         d="m 5.9038377,-128.75798 c -0.3317977,0 -0.6152344,-0.28344 -0.6152344,-0.61524 v -1.76128 c 0,-0.3318 0.2834367,-0.61523 0.6152344,-0.61523 h 4.1998843 c 0.331796,0 0.615233,0.28343 0.615233,0.61523 v 1.76128 c 0,0.3318 -0.283437,0.61524 -0.615233,0.61524 z"
+         transform="scale(1,-1)"
+         sodipodi:nodetypes="sssssssss" />
+=======
        inkscape:label="Function"
        transform="matrix(1.0755649,0,0,1.0756119,8.702853,-10.44184)">
       <path
@@ -3250,17 +3344,28 @@
          d="m 108.65079,137.28161 -3.43603,4.07559"
          id="path16"
          sodipodi:nodetypes="cc" />
+>>>>>>> master
     </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer60"
      inkscape:label="eight_row"
+<<<<<<< HEAD
+     sodipodi:insensitive="true"
+     style="display:inline">
+    <g
+       inkscape:groupmode="layer"
+       id="layer45"
+       inkscape:label="CheckCheckedDisabled"
+       style="display:inline">
+=======
      sodipodi:insensitive="true">
     <g
        inkscape:groupmode="layer"
        id="layer45"
        inkscape:label="CheckCheckedDisabled">
+>>>>>>> master
       <path
          id="path85"
          style="fill:url(#linearGradient89);fill-opacity:1;stroke-width:0;paint-order:fill markers stroke"
@@ -3271,7 +3376,12 @@
     <g
        inkscape:groupmode="layer"
        id="layer44"
+<<<<<<< HEAD
+       inkscape:label="CheckUncheckedDisabled"
+       style="display:inline">
+=======
        inkscape:label="CheckUncheckedDisabled">
+>>>>>>> master
       <path
          id="path92"
          style="fill:url(#linearGradient92);stroke-width:0;paint-order:fill markers stroke"
@@ -3282,7 +3392,12 @@
        inkscape:groupmode="layer"
        id="g18"
        inkscape:label="CheckChecked"
+<<<<<<< HEAD
+       transform="translate(16)"
+       style="display:inline">
+=======
        transform="translate(16)">
+>>>>>>> master
       <path
          id="path18"
          style="fill:url(#linearGradient19);fill-opacity:1;stroke-width:0;paint-order:fill markers stroke"
@@ -3292,7 +3407,12 @@
     <g
        inkscape:groupmode="layer"
        id="layer39"
+<<<<<<< HEAD
+       inkscape:label="CheckUnchecked"
+       style="display:inline">
+=======
        inkscape:label="CheckUnchecked">
+>>>>>>> master
       <path
          id="rect16"
          style="fill:url(#linearGradient85);stroke-width:0;paint-order:fill markers stroke"
@@ -3333,7 +3453,12 @@
     <g
        inkscape:groupmode="layer"
        id="layer38"
+<<<<<<< HEAD
+       inkscape:label="RadioChecked"
+       style="display:inline">
+=======
        inkscape:label="RadioChecked">
+>>>>>>> master
       <ellipse
          style="fill:url(#linearGradient15);fill-opacity:1;stroke-width:0;paint-order:fill markers stroke"
          id="path5"
@@ -4306,7 +4431,12 @@
      inkscape:groupmode="layer"
      id="layer53"
      inkscape:label="first_row"
+<<<<<<< HEAD
+     sodipodi:insensitive="true"
+     style="display:inline">
+=======
      sodipodi:insensitive="true">
+>>>>>>> master
     <g
        inkscape:groupmode="layer"
        id="layer12"
