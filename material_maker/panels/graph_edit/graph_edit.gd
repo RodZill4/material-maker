@@ -1359,3 +1359,21 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 		do_create_nodes({nodes=[ reroute_node ],connections=reroute_connections})
 	var next = generator.serialize()
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)
+
+
+func _on_gui_input(event: InputEvent) -> void:
+	# handle quick bar shortcuts
+	if event is InputEventKey and event.is_pressed():
+		if event.unicode >= KEY_0 and event.unicode <= KEY_9:
+			var key_num = event.unicode - KEY_0 - 1
+			key_num = 9 if key_num == -1 else key_num
+			
+			var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
+			var quick_button_key = "quick_button_%d" % [key_num]
+			
+			if mm_globals.config.has_section_key("library", quick_button_key):
+				var config = mm_globals.config.get_value("library", quick_button_key)
+				if config != "":
+					var library_item = library_manager.get_item(config)
+					if library_item != null:
+						do_paste(library_item.item)
