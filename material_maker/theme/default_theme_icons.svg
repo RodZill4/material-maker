@@ -28,16 +28,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="20.870518"
-     inkscape:cx="66.361553"
-     inkscape:cy="192.90369"
-     inkscape:window-width="1728"
-     inkscape:window-height="984"
+     inkscape:zoom="4"
+     inkscape:cx="59.625"
+     inkscape:cy="112.125"
+     inkscape:window-width="1152"
+     inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="38"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer81-9-4-4"
-     showguides="true">
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer82">
     <inkscape:grid
        id="grid2"
        units="px"
@@ -70,43 +69,17 @@
        gridanglex="30"
        gridanglez="30"
        visible="true" />
+    <inkscape:page
+       x="0"
+       y="0"
+       width="128"
+       height="208"
+       id="page2"
+       margin="0"
+       bleed="0" />
   </sodipodi:namedview>
   <defs
      id="defs1">
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect12"
-       is_visible="true"
-       lpeversion="1"
-       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,2.1839154,0,1 @ F,0,0,1,0,2.9257121,0,1 @ F,0,0,1,0,0,0,1"
-       radius="0"
-       unit="px"
-       method="auto"
-       mode="F"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
-       hide_knots="false" />
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect11"
-       is_visible="true"
-       lpeversion="1"
-       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-       radius="0"
-       unit="px"
-       method="auto"
-       mode="F"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
-       hide_knots="false" />
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect85"
@@ -440,23 +413,6 @@
        apply_no_radius="true"
        apply_with_radius="true"
        only_selected="true"
-       hide_knots="false" />
-    <inkscape:path-effect
-       effect="fillet_chamfer"
-       id="path-effect38"
-       is_visible="true"
-       lpeversion="1"
-       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
-       radius="0"
-       unit="px"
-       method="auto"
-       mode="F"
-       chamfer_steps="1"
-       flexible="false"
-       use_knot_distance="true"
-       apply_no_radius="true"
-       apply_with_radius="true"
-       only_selected="false"
        hide_knots="false" />
     <linearGradient
        id="swatch38"
@@ -2419,6 +2375,23 @@
        y1="25"
        x2="126"
        y2="25" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect12"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,2.1839154,0,1 @ F,0,0,1,0,2.9257121,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#swatch4"
@@ -2472,17 +2445,17 @@
   </defs>
   <g
      inkscape:groupmode="layer"
-     id="layer77-3"
+     id="g30"
      inkscape:label="thirteenth_row"
-     transform="translate(-1.51673,-11.9367)">
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer81-9"
        inkscape:label="BezierLine"
-       transform="translate(-39.472622,24)">
+       transform="translate(-40.486665,12.17902)">
       <path
          style="fill:none;stroke:#ffffff;stroke-width:1.75748;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
-         d="m 58.890213,193.48381 c 7.733981,0 4.49042,-11.04855 12.2244,-11.04855"
+         d="m 58.395956,193.36969 c 7.733981,0 4.49042,-11.04855 12.2244,-11.04855"
          id="path100"
          sodipodi:nodetypes="cc" />
     </g>
@@ -2490,10 +2463,10 @@
        inkscape:groupmode="layer"
        id="layer81-9-4"
        inkscape:label="ManhattanLine"
-       transform="translate(-32.093155,20.00223)">
+       transform="translate(-33.107198,8.1812495)">
       <path
-         style="fill:none;stroke:#ffffff;stroke-width:1.75748;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;stroke-miterlimit:100"
-         d="m 67.558407,197.44763 6.055523,0.0339 -10e-7,-11.09273 h 6.136328"
+         style="fill:none;stroke:#ffffff;stroke-width:1.75748;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1"
+         d="m 67.056804,197.33238 6.055523,0.0339 -10e-7,-11.09273 h 6.136328"
          id="path101"
          sodipodi:nodetypes="cccc" />
     </g>
@@ -2501,10 +2474,10 @@
        inkscape:groupmode="layer"
        id="layer81-9-4-5"
        inkscape:label="DiagonalLine"
-       transform="translate(-40.731773,-5.57339)">
+       transform="translate(-41.745816,-17.39437)">
       <path
          style="fill:none;stroke:#ffffff;stroke-width:1.75748;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-         d="m 92.205368,223.01013 3.944577,0.003 4.122595,-10.98335 4.13088,-0.0156"
+         d="m 91.701721,222.89426 3.944577,0.003 4.122595,-10.98335 4.130877,-0.0156"
          id="path101-5"
          sodipodi:nodetypes="cccc" />
     </g>
@@ -2512,10 +2485,10 @@
        inkscape:groupmode="layer"
        id="layer81-9-4-5-7"
        inkscape:label="StraightLine"
-       transform="translate(-73.184898,-5.51124)">
+       transform="translate(-74.198941,-16.651901)">
       <path
          style="fill:none;stroke:#ffffff;stroke-width:1.75748;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-         d="m 76.611618,222.94763 12.144971,-11.0897"
+         d="m 76.109492,222.15105 12.144971,-11.0897"
          id="path101-5-8"
          sodipodi:nodetypes="cc" />
     </g>
@@ -2523,20 +2496,22 @@
        inkscape:groupmode="layer"
        id="layer81-9-4-4"
        inkscape:label="RoundedLine"
-       transform="translate(-0.35268465,19.968232)">
+       transform="translate(-1.3667284,8.1472515)">
       <path
          style="fill:none;stroke:#ffffff;stroke-width:1.75748;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:100;stroke-dasharray:none;stroke-opacity:1"
          d="m 67.873155,197.53104 3.871642,0.0217 a 2.1717234,2.1717234 135.16037 0 0 2.183881,-2.17169 l -1e-6,-5.9831 a 2.9257118,2.9257118 135 0 1 2.925712,-2.92571 h 3.210616"
          id="path101-3"
          sodipodi:nodetypes="cccc"
          inkscape:path-effect="#path-effect12"
-         inkscape:original-d="m 67.873155,197.53104 6.055523,0.0339 -1e-6,-11.09273 h 6.136328" />
+         inkscape:original-d="m 67.873155,197.53104 6.055523,0.0339 -1e-6,-11.09273 h 6.136328"
+         transform="translate(-0.50264722,-0.11552464)" />
     </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer77"
-     inkscape:label="twelvth_row">
+     inkscape:label="twelvth_row"
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer66"
@@ -2566,7 +2541,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer70"
-     inkscape:label="eleventh_row">
+     inkscape:label="eleventh_row"
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer82"
@@ -2676,7 +2652,8 @@
      inkscape:groupmode="layer"
      id="g1"
      inkscape:label="eleventh_row"
-     sodipodi:insensitive="true">
+     sodipodi:insensitive="true"
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="g217"
@@ -2873,7 +2850,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer63"
-     inkscape:label="tenth_row">
+     inkscape:label="tenth_row"
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer74"
@@ -3199,6 +3177,7 @@
      inkscape:groupmode="layer"
      id="layer61"
      inkscape:label="ninth_row"
+     style="display:inline"
      sodipodi:insensitive="true">
     <g
        inkscape:groupmode="layer"
@@ -3368,6 +3347,31 @@
          cy="140.5"
          rx="1.5"
          ry="1.4999962" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="g11"
+       inkscape:label="Function"
+       transform="matrix(1.0755649,0,0,1.0756119,8.702853,-10.44184)">
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1.51548;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         d="m 105.65813,130.07033 c 0,0 -1.87662,-0.0142 -2.47242,1.81208 -0.59582,1.82622 -1.31784,7.22121 -2.15195,8.54612 -0.83412,1.32491 -1.397369,1.14587 -2.747857,1.18169"
+         id="path11"
+         sodipodi:nodetypes="cssc" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1.63492;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         d="m 100.09921,133.75242 h 5.34269"
+         id="path13" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1.50564;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         d="m 105.21476,137.28161 3.43603,4.07559"
+         id="path14"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;stroke:#ffffff;stroke-width:1.50564;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         d="m 108.65079,137.28161 -3.43603,4.07559"
+         id="path16"
+         sodipodi:nodetypes="cc" />
     </g>
   </g>
   <g
