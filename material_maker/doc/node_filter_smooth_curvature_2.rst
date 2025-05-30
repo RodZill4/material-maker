@@ -3,7 +3,7 @@ Smooth Curvature 2 node
 
 The **Smooth Curvature 2** node generates an curvature texture from its input.
 
-.. image:: images/node_filter_smoothcurvature2.png
+.. image:: images/node_filter_smooth_curvature_2.png
 	:align: center
 
 Inputs

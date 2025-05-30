@@ -3,6 +3,9 @@ Easy SDF node
 
 The **Easy SDF** node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.
 
+.. image:: images/node_simple_easy_sdf.png
+	:align: center
+
 Inputs
 ++++++
 
