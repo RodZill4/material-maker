@@ -137,7 +137,6 @@ func _gui_input(event: InputEvent) -> void:
 				from_lower_bound = float_value <= min_value
 				from_upper_bound = float_value >= max_value
 				actually_dragging = false
-				$Edit.grab_focus()
 
 		if event.is_action("ui_accept") and event.pressed:
 			mode = Modes.EDITING
@@ -309,5 +308,8 @@ func _on_mouse_exited() -> void:
 
 
 func _on_edit_draw() -> void:
-	if get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() ==  $Edit:
+	var is_focused = get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() == $Edit
+	var is_dragging = mode == Modes.SLIDING
+
+	if is_focused or is_dragging:
 		$Edit.draw_style_box(get_theme_stylebox("focus"), Rect2(Vector2(), size))
