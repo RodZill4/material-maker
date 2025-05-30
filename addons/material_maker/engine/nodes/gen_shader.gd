@@ -808,6 +808,7 @@ func do_edit(node, edit_window_scene : PackedScene, tab : String = "") -> void:
 		edit_window.connect("popup_hide", Callable(edit_window, "queue_free"))
 		edit_window.get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 		edit_window.get_window().min_size = Vector2(950, 450) * edit_window.get_window().content_scale_factor
+		edit_window.hide()
 		edit_window.popup_centered()
 		if tab != "":
 			edit_window.show_tab(tab)

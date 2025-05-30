@@ -25,6 +25,7 @@ func _ready():
 			picker.content_scale_factor = content_scale_factor
 			picker.min_size = picker.get_contents_minimum_size() * content_scale_factor
 	
+	hide()
 	popup_centered()
 	_on_ViewportContainer_resized()
 	connect_controls()
