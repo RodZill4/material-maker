@@ -3,7 +3,7 @@ Arc Pavement node
 
 The **Arc Pavement** node outputs several related bricks pattern textures that can be used for pavement.
 
-.. image:: images/node_pattern_bricks_arcpavement.png
+.. image:: images/node_pattern_arc_pavement.png
 	:align: center
 
 Inputs

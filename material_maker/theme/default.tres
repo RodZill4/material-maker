@@ -419,7 +419,7 @@ region = Rect2(64, 64, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ovvp6"]
 atlas = ExtResource("1_s43fy")
-region = Rect2(112, 128, 16, 16)
+region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_du4od"]
 atlas = ExtResource("1_s43fy")
@@ -1164,6 +1164,7 @@ PopupMenu/icons/unchecked_disabled = SubResource("AtlasTexture_ftwxj")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_rqlqa")
+RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
 SpinBox/colors/down_disabled_icon_modulate = Color(0.875, 0.875, 0.875, 0.5)
 SpinBox/colors/down_hover_icon_modulate = Color(1, 1, 1, 1)
 SpinBox/colors/down_icon_modulate = Color(1, 1, 1, 1)
