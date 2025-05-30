@@ -56,7 +56,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 4,
+				"default": 16,
 				"label": "Columns",
 				"longdesc": "Number of pixel columns of the output",
 				"max": 256,
@@ -68,7 +68,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 16,
 				"label": "Rows",
 				"longdesc": "Number of pixel rows of the output",
 				"max": 256,
@@ -80,7 +80,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 8,
 				"label": "Levels",
 				"longdesc": "Number of color levels for each channel",
 				"max": 32,

@@ -42,7 +42,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 2,
 				"label": "Frequency",
 				"longdesc": "The frequency of the sine wave function (i.e. the number of oscillations shown in the generated image).",
 				"max": 16,
