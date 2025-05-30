@@ -115,6 +115,11 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	$SplashFade.visible = true
+
+	# unset clear color set from splash screen (use default)
+	RenderingServer.set_default_clear_color(Color(0.3,0.3,0.3,1.0))
+
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
@@ -224,9 +229,16 @@ func _ready() -> void:
 						for f in files:
 							DirAccess.remove_absolute(f)
 
-	if get_current_graph_edit() == null:
-		await get_tree().process_frame
-		new_material()
+	var tween = get_tree().create_tween()
+	tween.tween_property($SplashFade, "color", Color(0.0,0.0,0.0,0.0),
+			0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_delay(0.2)
+	tween.tween_callback(func():
+		$SplashFade.visible = false
+		$SplashFade.free()
+		if get_current_graph_edit() == null:
+			await get_tree().process_frame
+			new_material()
+	)
 
 	size = get_window().size
 	position = Vector2.ZERO
