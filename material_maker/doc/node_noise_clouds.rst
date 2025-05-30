@@ -3,7 +3,7 @@ Clouds node
 
 The **Clouds** node outputs various clouds noises.
 
-.. image:: images/node_noise_clouds.png
+.. image:: images/node_noise_composite_clouds_noise.png
 	:align: center
 
 Inputs

@@ -33,6 +33,7 @@ func ask(status : Array) -> String:
 		label.text = tr(s.message)
 		checks.add_child(label)
 	_on_MarginContainer_minimum_size_changed()
+	hide()
 	popup_centered()
 	var result = await self.return_status
 	queue_free()

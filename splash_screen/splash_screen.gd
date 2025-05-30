@@ -237,3 +237,8 @@ func _on_next_pressed():
 func _on_title_gui_input(event, url : String):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		OS.shell_open(url)
+
+
+func _on_url_gui_input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		OS.shell_open("https://www.materialmaker.org")

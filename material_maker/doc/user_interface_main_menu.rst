@@ -5,7 +5,7 @@ The main menu bar is organized in 5 menus:
 
 * the *File* menu contains actions to create, load, save and export materials
 * the *Edit* menu has common edit actions cut, copy and paste
-* the *View* menu contains actions to customize the graphial user interface
+* the *View* menu contains actions to customize the graphical user interface
 * the *Tools* menu has actions to add items to the user library
 * the *Help* menu can be used to find more information and submit feedback about the software
 
