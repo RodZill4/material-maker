@@ -261,3 +261,32 @@ func _on_white_value_changed(value: Variant) -> void:
 	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	environment.tonemap_white = value
 	mm_globals.set_config("ui_3d_preview_tonemap_white", value)
+
+func _on_snap_top_pressed() -> void:
+	var tween = get_tree().create_tween()
+	var camrot2 : Node3D = camera_controller.camera_rotation2
+	var camrot1 : Node3D = camera_controller.camera_rotation1
+	tween.tween_property(camrot2, "rotation",
+			Vector3(-PI*0.5, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(camrot1, "rotation",
+			Vector3(camrot1.rotation.x, 0.0 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
+
+
+func _on_snap_front_pressed() -> void:
+	var tween = get_tree().create_tween()
+	var camrot2 : Node3D = camera_controller.camera_rotation2
+	var camrot1 : Node3D = camera_controller.camera_rotation1
+	tween.tween_property(camrot2, "rotation",
+			Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(camrot1, "rotation",
+			Vector3(camrot1.rotation.x, 0.0 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
+
+
+func _on_snap_right_pressed() -> void:
+	var tween = get_tree().create_tween()
+	var camrot2 : Node3D = camera_controller.camera_rotation2
+	var camrot1 : Node3D = camera_controller.camera_rotation1
+	tween.tween_property(camrot2, "rotation",
+			Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(camrot1, "rotation",
+			Vector3(camrot1.rotation.x, -PI*0.5 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
