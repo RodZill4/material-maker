@@ -325,6 +325,7 @@ func _on_menu(id : int, current_item : TreeItem):
 	match id:
 		MENU_RENAME:
 			current_item.select(0)
+			current_item.set_editable(0, true)
 			tree.edit_selected()
 		MENU_CUT:
 			copy_item(current_item)
@@ -368,6 +369,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 
 func _on_Tree_item_edited():
 	var item : TreeItem = tree.get_selected()
+	item.set_editable(0, false)
 	var item_scene : Dictionary = item.get_meta("scene")
 	var name : String = item.get_text(0)
 	if name == "" or name == item_scene.type:
