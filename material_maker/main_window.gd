@@ -307,6 +307,8 @@ func get_current_project() -> Control:
 	return projects_panel.get_projects().get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
+	if projects_panel == null:
+		return null
 	var graph_edit = projects_panel.get_projects().get_current_tab_control()
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
