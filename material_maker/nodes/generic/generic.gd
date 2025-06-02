@@ -481,7 +481,6 @@ func update_node() -> void:
 		if label != "":
 			var label_widget : Label = Label.new()
 			label_widget.text = label
-			label_widget.name = "InputLabel"
 			label_widget.theme_type_variation = "MM_NodePropertyLabel"
 			var replace : Control = hsizer.get_child(0)
 			hsizer.remove_child(replace)
@@ -491,6 +490,7 @@ func update_node() -> void:
 			hsizer.move_child(label_widget, 0)
 			input_labels.append(label_widget)
 		set_slot(index, enable_left, type_left, color_left, false, 0, Color())
+	
 	# Parameters
 	if !generator.minimized:
 		controls = {}
@@ -522,12 +522,6 @@ func update_node() -> void:
 				while index >= get_child_count():
 					hsizer = HBoxContainer.new()
 					hsizer.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
-					if not input_labels.is_empty():
-						var empty_control : Control = Control.new()
-						empty_control.name = "InputLabelPlaceholder"
-						empty_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
-						input_labels.append(empty_control)
-						hsizer.add_child(empty_control)
 					add_child(hsizer)
 					# Add empty input label
 					var empty_control : Control = Control.new()
@@ -542,11 +536,17 @@ func update_node() -> void:
 				hsizer.custom_minimum_size.y = minimum_line_height
 				if label != "":
 					var label_widget = Label.new()
-					label_widget.name = "PropertyLabel"
 					label_widget.text = label
 					property_labels.append(label_widget)
 					label_widget.theme_type_variation = "MM_NodePropertyLabel"
-					hsizer.add_child(label_widget)
+					if first:
+						var replace : Control = hsizer.get_child(1)
+						hsizer.remove_child(replace)
+						replace.free()
+						hsizer.add_child(label_widget)
+						hsizer.move_child(label_widget, 1)
+					else:
+						hsizer.add_child(label_widget)
 				control.size_flags_horizontal = SIZE_EXPAND | SIZE_FILL
 				if hsizer != null:
 					hsizer.add_child(control)
@@ -556,28 +556,34 @@ func update_node() -> void:
 				else:
 					first_focus = control
 				previous_focus = control
-		var label_max_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
-		label_max_width = min(100, label_max_width)
-		for label in property_labels:
-			label.custom_minimum_size.x = label_max_width
-			label.size.x = label_max_width
-			label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-
+		
+		var param_label_width = property_labels.reduce(func(accum, label): return max(accum, label.size.x), 0)
+		param_label_width = min(100, param_label_width)
+		
 		var input_label_width : int = 0
-		input_label_width = input_labels.reduce(
-			func(accum, label):
-				#printt(child, child.get_child(0).size.x)
-				return max(accum, label.size.x), 0)
-
-		if not property_labels.is_empty():
+		input_label_width = get_children().reduce(
+			func(accum, child): return max(child.get_child(0).size.x, accum) if child.get_child_count() else accum
+			, 0)
+		if input_label_width > 0 and not property_labels.is_empty():
 			input_label_width += 10
-
-		for i in input_labels:
-			i.custom_minimum_size.x = input_label_widthr
+		
+		for r in get_children():
+			if not (r.get_child(0) is Label or r.get_child(1) is Label):
+				continue
+			var input_label : Control = r.get_child(0)
+			input_label.custom_minimum_size.x = input_label_width
+			if input_label is Label:
+				input_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			var param_label : Control = r.get_child(1)
+			param_label.custom_minimum_size.x = param_label_width
+			if param_label is Label:
+				param_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		
 		if first_focus != null:
 			previous_focus.focus_next = first_focus.get_path()
 			first_focus.focus_previous = previous_focus.get_path()
 		initialize_properties()
+	
 	# Outputs
 	var outputs = generator.get_output_defs()
 	output_count = outputs.size()
