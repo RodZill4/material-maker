@@ -179,7 +179,7 @@ func _gui_input(event) -> void:
 			match scancode_with_modifiers:
 				KEY_H:
 					minimize_selection()
-				KEY_DELETE,KEY_BACKSPACE:
+				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
