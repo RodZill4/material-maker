@@ -29,7 +29,9 @@ const DEFAULT_CONFIG : Dictionary = {
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,
 	bake_denoise_radius = 3,
-	auto_size_comment = true
+	auto_size_comment = true,
+	graph_line_curvature = 0.5,
+	graph_line_style = 1,
 }
 
 
