@@ -146,6 +146,42 @@ region = Rect2(16, 16, 16, 16)
 atlas = ExtResource("9")
 region = Rect2(32, 16, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ay1es"]
+atlas = ExtResource("9")
+region = Rect2(32, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23wvn"]
+atlas = ExtResource("9")
+region = Rect2(48, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ayxwm"]
+atlas = ExtResource("9")
+region = Rect2(64, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pddhx"]
+atlas = ExtResource("9")
+region = Rect2(80, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqw5j"]
+atlas = ExtResource("9")
+region = Rect2(96, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7tomt"]
+atlas = ExtResource("9")
+region = Rect2(112, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gmich"]
+atlas = ExtResource("9")
+region = Rect2(128, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4b8ap"]
+atlas = ExtResource("9")
+region = Rect2(144, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xe7rx"]
+atlas = ExtResource("9")
+region = Rect2(0, 48, 16, 16)
+
 [node name="SDFBuilder" type="Node"]
 script = ExtResource("2")
 
@@ -375,51 +411,60 @@ item_category = "SDF2D_COLOR"
 script = ExtResource("20")
 item_type = "Sphere"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_ay1es")
 
 [node name="Box" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("31_n0wqc")
 item_type = "Box3D"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_23wvn")
 
 [node name="Cylinder" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("35")
 item_type = "Cylinder"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_ayxwm")
 
 [node name="Capsule" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("35")
 shape = 1
 item_type = "Capsule"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_pddhx")
 
 [node name="Cone" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("35")
 shape = 3
 item_type = "Cone"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_rqw5j")
 
 [node name="Torus" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("47")
 item_type = "Torus"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_7tomt")
 
 [node name="Pyramid" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("35")
 shape = 2
 item_type = "Pyramid"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_gmich")
 
 [node name="Ellipsoid" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("31_n0wqc")
 shape = 1
 item_type = "Ellipsoid"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_4b8ap")
 
 [node name="Octahedron" type="Node" parent="SDF3D/Shape"]
 script = ExtResource("20")
 shape = 1
 item_type = "Octahedron"
 item_category = "SDF3D"
+icon = SubResource("AtlasTexture_xe7rx")
 
 [node name="Generate" type="Node" parent="SDF3D"]
 
