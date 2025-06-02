@@ -86,6 +86,7 @@ size_flags_horizontal = 0
 tooltip_text = "If tesselation is enabled, the mesh will be subdivided, which is necessary for materials that use vertex displacement."
 
 [connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]
+[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_v_box_container_minimum_size_changed"]
 [connection signal="value_changed" from="VBoxContainer/Parameters/UVScale/UV_Scale_X" to="." method="_on_UV_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/Parameters/UVScale/UV_Scale_Y" to="." method="_on_UV_value_changed"]
 [connection signal="toggled" from="VBoxContainer/Parameters/UVScale/ScaleLinked" to="." method="_on_scale_linked_toggled"]
