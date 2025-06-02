@@ -3,7 +3,8 @@ extends Window
 signal return_values(values)
 
 func _ready():
-	pass # Replace with function body.
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(450, 60) * content_scale_factor
 
 func _on_OK_pressed() -> void:
 	emit_signal("return_values", { min=$VBoxContainer/float/Min.value, max=$VBoxContainer/float/Max.value, step=$VBoxContainer/float/Step.value, default=$VBoxContainer/float/Default.value} )
@@ -19,6 +20,7 @@ func configure_param(minimum : float = 0.0, maximum : float = 1.0, step : float 
 	$VBoxContainer/float/Max.set_value(maximum)
 	$VBoxContainer/float/Step.set_value(step)
 	$VBoxContainer/float/Default.set_value(default)
+	hide()
 	popup_centered()
 	var result = await self.return_values
 	queue_free()

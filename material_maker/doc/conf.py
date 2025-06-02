@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Material Maker'
-copyright = '2018-2023, Rodolphe Suescun'
+copyright = '2018-2025, Rodolphe Suescun'
 author = 'Rodolphe Suescun'
 
 # The short X.Y version

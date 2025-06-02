@@ -1,3 +1,50 @@
+# Material Maker 1.4b2
+
+## General
+
+- Animation export parameters are now saved (contributed by williamchange)
+- Added a keyboard shortcut (H) to minimize nodes (contributed by williamchange)
+- Updated gradient color picker to focus hex field when shown (contributed by williamchange)
+- Added a shortcut (Control+,) for the Preferences dialog (contributed by williamchange)
+- Added a limit of 5 custom models shown in the list in Preview 3D UI
+- Improved DMG generation for macos (contributed by williamchange)
+
+## Nodes
+
+- Made RGBA transform nodes variadic (contributed by williamchange)
+- Allow dragging curve parameter to tonality node (contributed by williamchange)
+- Fixed artifacts in FBM nodes (contributed by williamchange)
+- Fixes missing nodes descriptions (contributed by williamchange)
+- Fixes typos in node labels (contributed by williamchange)
+- Updated math aliases with new operators (contributed by williamchange)
+- Improved Splines parameter editor (contributed by NotArme)
+- Improved node labels alignment
+- Added a Unity URP lit export target for static material types (contributed by williamchange)
+- Fixed kaleidoscope variations (contributed by williamchange)
+- Added axis parameters to Extrude/Revolution nodes (contributed by williamchange)
+- Added more primitives to the EasySDF editor (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed tonemap/exposure fields not showing when environment is set (contributed by williamchange)
+- Fixes in export editor
+- Fixed EXR file format support
+- Fixed documentation access from Material Maker (contributed by NotArme)
+- Fixes in environment editor (contributed by wojtekpil)
+- Fixes in the About dialog (contributed by williamchange)
+- Fixed the curve preset icons (contributed by williamchange)
+- Fixed aliasing problem in TEX3D preview (contributed by williamchange)
+- Fixed division-by-zero errorrs in SDF3D preview (contributed by williamchange)
+- Fixed Alt-drag on editors for fine-tuning float values (contributed by williamchange)
+- Made the license uneditable in the About dialog (contributed by williamchange)
+- Fixed weird presets of Shape node (contributed by williamchange)
+- Documentation fixes and updates (contributed by NotArme and williamchange)
+- Fixed graph screenshot feature
+- Fixed Unity HDRP export target (contributed by williamchange)
+- Fixed the scale of dialogs for hi-dpi displays (contributed by williamchange)
+- Fixed the HDRI download dialog title (contributed by williamchange)
+- Fixed environment panel minimum size (contributed by williamchange)
+
 # Material Maker 1.4b1
 
 ## General
@@ -23,6 +70,10 @@
 - Fixed comment highlighting in code editor
 - Fixed message when closing with unsaved projects (contributed by williamchange)
 - Small fix for the meteor rain splash screen (contributed by williamchange)
+- Fixed preview export for non-image types
+- Fixed spline edit dialog
+- Fixed Preference window, that vanished when trying to download languages
+- Show locale as english if it's not found
 
 ## Miscellaneous
 

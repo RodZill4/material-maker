@@ -24,6 +24,12 @@ choco install material-maker
 choco install material-maker.portable
 ```
 
+on MacOS, you can install Material Maker using [Homebrew](https://brew.sh/):
+
+```text
+brew install --cask material-maker
+```
+
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
 
 <a href="https://github.com/RodZill4/material-maker/actions">
@@ -51,7 +57,7 @@ Translation files can be installed using the **Install** button in the **Prefere
 
 ## License
 
-Copyright (c) 2018-2021 Rodolphe Suescun and contributors
+Copyright (c) 2018-2025 Rodolphe Suescun and contributors
 
 Unless otherwise specified, files in this repository are licensed under the
 MIT license. See [LICENSE.md](LICENSE.md) for more information.

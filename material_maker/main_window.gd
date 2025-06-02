@@ -82,7 +82,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Save Selection", command="edit_save_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/-" },
 	{ menu="Edit/Set theme", submenu="set_theme" },
-	{ menu="Edit/Preferences", command="edit_preferences" },
+	{ menu="Edit/Preferences", command="edit_preferences", shortcut="Control+Comma" },
 
 	{ menu="View/Center view", command="view_center", shortcut="C" },
 	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
@@ -117,7 +117,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
-	get_window().move_to_foreground()
+	get_window().grab_focus()
 	get_window().gui_embed_subwindows = false
 
 	get_window().close_requested.connect(self.on_close_requested)
@@ -307,6 +307,8 @@ func get_current_project() -> Control:
 	return projects_panel.get_projects().get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
+	if projects_panel == null:
+		return null
 	var graph_edit = projects_panel.get_projects().get_current_tab_control()
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
@@ -485,6 +487,11 @@ func change_theme(theme_name) -> void:
 		_theme.update()
 	await get_tree().process_frame
 	theme = _theme
+	if "classic" in theme_name:
+		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
+	else:
+		RenderingServer.set_default_clear_color(
+				Color(0.48, 0.48, 0.48) if "light" in theme_name else Color(0.12, 0.12, 0.12))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -839,6 +846,7 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
@@ -851,7 +859,6 @@ func view_reset_zoom() -> void:
 
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
-
 
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -888,6 +895,8 @@ func add_selection_to_library(index) -> void:
 	if selected_nodes.is_empty():
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var current_item_name = ""
 	if library.is_inside_tree():
@@ -913,6 +922,8 @@ func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 
 func add_brush_to_library(index) -> void:
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
 	if ! status.ok:
@@ -977,7 +988,7 @@ func show_library_item_doc() -> void:
 		var doc_name = library.get_selected_item_doc_name()
 		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			if DirAccess.open("res://").file_exists(doc_path):
+			if FileAccess.file_exists(doc_path):
 				OS.shell_open(doc_path)
 				break
 			doc_name = doc_name.left(doc_name.rfind("_"))
@@ -991,7 +1002,7 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
-	about_box.connect("popup_hide", Callable(about_box, "queue_free"))
+	about_box.hide()
 	about_box.popup_centered()
 
 # Preview
@@ -1118,32 +1129,28 @@ func generate_graph_screenshot():
 	graph_edit.zoom = 1
 	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
-	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(30, 180))
+	var scale_factor : float = get_window().content_scale_factor
+	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(25, 90))
+	graph_edit_rect = Rect2(scale_factor*graph_edit_rect.position, scale_factor*graph_edit_rect.size)
 	var graph_rect = null
 	for c in graph_edit.get_children():
-		if c is GraphNode:
-			var node_rect = Rect2(c.global_position, c.size)
+		if c is GraphElement:
+			var node_rect = Rect2(c.position_offset, c.size)
 			if graph_rect == null:
 				graph_rect = node_rect
 			else:
 				graph_rect = graph_rect.expand(node_rect.position)
 				graph_rect = graph_rect.expand(node_rect.end)
 	graph_rect = graph_rect.grow_individual(50, 20, 50, 80)
-	var image : Image = Image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
-	var origin = graph_edit.scroll_offset+graph_rect.position-graph_edit_rect.position
-	var small_image : Image = Image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_data().get_format())
+	graph_rect = Rect2(scale_factor*graph_rect.position, scale_factor*graph_rect.size)
+	var image : Image = Image.create(graph_rect.size.x, graph_rect.size.y, false, get_viewport().get_texture().get_image().get_format())
+	var origin = graph_rect.position
+	var small_image : Image = Image.create(graph_edit_rect.size.x, graph_edit_rect.size.y, false, get_viewport().get_texture().get_image().get_format())
 	for x in range(0, graph_rect.size.x, graph_edit_rect.size.x):
 		for y in range(0, graph_rect.size.y, graph_edit_rect.size.y):
-			graph_edit.scroll_offset = origin+Vector2(x, y)
-			var timer : Timer = Timer.new()
-			add_child(timer)
-			timer.wait_time = 0.05
-			timer.one_shot = true
-			timer.start()
-			await timer.timeout
-			timer.queue_free()
-			small_image.blit_rect(get_viewport().get_texture().get_data(), graph_edit_rect, Vector2(0, 0))
-			small_image.flip_y()
+			graph_edit.scroll_offset = (origin+Vector2(x, y))/scale_factor-Vector2(15, 80)
+			await get_tree().process_frame
+			small_image.blit_rect(get_viewport().get_texture().get_image(), graph_edit_rect, Vector2(0, 0))
 			image.blit_rect(small_image, Rect2(Vector2(0, 0), graph_edit_rect.size), Vector2(x, y))
 	graph_edit.scroll_offset = save_scroll_offset
 	graph_edit.zoom = save_zoom
@@ -1193,11 +1200,9 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(file.get_as_text())
-				var parse_result = test_json_conv.get_data()
-				if parse_result.error == OK:
-					var data = parse_result.result
+				var test_json_conv : JSON = JSON.new()
+				if test_json_conv.parse(file.get_as_text()) == OK:
+					var data = test_json_conv.get_data()
 					if data.has("material") and data.has("name"):
 						mm_loader.save_export_target(data.material, data.name, data)
 						mm_loader.load_external_export_targets()
@@ -1266,3 +1271,7 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+
+func _on_console_resizer_container_mouse_entered() -> void:
+	pass # Replace with function body.

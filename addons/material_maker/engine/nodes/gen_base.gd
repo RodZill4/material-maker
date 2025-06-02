@@ -73,7 +73,6 @@ class ShaderUniform:
 						str_value_assign += "%.9f" % v
 					str_value_assign += " )"
 			"vec2":
-				print(value)
 				if value is PackedFloat32Array and initialize_vectors:
 					str_value_assign = " = vec2[]( "
 					var first : bool = true

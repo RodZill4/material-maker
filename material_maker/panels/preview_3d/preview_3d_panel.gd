@@ -44,9 +44,11 @@ func on_right_click():
 
 func _on_PopupMenu_id_pressed(id):
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
+	var cam_control = get_node("MaterialPreview/Preview3d/CameraController")
 	match id:
 		0:
 			pivot.transform.origin = Vector3(0, 0, 0)
+			cam_control.transform.origin = Vector3(0, 0, 0)
 		1:
 			pivot.transform.origin = new_pivot_position
 
@@ -62,15 +64,3 @@ func on_drop_model_file(file_name : String):
 func _on_resized() -> void:
 	$BG.size = size
 	%MenuBar.size.x = size.x
-
-
-func _on_exposure_value_changed(value: Variant) -> void:
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_exposure = value
-	mm_globals.set_config("ui_3d_preview_tonemap_exposure", value)
-
-
-func _on_white_value_changed(value: Variant) -> void:
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_white = value
-	mm_globals.set_config("ui_3d_preview_tonemap_white", value)

@@ -120,6 +120,8 @@ func set_environment(id:int) -> void:
 		environment_manager.apply_environment(current_environment, environment, sun)
 
 	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
+	environment.tonemap_exposure = mm_globals.get_config("ui_3d_preview_tonemap_exposure")
+	environment.tonemap_white = mm_globals.get_config("ui_3d_preview_tonemap_white")
 
 
 func set_tonemap(id) -> void:
@@ -130,6 +132,7 @@ func set_tonemap(id) -> void:
 
 func configure_model() -> void:
 	var popup = preload("res://material_maker/panels/preview_3d/mesh_config_popup.tscn").instantiate()
+	popup.hide()
 	add_child(popup)
 	popup.configure_mesh(current_object)
 
@@ -144,6 +147,9 @@ func set_rotate_model_speed(speed: float) -> void:
 
 
 func get_materials() -> Array:
+	# Update 3D scale
+	$MaterialPreview.scaling_3d_scale = mm_globals.main_window.preview_rendering_scale_factor
+	# Return materials
 	if current_object != null and current_object.get_material() != null:
 		return [ current_object.get_material() ]
 	return []
@@ -243,3 +249,15 @@ func do_generate_map(file_name : String, map : String, image_size : int) -> void
 	var t : MMTexture = await MMMapGenerator.get_map(object.mesh, map, image_size)
 	t.save_to_file(file_name)
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
+
+
+func _on_exposure_value_changed(value: Variant) -> void:
+	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+	environment.tonemap_exposure = value
+	mm_globals.set_config("ui_3d_preview_tonemap_exposure", value)
+
+
+func _on_white_value_changed(value: Variant) -> void:
+	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+	environment.tonemap_white = value
+	mm_globals.set_config("ui_3d_preview_tonemap_white", value)

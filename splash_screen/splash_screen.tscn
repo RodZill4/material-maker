@@ -1,10 +1,10 @@
 [gd_scene load_steps=14 format=3 uid="uid://bq7jj2aydbqug"]
 
-[ext_resource type="Script" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
+[ext_resource type="Script" uid="uid://cms1wqfr4yeb5" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
 [ext_resource type="FontFile" uid="uid://dttdyavpec18b" path="res://material_maker/fonts/vegur_regular.otf" id="3_m0b76"]
 [ext_resource type="Texture2D" uid="uid://dfy67bw73b836" path="res://splash_screen/arrow.svg" id="5_o00vo"]
-[ext_resource type="Shader" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
+[ext_resource type="Shader" uid="uid://b3x7551t5ha0u" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jeaul"]
 size = Vector2(760, 430)
@@ -221,5 +221,6 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_587d8")
 
 [connection signal="gui_input" from="SplashScreen/TextureRect/SecretButton" to="." method="_on_secret_button_gui_input"]
+[connection signal="gui_input" from="SplashScreen/URL" to="." method="_on_url_gui_input"]
 [connection signal="pressed" from="BackgroundSelect/Previous" to="." method="_on_previous_pressed"]
 [connection signal="pressed" from="BackgroundSelect/Next" to="." method="_on_next_pressed"]

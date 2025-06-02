@@ -49,9 +49,6 @@ func update_environment_selector() -> void:
 		EnvironmentList.set_item_tooltip(idx, env.name)
 		idx += 1
 
-	EnvironmentList.fixed_icon_size.x = EnvironmentList.size.x/4.0 - 7
-	EnvironmentList.fixed_icon_size.y = EnvironmentList.fixed_icon_size.x
-	EnvironmentList.get_parent().custom_minimum_size.y = EnvironmentList.size.x/4.0
 	size = Vector2()
 
 
@@ -78,3 +75,7 @@ func _on_clear_background_toggled(toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_PREVIEW_CLEAR_BG, toggled_on)
 	if preview3D.is_node_ready():
 		preview3D.set_environment(-1)
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()

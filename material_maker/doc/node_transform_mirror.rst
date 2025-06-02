@@ -1,7 +1,7 @@
 Mirror node
 ~~~~~~~~~~~
 
-The **Mirror** node applies a mirror filter on its input.
+The **Mirror** node is variadic and applies a mirror filter on its inputs.
 
 .. image:: images/node_transform_mirror.png
 	:align: center
@@ -9,12 +9,12 @@ The **Mirror** node applies a mirror filter on its input.
 Inputs
 ++++++
 
-The **Mirror** node accepts a single RGBA input.
+The **Mirror** node accepts one or more RGBA inputs.
 
 Outputs
 +++++++
 
-The **Mirror** node outputs the mirrored image as RGBA.
+The **Mirror** node outputs the mirrored images as RGBA.
 
 Parameters
 ++++++++++

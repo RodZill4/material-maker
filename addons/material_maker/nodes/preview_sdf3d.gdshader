@@ -3,6 +3,8 @@ uniform float variation = 0.0;
 float calcdist(vec3 uv) {
 	float _seed_variation_ = variation;
 	$(code)
+	float v = $(value);
+	v = v == 0.0 ? 1.0 : v;
 	return min($(value), uv.z);
 }
 

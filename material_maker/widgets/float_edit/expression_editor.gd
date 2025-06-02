@@ -8,8 +8,16 @@ var accept_empty : bool = false
 @onready var editor = $MarginContainer/VBoxContainer/TextEdit
 @onready var parser = load("res://addons/material_maker/parser/glsl_parser.gd").new()
 
+func _context_menu_about_to_popup(context_menu):
+	context_menu.position =  get_window().position + Vector2i(
+			get_mouse_position() * mm_globals.main_window.get_window().content_scale_factor)
+
 func _ready():
-	pass # Replace with function body.
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(300, 100) * content_scale_factor
+	
+	editor.get_menu().about_to_popup.connect(
+			_context_menu_about_to_popup.bind(editor.get_menu()))
 
 func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
 	object = o
@@ -18,6 +26,7 @@ func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Ar
 	accept_empty = ae
 	title = wt
 	editor.text = value
+	hide()
 	popup_centered()
 	editor.set_caret_column(editor.text.length())
 	editor.grab_focus()
