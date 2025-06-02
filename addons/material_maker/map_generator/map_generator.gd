@@ -198,7 +198,7 @@ static func generate(mesh : Mesh, map : String, size : int, texture : MMTexture)
 static var busy : bool = false
 
 static func get_map(mesh : Mesh, map : String, size : int = 2048, force_generate : bool = false) -> MMTexture:
-	if mesh == null or size <= 0:
+	if mesh == null or size <= 0 or mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV] == null:
 		if error_texture == null:
 			error_texture = MMTexture.new()
 			var image : Image = Image.create(1, 1, 0, Image.FORMAT_RGBAH)

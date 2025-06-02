@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://bvsuo5y7vh1y2"]
+[gd_scene load_steps=69 format=3 uid="uid://bvsuo5y7vh1y2"]
 
 [ext_resource type="Script" uid="uid://d16yu8rdgx4hx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/circle.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5mnqww2iagdf" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://2docp5a53rt5" path="res://addons/material_maker/sdf_builder/sdf2d/alter/round.gd" id="29"]
 [ext_resource type="Script" uid="uid://b4hs21jsy2ocj" path="res://addons/material_maker/sdf_builder/sdf2d/alter/bend.gd" id="30"]
 [ext_resource type="Script" uid="uid://diateb2qfwgvr" path="res://addons/material_maker/sdf_builder/sdf2d/alter/annular.gd" id="31"]
+[ext_resource type="Script" uid="uid://4cyk4qqbj8gj" path="res://addons/material_maker/sdf_builder/sdf3d/shapes/box.gd" id="31_n0wqc"]
 [ext_resource type="Script" uid="uid://c6xr60kqjq4r2" path="res://addons/material_maker/sdf_builder/sdf2d/alter/morph.gd" id="32"]
 [ext_resource type="Script" uid="uid://dhodyf2uovltv" path="res://addons/material_maker/sdf_builder/sdf3d/generate/extrusion.gd" id="33"]
 [ext_resource type="Script" uid="uid://v4fjkky72ftf" path="res://addons/material_maker/sdf_builder/sdf3d/generate/revolution.gd" id="34"]
@@ -365,7 +366,7 @@ item_type = "Sphere"
 item_category = "SDF3D"
 
 [node name="Box" type="Node" parent="SDF3D/Shape"]
-script = ExtResource("22")
+script = ExtResource("31_n0wqc")
 item_type = "Box3D"
 item_category = "SDF3D"
 

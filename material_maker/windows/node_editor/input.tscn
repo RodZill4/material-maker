@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bc5kmhrysy8cn"]
+[gd_scene load_steps=10 format=3 uid="uid://bc5kmhrysy8cn"]
 
-[ext_resource type="Script" path="res://material_maker/windows/node_editor/input.gd" id="1"]
+[ext_resource type="Script" uid="uid://codatbokkaf55" path="res://material_maker/windows/node_editor/input.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="PackedScene" uid="uid://bi88rsdxt0ld7" path="res://material_maker/widgets/port_group_button/port_group_button.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="4_r3lle"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2")
@@ -16,6 +17,10 @@ region = Rect2(18, 48, 12, 16)
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("2")
 region = Rect2(34, 48, 12, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssp1q"]
+atlas = ExtResource("4_r3lle")
+region = Rect2(112, 128, 16, 16)
 
 [node name="Parameter" type="HBoxContainer"]
 offset_right = 201.0
@@ -69,7 +74,7 @@ text = "0.0"
 layout_mode = 2
 tooltip_text = "Generate input as function (can be used in \"Instance Functions\" section)"
 toggle_mode = true
-text = "f(x)"
+icon = SubResource("AtlasTexture_ssp1q")
 
 [node name="PortGroupButton" parent="." instance=ExtResource("3")]
 layout_mode = 2

@@ -38,13 +38,17 @@ func _ready():
 	if tree.get_root() == null:
 		tree.create_item()
 	set_node_parameter_mode(false)
+	# Hide useless controls in 2D preview menu
+	var viewmenu_panel_grid : Control = $TopContainer/Main/Preview2D/MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox
+	for c in [ "ViewModeLabel", "ViewMode", "PostProcessingLabel", "PostProcessing" ]:
+		viewmenu_panel_grid.get_node(c).visible = false
 
 func get_next_index() -> int:
 	next_index += 1
 	return next_index
 
 func get_treeitem_by_index(index : int, parent : TreeItem = tree.get_root()) -> TreeItem:
-	var meta = parent.get_meta("scene")
+	var meta = parent.get_meta("scene") if parent.has_meta("scene") else null
 	if meta != null and meta is Dictionary and meta.has("index") and meta.index == index:
 		return parent
 	for i in parent.get_children():
@@ -69,7 +73,6 @@ func set_preview(s : Array):
 			preview_3d.set_generator($GenSDF, 0, true)
 
 func select_first_item():
-
 	if ! tree.get_root().get_children().is_empty():
 		var top : TreeItem = tree.get_root().get_children()[0]
 		top.select(0)
@@ -326,6 +329,7 @@ func _on_menu(id : int, current_item : TreeItem):
 	match id:
 		MENU_RENAME:
 			current_item.select(0)
+			current_item.set_editable(0, true)
 			tree.edit_selected()
 		MENU_CUT:
 			copy_item(current_item)
@@ -369,6 +373,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 
 func _on_Tree_item_edited():
 	var item : TreeItem = tree.get_selected()
+	item.set_editable(0, false)
 	var item_scene : Dictionary = item.get_meta("scene")
 	var name : String = item.get_text(0)
 	if name == "" or name == item_scene.type:
@@ -556,8 +561,9 @@ func _on_color_changed(new_color, _old_value, variable : String) -> void:
 
 func _on_polygon_changed(new_polygon, _old_value, variable : String) -> void:
 	ignore_parameter_change = variable
-	$GenSDF.set_parameter(variable, new_polygon)
-	set_node_parameters($GenSDF, { variable:MMType.serialize_value(new_polygon) })
+	var serialized_value : Dictionary = MMType.serialize_value(new_polygon)
+	$GenSDF.set_parameter(variable, serialized_value)
+	set_node_parameters($GenSDF, { variable:serialized_value })
 	ignore_parameter_change = ""
 
 func on_parameter_changed(p : String, v) -> void:
@@ -565,6 +571,10 @@ func on_parameter_changed(p : String, v) -> void:
 		return
 	else:
 		GENERIC.update_control_from_parameter(controls, p, v)
+	var item : TreeItem = get_treeitem_by_index(p.right(-1).to_int())
+	if item:
+		var parameter_name : String = p.right(-(p.find("_")+1))
+		item.get_meta("scene").parameters[parameter_name] = v
 
 func _on_Tree_item_selected():
 	var selected_item = tree.get_selected()

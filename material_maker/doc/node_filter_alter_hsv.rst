@@ -4,7 +4,7 @@ Alter HSV node
 The **Alter HSV** node modifies the hue, saturation and value of the input image, according
 to dedicated input maps. It can be used to easily apply variations to its input.
 
-.. image:: images/node_filter_alterhsv.png
+.. image:: images/node_filter_alter_hsv.png
 	:align: center
 
 Inputs
