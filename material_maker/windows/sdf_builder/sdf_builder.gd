@@ -38,6 +38,10 @@ func _ready():
 	if tree.get_root() == null:
 		tree.create_item()
 	set_node_parameter_mode(false)
+	# Hide useless controls in 2D preview menu
+	var viewmenu_panel_grid : Control = $TopContainer/Main/Preview2D/MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox
+	for c in [ "ViewModeLabel", "ViewMode", "PostProcessingLabel", "PostProcessing" ]:
+		viewmenu_panel_grid.get_node(c).visible = false
 
 func get_next_index() -> int:
 	next_index += 1
