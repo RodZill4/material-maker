@@ -29,7 +29,9 @@ const DEFAULT_CONFIG : Dictionary = {
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,
 	bake_denoise_radius = 3,
-	auto_size_comment = true
+	auto_size_comment = true,
+	graph_line_curvature = 0.5,
+	graph_line_style = 1,
 }
 
 
@@ -155,7 +157,7 @@ static func popup_menu(menu : PopupMenu, parent : Control):
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
-	main_window.set_tip_text(tip, timeout, priority)
+	main_window.set_tip_text(TranslationServer.translate(tip), timeout, priority)
 
 static func do_propagate_shortcuts(control : Control, event : InputEvent):
 	for child in control.get_children():

@@ -26,7 +26,7 @@
 			],
 			"type": "Gradient"
 		},
-		"perspective": 0.285821,
+		"perspective": 0.3,
 		"use_perspective": true
 	},
 	"seed_int": 0,
@@ -68,7 +68,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Zoom",
 				"max": 10,
 				"min": 0,

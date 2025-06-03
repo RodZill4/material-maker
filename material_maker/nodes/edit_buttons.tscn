@@ -1,20 +1,21 @@
 [gd_scene load_steps=6 format=3 uid="uid://cit68cso5187c"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/edit_buttons.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
+[ext_resource type="Script" uid="uid://ruo1gfek58tl" path="res://material_maker/nodes/edit_buttons.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="2_dvsrk"]
 
 [sub_resource type="AtlasTexture" id="1"]
-atlas = ExtResource("2")
+atlas = ExtResource("2_dvsrk")
 region = Rect2(16, 16, 16, 16)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("2")
+atlas = ExtResource("2_dvsrk")
 region = Rect2(48, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("2")
+atlas = ExtResource("2_dvsrk")
 region = Rect2(32, 16, 16, 16)
+metadata/Recolor = false
 
 [node name="NodeEditButtons" type="HBoxContainer"]
 offset_right = 65.0
@@ -35,3 +36,6 @@ flat = true
 layout_mode = 2
 icon = SubResource("3")
 flat = true
+
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="ready" from="Edit" to="." method="_on_edit_ready"]

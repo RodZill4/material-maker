@@ -1,10 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cxl3d5cu62dl4"]
 
-[ext_resource path="res://material_maker/tools/painter/shaders/init_channels.gdshader" type="Shader" id=1]
+[ext_resource type="Shader" uid="uid://cn3pnjsx6lrrx" path="res://material_maker/tools/painter/shaders/init_channels.gdshader" id="1"]
 
 [resource]
-shader = ExtResource( 1 )
-shader_param/r_mask = Plane( 1, 0, 0, 0 )
-shader_param/g_mask = Plane( 0, 1, 0, 0 )
-shader_param/b_mask = Plane( 0, 0, 1, 0 )
-shader_param/a_mask = Plane( 0, 0, 0, 1 )
+shader = ExtResource("1")
+shader_parameter/r_mask = Vector4(1, 0, 0, 0)
+shader_parameter/g_mask = Vector4(0, 1, 0, 0)
+shader_parameter/b_mask = Vector4(0, 0, 1, 0)
+shader_parameter/a_mask = Vector4(0, 0, 0, 1)

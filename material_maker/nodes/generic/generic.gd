@@ -300,7 +300,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		if p.has("default"):
 			control.value = p.default
 			control.default_value = p.default
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 60
 	elif p.type == "size":
 		control = SizeOptionButton.new()
 		control.min_size = p.first

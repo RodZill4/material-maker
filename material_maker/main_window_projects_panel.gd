@@ -16,7 +16,6 @@ var current_graph_edit: GraphEdit = null:
 		if value:
 			current_graph_edit.item_rect_changed.connect(update_menu_position)
 
-
 func _ready() -> void:
 	preview_3d_background_panel = $BackgroundPreviews/Preview3D.reattach_menu($MenuBar/HBox)
 	preview_3d_background_panel.hide()

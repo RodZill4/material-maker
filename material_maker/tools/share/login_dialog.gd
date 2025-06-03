@@ -23,6 +23,7 @@ func ask(user : String, password : String) -> Dictionary:
 	if password != "":
 		$MarginContainer/VBoxContainer/Password.text = password
 		$MarginContainer/VBoxContainer/SavePassword.button_pressed = true
+	hide()
 	popup_centered()
 	var result = await self.return_status
 	queue_free()
