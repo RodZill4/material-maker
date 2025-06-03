@@ -87,3 +87,9 @@ func _ready() -> void:
 
 func open_url(url) -> void:
 	OS.shell_open(url)
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			%EpicLogo.material.set_shader_parameter("invert", 
+					"light" in mm_globals.main_window.theme.resource_path)

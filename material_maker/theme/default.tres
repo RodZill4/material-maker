@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=134 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=139 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -99,6 +99,9 @@ atlas = ExtResource("1_s43fy")
 region = Rect2(96, 112, 16, 16)
 metadata/recolor = false
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oy0ko"]
+bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_m1w7u"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 128, 16, 16)
@@ -142,7 +145,7 @@ content_margin_left = 10.0
 content_margin_top = 8.0
 content_margin_right = 10.0
 content_margin_bottom = 8.0
-bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+bg_color = Color(0.067, 0.067, 0.078, 1)
 border_width_left = 1
 border_width_right = 1
 border_width_bottom = 1
@@ -270,6 +273,9 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.359069, 0.359069, 0.359069, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agwde"]
+bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_08mel"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 176, 16, 16)
@@ -368,6 +374,26 @@ region = Rect2(48, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_j13i3"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 160, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovvp6"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(16, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8tn7x"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(48, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfiqs"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfsii"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(32, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1lfk8"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(64, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
 atlas = ExtResource("1_s43fy")
@@ -989,6 +1015,24 @@ CheckBox/icons/radio_unchecked = SubResource("AtlasTexture_rdh87")
 CheckBox/icons/radio_unchecked_disabled = SubResource("AtlasTexture_8fbk7")
 CheckBox/icons/unchecked = SubResource("AtlasTexture_5s2d2")
 CheckBox/icons/unchecked_disabled = SubResource("AtlasTexture_vngdy")
+CodeEdit/colors/built_in_function_color = Color(0.501961, 0.501961, 1, 1)
+CodeEdit/colors/caret_color = Color(0.875, 0.875, 0.875, 1)
+CodeEdit/colors/current_line_color = Color(0.25, 0.25, 0.26, 0.8)
+CodeEdit/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+CodeEdit/colors/function_color = Color(0.780392, 0.00784314, 0.776471, 1)
+CodeEdit/colors/keyword_color = Color(1, 0.6, 0.6, 1)
+CodeEdit/colors/line_number_color = Color(0.67, 0.67, 0.67, 0.4)
+CodeEdit/colors/member_variable_color = Color(0.870588, 0.298039, 0.337255, 1)
+CodeEdit/colors/multi_line_comment_color = Color(0, 0.5, 0, 1)
+CodeEdit/colors/number_color = Color(0.341176, 0.34902, 0.992157, 1)
+CodeEdit/colors/selection_color = Color(0.5, 0.5, 0.5, 1)
+CodeEdit/colors/single_line_comment_color = Color(0, 0.5, 0, 1)
+CodeEdit/colors/symbol_color = Color(1, 1, 0.501961, 1)
+CodeEdit/colors/type_color = Color(1, 1, 0.5, 1)
+CodeEdit/styles/normal = SubResource("StyleBoxFlat_oy0ko")
+FileDialog/colors/file_disabled_color = Color(0.301961, 0.305882, 0.309804, 1)
+FileDialog/colors/file_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
+FileDialog/colors/folder_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
 GraphEdit/colors/grid_major = Color(0.137255, 0.141176, 0.152941, 1)
 GraphEdit/colors/grid_minor = Color(0.137255, 0.141176, 0.152941, 1)
 GraphEdit/constants/port_hotzone_inner_extent = 8
@@ -1030,6 +1074,7 @@ LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
 MM_AddNodePanel/base_type = &"PanelContainer"
 MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
+MM_AddNodePanelList/styles/panel = SubResource("StyleBoxFlat_agwde")
 MM_CommentNode/icons/resizer = SubResource("AtlasTexture_08mel")
 MM_CommentNode/styles/default = SubResource("StyleBoxFlat_asgc8")
 MM_CommentNode/styles/selected = SubResource("StyleBoxFlat_en6gw")
@@ -1048,6 +1093,11 @@ MM_Icons/icons/arrange_nodes = SubResource("AtlasTexture_60g77")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
+MM_Icons/icons/connection_bezier = SubResource("AtlasTexture_ovvp6")
+MM_Icons/icons/connection_diagonal = SubResource("AtlasTexture_8tn7x")
+MM_Icons/icons/connection_direct = SubResource("AtlasTexture_pfiqs")
+MM_Icons/icons/connection_manhattan = SubResource("AtlasTexture_pfsii")
+MM_Icons/icons/connection_rounded = SubResource("AtlasTexture_1lfk8")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
@@ -1077,6 +1127,7 @@ MM_Icons/icons/zoom_out = SubResource("AtlasTexture_vqfa7")
 MM_Icons/icons/zoom_reset = SubResource("AtlasTexture_ngrf6")
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
+MM_Node/constants/minimum_line_height = 20
 MM_NodeCheckbox/base_type = &"Button"
 MM_NodeFloatEdit/base_type = &"Button"
 MM_NodeFloatEdit/font_sizes/font_size = 15
@@ -1098,6 +1149,7 @@ MM_NodeOptionEdit/colors/icon_hover_color = Color(0.933333, 0.678431, 0.909804, 
 MM_NodeOptionEdit/colors/icon_hover_pressed_color = Color(0.933333, 0.678431, 0.909804, 1)
 MM_NodeOptionEdit/colors/icon_normal_color = Color(1, 1, 1, 1)
 MM_NodeOptionEdit/colors/icon_pressed_color = Color(0.933333, 0.521569, 0.909804, 1)
+MM_NodeOptionEdit/font_sizes/font_size = 15
 MM_NodeOptionEdit/icons/arrow = SubResource("AtlasTexture_bflk3")
 MM_NodeOptionEditPopup/base_type = &"PopupMenu"
 MM_NodeOptionEditPopup/styles/hover = SubResource("StyleBoxFlat_3j6py")

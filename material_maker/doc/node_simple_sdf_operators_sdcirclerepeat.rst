@@ -4,7 +4,7 @@ sdCircleRepeat node
 The **sdCircleRepeat** node generates a signed distance image obtained by repeating
 the input on a circle.
 
-.. image:: images/node_simple_sdf_operators_sdcirclerepeat.png
+.. image:: images/node_simple_sdf_operators_sdcircle_repeat.png
 	:align: center
 
 Inputs

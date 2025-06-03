@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dj5q8sxvd3gci"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/option_edit/option_edit.gd" id="1_no1tx"]
+[ext_resource type="Script" uid="uid://bnwwic4t5iaoc" path="res://material_maker/widgets/option_edit/option_edit.gd" id="1_no1tx"]
 
 [node name="OptionEdit" type="OptionButton"]
 offset_right = 32.0
