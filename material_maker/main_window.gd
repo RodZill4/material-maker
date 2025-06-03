@@ -1,5 +1,7 @@
 extends Control
 
+signal config_changed()
+
 var quitting : bool = false
 
 var recent_files = []
@@ -299,7 +301,8 @@ func on_config_changed() -> void:
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 # warning-ignore:narrowing_conversion
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
-
+	emit_signal("config_changed")
+	
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 

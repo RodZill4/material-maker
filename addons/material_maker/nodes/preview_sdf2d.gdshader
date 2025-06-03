@@ -4,9 +4,19 @@ vec4 preview_2d(vec2 uv) {
 	float _seed_variation_ = variation;
 	$(code)
 	float d = $(value);
-	vec3 col = vec3(clamp(6.0*cos(d*min((256), preview_size))-5.0, 0.0, 1.0));
-	col *= clamp(1.0-d*d, 0.0, 1.0);
-	col *= vec3(1.0, vec2(step(-0.015, d)));
-	col *= vec3(vec2(step(d, 0.015)), 1.0);
-	return vec4(col, 1.0);
+
+	float border = $(border_thickness);
+	float it = $(isolines_thickness);
+	float io = $(isolines_opacity);
+	float is = max($(isolines_smoothness),0.0001);
+	float id = $(isolines_density);
+	float sha = $(shadow_opacity);
+
+    vec3 col = ( d >0.0 ) ? $(bg) : mix($(fg1), $(fg2), smoothstep(0.0,0.5,abs(d)));
+	border *= 0.25; id *= 250.0;
+	it = (it * 2.0 - 1.0) * (1.0 + is * 0.75);
+    col *= 1.2 - exp( -6.0 * abs(d) ) * sha;
+    col *= 0.8 + 0.1 * io *smoothstep( it + 1.0 * is ,it - 1.0 * is, cos(id * d));
+    col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.008, border, abs(d)));
+    return vec4(col, 1.0);
 }
