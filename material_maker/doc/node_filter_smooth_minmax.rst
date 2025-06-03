@@ -3,7 +3,7 @@ Smooth MinMax node
 
 The **Smooth MinMax** node performs a smooth minimum or smooth maximum math operation between its inputs.
 
-.. image:: images/node_filter_smooth_minmax.png
+.. image:: images/node_filter_math_smooth_minmax.png
 	:align: center
 
 Inputs

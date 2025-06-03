@@ -5,7 +5,7 @@ The **Skewed Uneven Bricks** node outputs an uneven brick pattern texture that c
 or pavement. This node is similar to the **Uneven Bricks 3** node, but generates skewed bricks by 
 using randomly angled intersections.
 
-.. image:: images/node_pattern_skewed_unevenbricks.png
+.. image:: images/node_pattern_skewed_uneven_bricks.png
 	:align: center
 
 Inputs

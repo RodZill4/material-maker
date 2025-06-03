@@ -29,7 +29,8 @@ func set_library_item(li : String):
 		material.set_shader_parameter("tex", library_item.icon)
 		tooltip_text = library_item.item.tree_item
 	else:
-		material.set_shader_parameter("tex", get_theme_icon("radio_unchecked", "PopupMenu"))
+		material.set_shader_parameter("tex", ImageTexture.create_from_image(
+				get_theme_icon("radio_unchecked", "PopupMenu").get_image()))
 		tooltip_text = "Drag a node from the list to this slot to add it to the quick access."
 
 func _drop_data(_position, data):
