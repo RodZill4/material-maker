@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://bvsuo5y7vh1y2"]
+[gd_scene load_steps=80 format=3 uid="uid://bvsuo5y7vh1y2"]
 
 [ext_resource type="Script" uid="uid://d16yu8rdgx4hx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/circle.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5mnqww2iagdf" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
@@ -33,11 +33,15 @@
 [ext_resource type="Script" uid="uid://v4fjkky72ftf" path="res://addons/material_maker/sdf_builder/sdf3d/generate/revolution.gd" id="34"]
 [ext_resource type="Script" uid="uid://kvqpx2jj8h2l" path="res://addons/material_maker/sdf_builder/sdf3d/shapes/cylinder.gd" id="35"]
 [ext_resource type="Script" uid="uid://doftuwrp1lis4" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/polygon.gd" id="36"]
+[ext_resource type="Script" uid="uid://cdbhqeta2gqu3" path="res://addons/material_maker/sdf_builder/sdf3d/boolean/intersection.gd" id="36_4b8ap"]
 [ext_resource type="Script" uid="uid://chk6rcpgr02p8" path="res://addons/material_maker/sdf_builder/sdf3d/alter/flip.gd" id="36_ay1es"]
+[ext_resource type="Script" uid="uid://b4veo2qpss2xl" path="res://addons/material_maker/sdf_builder/sdf3d/boolean/union.gd" id="36_ns3fs"]
 [ext_resource type="Script" uid="uid://lwh4hml0cgph" path="res://addons/material_maker/sdf_builder/sdf3d/alter/mirror.gd" id="37_23wvn"]
 [ext_resource type="Script" uid="uid://13ikfvedvqbf" path="res://addons/material_maker/sdf_builder/tex/uniform.gd" id="38"]
 [ext_resource type="Script" uid="uid://dxgkbq1scmmjr" path="res://addons/material_maker/sdf_builder/sdf3d/alter/elongate.gd" id="38_ayxwm"]
+[ext_resource type="Script" uid="uid://bb64ub0k3fett" path="res://addons/material_maker/sdf_builder/sdf3d/boolean/difference.gd" id="38_ekem8"]
 [ext_resource type="Script" uid="uid://b1eya3x8i88a8" path="res://addons/material_maker/sdf_builder/tex/fbm.gd" id="39"]
+[ext_resource type="Script" uid="uid://cgxif3fvx4dgs" path="res://addons/material_maker/sdf_builder/sdf3d/smooth/smooth_union.gd" id="39_faixs"]
 [ext_resource type="Script" uid="uid://w6ad5lo2ndak" path="res://addons/material_maker/sdf_builder/sdf3d/alter/round.gd" id="39_pddhx"]
 [ext_resource type="Script" uid="uid://d4brsdtpftone" path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" id="40"]
 [ext_resource type="Script" uid="uid://ohekfc64j2h8" path="res://addons/material_maker/sdf_builder/sdf3d/alter/bend.gd" id="40_rqw5j"]
@@ -432,29 +436,29 @@ item_category = "SDF3D"
 [node name="Boolean" type="Node" parent="SDF3D"]
 
 [node name="Union" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource("21")
+script = ExtResource("36_ns3fs")
 item_type = "Union3D"
 item_category = "SDF3D"
 
 [node name="Intersection" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource("23")
+script = ExtResource("36_4b8ap")
 item_type = "Intersection3D"
 item_category = "SDF3D"
 
 [node name="Difference" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource("24")
+script = ExtResource("38_ekem8")
 item_type = "Difference3D"
 item_category = "SDF3D"
 
 [node name="Smooth" type="Node" parent="SDF3D"]
 
 [node name="Union" type="Node" parent="SDF3D/Smooth"]
-script = ExtResource("25")
+script = ExtResource("39_faixs")
 item_type = "SmoothUnion3D"
 item_category = "SDF3D"
 
 [node name="Intersection" type="Node" parent="SDF3D/Smooth"]
-script = ExtResource("25")
+script = ExtResource("39_faixs")
 op_sign = ""
 item_type = "SmoothIntersection3D"
 item_category = "SDF3D"
