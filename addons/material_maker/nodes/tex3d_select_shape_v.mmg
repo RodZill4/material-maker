@@ -58,7 +58,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.01,
+				"default": 0.00,
 				"label": "3:Smoothness",
 				"longdesc": "The width of the transition area between textures",
 				"max": 1,

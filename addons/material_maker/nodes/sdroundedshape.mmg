@@ -35,7 +35,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.2,
 				"label": "",
 				"longdesc": "The length of the dilate operation",
 				"max": 1,

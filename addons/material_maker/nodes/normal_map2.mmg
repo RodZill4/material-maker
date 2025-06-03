@@ -52,12 +52,12 @@
 				"y": -293.916687011719
 			},
 			"parameters": {
-				"buffer": 1,
-				"param2": 0,
-				"size": 10,
-				"strength": 1
+				"buffer": 1.0,
+				"param2": 0.0,
+				"size": 10.0,
+				"strength": 1.0
 			},
-			"seed": 56582,
+			"seed": 56582.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -108,14 +108,14 @@
 						"False": [
 							{
 								"node": "switch",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							}
 						],
 						"True": [
 							{
 								"node": "switch",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							}
 						]
@@ -145,14 +145,14 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the generated normal map",
 					"name": "Normal",
 					"shortdesc": "Output",
 					"type": "rgb"
 				}
 			],
-			"seed": -6314,
+			"seed": -6314.0,
 			"type": "ios"
 		},
 		{
@@ -166,14 +166,14 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input height map",
 					"name": "Bump",
 					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
-			"seed": 12483,
+			"seed": 12483.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
@@ -184,25 +184,25 @@
 				"y": 141.29736328125
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 1
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 1.0
 			},
-			"seed": -53264,
+			"seed": -53264.0,
 			"type": "switch"
 		},
 		{
 			"name": "edge_detect_1",
 			"node_position": {
 				"x": -691.092529296875,
-				"y": 239.868774414063
+				"y": 239.868774414062
 			},
 			"parameters": {
-				"algo": 0,
-				"amount": 1,
-				"size": 10
+				"algo": 0.0,
+				"amount": 1.0,
+				"size": 10.0
 			},
-			"seed": -11547,
+			"seed": -11547.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -264,7 +264,7 @@
 				],
 				"parameters": [
 					{
-						"default": 3,
+						"default": 3.0,
 						"label": "",
 						"name": "algo",
 						"type": "enum",
@@ -297,10 +297,10 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 1.0,
 						"label": "",
-						"max": 2,
-						"min": 0,
+						"max": 2.0,
+						"min": 0.0,
 						"name": "amount",
 						"step": 0.01,
 						"type": "float"
@@ -313,13 +313,13 @@
 			"name": "buffer_2",
 			"node_position": {
 				"x": -702.5,
-				"y": -27.0291137695313
+				"y": -27.0291137695312
 			},
 			"parameters": {
 				"f32": true,
 				"filter": true,
 				"mipmap": false,
-				"size": 10
+				"size": 10.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -339,10 +339,10 @@
 		}
 	],
 	"parameters": {
-		"buffer": 1,
-		"param2": 0,
-		"size": 10,
-		"strength": 1
+		"buffer": 1.0,
+		"param2": 0.0,
+		"size": 10.0,
+		"strength": 1.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Normal map",

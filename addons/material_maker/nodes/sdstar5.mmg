@@ -43,7 +43,7 @@
 			},
 			{
 				"control": "Radius11.r",
-				"default": 0.5,
+				"default": 0.45,
 				"label": "Inner Radius",
 				"longdesc": "Inner radius of the 5-point star",
 				"max": 1,
