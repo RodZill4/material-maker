@@ -23,6 +23,7 @@ func _on_Cancel_pressed():
 func edit_pixels(pixels : MMPixels) -> Dictionary:
 	previous_value = pixels.duplicate()
 	$VBoxContainer/EditorContainer/PixelsEditor.set_pixels(pixels)
+	hide()
 	popup_centered()
 	var result = await self.return_pixels
 	queue_free()

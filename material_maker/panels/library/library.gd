@@ -193,7 +193,7 @@ func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null)
 	if parent_item == null:
 		parent_item = tree.get_root()
 		var stylebox : StyleBoxFlat = StyleBoxFlat.new()
-		stylebox.bg_color = Color(1.0, 1.0, 1.0)
+		stylebox.bg_color = Color("303236") # documentation page bg color
 		graph_edit.add_theme_stylebox_override("panel", stylebox)
 	var items : Array[TreeItem] = parent_item.get_children()
 	for item in items:
@@ -201,8 +201,10 @@ func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null)
 			var new_nodes = graph_edit.create_nodes(item.get_metadata(0))
 			await get_tree().create_timer(0.05).timeout
 			var image = get_viewport().get_texture().get_image()
-			image = image.get_region(Rect2(new_nodes[0].global_position-Vector2(6, 6), new_nodes[0].size+Vector2(14, 12)))
+			var csf = mm_globals.main_window.get_window().content_scale_factor
+			image = image.get_region(Rect2(csf*(new_nodes[0].global_position-Vector2(6, 6)),csf*(new_nodes[0].size+Vector2(14, 12))))
 			print(get_icon_name(get_item_path(item)))
+			image.resize(image.get_size().x/csf, image.get_size().y/csf, Image.INTERPOLATE_LANCZOS)
 			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
 			for n in new_nodes:
 				graph_edit.remove_node(n)
@@ -228,15 +230,20 @@ func _on_Tree_item_collapsed(item) -> void:
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:
+	if not library_manager.is_section_enabled(category):
+		return
+
+	var match_item : TreeItem
 	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			for node in tree.get_children(true):
-				if node is VScrollBar:
-					node.value = tree.get_item_area_rect(item).position.y
-					break
+			match_item = item
 			break
+
+	tree.scroll_to_item(tree.get_last_item(tree.get_root()))
+	tree.scroll_to_item(match_item)
+
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:

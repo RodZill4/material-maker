@@ -13,6 +13,7 @@ func show_code(s) -> void:
 	_on_ShaderType_item_selected(0)
 	if ! is_connected("popup_hide", Callable(self, "queue_free")):
 		connect("popup_hide", Callable(self, "queue_free"))
+	hide()
 	popup_centered()
 
 func _on_ShaderType_item_selected(index):

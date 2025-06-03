@@ -7,7 +7,7 @@ Overlapping instances are mixed with each other using a *lighten* filter.
 
 The **Circle Splatter** also has a color version whose input is in RGBA format.
 
-.. image:: images/node_transform_circlesplatter.png
+.. image:: images/node_transform_circle_splatter.png
 	:align: center
 
 Inputs

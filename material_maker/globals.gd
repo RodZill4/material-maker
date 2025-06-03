@@ -23,11 +23,15 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_3d_preview_tonemap = 0,
 	ui_3d_preview_tonemap_white = 1.0,
 	ui_3d_preview_tonemap_exposure = 1.0,
+	ui_console_open = false,
+	ui_console_height = 100,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,
 	bake_denoise_radius = 3,
-	auto_size_comment = true
+	auto_size_comment = true,
+	graph_line_curvature = 0.5,
+	graph_line_style = 1,
 }
 
 
@@ -153,7 +157,7 @@ static func popup_menu(menu : PopupMenu, parent : Control):
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
-	main_window.set_tip_text(tip, timeout, priority)
+	main_window.set_tip_text(TranslationServer.translate(tip), timeout, priority)
 
 static func do_propagate_shortcuts(control : Control, event : InputEvent):
 	for child in control.get_children():

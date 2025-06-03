@@ -199,7 +199,7 @@ func _unhandled_input(event) -> void:
 func _on_filter_gui_input(event: InputEvent) -> void:
 	if event.is_action("ui_down"):
 		%List.grab_focus()
-		%List.select(0)
+		%List.select(1)
 
 
 func _on_list_gui_input(event: InputEvent) -> void:
