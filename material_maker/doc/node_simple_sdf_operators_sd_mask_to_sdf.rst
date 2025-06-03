@@ -3,7 +3,7 @@ Mask to SDF node
 
 The **Mask to SDF** node generates a signed distance image from an image mask.
 
-.. image:: images/node_simple_sdf_operators_sd_mask_to_sdf.png
+.. image:: images/node_simple_sdf_operators_mask_to_sdf.png
 	:align: center
 
 Inputs

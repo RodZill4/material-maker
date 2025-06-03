@@ -26,6 +26,7 @@ func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Ar
 	accept_empty = ae
 	title = wt
 	editor.text = value
+	hide()
 	popup_centered()
 	editor.set_caret_column(editor.text.length())
 	editor.grab_focus()

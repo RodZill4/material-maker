@@ -4,7 +4,7 @@ Fill to Random Gray node
 The **Fill to Random Gray** node uses the output of the **Fill** node and fills
 all detected areas with a random shade of gray.
 
-.. image:: images/node_filter_fill_to_random_grey.png
+.. image:: images/node_filter_fill_to_random_gray.png
 	:align: center
 
 Inputs

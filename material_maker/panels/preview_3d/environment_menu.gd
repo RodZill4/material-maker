@@ -49,9 +49,6 @@ func update_environment_selector() -> void:
 		EnvironmentList.set_item_tooltip(idx, env.name)
 		idx += 1
 
-	EnvironmentList.fixed_icon_size.x = EnvironmentList.size.x/4.0 - 7
-	EnvironmentList.fixed_icon_size.y = EnvironmentList.fixed_icon_size.x
-	EnvironmentList.get_parent().custom_minimum_size.y = EnvironmentList.size.x/4.0
 	size = Vector2()
 
 

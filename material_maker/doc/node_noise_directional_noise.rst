@@ -3,7 +3,7 @@ Directional Noise node
 
 The **Directional Noise** node outputs various directional noises.
 
-.. image:: images/node_noise_directional_noise.png
+.. image:: images/node_noise_composite_directional_noise.png
 	:align: center
 
 Inputs
