@@ -44,6 +44,7 @@ var connection_line_style : int = ConnectionStyle.BEZIER
 @onready var drag_cut_cursor = load("res://material_maker/icons/knife.png")
 var connections_to_cut : Array[Dictionary]
 var drag_cut_line : Line2D = Line2D.new()
+var valid_drag_cut_entry: bool = false
 
 signal save_path_changed
 signal graph_changed
@@ -57,6 +58,7 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -162,6 +164,7 @@ func _gui_input(event) -> void:
 				event.control = true
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+			valid_drag_cut_entry = true
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
@@ -181,7 +184,6 @@ func _gui_input(event) -> void:
 								if c.has_method("on_clicked_output"):
 									c.on_clicked_output(slot.index, Input.is_key_pressed(KEY_SHIFT))
 									return
-
 			# Only show add node popup if Ctrl is not pressed to
 			# avoid conflicting with drag-cut shortcut (Ctrl + RMB)
 			if !event.ctrl_pressed:
@@ -241,11 +243,15 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
-		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and event.ctrl_pressed:
-			Input.set_custom_mouse_cursor(
-					drag_cut_cursor, Input.CURSOR_ARROW, Vector2(2.0, 27.22))
-			drag_cut_line.add_point(get_local_mouse_position())
-			queue_redraw()
+		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
+			if event.ctrl_pressed:
+				Input.set_custom_mouse_cursor(
+						drag_cut_cursor, Input.CURSOR_ARROW, Vector2(2.0, 27.22))
+				drag_cut_line.add_point(get_local_mouse_position())
+				queue_redraw()
+			elif drag_cut_line.points.size():
+				drag_cut_line.add_point(get_local_mouse_position())
+				queue_redraw()
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
