@@ -307,6 +307,8 @@ func get_current_project() -> Control:
 	return projects_panel.get_projects().get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
+	if projects_panel == null:
+		return null
 	var graph_edit = projects_panel.get_projects().get_current_tab_control()
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
@@ -485,6 +487,11 @@ func change_theme(theme_name) -> void:
 		_theme.update()
 	await get_tree().process_frame
 	theme = _theme
+	if "classic" in theme_name:
+		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
+	else:
+		RenderingServer.set_default_clear_color(
+				Color(0.48, 0.48, 0.48) if "light" in theme_name else Color(0.12, 0.12, 0.12))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:

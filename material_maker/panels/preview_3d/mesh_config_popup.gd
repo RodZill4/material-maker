@@ -57,3 +57,7 @@ func _on_UV_value_changed(_value):
 
 func _on_Tesselated_toggled(button_pressed):
 	mesh.tesselated = button_pressed
+
+
+func _on_v_box_container_minimum_size_changed() -> void:
+	size = get_contents_minimum_size() * content_scale_factor
