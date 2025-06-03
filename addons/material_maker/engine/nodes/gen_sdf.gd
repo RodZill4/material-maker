@@ -194,4 +194,6 @@ func edit(node, tab : String = "") -> void:
 		edit_window.set_sdf_scene(scene)
 		edit_window.connect("node_changed", Callable(node, "update_sdf_generator"))
 		edit_window.connect("editor_window_closed", Callable(node, "finalize_generator_update"))
+		edit_window.get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		edit_window.get_window().min_size = Vector2(800, 400) * edit_window.get_window().content_scale_factor
 		edit_window.popup_centered()

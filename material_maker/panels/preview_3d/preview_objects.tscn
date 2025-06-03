@@ -219,7 +219,7 @@ void set_point(int x, int y) {
 	float a = float(x)*TAU/float(size);	
 	vec3 vertex = vec3(vertex_2d.x*cos(a), vertex_2d.y, vertex_2d.x*sin(a));
 	vec3 normal = normalize(vec3(normal_2d.x*cos(a), normal_2d.y, normal_2d.x*sin(a)));
-	vec3 tangent = vec3(-sin(a), 0, cos(a));
+	vec3 tangent = vec3(sin(a), 0, -cos(a));
 	vec2 tex_uvs =vec2(1.0, 1.0)-scale*vec2(x, y);
 	set_face_point(vertex_index, vertex, normal, tangent, tex_uvs);
 }

@@ -3,7 +3,7 @@ Crystal node
 
 The **Crystal** node outputs a crystal like pattern based on combining Voronoi noises.
 
-.. image:: images/node_noise_crystal.png
+.. image:: images/node_noise_composite_crystal.png
 	:align: center
 
 Inputs

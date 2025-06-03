@@ -9,7 +9,8 @@ The **Noise** node outputs a randomly generated black and white texture.
 Inputs
 ++++++
 
-The **Noise** node does not accept any input.
+The **Noise** node accepts a single input, the **Density Input** to optionally
+drive the **Density** value with an input.
 
 Outputs
 +++++++

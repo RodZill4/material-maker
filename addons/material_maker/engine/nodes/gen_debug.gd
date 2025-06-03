@@ -12,6 +12,11 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Debug"
 
+func get_description() -> String:
+	return "\n".join(["Debug",
+			"Shows generated shader of an input and code " +
+			"which can be copied and used directly in Shadertoy"])
+
 func get_input_defs() -> Array:
 	return [ { name="in", type="rgba" } ]
 

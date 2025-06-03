@@ -5,7 +5,7 @@ The **SmoothBoolean** node generates a 3D signed distance image for the combinat
 intersection or difference) of its inputs. If the input shapes are associated to color indexes, the
 smooth boolean node applies them to the output.
 
-.. image:: images/node_3d_sdf_operators_smoothboolean.png
+.. image:: images/node_3d_sdf_operators_smooth_boolean.png
 	:align: center
 
 Inputs

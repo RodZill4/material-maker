@@ -131,7 +131,10 @@ func _on_text_focus_exited():
 func _on_change_color_pressed():
 	var light_theme = "light" in mm_globals.main_window.theme.resource_path
 	accept_event()
-	$Popup.position = get_local_mouse_position()+get_screen_position()
+	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	$Popup.get_window().content_scale_factor = content_scale_factor
+	$Popup.get_window().min_size = $Popup.get_window().get_contents_minimum_size() * content_scale_factor
+	$Popup.position = get_global_mouse_position() * content_scale_factor
 	$Popup.popup()
 	var corrected_color = pallette_colors.duplicate(true)
 	if !light_theme:
@@ -173,7 +176,11 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
-		$PopupSelector.popup(Rect2(event.global_position, Vector2(0, 0)))
+		var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		$PopupSelector.get_window().content_scale_factor = content_scale_factor
+		$PopupSelector.get_window().min_size = $PopupSelector.get_window().get_contents_minimum_size() * content_scale_factor
+		$PopupSelector.get_window().position = get_global_mouse_position() * content_scale_factor
+		$PopupSelector.popup()
 		$PopupSelector/PanelContainer/ColorPicker.color = generator.color
 		if not $PopupSelector/PanelContainer/ColorPicker.color_changed.is_connected(self.set_color):
 			$PopupSelector/PanelContainer/ColorPicker.color_changed.connect(self.set_color)
