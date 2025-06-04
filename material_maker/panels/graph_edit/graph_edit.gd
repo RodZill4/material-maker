@@ -219,10 +219,16 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
-		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE ) != 0:
-			if (event.get_modifiers_mask() & ( KEY_MASK_CTRL | KEY_MASK_META)):
+		if ((event.button_mask & MOUSE_BUTTON_MASK_MIDDLE ) != 0
+				and (event.get_modifiers_mask() & ( KEY_MASK_CTRL | KEY_MASK_META))):
+			accept_event()
+			if event.relative.abs().y < 50:
 				zoom -= event.relative.y * 0.002
-				accept_event()
+			if get_local_mouse_position().y > get_rect().size.y:
+				warp_mouse(Vector2(get_local_mouse_position().x, get_viewport_rect().position.y))
+			elif get_local_mouse_position().y < get_viewport_rect().position.y:
+				warp_mouse(Vector2(get_local_mouse_position().x, size.y))
+
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
