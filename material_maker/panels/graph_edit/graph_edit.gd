@@ -227,7 +227,7 @@ func _gui_input(event) -> void:
 			if get_local_mouse_position().y > get_rect().size.y:
 				warp_mouse(Vector2(get_local_mouse_position().x, get_viewport_rect().position.y))
 			elif get_local_mouse_position().y < get_viewport_rect().position.y:
-				warp_mouse(Vector2(get_local_mouse_position().x, size.y))
+				warp_mouse(Vector2(get_local_mouse_position().x, get_rect().size.y))
 
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
