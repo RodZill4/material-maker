@@ -7,6 +7,8 @@ extends Node
 # warning-ignore:unused_class_variable
 var main_window
 
+static var _is_drag_zoom_warping : int = 0
+
 var config : ConfigFile = ConfigFile.new()
 const DEFAULT_CONFIG : Dictionary = {
 	locale = "",
@@ -32,6 +34,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
+	ui_warp_mouse_gestures = true,
 }
 
 
@@ -147,6 +150,32 @@ func parse_paste_data(data : String):
 	return { type=type, graph=graph }
 
 # Misc. UI functions
+
+static func do_warp_mouse(position : Vector2, node : Node):
+	if mm_globals.get_config("ui_warp_mouse_gestures"):
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+		node.warp_mouse(position)
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+static func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
+		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
+		should_accept_event : bool = true, ignore_after_warp : int = 2) -> void:
+		if should_accept_event:
+			node.accept_event()
+
+		_is_drag_zoom_warping -= 1 if _is_drag_zoom_warping else 0
+		if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warp_mouse_gestures"):
+			_is_drag_zoom_warping = 0
+
+		if not _is_drag_zoom_warping:
+			zoom_func.call()
+
+		if mouse_pos.y > to_rect_y:
+			_is_drag_zoom_warping = ignore_after_warp
+			do_warp_mouse(Vector2(mouse_pos.x, from_rect_y), node)
+		elif mouse_pos.y < from_rect_y:
+			_is_drag_zoom_warping = ignore_after_warp
+			do_warp_mouse(Vector2(mouse_pos.x, to_rect_y), node)
 
 static func popup_menu(menu : PopupMenu, parent : Control):
 	var zoom_fac = 1.0
