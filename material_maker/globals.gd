@@ -5,6 +5,8 @@ extends Node
 
 var main_window
 
+var _is_gesture_warping : int = 0
+
 var config : ConfigFile = ConfigFile.new()
 const DEFAULT_CONFIG : Dictionary = {
 	locale = "",
@@ -30,6 +32,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
+	ui_warp_mouse_gestures = true,
 }
 
 
@@ -146,11 +149,60 @@ func parse_paste_data(data : String):
 
 # Misc. UI functions
 
+func do_warp_mouse(position : Vector2, node : Node) -> void:
+	if mm_globals.get_config("ui_warp_mouse_gestures"):
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+		node.warp_mouse(position)
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
+		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
+		should_accept_event : bool = true, ignore_after_warp : int = 2) -> void:
+	if should_accept_event:
+		node.accept_event()
+
+	_is_gesture_warping -= 1 if _is_gesture_warping else 0
+	if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warp_mouse_gestures"):
+		_is_gesture_warping = 0
+
+	if not _is_gesture_warping:
+		zoom_func.call()
+
+	if mouse_pos.y > to_rect_y:
+		_is_gesture_warping = ignore_after_warp
+		do_warp_mouse(Vector2(mouse_pos.x, from_rect_y), node)
+	elif mouse_pos.y < from_rect_y:
+		_is_gesture_warping = ignore_after_warp
+		do_warp_mouse(Vector2(mouse_pos.x, to_rect_y), node)
+
+func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
+		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
+		dragging_cursor : Control.CursorShape = Control.CURSOR_DRAG,
+		relative_offset_multiplier : float = 1.0, ignore_after_warp : int = 2) -> void:
+	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
+		node.mouse_default_cursor_shape = dragging_cursor
+
+		_is_gesture_warping -= 1 if _is_gesture_warping else 0
+		if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warp_mouse_gestures"):
+			_is_gesture_warping = 0
+
+		if not _is_gesture_warping and event.relative.abs().y < 96:
+			vscroll.value -= event.relative.y * relative_offset_multiplier
+
+		if mouse_pos.y > to_rect_y:
+			_is_gesture_warping = ignore_after_warp
+			do_warp_mouse(Vector2(mouse_pos.x, from_rect_y), node)
+		elif mouse_pos.y < from_rect_y:
+			_is_gesture_warping = ignore_after_warp
+			do_warp_mouse(Vector2(mouse_pos.x, to_rect_y), node)
+	else:
+		node.mouse_default_cursor_shape = Control.CURSOR_ARROW
+
 func popup_menu(menu : PopupMenu, parent : Control):
 	var zoom_fac = 1.0
 	if parent is GraphNode:
 		zoom_fac *= mm_globals.main_window.get_current_graph_edit().zoom
-	
+
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 

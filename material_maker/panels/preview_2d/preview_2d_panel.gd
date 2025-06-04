@@ -222,6 +222,7 @@ func on_resized() -> void:
 
 var dragging : bool = false
 var zooming : bool = false
+var drag_zooming : bool = false
 
 func _input(event):
 	if event.is_pressed():
@@ -251,17 +252,28 @@ func _on_gui_input(event):
 		else:
 			dragging = false
 			zooming = false
+			drag_zooming = false
 	elif event is InputEventMouseMotion:
-		if dragging:
-			new_center = center-event.relative*view_scale/multiplier
-		elif zooming:
-			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
+				event.ctrl_pressed or event.meta_pressed):
+			drag_zooming = true
+			var sca : Array[float] = [new_scale]
+			mm_globals.handle_warped_drag_zoom(self,
+				(func(): sca[0] *= 1.0 + 0.005 *event.relative.y),0,
+				get_rect().size.y, get_local_mouse_position())
+			new_scale = clamp(sca[0], 0.005, 5.0)
+		else:
+			if dragging:
+				new_center = center-event.relative*view_scale/multiplier
+			elif zooming:
+				new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
 	elif event is InputEventPanGesture:
 		new_center = center-event.delta*10.0*view_scale/multiplier
 	elif event is InputEventMagnifyGesture:
 		new_scale = clamp(new_scale/event.factor, 0.005, 5.0)
 	if new_scale != view_scale:
-		new_center = center+offset_from_center*(view_scale-new_scale)/multiplier
+		if not drag_zooming:
+			new_center = center+offset_from_center*(view_scale-new_scale)/multiplier
 		view_scale = new_scale
 		need_update = true
 	if new_center != center:

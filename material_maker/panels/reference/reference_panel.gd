@@ -12,6 +12,7 @@ var current_image_index := 0
 var is_picking := false
 var is_dragging := false
 var is_zooming := false
+var is_drag_zooming := false
 
 var selected_slot: Button = null
 
@@ -188,7 +189,7 @@ func handle_movement(event: InputEvent) -> void:
 				is_dragging = event.pressed and event.shift_pressed
 
 				is_zooming = event.pressed and event.is_command_or_control_pressed() and not is_dragging
-
+				is_drag_zooming = false
 			MOUSE_BUTTON_WHEEL_DOWN:
 				new_scale = min(new_scale+0.05, 3)
 
@@ -196,15 +197,25 @@ func handle_movement(event: InputEvent) -> void:
 				new_scale = max(new_scale-0.05, 0.05)
 
 	elif event is InputEventMouseMotion:
-		if is_dragging:
-			new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
+				event.ctrl_pressed or event.meta_pressed):
+			is_drag_zooming = true
+			var sca : Array[float] = [new_scale]
+			mm_globals.handle_warped_drag_zoom(self,
+				(func(): sca[0] *= 1.0 + 0.005 *event.relative.y),0,
+				get_rect().size.y, get_local_mouse_position())
+			new_scale = clamp(sca[0], 0.005, 3.0)
+		else:
+			if is_dragging:
+				new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
 
-		elif is_zooming:
-			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 3)
+			elif is_zooming:
+				new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 3)
 
 	if new_scale != image_scale:
 		m.set_shader_parameter("scale", new_scale)
-		new_center = center+offset_from_center*(image_scale-new_scale)/multiplier
+		if not is_drag_zooming:
+			new_center = center+offset_from_center*(image_scale-new_scale)/multiplier
 		opened_images[current_image_index].scale = new_scale
 
 	if new_center != center:
