@@ -29,6 +29,8 @@ const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
 
+var _is_drag_zoom_warping : int
+
 @onready var node_popup : Popup = get_node("/root/MainWindow/AddNodePopup")
 @onready var timer : Timer = $Timer
 
@@ -218,6 +220,27 @@ func _gui_input(event) -> void:
 			var rect = get_global_rect()
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
+		
+		if ((event.button_mask & MOUSE_BUTTON_MASK_MIDDLE ) != 0
+				and (event.get_modifiers_mask() & ( KEY_MASK_CTRL | KEY_MASK_META))):
+			accept_event()
+
+			# force connection lines to redraw
+			set_connection_lines_curvature(connection_lines_curvature)
+
+			_is_drag_zoom_warping -= 1 if _is_drag_zoom_warping else 0
+			if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warped_mouse_zoom"):
+				_is_drag_zoom_warping = 0
+
+			if not _is_drag_zoom_warping:
+				zoom -= event.relative.y * 0.002
+
+			if get_local_mouse_position().y > get_rect().size.y:
+				_is_drag_zoom_warping = 2
+				mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, get_viewport_rect().position.y), self)
+			elif get_local_mouse_position().y < get_viewport_rect().position.y:
+				_is_drag_zoom_warping = 2
+				mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, get_rect().size.y), self)
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
@@ -1387,7 +1410,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			curve.set_point_out(0, Vector2(cp_offset, 0))
 			curve.add_point(to)
 			curve.set_point_in(1, Vector2(-cp_offset, 0))
-			
+
 			if connection_lines_curvature > 0:
 				return curve.tessellate(5, 2.0)
 			else:
@@ -1427,7 +1450,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 
 			var r = min(min(abs(to.y - from.y) * 0.25,
 					abs(from.x - to.x) * 0.25), max_radius)
-			
+
 			if from.x < to.x:
 				for i in range(pts):
 					var x = lerp(mid.x - r, mid.x, i/pts)
