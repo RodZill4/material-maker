@@ -617,7 +617,9 @@ func _on_Tree_item_selected():
 			preview_3d.setup_controls("n%d" % index)
 			$GenSDF.set_parameter("index", float(index))
 
-func _on_Tree_button_pressed(item, _column, _id):
+func _on_tree_button_clicked(item, _column, _id, mouse_button_index):
+	if mouse_button_index != MOUSE_BUTTON_LEFT:
+		return
 	var item_scene : Dictionary = item.get_meta("scene")
 	if item_scene.has("hidden") and item_scene.hidden:
 		item_scene.erase("hidden")
