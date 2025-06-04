@@ -4,6 +4,21 @@ extends Tree
 
 var scroll_position = 0.0
 
+var tree_scrollbar : VScrollBar
+
+func _on_ready() -> void:
+	for node in get_children(true):
+		if node is VScrollBar:
+			tree_scrollbar = node
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		auto_tooltip = false
+		mm_globals.handle_warped_mmb_scroll(event, self, tree_scrollbar,
+				0, get_rect().size.y, get_local_mouse_position(), Control.CURSOR_DRAG)
+	else:
+		auto_tooltip = true
+
 func get_last_item(parent : TreeItem):
 	while true:
 		if parent.collapsed:
