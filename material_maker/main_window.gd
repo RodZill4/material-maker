@@ -384,7 +384,7 @@ func quick_export() -> void:
 		return
 
 	var export_prefix : String
-	var exports : Array[GraphElement]
+	var exports : Array
 
 	var progress_dialog = null
 	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
@@ -420,7 +420,7 @@ func quick_export() -> void:
 		var export_count = 0.0
 
 		for export_node in exports:
-			await export_node.export_material(export_prefix + "/")
+			await export_node.export_material(export_prefix + "/", "Quick Export")
 			export_count += 1.0
 			progress_dialog.set_progress(export_count / len(exports))
 
