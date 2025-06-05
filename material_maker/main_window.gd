@@ -45,6 +45,8 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
+const MENU_QUICK_EXPORT : int = 1000
+
 const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
@@ -58,7 +60,6 @@ const MENU : Array[Dictionary] = [
 	{ menu="File/Save as...", command="save_project_as", shortcut="Control+Shift+S" },
 	{ menu="File/Save all...", command="save_all_projects", not_in_ports=["HTML5"] },
 	{ menu="File/-" },
-	{ menu="File/Quick export", command="quick_export", shortcut="Control+Shift+E" },
 	{ menu="File/Export again", command="export_again", shortcut="Control+E", not_in_ports=["HTML5"] },
 	{ menu="File/Export material", submenu="export_material", not_in_ports=["HTML5"] },
 	{ menu="File/-" },
@@ -396,19 +397,20 @@ func quick_export() -> void:
 
 	var export_prefix : String
 	var exports : Array
-	var null_exports : Array
+	var unconnected_exports : Array
 
 	for g in graph_edit.top_generator.get_children():
 		if g.has_method("export_material") and !g.has_method("get_export_profiles"):
 			if g.get_source(0) != null:
 				exports.append(g)
 			else:
-				null_exports.append(g)
+				unconnected_exports.append(g)
 
+	# No export nodes
 	if not exports.size():
 		var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		var error_text = "Quick export requires at least one export node"
-		if null_exports.size():
+		if unconnected_exports.size():
 			error_text += " with connected input"
 		dialog.dialog_text = TranslationServer.translate(error_text)
 		add_child(dialog)
@@ -432,20 +434,24 @@ func quick_export() -> void:
 	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
 	if progress_dialog_scene != null:
 		progress_dialog = progress_dialog_scene.instantiate()
+	var dim_rect = ColorRect.new()
+	dim_rect.modulate = Color(0,0,0,0.5)
+	add_child(dim_rect)
 	get_tree().get_root().add_child(progress_dialog)
-	progress_dialog.set_text("Quick Exporting")
+	progress_dialog.set_text("Quick Export")
 	progress_dialog.set_progress(0)
 
 	var export_count = 0.0
 	for export_node in exports:
 		await export_node.export_material(
-				"%s/%s" % [export_prefix, project_file],"Quick Export")
+				"%s/%s" % [export_prefix, project_file], "Quick Export")
 		export_count += 1.0
 		progress_dialog.set_progress(export_count / len(exports))
 
 	if progress_dialog != null:
 		# Wait a little to allow progress bar to complete
 		await get_tree().create_timer(0.25).timeout
+		dim_rect.queue_free()
 		progress_dialog.queue_free()
 
 	mm_globals.config.set_value("path", "quick_export", export_prefix)
@@ -482,7 +488,8 @@ func export_again() -> void:
 	var export_path : String = material_node.get_export_path(export_target)
 	export_material(export_path, export_target)
 
-func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String = "", export_profiles = null) -> void:
+func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String = "",
+		export_profiles = null, add_quick_export : bool = true) -> void:
 	if prefix == "":
 		menu.clear()
 	var project = get_current_project()
@@ -493,8 +500,10 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 		return
 	var prefix_len = prefix.length()
 	var submenus : Array[String] = []
+
 	if export_profiles == null:
 		export_profiles = material_node.get_export_profiles()
+
 	for id in range(export_profiles.size()):
 		var p : String = export_profiles[id]
 		if prefix_len > 0:
@@ -508,17 +517,25 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 			var submenu_name : String = p.left(slash_position)
 			if submenus.find(submenu_name) == -1:
 				var submenu : MMMenuManager.MenuBase = menu.add_submenu(submenu_name)
-				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles)
+				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles, false)
 				submenus.append(submenu_name)
 	menu.connect_id_pressed(self._on_ExportMaterial_id_pressed)
 
+	if add_quick_export:
+		menu.add_item("Quick Export", MENU_QUICK_EXPORT, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_E )
+
 func _on_ExportMaterial_id_pressed(id) -> void:
+	if id == MENU_QUICK_EXPORT:
+		quick_export()
+		return
+
 	var project = get_current_project()
 	if project == null:
 		return
 	var material_node = project.get_material_node()
 	if material_node == null:
 		return
+
 	var profile = material_node.get_export_profiles()[id]
 	var export_extension : String = material_node.get_export_extension(profile)
 	if export_extension == "":
@@ -544,7 +561,6 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		var files = await dialog.select_files()
 		if files.size() > 0:
 			export_material(files[0], profile)
-
 
 func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
