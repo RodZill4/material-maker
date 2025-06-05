@@ -397,22 +397,6 @@ func quick_export() -> void:
 	var export_prefix : String
 	var exports : Array
 
-	var progress_dialog = null
-	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
-	if progress_dialog_scene != null:
-		progress_dialog = progress_dialog_scene.instantiate()
-
-	var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
-	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
-	file_dialog.title = "Quick Export"
-	if mm_globals.config.has_section_key("path", "quick_export"):
-		file_dialog.current_dir = mm_globals.config.get_value("path", "quick_export")
-
-	var files = await file_dialog.select_files()
-	if files.size() == 1:
-		export_prefix = files[0]
-
 	for g in graph_edit.top_generator.get_children():
 		if g.has_method("export_material") and !g.has_method("get_export_profiles"):
 			exports.append(g)
@@ -424,26 +408,42 @@ func quick_export() -> void:
 		await dialog.ask()
 		return
 
+	var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
+	file_dialog.title = "Quick Export"
+	if mm_globals.config.has_section_key("path", "quick_export"):
+		file_dialog.current_dir = mm_globals.config.get_value("path", "quick_export")
+
+	var files = await file_dialog.select_files()
+	if files.size() == 1:
+		export_prefix = files[0]
 	else:
-		get_tree().get_root().add_child(progress_dialog)
-		progress_dialog.set_text("Quick Exporting")
-		progress_dialog.set_progress(0)
-		var export_count = 0.0
+		return
 
-		for export_node in exports:
-			await export_node.export_material(
-					"%s/%s" % [export_prefix, project_file],"Quick Export")
-			export_count += 1.0
-			progress_dialog.set_progress(export_count / len(exports))
+	var progress_dialog = null
+	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
+	if progress_dialog_scene != null:
+		progress_dialog = progress_dialog_scene.instantiate()
+	get_tree().get_root().add_child(progress_dialog)
+	progress_dialog.set_text("Quick Exporting")
+	progress_dialog.set_progress(0)
 
-		if progress_dialog != null:
-			# Wait a little to allow progress bar to complete
-			await get_tree().create_timer(0.25).timeout
-			progress_dialog.queue_free()
+	var export_count = 0.0
+	for export_node in exports:
+		await export_node.export_material(
+				"%s/%s" % [export_prefix, project_file],"Quick Export")
+		export_count += 1.0
+		progress_dialog.set_progress(export_count / len(exports))
 
-		mm_globals.config.set_value("path", "quick_export", export_prefix)
-		mm_globals.set_tip_text(
-				"Quick exported %s file(s) to %s" % [len(exports), export_prefix], 3, 1)
+	if progress_dialog != null:
+		# Wait a little to allow progress bar to complete
+		await get_tree().create_timer(0.25).timeout
+		progress_dialog.queue_free()
+
+	mm_globals.config.set_value("path", "quick_export", export_prefix)
+	mm_globals.set_tip_text(
+			"Quick exported %s file(s) to %s" % [len(exports), export_prefix], 3, 1)
 
 func export_material(file_path : String, profile : String) -> void:
 	var project = get_current_project()
