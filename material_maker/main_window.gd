@@ -379,9 +379,20 @@ func export_profile_config_key(profile : String) -> String:
 	return key
 
 func quick_export() -> void:
+	var project = get_current_project()
+	if project == null:
+		return
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit == null:
 		return
+
+	# get project filename
+	var project_file : String
+	if not graph_edit.save_path.is_empty():
+		project_file = graph_edit.save_path.right(-(graph_edit.save_path.rfind("/")+1))
+		project_file = project_file.trim_suffix(".ptex")
+	else:
+		project_file = "unnamed"
 
 	var export_prefix : String
 	var exports : Array
@@ -420,7 +431,8 @@ func quick_export() -> void:
 		var export_count = 0.0
 
 		for export_node in exports:
-			await export_node.export_material(export_prefix + "/", "Quick Export")
+			await export_node.export_material(
+					"%s/%s" % [export_prefix, project_file],"Quick Export")
 			export_count += 1.0
 			progress_dialog.set_progress(export_count / len(exports))
 
