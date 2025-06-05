@@ -682,7 +682,7 @@ func export_material(export_prefix, profile) -> void:
 		await g.export_material(export_prefix, profile)
 		export_count += 1.0
 		progress_dialog.set_progress(export_count / len(exports))
-	
+
 	if progress_dialog != null:
 		# Wait a little to allow progress bar to complete
 		await get_tree().create_timer(0.25).timeout
