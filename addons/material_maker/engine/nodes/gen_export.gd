@@ -28,9 +28,12 @@ func get_type_name() -> String:
 	return "Export"
 
 func get_description() -> String:
-	return "\n".join(["Export",
-			"Defines a texture which will be saved " +
-			"along with other textures on material export"])
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Export"))
+	desc_list.push_back(TranslationServer.translate(
+			"Defines a texture which will be saved along with other textures on material export."+
+			" Can also be triggered via 'Quick export'"))
+	return "\n".join(desc_list)
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data
