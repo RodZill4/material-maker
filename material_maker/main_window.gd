@@ -434,9 +434,9 @@ func quick_export() -> void:
 	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
 	if progress_dialog_scene != null:
 		progress_dialog = progress_dialog_scene.instantiate()
-	var dim_rect = ColorRect.new()
-	dim_rect.modulate = Color(0,0,0,0.5)
-	add_child(dim_rect)
+	var dim_color_rect = ColorRect.new()
+	dim_color_rect.modulate = Color(0.05, 0.05, 0.05, 0.5)
+	add_child(dim_color_rect)
 	get_tree().get_root().add_child(progress_dialog)
 	progress_dialog.set_text("Quick Export")
 	progress_dialog.set_progress(0)
@@ -451,7 +451,7 @@ func quick_export() -> void:
 	if progress_dialog != null:
 		# Wait a little to allow progress bar to complete
 		await get_tree().create_timer(0.25).timeout
-		dim_rect.queue_free()
+		dim_color_rect.queue_free()
 		progress_dialog.queue_free()
 
 	mm_globals.config.set_value("path", "quick_export", export_prefix)
