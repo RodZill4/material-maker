@@ -2,8 +2,8 @@ Export node
 ~~~~~~~~~~~
 
 The **Export** node defines a texture that will be saved together with the
-material textures when exporting the project. They can also be triggered
-manually via **Quick Export** under File menu.
+material textures when exporting the project. This node can also be triggered
+manually via **Quick Export** under material exports.
 
 .. image:: images/node_miscellaneous_export.png
 	:align: center
