@@ -31,13 +31,15 @@ File menu
 * *Save all* saves all currently open materials and paint projects. Projects that were already
   saved are ignored.
 
-* *Quick export* export files from export node(s) present in the graph. Nodes without
-  a connection are ignored.
-
 * the *Export* submenu can be used to export the current Material or painted textures for Godot, Unity
   or Unreal. It will prompt for a file name and generate PNG files for all components
-  of the material. Exporting to one of those engines is described in the
+  of the material.
+
+  Exporting to one of those engines is described in the
   :ref:`export-section` section.
+
+  Additionally, *Quick Export* allows for simpler exports which only saves images
+  connected to export nodes in the graph. This is useful when a full material isn't required.
 
 * *Close* closes the current project.
 
