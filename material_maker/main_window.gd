@@ -522,6 +522,10 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 	menu.connect_id_pressed(self._on_ExportMaterial_id_pressed)
 
 	if add_quick_export:
+		# This work as stated in godot docs, but still shows a warning
+		# https://github.com/godotengine/godot/issues/101320
+		@warning_ignore("int_as_enum_without_cast")
+		@warning_ignore("int_as_enum_without_match")
 		menu.add_item("Quick Export", MENU_QUICK_EXPORT, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_E )
 
 func _on_ExportMaterial_id_pressed(id) -> void:
