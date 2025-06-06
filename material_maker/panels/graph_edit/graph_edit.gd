@@ -689,6 +689,7 @@ func export_material(export_prefix, profile) -> void:
 		dim_color_rect.queue_free()
 		progress_dialog.queue_free()
 
+
 # Cut / copy / paste / duplicate
 
 func get_selected_nodes() -> Array:
