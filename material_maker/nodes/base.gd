@@ -177,7 +177,7 @@ func _draw() -> void:
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_input_port_position(i)-Vector2(string_size.x+12, -string_size.y*0.3), string, 0, -1, 16, color)
+			draw_string(font, get_input_port_position(i)-Vector2(string_size.x+12, -string_size.y*0.3), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 	var outputs = generator.get_output_defs()
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
@@ -203,7 +203,7 @@ func _draw() -> void:
 		if show_outputs:
 			var string : StringName = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else StringName(tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_output_port_position(i)+Vector2(12, string_size.y*0.3), string, 0, -1, 16, color)
+			draw_string(font, get_output_port_position(i)+Vector2(12, string_size.y*0.3), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 	if false and selected:
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 	if generator.rendering_time > 0:
