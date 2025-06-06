@@ -14,17 +14,15 @@ The **Triangle Voronoi** noise node does not accept any input.
 Outputs
 +++++++
 
-The **Triangle Voronoi** noise node provides five outputs:
-
-* a greyscale Triangle Voronoi noise texture that shows the distance to the cell centers.
+The **Triangle Voronoi** noise node provides three outputs:
 
 * a greyscale texture that shows the distance to the feature points.
 
-* a color texture where each cell is filled with a random color.
+* a greyscale texture that shows the distance to the cell borders.
 
-* an UV map that maps each cell and can be used with the Custom UV node.
-
-* a normal map to the cell borders.
+* fill information for each cell and must be connected to a Fill companion
+  node, to generate random colors, custom UVs etc. to create complex materials that show
+  for example cells of different colors.
 
 Parameters
 ++++++++++
