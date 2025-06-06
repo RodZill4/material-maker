@@ -397,20 +397,20 @@ func quick_export() -> void:
 
 	var export_prefix : String
 	var exports : Array
-	var unconnected_exports : Array
+	var has_unconnected_exports : bool = false
 
 	for g in graph_edit.top_generator.get_children():
 		if g.has_method("export_material") and !g.has_method("get_export_profiles"):
 			if g.get_source(0) != null:
 				exports.append(g)
 			else:
-				unconnected_exports.append(g)
+				has_unconnected_exports = true
 
 	# No export nodes
 	if not exports.size():
 		var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		var error_text = "Quick export requires at least one export node"
-		if unconnected_exports.size():
+		if has_unconnected_exports:
 			error_text += " with connected input"
 		dialog.dialog_text = TranslationServer.translate(error_text)
 		add_child(dialog)
