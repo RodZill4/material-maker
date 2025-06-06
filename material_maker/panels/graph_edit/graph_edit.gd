@@ -222,13 +222,17 @@ func _gui_input(event) -> void:
 		if ((event.button_mask & MOUSE_BUTTON_MASK_MIDDLE ) != 0
 				and (event.get_modifiers_mask() & ( KEY_MASK_CTRL | KEY_MASK_META))):
 			accept_event()
-			if event.relative.abs().y < 50:
+
+			# force connection lines to redraw
+			set_connection_lines_curvature(connection_lines_curvature)
+
+			if event.relative.abs().y < 100:
 				zoom -= event.relative.y * 0.002
+
 			if get_local_mouse_position().y > get_rect().size.y:
 				warp_mouse(Vector2(get_local_mouse_position().x, get_viewport_rect().position.y))
 			elif get_local_mouse_position().y < get_viewport_rect().position.y:
 				warp_mouse(Vector2(get_local_mouse_position().x, get_rect().size.y))
-
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
