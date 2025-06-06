@@ -14,7 +14,7 @@ class CustomSorter:
 
 var points = [ Point.new(0.0, Color(0.0, 0.0, 0.0, 0.0)), { v=1.0, c=Color(1.0, 1.0, 1.0, 1.0) } ]
 
-enum Interpolation { CONSTANT, LINEAR, SMOOTHSTEP, CUBIC}
+enum Interpolation { CONSTANT, LINEAR, SMOOTHSTEP, CUBIC }
 var interpolation := Interpolation.LINEAR
 var sorted := true
 
