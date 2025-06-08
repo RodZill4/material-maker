@@ -1750,3 +1750,7 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func _on_theme_changed() -> void:
+	# fix connection lines offset changing to/from classic
+	get_node("_connection_layer").queue_redraw()
