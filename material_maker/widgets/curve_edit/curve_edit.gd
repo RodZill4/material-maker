@@ -5,7 +5,6 @@ var value = null: set = set_value
 
 signal updated(curve, old_value)
 
-
 func _ready():
 	set_value(MMCurve.new())
 
@@ -31,10 +30,18 @@ func on_value_changed(v) -> void:
 	emit_signal("updated", v.duplicate(), null)
 
 func _get_drag_data(_position) -> MMCurve:
-	return value.duplicate()
+	var duplicated_value = value.duplicate()
+	var view = CurveView.new(duplicated_value)
+	view.size = $CurveView.size
+	var button = Button.new()
+	button.size = size
+	button.add_child(view)
+	set_drag_preview(button)
+	return duplicated_value
 
 func _can_drop_data(_position, data) -> bool:
 	return data is MMCurve
+	
 
 func _drop_data(_position, data) -> void:
 	var old_curve : MMCurve = value

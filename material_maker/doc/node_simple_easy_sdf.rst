@@ -3,6 +3,9 @@ Easy SDF node
 
 The **Easy SDF** node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.
 
+.. image:: images/node_simple_easy_sdf.png
+	:align: center
+
 Inputs
 ++++++
 
@@ -41,7 +44,7 @@ The available SDF item types are:
 
 * For 2D:
 
-  * Shapes: Circle, Ellipse, NGon, Star, Isoceles triangle, Rhombus, Line, Tunnel, Stairs
+  * Shapes: Arc, Arrow, Box, Cricle, Cross, Heart, Hexagram, IsoscelesTriangle, Line, Moon, N-gon, Pie, Polygon, Stairs, Star, Versica
   * Boolean operations:
 
     * Union joins its children into a single shape

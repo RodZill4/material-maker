@@ -19,11 +19,11 @@
 
 		],
 		"instance": "",
-		"longdesc": "A versica described as a signed distance function",
-		"name": "sdVersica",
+		"longdesc": "A vesica described as a signed distance function",
+		"name": "sdVesica",
 		"outputs": [
 			{
-				"longdesc": "The versica as a signed distance function",
+				"longdesc": "The vesica as a signed distance function",
 				"sdf2d": "sdVesica($uv - 0.5 - vec2($cx, $cy), $r, $r - $d)",
 				"shortdesc": "Output",
 				"type": "sdf2d"
@@ -34,7 +34,7 @@
 				"control": "Rect1.y",
 				"default": 0.6,
 				"label": "Radius",
-				"longdesc": "Radius of the versica",
+				"longdesc": "Radius of the vesica",
 				"max": 1,
 				"min": 0,
 				"name": "r",
@@ -77,7 +77,7 @@
 				"type": "float"
 			}
 		],
-		"shortdesc": "sdVersica"
+		"shortdesc": "sdVesica"
 	},
 	"type": "shader"
 }

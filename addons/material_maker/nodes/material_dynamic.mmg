@@ -145,7 +145,7 @@
 							"[resource]",
 							"shader = ExtResource( 1 )",
 							"$begin_buffers",
-							"shader_param/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )",
+							"shader_parameter/texture_$(buffer_index) = ExtResource( $(expr:$(buffer_index)+1) )",
 							"$end_buffers",
 							""
 						],

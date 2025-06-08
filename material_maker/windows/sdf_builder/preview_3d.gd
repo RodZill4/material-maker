@@ -161,7 +161,9 @@ func _on_Background_input_event(_camera, event, _position, _normal, _shape_idx):
 
 func _on_GizmoButton_toggled(button_pressed):
 	gizmo.visible = button_pressed
+	update_viewport()
 
 func _on_LocalButton_toggled(button_pressed):
 	gizmo_is_local = button_pressed
 	update_gizmo_position()
+	update_viewport()

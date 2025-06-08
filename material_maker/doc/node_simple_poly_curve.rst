@@ -3,7 +3,7 @@ Poly Curve node
 
 The **Poly Curve** node outputs a simple RGBA image showing a curve defined by several control points.
 
-.. image:: images/node_simple_polycurve.png
+.. image:: images/node_simple_poly_curve.png
 	:align: center
 
 Inputs
