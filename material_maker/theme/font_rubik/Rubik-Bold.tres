@@ -1,6 +1,0 @@
-[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://2qiew0gpyihc"]
-
-[ext_resource type="FontFile" uid="uid://dq4ssdyyfotag" path="res://material_maker/theme/font_rubik/Rubik-Bold.ttf" id="1_0wbcy"]
-
-[resource]
-base_font = ExtResource("1_0wbcy")
