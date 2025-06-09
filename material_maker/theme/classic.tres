@@ -138,6 +138,7 @@ border_color = Color(0.145762, 0.145765, 0.164989, 1)
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 4
+expand_margin_top = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryqkj"]
 content_margin_left = 10.0
@@ -152,6 +153,7 @@ border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 4
+expand_margin_top = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imqse"]
 content_margin_left = 5.0

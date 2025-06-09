@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=139 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=141 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -153,6 +153,7 @@ border_color = Color(0.145762, 0.145765, 0.164989, 1)
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
+expand_margin_top = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryqkj"]
 content_margin_left = 10.0
@@ -167,6 +168,7 @@ border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
+expand_margin_top = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imqse"]
 content_margin_left = 5.0
