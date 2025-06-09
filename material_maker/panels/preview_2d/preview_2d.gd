@@ -124,7 +124,7 @@ func export_taa() -> void:
 	window.popup_centered()
 
 
-func create_image(renderer_function : String, params : Array, image_size : Vector2i) -> void:
+func create_image(_renderer_function : String, _params : Array, image_size : Vector2i) -> void:
 	if generator != null:
 		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
 
