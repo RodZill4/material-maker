@@ -682,7 +682,7 @@ func minimize_selection() -> void:
 			c.on_minimize_pressed()
 
 # Maybe move this to gen_graph...
-func serialize_selection(nodes = []) -> Dictionary:
+func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
 	var data = { nodes = [], connections = [] }
 	if nodes.is_empty():
 		for c in get_children():
@@ -702,7 +702,7 @@ func serialize_selection(nodes = []) -> Dictionary:
 	for c in get_connection_list():
 		var from = get_node(NodePath(c.from_node))
 		var to = get_node(NodePath(c.to_node))
-		if from != null and from.selected and to != null and to.selected:
+		if from != null and (from.selected or with_inputs) and to != null and to.selected:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name
 			connection.to = to.generator.name
@@ -753,6 +753,9 @@ func paste() -> void:
 
 func duplicate_selected() -> void:
 	do_paste(serialize_selection())
+
+func duplicate_selected_with_inputs() -> void:
+	do_paste(serialize_selection([], true))
 
 func select_all() -> void:
 	for c in get_children():

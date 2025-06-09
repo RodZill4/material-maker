@@ -58,6 +58,8 @@ Edit menu
 
 * *Duplicate* creates a copy of the current selection without affecting the clipboard
 
+* *Duplicate with inputs* is similar to *Duplicate*, but with input links kept
+
 * *Select all* selects all nodes in the current graph view
 
 * *Select none* clears the selection in the current graph view
