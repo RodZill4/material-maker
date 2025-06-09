@@ -71,7 +71,7 @@ func set_value(v: MMGradient) -> void:
 	value_was_set.emit()
 
 
-func set_interpolation(interpolation_type:int) -> void:
+func set_interpolation(interpolation_type : MMGradient.Interpolation) -> void:
 	value.interpolation = interpolation_type
 	update_shader()
 	updated.emit(value, false)
