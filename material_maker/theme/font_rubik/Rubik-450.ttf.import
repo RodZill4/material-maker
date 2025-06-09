@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bwvv8lwty5sjd"
-path="res://.godot/imported/Rubik-Regular.ttf-daf89f19ee0aa0b19e8b393f8cce683a.fontdata"
+uid="uid://bn648prik7soq"
+path="res://.godot/imported/Rubik-450.ttf-323a2931c553b05d8a7209b8f1240ed8.fontdata"
 
 [deps]
 
-source_file="res://material_maker/theme/font_rubik/Rubik-Regular.ttf"
-dest_files=["res://.godot/imported/Rubik-Regular.ttf-daf89f19ee0aa0b19e8b393f8cce683a.fontdata"]
+source_file="res://material_maker/theme/font_rubik/Rubik-450.ttf"
+dest_files=["res://.godot/imported/Rubik-450.ttf-323a2931c553b05d8a7209b8f1240ed8.fontdata"]
 
 [params]
 
@@ -33,7 +33,8 @@ preload=[{
 "chars": [],
 "glyphs": [],
 "name": "New Configuration",
-"size": Vector2i(16, 0)
+"size": Vector2i(16, 0),
+&"variation_embolden": 0.0
 }]
 language_support={}
 script_support={}
