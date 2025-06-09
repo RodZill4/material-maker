@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://k528bu7vevi0" path="res://material_maker/panels/preview_3d/environment_menu.gd" id="7_8m40s"]
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="8_13pve"]
 [ext_resource type="Script" uid="uid://cy7mimh863mo4" path="res://material_maker/panels/preview_3d/export_menu.gd" id="8_w881c"]
-[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="9_iu7lt"]
+[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="9_iu7lt"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="9_xygyl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yosc0"]
