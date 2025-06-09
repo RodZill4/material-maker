@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=117 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=116 format=3 uid="uid://42cileyfwaca"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
-[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_l05jd"]
+[ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="2_lsxnf"]
+[ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-450.ttf" id="2_meah8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inl5r"]
 content_margin_left = 3.0
@@ -177,10 +178,6 @@ border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_detail = 4
-
-[sub_resource type="FontVariation" id="FontVariation_na26k"]
-base_font = ExtResource("1_l05jd")
-variation_embolden = 0.8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v2584"]
 
@@ -397,12 +394,6 @@ content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
-
-[sub_resource type="FontVariation" id="FontVariation_80ifi"]
-base_font = ExtResource("1_l05jd")
-opentype_features = {
-1953396077: 1
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwwye"]
 bg_color = Color(1, 1, 1, 1)
@@ -760,7 +751,7 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [resource]
-default_font = ExtResource("1_l05jd")
+default_font = ExtResource("2_lsxnf")
 default_font_size = 16
 Button/colors/icon_hover_pressed_color = Color(0.874128, 0.694643, 0.972002, 1)
 Button/colors/icon_pressed_color = Color(0.792157, 0.478431, 0.94902, 1)
@@ -818,7 +809,7 @@ GraphNodeTitleLabel/colors/font_outline_color = Color(0.168627, 0.176471, 0.1921
 GraphNodeTitleLabel/colors/font_shadow_color = Color(0.168627, 0.176471, 0.192157, 1)
 GraphNodeTitleLabel/constants/outline_size = 4
 GraphNodeTitleLabel/constants/shadow_outline_size = 4
-GraphNodeTitleLabel/fonts/font = SubResource("FontVariation_na26k")
+GraphNodeTitleLabel/fonts/font = ExtResource("2_meah8")
 ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
 ItemList/styles/focus = SubResource("StyleBoxEmpty_v2584")
 ItemList/styles/hovered = SubResource("StyleBoxFlat_m2221")
@@ -870,7 +861,7 @@ MM_Node/constants/minimum_line_height = 16
 MM_NodeCheckbox/base_type = &"Button"
 MM_NodeFloatEdit/base_type = &"Button"
 MM_NodeFloatEdit/font_sizes/font_size = 15
-MM_NodeFloatEdit/fonts/font = SubResource("FontVariation_80ifi")
+MM_NodeFloatEdit/fonts/font = ExtResource("2_lsxnf")
 MM_NodeFloatEdit/styles/clip = SubResource("StyleBoxFlat_pwwye")
 MM_NodeFloatEdit/styles/fill_hover = SubResource("StyleBoxFlat_s6o4g")
 MM_NodeFloatEdit/styles/fill_normal = SubResource("StyleBoxFlat_8m00c")
