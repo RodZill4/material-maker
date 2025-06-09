@@ -29,6 +29,7 @@ func _on_Cancel_pressed():
 func edit_polygon(polygon : MMPolygon) -> Dictionary:
 	previous_value = polygon.duplicate()
 	$VBoxContainer/EditorContainer/PolygonEditor.set_polygon(polygon)
+	hide()
 	popup_centered()
 	var result = await self.return_polygon
 	queue_free()

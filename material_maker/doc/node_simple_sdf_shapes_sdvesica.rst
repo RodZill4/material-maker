@@ -3,7 +3,7 @@ sdVesica node
 
 The **sdVesica** node generates a signed distance image for a vesica.
 
-.. image:: images/node_simple_sdf_shapes_sdversica.png
+.. image:: images/node_simple_sdf_shapes_sdvesica.png
 	:align: center
 
 Inputs

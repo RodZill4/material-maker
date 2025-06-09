@@ -68,7 +68,7 @@ script = ExtResource("1")
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Get more nodes from website"
-text = "Browse Community Nodes "
+text = "Browse Community Nodes"
 clip_text = true
 
 [node name="ItemMenu" type="PopupMenu" parent="."]

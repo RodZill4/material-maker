@@ -234,7 +234,7 @@ script = ExtResource("8_13pve")
 icon_name = "draw"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 100)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 
 [node name="EnvironmentList" type="ItemList" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer"]
@@ -247,7 +247,7 @@ theme_override_constants/h_separation = 5
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ysrta")
 item_count = 4
 max_columns = 0
-fixed_icon_size = Vector2i(55, 55)
+fixed_icon_size = Vector2i(43, 43)
 
 [node name="VBox" type="GridContainer" parent="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer"]
 layout_mode = 2

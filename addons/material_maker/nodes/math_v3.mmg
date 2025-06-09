@@ -25,7 +25,7 @@
 		"inputs": [
 			{
 				"default": "vec3($d_in1_x, $d_in1_y, $d_in1_z)",
-				"label": "2:A",
+				"label": "2:",
 				"longdesc": "The A operand",
 				"name": "in1",
 				"shortdesc": "A",
@@ -33,7 +33,7 @@
 			},
 			{
 				"default": "vec3($d_in2_x, $d_in2_y, $d_in2_z)",
-				"label": "B",
+				"label": "",
 				"longdesc": "The B operand",
 				"name": "in2",
 				"shortdesc": "B",
