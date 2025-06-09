@@ -321,6 +321,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 40
 	elif p.type == "gradient":
 		control = preload("res://material_maker/widgets/gradient_editor/gradient_edit.tscn").instantiate()
+		control.custom_minimum_size.x = 80
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
 	elif p.type == "polygon":
