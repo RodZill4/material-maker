@@ -16,7 +16,7 @@ var mode := Modes.DRAW
 
 var progressive := false
 
-var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.tres")
+var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.ttf")
 var font_size = 16
 var text_bg_width = 12
 
