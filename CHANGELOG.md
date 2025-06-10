@@ -1,3 +1,38 @@
+# Material Maker 1.4b3
+
+## General
+
+- Added Graph view preferences for connection styles (contributed by williamchange)
+- Updated graph zoom level UI
+- Added X shortcut to delete selected nodes (contributed by williamchange)
+- Added duplicate with inputs (Control+Shift+D) command (contributed by williamchange)
+
+## Nodes
+
+- Added Comment Line node (contributed by williamchange)
+- Made float edit control smaller (contributed by Jowan-Spooner)
+
+## Bug Fixes
+
+- Fixed comments behavior when moving through hierarchy
+- Show webpage when clicking website url on splashscreen
+- Fixed export node
+- Fixed SDF editor problem with polygon parameters
+- Fixed generated cylinder tangents
+- Fixed generic node layout
+- Many fixes in EasySDF editor (renaming, hide button, many 3D primitives)
+- Fixed dialog placement under Linux (contributed by williamchange)
+- Fixed scroll to item buttons in Library panel (contributed by williamchange)
+- Fixed 2D preview reset tooltip (contributed by williamchange)
+- Fixed environment list size (contributed by williamchange)
+- Fixed camera controller reset (contributed by williamchange)
+- Fixed crash that occurred when loading a mesh without UVs (contributed by williamchange)
+- Fixes in Add Node popup (contributed by williamchange)
+- Fixes in About dialog (contributed by williamchange)
+- Made tip text translatable (contributed by williamchange)
+- Fixes in light theme (contributed by williamchange)
+- Miscellaneous UI fixes (contributed by williamchange)
+
 # Material Maker 1.4b2
 
 ## General
