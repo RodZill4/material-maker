@@ -9,6 +9,7 @@ var current_tab = null
 var updating : bool = false
 var need_update : bool = false
 
+
 # The resolution scale to use for 3D previews.
 # Values above 1.0 enable supersampling. This has a significant performance cost
 # but greatly improves texture rendering quality, especially when using
@@ -111,9 +112,13 @@ const MENU : Array[Dictionary] = [
 	{ menu="Help/About", command="about" }
 ]
 
-
 func _enter_tree() -> void:
 	mm_globals.main_window = self
+
+	if OS.get_name() == "macOS":
+		get_window().extend_to_title = true
+		$VBoxContainer/TitleBar.visible = true
+		$VBoxContainer/TitleBar.process_mode = Node.PROCESS_MODE_INHERIT
 
 func _ready() -> void:
 	get_window().borderless = false
