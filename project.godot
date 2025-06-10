@@ -23,8 +23,8 @@ boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="1.4.0.4"
-config/actual_release="1.4b2"
+config/release="1.4.0.5"
+config/actual_release="1.4b3"
 
 [audio]
 
