@@ -49,12 +49,6 @@
 			"to_port": 1
 		},
 		{
-			"from": "iterate_buffer",
-			"from_port": 0,
-			"to": "6520",
-			"to_port": 0
-		},
-		{
 			"from": "24282_2",
 			"from_port": 0,
 			"to": "2434_8",
@@ -64,6 +58,18 @@
 			"from": "iterate_buffer",
 			"from_port": 1,
 			"to": "24282_2",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 0,
+			"to": "shader_2",
+			"to_port": 0
+		},
+		{
+			"from": "shader_2",
+			"from_port": 0,
+			"to": "6520",
 			"to_port": 0
 		}
 	],
@@ -78,32 +84,33 @@
 		{
 			"name": "iterate_buffer",
 			"node_position": {
-				"x": 76.700005,
-				"y": -249.817047
+				"x": 9.70000457763672,
+				"y": -328.817047119141
 			},
 			"parameters": {
 				"autostop": false,
+				"f32": false,
 				"filter": false,
-				"iterations": 30,
+				"iterations": 30.0,
 				"mipmap": false,
 				"shrink": false,
-				"size": 10
+				"size": 10.0
 			},
-			"seed": 29168,
+			"seed": 29168.0,
 			"seed_locked": true,
 			"type": "iterate_buffer"
 		},
 		{
 			"name": "2434_8",
 			"node_position": {
-				"x": 91.099991,
-				"y": -9.031479
+				"x": 91.0999908447266,
+				"y": -9.03147888183594
 			},
 			"parameters": {
-				"distance": 0,
-				"size": 10
+				"distance": 0.0,
+				"size": 10.0
 			},
-			"seed": -4110,
+			"seed": -4110.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -120,7 +127,7 @@
 					"vec3 $(name)_jump_flood(vec2 uv, float size) {",
 					"\tivec2 int_uv = ivec2(uv * size);",
 					"\tfloat best_distance = 9999.9;",
-					"\tvec2 best_coord;",
+					"\tvec2 best_coord = vec2(0.0);",
 					"\tfloat iter = $in(uv).b;",
 					"\titer += 0.01;",
 					"\tfloat step_width = size / 4.0 / (iter * 100.0);",
@@ -163,7 +170,7 @@
 						"type": "size"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "",
 						"name": "distance",
 						"type": "enum",
@@ -189,13 +196,13 @@
 		{
 			"name": "1823",
 			"node_position": {
-				"x": -269.899872,
-				"y": -18.741766
+				"x": -269.899871826172,
+				"y": -18.7417659759521
 			},
 			"parameters": {
 
 			},
-			"seed": 45955,
+			"seed": 45955.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -215,37 +222,35 @@
 						"type": "rgb"
 					}
 				],
-				"parameters": [
-
-				]
+				"parameters": []
 			},
 			"type": "shader"
 		},
 		{
 			"name": "edge_detect",
 			"node_position": {
-				"x": -286.951447,
-				"y": -137.078964
+				"x": -286.951446533203,
+				"y": -137.078964233398
 			},
 			"parameters": {
-				"size": 10,
+				"size": 10.0,
 				"threshold": 0.4,
-				"width": 1
+				"width": 1.0
 			},
-			"seed": 50217,
+			"seed": 50217.0,
 			"type": "edge_detect"
 		},
 		{
 			"name": "6520",
 			"node_position": {
-				"x": 364.156525,
-				"y": -261.873169
+				"x": 290.156524658203,
+				"y": -232.873168945312
 			},
 			"parameters": {
-				"distance": 0,
-				"tiled": false
+				"distance": 0.0,
+				"tiled": true
 			},
-			"seed": -16657,
+			"seed": -16657.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -294,7 +299,7 @@
 						"type": "boolean"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "",
 						"name": "distance",
 						"type": "enum",
@@ -320,58 +325,58 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -735.85144,
-				"y": -352.006775
+				"x": -735.851440429688,
+				"y": -352.006774902344
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The greyscale mask to be converted",
 					"name": "mask",
 					"shortdesc": "Mask",
 					"type": "f"
 				}
 			],
-			"seed": 23391,
+			"seed": 23391.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 646.256348,
-				"y": -263.285461
+				"x": 568.25634765625,
+				"y": -246.285461425781
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The genrated distance field",
 					"name": "sdf",
 					"shortdesc": "Output",
 					"type": "sdf2d"
 				}
 			],
-			"seed": -35133,
+			"seed": -35133.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -47.67952,
-				"y": -541.979187
+				"x": -47.6795196533203,
+				"y": -541.979187011719
 			},
 			"parameters": {
-				"param0": 10,
-				"param1": 30,
-				"param2": false,
-				"param3": 0
+				"param0": 10.0,
+				"param1": 30.0,
+				"param2": true,
+				"param3": 0.0
 			},
-			"seed": 46252,
+			"seed": 46252.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -422,11 +427,13 @@
 						{
 							"node": "6520",
 							"widget": "tiled"
+						},
+						{
+							"node": "shader_2",
+							"widget": "tiled"
 						}
 					],
-					"longdesc": "Controls whether the resulting ditance field will be tiled. Useful for patterns that extend over the texture bounds",
 					"name": "param2",
-					"shortdesc": "Tiled",
 					"type": "linked_control"
 				},
 				{
@@ -450,40 +457,40 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -297.702789,
-				"y": -348.41391
+				"x": -297.702789306641,
+				"y": -348.413909912109
 			},
 			"parameters": {
-				"size": 10
+				"size": 10.0
 			},
-			"seed": 7085,
+			"seed": 7085.0,
 			"type": "buffer",
 			"version": 1
 		},
 		{
 			"name": "tones_step",
 			"node_position": {
-				"x": -294.947968,
-				"y": -258.84549
+				"x": -294.947967529297,
+				"y": -258.845489501953
 			},
 			"parameters": {
 				"invert": false,
 				"value": 0.5,
-				"width": 0
+				"width": 0.0
 			},
-			"seed": 48280,
+			"seed": 48280.0,
 			"type": "tones_step"
 		},
 		{
 			"name": "24282_2",
 			"node_position": {
-				"x": 114.391708,
-				"y": -90.765732
+				"x": 114.391708374023,
+				"y": -90.7657318115234
 			},
 			"parameters": {
-				"tiled": false
+				"tiled": true
 			},
-			"seed": -56216,
+			"seed": -56216.0,
 			"shader_model": {
 				"code": [
 					"vec3 $(name_uv)_in = $in(fract($uv));",
@@ -519,754 +526,54 @@
 			"type": "shader"
 		},
 		{
-			"connections": [
-				{
-					"from": "edge_detect",
-					"from_port": 0,
-					"to": "1823",
-					"to_port": 0
-				},
-				{
-					"from": "tones_step",
-					"from_port": 0,
-					"to": "edge_detect",
-					"to_port": 0
-				},
-				{
-					"from": "1823",
-					"from_port": 0,
-					"to": "iterate_buffer",
-					"to_port": 0
-				},
-				{
-					"from": "2434_8",
-					"from_port": 0,
-					"to": "iterate_buffer",
-					"to_port": 1
-				},
-				{
-					"from": "iterate_buffer",
-					"from_port": 0,
-					"to": "6520",
-					"to_port": 0
-				},
-				{
-					"from": "24282_2",
-					"from_port": 0,
-					"to": "2434_8",
-					"to_port": 0
-				},
-				{
-					"from": "iterate_buffer",
-					"from_port": 1,
-					"to": "24282_2",
-					"to_port": 0
-				},
-				{
-					"from": "iterate_buffer",
-					"from_port": 0,
-					"to": "2153",
-					"to_port": 1
-				},
-				{
-					"from": "buffer_2",
-					"from_port": 0,
-					"to": "tones_step",
-					"to_port": 0
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 1,
-					"to": "2153",
-					"to_port": 0
-				},
-				{
-					"from": "2153",
-					"from_port": 0,
-					"to": "11582",
-					"to_port": 1
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 1,
-					"to": "11582",
-					"to_port": 2
-				},
-				{
-					"from": "11582",
-					"from_port": 0,
-					"to": "gen_outputs",
-					"to_port": 0
-				},
-				{
-					"from": "8064",
-					"from_port": 0,
-					"to": "2153",
-					"to_port": 2
-				},
-				{
-					"from": "gen_inputs",
-					"from_port": 0,
-					"to": "8064",
-					"to_port": 0
-				},
-				{
-					"from": "8064",
-					"from_port": 0,
-					"to": "buffer_2",
-					"to_port": 0
-				},
-				{
-					"from": "buffer_2",
-					"from_port": 0,
-					"to": "6520",
-					"to_port": 1
-				},
-				{
-					"from": "6520",
-					"from_port": 0,
-					"to": "11582",
-					"to_port": 0
-				}
-			],
-			"label": "Dilate 2",
-			"longdesc": "",
-			"name": "graph_3",
+			"name": "shader_2",
 			"node_position": {
-				"x": 515.555786,
-				"y": -545.049744
+				"x": 265.37158203125,
+				"y": -316.934143066406
 			},
-			"nodes": [
-				{
-					"name": "iterate_buffer",
-					"node_position": {
-						"x": 64.900002,
-						"y": -259.215881
-					},
-					"parameters": {
-						"autostop": false,
-						"filter": false,
-						"iterations": 30,
-						"mipmap": false,
-						"shrink": false,
-						"size": 9
-					},
-					"seed": 29168,
-					"seed_locked": true,
-					"type": "iterate_buffer"
-				},
-				{
-					"name": "2434_8",
-					"node_position": {
-						"x": 102.099998,
-						"y": 15.367363
-					},
-					"parameters": {
-						"distance": 0,
-						"size": 9
-					},
-					"seed": 26197,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(-1.0)",
-								"function": true,
-								"label": "",
-								"name": "in",
-								"type": "rgb"
-							}
-						],
-						"instance": [
-							"vec3 $(name)_jump_flood(vec2 uv, float size) {",
-							"\tivec2 int_uv = ivec2(uv * size);",
-							"\tfloat best_distance = 9999.9;",
-							"\tvec2 best_coord;",
-							"\tfloat iter = $in(uv).b;",
-							"\titer += 0.01;",
-							"\tfloat step_width = size / 4.0 / (iter * 100.0);",
-							"\t",
-							"\tfor (int x = -1; x <= 1; x++) {",
-							"\t\tfor (int y = -1; y <= 1; y++) {",
-							"\t\t\tivec2 offsetUV = int_uv + ivec2(x, y) * int(step_width);",
-							"\t\t\tvec2 float_uv = vec2(offsetUV) / size;",
-							"\t\t\tvec2 offset_pos = $in(float_uv).rg;",
-							"\t\t\t",
-							"\t\t\tif (offset_pos.x != 0.0 && offset_pos.y != 0.0) {",
-							"\t\t\t\tvec2 diff = offset_pos - uv;",
-							"\t\t\t\t//float dist = dot(diff, diff);",
-							"\t\t\t\t//float dist = abs(diff.x) + abs(diff.y);",
-							"\t\t\t\t//float dist = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);",
-							"\t\t\t\t$distance",
-							"\t\t\t\tif (dist < best_distance) {",
-							"\t\t\t\t\tbest_distance = dist;",
-							"\t\t\t\t\tbest_coord = offset_pos;",
-							"\t\t\t\t}",
-							"\t\t\t}",
-							"\t\t}",
-							"\t}",
-							"\t",
-							"\treturn vec3(best_coord, iter);",
-							"}"
-						],
-						"name": "Jump Flood",
-						"outputs": [
-							{
-								"rgb": "$(name)_jump_flood($uv, $size)",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-							{
-								"default": 10,
-								"first": 0,
-								"label": "",
-								"last": 13,
-								"name": "size",
-								"type": "size"
-							},
-							{
-								"default": 2,
-								"label": "",
-								"name": "distance",
-								"type": "enum",
-								"values": [
-									{
-										"name": "Euclidean",
-										"value": "float dist = dot(diff, diff);"
-									},
-									{
-										"name": "Manhattan",
-										"value": "float dist = abs(diff.x) + abs(diff.y);"
-									},
-									{
-										"name": "Chebyshev",
-										"value": "float dist = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);"
-									}
-								]
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "1823",
-					"node_position": {
-						"x": -269.899872,
-						"y": -17.741766
-					},
-					"parameters": {
-
-					},
-					"seed": 45954,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "1.0",
-								"label": "",
-								"name": "in",
-								"type": "f"
-							}
-						],
-						"instance": "",
-						"name": "Mask to UV Mask",
-						"outputs": [
-							{
-								"rgb": "$in($uv) < .5 ? vec3(0.0) : vec3($uv, 0.0)",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "edge_detect",
-					"node_position": {
-						"x": -286.951447,
-						"y": -137.078964
-					},
-					"parameters": {
-						"size": 9,
-						"threshold": 0.4,
-						"width": 1
-					},
-					"seed": 50217,
-					"type": "edge_detect"
-				},
-				{
-					"name": "6520",
-					"node_position": {
-						"x": 347.356567,
-						"y": -346.449127
-					},
-					"parameters": {
-						"distance": 0,
-						"length": 0.1
-					},
-					"seed": -11869,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.0)",
-								"function": true,
-								"label": "",
-								"name": "in",
-								"type": "rgb"
-							},
-							{
-								"default": "0.0",
-								"function": true,
-								"label": "",
-								"name": "mask",
-								"type": "f"
-							}
-						],
-						"instance": [
-							"float $(name)_distance(vec2 uv, float length) {",
-							"\tvec2 custom_uv = $in(fract(uv)).xy;",
-							"\tvec2 diff = custom_uv != vec2(0.0) ? custom_uv - fract(uv) : vec2(1.0);",
-							"\t//float distance = length(diff);",
-							"\t//float distance = abs(diff.x) + abs(diff.y);",
-							"\t//float distance = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);",
-							"\t$distance",
-							"\tif (length >= 0.0) {",
-							"\t\treturn $mask(uv) < 0.5 ? clamp(1.0 - (distance / length), 0.0, 1.0) : 1.0;",
-							"\t} else {",
-							"\t\treturn $mask(uv) > 0.5 ? clamp((distance / -length), 0.0, 1.0) : 0.0;",
-							"\t}",
-							"}"
-						],
-						"name": "Calculate Distance",
-						"outputs": [
-							{
-								"f": "$(name)_distance($uv, $length)",
-								"type": "f"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 0.1,
-								"label": "Length",
-								"max": 1,
-								"min": -1,
-								"name": "length",
-								"step": 0.01,
-								"type": "float"
-							},
-							{
-								"default": 2,
-								"label": "",
-								"name": "distance",
-								"type": "enum",
-								"values": [
-									{
-										"name": "Euclidean",
-										"value": "float distance = length(diff);"
-									},
-									{
-										"name": "Manhattan",
-										"value": "float distance = abs(diff.x) + abs(diff.y);"
-									},
-									{
-										"name": "Chebyshev",
-										"value": "float distance = abs(diff.x) > abs(diff.y) ? abs(diff.x) : abs(diff.y);"
-									}
-								]
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "gen_inputs",
-					"node_position": {
-						"x": -793.451477,
-						"y": -236.812195
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"group_size": 0,
-							"longdesc": "The greyscale mask to be converted",
-							"name": "mask",
-							"shortdesc": "Mask",
-							"type": "f"
-						},
-						{
-							"group_size": 0,
-							"longdesc": "",
-							"name": "source",
-							"shortdesc": "Source",
-							"type": "rgb"
-						}
-					],
-					"seed": 26605,
-					"type": "ios"
-				},
-				{
-					"name": "gen_outputs",
-					"node_position": {
-						"x": 885.056335,
-						"y": -247.896317
-					},
-					"parameters": {
-
-					},
-					"ports": [
-						{
-							"group_size": 0,
-							"longdesc": "Shows the dilated image",
-							"name": "out",
-							"shortdesc": "Output",
-							"type": "rgb"
-						}
-					],
-					"seed": -38622,
-					"type": "ios"
-				},
-				{
-					"name": "gen_parameters",
-					"node_position": {
-						"x": 61.520477,
-						"y": -639.339172
-					},
-					"parameters": {
-						"param0": 9,
-						"param1": 0.1,
-						"param2": 0,
-						"param3": 0,
-						"param4": 30
-					},
-					"seed": -26654,
-					"type": "remote",
-					"widgets": [
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "iterate_buffer",
-									"widget": "size"
-								},
-								{
-									"node": "2434_8",
-									"widget": "size"
-								},
-								{
-									"node": "buffer_2",
-									"widget": "size"
-								},
-								{
-									"node": "edge_detect",
-									"widget": "size"
-								}
-							],
-							"longdesc": "The resolution of the input images",
-							"name": "param0",
-							"shortdesc": "Size",
-							"type": "linked_control"
-						},
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "6520",
-									"widget": "length"
-								}
-							],
-							"longdesc": "The length of the dilate effect",
-							"name": "param1",
-							"shortdesc": "Length",
-							"type": "linked_control"
-						},
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "11582",
-									"widget": "fill"
-								}
-							],
-							"longdesc": "0 to generate a gradient to black while dilating, 1 to fill with input color",
-							"name": "param2",
-							"shortdesc": "Fill",
-							"type": "linked_control"
-						},
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "2434_8",
-									"widget": "distance"
-								},
-								{
-									"node": "6520",
-									"widget": "distance"
-								}
-							],
-							"name": "param3",
-							"shortdesc": "Distance Function",
-							"type": "linked_control"
-						},
-						{
-							"label": "",
-							"linked_widgets": [
-								{
-									"node": "iterate_buffer",
-									"widget": "iterations"
-								}
-							],
-							"longdesc": "The number of iterations the jump flood algorithm performs to calculate the distances",
-							"name": "param4",
-							"shortdesc": "Iterations",
-							"type": "linked_control"
-						}
-					]
-				},
-				{
-					"name": "buffer_2",
-					"node_position": {
-						"x": -294.502808,
-						"y": -340.816589
-					},
-					"parameters": {
-						"size": 9
-					},
-					"seed": 48330,
-					"type": "buffer",
-					"version": 1
-				},
-				{
-					"name": "tones_step",
-					"node_position": {
-						"x": -285.347992,
-						"y": -253.248215
-					},
-					"parameters": {
-						"invert": false,
-						"value": 0.5,
-						"width": 0
-					},
-					"seed": 42366,
-					"type": "tones_step"
-				},
-				{
-					"name": "24282_2",
-					"node_position": {
-						"x": 109.591705,
-						"y": -88.567284
-					},
-					"parameters": {
-						"tiled": true
-					},
-					"seed": -16485,
-					"shader_model": {
-						"code": [
-							"vec3 $(name_uv)_in = $in(fract($uv));",
-							"vec3 $(name_uv)_tiled = $(name_uv)_in.xy != vec2(0.0) ? $(name_uv)_in + vec3(floor($uv), 0.0) : $(name_uv)_in;"
-						],
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(1.0)",
-								"function": true,
-								"label": "",
-								"name": "in",
-								"type": "rgb"
-							}
-						],
-						"instance": "",
-						"name": "Tiling",
-						"outputs": [
-							{
-								"rgb": "$tiled ? $(name_uv)_tiled : $(name_uv)_in",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-							{
-								"default": false,
-								"label": "Tiled",
-								"name": "tiled",
-								"type": "boolean"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "2153",
-					"node_position": {
-						"x": 368.85202,
-						"y": -157.100906
-					},
-					"parameters": {
-
-					},
-					"seed": -48141,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(1.0)",
-								"label": "Source",
-								"name": "source",
-								"type": "rgb"
-							},
-							{
-								"default": "$uv",
-								"label": "Custom UV",
-								"name": "custom_uv",
-								"type": "rgb"
-							},
-							{
-								"default": "0.0",
-								"label": "Mask",
-								"name": "mask",
-								"type": "f"
-							}
-						],
-						"instance": "",
-						"name": "Dilate UV",
-						"outputs": [
-							{
-								"rgb": "$mask($uv) < 0.5 ? $source($custom_uv($uv).xy) : $source($uv)",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "11582",
-					"node_position": {
-						"x": 609.343445,
-						"y": -239.746399
-					},
-					"parameters": {
-						"fill": 0
-					},
-					"seed": -2130,
-					"shader_model": {
-						"code": [
-							"float $(name_uv)_dist = $distance($uv);",
-							"vec3 $(name_uv)_color = mix($source(fract($uv)), $fill_raw(fract($uv)), float( $(name_uv)_dist != 0.0 ) );",
-							"vec3 $(name_uv)_mix = mix($(name_uv)_color * $(name_uv)_dist, $(name_uv)_color, $fill);"
-						],
-						"global": "",
-						"inputs": [
-							{
-								"default": "0.0",
-								"function": true,
-								"label": "Distance",
-								"name": "distance",
-								"type": "f"
-							},
-							{
-								"default": "vec3(1.0)",
-								"function": true,
-								"label": "Fill Raw",
-								"name": "fill_raw",
-								"type": "rgb"
-							},
-							{
-								"default": "vec3(1.0)",
-								"function": true,
-								"label": "Source",
-								"name": "source",
-								"type": "rgb"
-							}
-						],
-						"instance": "",
-						"name": "Dilate Combine",
-						"outputs": [
-							{
-								"rgb": "$(name_uv)_mix",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-							{
-								"control": "None",
-								"default": 0,
-								"label": "Fill",
-								"max": 1,
-								"min": 0,
-								"name": "fill",
-								"step": 0.01,
-								"type": "float"
-							}
-						]
-					},
-					"type": "shader"
-				},
-				{
-					"name": "8064",
-					"node_position": {
-						"x": -282.533325,
-						"y": -433.011169
-					},
-					"parameters": {
-
-					},
-					"seed": 18837,
-					"shader_model": {
-						"code": "",
-						"global": "",
-						"inputs": [
-							{
-								"default": "vec3(0.0)",
-								"label": "",
-								"name": "in",
-								"type": "rgb"
-							}
-						],
-						"instance": "",
-						"name": "Default Value",
-						"outputs": [
-							{
-								"rgb": "$in($uv)",
-								"type": "rgb"
-							}
-						],
-						"parameters": [
-
-						]
-					},
-					"type": "shader"
-				}
-			],
 			"parameters": {
-				"param0": 9,
-				"param1": 0.1,
-				"param2": 0,
-				"param3": 0,
-				"param4": 30
+				"tiled": true
 			},
-			"seed": -39294,
-			"shortdesc": "",
-			"type": "graph"
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"includes": [
+					"scale"
+				],
+				"inputs": [
+					{
+						"default": "0.0",
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": "",
+				"name": "Fix Untiled",
+				"outputs": [
+					{
+						"rgb": "$tiled ? $in($uv) : $in(clamp($uv,vec2(0.0), vec2(0.999)))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": false,
+						"label": "Tiled",
+						"name": "tiled",
+						"type": "boolean"
+					}
+				]
+			},
+			"type": "shader"
 		}
 	],
 	"parameters": {
-		"param0": 10,
-		"param1": 30,
-		"param2": false,
-		"param3": 0
+		"param0": 10.0,
+		"param1": 30.0,
+		"param2": true,
+		"param3": 0.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Mask to SDF",

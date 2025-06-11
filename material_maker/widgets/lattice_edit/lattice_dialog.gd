@@ -10,7 +10,8 @@ signal return_lattice(lattice)
 
 
 func _ready():
-	min_size = $VBoxContainer.get_combined_minimum_size()
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
 
 func set_closed(c : bool = true):
 	closed = c
@@ -29,6 +30,7 @@ func _on_Cancel_pressed():
 func edit_lattice(lattice : MMLattice) -> Dictionary:
 	previous_value = lattice.duplicate()
 	$VBoxContainer/EditorContainer/LatticeEditor.set_lattice(lattice)
+	hide()
 	popup_centered()
 	var result = await self.return_lattice
 	queue_free()

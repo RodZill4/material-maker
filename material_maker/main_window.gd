@@ -73,6 +73,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Copy", command="edit_copy", shortcut="Control+C" },
 	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
+	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
 	{ menu="Edit/-" },
 	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
 	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
@@ -119,7 +120,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
-	get_window().move_to_foreground()
+	get_window().grab_focus()
 	get_window().gui_embed_subwindows = false
 
 	get_window().close_requested.connect(self.on_close_requested)
@@ -310,6 +311,8 @@ func get_current_project() -> Control:
 	return projects_panel.get_projects().get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
+	if projects_panel == null:
+		return null
 	var graph_edit = projects_panel.get_projects().get_current_tab_control()
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
@@ -488,6 +491,11 @@ func change_theme(theme_name) -> void:
 		_theme.update()
 	await get_tree().process_frame
 	theme = _theme
+	if "classic" in theme_name:
+		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
+	else:
+		RenderingServer.set_default_clear_color(
+				Color(0.48, 0.48, 0.48) if "light" in theme_name else Color(0.12, 0.12, 0.12))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -753,6 +761,14 @@ func edit_duplicate() -> void:
 	if graph_edit != null:
 		graph_edit.duplicate_selected()
 
+func edit_duplicate_with_inputs() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.duplicate_selected_with_inputs()
+
+func edit_duplicate_with_inputs_is_disabled() -> bool:
+	return edit_cut_is_disabled()
+
 func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
@@ -842,6 +858,7 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	dialog.edit_preferences(mm_globals.config)
 
 func view_center() -> void:
@@ -854,7 +871,6 @@ func view_reset_zoom() -> void:
 
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
-
 
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -891,6 +907,8 @@ func add_selection_to_library(index) -> void:
 	if selected_nodes.is_empty():
 		return
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var current_item_name = ""
 	if library.is_inside_tree():
@@ -916,6 +934,8 @@ func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 
 func add_brush_to_library(index) -> void:
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
 	if ! status.ok:
@@ -980,7 +1000,7 @@ func show_library_item_doc() -> void:
 		var doc_name = library.get_selected_item_doc_name()
 		while doc_name != "":
 			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
-			if DirAccess.open("res://").file_exists(doc_path):
+			if FileAccess.file_exists(doc_path):
 				OS.shell_open(doc_path)
 				break
 			doc_name = doc_name.left(doc_name.rfind("_"))
@@ -994,6 +1014,7 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
+	about_box.hide()
 	about_box.popup_centered()
 
 # Preview
@@ -1191,11 +1212,9 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
-				var test_json_conv = JSON.new()
-				test_json_conv.parse(file.get_as_text())
-				var parse_result = test_json_conv.get_data()
-				if parse_result.error == OK:
-					var data = parse_result.result
+				var test_json_conv : JSON = JSON.new()
+				if test_json_conv.parse(file.get_as_text()) == OK:
+					var data = test_json_conv.get_data()
 					if data.has("material") and data.has("name"):
 						mm_loader.save_export_target(data.material, data.name, data)
 						mm_loader.load_external_export_targets()
@@ -1264,3 +1283,7 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+
+func _on_console_resizer_container_mouse_entered() -> void:
+	pass # Replace with function body.

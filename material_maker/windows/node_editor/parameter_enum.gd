@@ -47,21 +47,28 @@ func update_enum_list() -> void:
 
 func _on_EnumValues_item_selected(id) -> void:
 	id = $EnumValues.get_item_id(id)
+	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	if id >= 0 and id < enum_values.size():
 		enum_current = id
 	elif id == ENUM_EDIT:
 		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instantiate()
+		dialog.content_scale_factor = content_scale_factor
+		dialog.min_size = Vector2(250, 90) * content_scale_factor
 		var v = enum_values[enum_current]
 		add_child(dialog)
 		dialog.set_value(v.name, v.value)
 		dialog.connect("ok", Callable(self, "update_enum_value").bind(enum_current))
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
+		dialog.hide()
 		dialog.popup_centered()
 	elif id == ENUM_ADD:
 		var dialog = preload("res://material_maker/windows/node_editor/enum_editor.tscn").instantiate()
+		dialog.content_scale_factor = content_scale_factor
+		dialog.min_size = Vector2(250, 90) * content_scale_factor
 		add_child(dialog)
 		dialog.connect("ok", Callable(self, "update_enum_value").bind(-1))
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
+		dialog.hide()
 		dialog.popup_centered()
 	elif id == ENUM_REMOVE:
 		enum_values.remove_at(enum_current)

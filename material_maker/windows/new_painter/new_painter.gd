@@ -18,6 +18,8 @@ signal return_status(status : Dictionary)
 
 
 func _ready():
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = Vector2(500, 300) * content_scale_factor
 	if mesh_material:
 		mesh_instance.set_surface_override_material(0, mesh_material)
 
@@ -35,7 +37,7 @@ func _on_ModelFile_pressed():
 	if files.size() == 1:
 		set_mesh(files[0])
 	await get_tree().process_frame
-	move_to_foreground()
+	grab_focus()
 
 func set_mesh(file_name : String) -> void:
 	if file_name == mesh_filename:
@@ -101,6 +103,7 @@ func ask(obj_file_name = null) -> Dictionary:
 	mm_globals.main_window.add_dialog(self)
 	if obj_file_name != null:
 		set_mesh(obj_file_name)
+	hide()
 	popup_centered()
 	_on_ViewportContainer_resized()
 	var result = await self.return_status

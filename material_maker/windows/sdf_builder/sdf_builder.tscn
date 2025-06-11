@@ -134,6 +134,7 @@ editor = true
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="TopContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="button_clicked" from="TopContainer/Main/Tree" to="." method="_on_tree_button_clicked"]
 [connection signal="drop_item" from="TopContainer/Main/Tree" to="." method="_on_Tree_drop_item"]
 [connection signal="gui_input" from="TopContainer/Main/Tree" to="." method="_on_Tree_gui_input"]
 [connection signal="item_collapsed" from="TopContainer/Main/Tree" to="." method="_on_Tree_item_collapsed"]
