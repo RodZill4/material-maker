@@ -442,6 +442,10 @@ region = Rect2(16, 128, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 64, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovvp6"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(112, 176, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_du4od"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 80, 16, 16)
@@ -1109,6 +1113,7 @@ MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
 MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
 MM_Icons/icons/minimap = SubResource("AtlasTexture_ld0tj")
 MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
+MM_Icons/icons/paste_image = SubResource("AtlasTexture_ovvp6")
 MM_Icons/icons/pin_pinned = SubResource("AtlasTexture_du4od")
 MM_Icons/icons/pin_unpinned = SubResource("AtlasTexture_nkmvd")
 MM_Icons/icons/reset_view = SubResource("AtlasTexture_w0re2")
