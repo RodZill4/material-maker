@@ -15,6 +15,8 @@ var new_environment_icon = preload("res://material_maker/windows/environment_edi
 
 var current_environment = -1
 
+var _is_env_list_warping_mouse : int = 0
+
 func _ready():
 	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	min_size = Vector2(900, 600) * content_scale_factor
@@ -135,13 +137,32 @@ func _on_Environments_item_selected(index):
 		environment_list.select(index)
 	set_current_environment(index)
 
+
 func _on_Environments_gui_input(event):
-	if ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:
+	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) !=0:
+
+		_is_env_list_warping_mouse -= 1 if _is_env_list_warping_mouse else 0
+		if not _is_env_list_warping_mouse:
+			environment_list.get_v_scroll_bar().value -= event.relative.y
+		
+		var rect : Rect2 = environment_list.get_rect()
+		var mouse_pos = environment_list.get_local_mouse_position()
+
+		if mouse_pos.y > rect.size.y:
+			_is_env_list_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(mouse_pos.x, rect.position.y), environment_list)
+		elif mouse_pos.y < rect.position.y:
+			_is_env_list_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(mouse_pos.x, rect.size.y), environment_list)
+
+	elif ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:
 		return
 	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
 		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
+
+	
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]

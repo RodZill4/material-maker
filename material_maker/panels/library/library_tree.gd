@@ -4,6 +4,35 @@ extends Tree
 
 var scroll_position = 0.0
 
+var tree_scrollbar : VScrollBar
+
+var is_tree_warping_mouse : int = 0
+
+func _on_ready() -> void:
+	for node in get_children(true):
+		if node is VScrollBar:
+			tree_scrollbar = node
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and (
+				event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
+		mouse_default_cursor_shape = Control.CURSOR_DRAG
+		auto_tooltip = false
+
+		is_tree_warping_mouse -= 1 if is_tree_warping_mouse else 0
+		if not is_tree_warping_mouse:
+			tree_scrollbar.value -= event.relative.y
+
+		if get_local_mouse_position().y > get_rect().size.y:
+			is_tree_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, 0), self )
+		elif get_local_mouse_position().y < 0:
+			is_tree_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, get_rect().size.y), self)
+	else:
+		mouse_default_cursor_shape = Control.CURSOR_ARROW
+		auto_tooltip = true
+
 func get_last_item(parent : TreeItem):
 	while true:
 		if parent.collapsed:

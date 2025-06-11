@@ -13,6 +13,7 @@ var qc_is_output : bool
 
 @onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 
+var _is_list_warping_mouse : int = 0
 
 func get_current_graph():
 	return get_parent().get_current_graph_edit()
@@ -211,6 +212,20 @@ func _on_list_gui_input(event: InputEvent) -> void:
 		var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
 		if idx != -1:
 			_on_list_item_activated(idx)
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+
+		_is_list_warping_mouse -= 1 if _is_list_warping_mouse else 0
+		if not _is_list_warping_mouse:
+			%List.get_v_scroll_bar().value -= event.relative.y
+
+		var list_rect = %List.get_rect()
+		var list_viewport_rect = %List.get_viewport_rect()
+		if get_mouse_position().y > list_viewport_rect.size.y:
+			_is_list_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(get_mouse_position().x,list_rect.position.y), self)
+		elif get_mouse_position().y < list_rect.position.y:
+			_is_list_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(get_mouse_position().x, list_viewport_rect.size.y), self)
 
 
 func get_list_drag_data(m_position):
