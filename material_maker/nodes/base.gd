@@ -153,13 +153,13 @@ func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 		var inputs = generator.get_input_defs()
 		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
 			var conn_pos1 = get_input_port_position(slot_index)
-			# warning-ignore:narrowing_conversion
+			@warning_ignore("narrowing_conversion")
 			var conn_pos2 = get_input_port_position(min(slot_index+inputs[slot_index].group_size-1, inputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 	else:
 		var outputs = generator.get_output_defs()
 		if slot_index < outputs.size() and outputs[slot_index].has("group_size") and outputs[slot_index].group_size > 1:
-			# warning-ignore:narrowing_conversion
+			@warning_ignore("narrowing_conversion")
 			var conn_pos1 = get_output_port_position(slot_index)
 			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
@@ -168,7 +168,7 @@ func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 
 func _draw() -> void:
 	var color : Color = get_theme_color("title_color")
-	# warning-ignore:narrowing_conversion
+	@warning_ignore("narrowing_conversion")
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
