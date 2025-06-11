@@ -70,6 +70,13 @@ layout_mode = 2
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
+[node name="GuiUseWarpedScrolling" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Warp mouse position when using middle mouse drag to scroll (on supported ui panels)
+Turning this off might alleviate problems associated with graphics tablets"
+text = "Use warped scrolling"
+config_variable = "ui_use_warped_scrolling"
+
 [node name="Space3" type="Control" parent="VBoxContainer/TabContainer/General"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
