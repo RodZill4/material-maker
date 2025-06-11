@@ -60,7 +60,7 @@
 			},
 			{
 				"control": "None",
-				"default": 180,
+				"default": 135,
 				"label": "",
 				"longdesc": "The angle of the shape",
 				"max": 360,
