@@ -18,7 +18,11 @@ func get_type_name() -> String:
 	return "Text"
 
 func get_description() -> String:
-	return "\n".join(["Text", "Text as a greyscale image"])
+	var shortdesc = "Text"
+	var longdesc = "Text as a greyscale image"
+	return "\n".join(
+			[TranslationServer.translate(shortdesc),
+			TranslationServer.translate(longdesc)])
 
 func get_parameter_defs() -> Array:
 	return [
