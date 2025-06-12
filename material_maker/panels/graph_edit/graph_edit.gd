@@ -12,7 +12,6 @@ class Preview:
 		output_index = i
 		node = n
 
-# warning-ignore:unused_class_variable
 @export var shader_context_defs : String = "" # (String, MULTILINE)
 
 var node_factory = null
