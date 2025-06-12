@@ -50,7 +50,7 @@ Shapes
 	node_simple_sdf_shapes_sdtrapezoid
 	node_simple_sdf_shapes_sdtriangle
 	node_simple_sdf_shapes_sdunevencapsule
-	node_simple_sdf_shapes_sdversica
+	node_simple_sdf_shapes_sdvesica
 	node_simple_sdf_shapes_sdstar
 	node_simple_sdf_shapes_sdpie
 	node_simple_sdf_shapes_sdarrow

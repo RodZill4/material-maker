@@ -16,6 +16,9 @@ var mode := Modes.DRAW
 
 var progressive := false
 
+var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.ttf")
+var font_size = 16
+var text_bg_width = 12
 
 func _ready():
 	%DrawMode.button_group.pressed.connect(func(button):mode = Modes.DRAW if button.name == "DrawMode" else Modes.SELECT)
@@ -31,6 +34,12 @@ func _ready():
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
+	
+	await get_tree().process_frame
+	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	get_window().min_size = get_window().get_contents_minimum_size() * get_window().content_scale_factor
+	get_window().hide()
+	get_window().popup_centered()
 
 	super._ready()
 	update_controls()
@@ -40,7 +49,14 @@ func _draw():
 		for c in control_points.get_children():
 			if c.is_selected:
 				var index = 1+selected_control_points.find(c.get_meta("point"))
-				draw_string(get_theme_font("default"), c.position+Vector2(10, 10), str(index), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(1.0, 0.0, 0.0))
+				var square_bg: Rect2
+				if index >= 10:
+					square_bg = Rect2(c.position+Vector2(12, -3), Vector2(text_bg_width * 2, 16))
+				else:
+					square_bg = Rect2(c.position+Vector2(12, -3), Vector2(text_bg_width, 16))
+				draw_rect(square_bg, Color(0.05, 0.05, 0.05, 0.95), true, -1.0, true)
+				draw_rect(square_bg, Color(1, 1, 1, 0.50), false, 1, false)
+				draw_string(spline_font, c.position+Vector2(12, 10), str(index), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1.0, 1.0, 1.0, 1.0))
 	super._draw()
 
 func set_splines(p : MMSplines) -> void:
@@ -117,6 +133,26 @@ func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_
 		else:
 			cp.select(true)
 			selected_control_points.append(cp.get_meta("point"))
+	elif is_shift_pressed:
+		if cp.is_selected:
+			return
+		else:
+			cp.select(true)
+			if selected_control_points.is_empty():
+				selected_control_points.append(cp.get_meta("point"))
+			else:
+				var last_selection = selected_control_points.back()
+				var curr_selection = cp.get_meta("point")
+				
+				var next_selection = last_selection
+				var increment = 1 if curr_selection > last_selection else -1
+				while next_selection != curr_selection:
+					next_selection += increment
+					if splines.is_linked(0, next_selection):
+						continue
+					selected_control_points.append(next_selection)
+				queue_redraw()
+				update_controls()
 	else:
 		if not cp.is_selected:
 			for c in control_points.get_children():
@@ -158,7 +194,7 @@ func _on_width_value_changed(value):
 	emit_signal("value_changed", splines)
 
 func _on_offset_value_changed(value):
-	splines.set_points_offset(get_selection(), value)
+	splines.set_points_offset(get_selection(), value, progressive)
 	emit_signal("value_changed", splines)
 
 
@@ -241,6 +277,11 @@ func _on_progressive_toggled(toggled_on: bool) -> void:
 
 
 func handle_select_mode(event : InputEvent) -> bool:
+	if event is InputEventMouseButton:
+		for c in control_points.get_children():
+			c.select(false)
+		selected_control_points.clear()
+		queue_redraw()
 	return false
 
 

@@ -1,4 +1,6 @@
 @tool
+class_name SplinesView
+
 extends Control
 
 
@@ -14,9 +16,12 @@ var edited : MMSplines.Bezier = null
 var draw_size : Vector2 = Vector2(1, 1)
 var draw_offset : Vector2 = Vector2(0, 0)
 
+func _init(v : MMSplines = null) -> void:
+	splines = v
 
 func _ready() -> void:
-	splines = MMSplines.new()
+	if splines == null:
+		splines = MMSplines.new()
 	_on_resized()
 
 func set_view_rect(do : Vector2, ds : Vector2):
@@ -67,4 +72,3 @@ func _on_resized():
 	if auto_rescale:
 		var ds : float = min(size.x, size.y)
 		set_view_rect(0.5*(size-draw_size), Vector2(ds, ds))
-

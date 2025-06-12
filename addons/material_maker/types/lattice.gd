@@ -35,7 +35,6 @@ static func interpolate_point(v : Vector2, size : Vector2i, points : PackedVecto
 	vs.x = clampi(vs.x, 0, size.x-1)
 	vs.y = clampi(vs.y, 0, size.y-1)
 	var vt : Vector2 = Vector2(v.x-vs.x, v.y-vs.y)
-	print(str(vs)+"   "+str(vt))
 	var p00 : Vector2 = get_point_from_array(vs, size, points)
 	var p01 : Vector2 = get_point_from_array(vs+Vector2i(0, 1), size, points)
 	var p10 : Vector2 = get_point_from_array(vs+Vector2i(1, 0), size, points)

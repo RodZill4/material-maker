@@ -188,7 +188,9 @@
 				"step": 1,
 				"type": "float"
 			}
-		]
+		],
+		"shortdesc": "Curve",
+		"longdesc": "Quadratic bezier curve with image mapping"
 	},
 	"type": "shader"
 }

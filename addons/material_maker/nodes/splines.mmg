@@ -76,6 +76,8 @@
 				"default": "vec4(1.0)",
 				"function": true,
 				"label": "",
+				"longdesc": "Image to be mapped onto the splines",
+				"shortdesc": "Edge",
 				"name": "in_edge",
 				"type": "rgba"
 			},
@@ -83,12 +85,16 @@
 				"default": "vec4(0.0)",
 				"function": true,
 				"label": "",
+				"longdesc": "Image to be displayed on the inside area of the splines",
+				"shortdesc": "Fill",
 				"name": "in_fill",
 				"type": "rgba"
 			},
 			{
 				"default": "vec4(0.0)",
 				"label": "",
+				"longdesc": "Image to be used as a guide",
+				"shortdesc": "Guide",
 				"name": "in_guide",
 				"type": "rgba"
 			}
@@ -115,11 +121,10 @@
 			"\treturn vec4(0.0);",
 			"}"
 		],
-		"longdesc": "Draws a uniform greyscale image",
+		"longdesc": "Draws splines",
 		"name": "Splines",
 		"outputs": [
 			{
-				"longdesc": "A uniform image of the selected value",
 				"rgba": "mix($(name)_splines($uv), $in_guide($uv), 0.5*$in_guide($uv).a)",
 				"shortdesc": "Output",
 				"type": "rgba"

@@ -5,7 +5,6 @@ class_name MMGenText
 
 # Texture generator from text
 
-
 var updating : bool = false
 var update_again : bool = false
 
@@ -18,14 +17,17 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Text"
 
+func get_description() -> String:
+	return "\n".join(["Text", "Text as a greyscale image"])
+
 func get_parameter_defs() -> Array:
 	return [
-		{ name="text", type="string", default="Text" },
-		{ name="font", type="file", filters=[ "*.otf,*.ttf,*.fnt;Font file" ], default="" },
-		{ name="font_size", type="float", min=0, max=128, step=1, default=32 },
-		{ name="center", type="boolean", default=false },
-		{ name="x", type="float", min=-0.5, max=0.5, step=0.001, default=0.1, control="P1.x" },
-		{ name="y", type="float", min=-0.5, max=0.5, step=0.001, default=0.1, control="P1.y" }
+		{ name="text", label="Text", type="string", default="Text" },
+		{ name="font", label="Font", type="file", filters=[ "*.otf,*.ttf,*.fnt;Font file" ], default="" },
+		{ name="font_size", label="Font size", type="float", min=0, max=128, step=1, default=32 },
+		{ name="center", label="Center", type="boolean", default=false },
+		{ name="x", label="X", type="float", min=-0.5, max=0.5, step=0.001, default=0.1, control="P1.x" },
+		{ name="y", label="Y", type="float", min=-0.5, max=0.5, step=0.001, default=0.1, control="P1.y" }
 	]
 
 func set_parameter(n : String, v) -> void:

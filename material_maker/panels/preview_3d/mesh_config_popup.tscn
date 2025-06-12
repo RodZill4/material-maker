@@ -4,10 +4,8 @@
 [ext_resource type="Script" uid="uid://blmq2gm7dwr3k" path="res://material_maker/panels/preview_3d/mesh_config_popup.gd" id="2"]
 
 [node name="MeshConfiguration" type="PopupPanel"]
-transparent_bg = true
 size = Vector2i(259, 128)
 visible = true
-transparent = true
 script = ExtResource("2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -16,8 +14,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 255.0
-offset_bottom = 124.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="Panel" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -84,9 +82,11 @@ text = "Tesselated"
 [node name="Tesselated" type="CheckBox" parent="VBoxContainer/Parameters"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "If tesselation is enabled, the mesh will be subdivided, which is necessary for materials that use vertex displacement."
 
 [connection signal="popup_hide" from="." to="." method="_on_MeshConfiguration_popup_hide"]
+[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_v_box_container_minimum_size_changed"]
 [connection signal="value_changed" from="VBoxContainer/Parameters/UVScale/UV_Scale_X" to="." method="_on_UV_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/Parameters/UVScale/UV_Scale_Y" to="." method="_on_UV_value_changed"]
 [connection signal="toggled" from="VBoxContainer/Parameters/UVScale/ScaleLinked" to="." method="_on_scale_linked_toggled"]

@@ -8,22 +8,22 @@ The filter nodes accept one or several inputs and generate one or several images
 
 	node_filter_invert
 	node_filter_brightnesscontrast
-	node_filter_adjusthsv
-	node_filter_alterhsv
+	node_filter_adjust_hsv
+	node_filter_alter_hsv
 	node_filter_convert_from_to_rgb
 	node_filter_tones
 	node_filter_tones_map
 	node_filter_tones_step
 	node_filter_tones_range
 	node_filter_auto_tones
-	node_filter_greyscale
+	node_filter_grayscale
 	node_filter_tonality
 	node_filter_colorize
 	node_filter_colormap
 	node_filter_blend
 	node_filter_combine
 	node_filter_decompose
-	node_filter_swapchannels
+	node_filter_swap_channels
 	node_filter_normal_map
 	node_filter_normal_convert
 	node_filter_normal_blend
@@ -52,11 +52,11 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_math
 	node_filter_vec3_math
 	node_filter_smooth_minmax
-	node_filter_maketileable
+	node_filter_make_tileable
 	node_filter_pixelize
 	node_filter_supersample
-	node_filter_smoothcurvature
-	node_filter_smoothcurvature2
+	node_filter_smooth_curvature
+	node_filter_smooth_curvature_2
 	node_filter_denoiser
 	node_filter_palettize
 	node_filter_binary_smooth

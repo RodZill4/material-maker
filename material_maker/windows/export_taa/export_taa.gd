@@ -11,17 +11,27 @@ var force_update : bool = false
 var render_size : Vector2i = Vector2i(512, 512)
 
 func _ready():
-	min_size = $VBoxContainer.get_combined_minimum_size()
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
 	acc_texture = MMTexture.new()
 	avg_texture = MMTexture.new()
 	accumulate_render = MMComputeShader.new()
 	divide_render = MMComputeShader.new()
 	_on_denoise_item_selected(0)
-	$VBoxContainer.size = size
 
 func set_source(generator, output):
 	var context : MMGenContext = MMGenContext.new()
 	var source : MMGenBase.ShaderCode = generator.get_shader_code("uv", output, context)
+	if not source.output_values.has("rgba"):
+		var preview_code : String = mm_io_types.types[source.output_type].preview
+		preview_code = preview_code.replace("uniform", "const")
+		preview_code = preview_code.replace("preview_size", "64")
+		preview_code = preview_code.replace("$(code)", source.code)
+		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])
+		source.defs += preview_code
+		source.code = ""
+		source.output_values.rgba = "preview_2d(uv)"
+		source.output_type = "rgba"
 	var shader_template : String = load("res://material_maker/windows/export_taa/accumulate_compute.tres").text
 	var extra_parameters : Array[Dictionary] = []
 	extra_parameters.append({ name="elapsed_time", type="float", value=0.0 })
@@ -77,9 +87,6 @@ func _on_Export_pressed():
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		await avg_texture.save_to_file(files[0])
-
-func _on_size_changed():
-	$VBoxContainer.set_size(size)
 
 func _on_denoise_item_selected(index):
 	force_update = true

@@ -3,7 +3,7 @@ Auto Tones node
 
 The **Auto Tones** node finds the minimum and maximum values in the input texture and tone maps it to the full 0.0 - 1.0 range.
 
-.. image:: images/node_filter_auto_tones.png
+.. image:: images/node_filter_tones_auto_tones.png
 	:align: center
 
 Inputs

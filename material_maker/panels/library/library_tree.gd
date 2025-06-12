@@ -20,9 +20,6 @@ func _draw():
 	if last_tree_item == null:
 		return
 	var bottom_rect = get_item_area_rect(last_tree_item)
-	var sp : float = get_scroll().y
-	if bottom_rect.position.y + bottom_rect.size.y < size.y:
-		sp = 0
 	var library_manager = owner.library_manager
 	var items : Array[TreeItem] = get_root().get_children()
 	for item in items:
@@ -34,7 +31,7 @@ func _draw():
 				var last_item : TreeItem = get_last_item(item)
 				if last_item != null:
 					last_rect = get_item_area_rect(last_item)
-			draw_rect(Rect2(1, rect.position.y-sp, 4, last_rect.position.y-rect.position.y+last_rect.size.y), color)
+			draw_rect(Rect2(1, rect.position.y, 4, last_rect.position.y-rect.position.y+last_rect.size.y), color)
 		item = item.get_next()
 
 func _get_drag_data(_position):

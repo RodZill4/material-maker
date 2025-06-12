@@ -1,5 +1,10 @@
 extends Panel
 
+
+signal tab_changed(tab : int)
+signal no_more_tabs
+
+
 var current_tab : int = -1 :
 	get:
 		return current_tab
@@ -20,10 +25,7 @@ var current_tab : int = -1 :
 		node.position = Vector2(0, $TabBar.size.y)
 		node.size = size - node.position - Vector2(6, 6)
 		$TabBar.current_tab = current_tab
-		emit_signal("tab_changed", current_tab)
-
-signal tab_changed(tab : int)
-signal no_more_tabs
+		tab_changed.emit(current_tab)
 
 func add_tab(control, legible_unique_name = false) -> void:
 	add_child(control, legible_unique_name)
@@ -100,7 +102,7 @@ func do_close_tab(tab = null) -> void:
 	control.free()
 	current_tab = -1
 	if $TabBar.get_tab_count() == 0:
-		emit_signal("no_more_tabs")
+		no_more_tabs.emit()
 	else:
 		current_tab = 0
 

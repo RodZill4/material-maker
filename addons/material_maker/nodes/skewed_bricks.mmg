@@ -305,7 +305,7 @@
 				"control": "None",
 				"default": 0.3,
 				"label": "Corner",
-				"longdesc": "The size of the corner part of each brick (only used to calculate the Corner UV  and Corner Fill outputs)",
+				"longdesc": "The size of the corner part of each brick (only used to calculate the Corner UV and Corner Fill outputs)",
 				"max": 1,
 				"min": 0,
 				"name": "corner",
