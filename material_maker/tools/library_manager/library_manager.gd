@@ -237,7 +237,7 @@ func get_section_color(section_name : String) -> Color:
 	for s in section_colors.keys():
 		if TranslationServer.translate(s) == section_name:
 			return section_colors[s]
-	return Color(0.0, 0.0, 0.0, 0.0)
+	return Color.DIM_GRAY
 
 func is_section_enabled(section_name : String) -> bool:
 	return disabled_sections.find(section_name) == -1

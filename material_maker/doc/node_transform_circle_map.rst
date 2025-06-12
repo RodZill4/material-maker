@@ -3,7 +3,7 @@ Circle Map node
 
 The **Circle Map** node is variadic and map input images in a circle into the outputs.
 
-.. image:: images/node_transform_circlemap.png
+.. image:: images/node_transform_circle_map.png
 	:align: center
 
 Inputs

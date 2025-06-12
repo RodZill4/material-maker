@@ -71,6 +71,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Copy", command="edit_copy", shortcut="Control+C" },
 	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
+	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
 	{ menu="Edit/-" },
 	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
 	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
@@ -117,7 +118,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
-	get_window().move_to_foreground()
+	get_window().grab_focus()
 	get_window().gui_embed_subwindows = false
 
 	get_window().close_requested.connect(self.on_close_requested)
@@ -307,6 +308,8 @@ func get_current_project() -> Control:
 	return projects_panel.get_projects().get_current_tab_control()
 
 func get_current_graph_edit() -> MMGraphEdit:
+	if projects_panel == null:
+		return null
 	var graph_edit = projects_panel.get_projects().get_current_tab_control()
 	if graph_edit != null and graph_edit.has_method("get_graph_edit"):
 		return graph_edit.get_graph_edit()
@@ -485,6 +488,11 @@ func change_theme(theme_name) -> void:
 		_theme.update()
 	await get_tree().process_frame
 	theme = _theme
+	if "classic" in theme_name:
+		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
+	else:
+		RenderingServer.set_default_clear_color(
+				Color(0.48, 0.48, 0.48) if "light" in theme_name else Color(0.12, 0.12, 0.12))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -750,6 +758,14 @@ func edit_duplicate() -> void:
 	if graph_edit != null:
 		graph_edit.duplicate_selected()
 
+func edit_duplicate_with_inputs() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.duplicate_selected_with_inputs()
+
+func edit_duplicate_with_inputs_is_disabled() -> bool:
+	return edit_cut_is_disabled()
+
 func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
@@ -995,6 +1011,7 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
+	about_box.hide()
 	about_box.popup_centered()
 
 # Preview

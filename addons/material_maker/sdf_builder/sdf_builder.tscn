@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://bvsuo5y7vh1y2"]
+[gd_scene load_steps=80 format=3 uid="uid://bvsuo5y7vh1y2"]
 
 [ext_resource type="Script" uid="uid://d16yu8rdgx4hx" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/circle.gd" id="1"]
 [ext_resource type="Script" uid="uid://c5mnqww2iagdf" path="res://addons/material_maker/sdf_builder/sdf_builder.gd" id="2"]
@@ -27,19 +27,31 @@
 [ext_resource type="Script" uid="uid://2docp5a53rt5" path="res://addons/material_maker/sdf_builder/sdf2d/alter/round.gd" id="29"]
 [ext_resource type="Script" uid="uid://b4hs21jsy2ocj" path="res://addons/material_maker/sdf_builder/sdf2d/alter/bend.gd" id="30"]
 [ext_resource type="Script" uid="uid://diateb2qfwgvr" path="res://addons/material_maker/sdf_builder/sdf2d/alter/annular.gd" id="31"]
+[ext_resource type="Script" uid="uid://4cyk4qqbj8gj" path="res://addons/material_maker/sdf_builder/sdf3d/shapes/box.gd" id="31_n0wqc"]
 [ext_resource type="Script" uid="uid://c6xr60kqjq4r2" path="res://addons/material_maker/sdf_builder/sdf2d/alter/morph.gd" id="32"]
 [ext_resource type="Script" uid="uid://dhodyf2uovltv" path="res://addons/material_maker/sdf_builder/sdf3d/generate/extrusion.gd" id="33"]
 [ext_resource type="Script" uid="uid://v4fjkky72ftf" path="res://addons/material_maker/sdf_builder/sdf3d/generate/revolution.gd" id="34"]
 [ext_resource type="Script" uid="uid://kvqpx2jj8h2l" path="res://addons/material_maker/sdf_builder/sdf3d/shapes/cylinder.gd" id="35"]
 [ext_resource type="Script" uid="uid://doftuwrp1lis4" path="res://addons/material_maker/sdf_builder/sdf2d/shapes/polygon.gd" id="36"]
+[ext_resource type="Script" uid="uid://cdbhqeta2gqu3" path="res://addons/material_maker/sdf_builder/sdf3d/boolean/intersection.gd" id="36_kabr5"]
+[ext_resource type="Script" uid="uid://b4veo2qpss2xl" path="res://addons/material_maker/sdf_builder/sdf3d/boolean/union.gd" id="36_ns3fs"]
+[ext_resource type="Script" uid="uid://bb64ub0k3fett" path="res://addons/material_maker/sdf_builder/sdf3d/boolean/difference.gd" id="37_ns3fs"]
 [ext_resource type="Script" uid="uid://13ikfvedvqbf" path="res://addons/material_maker/sdf_builder/tex/uniform.gd" id="38"]
+[ext_resource type="Script" uid="uid://cgxif3fvx4dgs" path="res://addons/material_maker/sdf_builder/sdf3d/smooth/smooth_union.gd" id="38_ekem8"]
 [ext_resource type="Script" uid="uid://b1eya3x8i88a8" path="res://addons/material_maker/sdf_builder/tex/fbm.gd" id="39"]
+[ext_resource type="Script" uid="uid://chk6rcpgr02p8" path="res://addons/material_maker/sdf_builder/sdf3d/alter/flip.gd" id="39_faixs"]
 [ext_resource type="Script" uid="uid://d4brsdtpftone" path="res://addons/material_maker/sdf_builder/tex/simple_gradient.gd" id="40"]
+[ext_resource type="Script" uid="uid://lwh4hml0cgph" path="res://addons/material_maker/sdf_builder/sdf3d/alter/mirror.gd" id="40_toca5"]
 [ext_resource type="Script" uid="uid://cgxyf3vctoab2" path="res://addons/material_maker/sdf_builder/tex/step.gd" id="41"]
+[ext_resource type="Script" uid="uid://dxgkbq1scmmjr" path="res://addons/material_maker/sdf_builder/sdf3d/alter/elongate.gd" id="41_lw8a4"]
 [ext_resource type="Script" uid="uid://ukahbu2tg1xa" path="res://addons/material_maker/sdf_builder/sdf3d/color.gd" id="42"]
+[ext_resource type="Script" uid="uid://w6ad5lo2ndak" path="res://addons/material_maker/sdf_builder/sdf3d/alter/round.gd" id="42_r2i55"]
 [ext_resource type="Script" uid="uid://txiv75ou444k" path="res://addons/material_maker/sdf_builder/tex/pattern.gd" id="43"]
+[ext_resource type="Script" uid="uid://ohekfc64j2h8" path="res://addons/material_maker/sdf_builder/sdf3d/alter/bend.gd" id="43_2ci21"]
 [ext_resource type="Script" uid="uid://duiy323ctcbai" path="res://addons/material_maker/sdf_builder/tex/blend.gd" id="44"]
+[ext_resource type="Script" uid="uid://dubllsjbsgkwf" path="res://addons/material_maker/sdf_builder/sdf3d/alter/annular.gd" id="44_ilgdj"]
 [ext_resource type="Script" uid="uid://d32rwaxge86wf" path="res://addons/material_maker/sdf_builder/sdf3d/alter/distort.gd" id="45"]
+[ext_resource type="Script" uid="uid://ca2gilvo4pb3e" path="res://addons/material_maker/sdf_builder/sdf3d/alter/morph.gd" id="45_737m3"]
 [ext_resource type="Script" uid="uid://cjnre06j82257" path="res://addons/material_maker/sdf_builder/sdf3d/alter/twist.gd" id="46"]
 [ext_resource type="Script" uid="uid://f0yln58ydnpm" path="res://addons/material_maker/sdf_builder/sdf3d/shapes/torus.gd" id="47"]
 [ext_resource type="Script" uid="uid://raosrh61drdp" path="res://addons/material_maker/sdf_builder/tex/uniform_gs.gd" id="48"]
@@ -365,7 +377,7 @@ item_type = "Sphere"
 item_category = "SDF3D"
 
 [node name="Box" type="Node" parent="SDF3D/Shape"]
-script = ExtResource("22")
+script = ExtResource("31_n0wqc")
 item_type = "Box3D"
 item_category = "SDF3D"
 
@@ -398,7 +410,7 @@ item_type = "Pyramid"
 item_category = "SDF3D"
 
 [node name="Ellipsoid" type="Node" parent="SDF3D/Shape"]
-script = ExtResource("22")
+script = ExtResource("31_n0wqc")
 shape = 1
 item_type = "Ellipsoid"
 item_category = "SDF3D"
@@ -424,29 +436,29 @@ item_category = "SDF3D"
 [node name="Boolean" type="Node" parent="SDF3D"]
 
 [node name="Union" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource("21")
+script = ExtResource("36_ns3fs")
 item_type = "Union3D"
 item_category = "SDF3D"
 
 [node name="Intersection" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource("23")
+script = ExtResource("36_kabr5")
 item_type = "Intersection3D"
 item_category = "SDF3D"
 
 [node name="Difference" type="Node" parent="SDF3D/Boolean"]
-script = ExtResource("24")
+script = ExtResource("37_ns3fs")
 item_type = "Difference3D"
 item_category = "SDF3D"
 
 [node name="Smooth" type="Node" parent="SDF3D"]
 
 [node name="Union" type="Node" parent="SDF3D/Smooth"]
-script = ExtResource("25")
+script = ExtResource("38_ekem8")
 item_type = "SmoothUnion3D"
 item_category = "SDF3D"
 
 [node name="Intersection" type="Node" parent="SDF3D/Smooth"]
-script = ExtResource("25")
+script = ExtResource("38_ekem8")
 op_sign = ""
 item_type = "SmoothIntersection3D"
 item_category = "SDF3D"
@@ -454,37 +466,37 @@ item_category = "SDF3D"
 [node name="Alter" type="Node" parent="SDF3D"]
 
 [node name="Flip" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("26")
+script = ExtResource("39_faixs")
 item_type = "Flip3D"
 item_category = "SDF3D"
 
 [node name="Mirror" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("27")
+script = ExtResource("40_toca5")
 item_type = "Mirror3D"
 item_category = "SDF3D"
 
 [node name="Elongate" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("28")
+script = ExtResource("41_lw8a4")
 item_type = "Elongate3D"
 item_category = "SDF3D"
 
 [node name="Round" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("29")
+script = ExtResource("42_r2i55")
 item_type = "Round3D"
 item_category = "SDF3D"
 
 [node name="Bend" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("30")
+script = ExtResource("43_2ci21")
 item_type = "Bend3D"
 item_category = "SDF3D"
 
 [node name="Annular" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("31")
+script = ExtResource("44_ilgdj")
 item_type = "Annular3D"
 item_category = "SDF3D"
 
 [node name="Morph" type="Node" parent="SDF3D/Alter"]
-script = ExtResource("32")
+script = ExtResource("45_737m3")
 item_type = "Morph3D"
 item_category = "SDF3D"
 
@@ -526,53 +538,53 @@ type = 1
 item_type = "Emission3D"
 item_category = "SDF3D_COLOR"
 
-[node name="Texture2D" type="Node" parent="."]
+[node name="Texture" type="Node" parent="."]
 
-[node name="Generator" type="Node" parent="Texture2D"]
+[node name="Generator" type="Node" parent="Texture"]
 
-[node name="Uniform" type="Node" parent="Texture2D/Generator"]
+[node name="Uniform" type="Node" parent="Texture/Generator"]
 script = ExtResource("38")
 item_type = "Uniform"
 item_category = "TEX"
 
-[node name="GreyscaleUniform" type="Node" parent="Texture2D/Generator"]
+[node name="GreyscaleUniform" type="Node" parent="Texture/Generator"]
 script = ExtResource("48")
 item_type = "GreyscaleUniform"
 item_category = "TEX"
 
-[node name="Pattern" type="Node" parent="Texture2D/Generator"]
+[node name="Pattern" type="Node" parent="Texture/Generator"]
 script = ExtResource("43")
 item_type = "Pattern"
 item_category = "TEX"
 
-[node name="FBM" type="Node" parent="Texture2D/Generator"]
+[node name="FBM" type="Node" parent="Texture/Generator"]
 script = ExtResource("39")
 item_type = "FBM"
 item_category = "TEX"
 
-[node name="Filter" type="Node" parent="Texture2D"]
+[node name="Filter" type="Node" parent="Texture"]
 
-[node name="BrightnessContrast" type="Node" parent="Texture2D/Filter"]
+[node name="BrightnessContrast" type="Node" parent="Texture/Filter"]
 script = ExtResource("50")
 item_type = "BrightnessContrast"
 item_category = "TEX"
 
-[node name="Step" type="Node" parent="Texture2D/Filter"]
+[node name="Step" type="Node" parent="Texture/Filter"]
 script = ExtResource("41")
 item_type = "Step"
 item_category = "TEX"
 
-[node name="SimpleGradient" type="Node" parent="Texture2D/Filter"]
+[node name="SimpleGradient" type="Node" parent="Texture/Filter"]
 script = ExtResource("40")
 item_type = "SimpleGradient"
 item_category = "TEX"
 
-[node name="Blend" type="Node" parent="Texture2D/Filter"]
+[node name="Blend" type="Node" parent="Texture/Filter"]
 script = ExtResource("44")
 item_type = "Blend"
 item_category = "TEX"
 
-[node name="Deform" type="Node" parent="Texture2D/Filter"]
+[node name="Deform" type="Node" parent="Texture/Filter"]
 script = ExtResource("49")
 item_type = "Deform"
 item_category = "TEX"

@@ -52,6 +52,8 @@ func _ready():
 	%GuidesColor.get_popup().content_scale_factor = content_scale_factor
 	%GuidesColor.get_popup().min_size = %GuidesColor.get_popup().get_contents_minimum_size() * content_scale_factor
 
+	%ResetViewButton.tooltip_text += " (%s)" % [ %ResetViewButton.shortcut.get_as_text() ]
+
 	clear()
 	reset_view()
 	if mm_globals.has_config("preview"+config_var_suffix+"_view_mode"):

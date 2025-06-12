@@ -20,6 +20,7 @@ func configure_param(minimum : float = 0.0, maximum : float = 1.0, step : float 
 	$VBoxContainer/float/Max.set_value(maximum)
 	$VBoxContainer/float/Step.set_value(step)
 	$VBoxContainer/float/Default.set_value(default)
+	hide()
 	popup_centered()
 	var result = await self.return_values
 	queue_free()

@@ -6,7 +6,7 @@ the input has to be a somewhat homogeneous pattern
 
 The **Make Tileable** node also has a **Make Tileable Square** version which uses a different algorithm to make the input tileable.
 
-.. image:: images/node_filter_maketileable.png
+.. image:: images/node_filter_make_tileable.png
 	:align: center
 
 Inputs

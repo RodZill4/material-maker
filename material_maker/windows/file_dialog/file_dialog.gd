@@ -72,6 +72,7 @@ func _on_FileDialog_popup_hide() -> void:
 
 func select_files() -> Array:
 	mm_globals.main_window.add_dialog(self)
+	hide()
 	popup_centered()
 	var result = await self.return_paths
 	queue_free()
