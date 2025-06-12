@@ -1514,3 +1514,9 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			return points
 		_:
 			return points
+
+func _on_theme_changed() -> void:
+	# fix connection lines offset changing to/from classic
+	await get_tree().process_frame
+	select_invert()
+	select_invert()
