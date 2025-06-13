@@ -89,6 +89,15 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+layout_mode = 2
+
+[node name="GuiUseNativeFileDialogs" parent="VBoxContainer/TabContainer/General/HBoxContainer2" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Prefer the use of native file dialogs"
+text = "Use native file dialogs"
+config_variable = "ui_use_native_file_dialogs"
+
 [node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 layout_mode = 2
 
