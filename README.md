@@ -6,6 +6,8 @@ be used to create textures procedurally and paint 3D models.
 Its user interface is based on Godot's GraphEdit node: textures and brushes are
 described as interconnected nodes.
 
+![Screenshot](material_maker/doc/images/screenshot.png)
+
 ## Download
 
 - **[Download on itch.io](https://rodzilla.itch.io/material-maker)**
@@ -50,10 +52,6 @@ Translation files can be installed using the **Install** button in the **Prefere
 
 - **[Discord server](https://discord.gg/PF5V3mFwFM)**
 - **[Material Maker subreddit](https://www.reddit.com/r/MaterialMaker/)**
-
-## Screenshot
-
-![Screenshot](material_maker/doc/images/screenshot.png)
 
 ## License
 
