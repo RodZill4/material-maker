@@ -68,6 +68,8 @@ func _on_export_folder_button_pressed() -> void:
 	#file_dialog.add_filter("*.png; PNG image file")
 	#file_dialog.add_filter("*.exr; EXR image file")
 
+	file_dialog.current_dir = mm_globals.get_home_directory()
+	
 	if %ExportFolder.text:
 		file_dialog.current_dir = %ExportFolder.text
 
@@ -126,8 +128,7 @@ func _on_image_pressed() -> void:
 			file_dialog.add_filter("*.png; PNG image file")
 			file_dialog.add_filter("*.exr; EXR image file")
 
-		if mm_globals.config.has_section_key("path", "save_preview"):
-			file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
+		file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview", mm_globals.get_home_directory())
 
 		var files = await file_dialog.select_files()
 

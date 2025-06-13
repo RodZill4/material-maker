@@ -48,8 +48,7 @@ func _on_generate_map_button_pressed() -> void:
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png; PNG image File")
 	dialog.add_filter("*.exr; EXR image File")
-	if mm_globals.config.has_section_key("path", "maps"):
-		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
+	dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps", mm_globals.get_home_directory())
 
 	dialog.current_file = file_name.get_basename()+extension
 
