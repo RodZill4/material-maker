@@ -329,5 +329,5 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 			value_changed.disconnect(self.control_update_parameter)
 		generator = null
 
-func control_update_parameter(value : MMSplines):
+func control_update_parameter(_value : MMSplines):
 	generator.set_parameter(parameter_name, splines.serialize())

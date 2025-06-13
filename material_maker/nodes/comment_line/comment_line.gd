@@ -43,7 +43,7 @@ func _on_text_focus_exited() -> void:
 	generator.text = editor.text
 
 
-func _on_dragged(from, to) -> void:
+func _on_dragged(_from, to) -> void:
 	_on_raise_request()
 	generator.position = to
 
@@ -73,5 +73,5 @@ func _on_text_label_gui_input(event: InputEvent) -> void:
 		accept_event()
 
 
-func _on_text_text_submitted(new_text: String) -> void:
+func _on_text_text_submitted(_new_text: String) -> void:
 	_on_text_focus_exited()
