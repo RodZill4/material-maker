@@ -86,6 +86,8 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Preferences", command="edit_preferences", shortcut="Control+Comma" },
 
 	{ menu="View/Center view", command="view_center", shortcut="C" },
+	{ menu="View/Zoom in", command="view_zoom_in", shortcut="Control+EQUAL" },
+	{ menu="View/Zoom out", command="view_zoom_out", shortcut="Control+MINUS" },
 	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
 	{ menu="View/-" },
 	{ menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
@@ -861,6 +863,14 @@ func edit_preferences() -> void:
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.center_view()
+
+func view_zoom_in() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.zoom += 0.2
+
+func view_zoom_out() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.zoom -= 0.2
 
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
