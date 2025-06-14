@@ -89,6 +89,13 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
+[node name="GuiWarpedMouseZoom" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Warps mouse around panel during drag zoom gesture
+This makes it possible to move over a large area without exiting and having to adjust mouse position"
+text = "Warped mouse zoom"
+config_variable = "ui_warped_mouse_zoom"
+
 [node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 layout_mode = 2
 

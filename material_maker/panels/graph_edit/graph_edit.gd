@@ -229,7 +229,7 @@ func _gui_input(event) -> void:
 			set_connection_lines_curvature(connection_lines_curvature)
 
 			_is_drag_zoom_warping -= 1 if _is_drag_zoom_warping else 0
-			if DisplayServer.get_name() != "X11":
+			if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warped_mouse_zoom"):
 				_is_drag_zoom_warping = 0
 
 			if not _is_drag_zoom_warping:

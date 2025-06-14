@@ -34,7 +34,7 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 					var cam_dist_max : float = preview_3d.CAMERA_DISTANCE_MAX
 
 					_is_drag_zoom_warping_mouse -= 1 if _is_drag_zoom_warping_mouse else 0
-					if DisplayServer.get_name() != "X11":
+					if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warped_mouse_zoom"):
 						_is_drag_zoom_warping_mouse = 0
 					if not _is_drag_zoom_warping_mouse:
 						var amount : float = 1.0 + event.relative.y * 0.002
