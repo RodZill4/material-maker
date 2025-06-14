@@ -215,7 +215,7 @@ func _on_list_gui_input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
 
 		_is_list_warping_mouse -= 1 if _is_list_warping_mouse else 0
-		if not _is_list_warping_mouse:
+		if not _is_list_warping_mouse or not mm_globals.get_config("ui_use_warped_scrolling"):
 			%List.get_v_scroll_bar().value -= event.relative.y
 
 		var list_rect = %List.get_rect()

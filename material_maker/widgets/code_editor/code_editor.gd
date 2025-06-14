@@ -65,7 +65,7 @@ func _on_gui_input(event):
 	elif event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) !=0:
 		
 		_is_code_edit_warping_mouse -= 1 if _is_code_edit_warping_mouse else 0
-		if not _is_code_edit_warping_mouse:
+		if not _is_code_edit_warping_mouse or not mm_globals.get_config("ui_use_warped_scrolling"):
 			scroll_vertical -= event.relative.y / get_line_height()
 
 		if get_local_mouse_position().y > get_rect().size.y:

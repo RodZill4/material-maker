@@ -20,7 +20,7 @@ func _gui_input(event: InputEvent) -> void:
 		auto_tooltip = false
 
 		is_tree_warping_mouse -= 1 if is_tree_warping_mouse else 0
-		if not is_tree_warping_mouse:
+		if not is_tree_warping_mouse or not mm_globals.get_config("ui_use_warped_scrolling"):
 			tree_scrollbar.value -= event.relative.y
 
 		if get_local_mouse_position().y > get_rect().size.y:

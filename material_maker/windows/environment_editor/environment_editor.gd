@@ -142,7 +142,7 @@ func _on_Environments_gui_input(event):
 	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) !=0:
 
 		_is_env_list_warping_mouse -= 1 if _is_env_list_warping_mouse else 0
-		if not _is_env_list_warping_mouse:
+		if not _is_env_list_warping_mouse or not mm_globals.get_config("ui_use_warped_scrolling"):
 			environment_list.get_v_scroll_bar().value -= event.relative.y
 		
 		var rect : Rect2 = environment_list.get_rect()
