@@ -29,13 +29,13 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 				camera_target_position.translate(factor*event.relative.y*camera_position.global_transform.basis.y)
 			elif event.ctrl_pressed or event.meta_pressed:
 				if get_parent().name == "Preview3d":
-					var preview_3d : SubViewportContainer = mm_globals.main_window.get_panel("Preview3D")
+					var preview_3d : SubViewportContainer = get_parent().owner
 					var cam_dist_min : float = preview_3d.CAMERA_DISTANCE_MIN
 					var cam_dist_max : float = preview_3d.CAMERA_DISTANCE_MAX
-					var amount : float = 1.0 + event.relative.y * 0.002
 
 					_is_drag_zoom_warping_mouse -= 1 if _is_drag_zoom_warping_mouse else 0
 					if not _is_drag_zoom_warping_mouse:
+						var amount : float = 1.0 + event.relative.y * 0.002
 						camera_position.position.z = clamp(
 								camera_position.position.z*amount, cam_dist_min, cam_dist_max)
 
