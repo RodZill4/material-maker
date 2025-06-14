@@ -6,11 +6,12 @@ var displayed_assets : Array = []
 var thumbnail_update_thread : Thread = null
 var only_return_index : bool = false
 
+var _is_item_list_warping_mouse : int = 0
+
 @onready var item_list : ItemList = $VBoxContainer/ItemList
 
 
 signal return_asset(json : Dictionary)
-
 
 func _ready() -> void:
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
@@ -135,3 +136,21 @@ func _on_VBoxContainer_minimum_size_changed():
 
 func _on_Filter_changed(new_text):
 	fill_list(new_text)
+
+func _on_item_list_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and (
+			event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
+
+		_is_item_list_warping_mouse -= 1 if _is_item_list_warping_mouse else 0
+		if not _is_item_list_warping_mouse or not mm_globals.get_config("ui_use_warped_scrolling"):
+			$VBoxContainer/ItemList.get_v_scroll_bar().value -= event.relative.y
+
+		var rect : Rect2 = $VBoxContainer/ItemList.get_rect()
+		var mouse_pos = $VBoxContainer/ItemList.get_local_mouse_position()
+
+		if mouse_pos.y > rect.size.y:
+			_is_item_list_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(mouse_pos.x, 0), $VBoxContainer/ItemList)
+		elif mouse_pos.y < 0:
+			_is_item_list_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(mouse_pos.x, rect.size.y), $VBoxContainer/ItemList)

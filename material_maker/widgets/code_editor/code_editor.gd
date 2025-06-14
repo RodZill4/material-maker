@@ -22,6 +22,8 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 									"smoothstep", "length", "distance", "dot", "cross",
 									"normalize" ]
 
+var _is_code_edit_warping_mouse : int = 0
+
 func _context_menu_about_to_popup() -> void:
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	get_menu().position = get_window().position + Vector2i(
@@ -60,6 +62,19 @@ func _on_gui_input(event):
 				%ReplaceString.grab_focus()
 			else:
 				%FindString.grab_focus()
+	elif event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) !=0:
+		
+		_is_code_edit_warping_mouse -= 1 if _is_code_edit_warping_mouse else 0
+		if not _is_code_edit_warping_mouse or not mm_globals.get_config("ui_use_warped_scrolling"):
+			scroll_vertical -= event.relative.y / get_line_height()
+
+		if get_local_mouse_position().y > get_rect().size.y:
+			_is_code_edit_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, 0), self)
+		elif get_local_mouse_position().y < 0:
+			_is_code_edit_warping_mouse = 2
+			mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, get_rect().size.y), self)
+
 
 func _on_close_pressed():
 	%Find.visible = false
