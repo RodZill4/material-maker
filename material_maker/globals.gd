@@ -32,6 +32,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
+	ui_use_warped_scrolling = true,
 }
 
 
@@ -149,9 +150,10 @@ func parse_paste_data(data : String):
 # Misc. UI functions
 
 static func do_warp_mouse(position : Vector2, node : Node):
-	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-	node.warp_mouse(position)
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if mm_globals.get_config("ui_use_warped_scrolling"):
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+		node.warp_mouse(position)
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 static func popup_menu(menu : PopupMenu, parent : Control):
 	var zoom_fac = 1.0
