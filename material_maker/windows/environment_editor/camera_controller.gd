@@ -34,10 +34,11 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 					var cam_dist_max : float = preview_3d.CAMERA_DISTANCE_MAX
 
 					_is_drag_zoom_warping_mouse -= 1 if _is_drag_zoom_warping_mouse else 0
+					if DisplayServer.get_name() != "X11":
+						_is_drag_zoom_warping_mouse = 0
 					if not _is_drag_zoom_warping_mouse:
 						var amount : float = 1.0 + event.relative.y * 0.002
-						camera_position.position.z = clamp(
-								camera_position.position.z*amount, cam_dist_min, cam_dist_max)
+						camera_position.position.z = clamp(camera_position.position.z*amount, cam_dist_min, cam_dist_max)
 
 					var mouse_pos : Vector2 = preview_3d.get_local_mouse_position()
 					if mouse_pos.y > preview_3d.get_rect().size.y:
@@ -45,8 +46,7 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 						mm_globals.do_warp_mouse(Vector2(mouse_pos.x, 0), preview_3d)
 					elif mouse_pos.y < 0:
 						_is_drag_zoom_warping_mouse = 2
-						mm_globals.do_warp_mouse(
-								Vector2(mouse_pos.x, preview_3d.get_rect().size.y), preview_3d)
+						mm_globals.do_warp_mouse(Vector2(mouse_pos.x, preview_3d.get_rect().size.y), preview_3d)
 			else:
 				camera_rotation2.rotate_x(-0.01*event.relative.y)
 				camera_rotation1.rotate_y(-0.01*event.relative.x)

@@ -229,14 +229,17 @@ func _gui_input(event) -> void:
 			set_connection_lines_curvature(connection_lines_curvature)
 
 			_is_drag_zoom_warping -= 1 if _is_drag_zoom_warping else 0
+			if DisplayServer.get_name() != "X11":
+				_is_drag_zoom_warping = 0
+
 			if not _is_drag_zoom_warping:
 				zoom -= event.relative.y * 0.002
 
 			if get_local_mouse_position().y > get_rect().size.y:
-				_is_drag_zoom_warping = 3
+				_is_drag_zoom_warping = 2
 				mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, get_viewport_rect().position.y), self)
 			elif get_local_mouse_position().y < get_viewport_rect().position.y:
-				_is_drag_zoom_warping = 3
+				_is_drag_zoom_warping = 2
 				mm_globals.do_warp_mouse(Vector2(get_local_mouse_position().x, get_rect().size.y), self)
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
