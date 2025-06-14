@@ -47,6 +47,7 @@ expand_to_text_length = true
 flat = true
 
 [connection signal="dragged" from="." to="." method="_on_dragged"]
+[connection signal="minimum_size_changed" from="." to="." method="_on_minimum_size_changed"]
 [connection signal="node_deselected" from="." to="." method="_on_node_deselected"]
 [connection signal="node_selected" from="." to="." method="_on_node_selected"]
 [connection signal="position_offset_changed" from="." to="." method="_on_position_offset_changed"]
