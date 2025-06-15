@@ -38,7 +38,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.0,
 				"label": "Input min",
 				"longdesc": "The minimum value of the input interval",
 				"max": 1,
@@ -50,7 +50,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 1.0,
 				"label": "Input max",
 				"longdesc": "The maximum value of the input interval",
 				"max": 1,
@@ -62,7 +62,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 0.0,
 				"label": "Output min",
 				"longdesc": "The minimum value of the output interval",
 				"max": 1,
@@ -74,7 +74,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 1.0,
 				"label": "Output max",
 				"longdesc": "The maximum value of the output interval",
 				"max": 1,

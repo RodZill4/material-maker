@@ -43,7 +43,7 @@
 		"parameters": [
 			{
 				"control": "Angle1.a",
-				"default": 0,
+				"default": 30,
 				"label": "Angle 1",
 				"longdesc": "The first angle of the arc",
 				"max": 180,
@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "Angle2.a",
-				"default": 0,
+				"default": 150,
 				"label": "Angle 2",
 				"longdesc": "The second angle of the arc",
 				"max": 180,
@@ -67,7 +67,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Radius",
 				"longdesc": "The radius of the arc",
 				"max": 1,

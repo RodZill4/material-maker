@@ -37,7 +37,7 @@
 		"parameters": [
 			{
 				"control": "Rect1.x",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Size X",
 				"longdesc": "The size of the box along the X axis",
 				"max": 1,
@@ -49,7 +49,7 @@
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Size Y",
 				"longdesc": "The size of the box along the Y axis",
 				"max": 1,
@@ -61,7 +61,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Size Z",
 				"longdesc": "The size of the box along the Z axis",
 				"max": 1,
@@ -73,7 +73,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.01,
 				"label": "Radius",
 				"longdesc": "The radius of the rounded box",
 				"max": 1,

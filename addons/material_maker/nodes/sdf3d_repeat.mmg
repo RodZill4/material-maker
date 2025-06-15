@@ -67,7 +67,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 4,
+				"default": 3,
 				"label": "X",
 				"longdesc": "The number of columns in the grid",
 				"max": 32,
@@ -79,7 +79,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 3,
 				"label": "Y",
 				"longdesc": "The number of lines in the grid",
 				"max": 32,
@@ -91,7 +91,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "R",
 				"longdesc": "The amount of random rotation on each instance of the input shape",
 				"max": 1,
