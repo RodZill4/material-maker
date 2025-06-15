@@ -13,7 +13,6 @@ var qc_is_output : bool
 
 @onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 
-
 func get_current_graph():
 	return get_parent().get_current_graph_edit()
 
@@ -211,7 +210,11 @@ func _on_list_gui_input(event: InputEvent) -> void:
 		var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
 		if idx != -1:
 			_on_list_item_activated(idx)
-
+	elif event is InputEventMouseMotion:
+		var list_rect = %List.get_rect()
+		var list_viewport_rect = %List.get_viewport_rect()
+		mm_globals.handle_warped_mmb_scroll(event, %List, %List.get_v_scroll_bar(),
+				0, list_rect.size.y, %List.get_local_mouse_position(), Control.CURSOR_DRAG)
 
 func get_list_drag_data(m_position):
 	var data = %List.get_item_metadata(%List.get_item_at_position(m_position))
