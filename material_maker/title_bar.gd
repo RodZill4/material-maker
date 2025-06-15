@@ -3,7 +3,9 @@ extends Control
 var moving : bool
 var click_pos : Vector2i
 
-func _input(event: InputEvent) -> void:
+var title_bar_font = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
+
+func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		if moving:
 			if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
@@ -41,11 +43,12 @@ func _on_title_bar_label_ready() -> void:
 	var tween = get_tree().create_tween()
 	modulate = Color.TRANSPARENT
 	tween.tween_property(
-			self,"modulate", Color.WHITE, 0.5).set_trans(Tween.TRANS_CUBIC).set_delay(0.15)
+			self,"modulate", Color.LIGHT_GRAY, 0.5).set_trans(Tween.TRANS_CUBIC).set_delay(0.15)
 	
 	var version = ProjectSettings.get_setting("application/config/actual_release")
 	var app_name = ProjectSettings.get_setting("application/config/name")
 	var title_bar_label_text = "%s v%s" % [ app_name, version ]
 	
+	$TitleBarLabel.add_theme_font_override("font", title_bar_font)
 	$TitleBarLabel.add_theme_font_size_override("font_size", 14)
 	$TitleBarLabel.text = title_bar_label_text
