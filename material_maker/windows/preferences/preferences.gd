@@ -65,8 +65,8 @@ func _on_InstallLanguage_pressed():
 		update_language_list()
 
 func update_language_list():
-	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
-	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
+	$VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer/Language.init_from_locales()
+	$VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer/Language.init_from_config(config)
 
 func _on_DownloadLanguage_pressed():
 	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
