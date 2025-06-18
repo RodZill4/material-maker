@@ -11,9 +11,9 @@
 	},
 	"seed_int": 1204686787,
 	"shader_model": {
-		"code": "vec3 $(name_uv)_kal = kal_rotate($uv, $count, $offset, $seed);",
+		"code": "vec3 $(name_uv)_kal = old_kal_rotate($uv, $count, $offset, $seed);",
 		"global": [
-			"vec3 kal_rotate(vec2 uv, float count, float offset, float seed) {",
+			"vec3 old_kal_rotate(vec2 uv, float count, float offset, float seed) {",
 			"\tfloat pi = 3.14159265359;",
 			"\toffset *= pi/180.0;",
 			"\toffset += pi*(1.0/count+0.5);",
