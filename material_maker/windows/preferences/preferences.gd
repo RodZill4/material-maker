@@ -6,8 +6,8 @@ signal config_changed()
 
 
 func _on_ready() -> void:
-	if DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
-		%EnableGlobalMenu.visible = true
+	%PreferGlobalMenu.visible = DisplayServer.has_feature(
+			DisplayServer.FEATURE_GLOBAL_MENU)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

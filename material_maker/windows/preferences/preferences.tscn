@@ -70,13 +70,13 @@ layout_mode = 2
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
-[node name="EnableGlobalMenu" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="PreferGlobalMenu" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 button_pressed = true
-text = "Use global menu (requires restart)"
-config_variable = "macos_use_global_menu"
+text = "Prefer global menu (requires restart)"
+config_variable = "prefer_global_menu"
 
 [node name="Space3" type="Control" parent="VBoxContainer/TabContainer/General"]
 custom_minimum_size = Vector2(0, 10)
