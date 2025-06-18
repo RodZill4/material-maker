@@ -226,8 +226,7 @@ func _ready() -> void:
 							DirAccess.remove_absolute(f)
 
 	if get_current_graph_edit() == null:
-		await get_tree().process_frame
-		new_material()
+		new_material.call_deferred()
 
 	size = get_window().size
 	position = Vector2.ZERO
