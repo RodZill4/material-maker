@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://drn8t5132w352"]
+[gd_scene load_steps=10 format=3 uid="uid://drn8t5132w352"]
 
 [ext_resource type="Script" uid="uid://cll2emvic6l63" path="res://material_maker/panels/reference/reference_panel.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cqalnln5sq2ff" path="res://material_maker/panels/reference/color_slot.tscn" id="2"]
+[ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="2_82qg5"]
 [ext_resource type="PackedScene" uid="uid://jyqnc0l3oaeu" path="res://material_maker/panels/reference/gradient_slot.tscn" id="3"]
 
 [sub_resource type="Shader" id="1"]
@@ -27,6 +28,14 @@ shader_parameter/image_size = Vector2(256, 256)
 shader_parameter/scale = 2.02
 shader_parameter/center = Vector2(0.5, 0.5)
 shader_parameter/bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="InputEventKey" id="InputEventKey_83edi"]
+command_or_control_autoremap = true
+pressed = true
+keycode = 82
+
+[sub_resource type="Shortcut" id="Shortcut_t580j"]
+events = [SubResource("InputEventKey_83edi")]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_82qg5"]
 resource_local_to_scene = false
@@ -88,6 +97,26 @@ vertical_scroll_mode = 0
 [node name="HBox" type="HFlowContainer" parent="MenuBar"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="ResetView" type="PanelContainer" parent="MenuBar/HBox"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/ResetView"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/ResetView/HBox"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center View"
+tooltip_auto_translate_mode = 2
+shortcut = SubResource("Shortcut_t580j")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("2_82qg5")
+icon_name = "reset_view"
 
 [node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox"]
 layout_mode = 2
@@ -213,6 +242,7 @@ button_group = SubResource("ButtonGroup_82qg5")
 
 [connection signal="gui_input" from="Image" to="." method="_on_image_gui_input"]
 [connection signal="resized" from="Image" to="." method="_on_image_resized"]
+[connection signal="pressed" from="MenuBar/HBox/ResetView/HBox/ResetViewButton" to="." method="_on_reset_view_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/AddImageButton" to="." method="_on_add_image_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/PasteImageButton" to="." method="_on_paste_image_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/RemoveImageButton" to="." method="_on_remove_image_button_pressed"]
