@@ -477,7 +477,6 @@ custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Cancel"
 
-[connection signal="about_to_popup" from="." to="." method="_on_Preferences_about_to_show"]
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="item_selected" from="HSplitContainer/PreferenceCategory/Tree" to="." method="_on_tree_item_selected"]
