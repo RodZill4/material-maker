@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=143 format=3 uid="uid://w487nirev8y5"]
+[gd_resource type="Theme" load_steps=144 format=3 uid="uid://w487nirev8y5"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
@@ -612,6 +612,12 @@ corner_detail = 4
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5e0gw"]
 content_margin_top = 3.0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vbdqj"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u368o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc6mb"]
@@ -1069,6 +1075,8 @@ MM_PanelMenuSubPanelLabel/base_type = &"Label"
 MM_PanelMenuSubPanelLabel/colors/font_color = Color(0.881937, 0.881937, 0.881937, 1)
 MM_PanelMenuSubPanelLabel/font_sizes/font_size = 15
 MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_5e0gw")
+MM_PreferenceTab/base_type = &"ScrollContainer"
+MM_PreferenceTab/styles/panel = SubResource("StyleBoxEmpty_vbdqj")
 MM_ProjectsBackground/base_type = &"Panel"
 MM_ProjectsBackground/styles/panel = SubResource("StyleBoxEmpty_u368o")
 MM_Reroute/base_type = &"GraphNode"

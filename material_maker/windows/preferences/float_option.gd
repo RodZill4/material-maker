@@ -1,5 +1,7 @@
 extends "res://material_maker/widgets/float_edit/float_edit.gd"
 
+class_name FloatOption
+
 @export var config_variable : String
 
 func _ready() -> void:
