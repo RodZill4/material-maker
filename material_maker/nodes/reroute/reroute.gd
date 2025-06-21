@@ -111,3 +111,8 @@ func set_preview(v : int):
 		theme_type_variation = "MM_ReroutePreview"
 	await get_tree().process_frame
 	size = Vector2(0, 0)
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			size = get_minimum_size()
