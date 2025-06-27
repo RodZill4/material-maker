@@ -75,6 +75,7 @@ control_target = NodePath("../../..")
 [node name="ScrollContainer" type="ScrollContainer" parent="TopContainer/Main"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="Parameters" type="VBoxContainer" parent="TopContainer/Main/ScrollContainer"]
 layout_mode = 2
