@@ -82,7 +82,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.4,
+				"default": 0.04,
 				"label": "Thickness",
 				"longdesc": "Thickness of the box frame",
 				"max": 1,

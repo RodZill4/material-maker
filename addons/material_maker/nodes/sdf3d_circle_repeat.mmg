@@ -54,7 +54,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 4,
+				"default": 5,
 				"label": "",
 				"longdesc": "The number of repetitions of the input shape around the circle",
 				"max": 32,

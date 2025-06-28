@@ -99,7 +99,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 2,
 				"label": "Scale X",
 				"longdesc": "The scale along the X axis",
 				"max": 32,
@@ -111,7 +111,7 @@
 			},
 			{
 				"control": "None",
-				"default": 4,
+				"default": 2,
 				"label": "Scale Y",
 				"longdesc": "The scale along the Y axis",
 				"max": 32,
@@ -123,7 +123,7 @@
 			},
 			{
 				"control": "None",
-				"default": 3,
+				"default": 2,
 				"label": "Iterations",
 				"longdesc": "The number of octaves (higher values might affect performance)",
 				"max": 10,
@@ -147,7 +147,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 2,
 				"label": "Frequency",
 				"max": 2,
 				"min": 0,

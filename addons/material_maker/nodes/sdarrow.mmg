@@ -150,7 +150,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.4,
+				"default": 0.3,
 				"label": "Head",
 				"longdesc": "Width of the arrow head",
 				"max": 1,
