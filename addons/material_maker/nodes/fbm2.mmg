@@ -86,7 +86,7 @@
 			"}",
 			"",
 			"float old_perlinabs_noise_2d(vec2 coord, vec2 size, float offset, float seed) {",
-			"\treturn abs(2.0*perlin_noise_2d(coord, size, offset, seed)-1.0);",
+			"\treturn abs(2.0*old_perlin_noise_2d(coord, size, offset, seed)-1.0);",
 			"}",
 			"",
 			"float old_fbm_2d_perlinabs(vec2 coord, vec2 size, int folds, int octaves, float persistence, float offset, float seed) {",
