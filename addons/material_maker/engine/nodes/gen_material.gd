@@ -149,7 +149,7 @@ func on_dep_update_buffer(buffer_name) -> bool:
 		return true
 	var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("shader_compute"):
-		print("Cannot update "+buffer_name)
+		print("Cannot update ", buffer_name)
 		print(preview_textures[texture_name])
 		return false
 	var size = get_image_size()
@@ -344,6 +344,12 @@ func process_option_hlsl_base(s : String, is_declaration : bool = false) -> Stri
 		if m == null:
 			break
 		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
+	re.compile("float[234]?\\[\\]\\((.*)\\);")
+	while true:
+		var m : RegExMatch = re.search(s)
+		if m == null:
+			break
+		s = s.replace(m.strings[0], "{ %s };" % [ m.strings[1] ])
 	if is_declaration:
 		s = get_template_text("hlsl_defs.tmpl")+"\n\n// EngineSpecificDefinitions\n\n\n"+s
 	return s
