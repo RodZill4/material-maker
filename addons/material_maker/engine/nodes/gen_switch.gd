@@ -33,7 +33,7 @@ func get_input_defs() -> Array:
 	var rv : Array = []
 	for c in range(parameters.choices):
 		for o in range(parameters.outputs):
-			var n = PackedByteArray([65+o]).get_string_from_ascii()+str(c)
+			var n = PackedByteArray([65+o]).get_string_from_ascii()+str(c+1)
 			rv.push_back({ name=n, label=n, type="any" })
 	return rv
 

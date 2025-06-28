@@ -149,7 +149,7 @@ func on_dep_update_buffer(buffer_name) -> bool:
 		return true
 	var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 	if ! preview_textures.has(texture_name) or ! preview_textures[texture_name].has("shader_compute"):
-		print("Cannot update "+buffer_name)
+		print("Cannot update ", buffer_name)
 		print(preview_textures[texture_name])
 		return false
 	var size = get_image_size()
@@ -326,9 +326,15 @@ func set_3d_previews(previews : Dictionary[Node, Array]):
 # Export filters
 
 func process_option_hlsl_base(s : String, is_declaration : bool = false) -> String:
+	s = s.replace("ivec2(", "toint2(")
+	s = s.replace("ivec3(", "toint3(")
+	s = s.replace("ivec4(", "toint4(")
 	s = s.replace("vec2(", "tofloat2(")
 	s = s.replace("vec3(", "tofloat3(")
 	s = s.replace("vec4(", "tofloat4(")
+	s = s.replace("ivec2", "int2")
+	s = s.replace("ivec3", "int3")
+	s = s.replace("ivec4", "int4")
 	s = s.replace("vec2", "float2")
 	s = s.replace("vec3", "float3")
 	s = s.replace("vec4", "float4")
@@ -344,6 +350,12 @@ func process_option_hlsl_base(s : String, is_declaration : bool = false) -> Stri
 		if m == null:
 			break
 		s = s.replace(m.strings[0], "%s = mul(%s, tofloat2x2%s);" % [ m.strings[1], m.strings[1], m.strings[2] ])
+	re.compile("(?:int|float)[234]?\\[\\d*\\]\\((.*)\\);")
+	while true:
+		var m : RegExMatch = re.search(s)
+		if m == null:
+			break
+		s = s.replace(m.strings[0], "{ %s };" % [ m.strings[1] ])
 	if is_declaration:
 		s = get_template_text("hlsl_defs.tmpl")+"\n\n// EngineSpecificDefinitions\n\n\n"+s
 	return s

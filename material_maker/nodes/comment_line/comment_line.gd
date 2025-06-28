@@ -75,3 +75,7 @@ func _on_text_label_gui_input(event: InputEvent) -> void:
 
 func _on_text_text_submitted(new_text: String) -> void:
 	_on_text_focus_exited()
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()
