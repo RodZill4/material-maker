@@ -77,8 +77,8 @@ class TranslationStrings:
 	
 	func read_language_file_csv(fn : String):
 		var input_translation : Translation = Translation.new()
-		var f : File = File.new()
-		if f.open(fn, File.READ) != OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.READ)
+		if f.get_error() != OK:
 			print("Error")
 			return input_translation
 		var count : int = 0
@@ -110,13 +110,15 @@ class TranslationStrings:
 	func save_csv(fn : String, position : Translation = null):
 		if position == null:
 			return
-		var f : File = File.new()
-		if f.open(fn, File.WRITE) == OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.READ)
+		if f.get_error() == OK:
 			f.store_line("id|"+position.locale)
 			for s in strings:
 				f.store_line("%s|%s" % [ s.string.replace("\n", "\\n"), position.get_message(s.string).replace("\n", "\\n") ])
 			f.close()
-		if f.open(fn+".report", File.WRITE) == OK:
+		
+		f = FileAccess.open(fn+".report", FileAccess.WRITE)
+		if f.get_error() == OK:
 			var string_list = []
 			for s in strings:
 				string_list.push_back(s.string)
@@ -131,8 +133,8 @@ class TranslationStrings:
 			f.close()
 
 	func save(fn : String, position = null):
-		var f : File = File.new()
-		if f.open(fn, File.WRITE) == OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.WRITE)
+		if f.get_error() == OK:
 			f.store_line("# Translations template for Material Maker.")
 			f.store_line("# Copyright (C) 2018-2022 Rodolphe Suescun and contributors")
 			f.store_line("# This file is distributed under the same license as the Material Maker project.")
@@ -183,8 +185,8 @@ class TranslationStrings:
 
 	func extract_strings_from_gd(fn):
 		var string_count : int = 0
-		var f : File = File.new()
-		if f.open(fn, File.READ) == OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.READ)
+		if f.get_error() == OK:
 			var line_number = 1
 			while ! f.eof_reached():
 				var l : String = f.get_line()
@@ -210,8 +212,8 @@ class TranslationStrings:
 
 	func extract_strings_from_tscn(fn):
 		var string_count : int = 0
-		var f : File = File.new()
-		if f.open(fn, File.READ) == OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.READ)
+		if f.get_error() == OK:
 			var line_number = 1
 			var tab_containers : Array = []
 			while ! f.eof_reached():
@@ -242,13 +244,12 @@ class TranslationStrings:
 
 	func extract_strings_from_mmg(fn):
 		var string_count : int = 0
-		var f : File = File.new()
-		if f.open(fn, File.READ) == OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.READ)
+		if f.get_error() == OK:
 			var test_json_conv = JSON.new()
-			test_json_conv.parse(f.get_as_text())
-			var json_parse_result : JSON = test_json_conv.get_data()
-			if json_parse_result != null:
-				var json = json_parse_result.result
+			var json_parse_result = test_json_conv.parse(f.get_as_text())
+			if json_parse_result == OK:
+				var json = test_json_conv.data
 				if json.has("type"):
 					match json.type:
 						"graph":
@@ -306,13 +307,12 @@ class TranslationStrings:
 
 	func extract_strings_from_library(fn):
 		var string_count : int = 0
-		var f : File = File.new()
-		if f.open(fn, File.READ) == OK:
+		var f : FileAccess = FileAccess.open(fn, FileAccess.READ)
+		if f.get_error() == OK:
 			var test_json_conv = JSON.new()
-			test_json_conv.parse(f.get_as_text())
-			var json_parse_result : JSON = test_json_conv.get_data()
-			if json_parse_result != null:
-				var json = json_parse_result.result
+			var json_parse_result = test_json_conv.parse(f.get_as_text())
+			if json_parse_result == OK:
+				var json = test_json_conv.data
 				if json.has("name") and add_string(json.name, fn):
 					string_count += 1
 				if json.has("lib"):
