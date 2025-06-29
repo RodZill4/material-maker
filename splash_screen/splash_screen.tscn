@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bq7jj2aydbqug"]
+[gd_scene load_steps=14 format=3 uid="uid://d24qj0s2ime0p"]
 
 [ext_resource type="Script" uid="uid://cms1wqfr4yeb5" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
@@ -119,7 +119,7 @@ offset_bottom = 433.0
 mouse_filter = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 11
-text = "www.materialmaker.org"
+text = "materialmaker.org"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
