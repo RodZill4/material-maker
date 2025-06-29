@@ -1376,7 +1376,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 
 		ConnectionStyle.BEZIER:
 		# default behavior, adapted from:
-		# github.com/godotengine/godot/blob/master/scene/gui/graph_edit.cpp#L1507
+		# github.com/godotengine/godot/blob/4.4/scene/gui/graph_edit.cpp#L1282
 			var x_diff = to.x - from.x
 			var cp_offset = x_diff * connection_lines_curvature
 			if x_diff < 0:
