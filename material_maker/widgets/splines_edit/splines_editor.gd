@@ -12,9 +12,9 @@ signal unhandled_event(event : InputEvent)
 @onready var menu_bar := $SplinesMenu
 
 enum Modes {DRAW, SELECT}
-var mode := Modes.DRAW
+var mode : Modes = Modes.DRAW
 
-var progressive := false
+var progressive : bool = false
 
 var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.ttf")
 var font_size = 16
@@ -128,10 +128,12 @@ func _on_ControlPoint_moved(index):
 
 func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_pressed : bool):
 	var cp = control_points.get_child(index)
+	var update_info : bool = true
 	if is_control_pressed:
 		if cp.is_selected:
 			cp.select(false)
 			selected_control_points.erase(cp.get_meta("point"))
+			update_info = false
 		else:
 			cp.select(true)
 			selected_control_points.append(cp.get_meta("point"))
@@ -162,6 +164,10 @@ func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_
 			cp.select(true)
 			selected_control_points.clear()
 			selected_control_points.append(cp.get_meta("point"))
+	if update_info:
+		print(index)
+		menu_bar.get_node("HBox/Width").set_value(splines.get_point_by_index(cp.get_meta("point")).width)
+		menu_bar.get_node("HBox/Offset").set_value(splines.get_point_by_index(cp.get_meta("point")).offset)
 
 func get_selection() -> Array[int]:
 	return selected_control_points
@@ -202,6 +208,13 @@ func _on_offset_value_changed(value):
 
 var creating : int = 0
 var last_spline : int = -1
+
+func _on_select_mode_toggled(toggled_on : bool):
+	if toggled_on and creating != 0:
+		var event : InputEventMouseButton = InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_RIGHT
+		event.pressed = true
+		handle_draw_mode(event)
 
 func handle_draw_mode(event : InputEvent) -> bool:
 	if event is InputEventMouseButton:
