@@ -6,11 +6,6 @@ var generator : MMGenBase = null : set = set_generator
 var disable_undoredo_for_offset : bool = false
 
 var buttons : HBoxContainer = null
-var close_button : TextureButton
-
-
-const CLOSE_ICON : Texture2D = preload("res://material_maker/icons/close.tres")
-
 
 func _ready() -> void:
 	position_offset_changed.connect(self._on_offset_changed)
@@ -45,7 +40,7 @@ func add_button(texture : Texture2D, pressed_callback = null, popup_callback = n
 	return button
 
 func init_buttons():
-	close_button = add_button(CLOSE_ICON, self.on_close_pressed)
+	pass
 
 func on_close_pressed():
 	delete_request.emit()

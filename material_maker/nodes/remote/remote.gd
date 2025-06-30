@@ -69,8 +69,6 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 
 func update_node() -> void:
 	await get_tree().process_frame
-	# Show or hide the close button
-	close_button.visible = generator.can_be_deleted()
 	# Delete the contents and wait until it's done
 	for c in grid.get_children():
 		grid.remove_child(c)
