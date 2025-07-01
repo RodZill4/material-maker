@@ -51,6 +51,7 @@ func _ready() -> void:
 	libraries_button.get_popup().id_pressed.connect(self._on_Libraries_id_pressed)
 	init_expanded_items()
 	update_tree()
+	setup_scrollbars()
 	update_theme()
 
 func _notification(what: int) -> void:
@@ -62,6 +63,7 @@ func _notification(what: int) -> void:
 			button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
 			update_category_button_styleboxes(button, s)
 		update_theme()
+		setup_scrollbars()
 
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
@@ -426,3 +428,18 @@ func _on_GetFromWebsite_pressed():
 		if graph_edit != null:
 			mm_loader.get_generator_list()
 			await graph_edit.create_gen_from_type("website:%d" % result.index)
+
+func setup_scrollbars() -> void:
+	$ScrollbarController.initialize()
+
+	for scroll_bar in tree.get_children(true):
+		if scroll_bar is ScrollBar:
+			$ScrollbarController.should_show_scrollbars(scroll_bar.mouse_entered)
+			$ScrollbarController.should_show_scrollbars(scroll_bar.scrolling)
+			$ScrollbarController.add_scrollbar(scroll_bar)
+
+
+func _on_tree_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			$ScrollbarController.show_scrollbars()

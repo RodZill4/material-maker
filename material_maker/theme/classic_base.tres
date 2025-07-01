@@ -183,6 +183,39 @@ corner_detail = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v2584"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b2nb"]
+bg_color = Color(0.459045, 0.481907, 0.539062, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swrqc"]
+bg_color = Color(0.458824, 0.482353, 0.537255, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nblvr"]
+bg_color = Color(0.458824, 0.482353, 0.537255, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpu3p"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 0.125)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2221"]
 content_margin_left = 3.0
 content_margin_top = 3.0
@@ -863,6 +896,10 @@ GraphNodeTitleLabel/colors/font_shadow_color = Color(0.168627, 0.176471, 0.19215
 GraphNodeTitleLabel/constants/outline_size = 4
 GraphNodeTitleLabel/constants/shadow_outline_size = 4
 GraphNodeTitleLabel/fonts/font = ExtResource("2_vbdqj")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_7b2nb")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_swrqc")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_nblvr")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_qpu3p")
 ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
 ItemList/styles/focus = SubResource("StyleBoxEmpty_v2584")
 ItemList/styles/hovered = SubResource("StyleBoxFlat_m2221")
@@ -1022,3 +1059,7 @@ Tree/styles/focus = SubResource("StyleBoxFlat_w0cma")
 Tree/styles/panel = SubResource("StyleBoxFlat_55ai6")
 Tree/styles/selected = SubResource("StyleBoxFlat_x5l5s")
 Tree/styles/selected_focus = SubResource("StyleBoxFlat_x5l5s")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_7b2nb")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_swrqc")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_nblvr")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_qpu3p")

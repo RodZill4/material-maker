@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
+[gd_scene load_steps=6 format=3 uid="uid://drbpisn5f3h8y"]
 
 [ext_resource type="Script" uid="uid://byotadn432paf" path="res://material_maker/panels/library/library_tree.gd" id="1"]
 [ext_resource type="Script" uid="uid://cg0s65b0doku6" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="Script" uid="uid://bwcsia3vcwnn6" path="res://material_maker/tools/scrollbar_controller/scrollbar_controller.gd" id="4_idr0u"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("3")
@@ -88,8 +89,13 @@ item_4/separator = true
 item_5/text = "Define aliases"
 item_5/id = 5
 
+[node name="ScrollbarController" type="Node" parent="."]
+script = ExtResource("4_idr0u")
+metadata/_custom_type_script = "uid://bwcsia3vcwnn6"
+
 [connection signal="text_changed" from="Library/Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="about_to_popup" from="Library/Filter/Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="gui_input" from="Library/Tree" to="." method="_on_tree_gui_input"]
 [connection signal="item_collapsed" from="Library/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_mouse_selected" from="Library/Tree" to="." method="_on_tree_item_mouse_selected"]
 [connection signal="pressed" from="Library/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]
