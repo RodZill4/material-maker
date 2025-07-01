@@ -31,57 +31,64 @@ size_flags_vertical = 3
 current_tab = 0
 use_hidden_tabs_for_min_size = true
 
-[node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="General" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/General"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Language:"
 
-[node name="Language" type="OptionButton" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="Language" type="OptionButton" parent="VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 script = ExtResource("4")
 config_variable = "locale"
 
-[node name="InstallLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="InstallLanguage" type="Button" parent="VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Install"
 
-[node name="DownloadLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="DownloadLanguage" type="Button" parent="VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Download"
 
-[node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="ConfirmQuit" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="ConfirmQuit" parent="VBoxContainer/TabContainer/General/VBoxContainer" instance=ExtResource("1")]
 layout_mode = 2
 config_variable = "confirm_quit"
 
-[node name="ConfirmCloseProject" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="ConfirmCloseProject" parent="VBoxContainer/TabContainer/General/VBoxContainer" instance=ExtResource("1")]
 layout_mode = 2
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
-[node name="Space3" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="Space3" type="Control" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="GuiScale" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="GuiScale" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/GuiScale"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/GuiScale"]
 layout_mode = 2
 text = "UI scale (0 = auto):"
 
-[node name="GuiScale" parent="VBoxContainer/TabContainer/General/GuiScale" instance=ExtResource("3")]
+[node name="GuiScale" parent="VBoxContainer/TabContainer/General/VBoxContainer/GuiScale" instance=ExtResource("3")]
 layout_mode = 2
 config_variable = "ui_scale"
 value = 0.0
@@ -89,16 +96,16 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
-[node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/Gui3DPreviewResolution"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewResolution"]
 layout_mode = 2
 tooltip_text = "Higher values result in better antialiasing, but are more demanding to render."
 mouse_filter = 1
 text = "3D preview resolution:"
 
-[node name="Gui3DPreviewResolution" parent="VBoxContainer/TabContainer/General/Gui3DPreviewResolution" instance=ExtResource("3")]
+[node name="Gui3DPreviewResolution" parent="VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewResolution" instance=ExtResource("3")]
 layout_mode = 2
 tooltip_text = "Higher values result in better antialiasing, but are more demanding to render."
 config_variable = "ui_3d_preview_resolution"
@@ -108,10 +115,10 @@ max_value = 2.5
 step = 0.1
 float_only = true
 
-[node name="Gui3DPreviewTesselationDetail" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="Gui3DPreviewTesselationDetail" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/Gui3DPreviewTesselationDetail"]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewTesselationDetail"]
 layout_mode = 2
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
 Don't increase this setting above 256 on slower machines!
@@ -119,7 +126,7 @@ This only affects the 3D preview when using tesselation, not parallax occlusion 
 mouse_filter = 1
 text = "3D preview tesselation detail:"
 
-[node name="Gui3DPreviewTesselationDetail" parent="VBoxContainer/TabContainer/General/Gui3DPreviewTesselationDetail" instance=ExtResource("3")]
+[node name="Gui3DPreviewTesselationDetail" parent="VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewTesselationDetail" instance=ExtResource("3")]
 layout_mode = 2
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
 Don't increase this setting above 256 on slower machines!
@@ -131,7 +138,7 @@ max_value = 1024.0
 step = 1.0
 float_only = true
 
-[node name="Gui3DPreviewSunShadow" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="Gui3DPreviewSunShadow" parent="VBoxContainer/TabContainer/General/VBoxContainer" instance=ExtResource("1")]
 layout_mode = 2
 tooltip_text = "If enabled, the DirectionalLight3D will cast shadows in the 3D preview. This has a moderate performance cost.
 The effect of this shadow is only visible when using a tesselated mesh or a custom object.
@@ -139,26 +146,26 @@ Changes to this setting are only applied on application restart."
 text = "3D preview sun shadow (requires restart)"
 config_variable = "ui_3d_preview_sun_shadow"
 
-[node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="EnableVSync" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="EnableVSync" parent="VBoxContainer/TabContainer/General/VBoxContainer" instance=ExtResource("1")]
 layout_mode = 2
 text = "Enable VSync"
 config_variable = "vsync"
 
-[node name="FPSLimit" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="FPSLimit" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label1" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+[node name="Label1" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit"]
 layout_mode = 2
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
 mouse_filter = 1
 text = "FPS limit:"
 
-[node name="FPSLimit" parent="VBoxContainer/TabContainer/General/FPSLimit" instance=ExtResource("3")]
+[node name="FPSLimit" parent="VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit" instance=ExtResource("3")]
 layout_mode = 2
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
@@ -169,18 +176,18 @@ max_value = 200.0
 step = 1.0
 float_only = true
 
-[node name="Space" type="Control" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+[node name="Space" type="Control" parent="VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit"]
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit"]
 layout_mode = 2
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
 mouse_filter = 1
 text = "Idle FPS limit:"
 
-[node name="IdleFPSLimit" parent="VBoxContainer/TabContainer/General/FPSLimit" instance=ExtResource("3")]
+[node name="IdleFPSLimit" parent="VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit" instance=ExtResource("3")]
 layout_mode = 2
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
@@ -191,17 +198,24 @@ max_value = 20.0
 step = 1.0
 float_only = true
 
-[node name="Bake" type="GridContainer" parent="VBoxContainer/TabContainer"]
+[node name="Bake" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
-columns = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 1
 
-[node name="LabelRayCount" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/TabContainer/Bake"]
+layout_mode = 2
+columns = 2
+
+[node name="LabelRayCount" type="Label" parent="VBoxContainer/TabContainer/Bake/GridContainer"]
 layout_mode = 2
 text = "Ray count:"
 
-[node name="RayCount" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="RayCount" parent="VBoxContainer/TabContainer/Bake/GridContainer" instance=ExtResource("3")]
 layout_mode = 2
 config_variable = "bake_ray_count"
 value = 64.0
@@ -210,11 +224,11 @@ max_value = 256.0
 step = 1.0
 float_only = true
 
-[node name="LabelRayLength" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="LabelRayLength" type="Label" parent="VBoxContainer/TabContainer/Bake/GridContainer"]
 layout_mode = 2
 text = "Ray length:"
 
-[node name="RayLength" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="RayLength" parent="VBoxContainer/TabContainer/Bake/GridContainer" instance=ExtResource("3")]
 layout_mode = 2
 config_variable = "bake_ao_ray_dist"
 value = 128.0
@@ -223,11 +237,11 @@ max_value = 1024.0
 step = 1.0
 float_only = true
 
-[node name="LabelRayBias" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="LabelRayBias" type="Label" parent="VBoxContainer/TabContainer/Bake/GridContainer"]
 layout_mode = 2
 text = "Ray bias:"
 
-[node name="RayBias" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="RayBias" parent="VBoxContainer/TabContainer/Bake/GridContainer" instance=ExtResource("3")]
 layout_mode = 2
 config_variable = "bake_ao_ray_bias"
 value = 0.005
@@ -235,11 +249,11 @@ max_value = 1024.0
 step = 0.001
 float_only = true
 
-[node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake/GridContainer"]
 layout_mode = 2
 text = "Denoise radius:"
 
-[node name="DenoiseRadius" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="DenoiseRadius" parent="VBoxContainer/TabContainer/Bake/GridContainer" instance=ExtResource("3")]
 layout_mode = 2
 config_variable = "bake_denoise_radius"
 value = 3.0
@@ -248,50 +262,67 @@ max_value = 10.0
 step = 1.0
 float_only = true
 
-[node name="Graph" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Graph" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 2
 
-[node name="AutoSizeComment" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Graph"]
+layout_mode = 2
+
+[node name="AutoSizeComment" parent="VBoxContainer/TabContainer/Graph/VBoxContainer" instance=ExtResource("1")]
 layout_mode = 2
 text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
 
-[node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Export" type="MarginContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 3
 
-[node name="AnimationLabel" type="Label" parent="VBoxContainer/TabContainer/Export"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Export"]
+layout_mode = 2
+
+[node name="AnimationLabel" type="Label" parent="VBoxContainer/TabContainer/Export/VBoxContainer"]
 layout_mode = 2
 text = "Animation"
 
-[node name="RememberAnimExport" parent="VBoxContainer/TabContainer/Export" instance=ExtResource("1")]
+[node name="RememberAnimExport" parent="VBoxContainer/TabContainer/Export/VBoxContainer" instance=ExtResource("1")]
 layout_mode = 2
 tooltip_text = "Whether to save export parameters in the export animation dialog (i.e. size, begin, end etc.)"
 text = "Remember last export settings"
 config_variable = "remember_anim_export"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Apply" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="OK" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Cancel" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Cancel"
@@ -299,8 +330,8 @@ text = "Cancel"
 [connection signal="about_to_popup" from="." to="." method="_on_Preferences_about_to_show"]
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/General/VBoxContainer/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
