@@ -1,3 +1,28 @@
+# Material Maker 1.4RC1
+
+## General
+
+- Fixed shader exports for Unity and Unreal engines (HLSL generation for array unioforms)
+
+## Nodes
+
+- Fixed FBM noise and kaleidoscope nodes compatibility (contributed by williamchange)
+- Fixed switch node input tooltips (contributed by williamchange)
+- Fixed classic reroute (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed a problem that caused the menu to update repeatedly when moving a node
+- Adjusted File Dialog minimum size (contributed by williamchange)
+- Made load from website dialog exclusive (contributed by williamchange)
+- Fixed comment line node min size not updating (contributed by williamchange)
+- Fixed hdri download error dialog scale on hidpi displays (contributed by williamchange)
+- Removed Ctrl+R shortcut for 2D/3D buttons (contributed by williamchange)
+- Fixed SDF builder param size not updating (contributed by williamchange)
+- Fixed and updated tip text mouse icons (contributed by williamchange)
+- Removed Show/Hide side panels menu item
+- Small fixes in Splines editor
+
 # Material Maker 1.4b3
 
 ## General
