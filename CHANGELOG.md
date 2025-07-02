@@ -20,6 +20,7 @@
 - Removed Ctrl+R shortcut for 2D/3D buttons (contributed by williamchange)
 - Fixed SDF builder param size not updating (contributed by williamchange)
 - Fixed and updated tip text mouse icons (contributed by williamchange)
+- Fixed float edit drag focus bug (contributed by DevFika)
 - Removed Show/Hide side panels menu item
 - Small fixes in Splines editor
 
