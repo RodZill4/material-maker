@@ -2,7 +2,7 @@
 
 ## General
 
-- Fixed shader exports for Unity and Unreal engines (HLSL generation for array unioforms)
+- Fixed shader exports for Unity and Unreal engines (HLSL generation for array uniforms)
 
 ## Nodes
 
