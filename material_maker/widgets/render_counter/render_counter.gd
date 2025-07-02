@@ -156,5 +156,5 @@ func _on_MaxBufferSize_id_pressed(id):
 
 func _on_RenderCounter_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		menu.position = get_global_mouse_position() * mm_globals.main_window.get_window().content_scale_factor
+		menu.position = get_screen_transform() * get_local_mouse_position()
 		menu.popup()
