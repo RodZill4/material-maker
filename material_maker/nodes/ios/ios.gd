@@ -2,7 +2,6 @@ extends MMGraphNodeBase
 
 func _ready():
 	super._ready()
-	close_button.visible = false
 
 func set_generator(g) -> void:
 	super.set_generator(g)
