@@ -58,7 +58,7 @@ func position_panel() -> void:
 	panel.global_position = at_position
 
 
-func _input(event:InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	if event.is_pressed():
 		mm_globals.propagate_shortcuts(self, event)
 
