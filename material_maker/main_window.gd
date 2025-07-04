@@ -130,6 +130,9 @@ func _ready() -> void:
 
 	on_config_changed()
 
+	# Set a minimum window size to prevent UI elements from collapsing on each other.
+	get_window().min_size = Vector2(1024, 600) * get_window().content_scale_factor
+
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
@@ -140,6 +143,8 @@ func _ready() -> void:
 	if get_window().mode != Window.MODE_MAXIMIZED:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
+		else:
+			get_window().move_to_center()
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
 
@@ -162,9 +167,6 @@ func _ready() -> void:
 			if f.ends_with(".ptex"):
 				print(f)
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
-
-	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	get_window().min_size = Vector2(1024, 600)
 
 	# Set window title
 	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
