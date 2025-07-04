@@ -25,6 +25,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Dynamic PBR Material",
+		"longdesc": "PBR material with shader-generated maps, which enables creation of animated, resolution independent or non-repetitive materials",
 		"code": "",
 		"custom": "",
 		"exports": {
