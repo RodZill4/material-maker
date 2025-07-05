@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://c5kgvwl2snpc8"]
 
-[ext_resource type="Script" path="res://material_maker/panels/hierarchy/hierarchy_panel.gd" id="1"]
+[ext_resource type="Script" uid="uid://bcbm206jungcq" path="res://material_maker/panels/hierarchy/hierarchy_panel.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -46,6 +46,15 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 icon = SubResource("3")
+item_count = 4
+popup/item_0/text = "No preview"
+popup/item_0/id = 0
+popup/item_1/text = "1 preview"
+popup/item_1/id = 1
+popup/item_2/text = "2 previews"
+popup/item_2/id = 2
+popup/item_3/text = "3 previews"
+popup/item_3/id = 3
 
 [node name="Tree" type="Tree" parent="Hierarchy"]
 unique_name_in_owner = true
@@ -62,4 +71,4 @@ one_shot = true
 [connection signal="pressed" from="Hierarchy/HBoxContainer/Collapse" to="." method="_on_Collapse_pressed"]
 [connection signal="item_activated" from="Hierarchy/Tree" to="." method="_on_Hierarchy_item_double_clicked"]
 [connection signal="item_icon_double_clicked" from="Hierarchy/Tree" to="." method="_on_Hierarchy_item_double_clicked"]
-[connection signal="timeout" from="Delay" to="Hierarchy" method="_on_Delay_timeout"]
+[connection signal="timeout" from="Delay" to="." method="_on_Delay_timeout"]
