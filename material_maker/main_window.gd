@@ -298,7 +298,9 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
-# warning-ignore:narrowing_conversion
+	update_preview_3d([ preview_3d, projects_panel.preview_3d_background ])
+
+	@warning_ignore("narrowing_conversion")
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
