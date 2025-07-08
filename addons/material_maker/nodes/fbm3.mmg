@@ -447,7 +447,7 @@
 		"outputs": [
 			{
 				"f": "fbm_2d_$noise($(uv), vec2($(scale_x), $(scale_y)), int($(folds)), int($(iterations)), $(persistence), $offset_in($uv), $(seed))",
-				"longdesc": "Shows a greyscale image of the generated noise",
+				"longdesc": "Shows a grayscale image of the generated noise",
 				"shortdesc": "Output",
 				"type": "f"
 			}
