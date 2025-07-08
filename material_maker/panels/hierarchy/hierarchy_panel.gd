@@ -52,10 +52,13 @@ func update_from_graph_edit(graph_edit) -> void:
 	current_graph_edit.connect("view_updated", Callable(self, "on_view_updated"))
 	current_generator = graph_edit.generator
 	current_generator.connect("hierarchy_changed", Callable(self, "on_hierarchy_changed"))
-	var file_name = "PTex"
+	var file_name : String
 	if graph_edit.save_path != null:
 		file_name = graph_edit.save_path.get_file()
+		if file_name == "":
+			file_name = "PTex"
 	fill_item(tree.create_item(null), graph_edit.top_generator, graph_edit.generator, file_name)
+
 
 func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	var index = update_index
