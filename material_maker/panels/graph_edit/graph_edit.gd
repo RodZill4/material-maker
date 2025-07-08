@@ -462,6 +462,7 @@ func update_graph(generators, connections) -> Array:
 			add_node(node)
 			node.generator = g
 		node.do_set_position(g.position)
+		node.move_to_front()
 		rv.push_back(node)
 	for c in connections:
 		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
