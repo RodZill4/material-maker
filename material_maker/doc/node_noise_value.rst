@@ -16,7 +16,7 @@ The **Value** noise node does not accept any input.
 Outputs
 +++++++
 
-The **Value** noise node provides a greyscale Value noise texture.
+The **Value** noise node provides a grayscale Value noise texture.
 
 Parameters
 ++++++++++
@@ -39,7 +39,7 @@ Example images
 Variations
 ++++++++++
 
-* The **Color Value** node generates an RGB image made of 3 greyscale Value Noise images.
+* The **Color Value** node generates an RGB image made of 3 grayscale Value Noise images.
 
 * The **Value Warp 1** and **Value Warp 2** nodes generate Value noise with domain warping.
 

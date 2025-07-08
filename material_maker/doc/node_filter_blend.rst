@@ -3,7 +3,7 @@ Blend node
 
 The **Blend** node blends two or more inputs using an optional opacity. It performs a blend operation
 defined by the blend mode between the inputs, and mixes the result with the background input
-using the opacity (defined by the *opacity* parameter multiplied by the greyscale input).
+using the opacity (defined by the *opacity* parameter multiplied by the grayscale input).
 
 .. image:: images/node_filter_blend.png
 	:align: center
@@ -145,7 +145,7 @@ Blending modes
 Notes
 +++++
 
-The *opacity* input will be considered (and implicitly converted to) greyscale if it is a color texture.
+The *opacity* input will be considered (and implicitly converted to) grayscale if it is a color texture.
 
 Example images
 ++++++++++++++

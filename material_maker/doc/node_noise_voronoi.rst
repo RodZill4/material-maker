@@ -17,9 +17,9 @@ Outputs
 
 The **Voronoi** noise node provides three outputs:
 
-* a greyscale Voronoi noise texture that shows the distance to the feature points.
+* a grayscale Voronoi noise texture that shows the distance to the feature points.
 
-* a greyscale texture that shows the distance to the closest segment bisector of all feature points pairs.
+* a grayscale texture that shows the distance to the closest segment bisector of all feature points pairs.
 
 * Fill information for each cell that must be connected to a Fill companion node
 

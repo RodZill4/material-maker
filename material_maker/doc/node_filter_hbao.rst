@@ -9,7 +9,7 @@ The **HBAO** node generates a horizon based ambient occlusion texture from its i
 Inputs
 ++++++
 
-The **HBAO** node accepts a single greyscale image as input, interpreted as a heightmap.
+The **HBAO** node accepts a single grayscale image as input, interpreted as a heightmap.
 
 Outputs
 +++++++

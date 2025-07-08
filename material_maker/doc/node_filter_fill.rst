@@ -14,7 +14,7 @@ Inputs
 
 The **Fill** node accepts:
 
-* a mask greyscale input whose light parts surround areas that must be filled
+* a mask grayscale input whose light parts surround areas that must be filled
 
 Outputs
 +++++++

@@ -16,7 +16,7 @@ drive the **Offset** value with an input.
 Outputs
 +++++++
 
-The **FBM** node provides a greyscale noise texture.
+The **FBM** node provides a grayscale noise texture.
 
 Parameters
 ++++++++++

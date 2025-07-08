@@ -16,7 +16,7 @@ Outputs
 
 The **Beehive** generates:
 
-* a greyscale output texture
+* a grayscale output texture
 
 * Fill information for each hexagon that must be connected to a Fill companion node
 

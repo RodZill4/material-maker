@@ -17,14 +17,14 @@ The **Circle Splatter** node accepts two inputs:
 
 * The *Source* inputs is the image to be splat into the output.
 
-* The *Mask* input is a greyscale image that is used as a mask and affects each instance's value.
+* The *Mask* input is a grayscale image that is used as a mask and affects each instance's value.
 
 Outputs
 +++++++
 
 The **Circle Splatter** node outputs the splat image.
 
-The greyscale circle splatter has two additional outputs, one that assigns a random color to each splat instance and one that assigns a UV layout to each splat instance.
+The grayscale circle splatter has two additional outputs, one that assigns a random color to each splat instance and one that assigns a UV layout to each splat instance.
 
 Parameters
 ++++++++++

@@ -16,7 +16,7 @@ compatible output of another node) as input.
 Outputs
 +++++++
 
-The **Fill Select** node generates a single greyscale image map that
+The **Fill Select** node generates a single grayscale image map that
 shows a mask for the selected area.
 
 Parameters

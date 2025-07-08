@@ -4,7 +4,7 @@ Shader nodes
 Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
 but as shader programs that calculate
 
-* the color of a pixel from its coordinates for greyscale, color and RGBA outputs
+* the color of a pixel from its coordinates for grayscale, color and RGBA outputs
 
 * the signed distance of a 2D point from its coordinates for SDF2D outputs
 
