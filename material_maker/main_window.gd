@@ -88,7 +88,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="View/Center view", command="view_center", shortcut="C" },
 	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
 	{ menu="View/-" },
-	{ menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
+	# { menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
 	{ menu="View/Panels", submenu="show_panels" },
 
 	{ menu="Tools/Create", submenu="create" },

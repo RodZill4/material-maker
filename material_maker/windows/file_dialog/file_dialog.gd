@@ -17,7 +17,6 @@ func _ready() -> void:
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
 	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	content_scale_factor = _content_scale_factor
-	min_size = _content_scale_factor * Vector2(650, 500)
 	
 	for child in get_children():
 		if child is PopupMenu:
@@ -50,6 +49,9 @@ func _ready() -> void:
 			volume_option = vbox.get_child(0).get_child(3)
 			if ! volume_option is OptionButton:
 				volume_option = null
+		
+	min_size = _content_scale_factor * get_contents_minimum_size()
+	min_size.y = 500 * _content_scale_factor
 
 func get_full_current_dir() -> String:
 	var prefix = ""
