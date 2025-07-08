@@ -66,15 +66,11 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 		return
 	if mm_deps.get_render_queue_size() > 0:
 		await mm_deps.render_queue_empty
-	var result = await generator.render(self, output, 24, true)
+	var result = await generator.render_output_to_texture(output, Vector2i(24, 24))
 	if index == update_index:
-		var tex = ImageTexture.new()
-		result.copy_to_texture(tex)
-		result.release(self)
-# warning-ignore:narrowing_conversion
+		var tex = await result.get_texture()
+		@warning_ignore("narrowing_conversion")
 		item.set_icon(1-min(generator.get_output_defs().size()-preview, 0)+output, tex)
-	else:
-		result.release(self)
 
 func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, item_name = null) -> void:
 	item.set_text(0, item_name if item_name != null else generator.get_type_name())
