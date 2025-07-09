@@ -182,6 +182,8 @@ static func propagate_shortcuts(control : Control, event : InputEvent):
 		return
 	do_propagate_shortcuts(control, event)
 
+static func get_home_directory() -> String:
+	return OS.get_environment("USERPROFILE" if OS.has_feature("windows") else "HOME")
 
 func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}) -> String:
 	for i in additional_identifiers:
