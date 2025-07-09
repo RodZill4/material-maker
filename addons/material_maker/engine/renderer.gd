@@ -24,8 +24,12 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$Font.size = size
 	$Font/Label.text = text
 	$Font/Label.position = Vector2(2048*(0.5+x), 2048*(0.5+y))
-	var font : Font = load(font_path)
-	if font == null:
+	var font : Font = FontFile.new()
+	if font.load_dynamic_font(font_path) == OK:
+		pass
+		#font.multichannel_signed_distance_field = true
+		#font.msdf_size = 64
+	elif font.load_bitmap_font(font_path) != OK:
 		font = $Font/Label.get_theme_font("font")
 	$Font/Label.add_theme_font_override("font", font)
 	$Font/Label.add_theme_font_size_override("font_size", font_size)
