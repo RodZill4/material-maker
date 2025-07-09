@@ -514,6 +514,8 @@ func update_node() -> void:
 				if result:
 					index = result.get_string(1).to_int()-1
 					label = result.get_string(2)
+					if index < get_child_count() and get_child(index).get_child_count() > 2:
+						first = false
 				elif label.substr(0, 2) == "-:":
 					label = label.right(-2)
 					first = false
@@ -543,6 +545,8 @@ func update_node() -> void:
 					if first:
 						var replace : Control = hsizer.get_child(1)
 						hsizer.remove_child(replace)
+						if replace in property_labels:
+							property_labels.erase(replace)
 						replace.free()
 						hsizer.add_child(label_widget)
 						hsizer.move_child(label_widget, 1)
