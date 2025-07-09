@@ -74,12 +74,6 @@
 						"file_name": "$(path_prefix)_emission.png",
 						"output": 2,
 						"type": "texture"
-					},
-					{
-						"conditions": "$(connected:ao_tex)",
-						"file_name": "$(path_prefix)_occlusion.exr",
-						"output": 9,
-						"type": "texture"
 					}
 				]
 			},
