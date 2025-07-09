@@ -140,7 +140,7 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
-	return false
+	return true
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if buffer_name == buffer_name_prefix:
@@ -757,8 +757,13 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					e = preview_texture_dependencies[t].get_image().save_png(file_name)
-					if e != OK:
+					var image : Image = preview_texture_dependencies[t].get_image()
+					if image:
+						e = preview_texture_dependencies[t].get_image().save_png(file_name)
+						if e != OK:
+							error_files += 1
+					else:
+						print("No image for texture file ", file_name)
 						error_files += 1
 					index += 1
 					processed_files += 1
