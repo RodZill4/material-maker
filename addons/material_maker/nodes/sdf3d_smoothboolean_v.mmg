@@ -89,7 +89,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.15,
 				"label": "2:",
 				"longdesc": "The smoothness of the boolean operation",
 				"max": 1,

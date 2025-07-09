@@ -112,7 +112,7 @@
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 5,
 						"label": "Amount",
 						"max": 10,
 						"min": 0,

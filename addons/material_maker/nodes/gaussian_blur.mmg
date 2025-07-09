@@ -88,11 +88,11 @@
 				"y": -238.166656494141
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 0
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 0.0
 			},
-			"seed": 19598,
+			"seed": 19598.0,
 			"type": "switch"
 		},
 		{
@@ -102,26 +102,26 @@
 				"y": -159.666656494141
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 0
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 0.0
 			},
-			"seed": 11659,
+			"seed": 11659.0,
 			"type": "switch"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -519.666625976563,
-				"y": -694.666625976563
+				"x": -519.666625976562,
+				"y": -694.666625976562
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 4.8,
-				"param2": 0,
+				"param0": 9.0,
+				"param1": 50.0,
+				"param2": 0.0,
 				"param3": false
 			},
-			"seed": 24559,
+			"seed": 24559.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -175,36 +175,36 @@
 						"Both": [
 							{
 								"node": "switch",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							}
 						],
 						"X": [
 							{
 								"node": "switch",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							}
 						],
 						"Y": [
 							{
 								"node": "switch",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							}
 						]
@@ -249,7 +249,7 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -928.666625976563,
+				"x": -928.666625976562,
 				"y": -188.392852783203
 			},
 			"parameters": {
@@ -257,21 +257,21 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input image",
 					"name": "input",
 					"shortdesc": "Input",
 					"type": "rgba"
 				},
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "A map that controls the strength of the blur filter",
 					"name": "amount",
 					"shortdesc": "Strength map",
 					"type": "f"
 				}
 			],
-			"seed": 53476,
+			"seed": 53476.0,
 			"type": "ios"
 		},
 		{
@@ -285,14 +285,14 @@
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the generated blurred image",
 					"name": "port0",
 					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
-			"seed": 77778,
+			"seed": 77778.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
@@ -300,28 +300,150 @@
 			"name": "gaussian_blur_x",
 			"node_position": {
 				"x": -385.993408203125,
-				"y": -334.28173828125
+				"y": -335.28173828125
 			},
 			"parameters": {
-				"sigma": 4.8,
-				"size": 11
+				"sigma": 50.0,
+				"size": 9.0
 			},
-			"seed": 5439,
-			"type": "gaussian_blur_x"
+			"seed": 5439.0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(1.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"name": "amount",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec4 $(name)_fct(vec2 uv) {",
+					"\tfloat e = 1.0/$size;",
+					"\tvec4 rv = vec4(0.0);",
+					"\tfloat sum = 0.0;",
+					"\tfloat sigma = max(0.000001, $sigma*$amount(uv));",
+					"\tfor (float i = -50.0; i <= 50.0; i += 1.0) {",
+					"\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);",
+					"\t\trv += $in(uv+vec2(i*e, 0.0))*coef;",
+					"\t\tsum += coef;",
+					"\t}",
+					"\treturn rv/sum;",
+					"}"
+				],
+				"name": "Gaussian blur X",
+				"outputs": [
+					{
+						"rgba": "$(name)_fct($uv)",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 4,
+						"label": "Size",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 50.0,
+						"label": "Sigma",
+						"max": 50.0,
+						"min": 0.0,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
 		},
 		{
 			"name": "gaussian_blur_y",
 			"node_position": {
-				"x": -384.993408203125,
-				"y": 10.71826171875
+				"x": -386.993408203125,
+				"y": 18.71826171875
 			},
 			"parameters": {
-				"sigma": 4.8,
-				"size": 11
+				"sigma": 50.0,
+				"size": 9.0
 			},
-			"seed": 12279,
+			"seed": 12279.0,
 			"seed_locked": true,
-			"type": "gaussian_blur_y"
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(1.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"name": "amount",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec4 $(name)_fct(vec2 uv) {",
+					"\tfloat e = 1.0/$size;",
+					"\tvec4 rv = vec4(0.0);",
+					"\tfloat sum = 0.0;",
+					"\tfloat sigma = max(0.000001, $sigma*$amount(uv));",
+					"\tfor (float i = -50.0; i <= 50.0; i += 1.0) {",
+					"\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);",
+					"\t\trv += $in(uv+vec2(0.0, i*e))*coef;",
+					"\t\tsum += coef;",
+					"\t}",
+					"\treturn rv/sum;",
+					"}"
+				],
+				"name": "Gaussian blur Y",
+				"outputs": [
+					{
+						"rgba": "$(name)_fct($uv)",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 4,
+						"label": "Size",
+						"last": 12,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 50.0,
+						"label": "Sigma",
+						"max": 50.0,
+						"min": 0.0,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
 		},
 		{
 			"name": "buffer_4",
@@ -333,7 +455,7 @@
 				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 11
+				"size": 9.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -349,7 +471,7 @@
 				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 11
+				"size": 9.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -365,7 +487,7 @@
 				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 11
+				"size": 9.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -373,9 +495,9 @@
 		}
 	],
 	"parameters": {
-		"param0": 11,
-		"param1": 4.8,
-		"param2": 0,
+		"param0": 9.0,
+		"param1": 50.0,
+		"param2": 0.0,
 		"param3": false
 	},
 	"seed_int": 0,
