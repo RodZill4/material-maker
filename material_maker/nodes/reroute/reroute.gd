@@ -61,7 +61,7 @@ func update_preview(preview : Control = null):
 func _input(event:InputEvent) -> void:
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and is_visible_in_tree():
 		accept_event()
 		var menu : PopupMenu = PopupMenu.new()
 		menu.add_item("No preview")

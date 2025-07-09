@@ -16,6 +16,9 @@ var last_export_size = 4
 signal generator_changed
 
 
+func _enter_tree():
+	set_generator(generator, output, true)
+
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.output_type, template)
 

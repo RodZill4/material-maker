@@ -135,6 +135,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		rendering_time = shader_compute.get_render_time()
 		self.rendering_time_updated.emit(rendering_time)
 		mm_deps.dependency_update(buffer_name, texture, true)
+		mm_deps.update()
 	else:
 		print("Failed to update buffer")
 	return status
