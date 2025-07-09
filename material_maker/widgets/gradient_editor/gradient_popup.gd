@@ -63,7 +63,7 @@ func _on_interpolation_item_selected(index: int) -> void:
 
 
 func _on_offset_value_changed_undo(value: Variant, merge_undo: Variant) -> void:
-	%GradientEdit.get_active_cursor().set_cursor_offset(value, merge_undo)
+	%GradientEdit.get_active_cursor().set_cursor_offset(value, true, merge_undo)
 
 
 func _on_color_button_pressed() -> void:

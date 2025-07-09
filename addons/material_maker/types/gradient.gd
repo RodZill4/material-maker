@@ -14,8 +14,8 @@ class CustomSorter:
 
 var points = [ Point.new(0.0, Color(0.0, 0.0, 0.0, 0.0)), { v=1.0, c=Color(1.0, 1.0, 1.0, 1.0) } ]
 
-enum {CONSTANT=0, LINEAR=1, SMOOTHSTEP=2, CUBIC=3}
-var interpolation := LINEAR
+enum Interpolation { CONSTANT, LINEAR, SMOOTHSTEP, CUBIC }
+var interpolation := Interpolation.LINEAR
 var sorted := true
 
 func to_string() -> String:
@@ -126,7 +126,7 @@ func get_shader(parameter_name : String) -> String:
 	var shader: String
 	shader  = "vec4 "+parameter_name+"_gradient_fct(float x) {\n"
 	match interpolation:
-		CONSTANT:
+		Interpolation.CONSTANT:
 			if points.size() > 0:
 				shader += "  if (x < %s) {\n" % pv(parameter_name, 1)
 				shader += "    return "+pc(parameter_name, 0)+";\n"
@@ -138,20 +138,20 @@ func get_shader(parameter_name : String) -> String:
 				shader += "  return "+pc(parameter_name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
-		LINEAR, SMOOTHSTEP:
+		Interpolation.LINEAR, Interpolation.SMOOTHSTEP:
 			if points.size() > 0:
 				shader += "  if (x < %s) {\n" % pv(parameter_name, 0)
 				shader += "    return "+pc(parameter_name, 0)+";\n"
 				var s = points.size()-1
 				for i in range(s):
 					shader += "  } else if (x < %s) {\n" % pv(parameter_name, i+1)
-					var function = "(" if interpolation == LINEAR else "0.5-0.5*cos(3.14159265359*"
+					var function = "(" if interpolation == Interpolation.LINEAR else "0.5-0.5*cos(3.14159265359*"
 					shader += "    return mix(%s, %s, %s(x-%s)/(%s-%s)));\n" % [ pc(parameter_name, i), pc(parameter_name, i+1), function, pv(parameter_name, i), pv(parameter_name, i+1), pv(parameter_name, i) ]
 				shader += "  }\n"
 				shader += "  return "+pc(parameter_name, s)+";\n"
 			else:
 				shader += "  return vec4(0.0, 0.0, 0.0, 1.0);\n"
-		CUBIC:
+		Interpolation.CUBIC:
 			if points.size() > 0:
 				shader += "  if (x < %s) {\n" % pv(parameter_name, 0)
 				shader += "    return "+pc(parameter_name, 0)+";\n"
@@ -185,7 +185,7 @@ func get_shader(parameter_name : String) -> String:
 func serialize() -> Dictionary:
 	sort()
 	var rv = []
-	if interpolation == CONSTANT:
+	if interpolation == Interpolation.CONSTANT:
 		var p : Point = points[0]
 		rv.append({ pos=0, r=p.c.r, g=p.c.g, b=p.c.b, a=p.c.a })
 		for i in range(1, points.size()):
@@ -212,7 +212,7 @@ func deserialize(v) -> void:
 			add_point(i.pos, Color(i.r, i.g, i.b, i.a))
 		if v.has("interpolation"):
 			interpolation = int(v.interpolation)
-			if interpolation == CONSTANT:
+			if interpolation == Interpolation.CONSTANT:
 				for i in range(points.size()-1, 0, -1):
 					if points[i].c == points[i-1].c:
 						points.remove_at(i)
@@ -220,7 +220,7 @@ func deserialize(v) -> void:
 						points[i].v = 0.5*(points[i-1].v+points[i].v)
 				points[0].v = 0
 		else:
-			interpolation = LINEAR
+			interpolation = Interpolation.LINEAR
 	elif typeof(v) == TYPE_OBJECT and v.get_script() == get_script():
 		clear()
 		for p in v.points:
@@ -281,16 +281,16 @@ func get_color_between_points(point1:int, point2:int, global_offset:float) -> Co
 	# offset relative between the two points
 	var offset := local_offset(point1, point2, global_offset)#(global_offset-pl.v)/(pr.v-pl.v)
 
-	if interpolation == CONSTANT:
+	if interpolation == Interpolation.CONSTANT:
 		return pl.c
 	# LINEAR
-	elif interpolation == LINEAR:
+	elif interpolation == Interpolation.LINEAR:
 		return pl.c.lerp(pr.c, offset)
 	# SMOOTHSTEP
-	elif interpolation == SMOOTHSTEP:
+	elif interpolation == Interpolation.SMOOTHSTEP:
 		return pl.c.lerp(pr.c, 0.5-0.5*cos(3.14159265359*offset))
 	# CUBIC
-	elif interpolation == CUBIC:
+	elif interpolation == Interpolation.CUBIC:
 		if point1 == 0:
 			var factor := 1.0 - 0.5 * offset
 			var next_section_lerp := pr.c.lerp(points[point2+1].c, local_offset(point2, point2+1, global_offset))

@@ -230,15 +230,20 @@ func _on_Tree_item_collapsed(item) -> void:
 var current_category = ""
 
 func _on_Section_Button_pressed(category : String) -> void:
+	if not library_manager.is_section_enabled(category):
+		return
+
+	var match_item : TreeItem
 	for item in tree.get_root().get_children():
 		if item.get_text(0) == category:
 			item.select(0)
 			item.collapsed = false
-			for node in tree.get_children(true):
-				if node is VScrollBar:
-					node.value = tree.get_item_area_rect(item).position.y
-					break
+			match_item = item
 			break
+
+	tree.scroll_to_item(tree.get_last_item(tree.get_root()))
+	tree.scroll_to_item(match_item)
+
 
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:

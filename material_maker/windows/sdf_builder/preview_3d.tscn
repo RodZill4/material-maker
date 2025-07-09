@@ -85,6 +85,7 @@ layout_mode = 2
 [node name="GizmoButton" type="Button" parent="Buttons"]
 layout_mode = 2
 toggle_mode = true
+button_pressed = true
 text = "Gizmo"
 
 [node name="LocalButton" type="Button" parent="Buttons"]
