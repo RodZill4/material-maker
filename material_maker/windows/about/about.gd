@@ -5,7 +5,7 @@ extends Window
 @onready var patrons_list = $HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/Patrons
 
 const CONTRIBUTORS = [
-	{ icon="res://material_maker/icons/godot_logo.svg", contribution="99% of Material Maker's code is the awesome Godot Engine GODOT_VERSION" },
+	{ icon="res://material_maker/icons/godot_logo.svg", contribution="99% of Material Maker's code is the awesome Godot Engine GODOT_VERSION", url="https://godotengine.org/" },
 	{ name="Rodolphe Suescun", contribution="Lead developer" },
 	{ name="Kasper Arnklit Frandsen", contribution="Several nodes (including Auto Tones, Mask to SDF, Normal Blend and many Bricks nodes) and node updates, and very nice video tutorials" },
 	{ name="Hugo Locurcio", contribution="Lots of contributions, mostly related to rendering and user interface" },
@@ -64,6 +64,10 @@ func _ready() -> void:
 			icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
 			icon.texture = load(c.icon)
 			name_control = icon
+		if c.has("url"):
+			name_control.mouse_filter = Control.MOUSE_FILTER_STOP
+			name_control.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			name_control.gui_input.connect(_name_control_gui_input.bind(c.url))
 		name_control.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		authors_grid.add_child(name_control)
 
@@ -84,6 +88,11 @@ func _ready() -> void:
 		patrons_list.add_item(p)
 	for p in PATRONS2:
 		patrons_list.add_item(p)
+
+func _name_control_gui_input(event : InputEvent, url : String) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		open_url(url)
+	
 
 func open_url(url) -> void:
 	OS.shell_open(url)
