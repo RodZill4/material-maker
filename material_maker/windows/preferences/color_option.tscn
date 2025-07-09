@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvfyg14l14yp7"]
+
+[ext_resource type="Script" uid="uid://bemfbyiunrx50" path="res://material_maker/windows/preferences/color_option.gd" id="1_nt4w0"]
+
+[node name="ColorOption" type="ColorPickerButton"]
+offset_right = 8.0
+offset_bottom = 8.0
+edit_alpha = false
+script = ExtResource("1_nt4w0")
+
+[connection signal="color_changed" from="." to="." method="_on_color_changed"]
