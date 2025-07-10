@@ -81,5 +81,6 @@
 	"Transform/Tiler/Color": "duplicate,copy,clone,repeat,grid,colour",
 	"Transform/Tiler/Advanced/Color": "colour",
 	"Transform/Translate": "move,scroll,shift,push",
-	"Transform/Warp": "distortion,deform,shift,push"
+	"Transform/Warp": "distortion,deform,shift,push",
+	"Transform/Circle Map": "polar"
 }
