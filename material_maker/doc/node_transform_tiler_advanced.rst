@@ -19,7 +19,7 @@ Inputs
 The **Advanced Tiler** node accepts nine inputs:
 
 * The *Source* inputs is the image to be splatted into the output.
-* The *Mask* input is a greyscale image that is used as a mask and affects each instance's value.
+* The *Mask* input is a grayscale image that is used as a mask and affects each instance's value.
 * The *Color map* inputs 1 and 2 are RGBA maps used as inputs to generate instance map outputs.
 * The *Translate X* and *Translate Y* input maps are used to offset each instance.
 * The *Rotate* input map is used to rotate each instance.
@@ -28,7 +28,7 @@ The **Advanced Tiler** node accepts nine inputs:
   (i.e. roll a different seed for each instance)
 
 The **Remap** node can be used to generate input maps (*Translate X*, *Translate Y*, *Rotate*,
-*Scale X* and *Scale Y*) easily. It takes a greyscale image as input and defines the
+*Scale X* and *Scale Y*) easily. It takes a grayscale image as input and defines the
 target interval and a step for the output values. For example; using random noise through a
 **Remap** node to drive a *Rotate* input set to 180, you could set it's *Min* value to -1,
 it's *Max* value to 1 and it's *Step* value to 0.5 and you would get randomly rotated instances
@@ -50,7 +50,7 @@ Outputs
 
 The **Advanced Tiler** node outputs the splat image, 2 instance color maps.
 
-The greyscale tiler has a fourth output that assigns a UV layout to each tile.
+The grayscale tiler has a fourth output that assigns a UV layout to each tile.
 
 Parameters
 ++++++++++

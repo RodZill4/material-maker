@@ -1,8 +1,8 @@
 Profile node
 ~~~~~~~~~~~~
 
-The **Profile** is an utility node that outputs a simple greyscale image showing
-the profile of a gradient interpreted as greyscale.
+The **Profile** is an utility node that outputs a simple grayscale image showing
+the profile of a gradient interpreted as grayscale.
 
 .. image:: images/node_simple_profile.png
 	:align: center
@@ -15,7 +15,7 @@ The Profile node does not accept any input.
 Outputs
 +++++++
 
-The Profile node generates a greyscale image showing the profile of the specified gradient.
+The Profile node generates a grayscale image showing the profile of the specified gradient.
 
 Parameters
 ++++++++++

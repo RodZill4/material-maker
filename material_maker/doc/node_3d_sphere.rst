@@ -1,7 +1,7 @@
 Sphere node
 ~~~~~~~~~~~
 
-The **Sphere** node outputs a greyscale image that represents the depth of a 3D sphere.
+The **Sphere** node outputs a grayscale image that represents the depth of a 3D sphere.
 
 .. image:: images/node_3d_sphere.png
 	:align: center
@@ -14,7 +14,7 @@ The **Sphere** node does not accept any input.
 Outputs
 +++++++
 
-The **Sphere** node provides an output that generates a greyscale image showing the
+The **Sphere** node provides an output that generates a grayscale image showing the
 selected 3D sphere.
 
 Parameters

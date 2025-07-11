@@ -14,7 +14,7 @@ The **Roman numerals** node accepts an optional bevel map, which the parameter i
 Outputs
 +++++++
 
-The **Roman numerals** node outputs a greyscale texture.
+The **Roman numerals** node outputs a grayscale texture.
 
 Parameters
 ++++++++++

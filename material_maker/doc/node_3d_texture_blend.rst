@@ -3,7 +3,7 @@ Blend node
 
 The **Blend** node blends two or more 3D textures using an optional opacity. It performs a blend operation
 defined by the blend mode between the inputs, and mixes the result with the background input
-using the opacity (defines by the *opacity* parameter, or the optional greyscale input).
+using the opacity (defines by the *opacity* parameter, or the optional grayscale input).
 
 .. image:: images/node_3d_texture_blend.png
 	:align: center
@@ -36,7 +36,7 @@ The **Blend** node has two or more parameters:
 
 * The *opacity* used when mixing the result of the blend operation with the bottom input
   when the corresponding input is not connected. When connected, the opacity channel is
-  converted to greyscale and multiplied with that parameter.
+  converted to grayscale and multiplied with that parameter.
 
 Both parameters are repeated for each additional layer.
 

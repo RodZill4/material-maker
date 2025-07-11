@@ -334,7 +334,7 @@
 			"ports": [
 				{
 					"group_size": 0.0,
-					"longdesc": "The greyscale mask to be converted",
+					"longdesc": "The grayscale mask to be converted",
 					"name": "mask",
 					"shortdesc": "Mask",
 					"type": "f"

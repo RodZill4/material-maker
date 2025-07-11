@@ -14,7 +14,7 @@ The **Clouds** node does not accept any input.
 Outputs
 +++++++
 
-The **Clouds** node outputs a single greyscale texture of the noise.
+The **Clouds** node outputs a single grayscale texture of the noise.
 
 Parameters
 ++++++++++
@@ -25,7 +25,7 @@ The **Clouds** node accepts the following parameters:
 
 * *Scale* defines the scale of the output noise.
 
-* *Resolution* defines the resolution of the output greyscale image.
+* *Resolution* defines the resolution of the output grayscale image.
 
 Example images
 ++++++++++++++

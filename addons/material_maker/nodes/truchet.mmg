@@ -37,7 +37,7 @@
 		"outputs": [
 			{
 				"f": "truchet$shape($uv*$size, vec2(float($seed)))",
-				"longdesc": "Shows a greyscale image of the truchet pattern.",
+				"longdesc": "Shows a grayscale image of the truchet pattern.",
 				"shortdesc": "Output",
 				"type": "f"
 			}

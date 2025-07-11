@@ -32,12 +32,12 @@
 			"}",
 			""
 		],
-		"longdesc": "Creates a greyscale image from a shape described as a 2D Signed Distance Function",
+		"longdesc": "Creates a grayscale image from a shape described as a 2D Signed Distance Function",
 		"name": "sdShow 2",
 		"outputs": [
 			{
 				"f": "clamp($base-$(name)_d($uv)/max($bevel, 0.00001), 0.0, 1.0)",
-				"longdesc": "Shows the shape as a greyscale image",
+				"longdesc": "Shows the shape as a grayscale image",
 				"shortdesc": "Output",
 				"type": "f"
 			}

@@ -71,7 +71,7 @@
 		"outputs": [
 			{
 				"f": "$(name_uv)_tile.x",
-				"longdesc": "A greyscale image that shows the tiles pattern",
+				"longdesc": "A grayscale image that shows the tiles pattern",
 				"shortdesc": "Tiles pattern",
 				"type": "f"
 			},

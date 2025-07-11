@@ -62,7 +62,7 @@
 		"outputs": [
 			{
 				"f": "Rune(vec2($columns, $rows)*$uv, float($seed))",
-				"longdesc": "A greyscale image showing random runes.",
+				"longdesc": "A grayscale image showing random runes.",
 				"shortdesc": "Output",
 				"type": "f"
 			}

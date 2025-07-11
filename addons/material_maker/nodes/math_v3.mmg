@@ -45,7 +45,7 @@
 		"name": "Vec3 Math",
 		"outputs": [
 			{
-				"longdesc": "Shows a greyscale image of the result",
+				"longdesc": "Shows a grayscale image of the result",
 				"rgb": "$(name_uv)_clamp_$clamp",
 				"shortdesc": "Output",
 				"type": "rgb"
