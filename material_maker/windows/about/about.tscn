@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://btww87u0o4x7t"]
+[gd_scene load_steps=14 format=3 uid="uid://btww87u0o4x7t"]
 
 [ext_resource type="Script" uid="uid://c80e0om4076tc" path="res://material_maker/windows/about/about.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://uwqukrk00ios" path="res://material_maker/windows/about/github.png" id="2"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://d0417sp8jvp7a" path="res://material_maker/windows/about/itchio.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dntvnke4pcqqf" path="res://icon.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://bxfuae46y2fdc" path="res://material_maker/windows/about/youtube.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://d2aeyi0d5c0rw" path="res://splash_screen/rodz_labs_logo.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://d3measjdowk0x" path="res://material_maker/windows/about/facebook.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://dvniks5a8tybt" path="res://material_maker/windows/about/discord.png" id="10"]
 [ext_resource type="Texture2D" uid="uid://btvwy8odw2nmx" path="res://material_maker/windows/about/patreon.png" id="11"]
@@ -184,15 +183,6 @@ theme_override_constants/margin_bottom = 8
 [node name="SocialNetworks" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="RZLogo" type="TextureRect" parent="HBoxContainer/MarginContainer/SocialNetworks"]
-visible = false
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 6
-texture = ExtResource("8")
-expand_mode = 1
 
 [node name="Patreon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
