@@ -262,7 +262,7 @@ func _on_gui_input(event):
 			mm_globals.handle_warped_drag_zoom(self,
 				(func(): sca[0] *= 1.0 + 0.005 *event.relative.y),0,
 				get_rect().size.y, get_local_mouse_position())
-			new_scale =  clamp(sca[0], 0.005, 5.0)
+			new_scale = clamp(sca[0], 0.005, 5.0)
 		else:
 			if dragging:
 				new_center = center-event.relative*view_scale/multiplier
