@@ -66,6 +66,7 @@ func update_buffer() -> void:
 		renderer.release(self)
 		texture.set_texture(image_texture)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
+		mm_deps.update()
 		updating = false
 
 func _serialize(data: Dictionary) -> Dictionary:

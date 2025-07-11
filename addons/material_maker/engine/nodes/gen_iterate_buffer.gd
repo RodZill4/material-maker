@@ -165,10 +165,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	if buffer_name == buffer_names[3]:
-		print("Cannot update %s" % buffer_name)
+		print("Cannot update ", buffer_name)
 		return false
 	if is_rendering:
-		print("Already rendering %s" % buffer_name)
+		print("Already rendering ", buffer_name)
 		return false
 	
 	is_rendering = true

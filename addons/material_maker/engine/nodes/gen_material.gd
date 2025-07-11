@@ -140,7 +140,7 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
-	return false
+	return true
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if buffer_name == buffer_name_prefix:
@@ -269,6 +269,10 @@ func process_shader(shader_text : String, custom_script : String = "", force_uni
 				var new_code : String = rv.code+"\n"
 				new_code += subst_code+"\n"
 				var definitions : String = ""
+				if force_uniforms_init:
+					definitions += rv.uniforms_as_strings("uniform", true)
+				else:
+					definitions += rv.uniforms_as_strings("uniform", false)
 				for d in rv.globals:
 					definitions += "// #globals: %s\n" % d.source
 					definitions += d.code+"\n"
@@ -399,12 +403,11 @@ func sort_fct_longest_name(a, b) -> bool:
 func preprocess_option_unreal5(s : String) -> Array:
 	var unreal5_decls : Array
 	var re = RegEx.new()
-	re.compile("(?:uniform|const)\\s+([\\w_]+)\\s+([\\w_]+)\\s*=\\s*([^;]+);")
+	re.compile("(?:uniform|const)\\s+([\\w_]+)\\s+([\\w_]+)((?:\\[\\d+\\])?)\\s*=\\s*([^;]+);")
 	for d in split_glsl(s):
-		if d.find("{") == -1:
-			d = process_option_hlsl_base(d)
-			var extracted = re.search_all(d)
-			unreal5_decls.append_array(extracted)
+		d = process_option_hlsl_base(d)
+		var extracted = re.search_all(d)
+		unreal5_decls.append_array(extracted)
 	unreal5_decls.sort_custom(Callable(self, "sort_fct_longest_name"))
 	return unreal5_decls
 
@@ -414,11 +417,27 @@ func process_option_unreal5(s : String, is_declaration : bool = false, declarati
 	if is_declaration:
 		s = s.replace("// EngineSpecificDefinitions", "#define textureLod(t, uv, lod) t.SampleLevel(t##Sampler, uv, lod)");
 		for d in preprocess_option_unreal5(s):
-			s = s.replace(d.strings[0], "")
-			s = s.replace(d.strings[2], d.strings[3])
+			s = s.replace(d.strings[0], d.strings[1]+" "+d.strings[2]+d.strings[3]+";")
 	else:
+		var initializations : String = ""
 		for d in preprocess_option_unreal5(declarations):
-			s = s.replace(d.strings[2], d.strings[3])
+			if d.strings[3] == "":
+				initializations += d.strings[2]+" = "+d.strings[4]+";\n"
+			else:
+				var array_size = d.strings[3].trim_prefix("[").trim_suffix("]").to_int()
+				var values: Array = Array(d.strings[4].replace("{", "").replace("}", "").strip_edges().split(","))
+				for i in array_size:
+					var value : String = ""
+					while true:
+						if values.is_empty():
+							break
+						if value != "":
+							value += ","
+						value += values.pop_front()
+						if value.count("(") == value.count(")"):
+							break
+					initializations += d.strings[2]+"["+str(i)+"] = "+value.strip_edges()+";\n"
+		s = initializations+s
 	s = s.replace("sampler2D", "sampler")
 	return s
 
@@ -498,7 +517,6 @@ static func get_template_text(template : String) -> String:
 	var file_path : String = MMPaths.STD_GENDEF_PATH+"/"+template
 	var in_file : FileAccess = FileAccess.open(file_path, FileAccess.READ)
 	if in_file == null:
-		print("Failed to open "+file_path)
 		return template
 	return in_file.get_as_text()
 
@@ -739,8 +757,13 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					e = preview_texture_dependencies[t].get_image().save_png(file_name)
-					if e != OK:
+					var image : Image = preview_texture_dependencies[t].get_image()
+					if image:
+						e = preview_texture_dependencies[t].get_image().save_png(file_name)
+						if e != OK:
+							error_files += 1
+					else:
+						print("No image for texture file ", file_name)
 						error_files += 1
 					index += 1
 					processed_files += 1

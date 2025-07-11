@@ -23,7 +23,7 @@ env:
   GODOT_SUB: stable
   GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.4.1-stable
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_4b3
+  MM_RELEASE: 1_4rc1
 
 jobs:
   export_windows_linux:
