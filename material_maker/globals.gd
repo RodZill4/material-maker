@@ -34,7 +34,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
-	ui_use_warped_scrolling = true,
+	ui_warp_mouse_gestures = true,
 }
 
 
@@ -152,7 +152,7 @@ func parse_paste_data(data : String):
 # Misc. UI functions
 
 static func do_warp_mouse(position : Vector2, node : Node) -> void:
-	if mm_globals.get_config("ui_use_warped_scrolling"):
+	if mm_globals.get_config("ui_warp_mouse_gestures"):
 		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		node.warp_mouse(position)
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -165,7 +165,7 @@ static func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll
 		node.mouse_default_cursor_shape = dragging_cursor
 
 		_is_mmb_scroll_warping -= 1 if _is_mmb_scroll_warping else 0
-		if not _is_mmb_scroll_warping or not mm_globals.get_config("ui_use_warped_scrolling"):
+		if not _is_mmb_scroll_warping or not mm_globals.get_config("ui_warp_mouse_gestures"):
 			vscroll.value -= event.relative.y * relative_offset_multiplier
 
 		if mouse_pos.y > to_rect_y:

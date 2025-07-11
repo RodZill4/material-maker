@@ -70,12 +70,16 @@ layout_mode = 2
 text = "Confirm when closing a project"
 config_variable = "confirm_close_project"
 
-[node name="GuiUseWarpedScrolling" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="GuiWarpMouseGestures" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
 layout_mode = 2
-tooltip_text = "Warp mouse position when using middle mouse drag to scroll (on supported ui panels)
-Turning this off might alleviate problems associated with graphics tablets"
-text = "Use warped scrolling"
-config_variable = "ui_use_warped_scrolling"
+tooltip_text = "Warps mouse around panel for supported gestures
+(i.e. mmb drag-scroll)
+
+This makes it possible to move over a large area without
+exiting and having to adjust mouse position, but may cause
+issues with pen inputs on some opearating systems."
+text = "Warp mouse gestures"
+config_variable = "ui_warp_mouse_gestures"
 
 [node name="Space3" type="Control" parent="VBoxContainer/TabContainer/General"]
 custom_minimum_size = Vector2(0, 10)
