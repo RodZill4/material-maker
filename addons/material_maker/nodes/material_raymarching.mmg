@@ -13,6 +13,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Raymarching Material",
+		"longdesc": "Raymarched surface defined using a Signed Distance Function with albedo, metallic and roughness",
 		"code": "",
 		"custom": "",
 		"exports": {
