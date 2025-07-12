@@ -542,13 +542,14 @@ class FlexWindow:
 	var overlay : Control
 	
 	func _init(main_control : Control, first_panel : Control = null):
+		content_scale_factor = main_control.get_window().content_scale_factor
 		if first_panel:
 			position = Vector2i(first_panel.get_global_rect().position)+first_panel.get_window().position
-			size = first_panel.size
+			size = first_panel.size*content_scale_factor
 		panel = Control.new()
 		add_child(panel)
 		panel.position = Vector2i(0, 0)
-		panel.size = size
+		panel.size = size/content_scale_factor
 		panel.theme = main_control.owner.theme
 		flex_layout = FlexLayout.new(main_control, panel)
 		main_control.get_viewport().add_child(self)
@@ -561,7 +562,7 @@ class FlexWindow:
 	
 	func resize():
 		panel.position = Vector2i(0, 0)
-		panel.size = size
+		panel.size = size/content_scale_factor
 		flex_layout.layout()
 	
 	func serialize() -> Dictionary:
