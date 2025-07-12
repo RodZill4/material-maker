@@ -1,3 +1,41 @@
+# Material Maker 1.4RC2
+
+## General
+
+- Preview3D mesh UV scale is now saved in settings (contributed by williamchange)
+- Removed RZLogo TextureRect in about.tscn (contributed by williamchange)
+
+## Nodes
+
+- Fixed noise node banding artifacts
+
+## Bug Fixes
+
+- Fixed connections shown in front of nodes (contributed by williamchange)
+- Fixed render counter context menu position (contributed by williamchange)
+- Fixed missing top-level label in hierarchy panel (contributed by williamchange)
+- Fixed small default window size on hidpi displays (contributed by williamchange)
+- Fixed unlit material doc on inputs (contributed by williamchange)
+- Fixed hierarchy panel previews (contributed by williamchange)
+- Fixed reroute context menu (contributed by williamchange)
+- Fixed a problem that caused buffers and materials not to updating correctly
+- Fixed add node filter context pos on hidpi displays (contributed by williamchange)
+- Fixed add node popup size not updating correctly (contributed by williamchange)
+- Fixed preview3d that did not immediately apply 3D scale (contributed by williamchange)
+- Fixed comment color popup scale and position on hidpi display (contributed by williamchange)
+- Fixed propagating node changes (contributed by williamchange)
+- Fixed CodeEditor errors (contributed by williamchange)
+- Fixed crash that occurred when hovering param linked to minimized nodes (contributed by williamchange)
+- Fixed ShowTree button size when entering subgraph (contributed by williamchange)
+- Added missing parameter types in shader nodes documentation (contributed by williamchange)
+- Added image check when exporting materials
+- Fixed Font problem on Text node
+- Fixed layout on multicolumn nodes
+- Fixed comment node documentation and images (contributed by williamchange)
+- Various code format and warning fixes (contributed by williamchange)
+- Fixed scale factor for flexible layout subwindows
+- Fixed growing export menu problem on Mac
+
 # Material Maker 1.4RC1
 
 ## General
