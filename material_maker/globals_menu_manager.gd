@@ -172,7 +172,9 @@ class MenuDisplayServer:
 	func add_submenu(name : String) -> MenuBase:
 		var full_name : String = menu_name+"/"+name
 		DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
-		return new(full_name)
+		var menu : MenuDisplayServer = new(full_name)
+		menu.clear()
+		return menu
 
 class MenuBarDisplayServer:
 	extends MenuBarBase
