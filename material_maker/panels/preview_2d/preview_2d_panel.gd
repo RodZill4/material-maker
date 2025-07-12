@@ -15,7 +15,6 @@ var preview_mode := Modes.CUSTOM_PREVIEW:
 
 @export_multiline var shader_accumulate : String = "" # (String, MULTILINE)
 @export_multiline var shader_divide : String = "" # (String, MULTILINE)
-# warning-ignore:unused_class_variable
 @export var control_target : NodePath
 
 var center : Vector2 = Vector2(0.5, 0.5)
