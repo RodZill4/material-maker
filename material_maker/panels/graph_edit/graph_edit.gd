@@ -679,7 +679,8 @@ func remove_selection() -> void:
 func minimize_selection() -> void:
 	for c in get_children():
 		if c is GraphElement and c.selected:
-			c.on_minimize_pressed()
+			if c.has_method("on_minimize_pressed"):
+				c.on_minimize_pressed()
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
