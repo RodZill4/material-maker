@@ -51,7 +51,10 @@ func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 	return [ self ]
 
 func get_description() -> String:
-	return "\n".join(["Buffer", "Samples input into a texture of a given resolution"])
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Buffer"))
+	desc_list.push_back(TranslationServer.translate("Samples input into a texture of a given resolution"))
+	return "\n".join(desc_list)
 
 func get_parameter_defs() -> Array:
 	var parameter_defs : Array = [ { name="size",label="Size", type="size", first=4, last=13, default=4 } ]

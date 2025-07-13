@@ -588,7 +588,7 @@ func get_uid(index : int) -> String:
 		r[6] = (r[6] & 0x0f) | 0x40
 		r[8] = (r[8] & 0x3f) | 0x80
 		for k in range(16):
-# warning-ignore:unassigned_variable_op_assign
+			@warning_ignore("unassigned_variable_op_assign")
 			uid += '%02x' % r[k]
 		uids[index] = uid
 	return uids[index]
