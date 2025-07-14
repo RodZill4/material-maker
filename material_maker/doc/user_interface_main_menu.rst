@@ -60,6 +60,8 @@ Edit menu
 
 * *Duplicate with inputs* is similar to *Duplicate*, but with input links kept
 
+* *Frame selected nodes* creates a comment node that frames selected nodes
+
 * *Select all* selects all nodes in the current graph view
 
 * *Select none* clears the selection in the current graph view
@@ -146,4 +148,3 @@ Help menu
   do not hesitate to use it to suggest improvements for Material Maker.
 
 * *About* Shows the about dialog.
-

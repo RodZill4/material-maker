@@ -73,6 +73,8 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
 	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
 	{ menu="Edit/-" },
+	{ menu="Edit/Frame selected nodes", command="frame_nodes", shortcut="Control+Shift+F" },
+	{ menu="Edit/-" },
 	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
 	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
 	{ menu="Edit/Invert Selection", command="edit_select_invert", shortcut="Control+I" },
@@ -887,6 +889,17 @@ func create_subgraph() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.create_subgraph()
+
+func frame_nodes() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null and get_selected_nodes().size():
+		var nodes : Array = await graph_edit.create_nodes(
+				{"type":"comment", "title":"Frame"}, Vector2())
+		if nodes.size():
+			# Avoid calling resize twice
+			if not mm_globals.get_config("auto_size_comment"):
+				nodes[0].resize_to_selection()
+			nodes[0].selected = true
 
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
