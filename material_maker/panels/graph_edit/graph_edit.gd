@@ -863,14 +863,10 @@ func highlight_connections() -> void:
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	if node is MMGraphComment:
-		var node_rect = node.get_rect()
-
 		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
-				var c_rect = c.get_rect()
-
-				if node_rect.encloses(c_rect):
+				if node.get_rect().encloses(c.get_rect()):
 					c.selected = true
 	elif node is MMGraphCommentLine:
 		pass
