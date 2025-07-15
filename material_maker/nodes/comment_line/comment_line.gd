@@ -23,14 +23,12 @@ func _on_node_selected() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property($PanelContainer, "self_modulate",
 			Color(1.0, 1.0, 1.0, 0.2), 0.4).set_trans(Tween.TRANS_CUBIC)
-	_on_raise_request()
 
 
 func _on_node_deselected() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property($PanelContainer, "self_modulate",
 			Color(1.0, 1.0, 1.0, 0.0), 0.4).set_trans(Tween.TRANS_CUBIC)
-	_on_raise_request()
 
 
 func _on_text_focus_exited() -> void:
@@ -44,23 +42,11 @@ func _on_text_focus_exited() -> void:
 
 
 func _on_dragged(_from, to) -> void:
-	_on_raise_request()
 	generator.position = to
 
 
 func _on_position_offset_changed() -> void:
-	_on_raise_request()
-
-
-func _on_raise_request() -> void:
-	var parent = get_parent()
-	for i in parent.get_child_count():
-		var child = parent.get_child(i)
-		if child == self:
-			break
-		if not child is MMGraphCommentLine:
-			get_parent().move_child(self, i)
-			break
+	pass
 
 
 func _on_text_label_gui_input(event: InputEvent) -> void:
