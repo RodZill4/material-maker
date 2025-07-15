@@ -461,7 +461,8 @@ func update_graph(generators, connections) -> Array:
 			add_node(node)
 			node.generator = g
 		node.do_set_position(g.position)
-		node.move_to_front()
+		if node is not MMGraphComment:
+			node.move_to_front()
 		rv.push_back(node)
 	for c in connections:
 		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
@@ -863,18 +864,10 @@ func highlight_connections() -> void:
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	if node is MMGraphComment:
-		# Need to account for zoom level when checking for contained nodes within comment
-		var current_zoom = get_zoom()
-		var node_rect = node.get_rect()
-		node_rect.size = node_rect.size * current_zoom
-
 		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
-				var c_rect = c.get_rect()
-				c_rect.size = c_rect.size * current_zoom
-
-				if node_rect.encloses(c_rect):
+				if node.get_rect().encloses(c.get_rect()):
 					c.selected = true
 	elif node is MMGraphCommentLine:
 		pass
