@@ -198,10 +198,12 @@ func _on_position_offset_changed():
 func _on_node_selected():
 	_on_raise_request()
 	update_stylebox()
+	%Text.placeholder_text = TranslationServer.translate("Type your comment here")
 
 func _on_node_deselected():
 	_on_raise_request()
 	update_stylebox()
+	%Text.placeholder_text = ""
 
 func _on_raise_request():
 	var parent = get_parent()
