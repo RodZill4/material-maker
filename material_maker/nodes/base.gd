@@ -458,5 +458,5 @@ func finalize_generator_update() -> void:
 func edit_node() -> void:
 	if generator is MMGenGraph:
 		get_parent().update_view.call_deferred(generator)
-	elif generator is MMGenSDF:
+	else:
 		edit_generator()
