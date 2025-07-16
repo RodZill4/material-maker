@@ -420,7 +420,7 @@ func center_view() -> void:
 			node_count += 1
 	if node_count > 0:
 		center /= node_count
-		scroll_offset = center - 0.5*size
+		scroll_offset = center * zoom - 0.5*size
 
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
