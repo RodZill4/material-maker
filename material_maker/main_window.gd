@@ -891,7 +891,7 @@ func frame_nodes() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and get_selected_nodes().size():
 		var nodes : Array = await graph_edit.create_nodes(
-				{"type":"comment", "text":" ", "title":"Frame"}, Vector2())
+				{"type":"comment", "title":"Frame"}, Vector2())
 		if nodes.size():
 			# Avoid calling resize twice
 			if not mm_globals.get_config("auto_size_comment"):
