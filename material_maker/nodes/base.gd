@@ -5,6 +5,7 @@ class_name MMGraphNodeBase
 var minimize_button : TextureButton
 var randomness_button : TextureButton
 var buffer_button : TextureButton
+var custom_button : TextureButton
 
 var show_inputs : bool = false
 var show_outputs : bool = false
@@ -15,7 +16,6 @@ const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomne
 const RANDOMNESS_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
 const BUFFER_ICON : Texture2D = preload("res://material_maker/icons/buffer.tres")
 const BUFFER_PAUSED_ICON : Texture2D = preload("res://material_maker/icons/buffer_paused.tres")
-const CUSTOM_ICON : Texture2D = preload("res://material_maker/icons/custom.png")
 const PREVIEW_ICON : Texture2D = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/preview_locked.png")
 
@@ -64,6 +64,9 @@ func init_buttons():
 	randomness_button.tooltip_text = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 	buffer_button = add_button(BUFFER_ICON, null, buffer_button_create_popup)
 	buffer_button.visible = false
+	custom_button = add_button(get_theme_icon("draw", "MM_Icons"), edit_node)
+	custom_button.tooltip_text = tr("Edit node")
+	custom_button.visible = false
 
 func on_minimize_pressed():
 	generator.minimized = !generator.minimized
@@ -172,7 +175,7 @@ func _draw() -> void:
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
-		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
+		custom_button.visible = true
 	for i in range(inputs.size()):
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
@@ -286,10 +289,7 @@ func _on_gui_input(event) -> void:
 						menu.free()
 		elif doubleclicked:
 			doubleclicked = false
-			if generator is MMGenGraph:
-				get_parent().update_view.call_deferred(generator)
-			elif generator is MMGenSDF:
-				edit_generator()
+			edit_node()
 	elif event is InputEventMouseMotion:
 		var epos : Vector2 = event.position
 		if Rect2(0, 0, size.x-56, 16).has_point(epos):
@@ -454,3 +454,9 @@ func finalize_generator_update() -> void:
 		get_parent().undoredo_create_step("Edit node", generator.get_parent().get_hier_name(), edit_generator_prev_state, edit_generator_next_state)
 		edit_generator_prev_state = {}
 		edit_generator_next_state = {}
+
+func edit_node() -> void:
+	if generator is MMGenGraph:
+		get_parent().update_view.call_deferred(generator)
+	else:
+		edit_generator()
