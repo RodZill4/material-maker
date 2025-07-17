@@ -231,8 +231,16 @@ func _draw() -> void:
 	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
 		var conn_pos = get_output_port_position(generator.preview)
 		draw_circle(conn_pos, 3, portpreview_color, true)
-	
-	
+
+	# Simplify nodes when zoomed out
+	const start_fade := 0.5
+	var opacity : float = clamp(
+			inverse_lerp(0.3, start_fade, get_parent().zoom), 0.0, 1.0)
+	get_titlebar_hbox().modulate.a = opacity
+	for control in get_children():
+		if control.get("modulate"):
+			control.modulate.a = opacity
+
 func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
 	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * portgroup_width
 	var stylebox_size: Vector2 = Vector2(portgroup_width, last_port.y - first_port.y + portgroup_width)
