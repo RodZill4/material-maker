@@ -180,6 +180,9 @@ func _gui_input(event) -> void:
 					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
+				KEY_C:
+					if OS.get_name() == "macOS":
+						center_view()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
