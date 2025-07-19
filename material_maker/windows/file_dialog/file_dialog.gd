@@ -48,7 +48,7 @@ func _ready() -> void:
 				volume_option = null
 		
 	min_size = _content_scale_factor * get_contents_minimum_size()
-	min_size.y = 500 * _content_scale_factor
+	min_size.y = 500 * int(_content_scale_factor)
 
 func get_full_current_dir() -> String:
 	var prefix = ""
