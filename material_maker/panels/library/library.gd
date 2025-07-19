@@ -130,7 +130,7 @@ func update_tree() -> void:
 	tree.clear()
 	tree.create_item()
 	for i in library_manager.get_items(filter):
-		var item := add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
+		var _item := add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
 
 	tree.queue_redraw()
 

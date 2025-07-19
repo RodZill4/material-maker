@@ -39,6 +39,7 @@ func on_right_click():
 	# Reset normal rendering
 	current_object.set_surface_override_material(0, material_save)
 	$TextureRect.visible = false
+	@warning_ignore("static_called_on_instance")
 	mm_globals.popup_menu($PopupMenu, self)
 
 
