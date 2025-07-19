@@ -151,13 +151,13 @@ func parse_paste_data(data : String):
 
 # Misc. UI functions
 
-static func do_warp_mouse(position : Vector2, node : Node) -> void:
+func do_warp_mouse(position : Vector2, node : Node) -> void:
 	if mm_globals.get_config("ui_warp_mouse_gestures"):
 		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		node.warp_mouse(position)
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-static func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
+func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
 		should_accept_event : bool = true, ignore_after_warp : int = 2) -> void:
 		if should_accept_event:
@@ -177,7 +177,7 @@ static func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 			_is_gesture_warping = ignore_after_warp
 			do_warp_mouse(Vector2(mouse_pos.x, to_rect_y), node)
 
-static func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
+func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
 		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
 		dragging_cursor : Control.CursorShape = Control.CURSOR_DRAG,
 		relative_offset_multiplier : float = 1.0, ignore_after_warp : int = 2) -> void:
