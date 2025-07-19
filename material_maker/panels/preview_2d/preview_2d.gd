@@ -129,7 +129,7 @@ func export_taa() -> void:
 
 func create_image(_renderer_function : String, _params : Array, image_size : Vector2i) -> void:
 	if generator != null:
-		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
+		var _texture : MMTexture = await generator.render_output_to_texture(output, image_size)
 
 
 func export_as_image_file(file_name : String, image_size : Vector2i) -> void:
