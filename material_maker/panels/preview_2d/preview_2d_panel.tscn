@@ -16,7 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="14_qr76f"]
 [ext_resource type="Script" uid="uid://ca5sfnwa05qm2" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
 [ext_resource type="Script" uid="uid://pielyrq85378" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
-[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="18_kn37y"]
+[ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="18_kn37y"]
 
 [sub_resource type="Shader" id="Shader_0mwcg"]
 resource_local_to_scene = true

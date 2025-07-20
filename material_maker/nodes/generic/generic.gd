@@ -371,7 +371,7 @@ func restore_preview_widget() -> void:
 		if preview.get_parent():
 			preview.get_parent().remove_child(preview)
 		preview.add_child(preview_timer)
-		var child_count = get_child_count()
+		var _child_count = get_child_count()
 		#var preview_parent = get_child(child_count-1)
 		#while preview_parent is Container:
 			#child_count = preview_parent.get_child_count()

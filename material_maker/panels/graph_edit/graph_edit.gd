@@ -452,7 +452,7 @@ func clear_material() -> void:
 		generator = null
 	send_changed_signal()
 
-func update_graph(generators, connections) -> Array:
+func update_graph(generators, _connections) -> Array:
 	var rv = []
 	for g in generators:
 		var node = node_factory.create_node(g)
@@ -463,7 +463,7 @@ func update_graph(generators, connections) -> Array:
 		node.do_set_position(g.position)
 		node.move_to_front()
 		rv.push_back(node)
-	for c in connections:
+	for c in _connections:
 		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	return rv
 
@@ -999,8 +999,8 @@ func undoredo_command(command : Dictionary) -> void:
 			var parent_generator = get_node_from_hier_name(command.parent)
 			var node_position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
 			var generators = command.generators if command.has("generators") else []
-			var connections = command.connections if command.has("connections") else []
-			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, connections, node_position)
+			var _connections = command.connections if command.has("connections") else []
+			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, _connections, node_position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:
