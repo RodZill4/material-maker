@@ -82,5 +82,6 @@
 	"Transform/Tiler/Advanced/Color": "colour",
 	"Transform/Translate": "move,scroll,shift,push",
 	"Transform/Warp": "distortion,deform,shift,push",
-	"Transform/Circle Map": "polar"
+	"Transform/Circle Map": "polar",
+	"Filter/Quantize": "posterize"
 }
