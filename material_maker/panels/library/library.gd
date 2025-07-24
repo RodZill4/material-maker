@@ -15,8 +15,8 @@ var category_buttons = {}
 
 const MINIMUM_ITEM_HEIGHT : int = 30
 
-const MENU_CREATE_LIBRARY : int = 1000
-const MENU_LOAD_LIBRARY : int =   1001
+const MENU_CREATE_LIBRARY : int =   1000
+const MENU_LOAD_LIBRARY : int =     1001
 
 func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 	context_menu.position = get_window().position+ Vector2i(
@@ -259,26 +259,43 @@ func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 func _on_Libraries_about_to_show():
 	var popup : PopupMenu = libraries_button.get_popup()
 	var unload : PopupMenu = null
+	var show_library_path : PopupMenu = null
 	for c in popup.get_children():
-		if c is PopupMenu:
-			unload = c
-			break
+		if c is PopupMenu and c.name == "Unload":
+				unload = c
+				break
+	for c in popup.get_children():
+		if c is PopupMenu and c.name == "Show in folder":
+				show_library_path = c
+				break
 	if unload == null:
 		unload = PopupMenu.new()
 		unload.name = "Unload"
 		popup.add_child(unload)
 		unload.id_pressed.connect(self._on_Libraries_Unload_id_pressed)
+	if show_library_path == null:
+		show_library_path = PopupMenu.new()
+		show_library_path.name = "Show in folder"
+		popup.add_child(show_library_path)
+		show_library_path.id_pressed.connect(self._on_Libraries_Show_id_pressed)
 	popup.clear()
 	unload.clear()
+	show_library_path.clear()
+
 	for i in library_manager.get_child_count():
 		popup.add_check_item(library_manager.get_child(i).library_name, i)
 		popup.set_item_checked(i, library_manager.is_library_enabled(i))
 		if i > 1:
 			unload.add_item(library_manager.get_child(i).library_name, i)
+		if i >= 1:
+			show_library_path.add_item(library_manager.get_child(i).library_name, i)
+
 	popup.add_separator()
 	popup.add_item("Create library", MENU_CREATE_LIBRARY)
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
+	popup.add_submenu_item("Show in folder", "Show in folder")
+
 
 func on_html5_load_file(file_name, _file_type, file_data):
 	match file_name.get_extension():
@@ -286,7 +303,6 @@ func on_html5_load_file(file_name, _file_type, file_data):
 			library_manager.load_library(file_name, file_data)
 
 func _on_Libraries_id_pressed(id : int) -> void:
-	print(id)
 	match id:
 		MENU_CREATE_LIBRARY:
 			var dialog = preload("res://material_maker/panels/library/create_lib_dialog.tscn").instantiate()
@@ -315,6 +331,11 @@ func _on_Libraries_id_pressed(id : int) -> void:
 
 func _on_Libraries_Unload_id_pressed(id : int) -> void:
 	library_manager.unload_library(id)
+
+func _on_Libraries_Show_id_pressed(id : int) -> void:
+	OS.shell_show_in_file_manager(
+		ProjectSettings.globalize_path(
+				library_manager.get_child(id).library_path), true)
 
 var current_item : TreeItem
 
