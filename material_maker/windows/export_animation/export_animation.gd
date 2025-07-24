@@ -35,6 +35,7 @@ func _ready():
 	if mm_globals.get_config("remember_anim_export"):
 		if mm_globals.has_config("export_animation_size"):
 			value_size.selected = mm_globals.get_config("export_animation_size")
+			value_size.emit_signal("item_selected", value_size.selected)
 		if mm_globals.has_config("export_animation_begin"):
 			value_begin.value = mm_globals.get_config("export_animation_begin")
 		if mm_globals.has_config("export_animation_end"):
