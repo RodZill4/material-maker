@@ -172,7 +172,9 @@ func _draw() -> void:
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
-		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
+		draw_texture_rect(CUSTOM_ICON, Rect2(4, 11, 7, 7), false, color)
+		var node_title_label : Label = get_titlebar_hbox().get_child(0)
+		node_title_label.position.x = 8
 	for i in range(inputs.size()):
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
