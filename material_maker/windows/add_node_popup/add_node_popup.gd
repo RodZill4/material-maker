@@ -36,7 +36,7 @@ func filter_entered(_filter) -> void:
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
 	current_graph.undoredo.start_group()
-	var nodes : Array = current_graph.create_nodes(node_data, insert_position)
+	var nodes : Array = await current_graph.create_nodes(node_data, insert_position)
 	if not nodes.is_empty():
 		var node : GraphNode = nodes[0] as GraphNode
 		if node != null:
