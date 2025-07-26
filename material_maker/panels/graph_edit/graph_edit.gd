@@ -507,7 +507,9 @@ func create_nodes(data, nodes_position : Vector2 = Vector2(0, 0)) -> Array:
 	return nodes
 
 func create_gen_from_type(gen_name) -> void:
-	await create_nodes({ type=gen_name, parameters={} }, scroll_offset+0.5*size)
+	var nodes : Array = await create_nodes({ type=gen_name, parameters={} }, Vector2())
+	var node : GraphNode = nodes[0]
+	node.position_offset = (scroll_offset + 0.5 * size)/zoom - 0.5 * node.size
 
 func set_new_generator(new_generator) -> void:
 	clear_material()
