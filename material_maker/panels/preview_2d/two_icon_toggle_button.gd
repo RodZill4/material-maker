@@ -8,7 +8,7 @@ func _ready() -> void:
 	_on_toggled(button_pressed)
 
 
-func _on_toggled(toggled:= false):
+func _on_toggled(_toggled : bool = false):
 	if button_pressed:
 		icon = get_theme_icon(icon_pressed_name, "MM_Icons")
 	else:

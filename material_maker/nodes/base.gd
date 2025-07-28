@@ -210,6 +210,7 @@ func _draw() -> void:
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
+		@warning_ignore("narrowing_conversion")
 		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
 	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
 		var conn_pos = get_output_port_position(generator.preview)

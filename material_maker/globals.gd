@@ -146,7 +146,7 @@ func parse_paste_data(data : String):
 
 # Misc. UI functions
 
-static func popup_menu(menu : PopupMenu, parent : Control):
+func popup_menu(menu : PopupMenu, parent : Control):
 	var zoom_fac = 1.0
 	if parent is GraphNode:
 		zoom_fac *= mm_globals.main_window.get_current_graph_edit().zoom
@@ -173,7 +173,7 @@ static func do_propagate_shortcuts(control : Control, event : InputEvent):
 					child.pressed.emit()
 		do_propagate_shortcuts(child, event)
 
-static func propagate_shortcuts(control : Control, event : InputEvent):
+func propagate_shortcuts(control : Control, event : InputEvent):
 	if not control.shortcut_context:
 		return
 	if not control.shortcut_context.get_global_rect().has_point(control.get_global_mouse_position()):
