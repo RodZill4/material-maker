@@ -886,7 +886,11 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 				if n.generator == current_preview[0].generator:
 					return
 		if node.get_output_port_count():
-			if Input.is_key_pressed(KEY_SHIFT):
+			if (Input.is_key_pressed(KEY_SHIFT)
+			# Avoid conflicting with Ctrl/Command+Shift+D (Duplicate with inputs)
+					and not (Input.is_key_pressed(KEY_D) or
+					Input.is_key_pressed(KEY_META) or
+					Input.is_key_pressed(KEY_CTRL))):
 				set_current_preview(1, node)
 			else:
 				set_current_preview(0, node)
