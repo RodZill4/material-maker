@@ -14,7 +14,7 @@ Outputs
 Nodes can have several outputs that represent the data they provide. Each node output can be
 connected to several node inputs. Each node output (and input) can be:
 
-* a **greyscale image** (shown in grey) 
+* a **grayscale image** (shown in grey) 
 
 * a **color image** (shown in blue)
 
@@ -24,7 +24,7 @@ connected to several node inputs. Each node output (and input) can be:
 
 * a **3D signed distance function** (shown in orange-red), with or without a color index
 
-* a color or greyscale **3D texture** (shown in violet), that can be associated to
+* a color or grayscale **3D texture** (shown in violet), that can be associated to
   a color index, which makes it possible to associate several 3D textures in a single
   3D scene
 
@@ -36,10 +36,10 @@ Greyscale, color and RGBA inputs and outputs can be connected to each other and 
 converted when required.
 
 2D signed distance functions have a specific preview that shows the associated signed distance
-field. They can be converted into greyscale images using the `sdShow` node.
+field. They can be converted into grayscale images using the `sdShow` node.
 
 3D signed distance functions have a specific preview that shows the lit 3D scene. They can be
-converted into a greyscale height map and a color normal map using the `Render` node.
+converted into a grayscale height map and a color normal map using the `Render` node.
 
 3D textures are previewed on a sphere
 

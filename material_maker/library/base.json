@@ -1994,13 +1994,13 @@
 			"display_name": "Noise",
 			"icon": "noise",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAVBJREFUeJztmkEOwzAIBO2q//+ye8dSVgi7o5adYxI5qxU4QDzHGGs8sNbj7TRzzsf14/0s2fVepbf9ATaAFkDzjhdUDqk9QT2f3VNO7xGR9hFgA2gBNHOEOiCbo6dz8nbOx/XbR4ANoAXQbHVA9rtf7RVO53hE6WsfATaAFkAjewFFNodVb6DWq9YJ8fn2EWADaAE0cyWTvprzp3O8Woe0jwAbQAugOT4PyM4Ms5yuU9pHgA2gBdBsvUDk13Pc8wCBDaAF0Gx1gKK6B9DnAfxfIGADaAE02zygmsO3czxSXb99BNgAWgCN7AVu53x1plfV1z4CbAAtgCZ9TjDLt/t7hXuBgA2gBdDIM0KR6nf39lnh7PvbR4ANoAXQpM8HbAtcPi9Qxf8FBDaAFkBTPiscOf386fmC5wEBG0ALoCnXAduCX54fqPd7JiiwAbQAmg8Mv79dtyZxBwAAAABJRU5ErkJggg==",
-			"name": "noise",
+			"name": "noise2",
 			"parameters": {
 				"density": 0.5,
 				"size": 4.0
 			},
 			"tree_item": "Noise",
-			"type": "noise"
+			"type": "noise2"
 		},
 		{
 			"display_name": "Value",

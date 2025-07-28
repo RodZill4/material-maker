@@ -9,7 +9,7 @@ The **Binary Smooth** node smoothes the shape of a mask.
 Inputs
 ++++++
 
-The **Binary Smooth** node accepts a greyscale mask input to be smoothed.
+The **Binary Smooth** node accepts a grayscale mask input to be smoothed.
 
 Outputs
 +++++++

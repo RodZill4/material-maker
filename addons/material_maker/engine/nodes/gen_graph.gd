@@ -582,34 +582,34 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 			idx1 += 1
 			idx2 += 1
 		elif compare_name_and_type(child_names[idx1], other_child_names[idx2]):
-			remove_generator(get_node(child_names[idx1][0]))
+			remove_generator(get_node(NodePath(child_names[idx1][0])))
 			idx1 += 1
 		else:
-			var gen = graph.get_node(other_child_names[idx2][0]).serialize()
+			var gen = graph.get_node(NodePath(other_child_names[idx2][0])).serialize()
 			var generator = await mm_loader.create_gen(gen)
 			add_generator(generator)
 			idx2 += 1
 	
 	while idx1 < child_names.size():
-		remove_generator(get_node(child_names[idx1][0]))
+		remove_generator(get_node(NodePath(child_names[idx1][0])))
 		idx1 += 1
 	
 	while idx2 < other_child_names.size():
-		var gen = graph.get_node(other_child_names[idx2][0]).serialize()
+		var gen = graph.get_node(NodePath(other_child_names[idx2][0])).serialize()
 		var generator = await mm_loader.create_gen(gen)
 		add_generator(generator)
 		idx2 += 1
 		
 	for child in maybe_changed:
 		if child[1] == "graph":
-			var node = get_node(child[0])
-			var other_node = graph.get_node(child[0])
+			var node = get_node(NodePath(child[0]))
+			var other_node = graph.get_node(NodePath(child[0]))
 
 			node.apply_diff_from(other_node)
 			continue
 		
-		var node = get_node(child[0])
-		var other_node = graph.get_node(child[0])
+		var node = get_node(NodePath(child[0]))
+		var other_node = graph.get_node(NodePath(child[0]))
 		
 		node.position = other_node.position
 		if other_node.seed_locked:

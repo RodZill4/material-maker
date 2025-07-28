@@ -14,7 +14,7 @@ The **Japanese glyphs** node accepts an optional bevel map, which the parameter 
 Outputs
 +++++++
 
-The **Japanese glyphs** node outputs a greyscale texture.
+The **Japanese glyphs** node outputs a grayscale texture.
 
 Parameters
 ++++++++++

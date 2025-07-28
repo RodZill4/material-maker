@@ -14,7 +14,7 @@ The **Wavelet noise** node does not accept any input.
 Outputs
 +++++++
 
-The **Wavelet noise** node provides a greyscale Wavelet noise texture.
+The **Wavelet noise** node provides a grayscale Wavelet noise texture.
 
 Parameters
 ++++++++++

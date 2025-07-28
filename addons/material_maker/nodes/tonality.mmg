@@ -31,19 +31,19 @@
 			{
 				"default": "$uv.x",
 				"label": "",
-				"longdesc": "The input greyscale image",
+				"longdesc": "The input grayscale image",
 				"name": "input#",
 				"shortdesc": "Input#",
 				"type": "f"
 			}
 		],
 		"instance": "",
-		"longdesc": "Remaps a greyscale image tonality using a curve",
+		"longdesc": "Remaps a grayscale image tonality using a curve",
 		"name": "Tonality",
 		"outputs": [
 			{
 				"f": "$curve($input#($uv))",
-				"longdesc": "The remapped greyscale image",
+				"longdesc": "The remapped grayscale image",
 				"shortdesc": "Output#",
 				"type": "f"
 			}

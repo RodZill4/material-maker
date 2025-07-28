@@ -93,12 +93,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "Draws a greyscale Cairo tiles pattern",
+		"longdesc": "Draws a grayscale Cairo tiles pattern",
 		"name": "Cairo",
 		"outputs": [
 			{
 				"f": "cairo_round($uv*vec2($sx, $sy), $angle*0.01745329251, 200.0-190.0*$round)",
-				"longdesc": "Shows the greyscale pattern",
+				"longdesc": "Shows the grayscale pattern",
 				"shortdesc": "Output",
 				"type": "f"
 			},

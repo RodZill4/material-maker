@@ -287,7 +287,7 @@
 		"outputs": [
 			{
 				"f": "$(name_uv)_bricks",
-				"longdesc": "A greyscale image that shows the bricks pattern",
+				"longdesc": "A grayscale image that shows the bricks pattern",
 				"shortdesc": "Bricks Pattern",
 				"type": "f"
 			},
