@@ -9,7 +9,7 @@ The **Unlit Material** node describes a simple unlit material.
 Inputs
 ++++++
 
-The **Unlit Material** node has inputs for the distance function and all PBR channels.
+The **Unlit Material** node has a single RGBA input.
 
 Parameters
 ++++++++++

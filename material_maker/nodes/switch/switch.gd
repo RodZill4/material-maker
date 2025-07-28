@@ -68,7 +68,7 @@ func update_node() -> void:
 			sizer.get_child(0).text = ""
 			has_input = false
 		else:
-# warning-ignore:integer_division
+			@warning_ignore("integer_division")
 			var source : int = i/output_count
 			sizer.get_child(0).text = PackedByteArray([65+i%int(output_count)]).get_string_from_ascii()+str(1+source)
 			sizer.get_child(0).add_theme_color_override("font_color", Color(1.0, 1.0, 1.0) if source == generator.parameters.source else Color(0.5, 0.5, 0.5))

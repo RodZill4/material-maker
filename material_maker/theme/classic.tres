@@ -85,6 +85,8 @@ region = Rect2(64, 112, 16, 16)
 atlas = ExtResource("1_7p32q")
 region = Rect2(96, 112, 16, 16)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7b2nb"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
 
@@ -714,6 +716,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_swrqc"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rnro"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -792,6 +796,7 @@ CodeEdit/colors/selection_color = Color(0.501961, 0.501961, 0.501961, 1)
 CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
 CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
 CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
+CodeEdit/styles/focus = SubResource("StyleBoxEmpty_7b2nb")
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
 FileDialog/styles/panel = SubResource("StyleBoxFlat_7b2nb")
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
@@ -909,10 +914,14 @@ MM_PanelMenuSubPanelLabel/font_sizes/font_size = 15
 MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_5e0gw")
 MM_ProjectsBackground/base_type = &"Panel"
 MM_ProjectsBackground/styles/panel = SubResource("StyleBoxEmpty_u368o")
+MM_Reroute/base_type = &"GraphNode"
+MM_Reroute/constants/port_h_offset = 24
 MM_Reroute/styles/panel = SubResource("StyleBoxFlat_wc6mb")
 MM_Reroute/styles/panel_selected = SubResource("StyleBoxFlat_24h6y")
 MM_Reroute/styles/titlebar = SubResource("StyleBoxEmpty_l27kp")
 MM_Reroute/styles/titlebar_selected = SubResource("StyleBoxEmpty_lg0bb")
+MM_ReroutePreview/base_type = &"GraphNode"
+MM_ReroutePreview/constants/port_h_offset = 5
 MM_ReroutePreview/styles/panel = SubResource("StyleBoxFlat_gn0j1")
 MM_ReroutePreview/styles/panel_selected = SubResource("StyleBoxFlat_5vt7k")
 MM_ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_xyfhj")
@@ -938,6 +947,7 @@ TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_62r2q")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
 TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_ofwe7")
 TabContainer/styles/panel = SubResource("StyleBoxFlat_wc388")
+TextEdit/styles/focus = SubResource("StyleBoxEmpty_swrqc")
 TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
 Tree/constants/draw_guides = 0

@@ -64,7 +64,9 @@ func on_counter_change(count : int, pending : int) -> void:
 			start_time = Time.get_ticks_msec()
 			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
+			@warning_ignore("integer_division")
 			var remaining_time_msec = (Time.get_ticks_msec()-start_time)*pending/(count-pending)
+			@warning_ignore("integer_division")
 			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
 		$ProgressBar.value = count-pending
 
@@ -156,5 +158,5 @@ func _on_MaxBufferSize_id_pressed(id):
 
 func _on_RenderCounter_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		menu.position = get_global_mouse_position() * mm_globals.main_window.get_window().content_scale_factor
+		menu.position = get_screen_transform() * get_local_mouse_position()
 		menu.popup()

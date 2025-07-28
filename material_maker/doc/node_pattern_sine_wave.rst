@@ -1,7 +1,7 @@
 Sine Wave node
 ~~~~~~~~~~~~~~
 
-The **Sine Wave** node outputs a greyscale sine function graph.
+The **Sine Wave** node outputs a grayscale sine function graph.
 
 .. image:: images/node_pattern_sine_wave.png
 	:align: center
@@ -14,7 +14,7 @@ The **Sine Wave** node does not accept any input.
 Outputs
 +++++++
 
-The **Sine Wave** generates a single greyscale output texture.
+The **Sine Wave** generates a single grayscale output texture.
 
 Parameters
 ++++++++++

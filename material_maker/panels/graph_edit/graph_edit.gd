@@ -12,7 +12,6 @@ class Preview:
 		output_index = i
 		node = n
 
-# warning-ignore:unused_class_variable
 @export var shader_context_defs : String = "" # (String, MULTILINE)
 
 var node_factory = null
@@ -181,6 +180,9 @@ func _gui_input(event) -> void:
 					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
+				KEY_C:
+					if OS.get_name() == "macOS":
+						center_view()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -421,7 +423,7 @@ func center_view() -> void:
 			node_count += 1
 	if node_count > 0:
 		center /= node_count
-		scroll_offset = center - 0.5*size
+		scroll_offset = center * zoom - 0.5*size
 
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
@@ -453,7 +455,7 @@ func clear_material() -> void:
 		generator = null
 	send_changed_signal()
 
-func update_graph(generators, connections) -> Array:
+func update_graph(generators, _connections) -> Array:
 	var rv = []
 	for g in generators:
 		var node = node_factory.create_node(g)
@@ -462,8 +464,10 @@ func update_graph(generators, connections) -> Array:
 			add_node(node)
 			node.generator = g
 		node.do_set_position(g.position)
+		if node is not MMGraphComment:
+			node.move_to_front()
 		rv.push_back(node)
-	for c in connections:
+	for c in _connections:
 		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	return rv
 
@@ -679,7 +683,8 @@ func remove_selection() -> void:
 func minimize_selection() -> void:
 	for c in get_children():
 		if c is GraphElement and c.selected:
-			c.on_minimize_pressed()
+			if c.has_method("on_minimize_pressed"):
+				c.on_minimize_pressed()
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
@@ -862,18 +867,10 @@ func highlight_connections() -> void:
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	if node is MMGraphComment:
-		# Need to account for zoom level when checking for contained nodes within comment
-		var current_zoom = get_zoom()
-		var node_rect = node.get_rect()
-		node_rect.size = node_rect.size * current_zoom
-
 		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
-				var c_rect = c.get_rect()
-				c_rect.size = c_rect.size * current_zoom
-
-				if node_rect.encloses(c_rect):
+				if node.get_rect().encloses(c.get_rect()):
 					c.selected = true
 	elif node is MMGraphCommentLine:
 		pass
@@ -885,7 +882,11 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 				if n.generator == current_preview[0].generator:
 					return
 		if node.get_output_port_count():
-			if Input.is_key_pressed(KEY_SHIFT):
+			if (Input.is_key_pressed(KEY_SHIFT)
+			# Avoid conflicting with Ctrl/Command+Shift+D (Duplicate with inputs)
+					and not (Input.is_key_pressed(KEY_D) or
+					Input.is_key_pressed(KEY_META) or
+					Input.is_key_pressed(KEY_CTRL))):
 				set_current_preview(1, node)
 			else:
 				set_current_preview(0, node)
@@ -998,8 +999,8 @@ func undoredo_command(command : Dictionary) -> void:
 			var parent_generator = get_node_from_hier_name(command.parent)
 			var node_position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
 			var generators = command.generators if command.has("generators") else []
-			var connections = command.connections if command.has("connections") else []
-			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, connections, node_position)
+			var _connections = command.connections if command.has("connections") else []
+			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, _connections, node_position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:
@@ -1368,21 +1369,21 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)
 
 func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
-	var off = 15.0 * connection_lines_curvature * 0.5 * zoom
-	var points = PackedVector2Array()
+	var off : float = 15.0 * connection_lines_curvature * 0.5 * zoom
+	var points : PackedVector2Array = PackedVector2Array()
 	match connection_line_style:
 		ConnectionStyle.DIRECT:
 			return PackedVector2Array([from,to])
 
 		ConnectionStyle.BEZIER:
 		# default behavior, adapted from:
-		# github.com/godotengine/godot/blob/master/scene/gui/graph_edit.cpp#L1507
+		# github.com/godotengine/godot/blob/4.4/scene/gui/graph_edit.cpp#L1282
 			var x_diff = to.x - from.x
 			var cp_offset = x_diff * connection_lines_curvature
 			if x_diff < 0:
 				cp_offset *= -1
 
-			var curve = Curve2D.new()
+			var curve : Curve2D = Curve2D.new()
 			curve.add_point(from)
 			curve.set_point_out(0, Vector2(cp_offset, 0))
 			curve.add_point(to)
@@ -1396,11 +1397,11 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 		ConnectionStyle.MANHATTAN:
 			if abs(from.x - to.x) < 0.5 or abs(from.y - to.y) < 0.5:
 				return PackedVector2Array([from,to])
-			var mid = (from + to) / 2.0
-			var ma = Vector2(max(mid.x, from.x + off), mid.y)
-			var mb = Vector2(min(mid.x, to.x - off), mid.y)
-			var f1 = Vector2(max(mid.x, from.x + off), from.y)
-			var t1 = Vector2(mb.x, to.y)
+			var mid : Vector2 = (from + to) / 2.0
+			var ma : Vector2 = Vector2(max(mid.x, from.x + off), mid.y)
+			var mb : Vector2 = Vector2(min(mid.x, to.x - off), mid.y)
+			var f1 : Vector2 = Vector2(max(mid.x, from.x + off), from.y)
+			var t1 : Vector2 = Vector2(mb.x, to.y)
 
 			points.append(from)
 			points.append(f1)
@@ -1413,84 +1414,84 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 		ConnectionStyle.ROUNDED:
 			if abs(from.x - to.x) < 0.5 or abs(from.y - to.y) < 0.5:
 				return PackedVector2Array([from,to])
-			var mid = (from + to) / 2.0
-			var mb = mid
+			var mid : Vector2 = (from + to) / 2.0
+			var mb : Vector2 = mid
 			points.append(from)
 
-			const pts = 12.0 # corner arc resolution
-			var max_radius = 75 # max. arc radius when from < to
-			var inv_max_radius = 25 # max. arc radius when from > to
+			const pts : float = 12.0 # corner arc resolution
+			var max_radius : float = 75.0 # max. arc radius when from < to
+			var inv_max_radius : float = 25.0 # max. arc radius when from > to
 
-			var round_fac = clamp(connection_lines_curvature * 0.5, 0.0,1.0)
+			var round_fac : float = clamp(connection_lines_curvature * 0.5, 0.0, 1.0)
 			max_radius = max(max_radius * round_fac, 4.0)
 			inv_max_radius = max(inv_max_radius * round_fac , 2.0)
 
-			var r = min(min(abs(to.y - from.y) * 0.25,
+			var r : float = min(min(abs(to.y - from.y) * 0.25,
 					abs(from.x - to.x) * 0.25), max_radius)
 			
 			if from.x < to.x:
-				for i in range(pts):
-					var x = lerp(mid.x - r, mid.x, i/pts)
-					var y = lerp(from.y, from.y + r * sign(to.y - from.y), i/pts)
+				for i : float in range(pts):
+					var x : float = lerp(mid.x - r, mid.x, i/pts)
+					var y : float = lerp(from.y, from.y + r * sign(to.y - from.y), i/pts)
 					points.append(lerp(Vector2(x, from.y), Vector2(mid.x, y), i/pts))
 
-				for i in range(pts):
-					var x = lerp(mid.x, mid.x + r, i/pts)
-					var y = lerp(to.y + r * sign(from.y - to.y), to.y, i/pts)
+				for i : float in range(pts):
+					var x : float = lerp(mid.x, mid.x + r, i/pts)
+					var y : float = lerp(to.y + r * sign(from.y - to.y), to.y, i/pts)
 					points.append(lerp(Vector2(mid.x, y),Vector2(x , to.y), i/pts))
 			else:
 				r = min(r, inv_max_radius)
-				for i in range(pts):
-					var x = lerp(from.x, from.x + r, i/pts)
-					var y = lerp(from.y, from.y + r * sign(to.y - from.y), i/pts)
+				for i : float in range(pts):
+					var x : float = lerp(from.x, from.x + r, i/pts)
+					var y : float = lerp(from.y, from.y + r * sign(to.y - from.y), i/pts)
 					points.append(lerp(Vector2(x , from.y), Vector2(from.x + r, y), i/pts))
 
-				var last = points[points.size() - 1]
+				var last : Vector2 = points[points.size() - 1]
 				mb.x = last.x
-				var voff =  last.y + 0.01 * sign(mid.y - last.y)
+				var voff : float = last.y + 0.01 * sign(mid.y - last.y)
 				mb.y = min(mid.y + r, voff) if from.y > to.y else max(mid.y - r, voff)
 				points.append(mb)
 
 				if from.y < to.y:
-					var t1 = Vector2(points[points.size() - 1].x, mb.y)
-					for i in range(pts):
-						var x = lerp(t1.x, t1.x - r, i/pts)
-						var y = lerp(t1.y, t1.y + r, i/pts)
+					var t1 : Vector2 = Vector2(points[points.size() - 1].x, mb.y)
+					for i : float in range(pts):
+						var x : float = lerp(t1.x, t1.x - r, i/pts)
+						var y : float = lerp(t1.y, t1.y + r, i/pts)
 						points.append(lerp(Vector2(t1.x, y),Vector2(x , t1.y + r), i/pts))
 
-					var t2 = Vector2(to.x, mb.y + r)
+					var t2 : Vector2 = Vector2(to.x, mb.y + r)
 					r = min(abs(t2.y - to.y) * 0.5, r)
-					for i in range(1, pts):
-						var x = lerp(t2.x, t2.x - r, i/pts)
-						var y = lerp(t2.y, t2.y + r, i/pts)
+					for i : float in range(1, pts):
+						var x : float = lerp(t2.x, t2.x - r, i/pts)
+						var y : float = lerp(t2.y, t2.y + r, i/pts)
 						points.append(lerp(Vector2(x, t2.y),Vector2(t2.x - r, y), i/pts))
 
-					var t3 = Vector2(to.x - r, to.y - r)
+					var t3 : Vector2 = Vector2(to.x - r, to.y - r)
 
-					for i in range(pts):
-						var x = lerp(t3.x, t3.x + r, i/pts)
-						var y = lerp(t3.y, t3.y + r, i/pts)
+					for i : float in range(pts):
+						var x : float = lerp(t3.x, t3.x + r, i/pts)
+						var y : float = lerp(t3.y, t3.y + r, i/pts)
 						points.append(lerp(Vector2(t3.x, y),Vector2(x , t3.y + r), i/pts))
 				else:
-					var t4 = points[points.size() - 1]
+					var t4 : Vector2 = points[points.size() - 1]
 
 					r = min(abs(t4.y - to.y) * 0.5, r)
-					for i in range(pts):
-						var x = lerp(t4.x, t4.x - r, i/pts)
-						var y = lerp(t4.y, t4.y - r, i/pts)
+					for i : float in range(pts):
+						var x : float = lerp(t4.x, t4.x - r, i/pts)
+						var y : float = lerp(t4.y, t4.y - r, i/pts)
 						points.append(lerp(Vector2(t4.x, y),Vector2(x, t4.y - r),i/pts))
-					var t5 = Vector2(to.x, t4.y - r)
+					var t5 : Vector2 = Vector2(to.x, t4.y - r)
 
 					r = min(abs(t5.y - to.y) * 0.5, r)
-					for i in range(pts):
-						var x = lerp(t5.x, t5.x - r, i/pts)
-						var y = lerp(t5.y, t5.y - r, i/pts)
+					for i : float in range(pts):
+						var x : float = lerp(t5.x, t5.x - r, i/pts)
+						var y : float = lerp(t5.y, t5.y - r, i/pts)
 						points.append(lerp(Vector2(x, t5.y),Vector2(t5.x - r ,y), i/pts))
 
-					var t6 = Vector2(to.x - r, to.y + r)
-					for i in range(pts):
-						var x = lerp(t6.x, t6.x + r, i/pts)
-						var y = lerp(t6.y, t6.y - r, i/pts)
+					var t6 : Vector2 = Vector2(to.x - r, to.y + r)
+					for i : float in range(pts):
+						var x : float = lerp(t6.x, t6.x + r, i/pts)
+						var y : float = lerp(t6.y, t6.y - r, i/pts)
 						points.append(lerp(Vector2(t6.x, y),Vector2(x , t6.y - r), i/pts))
 			points.append(to)
 			return points
@@ -1499,11 +1500,11 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			if to.x > from.x:
 				off += (to.x-from.x) * 0.1
 
-			var mid = (from + to) / 2.0
-			var ma = Vector2(max(mid.x, from.x + off), mid.y)
-			var mb = Vector2(min(mid.x, to.x - off), mid.y)
-			var f1 = Vector2(from.x + off, from.y)
-			var t1 = Vector2(to.x - off, to.y)
+			var mid : Vector2 = (from + to) / 2.0
+			var ma : Vector2 = Vector2(max(mid.x, from.x + off), mid.y)
+			var mb : Vector2 = Vector2(min(mid.x, to.x - off), mid.y)
+			var f1 : Vector2 = Vector2(from.x + off, from.y)
+			var t1 : Vector2 = Vector2(to.x - off, to.y)
 
 			points.append(from)
 			points.append(f1)

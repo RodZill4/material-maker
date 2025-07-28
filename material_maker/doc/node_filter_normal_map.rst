@@ -9,7 +9,7 @@ The **Normal Map** node generates a normal map from its input.
 Inputs
 ++++++
 
-The **Normal Map** node accepts a single greyscale image as input, interpreted as a heightmap.
+The **Normal Map** node accepts a single grayscale image as input, interpreted as a heightmap.
 
 Outputs
 +++++++

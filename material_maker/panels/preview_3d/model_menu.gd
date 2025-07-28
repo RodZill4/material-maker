@@ -90,21 +90,21 @@ func _on_model_configurate_pressed() -> void:
 	preview3D.configure_model()
 
 
-func _on_speed_pause_toggled(toggled_on: bool) -> void:
+func _on_speed_pause_toggled(_toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_3D_PREVIEW_ROTATION_SPEED, 0)
 	preview3D.set_rotate_model_speed(0)
 
 
-func _on_speed_slow_toggled(toggled_on: bool) -> void:
+func _on_speed_slow_toggled(_toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_3D_PREVIEW_ROTATION_SPEED, 1)
 	preview3D.set_rotate_model_speed(0.01)
 
 
-func _on_speed_medium_toggled(toggled_on: bool) -> void:
+func _on_speed_medium_toggled(_toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_3D_PREVIEW_ROTATION_SPEED, 2)
 	preview3D.set_rotate_model_speed(0.05)
 
 
-func _on_speed_fast_toggled(toggled_on: bool) -> void:
+func _on_speed_fast_toggled(_toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_3D_PREVIEW_ROTATION_SPEED, 3)
 	preview3D.set_rotate_model_speed(0.1)
