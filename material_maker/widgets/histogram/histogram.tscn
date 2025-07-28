@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://0b6d65sghy3s"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/histogram/histogram.gd" id="1"]
+[ext_resource type="Script" uid="uid://cyxmcitflpgnq" path="res://material_maker/widgets/histogram/histogram.gd" id="1"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
@@ -39,8 +39,8 @@ viewport_path = NodePath("ViewportImage")
 [sub_resource type="ShaderMaterial" id="6"]
 resource_local_to_scene = true
 shader = SubResource("4")
-shader_parameter/size = 256.0
 shader_parameter/tex = SubResource("5")
+shader_parameter/size = 256.0
 
 [sub_resource type="Shader" id="7"]
 code = "shader_type canvas_item;
@@ -64,8 +64,8 @@ viewport_path = NodePath("ViewportHistogram1")
 [sub_resource type="ShaderMaterial" id="9"]
 resource_local_to_scene = true
 shader = SubResource("7")
-shader_parameter/size = 256.0
 shader_parameter/tex = SubResource("8")
+shader_parameter/size = 256.0
 
 [sub_resource type="Shader" id="10"]
 code = "shader_type canvas_item;
@@ -96,8 +96,8 @@ viewport_path = NodePath("ViewportHistogram2")
 [sub_resource type="ShaderMaterial" id="12"]
 resource_local_to_scene = true
 shader = SubResource("10")
-shader_parameter/gradient_width = 0.1
 shader_parameter/tex = SubResource("11")
+shader_parameter/gradient_width = 0.1
 
 [node name="Histogram" type="Control" groups=["preview"]]
 layout_mode = 3

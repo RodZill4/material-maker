@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://vkh00fjvl0py"]
 
-[ext_resource type="Script" path="res://material_maker/panels/parameters/parameters.gd" id="1"]
+[ext_resource type="Script" uid="uid://chqn6bm8u2bjm" path="res://material_maker/panels/parameters/parameters.gd" id="1"]
 
 [node name="BrushParams" type="ScrollContainer"]
 anchor_right = 1.0
