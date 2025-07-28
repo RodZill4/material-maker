@@ -213,6 +213,7 @@ func init_section_icons() -> void:
 	var atlas_image = atlas.get_image()
 	for i in sections.size():
 		var x = 128+32*(i%4)
+		@warning_ignore("integer_division")
 		var y = 32+32*(i/4)
 		var texture : AtlasTexture = AtlasTexture.new()
 		texture.atlas = atlas

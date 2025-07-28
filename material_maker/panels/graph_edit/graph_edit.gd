@@ -180,6 +180,9 @@ func _gui_input(event) -> void:
 					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
+				KEY_C:
+					if OS.get_name() == "macOS":
+						center_view()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -420,7 +423,7 @@ func center_view() -> void:
 			node_count += 1
 	if node_count > 0:
 		center /= node_count
-		scroll_offset = center - 0.5*size
+		scroll_offset = center * zoom - 0.5*size
 
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
@@ -452,7 +455,7 @@ func clear_material() -> void:
 		generator = null
 	send_changed_signal()
 
-func update_graph(generators, connections) -> Array:
+func update_graph(generators, _connections) -> Array:
 	var rv = []
 	for g in generators:
 		var node = node_factory.create_node(g)
@@ -461,9 +464,10 @@ func update_graph(generators, connections) -> Array:
 			add_node(node)
 			node.generator = g
 		node.do_set_position(g.position)
-		node.move_to_front()
+		if node is not MMGraphComment:
+			node.move_to_front()
 		rv.push_back(node)
-	for c in connections:
+	for c in _connections:
 		super.connect_node("node_"+c.from, c.from_port, "node_"+c.to, c.to_port)
 	return rv
 
@@ -863,18 +867,10 @@ func highlight_connections() -> void:
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	if node is MMGraphComment:
-		# Need to account for zoom level when checking for contained nodes within comment
-		var current_zoom = get_zoom()
-		var node_rect = node.get_rect()
-		node_rect.size = node_rect.size * current_zoom
-
 		print("Selecting enclosed nodes...")
 		for c in get_children():
 			if c is GraphNode and c != node:
-				var c_rect = c.get_rect()
-				c_rect.size = c_rect.size * current_zoom
-
-				if node_rect.encloses(c_rect):
+				if node.get_rect().encloses(c.get_rect()):
 					c.selected = true
 	elif node is MMGraphCommentLine:
 		pass
@@ -886,7 +882,11 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 				if n.generator == current_preview[0].generator:
 					return
 		if node.get_output_port_count():
-			if Input.is_key_pressed(KEY_SHIFT):
+			if (Input.is_key_pressed(KEY_SHIFT)
+			# Avoid conflicting with Ctrl/Command+Shift+D (Duplicate with inputs)
+					and not (Input.is_key_pressed(KEY_D) or
+					Input.is_key_pressed(KEY_META) or
+					Input.is_key_pressed(KEY_CTRL))):
 				set_current_preview(1, node)
 			else:
 				set_current_preview(0, node)
@@ -999,8 +999,8 @@ func undoredo_command(command : Dictionary) -> void:
 			var parent_generator = get_node_from_hier_name(command.parent)
 			var node_position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
 			var generators = command.generators if command.has("generators") else []
-			var connections = command.connections if command.has("connections") else []
-			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, connections, node_position)
+			var _connections = command.connections if command.has("connections") else []
+			var new_stuff = await mm_loader.add_to_gen_graph(parent_generator, generators, _connections, node_position)
 			if generator == parent_generator:
 				var actions : Array = []
 				for g in new_stuff.generators:
