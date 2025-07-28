@@ -85,7 +85,7 @@ func update(at:Node=null) -> void:
 	for type in get_stylebox_type_list():
 		for stylebox_name in get_stylebox_list(type):
 			# ADJUST SIZE
-			var base := base_theme.get_stylebox(stylebox_name, type)
+			var _base := base_theme.get_stylebox(stylebox_name, type)
 			var this := get_stylebox(stylebox_name, type)
 			#this.content_margin_left = base.content_margin_left * scale
 			#this.content_margin_top = base.content_margin_top * scale

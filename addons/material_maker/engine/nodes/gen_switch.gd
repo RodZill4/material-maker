@@ -33,7 +33,7 @@ func get_input_defs() -> Array:
 	var rv : Array = []
 	for c in range(parameters.choices):
 		for o in range(parameters.outputs):
-			var n = PackedByteArray([65+o]).get_string_from_ascii()+str(c)
+			var n = PackedByteArray([65+o]).get_string_from_ascii()+str(c+1)
 			rv.push_back({ name=n, label=n, type="any" })
 	return rv
 
@@ -55,7 +55,7 @@ func set_parameter(p, v) -> void:
 			if p == "outputs":
 				for i in connected_inputs:
 					var input = int(i) % int(parameters.outputs)
-# warning-ignore:integer_division
+					@warning_ignore("integer_division")
 					var choice = int(i) / int(parameters.outputs)
 					if input >= v:
 						inputs_changes[i] = -1
@@ -66,7 +66,7 @@ func set_parameter(p, v) -> void:
 						outputs_changes[i] = -1
 			else:
 				for i in connected_inputs:
-# warning-ignore:integer_division
+					@warning_ignore("integer_division")
 					var choice = int(i) / int(parameters.outputs)
 					if choice >= v:
 						inputs_changes[i] = -1

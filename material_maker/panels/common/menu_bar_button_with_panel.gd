@@ -37,8 +37,8 @@ func _draw() -> void:
 	draw_texture(theme_arrow_icon, Vector2(18, 5), get_theme_color("icon_normal_color"))
 
 
-func _on_toggled(pressed:bool) -> void:
-	panel.visible = pressed
+func _on_toggled(toggled_on : bool) -> void:
+	panel.visible = toggled_on
 	panel.size = Vector2()
 
 	if panel.visible:
@@ -58,7 +58,7 @@ func position_panel() -> void:
 	panel.global_position = at_position
 
 
-func _input(event:InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	if event.is_pressed():
 		mm_globals.propagate_shortcuts(self, event)
 

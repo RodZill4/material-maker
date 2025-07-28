@@ -12,8 +12,8 @@ Inputs
 
 The **Apply** node accepts 3 inputs:
 
-* the height map defined by a greyscale texture that defines the 3D surface
-* the color index map defined by a greyscale texture that can be used to define which 3D texture should be applied for each pixel of the result
+* the height map defined by a grayscale texture that defines the 3D surface
+* the color index map defined by a grayscale texture that can be used to define which 3D texture should be applied for each pixel of the result
 * the 3D texture (or several 3D textures using the **Select** node)
 
 Outputs

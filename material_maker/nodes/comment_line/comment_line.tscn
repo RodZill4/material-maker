@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://b04o8fwyfuaqx"]
+
+[ext_resource type="Script" uid="uid://b8htj1aou1m04" path="res://material_maker/nodes/comment_line/comment_line.gd" id="1_4xc6p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4xc6p"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0)
+
+[node name="CommentLineNode" type="GraphElement"]
+offset_right = 127.0
+offset_bottom = 23.0
+size_flags_horizontal = 2
+size_flags_vertical = 3
+mouse_filter = 0
+script = ExtResource("1_4xc6p")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_4xc6p")
+
+[node name="TextLabel" type="Label" parent="PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+text = "Enter something..."
+structured_text_bidi_override = 4
+
+[node name="TextEditor" type="LineEdit" parent="PanelContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter something..."
+expand_to_text_length = true
+flat = true
+
+[connection signal="dragged" from="." to="." method="_on_dragged"]
+[connection signal="minimum_size_changed" from="." to="." method="_on_minimum_size_changed"]
+[connection signal="node_deselected" from="." to="." method="_on_node_deselected"]
+[connection signal="node_selected" from="." to="." method="_on_node_selected"]
+[connection signal="position_offset_changed" from="." to="." method="_on_position_offset_changed"]
+[connection signal="raise_request" from="." to="." method="_on_raise_request"]
+[connection signal="resize_request" from="." to="." method="_on_resize_request"]
+[connection signal="focus_exited" from="PanelContainer/TextLabel" to="." method="_on_text_label_focus_exited"]
+[connection signal="gui_input" from="PanelContainer/TextLabel" to="." method="_on_text_label_gui_input"]
+[connection signal="focus_exited" from="PanelContainer/TextEditor" to="." method="_on_text_focus_exited"]
+[connection signal="text_submitted" from="PanelContainer/TextEditor" to="." method="_on_text_text_submitted"]

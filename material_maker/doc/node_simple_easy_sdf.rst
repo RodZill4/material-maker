@@ -3,6 +3,9 @@ Easy SDF node
 
 The **Easy SDF** node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.
 
+.. image:: images/node_simple_easy_sdf.png
+	:align: center
+
 Inputs
 ++++++
 
@@ -95,9 +98,9 @@ Unless specified otherwise, all items apply a union operation to their children.
 
   * Uniform: a uniform color
   * SimpleGradient: Create a gradient between 2 colors (defined as parameters) following
-    its greyscale child texture
-  * Pattern: A greyscale pattern similar to the Pattern node
-  * FBM: A greyscale noise similar to the FBM node
+    its grayscale child texture
+  * Pattern: A grayscale pattern similar to the Pattern node
+  * FBM: A grayscale noise similar to the FBM node
 
 Preview
 -------

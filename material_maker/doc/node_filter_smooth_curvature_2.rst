@@ -3,13 +3,13 @@ Smooth Curvature 2 node
 
 The **Smooth Curvature 2** node generates an curvature texture from its input.
 
-.. image:: images/node_filter_smoothcurvature2.png
+.. image:: images/node_filter_smooth_curvature_2.png
 	:align: center
 
 Inputs
 ++++++
 
-The **Smooth Curvature 2** node accepts a single greyscale image as input, interpreted as a heightmap.
+The **Smooth Curvature 2** node accepts a single grayscale image as input, interpreted as a heightmap.
 
 Outputs
 +++++++

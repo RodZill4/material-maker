@@ -4,7 +4,7 @@ sdSmoothBoolean node
 The **sdSmoothBoolean** node generates a signed distance image for the combination (union,
 intersection or difference) of its inputs.
 
-.. image:: images/node_simple_sdf_operators_sdsmoothboolean.png
+.. image:: images/node_simple_sdf_operators_sdsmooth_boolean.png
 	:align: center
 
 Inputs

@@ -41,12 +41,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "Generates several octaves of greyscale value noise",
+		"longdesc": "Generates several octaves of grayscale value noise",
 		"name": "Value Noise",
 		"outputs": [
 			{
 				"f": "perlin($(uv), vec2($(scale_x), $(scale_y)), int($(iterations)), $(persistence), $(seed))",
-				"longdesc": "Shows a greyscale value noise",
+				"longdesc": "Shows a grayscale value noise",
 				"shortdesc": "Output",
 				"type": "f"
 			}

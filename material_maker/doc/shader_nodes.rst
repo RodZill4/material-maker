@@ -4,7 +4,7 @@ Shader nodes
 Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
 but as shader programs that calculate
 
-* the color of a pixel from its coordinates for greyscale, color and RGBA outputs
+* the color of a pixel from its coordinates for grayscale, color and RGBA outputs
 
 * the signed distance of a 2D point from its coordinates for SDF2D outputs
 
@@ -41,8 +41,9 @@ the new parameter. On this line:
 * the second text field is an optional label that will be displayed in the user interface.
   There are a few tricks with this label that can help tweaking the UI.
 * the yellow document button can be used to add a tooltip to the parameter.
-* the option button can be used to select a type for the parameter. The available types
-  are **float**, **size**, **enum**, **boolean**, **color** and **gradient**
+* the option button can be used to select a type for the parameter. The available types are
+  **float**, **size**, **enum**, **boolean**, **color**, **gradient**, **curve**,
+  **polygon**, **polyline**, **splines**, **pixels** and **lattice**
 * on the right of the type selector, controls can be used to define a default value and
   constraints for the parameter
 * **float** parameters can be assigned a **control** variable in the 2D preview

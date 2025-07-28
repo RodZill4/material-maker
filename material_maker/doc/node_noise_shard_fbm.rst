@@ -16,7 +16,7 @@ drive the **Offset** value with an input and a **Sharpness Map** which affects t
 Outputs
 +++++++
 
-The **Shard FBM Noise** node provides a greyscale noise texture.
+The **Shard FBM Noise** node provides a grayscale noise texture.
 
 Parameters
 ++++++++++

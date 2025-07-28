@@ -31,7 +31,7 @@
 		"outputs": [
 			{
 				"f": "IChing(vec2($columns, $rows)*$uv, float($seed))",
-				"longdesc": "A greyscale image showing random I Ching hexagrams.",
+				"longdesc": "A grayscale image showing random I Ching hexagrams.",
 				"shortdesc": "Output",
 				"type": "f"
 			}

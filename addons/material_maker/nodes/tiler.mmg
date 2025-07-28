@@ -242,7 +242,7 @@
 				"control": "None",
 				"default": 0.5,
 				"label": "Rnd Value",
-				"longdesc": "The random greyscale value applied to each image instance",
+				"longdesc": "The random grayscale value applied to each image instance",
 				"max": 1,
 				"min": 0,
 				"name": "value",

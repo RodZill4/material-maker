@@ -3,7 +3,7 @@ Mix Maps node
 
 The **Mix Maps** node combines up to 4 maps holding height, orientation and offset information.
 
-.. image:: images/node_workflow_mixmap.png
+.. image:: images/node_workflow_mix_maps.png
 	:align: center
 
 Inputs

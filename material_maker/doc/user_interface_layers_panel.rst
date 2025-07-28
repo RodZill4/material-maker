@@ -16,7 +16,7 @@ Three types of layers are available:
   information. They are not painted manually, but have a corresponding brush (edited in the
   Paint panel) that is applied automatically to the whole layer.
 
-* **Mask layers**: a mask layer has a single greyscale channel that is applied as an alpha
+* **Mask layers**: a mask layer has a single grayscale channel that is applied as an alpha
   mask to the whole hierarchy of its parent layer. When several masks are applied their
   content is multiplied to generate a single alpha channel.
 

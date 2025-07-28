@@ -175,7 +175,7 @@ func start_ui(scene : PackedScene):
 		do_start_ui(scene)
 
 func do_start_ui(scene : PackedScene):
-	var window : Window = get_window()
+	var _window : Window = get_window()
 	if OS.get_name() == "HTML5":
 		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = """
@@ -237,3 +237,8 @@ func _on_next_pressed():
 func _on_title_gui_input(event, url : String):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		OS.shell_open(url)
+
+
+func _on_url_gui_input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		OS.shell_open("https://www.materialmaker.org")

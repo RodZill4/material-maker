@@ -15,14 +15,14 @@ Inputs
 The **Tiler** node accepts two inputs:
 
 * The *Source* inputs is the image to be splat into the output.
-* The *Mask* input is a greyscale image that is used as a mask and affects each instance's value.
+* The *Mask* input is a grayscale image that is used as a mask and affects each instance's value.
 
 Outputs
 +++++++
 
 The **Tiler** node outputs the splat image and a secondary output that assigns a random color to each tile.
 
-The greyscale tiler has a third output that assigns a UV layout to each tile.
+The grayscale tiler has a third output that assigns a UV layout to each tile.
 
 Parameters
 ++++++++++

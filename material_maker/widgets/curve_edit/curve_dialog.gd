@@ -20,6 +20,7 @@ func _on_Cancel_pressed():
 func edit_curve(curve : MMCurve) -> Dictionary:
 	previous_value = curve.duplicate()
 	$VBoxContainer/EditorContainer/CurveEditor.set_curve(curve)
+	hide()
 	popup_centered()
 	var result = await self.return_curve
 	queue_free()

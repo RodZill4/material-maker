@@ -16,7 +16,6 @@ func _context_menu_about_to_popup(context_menu : PopupMenu):
 func _ready() -> void:
 	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	content_scale_factor = _content_scale_factor
-	min_size = _content_scale_factor * Vector2(650, 500)
 	
 	for child in get_children():
 		if child is PopupMenu:
@@ -47,6 +46,9 @@ func _ready() -> void:
 			volume_option = vbox.get_child(0).get_child(3)
 			if ! volume_option is OptionButton:
 				volume_option = null
+		
+	min_size = _content_scale_factor * get_contents_minimum_size()
+	min_size.y = 500 * int(_content_scale_factor)
 
 func get_full_current_dir() -> String:
 	var prefix = ""
@@ -72,6 +74,7 @@ func _on_FileDialog_popup_hide() -> void:
 
 func select_files() -> Array:
 	mm_globals.main_window.add_dialog(self)
+	hide()
 	popup_centered()
 	var result = await self.return_paths
 	queue_free()

@@ -153,13 +153,13 @@ func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 		var inputs = generator.get_input_defs()
 		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
 			var conn_pos1 = get_input_port_position(slot_index)
-			# warning-ignore:narrowing_conversion
+			@warning_ignore("narrowing_conversion")
 			var conn_pos2 = get_input_port_position(min(slot_index+inputs[slot_index].group_size-1, inputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
 	else:
 		var outputs = generator.get_output_defs()
 		if slot_index < outputs.size() and outputs[slot_index].has("group_size") and outputs[slot_index].group_size > 1:
-			# warning-ignore:narrowing_conversion
+			@warning_ignore("narrowing_conversion")
 			var conn_pos1 = get_output_port_position(slot_index)
 			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
@@ -168,16 +168,18 @@ func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 
 func _draw() -> void:
 	var color : Color = get_theme_color("title_color")
-	# warning-ignore:narrowing_conversion
+	@warning_ignore("narrowing_conversion")
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
-		draw_texture_rect(CUSTOM_ICON, Rect2(3, 8, 7, 7), false, color)
+		draw_texture_rect(CUSTOM_ICON, Rect2(4, 11, 7, 7), false, color)
+		var node_title_label : Label = get_titlebar_hbox().get_child(0)
+		node_title_label.position.x = 8
 	for i in range(inputs.size()):
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_input_port_position(i)-Vector2(string_size.x+12, -string_size.y*0.3), string, 0, -1, 16, color)
+			draw_string(font, get_input_port_position(i)-Vector2(string_size.x+12, -string_size.y*0.3), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 	var outputs = generator.get_output_defs()
 	var preview_port : Array = [ -1, -1 ]
 	var preview_locked : Array = [ false, false ]
@@ -203,11 +205,12 @@ func _draw() -> void:
 		if show_outputs:
 			var string : StringName = TranslationServer.translate(outputs[i].shortdesc) if outputs[i].has("shortdesc") else StringName(tr("Output")+" "+str(i))
 			var string_size : Vector2 = font.get_string_size(string)
-			draw_string(font, get_output_port_position(i)+Vector2(12, string_size.y*0.3), string, 0, -1, 16, color)
+			draw_string(font, get_output_port_position(i)+Vector2(12, string_size.y*0.3), string, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 	if false and selected:
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
+		@warning_ignore("narrowing_conversion")
 		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
 	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
 		var conn_pos = get_output_port_position(generator.preview)

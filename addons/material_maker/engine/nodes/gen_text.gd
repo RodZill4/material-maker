@@ -18,7 +18,10 @@ func get_type_name() -> String:
 	return "Text"
 
 func get_description() -> String:
-	return "\n".join(["Text", "Text as a greyscale image"])
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Text"))
+	desc_list.push_back(TranslationServer.translate("Text as a grayscale image"))
+	return "\n".join(desc_list)
 
 func get_parameter_defs() -> Array:
 	return [
@@ -66,6 +69,7 @@ func update_buffer() -> void:
 		renderer.release(self)
 		texture.set_texture(image_texture)
 		mm_deps.dependency_update("o%d_tex" % get_instance_id(), texture)
+		mm_deps.update()
 		updating = false
 
 func _serialize(data: Dictionary) -> Dictionary:

@@ -9,6 +9,7 @@ func edit_descriptions(type : String, short : String, long : String) -> Array:
 	$VBoxContainer/HBoxContainer/ShortDesc.text = short
 	$VBoxContainer/LongDesc.text = long
 	_on_WindowDialog_minimum_size_changed()
+	hide()
 	popup_centered()
 	if await self.close:
 		short = $VBoxContainer/HBoxContainer/ShortDesc.text

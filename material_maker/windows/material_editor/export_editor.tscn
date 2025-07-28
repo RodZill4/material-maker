@@ -1,35 +1,35 @@
 [gd_scene load_steps=11 format=3 uid="uid://cwjtvrgb2al2x"]
 
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="Script" uid="uid://bp8x8ej3d6k4e" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://lt2wnsnw4af6" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="3_ko8a7"]
 
 [sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="9"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(48, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(16, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="7"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(48, 64, 16, 16)
 
 [sub_resource type="AtlasTexture" id="8"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(32, 16, 16, 16)
 
 [sub_resource type="AtlasTexture" id="4"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(48, 160, 16, 16)
 
 [sub_resource type="AtlasTexture" id="5"]
-atlas = ExtResource("1")
+atlas = ExtResource("3_ko8a7")
 region = Rect2(32, 0, 16, 16)
 
 [node name="ExportEditor" type="Window"]

@@ -15,7 +15,7 @@ The **FBM** node does not accept any input.
 Outputs
 .......
 
-The **FBM** node provides a greyscale 3D texture.
+The **FBM** node provides a grayscale 3D texture.
 
 Parameters
 ..........

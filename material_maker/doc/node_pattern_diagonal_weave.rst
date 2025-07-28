@@ -14,7 +14,7 @@ The **Diagonal Weave** node does not accept any input.
 Outputs
 +++++++
 
-The **Diagonal Weave** generates a single greyscale output texture.
+The **Diagonal Weave** generates a single grayscale output texture.
 
 Parameters
 ++++++++++

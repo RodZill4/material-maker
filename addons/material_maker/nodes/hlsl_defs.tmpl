@@ -5,6 +5,49 @@ inline float4 textureLod(sampler2D tex, float2 uv, float lod) {
     return tex2D(tex, uv);
 }
 
+// int vector funtions
+
+inline int2 toint2(int x) {
+    return int2(x, x);
+}
+inline int2 toint2(int x, int y) {
+    return int2(x, y);
+}
+
+inline int3 toint3(int x) {
+    return int3(x, x, x);
+}
+inline int3 toint3(int x, int y, int z) {
+    return int3(x, y, z);
+}
+inline int3 toint3(int2 xy, int z) {
+    return int3(xy.x, xy.y, z);
+}
+inline int3 toint3(int x, int2 yz) {
+    return int3(x, yz.x, yz.y);
+}
+
+inline int4 toint4(int x, int y, int z, int w) {
+    return int4(x, y, z, w);
+}
+inline int4 toint4(int x) {
+    return int4(x, x, x, x);
+}
+inline int4 toint4(int x, int3 yzw) {
+    return int4(x, yzw.x, yzw.y, yzw.z);
+}
+inline int4 toint4(int2 xy, int2 zw) {
+    return int4(xy.x, xy.y, zw.x, zw.y);
+}
+inline int4 toint4(int3 xyz, int w) {
+    return int4(xyz.x, xyz.y, xyz.z, w);
+}
+inline int4 toint4(int2 xy, int z, int w) {
+    return int4(xy.x, xy.y, z, w);
+}
+
+// float vector funtions
+
 inline float2 tofloat2(float x) {
     return float2(x, x);
 }

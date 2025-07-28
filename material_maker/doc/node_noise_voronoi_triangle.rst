@@ -16,9 +16,9 @@ Outputs
 
 The **Triangle Voronoi** noise node provides three outputs:
 
-* a greyscale texture that shows the distance to the feature points.
+* a grayscale texture that shows the distance to the feature points.
 
-* a greyscale texture that shows the distance to the cell borders.
+* a grayscale texture that shows the distance to the cell borders.
 
 * fill information for each cell and must be connected to a Fill companion
   node, to generate random colors, custom UVs etc. to create complex materials that show

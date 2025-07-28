@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=116 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=118 format=3 uid="uid://42cileyfwaca"]
 
-[ext_resource type="Texture2D" uid="uid://c7mq31csbj1fg" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
-[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="1_l05jd"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
+[ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="2_lsxnf"]
+[ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-416.ttf" id="2_meah8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inl5r"]
 content_margin_left = 3.0
@@ -84,6 +85,11 @@ region = Rect2(64, 112, 16, 16)
 atlas = ExtResource("1_7p32q")
 region = Rect2(96, 112, 16, 16)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7b2nb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_m1w7u"]
 atlas = ExtResource("1_7p32q")
 region = Rect2(0, 128, 16, 16)
@@ -135,6 +141,7 @@ border_color = Color(0.145762, 0.145765, 0.164989, 1)
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 4
+expand_margin_top = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryqkj"]
 content_margin_left = 10.0
@@ -149,6 +156,7 @@ border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 4
+expand_margin_top = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imqse"]
 content_margin_left = 5.0
@@ -174,10 +182,6 @@ border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_detail = 4
-
-[sub_resource type="FontVariation" id="FontVariation_na26k"]
-base_font = ExtResource("1_l05jd")
-variation_embolden = 0.8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v2584"]
 
@@ -394,12 +398,6 @@ content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
-
-[sub_resource type="FontVariation" id="FontVariation_80ifi"]
-base_font = ExtResource("1_l05jd")
-opentype_features = {
-1953396077: 1
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwwye"]
 bg_color = Color(1, 1, 1, 1)
@@ -711,6 +709,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_swrqc"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rnro"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -757,7 +757,7 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [resource]
-default_font = ExtResource("1_l05jd")
+default_font = ExtResource("2_lsxnf")
 default_font_size = 16
 Button/colors/icon_hover_pressed_color = Color(0.874128, 0.694643, 0.972002, 1)
 Button/colors/icon_pressed_color = Color(0.792157, 0.478431, 0.94902, 1)
@@ -775,6 +775,22 @@ CheckBox/icons/radio_unchecked = SubResource("AtlasTexture_rdh87")
 CheckBox/icons/radio_unchecked_disabled = SubResource("AtlasTexture_8fbk7")
 CheckBox/icons/unchecked = SubResource("AtlasTexture_5s2d2")
 CheckBox/icons/unchecked_disabled = SubResource("AtlasTexture_vngdy")
+CodeEdit/colors/built_in_function_color = Color(0.278431, 0.54902, 0.705882, 1)
+CodeEdit/colors/caret_color = Color(0.87451, 0.87451, 0.87451, 1)
+CodeEdit/colors/current_line_color = Color(0.25, 0.25, 0.26, 0.8)
+CodeEdit/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+CodeEdit/colors/function_color = Color(0.278431, 0.54902, 0.705882, 1)
+CodeEdit/colors/keyword_color = Color(1, 0.576471, 0.592157, 1)
+CodeEdit/colors/line_number_color = Color(0.67, 0.67, 0.67, 0.4)
+CodeEdit/colors/member_variable_color = Color(0.945098, 0.231373, 0.317647, 1)
+CodeEdit/colors/multi_line_comment_color = Color(0, 0.509804, 0, 1)
+CodeEdit/colors/number_color = Color(0.905882, 0.521569, 0.0313726, 1)
+CodeEdit/colors/selection_color = Color(0.501961, 0.501961, 0.501961, 1)
+CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
+CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
+CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
+CodeEdit/styles/focus = SubResource("StyleBoxEmpty_7b2nb")
+CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/constants/port_hotzone_inner_extent = 8
@@ -800,7 +816,7 @@ GraphNodeTitleLabel/colors/font_outline_color = Color(0.168627, 0.176471, 0.1921
 GraphNodeTitleLabel/colors/font_shadow_color = Color(0.168627, 0.176471, 0.192157, 1)
 GraphNodeTitleLabel/constants/outline_size = 4
 GraphNodeTitleLabel/constants/shadow_outline_size = 4
-GraphNodeTitleLabel/fonts/font = SubResource("FontVariation_na26k")
+GraphNodeTitleLabel/fonts/font = ExtResource("2_meah8")
 ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
 ItemList/styles/focus = SubResource("StyleBoxEmpty_v2584")
 ItemList/styles/hovered = SubResource("StyleBoxFlat_m2221")
@@ -852,7 +868,7 @@ MM_Node/constants/minimum_line_height = 16
 MM_NodeCheckbox/base_type = &"Button"
 MM_NodeFloatEdit/base_type = &"Button"
 MM_NodeFloatEdit/font_sizes/font_size = 15
-MM_NodeFloatEdit/fonts/font = SubResource("FontVariation_80ifi")
+MM_NodeFloatEdit/fonts/font = ExtResource("2_lsxnf")
 MM_NodeFloatEdit/styles/clip = SubResource("StyleBoxFlat_pwwye")
 MM_NodeFloatEdit/styles/fill_hover = SubResource("StyleBoxFlat_s6o4g")
 MM_NodeFloatEdit/styles/fill_normal = SubResource("StyleBoxFlat_8m00c")
@@ -890,10 +906,14 @@ MM_PanelMenuSubPanelLabel/font_sizes/font_size = 15
 MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_5e0gw")
 MM_ProjectsBackground/base_type = &"Panel"
 MM_ProjectsBackground/styles/panel = SubResource("StyleBoxEmpty_u368o")
+MM_Reroute/base_type = &"GraphNode"
+MM_Reroute/constants/port_h_offset = 24
 MM_Reroute/styles/panel = SubResource("StyleBoxFlat_wc6mb")
 MM_Reroute/styles/panel_selected = SubResource("StyleBoxFlat_24h6y")
 MM_Reroute/styles/titlebar = SubResource("StyleBoxEmpty_l27kp")
 MM_Reroute/styles/titlebar_selected = SubResource("StyleBoxEmpty_lg0bb")
+MM_ReroutePreview/base_type = &"GraphNode"
+MM_ReroutePreview/constants/port_h_offset = 5
 MM_ReroutePreview/styles/panel = SubResource("StyleBoxFlat_gn0j1")
 MM_ReroutePreview/styles/panel_selected = SubResource("StyleBoxFlat_5vt7k")
 MM_ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_xyfhj")
@@ -919,6 +939,7 @@ TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_62r2q")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
 TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_ofwe7")
 TabContainer/styles/panel = SubResource("StyleBoxFlat_wc388")
+TextEdit/styles/focus = SubResource("StyleBoxEmpty_swrqc")
 TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
 Tree/constants/draw_guides = 0
