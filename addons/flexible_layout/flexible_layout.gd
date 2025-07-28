@@ -546,7 +546,7 @@ class FlexWindow:
 		if OS.get_name() == "macOS":
 			unfocusable = true
 		if first_panel:
-			position = Vector2i(first_panel.get_global_rect().position)+first_panel.get_window().position
+			position = Vector2i(first_panel.get_global_rect().position*content_scale_factor)+first_panel.get_window().position
 			size = first_panel.size*content_scale_factor
 		panel = Control.new()
 		add_child(panel)
