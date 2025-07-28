@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=141 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=143 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -99,6 +99,8 @@ metadata/recolor = false
 atlas = ExtResource("1_s43fy")
 region = Rect2(96, 112, 16, 16)
 metadata/recolor = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m27ao"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oy0ko"]
 bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
@@ -942,6 +944,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_asgc8"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rnro"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -1027,6 +1031,7 @@ CodeEdit/colors/selection_color = Color(0.5, 0.5, 0.5, 1)
 CodeEdit/colors/single_line_comment_color = Color(0, 0.5, 0, 1)
 CodeEdit/colors/symbol_color = Color(1, 1, 0.501961, 1)
 CodeEdit/colors/type_color = Color(1, 1, 0.5, 1)
+CodeEdit/styles/focus = SubResource("StyleBoxEmpty_m27ao")
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_oy0ko")
 FileDialog/colors/file_disabled_color = Color(0.301961, 0.305882, 0.309804, 1)
 FileDialog/colors/file_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
@@ -1233,6 +1238,7 @@ TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_708uu")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
 TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_w1kc3")
 TabContainer/styles/panel = SubResource("StyleBoxFlat_wc388")
+TextEdit/styles/focus = SubResource("StyleBoxEmpty_asgc8")
 TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
 Tree/colors/font_color = Color(0.7, 0.7, 0.7, 1)
