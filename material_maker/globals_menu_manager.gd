@@ -181,14 +181,17 @@ class MenuBarDisplayServer:
 	
 	func create_menus(menu_def : Array, object : Object):
 		DisplayServer.global_menu_clear("_main")
+		DisplayServer.global_menu_clear("_help")
 		var menus : Array[String] = []
 		for md in menu_def:
 			var menu_name : String = md.menu.split("/")[0]
 			if menus.find(menu_name) == -1:
-				DisplayServer.global_menu_add_submenu_item("_main", menu_name, "_main/"+menu_name)
+				var menu_id = "_help" if menu_name == "Help" else "_main"
+				DisplayServer.global_menu_add_submenu_item(menu_id, menu_name, menu_id+"/"+menu_name)
 				menus.append(menu_name)
 		for m in menus:
-			mm_globals.menu_manager.create_menu(menu_def, object, m+"/", MenuDisplayServer.new("_main/"+m))
+			mm_globals.menu_manager.create_menu(menu_def, object, m+"/",
+					MenuDisplayServer.new("_help" if m == "Help" else "_main/"+m))
 
 func _ready():
 	pass
