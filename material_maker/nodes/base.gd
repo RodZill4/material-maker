@@ -89,8 +89,7 @@ func randomness_button_create_popup():
 		menu.add_item(tr("Paste seed"), 2)
 	add_child(menu)
 	mm_globals.popup_menu(menu, self)
-	menu.connect("popup_hide", Callable(menu, "queue_free"))
-	#menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
+	menu.popup_hide.connect(menu.queue_free)
 	menu.id_pressed.connect(_on_seed_menu)
 
 func buffer_button_create_popup():
@@ -104,8 +103,8 @@ func buffer_button_create_popup():
 		menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 	add_child(menu)
 	mm_globals.popup_menu(menu, self)
-	menu.connect("popup_hide",Callable(menu,"queue_free"))
-	menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
+	menu.popup_hide.connect(menu.queue_free)
+	menu.id_pressed.connect(_on_buffer_menu)
 
 func custom_button_create_popup():
 	var menu : PopupMenu = PopupMenu.new()
