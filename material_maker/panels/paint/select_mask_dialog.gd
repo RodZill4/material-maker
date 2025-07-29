@@ -63,16 +63,18 @@ func set_view_mode(index):
 func _on_Show_item_selected(index : int):
 	var material : ShaderMaterial = mesh_instance.get_surface_override_material(0)
 	current_view_mode = index
+	var mask_texture : Texture2D = await mask.get_texture()
 	material.set_shader_parameter("tex", idmap)
-	material.set_shader_parameter("mask", mask.get_texture())
+	material.set_shader_parameter("mask", mask_texture)
 	material.set_shader_parameter("mode", current_view_mode)
 
 func _on_Reset_pressed():
 	var image : Image = Image.new()
 	image.create(16, 16, 0, Image.FORMAT_RGBA8)
 	image.fill(Color(1, 1, 1))
-	mask.get_texture().set_image(image)
-	mask.set_texture(mask.get_texture())
+	var mask_texture : Texture2D = await mask.get_texture()
+	mask_texture.set_image(image)
+	mask.set_texture(mask_texture)
 
 func update_mask_from_mouse_position(mouse_position : Vector2):
 	var texture : ViewportTexture = viewport.get_texture()
@@ -101,8 +103,9 @@ func update_mask_from_mouse_position(mouse_position : Vector2):
 	if renderer == null:
 		return
 	renderer = await renderer.render_material(self, genmask_material, idmap.get_size().x)
-	renderer.copy_to_texture(mask.get_texture())
-	mask.set_texture(mask.get_texture())
+	var mask_texture : Texture2D = await mask.get_texture()
+	renderer.copy_to_texture(mask_texture)
+	mask.set_texture(mask_texture)
 	renderer.release(self)
 
 func zoom(amount : float):
