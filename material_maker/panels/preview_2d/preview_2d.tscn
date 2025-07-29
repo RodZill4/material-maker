@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb6iar0tbj2qt"]
 
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/preview_2d.gd" id="1"]
+[ext_resource type="Script" uid="uid://b74wyskjqeq6e" path="res://material_maker/panels/preview_2d/preview_2d.gd" id="1"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("1")
 
 [node name="Preview2D" type="ColorRect" groups=["preview"]]

@@ -64,7 +64,9 @@ func on_counter_change(count : int, pending : int) -> void:
 			start_time = Time.get_ticks_msec()
 			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
+			@warning_ignore("integer_division")
 			var remaining_time_msec = (Time.get_ticks_msec()-start_time)*pending/(count-pending)
+			@warning_ignore("integer_division")
 			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
 		$ProgressBar.value = count-pending
 

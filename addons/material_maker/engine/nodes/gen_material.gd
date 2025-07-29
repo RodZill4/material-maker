@@ -140,7 +140,7 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 	else:
 		var texture_name : String = buffer_name.right(-(buffer_name_prefix.length()+1))
 		preview_textures[texture_name].shader_compute.set_parameter(parameter_name, value)
-	return true
+	return false
 
 func on_dep_update_buffer(buffer_name) -> bool:
 	if buffer_name == buffer_name_prefix:

@@ -371,7 +371,7 @@ func restore_preview_widget() -> void:
 		if preview.get_parent():
 			preview.get_parent().remove_child(preview)
 		preview.add_child(preview_timer)
-		var child_count = get_child_count()
+		var _child_count = get_child_count()
 		#var preview_parent = get_child(child_count-1)
 		#while preview_parent is Container:
 			#child_count = preview_parent.get_child_count()
@@ -615,7 +615,7 @@ func update_node() -> void:
 	
 	# Edit buttons
 	if generator.is_editable():
-		for theme_stylebox in ["frame", "selected_frame"]:
+		for theme_stylebox in ["titlebar", "titlebar_selected"]:
 			remove_theme_stylebox_override(theme_stylebox)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
 		add_child(edit_buttons)
