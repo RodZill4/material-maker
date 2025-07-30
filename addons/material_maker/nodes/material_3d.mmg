@@ -24,6 +24,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "3D PBR Material",
+		"longdesc": "PBR material with shader-generated maps based on input coordinates from 3D position in world or local space",
 		"code": "",
 		"custom": "",
 		"exports": {
