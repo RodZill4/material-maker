@@ -3,19 +3,19 @@ Mask to SDF node
 
 The **Mask to SDF** node generates a signed distance image from an image mask.
 
-.. image:: images/node_simple_sdf_operators_sd_mask_to_sdf.png
+.. image:: images/node_simple_sdf_operators_mask_to_sdf.png
 	:align: center
 
 Inputs
 ::::::
 
-The **Mask to SDF** node accepts a greyscale image input.
+The **Mask to SDF** node accepts a grayscale image input.
 
 Outputs
 :::::::
 
 The **Mask to SDF** node generates a signed distance function of the
-greyscale input mask.
+grayscale input mask.
 
 Parameters
 ::::::::::

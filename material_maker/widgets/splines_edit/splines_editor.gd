@@ -1,3 +1,4 @@
+@tool
 extends "res://material_maker/widgets/splines_edit/splines_view.gd"
 
 
@@ -12,10 +13,13 @@ signal unhandled_event(event : InputEvent)
 @onready var menu_bar := $SplinesMenu
 
 enum Modes {DRAW, SELECT}
-var mode := Modes.DRAW
+var mode : Modes = Modes.DRAW
 
-var progressive := false
+var progressive : bool = false
 
+var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.ttf")
+var font_size = 16
+var text_bg_width = 12
 
 func _ready():
 	%DrawMode.button_group.pressed.connect(func(button):mode = Modes.DRAW if button.name == "DrawMode" else Modes.SELECT)
@@ -31,6 +35,14 @@ func _ready():
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
+	
+	await get_tree().process_frame
+	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	get_window().min_size = get_window().get_contents_minimum_size() * get_window().content_scale_factor
+
+	if get_window().get_window_id() != DisplayServer.MAIN_WINDOW_ID:
+		get_window().hide()
+		get_window().popup_centered()
 
 	super._ready()
 	update_controls()
@@ -40,7 +52,14 @@ func _draw():
 		for c in control_points.get_children():
 			if c.is_selected:
 				var index = 1+selected_control_points.find(c.get_meta("point"))
-				draw_string(get_theme_font("default"), c.position+Vector2(10, 10), str(index), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(1.0, 0.0, 0.0))
+				var square_bg: Rect2
+				if index >= 10:
+					square_bg = Rect2(c.position+Vector2(12, -3), Vector2(text_bg_width * 2, 16))
+				else:
+					square_bg = Rect2(c.position+Vector2(12, -3), Vector2(text_bg_width, 16))
+				draw_rect(square_bg, Color(0.05, 0.05, 0.05, 0.95), true, -1.0, true)
+				draw_rect(square_bg, Color(1, 1, 1, 0.50), false, 1, false)
+				draw_string(spline_font, c.position+Vector2(12, 10), str(index), HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1.0, 1.0, 1.0, 1.0))
 	super._draw()
 
 func set_splines(p : MMSplines) -> void:
@@ -68,8 +87,10 @@ func update_controls() -> void:
 			control_point.initialize(p, self)
 			control_point.setpos(transform_point(p))
 			control_point.set_meta("point", splines.get_point_index(si, pi))
-			control_point.moved.connect(self._on_ControlPoint_moved)
-			control_point.selected.connect(self._on_ControlPoint_selected)
+			if not control_point.is_connected("moved", self._on_ControlPoint_moved):
+				control_point.moved.connect(self._on_ControlPoint_moved)
+			if not control_point.is_connected("selected", self._on_ControlPoint_selected):
+				control_point.selected.connect(self._on_ControlPoint_selected)
 			i += 1
 	while i < control_points.get_child_count():
 		control_points.get_child(i).queue_free()
@@ -110,13 +131,35 @@ func _on_ControlPoint_moved(index):
 
 func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_pressed : bool):
 	var cp = control_points.get_child(index)
+	var update_info : bool = true
 	if is_control_pressed:
 		if cp.is_selected:
 			cp.select(false)
 			selected_control_points.erase(cp.get_meta("point"))
+			update_info = false
 		else:
 			cp.select(true)
 			selected_control_points.append(cp.get_meta("point"))
+	elif is_shift_pressed:
+		if cp.is_selected:
+			return
+		else:
+			cp.select(true)
+			if selected_control_points.is_empty():
+				selected_control_points.append(cp.get_meta("point"))
+			else:
+				var last_selection = selected_control_points.back()
+				var curr_selection = cp.get_meta("point")
+				
+				var next_selection = last_selection
+				var increment = 1 if curr_selection > last_selection else -1
+				while next_selection != curr_selection:
+					next_selection += increment
+					if splines.is_linked(0, next_selection):
+						continue
+					selected_control_points.append(next_selection)
+				queue_redraw()
+				update_controls()
 	else:
 		if not cp.is_selected:
 			for c in control_points.get_children():
@@ -124,6 +167,10 @@ func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_
 			cp.select(true)
 			selected_control_points.clear()
 			selected_control_points.append(cp.get_meta("point"))
+	if update_info:
+		print(index)
+		menu_bar.get_node("HBox/Width").set_value(splines.get_point_by_index(cp.get_meta("point")).width)
+		menu_bar.get_node("HBox/Offset").set_value(splines.get_point_by_index(cp.get_meta("point")).offset)
 
 func get_selection() -> Array[int]:
 	return selected_control_points
@@ -158,12 +205,19 @@ func _on_width_value_changed(value):
 	emit_signal("value_changed", splines)
 
 func _on_offset_value_changed(value):
-	splines.set_points_offset(get_selection(), value)
+	splines.set_points_offset(get_selection(), value, progressive)
 	emit_signal("value_changed", splines)
 
 
 var creating : int = 0
 var last_spline : int = -1
+
+func _on_select_mode_toggled(toggled_on : bool):
+	if toggled_on and creating != 0:
+		var event : InputEventMouseButton = InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_RIGHT
+		event.pressed = true
+		handle_draw_mode(event)
 
 func handle_draw_mode(event : InputEvent) -> bool:
 	if event is InputEventMouseButton:
@@ -241,6 +295,11 @@ func _on_progressive_toggled(toggled_on: bool) -> void:
 
 
 func handle_select_mode(event : InputEvent) -> bool:
+	if event is InputEventMouseButton:
+		for c in control_points.get_children():
+			c.select(false)
+		selected_control_points.clear()
+		queue_redraw()
 	return false
 
 
@@ -288,5 +347,5 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 			value_changed.disconnect(self.control_update_parameter)
 		generator = null
 
-func control_update_parameter(value : MMSplines):
+func control_update_parameter(_value : MMSplines):
 	generator.set_parameter(parameter_name, splines.serialize())

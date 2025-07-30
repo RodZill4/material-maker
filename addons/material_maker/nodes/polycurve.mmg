@@ -234,7 +234,9 @@
 				"shortdesc": "Ends",
 				"type": "boolean"
 			}
-		]
+		],
+		"shortdesc": "Poly Curve",
+		"longdesc": "Multi-point curve with image mapping"
 	},
 	"type": "shader"
 }

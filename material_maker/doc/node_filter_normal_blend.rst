@@ -3,13 +3,13 @@ Normal Blend node
 
 The **Normal Blend** node blends two normal map inputs using an optional opacity. The second input is the base
 and the first input gets applied on top of it using the *Reorient* method described in this 
-`article`__, using the opacity (defined by the *opacity* parameter, or the optional greyscale input).
+`article`__, using the opacity (defined by the *opacity* parameter, or the optional grayscale input).
 
 .. _normalblendpage: https://blog.selfshadow.com/publications/blending-in-detail/
 
 __ normalblendpage_
 
-.. image:: images/node_filter_normal_blend.png
+.. image:: images/node_filter_normal_map_blend.png
 	:align: center
 
 Inputs
@@ -40,7 +40,7 @@ The **Normal Blend** node has a single parameter:
 Notes
 +++++
 
-The *opacity* input will be considered (and implicitly converted to) greyscale if it is a color texture.
+The *opacity* input will be considered (and implicitly converted to) grayscale if it is a color texture.
 
 Example images
 ++++++++++++++

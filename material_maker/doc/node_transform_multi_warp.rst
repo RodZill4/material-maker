@@ -16,7 +16,7 @@ The **Multi Warp** node accepts two inputs:
 
 * The *Source* inputs is the image to be deformed.
 
-* The *Displace* input is a greyscale image whose derivative will be used to deform the source.
+* The *Displace* input is a grayscale image whose derivative will be used to deform the source.
 
 Outputs
 +++++++

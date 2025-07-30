@@ -1,12 +1,18 @@
 @tool
+class_name CurveView
+
 extends Control
 
 @export var show_axes : bool = false
 
 var curve : MMCurve
 
+func _init(v : MMCurve = null) -> void:
+	curve = v
+
 func _ready() -> void:
-	curve = MMCurve.new()
+	if curve == null:
+		curve = MMCurve.new()
 	connect("resized",Callable(self,"_on_resize"))
 	queue_redraw()
 

@@ -12,12 +12,12 @@ white areas.
 Inputs
 ++++++
 
-The **Slope** node accepts a single greyscale input, interpreted as a heightmap.
+The **Slope** node accepts a single grayscale input, interpreted as a heightmap.
 
 Outputs
 +++++++
 
-The **Slope** node outputs the transformed heightmap as greyscale.
+The **Slope** node outputs the transformed heightmap as grayscale.
 
 Parameters
 ++++++++++

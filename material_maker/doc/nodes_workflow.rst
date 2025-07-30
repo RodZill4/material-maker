@@ -46,8 +46,8 @@ generates the overall normal and ambient occlusion maps using the height map.
 .. toctree::
 	:maxdepth: 1
 
-	node_workflow_createmap
-	node_workflow_mixmaps
-	node_workflow_applymap
+	node_workflow_create_map
+	node_workflow_mix_maps
+	node_workflow_apply_map
 	node_workflow_mix
 	node_workflow_output

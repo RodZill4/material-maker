@@ -50,6 +50,12 @@ func get_buffers(flags : int = BUFFERS_ALL) -> Array:
 		return []
 	return [ self ]
 
+func get_description() -> String:
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Buffer"))
+	desc_list.push_back(TranslationServer.translate("Samples input into a texture of a given resolution"))
+	return "\n".join(desc_list)
+
 func get_parameter_defs() -> Array:
 	var parameter_defs : Array = [ { name="size",label="Size", type="size", first=4, last=13, default=4 } ]
 	match version:
@@ -132,6 +138,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		rendering_time = shader_compute.get_render_time()
 		self.rendering_time_updated.emit(rendering_time)
 		mm_deps.dependency_update(buffer_name, texture, true)
+		mm_deps.update()
 	else:
 		print("Failed to update buffer")
 	return status

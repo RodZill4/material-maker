@@ -1,7 +1,7 @@
 sdShow node
 ...........
 
-The **sdShow** and **sdShow 2** node convert a signed distance image into a greyscale
+The **sdShow** and **sdShow 2** node convert a signed distance image into a grayscale
 image whose background is black and the shape described by its input
 is white.
 
@@ -19,7 +19,7 @@ The **sdShow** node accepts an input in signed distance function format.
 Outputs
 :::::::
 
-The **sdShow** node generates a greyscale output.
+The **sdShow** node generates a grayscale output.
 
 Parameters
 ::::::::::

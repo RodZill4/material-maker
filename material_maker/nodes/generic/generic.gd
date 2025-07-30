@@ -299,7 +299,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.step = 0.005 if !p.has("step") else p.step
 		if p.has("default"):
 			control.value = p.default
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size.x = 60
 	elif p.type == "size":
 		control = SizeOptionButton.new()
 		control.min_size = p.first
@@ -321,6 +321,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 40
 	elif p.type == "gradient":
 		control = preload("res://material_maker/widgets/gradient_editor/gradient_edit.tscn").instantiate()
+		control.custom_minimum_size.x = 80
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
 	elif p.type == "polygon":
@@ -370,7 +371,7 @@ func restore_preview_widget() -> void:
 		if preview.get_parent():
 			preview.get_parent().remove_child(preview)
 		preview.add_child(preview_timer)
-		var child_count = get_child_count()
+		var _child_count = get_child_count()
 		#var preview_parent = get_child(child_count-1)
 		#while preview_parent is Container:
 			#child_count = preview_parent.get_child_count()
@@ -513,6 +514,8 @@ func update_node() -> void:
 				if result:
 					index = result.get_string(1).to_int()-1
 					label = result.get_string(2)
+					if index < get_child_count() and get_child(index).get_child_count() > 2:
+						first = false
 				elif label.substr(0, 2) == "-:":
 					label = label.right(-2)
 					first = false
@@ -542,6 +545,8 @@ func update_node() -> void:
 					if first:
 						var replace : Control = hsizer.get_child(1)
 						hsizer.remove_child(replace)
+						if replace in property_labels:
+							property_labels.erase(replace)
 						replace.free()
 						hsizer.add_child(label_widget)
 						hsizer.move_child(label_widget, 1)
@@ -610,7 +615,7 @@ func update_node() -> void:
 	
 	# Edit buttons
 	if generator.is_editable():
-		for theme_stylebox in ["frame", "selected_frame"]:
+		for theme_stylebox in ["titlebar", "titlebar_selected"]:
 			remove_theme_stylebox_override(theme_stylebox)
 		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
 		add_child(edit_buttons)

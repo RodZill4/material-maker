@@ -3,7 +3,7 @@ Crystal node
 
 The **Crystal** node outputs a crystal like pattern based on combining Voronoi noises.
 
-.. image:: images/node_noise_crystal.png
+.. image:: images/node_noise_composite_crystal.png
 	:align: center
 
 Inputs
@@ -14,7 +14,7 @@ The **Crystal** noise node does not accept any input.
 Outputs
 +++++++
 
-The **Crystal** noise node outputs a single greyscale texture of the crystal pattern.
+The **Crystal** noise node outputs a single grayscale texture of the crystal pattern.
 
 Parameters
 ++++++++++

@@ -1,0 +1,61 @@
+{
+	"name": "noise",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"density": 0.5,
+		"size": 4
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "vec2 $(name_uv)_uv = floor($uv*$size);",
+		"global": "",
+		"inputs": [
+			{
+				"default": "$density",
+				"label": "2:",
+				"name": "density_in",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates a grid made of black and white squares",
+		"name": "Noise",
+		"outputs": [
+			{
+				"f": "step(rand($(name_uv)_uv+vec2($seed)), $density_in($(name_uv)_uv))",
+				"longdesc": "Shows the noise pattern",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 8,
+				"first": 2,
+				"label": "Grid Size",
+				"last": 12,
+				"longdesc": "The grid size",
+				"name": "size",
+				"shortdesc": "Size",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Density",
+				"longdesc": "The density of white squares",
+				"max": 1,
+				"min": 0,
+				"name": "density",
+				"shortdesc": "Density",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Noise pattern"
+	},
+	"type": "shader"
+}

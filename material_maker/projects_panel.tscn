@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bnqq3vhwmudkw"]
+[gd_scene load_steps=15 format=3 uid="uid://bnqq3vhwmudkw"]
 
 [ext_resource type="Script" uid="uid://cryayuomvuwbo" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="2_oiaqi"]
@@ -9,13 +9,14 @@
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="7_qnupl"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="8_1w3oe"]
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
+[ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8fw7q"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("1")
 
 [sub_resource type="InputEventKey" id="InputEventKey_83edi"]
@@ -167,7 +168,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Zoom Out"
-tooltip_auto_translate_mode = 2
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
@@ -179,7 +179,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Zoom In"
-tooltip_auto_translate_mode = 2
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
@@ -191,7 +190,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Zoom Reset"
-tooltip_auto_translate_mode = 2
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
@@ -219,19 +217,21 @@ layout_mode = 0
 offset_left = 282.0
 offset_top = 85.0
 offset_right = 540.0
-offset_bottom = 179.0
+offset_bottom = 219.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("8_nl2qi")
 
-[node name="VBoxContainer" type="BoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel"]
 layout_mode = 2
 
-[node name="GridVisibility" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridVisibility" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Grid Visiblity"
-tooltip_auto_translate_mode = 2
 toggle_mode = true
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
@@ -239,12 +239,11 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "grid"
 
-[node name="GridSnapping" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="GridSnapping" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Grid Snapping"
-tooltip_auto_translate_mode = 2
 toggle_mode = true
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
@@ -252,7 +251,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "snapping"
 
-[node name="GridSize" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" instance=ExtResource("8_1w3oe")]
+[node name="GridSize" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Grid Size"
@@ -262,18 +261,135 @@ max_value = 40.0
 step = 1.0
 float_only = true
 
-[node name="Minimap" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="Minimap" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Minimap Visibility"
-tooltip_auto_translate_mode = 2
 toggle_mode = true
 shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "minimap"
+
+[node name="HSeparator" type="HSeparator" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+modulate = Color(1, 1, 1, 0.5)
+layout_mode = 2
+
+[node name="VBoxContainer3" type="GridContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+layout_mode = 2
+columns = 5
+
+[node name="DirectConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25.6, 25)
+layout_mode = 2
+tooltip_text = "Direct Connections"
+tooltip_auto_translate_mode = 2
+toggle_mode = true
+button_group = ExtResource("10_lbgjg")
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "connection_direct"
+
+[node name="BezierConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25.6, 25)
+layout_mode = 2
+tooltip_text = "Bezier Connections"
+tooltip_auto_translate_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("10_lbgjg")
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "connection_bezier"
+
+[node name="RoundedConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25.6, 25)
+layout_mode = 2
+tooltip_text = "Rounded Connections"
+tooltip_auto_translate_mode = 2
+toggle_mode = true
+button_group = ExtResource("10_lbgjg")
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "connection_rounded"
+
+[node name="ManhattanConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25.6, 25)
+layout_mode = 2
+tooltip_text = "Manhattan Connections"
+tooltip_auto_translate_mode = 2
+toggle_mode = true
+button_group = ExtResource("10_lbgjg")
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "connection_manhattan"
+
+[node name="DiagonalConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25.6, 25)
+layout_mode = 2
+tooltip_text = "Diagonal Connections"
+tooltip_auto_translate_mode = 2
+toggle_mode = true
+button_group = ExtResource("10_lbgjg")
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "connection_diagonal"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Thickness" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="ThicknessLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness"]
+layout_mode = 2
+text = "Thickness"
+
+[node name="LineThickness" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" instance=ExtResource("8_1w3oe")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Connection lines thickness"
+value = 4.0
+min_value = 1.0
+max_value = 12.0
+step = 0.01
+float_only = true
+
+[node name="Curvature" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CurvatureLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Curvature"
+
+[node name="LineCurvature" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature" instance=ExtResource("8_1w3oe")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Connection lines curvature"
+max_value = 2.0
+step = 0.01
+float_only = true
 
 [node name="ArrangeNodes" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox"]
 visible = false
@@ -302,9 +418,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "2D Preview"
-tooltip_auto_translate_mode = 2
 toggle_mode = true
-shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
 script = ExtResource("7_qnupl")
@@ -315,9 +429,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "3D Preview"
-tooltip_auto_translate_mode = 2
 toggle_mode = true
-shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
 script = ExtResource("7_qnupl")
@@ -342,10 +454,18 @@ Scroll to zoom the 3D Preview."
 [connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomOut" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_out_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomIn" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_in_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomReset" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_reset_pressed"]
-[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/GridVisibility" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_visibility_toggled"]
-[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/GridSnapping" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_snapping_toggled"]
-[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/GridSize" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_size_value_changed"]
-[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/Minimap" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_minimap_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridVisibility" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_visibility_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridSnapping" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_snapping_toggled"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridSize" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_size_value_changed"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/Minimap" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_minimap_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/DirectConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_direct_connection_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/BezierConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_bezier_connection_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/RoundedConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_rounded_connection_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/ManhattanConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_manhattan_connection_toggled"]
+[connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer3/DiagonalConnection" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_diagonal_connection_toggled"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness/LineThickness" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_thickness_value_changed"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu" method="_on_line_curvature_value_changed"]
+[connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_curvature_value_changed"]
 [connection signal="toggled" from="MenuBar/HBox/PreviewsMenu/HBox/2DPreview" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="MenuBar/HBox/PreviewsMenu/HBox/3DPreview" to="." method="show_background_preview_3d"]
 [connection signal="gui_input" from="MenuBar/HBox/PreviewsMenu/HBox/ControlView" to="BackgroundPreviews/Preview3D" method="on_gui_input"]

@@ -47,6 +47,13 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Iterate Buffer"
 
+func get_description() -> String:
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Iterate Buffer"))
+	desc_list.push_back(TranslationServer.translate(
+			"Samples input into a texture and applies a \"loop subgraph\" repeatedly"))
+	return "\n".join(desc_list)
+
 func set_paused(v : bool) -> void:
 	if v == is_paused:
 		return
@@ -161,10 +168,10 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if is_paused:
 		return false
 	if buffer_name == buffer_names[3]:
-		print("Cannot update %s" % buffer_name)
+		print("Cannot update ", buffer_name)
 		return false
 	if is_rendering:
-		print("Already rendering %s" % buffer_name)
+		print("Already rendering ", buffer_name)
 		return false
 	
 	is_rendering = true

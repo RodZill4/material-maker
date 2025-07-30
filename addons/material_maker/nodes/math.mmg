@@ -26,7 +26,7 @@
 		"inputs": [
 			{
 				"default": "$default_in1",
-				"label": "2:A",
+				"label": "2:",
 				"longdesc": "The A operand",
 				"name": "in1",
 				"shortdesc": "A",
@@ -34,7 +34,7 @@
 			},
 			{
 				"default": "$default_in2",
-				"label": "B",
+				"label": "",
 				"longdesc": "The B operand",
 				"name": "in2",
 				"shortdesc": "B",
@@ -47,7 +47,7 @@
 		"outputs": [
 			{
 				"f": "$(name_uv)_clamp_$clamp",
-				"longdesc": "Shows a greyscale image of the result",
+				"longdesc": "Shows a grayscale image of the result",
 				"shortdesc": "Output",
 				"type": "f"
 			}

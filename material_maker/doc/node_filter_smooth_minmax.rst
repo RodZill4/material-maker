@@ -3,19 +3,19 @@ Smooth MinMax node
 
 The **Smooth MinMax** node performs a smooth minimum or smooth maximum math operation between its inputs.
 
-.. image:: images/node_filter_smooth_minmax.png
+.. image:: images/node_filter_math_smooth_minmax.png
 	:align: center
 
 Inputs
 ++++++
 
-The **Smooth MinMax** node accepts two greyscale inputs. Those inputs are optional, and when
+The **Smooth MinMax** node accepts two grayscale inputs. Those inputs are optional, and when
 left unconnected, the corresponding parameter value is used.
 
 Outputs
 +++++++
 
-The **Smooth MinMax** node generates a single greyscale texture that contains the result
+The **Smooth MinMax** node generates a single grayscale texture that contains the result
 of the operation.
 
 Parameters

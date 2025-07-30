@@ -16,6 +16,9 @@ var last_export_size = 4
 signal generator_changed
 
 
+func _enter_tree():
+	set_generator(generator, output, true)
+
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.output_type, template)
 
@@ -110,6 +113,7 @@ func export_animation() -> void:
 	mm_globals.main_window.add_dialog(window)
 	window.set_source(generator, output)
 	window.exclusive = true
+	window.hide()
 	window.popup_centered()#e(get_window(), Rect2(get_window().size())
 
 
@@ -119,12 +123,13 @@ func export_taa() -> void:
 	var window = load("res://material_maker/windows/export_taa/export_taa.tscn").instantiate()
 	mm_globals.main_window.add_dialog(window)
 	window.set_source(generator, output)
+	window.hide()
 	window.popup_centered()
 
 
-func create_image(renderer_function : String, params : Array, image_size : Vector2i) -> void:
+func create_image(_renderer_function : String, _params : Array, image_size : Vector2i) -> void:
 	if generator != null:
-		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
+		var _texture : MMTexture = await generator.render_output_to_texture(output, image_size)
 
 
 func export_as_image_file(file_name : String, image_size : Vector2i) -> void:

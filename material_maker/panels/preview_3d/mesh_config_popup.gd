@@ -2,13 +2,24 @@ extends PopupPanel
 
 var mesh : MeshInstance3D
 
+const config_key : String = "3D_preview_objects/%s_uv_scale"
+
 func _ready() -> void:
+	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	min_size = get_contents_minimum_size() * content_scale_factor
 	%ScaleLinked.icon = get_theme_icon("link", "MM_Icons")
 
 func configure_mesh(m : MeshInstance3D) -> void:
 	mesh = m
-	%UV_Scale_X.value = mesh.uv_scale.x
-	%UV_Scale_Y.value = mesh.uv_scale.y
+	
+	var key : String = config_key % mesh.name.to_snake_case()
+	if mm_globals.has_config(key):
+		var uv_scale : Vector2 = mm_globals.get_config(key)
+		%UV_Scale_X.value = uv_scale.x
+		%UV_Scale_Y.value = uv_scale.y
+	else:
+		%UV_Scale_X.value = mesh.uv_scale.x
+		%UV_Scale_Y.value = mesh.uv_scale.y
 
 	%ScaleLinked.button_pressed = %UV_Scale_X.value == %UV_Scale_Y.value
 
@@ -32,13 +43,13 @@ func configure_mesh(m : MeshInstance3D) -> void:
 		%Parameters.add_child(float_edit)
 		float_edit.value_changed.connect(mesh.set_parameter.bind(p.name))
 
-	popup(Rect2(get_mouse_position(), $VBoxContainer.get_minimum_size()))
+	popup(Rect2(get_mouse_position()*content_scale_factor, $VBoxContainer.get_minimum_size()*content_scale_factor))
 
 
 func _on_scale_linked_toggled(toggled_on: bool) -> void:
 	%UV_Scale_Y.visible = not toggled_on
 	_on_UV_value_changed(%UV_Scale_X.value)
-	size = $VBoxContainer.get_minimum_size()
+	size = ($VBoxContainer.get_minimum_size() + Vector2(10,0)) * content_scale_factor
 
 
 func _on_MeshConfiguration_popup_hide():
@@ -51,7 +62,12 @@ func _on_UV_value_changed(_value):
 		%UV_Scale_Y.value = _value
 
 	mesh.uv_scale = Vector2(%UV_Scale_X.value, %UV_Scale_Y.value)
+	mm_globals.set_config(config_key % mesh.name.to_snake_case(), mesh.uv_scale)
 
 
 func _on_Tesselated_toggled(button_pressed):
 	mesh.tesselated = button_pressed
+
+
+func _on_v_box_container_minimum_size_changed() -> void:
+	size = get_contents_minimum_size() * content_scale_factor
