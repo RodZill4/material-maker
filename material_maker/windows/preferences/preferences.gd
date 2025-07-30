@@ -33,7 +33,7 @@ func update_config(p : Node) -> void:
 func _on_Apply_pressed():
 	update_config(self)
 	emit_signal("config_changed")
-	setup_preference_tabs()
+	setup_preferences_category_tree()
 
 func _on_OK_pressed():
 	update_config(self)
@@ -69,7 +69,7 @@ func _on_DownloadLanguage_closed():
 	locale.read_translations()
 	update_language_list()
 
-func setup_preference_tabs() -> void:
+func setup_preferences_category_tree() -> void:
 	%Tree.clear()
 	%Tree.hide_root = true
 	var root : TreeItem = %Tree.create_item()
@@ -84,7 +84,7 @@ func setup_preference_tabs() -> void:
 
 
 func _on_ready() -> void:
-	setup_preference_tabs()
+	setup_preferences_category_tree()
 
 
 func _on_tree_item_selected() -> void:
