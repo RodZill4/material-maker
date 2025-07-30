@@ -70,6 +70,8 @@ Edit menu
 
 * *Select targets* selects all direct and indirect target nodes of the current selection
 
+* *Align Start/Center/End* align selections horizontally
+
 * *Load Selection* Loads a graph selection previously saved into a file
 
 * *Save Selection* Saves the current graph selection into a file
