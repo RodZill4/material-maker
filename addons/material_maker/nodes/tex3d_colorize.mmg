@@ -34,14 +34,14 @@
 			{
 				"default": "vec3($uv.x+0.5)",
 				"label": "",
-				"longdesc": "The input greyscale 3D texture",
+				"longdesc": "The input grayscale 3D texture",
 				"name": "in",
 				"shortdesc": "Input",
 				"type": "tex3d"
 			}
 		],
 		"instance": "",
-		"longdesc": "Remaps a greyscale 3D texture to a custom gradient",
+		"longdesc": "Remaps a grayscale 3D texture to a custom gradient",
 		"name": "TEX3D Colorize",
 		"outputs": [
 			{

@@ -9,7 +9,7 @@ The **Emboss** node generates an image that simulates lighting on its input.
 Inputs
 ++++++
 
-The **Emboss** node has a single greyscale input, interpreted as a heightmap.
+The **Emboss** node has a single grayscale input, interpreted as a heightmap.
 
 Outputs
 +++++++

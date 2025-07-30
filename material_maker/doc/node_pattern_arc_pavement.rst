@@ -16,7 +16,7 @@ Outputs
 
 The **Arc Pavement** node provides the following textures:
 
-* The first one is a greyscale image where bricks are shown in white and mortar in black.
+* The first one is a grayscale image where bricks are shown in white and mortar in black.
 
 * The second one is a color image where all bricks are drawn using a random uniform color.
 

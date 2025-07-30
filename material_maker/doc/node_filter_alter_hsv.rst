@@ -10,7 +10,7 @@ to dedicated input maps. It can be used to easily apply variations to its input.
 Inputs
 ++++++
 
-The **Alter HSV** node requires a color input texture. It also has 3 greyscale input maps,
+The **Alter HSV** node requires a color input texture. It also has 3 grayscale input maps,
 one for hue, one for value, and one for saturation. Values above 0.5 increase the associated
 channel, and values below 0.5 decrease it.
 

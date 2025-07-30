@@ -19,7 +19,6 @@ func _draw():
 	var last_tree_item = get_last_item(get_root())
 	if last_tree_item == null:
 		return
-	var bottom_rect = get_item_area_rect(last_tree_item)
 	var library_manager = owner.library_manager
 	var items : Array[TreeItem] = get_root().get_children()
 	for item in items:

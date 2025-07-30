@@ -13,10 +13,10 @@
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8fw7q"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("1")
 
 [sub_resource type="InputEventKey" id="InputEventKey_83edi"]
@@ -419,7 +419,6 @@ custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "2D Preview"
 toggle_mode = true
-shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
 script = ExtResource("7_qnupl")
@@ -431,7 +430,6 @@ custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "3D Preview"
 toggle_mode = true
-shortcut = SubResource("Shortcut_7tisq")
 shortcut_in_tooltip = false
 icon_alignment = 1
 script = ExtResource("7_qnupl")
