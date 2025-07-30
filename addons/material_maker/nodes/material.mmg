@@ -27,6 +27,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Static PBR Material",
+		"longdesc": "PBR material with maps generated as static images",
 		"code": "",
 		"exports": {
 			"Blender": {
