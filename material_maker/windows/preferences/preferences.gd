@@ -14,7 +14,7 @@ func edit_preferences(c : ConfigFile) -> void:
 	main_window.add_dialog(self)
 	config_changed.connect(main_window.on_config_changed)
 	update_controls(self)
-	size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
+	size *= content_scale_factor
 	hide()
 	popup_centered(size)
 
@@ -33,6 +33,7 @@ func update_config(p : Node) -> void:
 func _on_Apply_pressed():
 	update_config(self)
 	emit_signal("config_changed")
+	setup_preferences_category_tree()
 
 func _on_OK_pressed():
 	update_config(self)
@@ -41,16 +42,6 @@ func _on_OK_pressed():
 
 func _on_Cancel_pressed():
 	queue_free()
-
-
-func _on_Preferences_about_to_show():
-	await get_tree().process_frame
-	_on_VBoxContainer_minimum_size_changed()
-
-func _on_VBoxContainer_minimum_size_changed():
-	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
-	size = min_size
-	
 
 func _on_InstallLanguage_pressed():
 	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
@@ -65,8 +56,8 @@ func _on_InstallLanguage_pressed():
 		update_language_list()
 
 func update_language_list():
-	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
-	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
+	%Language.init_from_locales()
+	%Language.init_from_config(config)
 
 func _on_DownloadLanguage_pressed():
 	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
@@ -77,3 +68,24 @@ func _on_DownloadLanguage_closed():
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
 	update_language_list()
+
+func setup_preferences_category_tree() -> void:
+	%Tree.clear()
+	%Tree.hide_root = true
+	var root : TreeItem = %Tree.create_item()
+	var sections = []
+
+	for child in %TabContainer.get_children():
+		var item : TreeItem = %Tree.create_item()
+		item.set_text(0, " " + tr(child.name) + " ")
+		sections.append(item)
+
+	%Tree.set_selected(sections[0], 0)
+
+
+func _on_ready() -> void:
+	setup_preferences_category_tree()
+
+
+func _on_tree_item_selected() -> void:
+	%TabContainer.current_tab = %Tree.get_selected().get_index()
