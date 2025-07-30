@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://dhn8uwj5mh2cq" path="res://material_maker/panels/reference/gradient_slot.gd" id="1"]
 
 [sub_resource type="Shader" id="1"]
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("1")
 
 [node name="GradientSlot" type="Button"]

@@ -17,6 +17,8 @@ func set_generator(g : MMGenBase) -> void:
 	await set_preview(g.get_parameter("preview"))
 	update_node()
 
+func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color) -> void:
+	draw_circle(position, 5, color, true, -1, true)
 
 #func set_theme_type(type : StringName):
 	#var current_theme : Theme = mm_globals.main_window.theme
@@ -61,7 +63,7 @@ func update_preview(preview : Control = null):
 func _input(event:InputEvent) -> void:
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and is_visible_in_tree():
 		accept_event()
 		var menu : PopupMenu = PopupMenu.new()
 		menu.add_item("No preview")

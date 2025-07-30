@@ -9,7 +9,7 @@ The **Smooth Curvature** node generates an curvature texture from its input.
 Inputs
 ++++++
 
-The **Smooth Curvature** node accepts a single greyscale image as input, interpreted as a heightmap.
+The **Smooth Curvature** node accepts a single grayscale image as input, interpreted as a heightmap.
 
 Outputs
 +++++++

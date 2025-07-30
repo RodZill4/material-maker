@@ -130,6 +130,9 @@ func _ready() -> void:
 
 	on_config_changed()
 
+	# Set a minimum window size to prevent UI elements from collapsing on each other.
+	get_window().min_size = Vector2(1024, 600) * get_window().content_scale_factor
+
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
 		get_window().current_screen = mm_globals.config.get_value("window", "screen")
@@ -140,6 +143,8 @@ func _ready() -> void:
 	if get_window().mode != Window.MODE_MAXIMIZED:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
+		else:
+			get_window().move_to_center()
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
 
@@ -162,9 +167,6 @@ func _ready() -> void:
 			if f.ends_with(".ptex"):
 				print(f)
 				dir.copy("res://material_maker/examples/"+f, "/examples/"+f)
-
-	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	get_window().min_size = Vector2(1024, 600)
 
 	# Set window title
 	get_window().set_title(ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release"))
@@ -278,7 +280,7 @@ func on_config_changed() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
-# warning-ignore:narrowing_conversion
+	@warning_ignore("narrowing_conversion")
 	OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 	# locale
 	var locale = mm_globals.get_config("locale")
@@ -298,7 +300,9 @@ func on_config_changed() -> void:
 
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
-# warning-ignore:narrowing_conversion
+	update_preview_3d([ preview_3d, projects_panel.preview_3d_background ])
+
+	@warning_ignore("narrowing_conversion")
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
 
 func get_panel(panel_name : String) -> Control:
@@ -1099,11 +1103,11 @@ func _notification(what : int) -> void:
 	match what:
 		MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
 			# Limit FPS to decrease CPU/GPU usage while the window is unfocused.
-# warning-ignore:narrowing_conversion
+			@warning_ignore("narrowing_conversion")
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("idle_fps_limit"), IDLE_FPS_LIMIT_MIN, IDLE_FPS_LIMIT_MAX)) * 1_000_000
 		MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
 			# Return to the normal FPS limit when the window is focused.
-# warning-ignore:narrowing_conversion
+			@warning_ignore("narrowing_conversion")
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 
 func on_close_requested():

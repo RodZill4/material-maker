@@ -9,12 +9,12 @@ The **Auto Tones** node finds the minimum and maximum values in the input textur
 Inputs
 ++++++
 
-The **Auto Tones** node requires a greyscale input texture.
+The **Auto Tones** node requires a grayscale input texture.
 
 Outputs
 +++++++
 
-The **Auto Tones** node provides a single greyscale texture.
+The **Auto Tones** node provides a single grayscale texture.
 
 Parameters
 ++++++++++

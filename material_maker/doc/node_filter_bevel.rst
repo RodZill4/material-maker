@@ -11,12 +11,12 @@ Inputs
 
 The **Bevel** node accepts:
 
-* a mask greyscale input whose light parts will be beveled
+* a mask grayscale input whose light parts will be beveled
 
 Outputs
 +++++++
 
-The **Bevel** node generates a single greyscale texture.
+The **Bevel** node generates a single grayscale texture.
 
 Parameters
 ++++++++++

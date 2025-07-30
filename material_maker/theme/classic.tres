@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=116 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=118 format=3 uid="uid://42cileyfwaca"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="2_lsxnf"]
@@ -84,6 +84,8 @@ region = Rect2(64, 112, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_vngdy"]
 atlas = ExtResource("1_7p32q")
 region = Rect2(96, 112, 16, 16)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7b2nb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
@@ -707,6 +709,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_swrqc"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rnro"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -785,6 +789,7 @@ CodeEdit/colors/selection_color = Color(0.501961, 0.501961, 0.501961, 1)
 CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
 CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
 CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
+CodeEdit/styles/focus = SubResource("StyleBoxEmpty_7b2nb")
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
@@ -934,6 +939,7 @@ TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_62r2q")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
 TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_ofwe7")
 TabContainer/styles/panel = SubResource("StyleBoxFlat_wc388")
+TextEdit/styles/focus = SubResource("StyleBoxEmpty_swrqc")
 TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
 Tree/constants/draw_guides = 0

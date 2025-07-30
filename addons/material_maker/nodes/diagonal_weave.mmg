@@ -25,7 +25,7 @@
 		"outputs": [
 			{
 				"f": "diagonal_weave($uv*$size,$seed)",
-				"longdesc": "Shows a greyscale image of the diagonal weave pattern.",
+				"longdesc": "Shows a grayscale image of the diagonal weave pattern.",
 				"shortdesc": "Output",
 				"type": "f"
 			}

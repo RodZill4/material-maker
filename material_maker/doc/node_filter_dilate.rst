@@ -12,7 +12,7 @@ Inputs
 
 The **Dilate** node accepts:
 
-* a mask greyscale input whose light parts will be dilated
+* a mask grayscale input whose light parts will be dilated
 * an optional color source input whose colors will be used in the output
 
 Outputs
