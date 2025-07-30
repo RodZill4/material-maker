@@ -74,12 +74,12 @@ func _on_ready() -> void:
 	%Tree.hide_root = true
 	var root : TreeItem = %Tree.create_item()
 	var sections = []
-	
+
 	for child in %TabContainer.get_children():
 		var item : TreeItem = %Tree.create_item()
 		item.set_text(0, " " + child.name + " ")
 		sections.append(item)
-	
+
 	%Tree.set_selected(sections[0], 0)
 
 
