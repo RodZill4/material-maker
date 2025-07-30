@@ -1,3 +1,4 @@
+@tool
 extends "res://material_maker/widgets/splines_edit/splines_view.gd"
 
 
@@ -86,8 +87,10 @@ func update_controls() -> void:
 			control_point.initialize(p, self)
 			control_point.setpos(transform_point(p))
 			control_point.set_meta("point", splines.get_point_index(si, pi))
-			control_point.moved.connect(self._on_ControlPoint_moved)
-			control_point.selected.connect(self._on_ControlPoint_selected)
+			if not control_point.is_connected("moved", self._on_ControlPoint_moved):
+				control_point.moved.connect(self._on_ControlPoint_moved)
+			if not control_point.is_connected("selected", self._on_ControlPoint_selected):
+				control_point.selected.connect(self._on_ControlPoint_selected)
 			i += 1
 	while i < control_points.get_child_count():
 		control_points.get_child(i).queue_free()
@@ -344,5 +347,5 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 			value_changed.disconnect(self.control_update_parameter)
 		generator = null
 
-func control_update_parameter(value : MMSplines):
+func control_update_parameter(_value : MMSplines):
 	generator.set_parameter(parameter_name, splines.serialize())

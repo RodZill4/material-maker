@@ -40,7 +40,7 @@
 		"outputs": [
 			{
 				"f": "anisotropic($(uv), vec2($(scale_x), $(scale_y)), $(seed), $(smoothness), $(interpolation))",
-				"longdesc": "Shows a greyscale value noise",
+				"longdesc": "Shows a grayscale value noise",
 				"shortdesc": "Output",
 				"type": "f"
 			}

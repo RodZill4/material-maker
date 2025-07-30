@@ -14,7 +14,7 @@ The **Truchet** node does not accept any input.
 Outputs
 +++++++
 
-The **Truchet** generates a single greyscale output texture.
+The **Truchet** generates a single grayscale output texture.
 
 Parameters
 ++++++++++

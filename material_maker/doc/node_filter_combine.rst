@@ -1,7 +1,7 @@
 Combine node
 ~~~~~~~~~~~~
 
-The **Combine** node combines four greyscale inputs into an RGBA output texture.
+The **Combine** node combines four grayscale inputs into an RGBA output texture.
 
 .. image:: images/node_filter_combine.png
 	:align: center

@@ -108,7 +108,7 @@ func _on_title_edit_focus_exited():
 	title.visible = true
 	title_edit.visible = false
 
-func _on_title_edit_text_submitted(new_text):
+func _on_title_edit_text_submitted(_new_text):
 	_on_title_edit_focus_exited()
 
 # Text edit
@@ -188,7 +188,7 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 func _on_close_pressed():
 	get_parent().remove_node(self)
 
-func _on_dragged(from, to):
+func _on_dragged(_from, to):
 	_on_raise_request()
 	generator.position = to
 

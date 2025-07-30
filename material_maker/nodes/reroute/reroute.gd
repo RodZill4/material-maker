@@ -17,6 +17,8 @@ func set_generator(g : MMGenBase) -> void:
 	await set_preview(g.get_parameter("preview"))
 	update_node()
 
+func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color) -> void:
+	draw_circle(position, 5, color, true, -1, true)
 
 #func set_theme_type(type : StringName):
 	#var current_theme : Theme = mm_globals.main_window.theme

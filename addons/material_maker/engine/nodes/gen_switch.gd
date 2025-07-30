@@ -55,7 +55,7 @@ func set_parameter(p, v) -> void:
 			if p == "outputs":
 				for i in connected_inputs:
 					var input = int(i) % int(parameters.outputs)
-# warning-ignore:integer_division
+					@warning_ignore("integer_division")
 					var choice = int(i) / int(parameters.outputs)
 					if input >= v:
 						inputs_changes[i] = -1
@@ -66,7 +66,7 @@ func set_parameter(p, v) -> void:
 						outputs_changes[i] = -1
 			else:
 				for i in connected_inputs:
-# warning-ignore:integer_division
+					@warning_ignore("integer_division")
 					var choice = int(i) / int(parameters.outputs)
 					if choice >= v:
 						inputs_changes[i] = -1

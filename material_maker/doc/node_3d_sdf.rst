@@ -5,7 +5,7 @@ The signed distance function nodes can be used to define complex 3D geometry usi
 shapes.
 
 They are based on a very small set of basic shapes, that can be combined using operators,
-and finally output as a greyscale heightmap and a color normal map using the **render** node.
+and finally output as a grayscale heightmap and a color normal map using the **render** node.
 
 Describing 3D objects using SDF primitives is more difficult than using existing meshes, but this
 method integrates smoothly with shader generation, and (as many nodes in Material Maker) is

@@ -11,7 +11,7 @@ using randomly angled intersections.
 Inputs
 ++++++
 
-The **Skewed Uneven Bricks** node accepts 3 optional greyscale input maps for the shape mortar,
+The **Skewed Uneven Bricks** node accepts 3 optional grayscale input maps for the shape mortar,
 bevel and round parameters (the corresponding parameter is multiplied by the map value).
 
 Outputs
@@ -19,7 +19,7 @@ Outputs
 
 The **Skewed Uneven Bricks** node provides the following textures:
 
-* The first is a greyscale image where bricks are shown in white and mortar in black.
+* The first is a grayscale image where bricks are shown in white and mortar in black.
 
 * The second is an RGB output of the skewed uv islands of each brick.
 

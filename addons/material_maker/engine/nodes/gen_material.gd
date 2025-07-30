@@ -588,7 +588,7 @@ func get_uid(index : int) -> String:
 		r[6] = (r[6] & 0x0f) | 0x40
 		r[8] = (r[8] & 0x3f) | 0x80
 		for k in range(16):
-# warning-ignore:unassigned_variable_op_assign
+			@warning_ignore("unassigned_variable_op_assign")
 			uid += '%02x' % r[k]
 		uids[index] = uid
 	return uids[index]
@@ -757,8 +757,13 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					e = preview_texture_dependencies[t].get_image().save_png(file_name)
-					if e != OK:
+					var image : Image = preview_texture_dependencies[t].get_image()
+					if image:
+						e = preview_texture_dependencies[t].get_image().save_png(file_name)
+						if e != OK:
+							error_files += 1
+					else:
+						print("No image for texture file ", file_name)
 						error_files += 1
 					index += 1
 					processed_files += 1
