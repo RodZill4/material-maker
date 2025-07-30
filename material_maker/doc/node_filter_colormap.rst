@@ -1,11 +1,11 @@
 Colormap node
 ~~~~~~~~~~~~~
 
-The **Colormap** node colorizes a greyscale image using a range of colors
+The **Colormap** node colorizes a grayscale image using a range of colors
 produced by sampling a single row or column from another image.
 
 By default, the node samples colors horizontally along the center of the
-colormap image. Black pixels in the greyscale image will become the color at
+colormap image. Black pixels in the grayscale image will become the color at
 the left edge of this row, white pixels the color at the right edge, and grey
 pixels the colors in between.
 
@@ -17,7 +17,7 @@ Inputs
 
 The **Colormap** node accepts 2 inputs:
 
-* *Input*, the greyscale texture to be colorized
+* *Input*, the grayscale texture to be colorized
 
 * *Colormap*, the RGBA texture to sample colors from
 

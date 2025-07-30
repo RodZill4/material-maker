@@ -16,6 +16,7 @@ func _ready():
 func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "", is_first : bool = false, is_last : bool = false) -> void:
 	var line_edit : LineEdit = LineEdit.new()
 	line_edit.set_text(control.name)
+	line_edit.custom_minimum_size.x = 80
 	grid.add_child(line_edit)
 	line_edit.connect("text_changed", Callable(self, "on_param_name_changed").bind(control.name, line_edit))
 	line_edit.connect("text_submitted", Callable(self, "on_param_name_entered").bind(control.name, line_edit))
@@ -252,7 +253,7 @@ func on_enter_widget(widget) -> void:
 	var new_links = []
 	for l in w.linked_widgets:
 		var graph_node = get_parent().get_node("node_"+l.node)
-		if graph_node != null:
+		if graph_node != null and graph_node.controls.has(l.widget):
 			var control = graph_node.controls[l.widget]
 			if control != null:
 				var link = MMNodeLink.new(get_parent())
@@ -268,5 +269,3 @@ func on_exit_widget(widget) -> void:
 		for l in links[widget]:
 			l.queue_free()
 		links.erase(widget)
-
-

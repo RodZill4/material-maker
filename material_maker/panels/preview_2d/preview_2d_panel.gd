@@ -15,7 +15,6 @@ var preview_mode := Modes.CUSTOM_PREVIEW:
 
 @export_multiline var shader_accumulate : String = "" # (String, MULTILINE)
 @export_multiline var shader_divide : String = "" # (String, MULTILINE)
-# warning-ignore:unused_class_variable
 @export var control_target : NodePath
 
 var center : Vector2 = Vector2(0.5, 0.5)
@@ -51,6 +50,8 @@ func _ready():
 	var content_scale_factor = mm_globals.get_window().content_scale_factor
 	%GuidesColor.get_popup().content_scale_factor = content_scale_factor
 	%GuidesColor.get_popup().min_size = %GuidesColor.get_popup().get_contents_minimum_size() * content_scale_factor
+
+	%ResetViewButton.tooltip_text += " (%s)" % [ %ResetViewButton.shortcut.get_as_text() ]
 
 	clear()
 	reset_view()

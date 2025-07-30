@@ -49,7 +49,7 @@
 
 		],
 		"instance": "",
-		"longdesc": "A greyscale 3D texture that combines patterns along all 3 axes",
+		"longdesc": "A grayscale 3D texture that combines patterns along all 3 axes",
 		"name": "TEX3D Pattern",
 		"outputs": [
 			{

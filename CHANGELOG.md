@@ -1,3 +1,102 @@
+# Material Maker 1.4RC2
+
+## General
+
+- Preview3D mesh UV scale is now saved in settings (contributed by williamchange)
+- Removed RZLogo TextureRect in about.tscn (contributed by williamchange)
+
+## Nodes
+
+- Fixed noise node banding artifacts
+
+## Bug Fixes
+
+- Fixed connections shown in front of nodes (contributed by williamchange)
+- Fixed render counter context menu position (contributed by williamchange)
+- Fixed missing top-level label in hierarchy panel (contributed by williamchange)
+- Fixed small default window size on hidpi displays (contributed by williamchange)
+- Fixed unlit material doc on inputs (contributed by williamchange)
+- Fixed hierarchy panel previews (contributed by williamchange)
+- Fixed reroute context menu (contributed by williamchange)
+- Fixed a problem that caused buffers and materials not to updating correctly
+- Fixed add node filter context pos on hidpi displays (contributed by williamchange)
+- Fixed add node popup size not updating correctly (contributed by williamchange)
+- Fixed preview3d that did not immediately apply 3D scale (contributed by williamchange)
+- Fixed comment color popup scale and position on hidpi display (contributed by williamchange)
+- Fixed propagating node changes (contributed by williamchange)
+- Fixed CodeEditor errors (contributed by williamchange)
+- Fixed crash that occurred when hovering param linked to minimized nodes (contributed by williamchange)
+- Fixed ShowTree button size when entering subgraph (contributed by williamchange)
+- Added missing parameter types in shader nodes documentation (contributed by williamchange)
+- Added image check when exporting materials
+- Fixed Font problem on Text node
+- Fixed layout on multicolumn nodes
+- Fixed comment node documentation and images (contributed by williamchange)
+- Various code format and warning fixes (contributed by williamchange)
+- Fixed scale factor for flexible layout subwindows
+- Fixed growing export menu problem on Mac
+
+# Material Maker 1.4RC1
+
+## General
+
+- Fixed shader exports for Unity and Unreal engines (HLSL generation for array uniforms)
+
+## Nodes
+
+- Fixed FBM noise and kaleidoscope nodes compatibility (contributed by williamchange)
+- Fixed switch node input tooltips (contributed by williamchange)
+- Fixed classic reroute (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed a problem that caused the menu to update repeatedly when moving a node
+- Adjusted File Dialog minimum size (contributed by williamchange)
+- Made load from website dialog exclusive (contributed by williamchange)
+- Fixed comment line node min size not updating (contributed by williamchange)
+- Fixed hdri download error dialog scale on hidpi displays (contributed by williamchange)
+- Removed Ctrl+R shortcut for 2D/3D buttons (contributed by williamchange)
+- Fixed SDF builder param size not updating (contributed by williamchange)
+- Fixed and updated tip text mouse icons (contributed by williamchange)
+- Fixed float edit drag focus bug (contributed by DevFika)
+- Removed Show/Hide side panels menu item
+- Small fixes in Splines editor
+
+# Material Maker 1.4b3
+
+## General
+
+- Added Graph view preferences for connection styles (contributed by williamchange)
+- Updated graph zoom level UI
+- Added X shortcut to delete selected nodes (contributed by williamchange)
+- Added duplicate with inputs (Control+Shift+D) command (contributed by williamchange)
+
+## Nodes
+
+- Added Comment Line node (contributed by williamchange)
+- Made float edit control smaller (contributed by Jowan-Spooner)
+
+## Bug Fixes
+
+- Fixed comments behavior when moving through hierarchy
+- Show webpage when clicking website url on splashscreen
+- Fixed export node
+- Fixed SDF editor problem with polygon parameters
+- Fixed generated cylinder tangents
+- Fixed generic node layout
+- Many fixes in EasySDF editor (renaming, hide button, many 3D primitives)
+- Fixed dialog placement under Linux (contributed by williamchange)
+- Fixed scroll to item buttons in Library panel (contributed by williamchange)
+- Fixed 2D preview reset tooltip (contributed by williamchange)
+- Fixed environment list size (contributed by williamchange)
+- Fixed camera controller reset (contributed by williamchange)
+- Fixed crash that occurred when loading a mesh without UVs (contributed by williamchange)
+- Fixes in Add Node popup (contributed by williamchange)
+- Fixes in About dialog (contributed by williamchange)
+- Made tip text translatable (contributed by williamchange)
+- Fixes in light theme (contributed by williamchange)
+- Miscellaneous UI fixes (contributed by williamchange)
+
 # Material Maker 1.4b2
 
 ## General

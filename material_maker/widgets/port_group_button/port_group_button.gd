@@ -4,7 +4,6 @@ class_name PortGroupButton
 @export var group_parent : int = 2
 
 var state : int = 0
-# warning-ignore:unused_class_variable
 var group_size : int = 0
 const TEXTURES = [
 	preload("res://material_maker/icons/port_group_0.tres"),
@@ -14,7 +13,7 @@ const TEXTURES = [
 ]
 
 
-# warning-ignore:unused_signal
+@warning_ignore("unused_signal")
 signal groups_updated(g)
 
 

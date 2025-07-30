@@ -21,9 +21,9 @@ corner_radius_bottom_left = 3
 corner_detail = 4
 
 [sub_resource type="Shader" id="Shader_786ke"]
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1yahc"]
-render_priority = 0
 shader = SubResource("Shader_786ke")
 
 [node name="GradientEdit" type="PanelContainer"]

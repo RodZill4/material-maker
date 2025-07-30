@@ -33,12 +33,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "Draws a greyscale hexagonal tiles pattern",
+		"longdesc": "Draws a grayscale hexagonal tiles pattern",
 		"name": "Beehive",
 		"outputs": [
 			{
 				"f": "1.0-2.0*beehive_dist($(name_uv)_center.xy)",
-				"longdesc": "Shows the greyscale pattern",
+				"longdesc": "Shows the grayscale pattern",
 				"shortdesc": "Output",
 				"type": "f"
 			},

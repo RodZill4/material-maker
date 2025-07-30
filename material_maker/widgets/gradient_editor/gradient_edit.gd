@@ -71,7 +71,7 @@ func set_value(v: MMGradient) -> void:
 	value_was_set.emit()
 
 
-func set_interpolation(interpolation_type:int) -> void:
+func set_interpolation(interpolation_type : MMGradient.Interpolation) -> void:
 	value.interpolation = interpolation_type
 	update_shader()
 	updated.emit(value, false)
@@ -112,6 +112,7 @@ func select_color(cursor:GradientEditCursor) -> void:
 	mode = Modes.SELECTING_COLOR
 
 	var color_picker_popup := preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
+	color_picker_popup.hide()
 	add_child(color_picker_popup)
 
 	var color_picker := color_picker_popup.get_node("ColorPicker")

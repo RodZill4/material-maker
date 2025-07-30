@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://clw8sb0p8webl"]
+[gd_scene load_steps=20 format=3 uid="uid://clw8sb0p8webl"]
 
 [ext_resource type="Script" uid="uid://di33ywsh7i1mp" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
@@ -13,7 +13,7 @@ uniform sampler2D tex;
 void fragment() {
 	vec4 color = texture(tex, UV);
 	if (disabled) {
-		color = vec4(vec3(0.4+dot(color.rgb, vec3(0.1))), color.a);
+		color = vec4(vec3(0.05+dot(color.rgb, vec3(0.1))), color.a);
 	}
 	COLOR = vec4(vec3(1.0), brightness)*color;
 }"
@@ -68,24 +68,9 @@ shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="Shader" id="19"]
-code = "shader_type canvas_item;
-
-uniform bool disabled = false;
-uniform float brightness = 0.8;
-uniform sampler2D tex;
-
-void fragment() {
-	vec4 color = texture(tex, UV);
-	if (disabled) {
-		color = vec4(vec3(0.4+dot(color.rgb, vec3(0.1))), color.a);
-	}
-	COLOR = vec4(vec3(1.0), brightness)*color;
-}"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s5pxd"]
 resource_local_to_scene = true
-shader = SubResource("19")
+shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")

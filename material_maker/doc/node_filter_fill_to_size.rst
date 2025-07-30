@@ -2,7 +2,7 @@ Fill to Size node
 ~~~~~~~~~~~~~~~~~
 
 The **Fill to Size** node uses the output of the **Fill** node and fills
-all detected areas with a greyscale color that depends on their size.
+all detected areas with a grayscale color that depends on their size.
 
 .. image:: images/node_filter_fill_to_size.png
 	:align: center
@@ -16,7 +16,7 @@ compatible output of another node) as input.
 Outputs
 +++++++
 
-The **Fill to Size** node generates a single greyscale image map whose value
+The **Fill to Size** node generates a single grayscale image map whose value
 is the size (width, height or area).
 
 Parameters

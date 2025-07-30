@@ -5,7 +5,7 @@ The **Warp Dilation** node dilates its input image along the slope or contours o
 heightmap. For each pixel, it samples the input image along that path and keeps the
 highest value (after the attenuation factor is applied).
 
-.. image:: images/node_transform_warpdilation.png
+.. image:: images/node_transform_warp_dilation.png
 	:align: center
 
 Inputs
@@ -15,7 +15,7 @@ The **Warp Dilation** node accepts two inputs:
 
 * The *Input* input is the image to be deformed.
 
-* The *Heightmap* input is a greyscale image whose slopes or contours will be used to deform the source.
+* The *Heightmap* input is a grayscale image whose slopes or contours will be used to deform the source.
 
 Outputs
 +++++++

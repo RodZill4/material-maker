@@ -213,6 +213,7 @@ func init_section_icons() -> void:
 	var atlas_image = atlas.get_image()
 	for i in sections.size():
 		var x = 128+32*(i%4)
+		@warning_ignore("integer_division")
 		var y = 32+32*(i/4)
 		var texture : AtlasTexture = AtlasTexture.new()
 		texture.atlas = atlas
@@ -237,7 +238,7 @@ func get_section_color(section_name : String) -> Color:
 	for s in section_colors.keys():
 		if TranslationServer.translate(s) == section_name:
 			return section_colors[s]
-	return Color(0.0, 0.0, 0.0, 0.0)
+	return Color.DIM_GRAY
 
 func is_section_enabled(section_name : String) -> bool:
 	return disabled_sections.find(section_name) == -1

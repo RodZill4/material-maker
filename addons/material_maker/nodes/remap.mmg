@@ -17,14 +17,14 @@
 			{
 				"default": "0.0",
 				"label": "",
-				"longdesc": "The greyscale input map",
+				"longdesc": "The grayscale input map",
 				"name": "in",
 				"shortdesc": "Input",
 				"type": "f"
 			}
 		],
 		"instance": "",
-		"longdesc": "Remaps a greyscale image for use as an input map for Advanced Tiler nodes",
+		"longdesc": "Remaps a grayscale image for use as an input map for Advanced Tiler nodes",
 		"name": "Remap",
 		"outputs": [
 			{

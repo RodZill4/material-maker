@@ -9,12 +9,12 @@ The **Tones Range** node selects a range of the input around a specified value.
 Inputs
 ++++++
 
-The **Tones Range** node requires a greyscale input texture.
+The **Tones Range** node requires a grayscale input texture.
 
 Outputs
 +++++++
 
-The **Tones Range** node provides a single greyscale texture.
+The **Tones Range** node provides a single grayscale texture.
 
 Parameters
 ++++++++++

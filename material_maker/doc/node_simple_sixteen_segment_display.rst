@@ -14,7 +14,7 @@ The **Sixteen Segment Display** node accepts an optional bevel map, which the pa
 Outputs
 +++++++
 
-The **Sixteen Segment Display** node outputs two greyscale images, the generated display and a hard mask for all segments
+The **Sixteen Segment Display** node outputs two grayscale images, the generated display and a hard mask for all segments
 
 Parameters
 ++++++++++

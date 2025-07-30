@@ -18,7 +18,7 @@ The **Scratches** node does not accept any input.
 Outputs
 +++++++
 
-The **Scratches** node generates a single greyscale output texture.
+The **Scratches** node generates a single grayscale output texture.
 
 Parameters
 ++++++++++

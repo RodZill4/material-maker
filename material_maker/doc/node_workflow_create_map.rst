@@ -12,7 +12,7 @@ Inputs
 
 The **Create Map** node accepts two inputs:
 
-* the *height* component as a greyscale image.
+* the *height* component as a grayscale image.
 
 * an optional offset map.
 

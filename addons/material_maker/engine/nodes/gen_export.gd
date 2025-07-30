@@ -26,9 +26,11 @@ func get_type_name() -> String:
 	return "Export"
 
 func get_description() -> String:
-	return "\n".join(["Export",
-			"Defines a texture which will be saved " +
-			"along with other textures on material export"])
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Export"))
+	desc_list.push_back(TranslationServer.translate("Defines a texture which will be saved " +
+			"along with other textures on material export"))
+	return "\n".join(desc_list)
 
 func get_parameter_defs() -> Array:
 	return [
@@ -44,9 +46,8 @@ func export_material(prefix : String, _profile : String, size : int = 0) -> void
 		size = get_image_size()
 	var source = get_source(0)
 	if source != null:
-		var result = await source.generator.render(self, source.output_index, size)
+		var texture : MMTexture = await source.generator.render_output_to_texture(source.output_index, Vector2i(size, size))
 		if parameters.suffix != "":
-			result.save_to_file("%s_%s.png" % [ prefix, parameters.suffix ])
+			await texture.save_to_file("%s_%s.png" % [ prefix, parameters.suffix ])
 		else:
-			result.save_to_file("%s.png" % [ prefix ])
-		result.release(self)
+			await texture.result.save_to_file("%s.png" % [ prefix ])

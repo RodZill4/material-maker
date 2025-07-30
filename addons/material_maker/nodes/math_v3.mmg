@@ -25,7 +25,7 @@
 		"inputs": [
 			{
 				"default": "vec3($d_in1_x, $d_in1_y, $d_in1_z)",
-				"label": "2:A",
+				"label": "2:",
 				"longdesc": "The A operand",
 				"name": "in1",
 				"shortdesc": "A",
@@ -33,7 +33,7 @@
 			},
 			{
 				"default": "vec3($d_in2_x, $d_in2_y, $d_in2_z)",
-				"label": "B",
+				"label": "",
 				"longdesc": "The B operand",
 				"name": "in2",
 				"shortdesc": "B",
@@ -45,7 +45,7 @@
 		"name": "Vec3 Math",
 		"outputs": [
 			{
-				"longdesc": "Shows a greyscale image of the result",
+				"longdesc": "Shows a grayscale image of the result",
 				"rgb": "$(name_uv)_clamp_$clamp",
 				"shortdesc": "Output",
 				"type": "rgb"

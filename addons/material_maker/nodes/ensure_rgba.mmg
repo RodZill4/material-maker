@@ -15,7 +15,7 @@
 			{
 				"default": "vec4(0.0)",
 				"label": "",
-				"longdesc": "The input greyscale image",
+				"longdesc": "The input grayscale image",
 				"name": "input",
 				"shortdesc": "Input",
 				"type": "rgba"
@@ -26,7 +26,7 @@
 		"name": "EnsureRGBA",
 		"outputs": [
 			{
-				"longdesc": "The remapped greyscale image",
+				"longdesc": "The remapped grayscale image",
 				"rgba": "$input($uv)",
 				"shortdesc": "Output",
 				"type": "rgba"

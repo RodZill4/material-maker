@@ -1,3 +1,4 @@
+@tool
 extends "res://material_maker/widgets/splines_edit/splines_view.gd"
 
 
@@ -12,11 +13,11 @@ signal unhandled_event(event : InputEvent)
 @onready var menu_bar := $SplinesMenu
 
 enum Modes {DRAW, SELECT}
-var mode := Modes.DRAW
+var mode : Modes = Modes.DRAW
 
-var progressive := false
+var progressive : bool = false
 
-var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.tres")
+var spline_font = preload("res://material_maker/theme/font_rubik/Rubik-Bold.ttf")
 var font_size = 16
 var text_bg_width = 12
 
@@ -38,7 +39,10 @@ func _ready():
 	await get_tree().process_frame
 	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	get_window().min_size = get_window().get_contents_minimum_size() * get_window().content_scale_factor
-	get_window().popup_centered()
+
+	if get_window().get_window_id() != DisplayServer.MAIN_WINDOW_ID:
+		get_window().hide()
+		get_window().popup_centered()
 
 	super._ready()
 	update_controls()
@@ -83,8 +87,10 @@ func update_controls() -> void:
 			control_point.initialize(p, self)
 			control_point.setpos(transform_point(p))
 			control_point.set_meta("point", splines.get_point_index(si, pi))
-			control_point.moved.connect(self._on_ControlPoint_moved)
-			control_point.selected.connect(self._on_ControlPoint_selected)
+			if not control_point.is_connected("moved", self._on_ControlPoint_moved):
+				control_point.moved.connect(self._on_ControlPoint_moved)
+			if not control_point.is_connected("selected", self._on_ControlPoint_selected):
+				control_point.selected.connect(self._on_ControlPoint_selected)
 			i += 1
 	while i < control_points.get_child_count():
 		control_points.get_child(i).queue_free()
@@ -125,10 +131,12 @@ func _on_ControlPoint_moved(index):
 
 func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_pressed : bool):
 	var cp = control_points.get_child(index)
+	var update_info : bool = true
 	if is_control_pressed:
 		if cp.is_selected:
 			cp.select(false)
 			selected_control_points.erase(cp.get_meta("point"))
+			update_info = false
 		else:
 			cp.select(true)
 			selected_control_points.append(cp.get_meta("point"))
@@ -159,6 +167,10 @@ func _on_ControlPoint_selected(index : int, is_control_pressed : bool, is_shift_
 			cp.select(true)
 			selected_control_points.clear()
 			selected_control_points.append(cp.get_meta("point"))
+	if update_info:
+		print(index)
+		menu_bar.get_node("HBox/Width").set_value(splines.get_point_by_index(cp.get_meta("point")).width)
+		menu_bar.get_node("HBox/Offset").set_value(splines.get_point_by_index(cp.get_meta("point")).offset)
 
 func get_selection() -> Array[int]:
 	return selected_control_points
@@ -199,6 +211,13 @@ func _on_offset_value_changed(value):
 
 var creating : int = 0
 var last_spline : int = -1
+
+func _on_select_mode_toggled(toggled_on : bool):
+	if toggled_on and creating != 0:
+		var event : InputEventMouseButton = InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_RIGHT
+		event.pressed = true
+		handle_draw_mode(event)
 
 func handle_draw_mode(event : InputEvent) -> bool:
 	if event is InputEventMouseButton:
@@ -328,5 +347,5 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 			value_changed.disconnect(self.control_update_parameter)
 		generator = null
 
-func control_update_parameter(value : MMSplines):
+func control_update_parameter(_value : MMSplines):
 	generator.set_parameter(parameter_name, splines.serialize())
