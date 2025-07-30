@@ -182,8 +182,8 @@ text = "Idle FPS limit:"
 
 [node name="IdleFPSLimit" parent="VBoxContainer/TabContainer/General/FPSLimit" instance=ExtResource("3")]
 layout_mode = 2
-tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life on laptops."
+tooltip_text = "FPS limit to use when window isn't focused to save CPU/GPU resources.
+Lower values may help reducing power usage, but could increase response time when window is focused again."
 config_variable = "idle_fps_limit"
 value = 20.0
 min_value = 1.0
