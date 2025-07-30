@@ -6,6 +6,7 @@ class_name MMGraphComment
 @onready var title_edit = %TitleEdit
 @onready var editor = %Text
 
+var disable_undoredo_for_offset : bool = false
 
 var generator : MMGenComment:
 	set(g):
@@ -33,8 +34,10 @@ const AUTO_SIZE_TOP_PADDING : int = 72
 
 
 func do_set_position(o : Vector2) -> void:
+	disable_undoredo_for_offset = true
 	position_offset = o
 	generator.position = o
+	disable_undoredo_for_offset = false
 
 func _on_resize_request(new_size : Vector2) -> void:
 	var parent : GraphEdit = get_parent()
@@ -194,6 +197,9 @@ func _on_dragged(_from, to):
 
 func _on_position_offset_changed():
 	_on_raise_request()
+	if ! disable_undoredo_for_offset:
+		get_parent().undoredo_move_node(generator.name, generator.position, position_offset)
+		generator.set_position(position_offset)
 
 func _on_node_selected():
 	_on_raise_request()

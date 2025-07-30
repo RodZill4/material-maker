@@ -6,6 +6,7 @@ class_name MMGraphCommentLine
 @onready var editor = %TextEditor
 @onready var label = %TextLabel
 
+var disable_undoredo_for_offset : bool = false
 
 var generator : MMGenCommentLine:
 	set(g):
@@ -15,8 +16,10 @@ var generator : MMGenCommentLine:
 
 
 func do_set_position(o : Vector2) -> void:
+	disable_undoredo_for_offset = true
 	position_offset = o
 	generator.position = o
+	disable_undoredo_for_offset = false
 
 
 func _on_node_selected() -> void:
@@ -46,7 +49,9 @@ func _on_dragged(_from, to) -> void:
 
 
 func _on_position_offset_changed() -> void:
-	pass
+	if ! disable_undoredo_for_offset:
+		get_parent().undoredo_move_node(generator.name, generator.position, position_offset)
+		generator.set_position(position_offset)
 
 
 func _on_text_label_gui_input(event: InputEvent) -> void:
