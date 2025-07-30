@@ -33,6 +33,7 @@ func update_config(p : Node) -> void:
 func _on_Apply_pressed():
 	update_config(self)
 	emit_signal("config_changed")
+	setup_preference_tabs()
 
 func _on_OK_pressed():
 	update_config(self)
@@ -68,8 +69,7 @@ func _on_DownloadLanguage_closed():
 	locale.read_translations()
 	update_language_list()
 
-
-func _on_ready() -> void:
+func setup_preference_tabs() -> void:
 	%Tree.clear()
 	%Tree.hide_root = true
 	var root : TreeItem = %Tree.create_item()
@@ -77,10 +77,14 @@ func _on_ready() -> void:
 
 	for child in %TabContainer.get_children():
 		var item : TreeItem = %Tree.create_item()
-		item.set_text(0, " " + child.name + " ")
+		item.set_text(0, " " + tr(child.name) + " ")
 		sections.append(item)
 
 	%Tree.set_selected(sections[0], 0)
+
+
+func _on_ready() -> void:
+	setup_preference_tabs()
 
 
 func _on_tree_item_selected() -> void:
