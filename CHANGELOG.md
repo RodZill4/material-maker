@@ -1,3 +1,42 @@
+# Material Maker 1.4RC3
+
+## General
+
+- Improved idle FPS tooltip in preferences (contributed by williamchange)
+- Removed library tree tooltips (contributed by williamchange)
+- Removed www. from splashscreen URL (contributed by williamchange)
+- Added hint for unload submenu when no custom library is loaded (contributed by williamchange)
+- Made website spelling consistent in documentation (contributed by williamchange)
+
+## Nodes
+
+- Added library icons for Decompose and Combine (contributed by williamchange)
+- Added missing short/long desc. for material nodes (contributed by williamchange)
+- Added icon for Mesh Map node (contributed by williamchange)
+- Added several aliases (contributed by williamchange)
+- Improved reroute ports drawing (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed duplicate with links shortcut (contributed by williamchange)
+- Fixed duplicated "Help" menu for macOS (contributed by williamchange)
+- Fixed comment node not dragging enclosed nodes (contributed by williamchange)
+- Fixed environment upload (contributed by williamchange)
+- Fixed saved preview mesh uv scale not applying (contributed by williamchange)
+- Fixed center view not accounting for zoom level (contributed by williamchange)
+- Fixed text/code edit white pixels corners when focused (contributed by williamchange)
+- Fixed comment node not dragging comment line node (contributed by williamchange)
+- Fixed create/web node not spawning at graph center (contributed by williamchange)
+- Fixed crash when adding website nodes from library (contributed by williamchange)
+- Fixed custom icon visibility on edited nodes (contributed by williamchange)
+- Fixed restoring animation export size (contributed by williamchange)
+- Fixed Preview3D material not updating (contributed by williamchange)
+- Fixed node title color unchanged when edited (contributed by williamchange)
+- Fixed for C key menu item shortcut for macOS (contributed by williamchange)
+- Fixed simplex noise seed offset (contributed by williamchange)
+- Fixed hidpi display panel undock position (contributed by williamchange)
+- Fixed various non-critical errors and warnings (contributed by williamchange)
+
 # Material Maker 1.4RC2
 
 ## General
