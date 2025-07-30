@@ -281,6 +281,7 @@ text = "Idle FPS Limit"
 [node name="IdleFPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/IdleFPSLimit" instance=ExtResource("3")]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "FPS limit to use when window isn't focused to save CPU/GPU resources.
 Lower values may help reducing power usage, but could increase response time when window is focused again."
 config_variable = "idle_fps_limit"
