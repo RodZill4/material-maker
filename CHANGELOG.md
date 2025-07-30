@@ -6,7 +6,7 @@
 - Removed library tree tooltips (contributed by williamchange)
 - Removed www. from splashscreen URL (contributed by williamchange)
 - Added hint for unload submenu when no custom library is loaded (contributed by williamchange)
-- Made website spelling consistent in documentation (contributed by williamchange)
+- Made website spelling consistent in tooltips (contributed by williamchange)
 
 ## Nodes
 
