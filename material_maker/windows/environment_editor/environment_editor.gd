@@ -135,13 +135,21 @@ func _on_Environments_item_selected(index):
 		environment_list.select(index)
 	set_current_environment(index)
 
+
 func _on_Environments_gui_input(event):
-	if ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:
+	if event is InputEventMouseMotion:
+		var rect : Rect2 = environment_list.get_rect()
+		mm_globals.handle_warped_mmb_scroll(event, environment_list,
+				environment_list.get_v_scroll_bar(), rect.position.y, rect.size.y,
+				environment_list.get_local_mouse_position())
+
+	elif ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:
 		return
 	var context_menu : PopupMenu = $Main/HSplitContainer/Environments/ContextMenu
 	var index = environment_list.get_item_at_position(event.position)
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
 		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
+
 
 func _on_ContextMenu_id_pressed(id):
 	var index = environment_list.get_selected_items()[0]
