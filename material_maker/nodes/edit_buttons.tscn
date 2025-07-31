@@ -1,7 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://cit68cso5187c"]
+[gd_scene load_steps=6 format=3 uid="uid://do021khl6idf5"]
 
-[ext_resource type="Script" uid="uid://ruo1gfek58tl" path="res://material_maker/nodes/edit_buttons.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="2_dvsrk"]
+
+[sub_resource type="GDScript" id="GDScript_vkr27"]
+script/source = "extends HBoxContainer
+
+func connect_buttons(object, edit_fct, load_fct, save_fct) -> void:
+	$Edit.connect(\"pressed\", Callable(object, edit_fct))
+	$Load.connect(\"pressed\", Callable(object, load_fct))
+	$Save.connect(\"pressed\", Callable(object, save_fct))
+
+func _on_ready() -> void:
+	# fix button icon colors (light theme)
+	for button in get_children():
+		button.add_theme_color_override(\"icon_normal_color\", Color.WHITE)
+		button.add_theme_color_override(\"icon_focus_color\", Color(\"656565\"))
+		button.add_theme_color_override(\"icon_pressed_color\", Color(\"656565\"))
+"
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2_dvsrk")
@@ -20,7 +35,7 @@ metadata/Recolor = false
 [node name="NodeEditButtons" type="HBoxContainer"]
 offset_right = 65.0
 offset_bottom = 22.0
-script = ExtResource("1")
+script = SubResource("GDScript_vkr27")
 
 [node name="Edit" type="Button" parent="."]
 layout_mode = 2
