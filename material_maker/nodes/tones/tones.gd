@@ -176,3 +176,11 @@ func _on_Auto_pressed():
 	cursor_in_min.update_value(float(in_min)/float(histogram_size-1))
 	cursor_in_mid.update_value(float(in_mid)/float(histogram_size-1))
 	cursor_in_max.update_value(float(in_max)/float(histogram_size-1))
+
+
+func _on_reset_pressed() -> void:
+	cursor_in_min.update_value(0.0)
+	cursor_in_mid.update_value(0.5)
+	cursor_in_max.update_value(1.0)
+	cursor_out_min.update_value(0.0)
+	cursor_out_max.update_value(1.0)
