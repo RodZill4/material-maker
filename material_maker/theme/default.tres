@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=143 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=144 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -371,6 +371,10 @@ region = Rect2(32, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_r3xak"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cscp3"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(80, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j13i3"]
 atlas = ExtResource("1_s43fy")
@@ -1095,6 +1099,7 @@ MM_Icons/icons/add_image = SubResource("AtlasTexture_86qok")
 MM_Icons/icons/arrange_nodes = SubResource("AtlasTexture_60g77")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
+MM_Icons/icons/camera = SubResource("AtlasTexture_cscp3")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
 MM_Icons/icons/connection_bezier = SubResource("AtlasTexture_ovvp6")
 MM_Icons/icons/connection_diagonal = SubResource("AtlasTexture_8tn7x")
