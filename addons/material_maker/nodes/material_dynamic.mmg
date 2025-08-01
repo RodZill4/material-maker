@@ -740,7 +740,7 @@
 			"shader_type spatial;",
 			"render_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx",
 			"$if $(connected:opacity_tex) and $(param:flags_transparent)",
-			",depth_draw_alpha_prepass",
+			",depth_draw_opaque",
 			"$fi",
 			";",
 			"",
