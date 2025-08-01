@@ -1,12 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://7wslfieqleli"]
+[gd_scene load_steps=7 format=3 uid="uid://7wslfieqleli"]
 
 [ext_resource type="PackedScene" uid="uid://0b6d65sghy3s" path="res://material_maker/widgets/histogram/histogram.tscn" id="1"]
 [ext_resource type="Script" uid="uid://nbk6k40bfmwi" path="res://material_maker/nodes/tones/tones.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="2_o4mha"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="3_hpd32"]
 
 [sub_resource type="AtlasTexture" id="1"]
-atlas = ExtResource("3")
+atlas = ExtResource("2_o4mha")
 region = Rect2(16, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jb2ll"]
+atlas = ExtResource("3_hpd32")
+region = Rect2(96, 192, 16, 16)
 
 [node name="Tones" type="GraphNode"]
 offset_right = 192.0
@@ -77,6 +82,12 @@ size_flags_vertical = 4
 tooltip_text = "Set levels automatically"
 texture_normal = SubResource("1")
 
+[node name="Reset" type="TextureButton" parent="Bar"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Reset levels"
+texture_normal = SubResource("AtlasTexture_jb2ll")
+
 [node name="Spacer1" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
@@ -91,3 +102,4 @@ layout_mode = 2
 
 [connection signal="item_selected" from="Bar/Mode" to="." method="_on_Mode_item_selected"]
 [connection signal="pressed" from="Bar/Auto" to="." method="_on_Auto_pressed"]
+[connection signal="pressed" from="Bar/Reset" to="." method="_on_reset_pressed"]
