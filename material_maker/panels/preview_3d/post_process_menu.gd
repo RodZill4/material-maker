@@ -6,6 +6,7 @@ extends PanelContainer
 @onready var TonemapMode := %TonemapMode
 @onready var TonemapExposure := %TonemapExposure
 @onready var TonemapWhite := %TonemapWhite
+@onready var TonemapWhiteLabel := %TonemapWhiteLabel
 
 @onready var Glow := %Glow
 @onready var GlowBleed := %GlowBleed
@@ -154,6 +155,7 @@ func restore_tonemap_settings(force_update : bool = false) -> void:
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP):
 			TonemapMode.selected = mm_globals.get_config(SETTING_PREVIEW_TONEMAP)
 			environment.tonemap_mode = TonemapMode.selected
+			show_hide_tonemap_white(TonemapMode.selected)
 
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_EXPOSURE):
 			TonemapExposure.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_EXPOSURE)
@@ -226,10 +228,20 @@ func _on_tonemap_toggled(toggled_on: bool) -> void:
 	else:
 		restore_tonemap_settings()
 
+func show_hide_tonemap_white(tonemapper: int) -> void:
+	match tonemapper:
+		Environment.ToneMapper.TONE_MAPPER_LINEAR, Environment.ToneMapper.TONE_MAPPER_AGX:
+			TonemapWhiteLabel.hide()
+			TonemapWhite.hide()
+		_:
+			TonemapWhiteLabel.show()
+			TonemapWhite.show()
 
-func _on_tone_map_item_selected(index: int) -> void:
-	environment.tonemap_mode = index
-	mm_globals.set_config(SETTING_PREVIEW_TONEMAP, index)
+
+func _on_tone_map_item_selected(tonemapper: int) -> void:
+	environment.tonemap_mode = tonemapper
+	mm_globals.set_config(SETTING_PREVIEW_TONEMAP, tonemapper)
+	show_hide_tonemap_white(tonemapper)
 
 
 func _on_tonemap_white_value_changed(value: Variant) -> void:

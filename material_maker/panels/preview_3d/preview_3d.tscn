@@ -472,6 +472,7 @@ step = 0.01
 float_only = true
 
 [node name="TonemapWhiteLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "White Point"
