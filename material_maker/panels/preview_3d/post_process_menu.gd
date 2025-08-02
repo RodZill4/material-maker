@@ -58,25 +58,19 @@ func _ready() -> void:
 
 	if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_ENABLED):
 		Tonemap.button_pressed = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_ENABLED)
-		restore_tonemap_settings()
+	restore_tonemap_settings()
 
 	if mm_globals.has_config(SETTING_PREVIEW_GLOW_ENABLED):
 		Glow.button_pressed = mm_globals.get_config(SETTING_PREVIEW_GLOW_ENABLED)
 		environment.glow_enabled = Glow.button_pressed
 		$VBoxContainer/GlowSection.visible = Glow.button_pressed
-
 	restore_glow_settings()
 
 	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED):
 		Adjustment.button_pressed = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED)
 		environment.adjustment_enabled = Adjustment.button_pressed
 		$VBoxContainer/AdjustmentSection.visible = Adjustment.button_pressed
-
 	restore_adjustment_settings()
-
-
-func _on_minimum_size_changed() -> void:
-	size = get_combined_minimum_size()
 
 
 func _on_glow_blending_item_selected(index: int) -> void:
@@ -228,6 +222,7 @@ func _on_tonemap_toggled(toggled_on: bool) -> void:
 	else:
 		restore_tonemap_settings()
 
+
 func show_hide_tonemap_white(tonemapper: int) -> void:
 	match tonemapper:
 		Environment.ToneMapper.TONE_MAPPER_LINEAR, Environment.ToneMapper.TONE_MAPPER_AGX:
@@ -253,7 +248,8 @@ func _on_tonemap_exposure_value_changed(value: Variant) -> void:
 	environment.tonemap_exposure = value
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_EXPOSURE, value)
 
-func reset_post_process_section(section : String) -> void:
+
+func reset_post_process_section(section: String) -> void:
 	for setting in mm_globals.DEFAULT_CONFIG:
 		if section in setting and "enable" not in setting:
 			mm_globals.set_config(setting, mm_globals.DEFAULT_CONFIG[setting])
@@ -272,3 +268,7 @@ func _on_reset_glow_section_pressed() -> void:
 func _on_reset_adjustment_section_pressed() -> void:
 	reset_post_process_section("preview_adjustment")
 	restore_adjustment_settings()
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()
