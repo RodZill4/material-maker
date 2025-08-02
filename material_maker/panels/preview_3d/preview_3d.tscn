@@ -416,12 +416,21 @@ script = ExtResource("12_osyun")
 [node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel"]
 layout_mode = 2
 
-[node name="Tonemap" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="TonemapHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Tonemap" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Tonemap"
+
+[node name="ResetTonemapSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader"]
+layout_mode = 2
+tooltip_text = "Reset tonemap settings"
+script = ExtResource("8_13pve")
+icon_name = "reset"
 
 [node name="TonemapSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
 layout_mode = 2
@@ -476,12 +485,25 @@ max_value = 16.0
 step = 0.01
 float_only = true
 
-[node name="Glow" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="TonemapSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="GlowHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Glow" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Glow"
+
+[node name="ResetGlowSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader"]
+layout_mode = 2
+tooltip_text = "Reset glow settings"
+script = ExtResource("8_13pve")
+icon_name = "reset"
 
 [node name="GlowSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
 layout_mode = 2
@@ -608,12 +630,25 @@ max_value = 16.0
 step = 0.01
 float_only = true
 
-[node name="Adjustment" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="GlowSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="AdjustmentHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Adjustment" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Adjustment"
+
+[node name="ResetAdjustmentSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader"]
+layout_mode = 2
+tooltip_text = "Reset adjustment settings"
+script = ExtResource("8_13pve")
+icon_name = "reset"
 
 [node name="AdjustmentSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
 layout_mode = 2
@@ -680,11 +715,13 @@ float_only = true
 [connection signal="text_changed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapExportFile" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_export_file_text_changed"]
 [connection signal="pressed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapButton" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_generate_map_button_pressed"]
 [connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_minimum_size_changed"]
-[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/Tonemap" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader/Tonemap" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader/ResetTonemapSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_tonemap_section_pressed"]
 [connection signal="item_selected" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection/TonemapMode" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tone_map_item_selected"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection/TonemapExposure" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_exposure_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection/TonemapWhite" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_white_value_changed"]
-[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/Glow" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader/Glow" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader/ResetGlowSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_glow_section_pressed"]
 [connection signal="item_selected" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBlendMode" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_blending_item_selected"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBlendMix" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_blend_mix_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBloom" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_bloom_value_changed"]
@@ -693,7 +730,8 @@ float_only = true
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBleed" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_size_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowThreshold" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_threshold_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowClamp" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_clamp_value_changed"]
-[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/Adjustment" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader/Adjustment" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader/ResetAdjustmentSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_adjustment_section_pressed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection/AdjustmentBrightness" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_brightness_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection/AdjustmentContrast" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_contrast_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection/AdjustmentSaturation" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_saturation_value_changed"]

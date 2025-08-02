@@ -64,58 +64,14 @@ func _ready() -> void:
 		environment.glow_enabled = Glow.button_pressed
 		$VBoxContainer/GlowSection.visible = Glow.button_pressed
 
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_SIZE):
-		GlowBleed.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_SIZE)
-		environment.glow_hdr_scale = GlowBleed.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_BLOOM):
-		GlowBloom.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_BLOOM)
-		environment.glow_bloom = GlowBloom.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_INTENSITY):
-		GlowIntensity.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_INTENSITY)
-		environment.glow_intensity = GlowIntensity.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_STRENGTH):
-		GlowClamp.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_STRENGTH)
-		environment.glow_strength = GlowStrength.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_BLEND_MODE):
-		GlowBlendMode.selected = mm_globals.get_config(SETTING_PREVIEW_GLOW_BLEND_MODE)
-		environment.glow_blend_mode = GlowBlendMode.selected
-		GlowBlendMix.visible = GlowBlendMode.selected == Environment.GLOW_BLEND_MODE_MIX
-		GlowBlendMixLabel.visible = GlowBlendMode.selected == Environment.GLOW_BLEND_MODE_MIX
-		GlowIntensity.visible = GlowBlendMode.selected != Environment.GLOW_BLEND_MODE_MIX
-		GlowIntensityLabel.visible = GlowBlendMode.selected != Environment.GLOW_BLEND_MODE_MIX
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_BLEND_MIX_FAC):
-		GlowBlendMix.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_BLEND_MIX_FAC)
-		environment.glow_mix = GlowBlendMix.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_LOWER_THRESHOLD):
-		GlowThreshold.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_LOWER_THRESHOLD)
-		environment.glow_hdr_threshold = GlowThreshold.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_GLOW_UPPER_THRESHOLD):
-		GlowClamp.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_UPPER_THRESHOLD)
-		environment.glow_hdr_luminance_cap = GlowClamp.value
+	restore_glow_settings()
 
 	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED):
 		Adjustment.button_pressed = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED)
 		environment.adjustment_enabled = Adjustment.button_pressed
 		$VBoxContainer/AdjustmentSection.visible = Adjustment.button_pressed
 
-	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_BRIGHTNESS):
-		AdjustmentBrightness.value = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_BRIGHTNESS)
-		environment.adjustment_brightness = AdjustmentBrightness.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_CONTRAST):
-		AdjustmentContrast.value = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_CONTRAST)
-		environment.adjustment_contrast = AdjustmentContrast.value
-
-	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_SATURATION):
-		AdjustmentSaturation.value = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_SATURATION)
-		environment.adjustment_saturation = AdjustmentSaturation.value
+	restore_adjustment_settings()
 
 
 func _on_minimum_size_changed() -> void:
@@ -193,8 +149,8 @@ func _on_adjustment_saturation_value_changed(value: Variant) -> void:
 	mm_globals.set_config(SETTING_PREVIEW_ADJUSTMENT_SATURATION, value)
 
 
-func restore_tonemap_settings() -> void:
-	if Tonemap.button_pressed:
+func restore_tonemap_settings(force_update : bool = false) -> void:
+	if Tonemap.button_pressed or force_update:
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP):
 			TonemapMode.selected = mm_globals.get_config(SETTING_PREVIEW_TONEMAP)
 			environment.tonemap_mode = TonemapMode.selected
@@ -204,8 +160,61 @@ func restore_tonemap_settings() -> void:
 			environment.tonemap_exposure = TonemapExposure.value
 
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_WHITE):
-					TonemapWhite.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_WHITE)
-					environment.tonemap_white = TonemapWhite.value
+			TonemapWhite.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_WHITE)
+			environment.tonemap_white = TonemapWhite.value
+
+
+func restore_glow_settings() -> void:
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_SIZE):
+		GlowBleed.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_SIZE)
+		environment.glow_hdr_scale = GlowBleed.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_BLOOM):
+		GlowBloom.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_BLOOM)
+		environment.glow_bloom = GlowBloom.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_INTENSITY):
+		GlowIntensity.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_INTENSITY)
+		environment.glow_intensity = GlowIntensity.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_STRENGTH):
+		GlowStrength.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_STRENGTH)
+		environment.glow_strength = GlowStrength.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_BLEND_MODE):
+		GlowBlendMode.selected = mm_globals.get_config(SETTING_PREVIEW_GLOW_BLEND_MODE)
+		environment.glow_blend_mode = GlowBlendMode.selected
+		GlowBlendMix.visible = GlowBlendMode.selected == Environment.GLOW_BLEND_MODE_MIX
+		GlowBlendMixLabel.visible = GlowBlendMode.selected == Environment.GLOW_BLEND_MODE_MIX
+		GlowIntensity.visible = GlowBlendMode.selected != Environment.GLOW_BLEND_MODE_MIX
+		GlowIntensityLabel.visible = GlowBlendMode.selected != Environment.GLOW_BLEND_MODE_MIX
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_BLEND_MIX_FAC):
+		GlowBlendMix.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_BLEND_MIX_FAC)
+		environment.glow_mix = GlowBlendMix.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_LOWER_THRESHOLD):
+		GlowThreshold.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_LOWER_THRESHOLD)
+		environment.glow_hdr_threshold = GlowThreshold.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_GLOW_UPPER_THRESHOLD):
+		GlowClamp.value = mm_globals.get_config(SETTING_PREVIEW_GLOW_UPPER_THRESHOLD)
+		environment.glow_hdr_luminance_cap = GlowClamp.value
+
+
+func restore_adjustment_settings() -> void:
+	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_BRIGHTNESS):
+		AdjustmentBrightness.value = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_BRIGHTNESS)
+		environment.adjustment_brightness = AdjustmentBrightness.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_CONTRAST):
+		AdjustmentContrast.value = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_CONTRAST)
+		environment.adjustment_contrast = AdjustmentContrast.value
+
+	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_SATURATION):
+		AdjustmentSaturation.value = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_SATURATION)
+		environment.adjustment_saturation = AdjustmentSaturation.value
+
 
 func _on_tonemap_toggled(toggled_on: bool) -> void:
 	$VBoxContainer/TonemapSection.visible = toggled_on
@@ -231,3 +240,23 @@ func _on_tonemap_white_value_changed(value: Variant) -> void:
 func _on_tonemap_exposure_value_changed(value: Variant) -> void:
 	environment.tonemap_exposure = value
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_EXPOSURE, value)
+
+func reset_post_process_section(section : String) -> void:
+	for setting in mm_globals.DEFAULT_CONFIG:
+		if section in setting and "enable" not in setting:
+			mm_globals.set_config(setting, mm_globals.DEFAULT_CONFIG[setting])
+
+
+func _on_reset_tonemap_section_pressed() -> void:
+	reset_post_process_section("preview_tonemap")
+	restore_tonemap_settings(true)
+
+
+func _on_reset_glow_section_pressed() -> void:
+	reset_post_process_section("preview_glow")
+	restore_glow_settings()
+
+
+func _on_reset_adjustment_section_pressed() -> void:
+	reset_post_process_section("preview_adjustment")
+	restore_adjustment_settings()

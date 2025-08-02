@@ -23,6 +23,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_3d_preview_tonemap_white = 1.0,
 	ui_3d_preview_tonemap_exposure = 1.0,
 	ui_3d_preview_glow_enabled = false,
+	ui_3d_preview_glow_bloom = 0.0,
 	ui_3d_preview_glow_size = 2.0,
 	ui_3d_preview_glow_intensity = 0.8,
 	ui_3d_preview_glow_strength = 1.0,
