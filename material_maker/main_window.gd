@@ -297,13 +297,21 @@ func on_config_changed() -> void:
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
-
 	# Clamp to reasonable values to avoid crashes on startup.
 	preview_rendering_scale_factor = clamp(mm_globals.get_config("ui_3d_preview_resolution"), 1.0, 2.0)
 	update_preview_3d([ preview_3d, projects_panel.preview_3d_background ])
 
 	@warning_ignore("narrowing_conversion")
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
+
+	# update minimize/close button visibility
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		for c in graph_edit.get_children():
+			if c.has_method("update_node"):
+				c.update_node()
+			if c.has_method("update"):
+				c.update()
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
