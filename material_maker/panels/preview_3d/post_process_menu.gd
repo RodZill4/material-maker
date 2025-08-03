@@ -51,12 +51,23 @@ const SETTING_PREVIEW_ADJUSTMENT_SATURATION := "ui_3d_preview_adjustment_saturat
 
 var environment : Environment
 
+var custom_min_width : float
 
 func _open() -> void:
 	_on_v_box_container_minimum_size_changed()
 
+func expand_panel_width() -> void:
+	# minimize visual changes (i.e. float field widths)
+	# when scrollbar is visible
+	var v_scroll : VScrollBar = $ScrollContainer.get_v_scroll_bar()
+	custom_minimum_size.x = (custom_min_width + v_scroll.size.x
+			if v_scroll.visible else custom_min_width)
 
 func _ready() -> void:
+	custom_min_width = custom_minimum_size.x
+	$ScrollContainer.get_v_scroll_bar().visibility_changed.connect(
+			expand_panel_width)
+
 	await preview3D.ready
 	environment = preview3D.environment
 	preview3D.resized.connect(_on_v_box_container_minimum_size_changed)
