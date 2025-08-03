@@ -413,35 +413,41 @@ offset_bottom = 369.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("12_osyun")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TonemapHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TonemapHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
-layout_mode = 2
-
-[node name="Tonemap" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader"]
+[node name="Tonemap" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Tonemap"
 
-[node name="ResetTonemapSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader"]
+[node name="ResetTonemapSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader"]
 layout_mode = 2
 tooltip_text = "Reset tonemap settings"
 script = ExtResource("8_13pve")
 icon_name = "reset"
 
-[node name="TonemapSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="TonemapSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 2
 
-[node name="TonemapLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection"]
+[node name="TonemapLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Tonemap"
 
-[node name="TonemapMode" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection" instance=ExtResource("5_xygyl")]
+[node name="TonemapMode" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection" instance=ExtResource("5_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -458,12 +464,12 @@ popup/item_3/id = 3
 popup/item_4/text = "AgX"
 popup/item_4/id = 4
 
-[node name="TonemapExposureLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection"]
+[node name="TonemapExposureLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Exposure"
 
-[node name="TonemapExposure" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection" instance=ExtResource("9_xygyl")]
+[node name="TonemapExposure" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 value = 1.0
@@ -471,13 +477,13 @@ max_value = 16.0
 step = 0.01
 float_only = true
 
-[node name="TonemapWhiteLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection"]
+[node name="TonemapWhiteLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "White Point"
 
-[node name="TonemapWhite" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection" instance=ExtResource("9_xygyl")]
+[node name="TonemapWhite" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "White reference point for the tonemapper."
@@ -486,36 +492,37 @@ max_value = 16.0
 step = 0.01
 float_only = true
 
-[node name="TonemapSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection"]
+[node name="TonemapSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection"]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 
-[node name="GlowHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="GlowHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Glow" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader"]
+[node name="Glow" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowHeader"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Glow"
 
-[node name="ResetGlowSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader"]
+[node name="ResetGlowSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowHeader"]
 layout_mode = 2
 tooltip_text = "Reset glow settings"
 script = ExtResource("8_13pve")
 icon_name = "reset"
 
-[node name="GlowSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="GlowSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 2
 
-[node name="GlowBlendModeLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowBlendModeLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Blend"
 
-[node name="GlowBlendMode" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("5_xygyl")]
+[node name="GlowBlendMode" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("5_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -532,26 +539,26 @@ popup/item_3/id = 3
 popup/item_4/text = "Mix"
 popup/item_4/id = 4
 
-[node name="GlowBlendMixLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowBlendMixLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Mix Fac"
 
-[node name="GlowBlendMix" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowBlendMix" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 value = 0.05
 step = 0.01
 float_only = true
 
-[node name="GlowBloomLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowBloomLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Bloom"
 
-[node name="GlowBloom" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowBloom" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Bloom intensity. Value higher than 0 will make areas lower than the threshold glow."
@@ -559,13 +566,13 @@ value = 0.0
 step = 0.01
 float_only = true
 
-[node name="GlowIntensityLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowIntensityLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Intensity"
 
-[node name="GlowIntensity" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowIntensity" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Brightness multiplier of the glow effect."
@@ -574,13 +581,13 @@ max_value = 8.0
 step = 0.01
 float_only = true
 
-[node name="GlowStrengthLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowStrengthLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Strength"
 
-[node name="GlowStrength" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowStrength" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 value = 1.0
@@ -588,12 +595,12 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
-[node name="GlowBleedLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowBleedLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Bleed"
 
-[node name="GlowBleed" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowBleed" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Bleed scale of the glow effect."
@@ -602,12 +609,12 @@ max_value = 4.0
 step = 0.01
 float_only = true
 
-[node name="GlowThresholdLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowThresholdLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Threshold"
 
-[node name="GlowThreshold" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowThreshold" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Lower threshold for the glow effect.
@@ -617,12 +624,12 @@ max_value = 4.0
 step = 0.01
 float_only = true
 
-[node name="GlowClampLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowClampLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Clamp"
 
-[node name="GlowClamp" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
+[node name="GlowClamp" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Upper threshold for the glow effect. Areas brighter than this value will be clamped."
@@ -631,36 +638,37 @@ max_value = 16.0
 step = 0.01
 float_only = true
 
-[node name="GlowSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection"]
+[node name="GlowSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection"]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 
-[node name="AdjustmentHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="AdjustmentHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Adjustment" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader"]
+[node name="Adjustment" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentHeader"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "Adjustment"
 
-[node name="ResetAdjustmentSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader"]
+[node name="ResetAdjustmentSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentHeader"]
 layout_mode = 2
 tooltip_text = "Reset adjustment settings"
 script = ExtResource("8_13pve")
 icon_name = "reset"
 
-[node name="AdjustmentSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer"]
+[node name="AdjustmentSection" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 2
 
-[node name="BrightnessLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection"]
+[node name="BrightnessLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Brightness"
 
-[node name="AdjustmentBrightness" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection" instance=ExtResource("9_xygyl")]
+[node name="AdjustmentBrightness" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -670,12 +678,12 @@ max_value = 8.0
 step = 0.01
 float_only = true
 
-[node name="ContrastLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection"]
+[node name="ContrastLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Contrast"
 
-[node name="AdjustmentContrast" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection" instance=ExtResource("9_xygyl")]
+[node name="AdjustmentContrast" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -685,12 +693,12 @@ max_value = 8.0
 step = 0.01
 float_only = true
 
-[node name="SaturationLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection"]
+[node name="SaturationLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection"]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "Saturation"
 
-[node name="AdjustmentSaturation" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection" instance=ExtResource("9_xygyl")]
+[node name="AdjustmentSaturation" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection" instance=ExtResource("9_xygyl")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -716,23 +724,25 @@ float_only = true
 [connection signal="text_changed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapExportFile" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_export_file_text_changed"]
 [connection signal="pressed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapButton" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_generate_map_button_pressed"]
 [connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_minimum_size_changed"]
-[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader/Tonemap" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_toggled"]
-[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapHeader/ResetTonemapSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_tonemap_section_pressed"]
-[connection signal="item_selected" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection/TonemapMode" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tone_map_item_selected"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection/TonemapExposure" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_exposure_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/TonemapSection/TonemapWhite" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_white_value_changed"]
-[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader/Glow" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_toggled"]
-[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowHeader/ResetGlowSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_glow_section_pressed"]
-[connection signal="item_selected" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBlendMode" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_blending_item_selected"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBlendMix" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_blend_mix_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBloom" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_bloom_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowIntensity" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_intensity_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowStrength" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_strength_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowBleed" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_size_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowThreshold" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_threshold_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/GlowSection/GlowClamp" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_clamp_value_changed"]
-[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader/Adjustment" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_toggled"]
-[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentHeader/ResetAdjustmentSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_adjustment_section_pressed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection/AdjustmentBrightness" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_brightness_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection/AdjustmentContrast" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_contrast_value_changed"]
-[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/VBoxContainer/AdjustmentSection/AdjustmentSaturation" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_saturation_value_changed"]
+[connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_scroll_container_minimum_size_changed"]
+[connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_v_box_container_minimum_size_changed"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader/Tonemap" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader/ResetTonemapSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_tonemap_section_pressed"]
+[connection signal="item_selected" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection/TonemapMode" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tone_map_item_selected"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection/TonemapExposure" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_exposure_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapSection/TonemapWhite" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_white_value_changed"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowHeader/Glow" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowHeader/ResetGlowSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_glow_section_pressed"]
+[connection signal="item_selected" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowBlendMode" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_blending_item_selected"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowBlendMix" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_blend_mix_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowBloom" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_bloom_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowIntensity" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_intensity_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowStrength" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_strength_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowBleed" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_size_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowThreshold" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_threshold_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowSection/GlowClamp" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_glow_clamp_value_changed"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentHeader/Adjustment" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentHeader/ResetAdjustmentSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_adjustment_section_pressed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection/AdjustmentBrightness" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_brightness_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection/AdjustmentContrast" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_contrast_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection/AdjustmentSaturation" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_saturation_value_changed"]

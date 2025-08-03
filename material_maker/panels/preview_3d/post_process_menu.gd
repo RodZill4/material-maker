@@ -2,6 +2,10 @@ extends PanelContainer
 
 @onready var preview3D := owner
 
+@onready var TonemapSection := %TonemapSection
+@onready var GlowSection := %GlowSection
+@onready var AdjustmentSection := %AdjustmentSection
+
 @onready var Tonemap := %Tonemap
 @onready var TonemapMode := %TonemapMode
 @onready var TonemapExposure := %TonemapExposure
@@ -49,12 +53,13 @@ var environment : Environment
 
 
 func _open() -> void:
-	pass
+	_on_v_box_container_minimum_size_changed()
 
 
 func _ready() -> void:
 	await preview3D.ready
 	environment = preview3D.environment
+	preview3D.resized.connect(_on_v_box_container_minimum_size_changed)
 
 	if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_ENABLED):
 		Tonemap.button_pressed = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_ENABLED)
@@ -63,15 +68,14 @@ func _ready() -> void:
 	if mm_globals.has_config(SETTING_PREVIEW_GLOW_ENABLED):
 		Glow.button_pressed = mm_globals.get_config(SETTING_PREVIEW_GLOW_ENABLED)
 		environment.glow_enabled = Glow.button_pressed
-		$VBoxContainer/GlowSection.visible = Glow.button_pressed
+		GlowSection.visible = Glow.button_pressed
 	restore_glow_settings()
 
 	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED):
 		Adjustment.button_pressed = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED)
 		environment.adjustment_enabled = Adjustment.button_pressed
-		$VBoxContainer/AdjustmentSection.visible = Adjustment.button_pressed
+		AdjustmentSection.visible = Adjustment.button_pressed
 	restore_adjustment_settings()
-
 
 func _on_glow_blending_item_selected(index: int) -> void:
 	environment.glow_blend_mode = index
@@ -94,7 +98,7 @@ func _on_glow_size_value_changed(value: Variant) -> void:
 
 func _on_glow_toggled(toggled_on: bool) -> void:
 	environment.glow_enabled = toggled_on
-	$VBoxContainer/GlowSection.visible = Glow.button_pressed
+	GlowSection.visible = Glow.button_pressed
 	mm_globals.set_config(SETTING_PREVIEW_GLOW_ENABLED, toggled_on)
 
 
@@ -125,7 +129,7 @@ func _on_glow_strength_value_changed(value: Variant) -> void:
 
 func _on_adjustment_toggled(toggled_on: bool) -> void:
 	environment.adjustment_enabled = toggled_on
-	$VBoxContainer/AdjustmentSection.visible = toggled_on
+	AdjustmentSection.visible = toggled_on
 	mm_globals.set_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED, toggled_on)
 
 
@@ -213,7 +217,7 @@ func restore_adjustment_settings() -> void:
 
 
 func _on_tonemap_toggled(toggled_on: bool) -> void:
-	$VBoxContainer/TonemapSection.visible = toggled_on
+	TonemapSection.visible = toggled_on
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_ENABLED, toggled_on)
 	if not toggled_on:
 		environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
@@ -272,3 +276,9 @@ func _on_reset_adjustment_section_pressed() -> void:
 
 func _on_minimum_size_changed() -> void:
 	size = get_combined_minimum_size()
+
+
+func _on_v_box_container_minimum_size_changed() -> void:
+	$ScrollContainer.custom_minimum_size.y = min(
+			$ScrollContainer/VBoxContainer.get_minimum_size().y,
+			preview3D.get_rect().size.y - 64)
