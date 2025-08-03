@@ -4,7 +4,6 @@ const SETTING_PREVIEW_CLEAR_BG := "3D_preview_panel_clear_background"
 
 @onready var preview3D := owner
 
-#@onready var ToneMap := %ToneMap
 @onready var ClearBackground := %ClearBackground
 @onready var EnvironmentList := %EnvironmentList
 
@@ -16,18 +15,6 @@ func _ready() -> void:
 
 func _open() -> void:
 	update_environment_selector()
-
-	#var tonemap_mode : int = mm_globals.get_config("ui_3d_preview_tonemap")
-	#ToneMap.select(tonemap_mode)
-	#
-	#if mm_globals.has_config("ui_3d_preview_tonemap_exposure"):
-		#$VBoxContainer/VBox/Exposure.set_value(mm_globals.get_config("ui_3d_preview_tonemap_exposure"))
-	#
-	#if mm_globals.has_config("ui_3d_preview_tonemap_white"):
-		#$VBoxContainer/VBox/White.set_value(mm_globals.get_config("ui_3d_preview_tonemap_white"))
-	#
-	#$VBoxContainer/VBox/White.visible = tonemap_mode > 0 && tonemap_mode <= 3
-	#$VBoxContainer/VBox/WhiteLabel.visible = tonemap_mode > 0 && tonemap_mode <= 3
 
 
 func update_environment_selector() -> void:
