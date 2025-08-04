@@ -255,7 +255,7 @@ func _on_tone_map_item_selected(tonemapper: int) -> void:
 
 
 func _on_tonemap_white_value_changed(value: Variant) -> void:
-	environment.tonemap_white = value
+	environment.tonemap_white = max(0.001, value)
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_WHITE, value)
 
 
