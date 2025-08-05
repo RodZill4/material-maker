@@ -120,6 +120,7 @@ func _ready() -> void:
 		DepthOfFieldSection.visible = DepthOfField.button_pressed
 	restore_dof_settings()
 
+
 func _on_glow_blending_item_selected(index: int) -> void:
 	environment.glow_blend_mode = index
 	mm_globals.set_config(SETTING_PREVIEW_GLOW_BLEND_MODE, index)
@@ -262,10 +263,12 @@ func restore_adjustment_settings() -> void:
 func restore_dof_settings() -> void:
 	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_FAR):
 		FarEnabled.button_pressed = mm_globals.get_config(SETTINGS_PREVIEW_DOF_FAR)
+		camera_attributes.dof_blur_far_enabled = FarEnabled.button_pressed
 		far_near_toggled("far", FarEnabled.button_pressed)
 
 	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_NEAR):
 		NearEnabled.button_pressed = mm_globals.get_config(SETTINGS_PREVIEW_DOF_NEAR)
+		camera_attributes.dof_blur_near_enabled = NearEnabled.button_pressed
 		far_near_toggled("near", NearEnabled.button_pressed)
 
 	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_BLUR_AMOUNT):
@@ -365,10 +368,14 @@ func _on_v_box_container_minimum_size_changed() -> void:
 func _on_depth_of_field_toggled(toggled_on: bool) -> void:
 	DepthOfFieldSection.visible = toggled_on
 	mm_globals.set_config(SETTINGS_PREVIEW_DOF_ENABLED, toggled_on)
+	if not toggled_on:
+		camera_attributes.dof_blur_far_enabled = false
+		camera_attributes.dof_blur_near_enabled = false
+	else:
+		restore_dof_settings()
 
 
 func far_near_toggled(dof_type: String, toggled_on: bool) -> void:
-	var tween = get_tree().create_tween()
 	for control in FarNearSettings.get_children():
 		if dof_type in control.name.to_lower() and control is FloatEdit:
 			control.editable = toggled_on
