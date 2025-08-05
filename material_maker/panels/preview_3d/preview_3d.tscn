@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://cy7mimh863mo4" path="res://material_maker/panels/preview_3d/export_menu.gd" id="8_w881c"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="9_iu7lt"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="9_xygyl"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/post_process_menu.gd" id="12_osyun"]
+[ext_resource type="Script" uid="uid://bspumned10eag" path="res://material_maker/panels/preview_3d/post_process_menu.gd" id="12_osyun"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yosc0"]
 atlas = ExtResource("6_osyun")
@@ -708,6 +708,123 @@ max_value = 8.0
 step = 0.01
 float_only = true
 
+[node name="AdjustmentSpacer" type="Control" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+
+[node name="DepthOfFieldHeader" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DepthOfField" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldHeader"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "Depth Of Field"
+
+[node name="ResetDofSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldHeader"]
+layout_mode = 2
+tooltip_text = "Reset glow settings"
+script = ExtResource("8_13pve")
+icon_name = "reset"
+
+[node name="DepthOfFieldSection" type="VBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="FarNearSettings" type="GridContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3
+
+[node name="FarNearLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Type"
+
+[node name="FarEnabled" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Enable DoF blur for objects further than far distance."
+text = "Far"
+
+[node name="NearEnabled" type="CheckBox" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Enable DoF blur for objects closer than near distance."
+text = "Near"
+
+[node name="DistanceLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Distance"
+
+[node name="FarDistance" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings" instance=ExtResource("9_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Far Distance(in meters). Objects further than this value will be blurred."
+value = 10.0
+min_value = 0.01
+max_value = 128.0
+step = 0.1
+float_only = true
+
+[node name="NearDistance" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings" instance=ExtResource("9_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Near Distance (in meters). Objects closer than this value will be blurred."
+value = 2.0
+min_value = 0.01
+max_value = 128.0
+step = 0.1
+float_only = true
+
+[node name="TransitionLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Transition"
+
+[node name="FarTransition" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings" instance=ExtResource("9_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 5.0
+min_value = 0.01
+max_value = 128.0
+step = 0.1
+float_only = true
+
+[node name="NearTransition" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings" instance=ExtResource("9_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 1.0
+min_value = 0.01
+max_value = 128.0
+step = 0.1
+float_only = true
+
+[node name="BlurAmountSettings" type="HBoxContainer" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection"]
+layout_mode = 2
+
+[node name="BlurLabel" type="Label" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/BlurAmountSettings"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Blur"
+
+[node name="BlurAmount" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/BlurAmountSettings" instance=ExtResource("9_xygyl")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Maximum blur amount for the DoF effect. High values can be resource-intensive."
+value = 0.1
+step = 0.01
+float_only = true
+
 [connection signal="gui_input" from="." to="." method="on_gui_input"]
 [connection signal="item_selected" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox/Model" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_item_selected"]
 [connection signal="pressed" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/HBox/ModelConfigurate" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_model_configurate_pressed"]
@@ -746,3 +863,12 @@ float_only = true
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection/AdjustmentBrightness" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_brightness_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection/AdjustmentContrast" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_contrast_value_changed"]
 [connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentSection/AdjustmentSaturation" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_adjustment_saturation_value_changed"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldHeader/DepthOfField" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_depth_of_field_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldHeader/ResetDofSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_dof_section_pressed"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings/FarEnabled" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_far_enabled_toggled"]
+[connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings/NearEnabled" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_near_enabled_toggled"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings/FarDistance" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_far_distance_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings/NearDistance" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_near_distance_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings/FarTransition" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_far_transition_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/FarNearSettings/NearTransition" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_near_transition_value_changed"]
+[connection signal="value_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldSection/BlurAmountSettings/BlurAmount" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_blur_amount_value_changed"]

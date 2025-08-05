@@ -5,6 +5,7 @@ extends PanelContainer
 @onready var TonemapSection := %TonemapSection
 @onready var GlowSection := %GlowSection
 @onready var AdjustmentSection := %AdjustmentSection
+@onready var DepthOfFieldSection := %DepthOfFieldSection
 
 @onready var Tonemap := %Tonemap
 @onready var TonemapMode := %TonemapMode
@@ -29,6 +30,17 @@ extends PanelContainer
 @onready var AdjustmentContrast := %AdjustmentContrast
 @onready var AdjustmentSaturation := %AdjustmentSaturation
 
+@onready var DepthOfField := %DepthOfField
+@onready var FarEnabled := %FarEnabled
+@onready var NearEnabled := %NearEnabled
+@onready var FarDistance := %FarDistance
+@onready var FarTransition := %FarTransition
+@onready var NearDistance := %NearDistance
+@onready var NearTransition := %NearTransition
+@onready var BlurAmount := %BlurAmount
+@onready var FarNearSettings := %FarNearSettings
+
+#region configuration keys
 const SETTING_PREVIEW_TONEMAP_ENABLED := "ui_3d_preview_tonemap_enabled"
 const SETTING_PREVIEW_TONEMAP := "ui_3d_preview_tonemap"
 const SETTING_PREVIEW_TONEMAP_WHITE := "ui_3d_preview_tonemap_white"
@@ -49,19 +61,32 @@ const SETTING_PREVIEW_ADJUSTMENT_BRIGHTNESS := "ui_3d_preview_adjustment_brightn
 const SETTING_PREVIEW_ADJUSTMENT_CONTRAST := "ui_3d_preview_adjustment_contrast"
 const SETTING_PREVIEW_ADJUSTMENT_SATURATION := "ui_3d_preview_adjustment_saturation"
 
+const SETTINGS_PREVIEW_DOF_ENABLED := "ui_3d_preview_dof_enabled"
+const SETTINGS_PREVIEW_DOF_FAR := "ui_3d_preview_dof_far"
+const SETTINGS_PREVIEW_DOF_NEAR := "ui_3d_preview_dof_near"
+const SETTINGS_PREVIEW_DOF_BLUR_AMOUNT := "ui_3d_preview_dof_blur_amount"
+const SETTINGS_PREVIEW_DOF_FAR_DIST := "ui_3d_preview_dof_far_distance"
+const SETTINGS_PREVIEW_DOF_NEAR_DIST := "ui_3d_preview_dof_near_distance"
+const SETTINGS_PREVIEW_DOF_FAR_TRANSITION := "ui_3d_preview_dof_far_transition"
+const SETTINGS_PREVIEW_DOF_NEAR_TRANSITION := "ui_3d_preview_dof_near_transition"
+#endregion
+
 var environment : Environment
+var camera_attributes : CameraAttributesPractical
 
 var custom_min_width : float
 
 func _open() -> void:
 	_on_v_box_container_minimum_size_changed()
 
+
 func expand_panel_width() -> void:
-	# minimize visual changes (i.e. float field widths)
-	# when scrollbar is visible
+	# minimize visual jumps (i.e. float field widths)
+	# when scrollbar is added to the ScrollContainer
 	var v_scroll : VScrollBar = $ScrollContainer.get_v_scroll_bar()
 	custom_minimum_size.x = (custom_min_width + v_scroll.size.x
 			if v_scroll.visible else custom_min_width)
+
 
 func _ready() -> void:
 	custom_min_width = custom_minimum_size.x
@@ -69,8 +94,10 @@ func _ready() -> void:
 			expand_panel_width)
 
 	await preview3D.ready
-	environment = preview3D.environment
 	preview3D.resized.connect(_on_v_box_container_minimum_size_changed)
+
+	environment = preview3D.environment
+	camera_attributes = preview3D.camera_attributes
 
 	if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_ENABLED):
 		Tonemap.button_pressed = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_ENABLED)
@@ -84,9 +111,14 @@ func _ready() -> void:
 
 	if mm_globals.has_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED):
 		Adjustment.button_pressed = mm_globals.get_config(SETTING_PREVIEW_ADJUSTMENT_ENABLED)
-		environment.adjustment_enabled = Adjustment.button_pressed
 		AdjustmentSection.visible = Adjustment.button_pressed
+		environment.adjustment_enabled = Adjustment.button_pressed
 	restore_adjustment_settings()
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_ENABLED):
+		DepthOfField.button_pressed = mm_globals.get_config(SETTINGS_PREVIEW_DOF_ENABLED)
+		DepthOfFieldSection.visible = DepthOfField.button_pressed
+	restore_dof_settings()
 
 func _on_glow_blending_item_selected(index: int) -> void:
 	environment.glow_blend_mode = index
@@ -159,7 +191,7 @@ func _on_adjustment_saturation_value_changed(value: Variant) -> void:
 	mm_globals.set_config(SETTING_PREVIEW_ADJUSTMENT_SATURATION, value)
 
 
-func restore_tonemap_settings(force_update : bool = false) -> void:
+func restore_tonemap_settings(force_update: bool = false) -> void:
 	if Tonemap.button_pressed or force_update:
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP):
 			TonemapMode.selected = mm_globals.get_config(SETTING_PREVIEW_TONEMAP)
@@ -227,6 +259,36 @@ func restore_adjustment_settings() -> void:
 		environment.adjustment_saturation = AdjustmentSaturation.value
 
 
+func restore_dof_settings() -> void:
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_FAR):
+		FarEnabled.button_pressed = mm_globals.get_config(SETTINGS_PREVIEW_DOF_FAR)
+		far_near_toggled("far", FarEnabled.button_pressed)
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_NEAR):
+		NearEnabled.button_pressed = mm_globals.get_config(SETTINGS_PREVIEW_DOF_NEAR)
+		far_near_toggled("near", NearEnabled.button_pressed)
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_BLUR_AMOUNT):
+		BlurAmount.value = mm_globals.get_config(SETTINGS_PREVIEW_DOF_BLUR_AMOUNT)
+		camera_attributes.dof_blur_amount = BlurAmount.value
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_FAR_DIST):
+		FarDistance.value = mm_globals.get_config(SETTINGS_PREVIEW_DOF_FAR_DIST)
+		camera_attributes.dof_blur_far_distance = FarDistance.value
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_NEAR_DIST):
+		NearDistance.value = mm_globals.get_config(SETTINGS_PREVIEW_DOF_NEAR_DIST)
+		camera_attributes.dof_blur_near_distance = NearDistance.value
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_FAR_TRANSITION):
+		FarTransition.value = mm_globals.get_config(SETTINGS_PREVIEW_DOF_FAR_TRANSITION)
+		camera_attributes.dof_blur_far_transition = FarTransition.value
+
+	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_NEAR_TRANSITION):
+		NearTransition.value = mm_globals.get_config(SETTINGS_PREVIEW_DOF_NEAR_TRANSITION)
+		camera_attributes.dof_blur_near_transition = NearTransition.value
+
+
 func _on_tonemap_toggled(toggled_on: bool) -> void:
 	TonemapSection.visible = toggled_on
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_ENABLED, toggled_on)
@@ -285,6 +347,11 @@ func _on_reset_adjustment_section_pressed() -> void:
 	restore_adjustment_settings()
 
 
+func _on_reset_dof_section_pressed() -> void:
+	reset_post_process_section("preview_dof")
+	restore_dof_settings()
+
+
 func _on_minimum_size_changed() -> void:
 	size = get_combined_minimum_size()
 
@@ -293,3 +360,53 @@ func _on_v_box_container_minimum_size_changed() -> void:
 	$ScrollContainer.custom_minimum_size.y = min(
 			$ScrollContainer/VBoxContainer.get_minimum_size().y,
 			preview3D.get_rect().size.y - 64)
+
+
+func _on_depth_of_field_toggled(toggled_on: bool) -> void:
+	DepthOfFieldSection.visible = toggled_on
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_ENABLED, toggled_on)
+
+
+func far_near_toggled(dof_type: String, toggled_on: bool) -> void:
+	var tween = get_tree().create_tween()
+	for control in FarNearSettings.get_children():
+		if dof_type in control.name.to_lower() and control is FloatEdit:
+			control.editable = toggled_on
+			control.modulate = Color.WHITE if toggled_on else Color.WEB_GRAY
+
+
+func _on_far_enabled_toggled(toggled_on: bool) -> void:
+	camera_attributes.dof_blur_far_enabled = toggled_on
+	far_near_toggled("far", toggled_on)
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_FAR, toggled_on)
+
+
+func _on_near_enabled_toggled(toggled_on: bool) -> void:
+	camera_attributes.dof_blur_near_enabled = toggled_on
+	far_near_toggled("near", toggled_on)
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_NEAR, toggled_on)
+
+
+func _on_blur_amount_value_changed(value: Variant) -> void:
+	camera_attributes.dof_blur_amount = value
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_BLUR_AMOUNT, value)
+
+
+func _on_far_distance_value_changed(value: Variant) -> void:
+	camera_attributes.dof_blur_far_distance = value
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_FAR_DIST, value)
+
+
+func _on_near_distance_value_changed(value: Variant) -> void:
+	camera_attributes.dof_blur_near_distance = value
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_NEAR_DIST, value)
+
+
+func _on_far_transition_value_changed(value: Variant) -> void:
+	camera_attributes.dof_blur_far_transition = value
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_FAR_TRANSITION, value)
+
+
+func _on_near_transition_value_changed(value: Variant) -> void:
+	camera_attributes.dof_blur_near_transition = value
+	mm_globals.set_config(SETTINGS_PREVIEW_DOF_NEAR_TRANSITION, value)

@@ -15,6 +15,7 @@ const CAMERA_FOV_MAX = 90
 @onready var sun = $MaterialPreview/Preview3d/Sun
 
 @onready var environment : Environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+@onready var camera_attributes : CameraAttributesPractical = $MaterialPreview/Preview3d/WorldEnvironment.camera_attributes
 
 var trigger_on_right_click = true
 
