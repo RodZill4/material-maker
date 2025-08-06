@@ -58,7 +58,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 1,
+				"default": 0.28,
 				"label": "Repeat",
 				"max": 20,
 				"min": 0,
