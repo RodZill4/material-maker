@@ -17,6 +17,8 @@ func _ready() -> void:
 
 	theme_arrow_icon = get_theme_icon("arrow", "OptionButton")
 	icon = get_theme_icon(icon_name, "MM_Icons")
+	mouse_entered.connect(func():
+		mm_globals.set_tip_text("#LMB: Open/Close panel, #RMB: Pin/Unpin Panel"))
 
 
 func _enter_tree() -> void:
