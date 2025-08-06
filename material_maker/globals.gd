@@ -183,7 +183,10 @@ func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScr
 		node.mouse_default_cursor_shape = dragging_cursor
 
 		_is_gesture_warping -= 1 if _is_gesture_warping else 0
-		if not _is_gesture_warping or not mm_globals.get_config("ui_warp_mouse_gestures"):
+		if DisplayServer.get_name() != "X11" or not mm_globals.get_config("ui_warp_mouse_gestures"):
+			_is_gesture_warping = 0
+
+		if not _is_gesture_warping:
 			vscroll.value -= event.relative.y * relative_offset_multiplier
 
 		if mouse_pos.y > to_rect_y:

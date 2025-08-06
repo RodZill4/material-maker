@@ -96,7 +96,7 @@ Drag zoom/scroll via  Ctrl + MMB / MMB
 
 This makes it possible to move over a large area without
 exiting and having to adjust mouse position, but may cause
-issues with pen inputs on some OSes."
+issues with some OSes and/or pen input devices."
 text = "Warp mouse gestures"
 config_variable = "ui_warp_mouse_gestures"
 
