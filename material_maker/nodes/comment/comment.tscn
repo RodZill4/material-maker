@@ -69,7 +69,6 @@ layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 1
 mouse_filter = 1
-placeholder_text = "Type your comment here"
 wrap_mode = 1
 caret_blink = true
 caret_multiple = false
