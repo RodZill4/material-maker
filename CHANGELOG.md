@@ -1,3 +1,26 @@
+# Material Maker 1.4RC4
+
+## General
+
+- Don't show export menu for 3d preview on start (contributed by williamchange)
+
+## Nodes
+
+- Fixed dynamic pbr preview shader (contributed by williamchange)
+- Fixed dynamic materials export for Godot 4 (contributed by Paulo Poiati)
+
+## Bug Fixes
+
+- Fix global menu translation for macOS (contributed by williamchange)
+- Fix comment nodes not undoing position (contributed by williamchange)
+- Fixed environment preview not showing reflection (contributed by williamchange)
+- Fixed environment thumbnail generation (contributed by williamchange)
+- Fixed window jump when maximizing from splash (contributed by williamchange)
+- Fix connected signals errors when dragging panels (contributed by williamchange)
+- Add null check in set_current_environment (contributed by williamchange)
+- Fixed histogram with buffer inputs bug
+- Fixed problem that caused the iterate buffer to stop updating
+
 # Material Maker 1.4RC3
 
 ## General
@@ -336,7 +359,7 @@
   by williamchange)
 - The Spherize node has been improved (contributed by williamchange)
 - Updated documentation for many nodes (contributed by williamchange)
- 
+
 ## Bug Fixes
 
 - Small fixes in the GLSL parser
@@ -595,7 +618,7 @@
 - Normal maps can now be painted directly or generated from painted depth or both
 - A new a *Paint Project Settings* dialog has been added. It replaces the huge submenu in the Tools menu
 - A new *Stamp* tool has been added. To use it, press the mouse button to place the center of the stamp, then drag around to define the size and angle
-- An implicit mask has been added to painting and it can be configured from an ID map using the new *Mask Selector* tool 
+- An implicit mask has been added to painting and it can be configured from an ID map using the new *Mask Selector* tool
 - The brush parameters panel has been updated to show channel filter parameters in a more intuitive way
 - Parameters expressions can now use new *tilt* (stylus angle), and *stroke_seed* (a random number that is rerolled for each stroke) predefined variables
 - The base brush library has been reorganized, many brushes have been improved and a few brushes have been added
