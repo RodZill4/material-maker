@@ -79,6 +79,10 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Select Sources", command="edit_select_sources", shortcut="Control+L" },
 	{ menu="Edit/Select Targets", command="edit_select_targets", shortcut="Control+Shift+L" },
 	{ menu="Edit/-" },
+	{ menu="Edit/Align Start", command="edit_align_start", shortcut="Control+BRACKETLEFT" },
+	{ menu="Edit/Align Center", command="edit_align_center", shortcut="Control+BACKSLASH" },
+	{ menu="Edit/Align End", command="edit_align_end", shortcut="Control+BRACKETRIGHT" },
+	{ menu="Edit/-" },
 	{ menu="Edit/Load Selection", command="edit_load_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/Save Selection", command="edit_save_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/-" },
@@ -864,6 +868,35 @@ func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
 	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	dialog.edit_preferences(mm_globals.config)
+
+func edit_align_start() -> void:
+	var nodes : Array = get_current_graph_edit().get_selected_nodes()
+	var min_offset : float = INF
+
+	for node : GraphElement in nodes:
+		min_offset = min(min_offset, node.position_offset.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = min_offset
+
+func edit_align_center() -> void:
+	var nodes : Array = get_current_graph_edit().get_selected_nodes()
+	var min_offset : float = INF
+	var max_offset : float = -INF
+
+	for node : GraphElement in nodes:
+		max_offset = max(max_offset, node.position_offset.x + node.size.x)
+		min_offset = min(min_offset, node.position_offset.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = (max_offset + min_offset) * 0.5 - (node.size.x * 0.5)
+
+func edit_align_end() -> void:
+	var nodes : Array = get_current_graph_edit().get_selected_nodes()
+	var max_offset : float = -INF
+
+	for node : GraphElement in nodes:
+		max_offset = max(max_offset, node.position_offset.x + node.size.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = max_offset - node.size.x
 
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
