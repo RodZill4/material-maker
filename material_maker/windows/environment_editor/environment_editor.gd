@@ -27,7 +27,6 @@ func _ready():
 	
 	hide()
 	popup_centered()
-	_on_ViewportContainer_resized()
 	connect_controls()
 	environment_manager.environment_updated.connect(self.on_environment_updated)
 	environment_manager.name_updated.connect(self.on_name_updated)
@@ -78,9 +77,6 @@ func read_environment_list(select : int = 0):
 			select += environment_list.get_item_count()-1
 		environment_list.select(select)
 		set_current_environment(select)
-
-func _on_ViewportContainer_resized():
-	$Main/HSplitContainer/SubViewportContainer/SubViewport.size = $Main/HSplitContainer/SubViewportContainer.size
 
 func _on_name_text_entered(new_text : String):
 	environment_list.set_item_text(current_environment, new_text)
@@ -144,7 +140,7 @@ func _on_Environments_gui_input(event):
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
 		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
 
-func _on_ContextMenu_id_pressed(id):
+func _on_ContextMenu_id_pressed(_id):
 	var index = environment_list.get_selected_items()[0]
 	environment_manager.delete_environment(index)
 	environment_list.remove_item(index)

@@ -41,7 +41,7 @@ func do_update_mesh() -> void:
 		shader.add_output_parameter("tangents", "float", 4*vertex_count)
 		shader.add_output_parameter("tex_uvs", "float", 2*vertex_count)
 		shader.add_output_parameter("indexes", "int", index_count)
-		await shader.set_shader_ext(compute_shader)
+		shader.set_shader_ext(compute_shader)
 		shader_size = size
 		shader_string = compute_shader
 	var opv : Dictionary = { vertices_format="vec3", normals_format="vec3", tex_uvs_format="vec2" }
