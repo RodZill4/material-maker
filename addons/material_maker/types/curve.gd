@@ -38,7 +38,7 @@ func compare(curve) -> bool:
 			return false
 	return true
 
-func add_point(x : float, y : float, ls : float = INF, rs : float = INF) -> void:
+func add_point(x : float, y : float, ls : float = INF, rs : float = INF) -> int:
 	for i in points.size():
 		if x < points[i].p.x:
 			if ls == INF:
@@ -46,8 +46,9 @@ func add_point(x : float, y : float, ls : float = INF, rs : float = INF) -> void
 			if rs == INF:
 				rs = 0
 			points.insert(i, Point.new(x, y, ls, rs))
-			return
+			return i
 	points.append(Point.new(x, y, ls, rs))
+	return -1
 
 func remove_point(index : int) -> bool:
 	if index <= 0 or index >= points.size() - 1:
