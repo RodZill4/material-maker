@@ -266,6 +266,7 @@ layout_mode = 2
 button_pressed = true
 
 [node name="ExportMenu" type="Button" parent="MainMenu/HBox"]
+visible = false
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "Export"

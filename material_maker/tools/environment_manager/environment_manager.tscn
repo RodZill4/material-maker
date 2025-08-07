@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmyq6xxfx88m0"]
+[gd_scene load_steps=7 format=3 uid="uid://dmyq6xxfx88m0"]
 
 [ext_resource type="Script" uid="uid://vkw5u7nwwyeh" path="res://material_maker/tools/environment_manager/environment_manager.gd" id="1"]
 
@@ -13,6 +13,10 @@ sky = SubResource("1")
 [sub_resource type="SphereMesh" id="3"]
 radius = 2.0
 height = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lfvfh"]
+metallic = 1.0
+roughness = 0.2
 
 [node name="EnvironmentManager" type="Node"]
 script = ExtResource("1")
@@ -39,6 +43,7 @@ transform = Transform3D(1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 
 
 [node name="Sphere" type="MeshInstance3D" parent="PreviewGenerator"]
 mesh = SubResource("3")
+surface_material_override/0 = SubResource("StandardMaterial3D_lfvfh")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 

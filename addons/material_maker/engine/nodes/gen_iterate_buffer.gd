@@ -15,7 +15,10 @@ var is_paused : bool = false
 var is_rendering : bool = false
 var current_iteration : int = 0
 
-var buffer_names : Array
+var buffer_name_init_input : String
+var buffer_name_loop_input : String
+var buffer_name_loop_output : String
+var buffer_name_output : String
 var iteration_param_name : String
 var used_named_parameters : Array = []
 
@@ -26,16 +29,14 @@ func _init():
 	shader_computes.append(MMShaderCompute.new())
 	if !parameters.has("size"):
 		parameters.size = 9
-	buffer_names = [
-		"o%d_input_init" % get_instance_id(),
-		"o%d_input_loop" % get_instance_id(),
-		"o%d_loop_tex" % get_instance_id(),
-		"o%d_it_tex" % get_instance_id()
-	]
+	buffer_name_init_input = "o%d_input_init" % get_instance_id()
+	buffer_name_loop_input = "o%d_input_loop" % get_instance_id()
+	buffer_name_loop_output = "o%d_loop_tex" % get_instance_id()
+	buffer_name_output = "o%d_it_tex" % get_instance_id()
+	mm_deps.create_buffer(buffer_name_output, self)
+	mm_deps.create_buffer(buffer_name_init_input, self)
+	mm_deps.create_buffer(buffer_name_loop_input, self)
 	iteration_param_name = "o%d_iteration" % get_instance_id()
-	mm_deps.create_buffer(buffer_names[3], self)
-	mm_deps.create_buffer(buffer_names[0], self)
-	mm_deps.create_buffer(buffer_names[1], self)
 	set_current_iteration(0)
 
 func _exit_tree() -> void:
@@ -120,7 +121,7 @@ func do_update_shaders() -> void:
 	var f32 = get_parameter("f32")
 	for i in 2:
 		var shader_compute : MMShaderCompute = shader_computes[i]
-		var buffer_name : String = buffer_names[i]
+		var buffer_name : String = [buffer_name_init_input, buffer_name_loop_input][i]
 		var output_texture_type : int = 0 if new_is_greyscale else 1
 		if f32:
 			output_texture_type |= 2
@@ -135,7 +136,6 @@ func do_update_shaders() -> void:
 			var output_textures : Array[Dictionary] = [{name="OUTPUT_TEXTURE", type=output_texture_type}]
 			await shader_compute.compute_shader.set_shader_from_shadercode_ext(shader_template, sources[i], output_textures, [], false, [])
 		mm_deps.buffer_create_compute_material(buffer_name, shader_compute)
-	mm_deps.update()
 	if new_is_greyscale != is_greyscale:
 		is_greyscale = new_is_greyscale
 		notify_output_change(0)
@@ -148,31 +148,34 @@ func set_parameter(n : String, v) -> void:
 			mm_deps.dependency_update("o%s_it_tex_size" % get_instance_id(), pow(2, v))
 	super.set_parameter(n, v)
 	set_current_iteration(0)
-	mm_deps.buffer_invalidate(buffer_names[0])
+	mm_deps.buffer_invalidate(buffer_name_init_input)
 
 func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
-	if parameter_name != buffer_names[2] and parameter_name != iteration_param_name and (buffer_name != buffer_names[1] or ! value is Texture2D):
+	#print("on_dep_update_value(", buffer_name, ", ", parameter_name, ", ", value, ")")
+	if parameter_name != buffer_name_loop_output and parameter_name != iteration_param_name and (buffer_name != buffer_name_loop_input or not value is MMTexture):
 		set_current_iteration(0)
+		#print("Resetting")
 	if value != null:
-		if buffer_name == buffer_names[0]:
+		if buffer_name == buffer_name_init_input:
 			shader_computes[0].set_parameter(parameter_name, value)
-		elif buffer_name == buffer_names[1]:
+		elif buffer_name == buffer_name_loop_input:
 			shader_computes[1].set_parameter(parameter_name, value)
 	return false
 
 func on_dep_buffer_invalidated(buffer_name : String):
-	if !exiting and (buffer_name == buffer_names[0] or buffer_name == buffer_names[1]):
-		mm_deps.buffer_invalidate(buffer_names[3])
+	#print("on_dep_buffer_invalidated(", buffer_name, ")")
+	if not exiting and (buffer_name == buffer_name_init_input or buffer_name == buffer_name_loop_input):
+		mm_deps.buffer_invalidate(buffer_name_output)
 
 func on_dep_update_buffer(buffer_name : String) -> bool:
+	#print("on_dep_update_buffer(", buffer_name, ")")
 	if is_paused:
 		return false
-	if buffer_name == buffer_names[3]:
-		print("Cannot update ", buffer_name)
-		return false
+	if buffer_name == buffer_name_output:
+		return true
 	if is_rendering:
 		print("Already rendering ", buffer_name)
-		return false
+		return true
 	
 	is_rendering = true
 	
@@ -206,15 +209,16 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	if current_iteration > 0:
 		output_parameter_values.mm_highest_diff = 0
 	var status : bool = await shader_compute.compute_shader.render(texture, Vector2i(size, size), output_parameter_values)
+	is_rendering = false
+	
 	if not status:
 		print("Error while rendering %s" % buffer_name)
-	
-	is_rendering = false
+		return false
 	
 	if check_current_iteration != current_iteration:
 		mm_deps.dependency_update(buffer_name, texture, true)
 		push_warning("Iteration mismatch for %s" % buffer_name)
-		return false
+		return true
 	
 	#print("iteration %d" % current_iteration)
 	
@@ -225,12 +229,13 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		set_current_iteration(current_iteration+1)
 	
-	if current_iteration <= iterations:
-		mm_deps.dependency_update("o%d_loop_tex" % get_instance_id(), texture, true)
+	
+	if current_iteration > iterations:
+		mm_deps.dependency_update(buffer_name_output, texture, true)
 	else:
-		print("updating texture")
-		mm_deps.dependency_update("o%d_it_tex" % get_instance_id(), texture, true)
-	mm_deps.dependency_update(buffer_name, texture, true)
+		mm_deps.dependency_update(buffer_name_loop_output, texture, true)
+	
+	#print("done ", status)
 	
 	return status
 
@@ -240,7 +245,7 @@ func set_current_iteration(i : int) -> void:
 	current_iteration = i
 	mm_deps.dependency_update(iteration_param_name, current_iteration, true)
 	if current_iteration == 0:
-		mm_deps.buffer_invalidate(buffer_names[3])
+		mm_deps.buffer_invalidate(buffer_name_output)
 
 #TODO: Remove this
 func get_globals__(texture_name : String) -> Array[String]:
