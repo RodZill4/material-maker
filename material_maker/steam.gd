@@ -36,7 +36,7 @@ func get_avatar_texture() -> ImageTexture:
 		await avatar_ready
 	return avatar_texture
 
-func _on_avatar_loaded(user_id: int, avatar_size: int, avatar_buffer: PackedByteArray) -> void:
+func _on_avatar_loaded(_user_id : int, avatar_size : int, avatar_buffer : PackedByteArray) -> void:
 	# Create the image and texture for loading
 	var avatar_image: Image = Image.create_from_data(avatar_size, avatar_size, false, Image.FORMAT_RGBA8, avatar_buffer)
 
