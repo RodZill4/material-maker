@@ -148,9 +148,9 @@ func update_node_parameters_grid():
 	if button != null:
 		button.disabled = true
 
-func node_parameter_exists_already(name : String, param_index : int) -> bool:
+func node_parameter_exists_already(_name : String, param_index : int) -> bool:
 	for pi in range($GenSDF.node_parameters.size()):
-		if pi != param_index and $GenSDF.node_parameters[pi].name == name:
+		if pi != param_index and $GenSDF.node_parameters[pi].name == _name:
 			return true
 	return false
 
@@ -657,11 +657,11 @@ func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 		duplicate_item(c, new_item)
 	return new_item
 
-func move_item(item, dest, position):
+func move_item(item, dest, _position):
 	var source_transform : Transform3D = get_item_transform_3d(item)
 	var dest_transform : Transform3D = get_item_transform_3d(dest)
 	var new_transform : Transform3D = dest_transform.affine_inverse()*source_transform
-	var new_item : TreeItem = duplicate_item(item, dest, position)
+	var new_item : TreeItem = duplicate_item(item, dest, _position)
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
 	rebuild_scene()
@@ -680,8 +680,8 @@ func move_item(item, dest, position):
 	parameters["n%d_position_z" % index] = new_transform.origin.z
 	set_node_parameters($GenSDF, parameters)
 
-func _on_Tree_drop_item(item, dest, position):
-	move_item(item, dest, position)
+func _on_Tree_drop_item(item, dest, _position):
+	move_item(item, dest, _position)
 
 
 # OK/Apply/Cancel buttons
