@@ -427,10 +427,10 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 		return true
 	return false
 
-func on_cut_connections(connections_to_cut : Array):
+func on_cut_connections(target_connections : Array):
 	var generator_hier_name : String = generator.get_hier_name()
 	var conns : Array = []
-	for c in connections_to_cut:
+	for c in target_connections:
 		var from_gen = get_node(str(c.from_node)).generator
 		var to_gen = get_node(str(c.to_node)).generator
 		if do_disconnect_node(c.from_node, c.from_port, c.to_node, c.to_port):
