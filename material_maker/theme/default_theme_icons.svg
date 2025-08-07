@@ -28,15 +28,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="128"
-     inkscape:cx="55.242187"
-     inkscape:cy="37.707031"
+     inkscape:zoom="22.627417"
+     inkscape:cx="80.831144"
+     inkscape:cy="194.12291"
      inkscape:window-width="1152"
      inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g27">
+     inkscape:current-layer="g29">
     <inkscape:grid
        id="grid2"
        units="px"
@@ -80,6 +80,23 @@
   </sodipodi:namedview>
   <defs
      id="defs1">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect30"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,2.1839154,0,1 @ F,0,0,1,0,2.9257121,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
     <inkscape:path-effect
        effect="fillet_chamfer"
        id="path-effect85"
@@ -2454,6 +2471,33 @@
        id="linearGradient96"
        gradientTransform="matrix(-9.5183323e-5,0,0,9.5183323e-5,2990.8886,68.329685)"
        gradientUnits="userSpaceOnUse" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect21-1-1"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0.96795223,0,1 @ F,0,0,1,0,0.96795223,0,1 @ F,0,0,1,0,0.96795223,0,1"
+       radius="2"
+       unit="px"
+       method="bezier"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch4"
+       id="linearGradient97"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.5000014,-0.99999978)"
+       x1="117"
+       y1="25"
+       x2="126"
+       y2="25" />
   </defs>
   <g
      inkscape:groupmode="layer"
@@ -2517,6 +2561,25 @@
          inkscape:path-effect="#path-effect12"
          inkscape:original-d="m 67.873155,197.53104 6.055523,0.0339 -1e-6,-11.09273 h 6.136328"
          transform="translate(-0.50264722,-0.11552464)" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="g29"
+       inkscape:label="Reset"
+       transform="matrix(0,-1.0625937,1.0625937,0,-115.76182,296.03026)">
+      <path
+         id="path30"
+         style="fill:none;stroke:#ffffff;stroke-width:1.40396;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:fill markers stroke"
+         d="m 90.420466,187.94871 c 2.536855,0 4.593384,2.05652 4.593384,4.59338 0,2.53686 -2.056529,4.59338 -4.593384,4.59338 -2.536854,0 -4.593383,-2.05652 -4.593383,-4.59338"
+         sodipodi:nodetypes="cssc" />
+      <path
+         style="display:inline;fill:url(#linearGradient97);stroke:none;stroke-width:1.05073;stroke-linecap:round;paint-order:fill markers stroke"
+         d="m 116.46795,22 h 7.0641 c 0.53458,0 0.64405,0.287913 0.24449,0.643072 l -3.05308,2.713856 c -0.39956,0.355159 -1.04736,0.355159 -1.44692,0 l -3.05308,-2.713856 C 115.8239,22.287913 115.93337,22 116.46795,22 Z"
+         id="path8-2-8"
+         inkscape:path-effect="#path-effect21-1-1"
+         inkscape:original-d="m 115.5,22 h 9 l -4.5,4 z"
+         transform="matrix(0,0.6740468,-1.2455106,0,117.93013,107.21628)"
+         sodipodi:nodetypes="cccc" />
     </g>
   </g>
   <g
