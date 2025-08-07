@@ -309,6 +309,7 @@ func on_config_changed() -> void:
 		# This prevents UI elements from being too small on hiDPI displays.
 		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	get_viewport().content_scale_factor = ui_scale
+	await get_tree().process_frame
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
@@ -1477,7 +1478,3 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
-
-
-func _on_console_resizer_container_mouse_entered() -> void:
-	pass # Replace with function body.
