@@ -1,4 +1,3 @@
-@tool
 extends "res://material_maker/widgets/polygon_edit/polygon_view.gd"
 
 

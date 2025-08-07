@@ -1,4 +1,3 @@
-@tool
 extends "res://material_maker/widgets/curve_edit/curve_view.gd"
 
 

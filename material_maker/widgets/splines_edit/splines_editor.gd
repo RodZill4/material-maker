@@ -1,4 +1,3 @@
-@tool
 extends "res://material_maker/widgets/splines_edit/splines_view.gd"
 
 
