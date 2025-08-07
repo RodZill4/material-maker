@@ -33,3 +33,4 @@ func _menu_item_selected(index : int) -> void:
 	var curve = MMCurve.new()
 	curve.points = presets[index].curve
 	get_parent().get_parent().get_node("EditorContainer/CurveEditor").set_curve(curve)
+	get_parent().get_parent().get_node("ControlUIContainer/ControlUI").hide()
