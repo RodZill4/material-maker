@@ -110,6 +110,10 @@ ui_next_tab={
 ]
 }
 
+[input_devices]
+
+pen_tablet/driver.windows="winink"
+
 [locale]
 
 translations=PackedStringArray()
