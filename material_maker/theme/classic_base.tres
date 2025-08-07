@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=148 format=3 uid="uid://w487nirev8y5"]
+[gd_resource type="Theme" format=3 uid="uid://w487nirev8y5"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
