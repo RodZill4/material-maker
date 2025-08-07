@@ -1,4 +1,3 @@
-@tool
 extends "res://material_maker/widgets/lattice_edit/lattice_view.gd"
 
 

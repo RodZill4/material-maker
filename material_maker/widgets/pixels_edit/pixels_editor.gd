@@ -1,4 +1,3 @@
-@tool
 extends "res://material_maker/widgets/pixels_edit/pixels_view.gd"
 
 
