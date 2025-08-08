@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1j6a4jdggjm6"]
+[gd_scene load_steps=6 format=3 uid="uid://c1j6a4jdggjm6"]
 
 [ext_resource type="PackedScene" uid="uid://drg0s4lftblx3" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
+[ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 
 [node name="Preferences" type="Window"]
 oversampling_override = 1.0
@@ -148,6 +149,35 @@ The effect of this shadow is only visible when using a tesselated mesh or a cust
 Changes to this setting are only applied on application restart."
 text = "3D preview sun shadow (requires restart)"
 config_variable = "ui_3d_preview_sun_shadow"
+
+[node name="WinTabletDriverSpacer" type="Control" parent="VBoxContainer/TabContainer/General"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="WinTabletDriver" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/WinTabletDriver"]
+layout_mode = 2
+text = "Tablet Driver:"
+
+[node name="EnumOption" type="OptionButton" parent="VBoxContainer/TabContainer/General/WinTabletDriver"]
+layout_mode = 2
+tooltip_text = "Pen tablet driver to use
+
+Winink: Windows Ink API (Windows 8.1+)
+Wintab: Wacom Tablet API (Requires a compatible device driver)
+Disabled: Disables pen tablet input"
+selected = 0
+item_count = 3
+popup/item_0/text = "Winink"
+popup/item_0/id = 0
+popup/item_1/text = "Wintab"
+popup/item_1/id = 1
+popup/item_2/text = "Disabled"
+popup/item_2/id = 2
+script = ExtResource("5_vp06c")
+config_variable = "win_tablet_driver"
 
 [node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
 custom_minimum_size = Vector2(0, 10)
@@ -309,6 +339,7 @@ text = "Cancel"
 
 [connection signal="about_to_popup" from="." to="." method="_on_Preferences_about_to_show"]
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
