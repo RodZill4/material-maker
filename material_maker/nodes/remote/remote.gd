@@ -253,7 +253,7 @@ func on_enter_widget(widget) -> void:
 	var new_links = []
 	for l in w.linked_widgets:
 		var graph_node = get_parent().get_node("node_"+l.node)
-		if graph_node != null:
+		if graph_node != null and graph_node.controls.has(l.widget):
 			var control = graph_node.controls[l.widget]
 			if control != null:
 				var link = MMNodeLink.new(get_parent())

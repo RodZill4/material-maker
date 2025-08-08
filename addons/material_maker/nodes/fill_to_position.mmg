@@ -22,7 +22,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A fill companion node that fills each area with a greyscale value that depends on its position",
+		"longdesc": "A fill companion node that fills each area with a grayscale value that depends on its position",
 		"name": "Fill to Position",
 		"outputs": [
 			{

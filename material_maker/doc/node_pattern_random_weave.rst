@@ -9,13 +9,13 @@ The **Random Weave** node outputs a randomizable weave pattern, that can be used
 Inputs
 ++++++
 
-The **Random Weave** node accepts an optional greyscale input map for the width parameter
+The **Random Weave** node accepts an optional grayscale input map for the width parameter
 (whose value is multiplied by the map value).
 
 Outputs
 +++++++
 
-The **Random Weave** generates a greyscale heightmap for the pattern as well as masks
+The **Random Weave** generates a grayscale heightmap for the pattern as well as masks
 for the horizontal and vertical stripes.
 
 Parameters

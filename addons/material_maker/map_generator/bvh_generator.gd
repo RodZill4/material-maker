@@ -96,7 +96,7 @@ class BVHNode:
 			root._id_nodes[id] = self
 
 		var data_offset := root._node_data.size()
-# warning-ignore:integer_division
+		@warning_ignore("integer_division")
 		_append_4(root._data, data_offset / 4)
 		_append_4(root._node_data, aabb.position.x, aabb.position.y, aabb.position.z, level)
 		_append_4(root._node_data, aabb.end.x, aabb.end.y, aabb.end.z, 0)
@@ -402,7 +402,7 @@ class BVHNode:
 
 		_data += _node_data
 		
-# warning-ignore:integer_division
+		@warning_ignore("integer_division")
 		var data_size = _data.size() / 4
 		var img_width = min(data_size, 16384)
 		var img_height = data_size / 16384 + 1

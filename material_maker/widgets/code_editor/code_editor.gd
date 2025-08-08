@@ -28,7 +28,9 @@ func _context_menu_about_to_popup() -> void:
 			get_global_mouse_position() * content_scale_factor)
 
 func _ready():
-	get_menu().about_to_popup.connect(_context_menu_about_to_popup)
+	if not get_menu().about_to_popup.is_connected(_context_menu_about_to_popup):
+		get_menu().about_to_popup.connect(_context_menu_about_to_popup)
+	syntax_highlighter.clear_color_regions()
 	for t in KEYWORDS:
 		syntax_highlighter.add_keyword_color(t, get_theme_color("keyword_color", "CodeEdit"))
 	for t in TYPES:

@@ -10,7 +10,7 @@ Inputs
 ++++++
 
 The **Custom Tiles** node accepts an SDF input that describes the shape of a tile
-as well as 2 optional greyscale input maps for the shape mortar and bevel
+as well as 2 optional grayscale input maps for the shape mortar and bevel
 parameters (the corresponding parameter is multiplied by the map value).
 
 Outputs
@@ -18,7 +18,7 @@ Outputs
 
 The **Custom Tiles** node provides the following textures:
 
-* The first is a greyscale image where Tiles are shown in white and mortar in black.
+* The first is a grayscale image where Tiles are shown in white and mortar in black.
 
 * The second is Fill information for each brick and must be connected to a Fill companion
   node, to generate random colors, custom UVs etc. to create complex materials that show

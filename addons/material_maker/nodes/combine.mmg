@@ -15,7 +15,7 @@
 			{
 				"default": "0.0",
 				"label": "R",
-				"longdesc": "The greyscale input for the red channel",
+				"longdesc": "The grayscale input for the red channel",
 				"name": "r",
 				"shortdesc": "Red",
 				"type": "f"
@@ -23,7 +23,7 @@
 			{
 				"default": "0.0",
 				"label": "G",
-				"longdesc": "The greyscale input for the green channel",
+				"longdesc": "The grayscale input for the green channel",
 				"name": "g",
 				"shortdesc": "Green",
 				"type": "f"
@@ -31,7 +31,7 @@
 			{
 				"default": "0.0",
 				"label": "B",
-				"longdesc": "The greyscale input for the blue channel",
+				"longdesc": "The grayscale input for the blue channel",
 				"name": "b",
 				"shortdesc": "Blue",
 				"type": "f"
@@ -39,14 +39,14 @@
 			{
 				"default": "1.0",
 				"label": "A",
-				"longdesc": "The greyscale input for the alpha channel",
+				"longdesc": "The grayscale input for the alpha channel",
 				"name": "a",
 				"shortdesc": "Alpha",
 				"type": "f"
 			}
 		],
 		"instance": "",
-		"longdesc": "Combines 4 greyscale inputs into an RGBA image",
+		"longdesc": "Combines 4 grayscale inputs into an RGBA image",
 		"name": "Combine",
 		"outputs": [
 			{

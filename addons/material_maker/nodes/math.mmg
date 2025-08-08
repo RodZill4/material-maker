@@ -47,7 +47,7 @@
 		"outputs": [
 			{
 				"f": "$(name_uv)_clamp_$clamp",
-				"longdesc": "Shows a greyscale image of the result",
+				"longdesc": "Shows a grayscale image of the result",
 				"shortdesc": "Output",
 				"type": "f"
 			}

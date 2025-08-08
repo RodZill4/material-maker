@@ -34,7 +34,7 @@ func _ready():
 	environment_manager.thumbnail_updated.connect(self.on_thumbnail_updated)
 	read_environment_list()
 	share_button = mm_globals.main_window.get_share_button()
-	# todo  $Main/Buttons/Share.disabled = ! share_button.can_share()
+	$Main/Buttons/Share.disabled = ! share_button.can_share()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -105,7 +105,9 @@ func set_current_environment(index : int) -> void:
 	current_environment = index
 	var env : Dictionary = environment_manager.environments[index]
 	for k in env.keys():
-		var control : Control = ui.get_node(k)
+		var control : Control
+		if ui.has_node(k):
+			control = ui.get_node(k)
 		if control is LineEdit:
 			if control.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
 				control.set_value(env[k])
@@ -163,9 +165,10 @@ func _on_Share_pressed():
 	var image = await environment_manager.create_preview(current_environment, 512)
 	var preview_texture : ImageTexture = ImageTexture.new()
 	preview_texture.set_image(image)
+	var preview_textures : Array[Texture2D] = [preview_texture]
 	var env = environment_manager.get_environment(current_environment).duplicate()
 	env.erase("thumbnail")
-	share_button.send_asset("environment", env, preview_texture)
+	share_button.send_asset("environment", env, preview_textures)
 
 func _on_Main_minimum_size_changed():
 	size = $Main.size+Vector2(4, 4)

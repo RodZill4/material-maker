@@ -1,7 +1,7 @@
 Shape node
 ~~~~~~~~~~
 
-The **Shape** node outputs a simple greyscale shape.
+The **Shape** node outputs a simple grayscale shape.
 
 .. image:: images/node_simple_shape.png
 	:align: center
@@ -9,13 +9,13 @@ The **Shape** node outputs a simple greyscale shape.
 Inputs
 ++++++
 
-The shape node accepts 2 optional greyscale input maps for the shape size and
+The shape node accepts 2 optional grayscale input maps for the shape size and
 edge width (the corresponding parameter is multiplied by the map value).
 
 Outputs
 +++++++
 
-The shape node provides an output that generates greyscale image showing the
+The shape node provides an output that generates grayscale image showing the
 selected white shape on a black background.
 
 Parameters

@@ -14,7 +14,7 @@ The **Seven Segment Display** node accepts an optional bevel map, which the para
 Outputs
 +++++++
 
-The **Seven Segment Display** node outputs a greyscale texture.
+The **Seven Segment Display** node outputs a grayscale texture.
 
 Parameters
 ++++++++++

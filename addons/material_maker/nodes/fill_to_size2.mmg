@@ -23,7 +23,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "A fill companion node that fills each area with a greyscale value that depends on its size",
+		"longdesc": "A fill companion node that fills each area with a grayscale value that depends on its size",
 		"name": "Fill to Size",
 		"outputs": [
 			{
