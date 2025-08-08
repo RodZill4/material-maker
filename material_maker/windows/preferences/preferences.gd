@@ -77,3 +77,8 @@ func _on_DownloadLanguage_closed():
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.read_translations()
 	update_language_list()
+
+
+func _on_ready() -> void:
+	if OS.get_name() == "Linux":
+		$VBoxContainer/TabContainer/Graph/MmbButtonPasteSelection.visible = true
