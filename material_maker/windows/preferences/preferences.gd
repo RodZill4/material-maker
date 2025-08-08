@@ -4,6 +4,11 @@ var config : ConfigFile
 
 signal config_changed()
 
+
+func _on_ready() -> void:
+	%PreferGlobalMenu.visible = DisplayServer.has_feature(
+			DisplayServer.FEATURE_GLOBAL_MENU)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		queue_free()
