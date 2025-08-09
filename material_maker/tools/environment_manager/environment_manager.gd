@@ -125,6 +125,8 @@ func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_col
 	elif env.show_color:
 		e.background_mode = Environment.BG_COLOR
 		e.background_color = MMType.deserialize_value(env.color)
+		e.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+		e.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	else:
 		e.background_mode = Environment.BG_SKY
 		e.background_energy_multiplier = env.sky_energy
