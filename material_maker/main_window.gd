@@ -742,7 +742,7 @@ func edit_redo_is_disabled() ->  bool:
 
 func edit_cut_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	return graph_edit == null or !graph_edit.can_copy()
+	return graph_edit == null or !graph_edit.can_copy() or not graph_edit.has_focus()
 
 func edit_copy() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -758,7 +758,12 @@ func edit_paste() -> void:
 		graph_edit.paste()
 
 func edit_paste_is_disabled() -> bool:
-	return false # todo validate_json(DisplayServer.clipboard_get()) != ""
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	return graph_edit == null or not graph_edit.has_focus() # todo validate_json(DisplayServer.clipboard_get()) != ""
+
+func edit_select_all_is_disabled() -> bool:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	return graph_edit == null or not graph_edit.has_focus()
 
 func edit_duplicate() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()

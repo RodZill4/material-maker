@@ -1517,3 +1517,13 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			return points
 		_:
 			return points
+
+
+func _on_focus_exited() -> void:
+	if OS.get_name() == "macOS":
+		mm_globals.main_window.update_menus()
+
+
+func _on_focus_entered() -> void:
+	if OS.get_name() == "macOS":
+		mm_globals.main_window.update_menus()
