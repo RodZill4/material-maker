@@ -27,6 +27,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Static PBR Material Displacement",
+		"longdesc": "PBR material with maps generated as static images. Identical to Static PBR Material, but with depth previewed as displacement in the 3D Preview",
 		"code": "",
 		"custom": "",
 		"exports": {

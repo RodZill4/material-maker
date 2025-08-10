@@ -26,7 +26,8 @@ func _enter_tree() -> void:
 		if menu_container == get_tree().root:
 			break
 	if menu_container is ScrollContainer:
-		menu_container.item_rect_changed.connect(position_panel)
+		if not menu_container.is_connected("item_rect_changed", position_panel):
+			menu_container.item_rect_changed.connect(position_panel)
 	else:
 		owner.item_rect_changed.connect(position_panel)
 

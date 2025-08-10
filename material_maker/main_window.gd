@@ -131,7 +131,7 @@ func _ready() -> void:
 	on_config_changed()
 
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	get_window().min_size = Vector2(1024, 600) * get_window().content_scale_factor
+	get_window().min_size = Vector2(1024, 600)
 
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
@@ -144,6 +144,7 @@ func _ready() -> void:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
 		else:
+			get_window().min_size *= get_window().content_scale_factor
 			get_window().move_to_center()
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
@@ -287,6 +288,8 @@ func on_config_changed() -> void:
 	if locale != "" and locale != TranslationServer.get_locale():
 		TranslationServer.set_locale(locale)
 		get_tree().call_group("updated_from_locale", "update_from_locale")
+		if OS.get_name() == "macOS":
+			mm_globals.main_window.update_menus()
 
 	var ui_scale = mm_globals.get_config("ui_scale")
 	if ui_scale <= 0:

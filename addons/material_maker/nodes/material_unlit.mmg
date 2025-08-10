@@ -12,6 +12,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Dynamic Unlit Material",
+		"longdesc" : "Simple unlit material",
 		"code": "",
 		"custom": "",
 		"exports": {

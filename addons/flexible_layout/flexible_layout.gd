@@ -683,7 +683,6 @@ func serialize() -> Dictionary:
 func start_flexlayout_drag():
 	overlay = OVERLAY_SCENE.instantiate()
 	overlay.position = Vector2(0, 0)
-	overlay.size = size
 	overlay.flex_layout = flex_layout
 	add_child(overlay)
 	for w in subwindows:

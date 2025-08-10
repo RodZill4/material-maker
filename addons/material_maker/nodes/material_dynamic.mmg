@@ -25,6 +25,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Dynamic PBR Material",
+		"longdesc": "PBR material with shader-generated maps, which enables creation of animated, resolution independent or non-repetitive materials",
 		"code": "",
 		"custom": "",
 		"exports": {
@@ -158,7 +160,7 @@
 							"shader_type spatial;",
 							"render_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx",
 							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
-							",depth_draw_alpha_prepass",
+							",depth_draw_opaque",
 							"$fi",
 							";",
 							"uniform vec3 uv1_offset = vec3(0.0, 0.0, 0.0);",
@@ -738,7 +740,7 @@
 			"shader_type spatial;",
 			"render_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx",
 			"$if $(connected:opacity_tex) and $(param:flags_transparent)",
-			",depth_draw_alpha_prepass",
+			",depth_draw_opaque",
 			"$fi",
 			";",
 			"",
