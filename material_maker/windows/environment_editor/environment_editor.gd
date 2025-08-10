@@ -105,7 +105,9 @@ func set_current_environment(index : int) -> void:
 	current_environment = index
 	var env : Dictionary = environment_manager.environments[index]
 	for k in env.keys():
-		var control : Control = ui.get_node(k)
+		var control : Control
+		if ui.has_node(k):
+			control = ui.get_node(k)
 		if control is LineEdit:
 			if control.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
 				control.set_value(env[k])
