@@ -282,6 +282,26 @@ func _on_Libraries_about_to_show():
 	popup.add_item("Create library", MENU_CREATE_LIBRARY)
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
+	if not popup.window_input.is_connected(_on_Libraries_window_input):
+		popup.window_input.connect(_on_Libraries_window_input.bind(popup))
+
+func _on_Libraries_window_input(event: InputEvent, popup: PopupMenu) -> void:
+	# show user/custom library path on right click
+	var focused_library_id : int = popup.get_focused_item()
+	var valid_library : bool = (focused_library_id and
+			focused_library_id < library_manager.get_child_count())
+	if valid_library:
+		mm_globals.set_tip_text("#LMB: Enable/Disable Library, #RMB: Show library path")
+	elif focused_library_id == 0:
+		mm_globals.set_tip_text("#LMB: Enable/Disable Library")
+	else:
+		mm_globals.set_tip_text("")
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		if valid_library:
+			popup.hide()
+			OS.shell_show_in_file_manager(ProjectSettings.globalize_path(
+					library_manager.get_child(focused_library_id).library_path), true)
+
 
 func on_html5_load_file(file_name, _file_type, file_data):
 	match file_name.get_extension():
