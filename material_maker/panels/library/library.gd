@@ -291,9 +291,9 @@ func _on_Libraries_window_input(event: InputEvent, popup: PopupMenu) -> void:
 	var valid_library : bool = (focused_library_id and
 			focused_library_id < library_manager.get_child_count())
 	if valid_library:
-		mm_globals.set_tip_text("#LMB: Load/Unload Library, #RMB: Show library path")
+		mm_globals.set_tip_text("#LMB: Enable/Disable Library, #RMB: Show library path")
 	elif focused_library_id == 0:
-		mm_globals.set_tip_text("#LMB: Load/Unload Library")
+		mm_globals.set_tip_text("#LMB: Enable/Disable Library")
 	else:
 		mm_globals.set_tip_text("")
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
