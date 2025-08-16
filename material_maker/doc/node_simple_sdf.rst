@@ -57,6 +57,7 @@ Shapes
 	node_simple_sdf_shapes_sdellipse
 	node_simple_sdf_shapes_sdtunnel
 	node_simple_sdf_shapes_sdstairs
+	node_simple_sdf_shapes_sdkite
 
 Operators
 +++++++++
