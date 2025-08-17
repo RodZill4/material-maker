@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "custom_uv2",
 	"node_position": {
 		"x": 0,
@@ -52,10 +53,10 @@
 			{
 				"default": "vec4(1.0)",
 				"function": true,
-				"label": "Input",
+				"label": "Input#",
 				"longdesc": "The image or atlas of images to be remapped.",
-				"name": "in",
-				"shortdesc": "Input",
+				"name": "in#",
+				"shortdesc": "Input#",
 				"type": "rgba"
 			},
 			{
@@ -73,15 +74,15 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the remapped image",
-				"rgba": "$in.variation(get_from_tileset_$(mode)($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))), $variations ? $(name_uv)_rnd : 0.0)",
-				"shortdesc": "Output",
+				"rgba": "$in#.variation(get_from_tileset_$(mode)($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))), $variations ? $(name_uv)_rnd : 0.0)",
+				"shortdesc": "Output#",
 				"type": "rgba"
 			}
 		],
 		"parameters": [
 			{
 				"default": 0.0,
-				"label": "Inputs",
+				"label": "2:Inputs",
 				"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
 				"name": "inputs",
 				"shortdesc": "Inputs",

@@ -1,7 +1,8 @@
 Custom UV node
 ~~~~~~~~~~~~~~
 
-The **Custom UV** node deforms an input image according to a custom UV map given as input.
+The **Custom UV** node is variadic and deforms one or more input images
+according to a custom UV map given as input.
 
 .. image:: images/node_transform_custom_uv.png
 	:align: center
