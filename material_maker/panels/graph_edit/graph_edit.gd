@@ -24,6 +24,9 @@ var need_save_crash_recovery : bool = false
 var top_generator = null
 var generator = null
 
+var target_drop_connection : Dictionary
+var target_drop_node : GraphNode
+
 const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
@@ -162,10 +165,24 @@ func _gui_input(event) -> void:
 									return
 			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
 			# with the Ctrl + Space shortcut.
-			node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
-			node_popup.show_popup()
+			var closest_connection : Dictionary = get_closest_connection_at_point(
+					get_local_mouse_position(), connection_lines_thickness + 2.0)
+			if not closest_connection.is_empty():
+				node_popup.target_connection = closest_connection
+				request_popup(closest_connection.from_node, closest_connection.from_port,
+						get_local_mouse_position(), false)
+			else:
+				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
+				node_popup.show_popup()
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
+				if not event.pressed:
+					if not target_drop_connection.is_empty() and not event.alt_pressed:
+						drop_node_on_connection(target_drop_node, target_drop_connection)
+						remove_theme_color_override("activity")
+						remove_theme_color_override("connection_hover_tint_color")
+					target_drop_connection.clear()
+					target_drop_node = null
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
@@ -195,6 +212,17 @@ func _gui_input(event) -> void:
 				KEY_DOWN:
 					scroll_offset.y += 0.5*size.y
 					accept_event()
+				KEY_ALT:
+					if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+							and has_graph_node_selection()):
+						hint_node_drop_allowed(false)
+						highlight_connection(target_drop_connection)
+		elif not event.pressed:
+			var scancode_with_modifiers = event.get_keycode_with_modifiers()
+			match scancode_with_modifiers:
+				KEY_ALT:
+					if has_graph_node_selection():
+						hint_node_drop_allowed(true)
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -221,6 +249,109 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		handle_node_detach(event)
+		handle_node_drop(event)
+
+
+## Detaches node(s) from connections if alt is held down
+## while dragging a node.
+## [br][br]Unsets [param target_drop_connection] and [param target_drop_node]
+func handle_node_detach(event: InputEventMouseMotion) -> void:
+	if (event.alt_pressed and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
+				and get_selected_nodes().size() and event.relative.length() > 0.0):
+		remove_with_reconnections(true)
+		target_drop_connection.clear()
+		target_drop_node = null
+
+
+## Checks whether a node can be dropped onto a connection (Alt key blocks the action)
+## and sets [param target_drop_connection] and [param target_drop_node]
+## [br][br]Node connections are performed by [method drop_node_on_connection] 
+func handle_node_drop(event: InputEventMouseMotion) -> void:
+	if (get_selected_nodes().size() == 1
+		and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
+		and event.relative.length() > 0.0):
+		hint_node_drop_allowed(not event.alt_pressed)
+		var node : GraphElement = get_selected_nodes()[0]
+		if node is not GraphNode:
+			return
+		for c in get_connection_list():
+			if node.name in c.values():
+				return
+		var active_conn : Dictionary
+		var node_rect : Rect2 = node.get_rect()
+		if node is MMGraphReroute:
+			node_rect.size.y = node_rect.size.x
+			node_rect.position.y += node_rect.size.y - 5.0
+		var conns := get_connections_intersecting_with_rect(node_rect)
+		if not conns.is_empty():
+			if conns.size() > 1:
+				conns.sort_custom(compare_connection_by_port_position_y)
+			active_conn = conns.front()
+			highlight_connection(active_conn)
+			if not event.alt_pressed:
+				target_drop_connection = active_conn
+				target_drop_node = node
+		else:
+			target_drop_connection.clear()
+			target_drop_node = null
+		for c in get_connection_list():
+			if c != active_conn:
+				highlight_connection(c, 0.0)
+	else:
+		remove_theme_color_override("activity")
+		remove_theme_color_override("connection_hover_tint_color")
+
+
+func compare_connection_by_port_position_y(a, b) -> bool:
+	var upper : GraphNode = get_node(NodePath(a.to_node))
+	var upper_slot_pos: Vector2 = upper.get_input_port_position(a.to_port) + upper.position_offset
+	var lower : GraphNode = get_node(NodePath(b.to_node))
+	var lower_slot_pos : Vector2 = lower.get_input_port_position(b.to_port) + lower.position_offset
+	return upper_slot_pos.y < lower_slot_pos.y
+
+
+func drop_node_on_connection(node : GraphNode, connection : Dictionary) -> void:
+	undoredo.start_group()
+	if node != null:
+		on_disconnect_node(
+			connection.from_node, connection.from_port,
+			connection.to_node, connection.to_port)
+		for new_slot in node.get_input_port_count():
+			var slot_type : int = node.get_input_port_type(new_slot)
+			var from_node = get_node(NodePath(connection.from_node))
+			var from_slot = from_node.get_output_port_type(connection.from_port)
+			if (from_slot == slot_type or slot_type == 42 or from_slot == 42):
+				on_connect_node(connection.from_node,
+						connection.from_port, node.name, new_slot)
+				break
+		for new_slot in node.get_output_port_count():
+			var slot_type : int = node.get_output_port_type(new_slot)
+			var to_node = get_node(NodePath(connection.to_node))
+			var to_slot = to_node.get_input_port_type(connection.to_port)
+			if (to_slot == slot_type or slot_type == 42 or to_slot == 42):
+				on_connect_node(node.name, new_slot,
+						connection.to_node, connection.to_port)
+				break
+		undoredo.end_group()
+
+
+func hint_node_drop_allowed(should_allow: bool, force_connection_redraw: bool = true) -> void:
+	add_theme_color_override("connection_hover_tint_color", Color.TRANSPARENT)
+	if should_allow:
+		remove_theme_color_override("activity")
+	else:
+		add_theme_color_override("activity", Color.BLACK)
+	if force_connection_redraw:
+		get_node("_connection_layer").queue_redraw()
+
+
+func highlight_connection(connection: Dictionary, amount: float = 0.6) -> void:
+	if not connection.is_empty():
+		set_connection_activity(connection.from_node, connection.from_port,
+				connection.to_node, connection.to_port, amount)
+
+
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
 	var padding := 8 * graph_node.get_global_transform().get_scale().x
@@ -230,6 +361,10 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 
 
 # Misc. useful functions
+
+func has_graph_node_selection() -> bool:
+	return get_selected_nodes().filter(func(n): return n is GraphNode).size()
+
 func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
 		if c.to_node == node and c.to_port == port:
@@ -764,6 +899,46 @@ func duplicate_selected() -> void:
 func duplicate_selected_with_inputs() -> void:
 	do_paste(serialize_selection([], true))
 
+
+## Detaches a node from an existing connection.
+## Nodes are kept if [param keep_nodes] is set
+func remove_with_reconnections(keep_nodes: bool = false) -> void:
+	var selection := get_selected_nodes()
+	var from_node : GraphNode
+	var to_node : GraphNode
+	var from_slot : int = -1
+	var to_slot : int = -1
+	undoredo.start_group()
+	for node in selection:
+		if node is not GraphNode:
+			node.selected = false
+		var connection_list : Array[Dictionary] = get_connection_list()
+		connection_list.sort_custom(func(a, b): return a.to_port < b.to_port)
+		for c in connection_list:
+			var from : GraphNode = get_node(NodePath(c.from_node))
+			var to : GraphNode = get_node(NodePath(c.to_node))
+			if from == node or to == node:
+				on_disconnect_node(c.from_node, c.from_port, c.to_node, c.to_port)
+				if from == node:
+					to_node = to
+					to_slot = c.to_port
+				if to == node:
+					from_node = from
+					from_slot = c.from_port
+				if from_node and to_node and from_slot != -1 and to_slot != -1:
+					var from_slot_type := from_node.get_output_port_type(c.from_port)
+					var to_slot_type := to_node.get_input_port_type(c.to_port)
+					if (from_slot_type == to_slot_type
+							or from_slot_type == 42 or to_slot_type == 42):
+						on_connect_node(from_node.name, from_slot, to_node.name, to_slot)
+						from_node = null
+						to_node = null
+						from_slot = -1
+						to_slot = -1
+	if not keep_nodes:
+		remove_selection()
+	undoredo.end_group()
+
 func select_all() -> void:
 	for c in get_children():
 		if c is GraphElement:
@@ -864,7 +1039,9 @@ func highlight_connections() -> void:
 	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		await get_tree().process_frame
 	for c in get_connection_list():
-		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
+		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port,
+				1.0 if get_node(NodePath(c.from_node)).selected
+				or get_node(NodePath(c.to_node)).selected else 0.0)
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
