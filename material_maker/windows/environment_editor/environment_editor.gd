@@ -141,7 +141,7 @@ func _on_Environments_gui_input(event):
 	if environment_list.is_selected(index) and ! environment_manager.is_read_only(index):
 		mm_globals.popup_menu(context_menu, $Main/HSplitContainer/Environments)
 
-func _on_ContextMenu_id_pressed(id):
+func _on_ContextMenu_id_pressed(_id):
 	var index = environment_list.get_selected_items()[0]
 	environment_manager.delete_environment(index)
 	environment_list.remove_item(index)
