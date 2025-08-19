@@ -44,7 +44,7 @@ size_flags_horizontal = 3
 stretch = true
 
 [node name="SubViewport" parent="Main/HSplitContainer/SubViewportContainer" instance=ExtResource("1")]
-size = Vector2i(2, 2)
+size = Vector2i(476, 465)
 render_target_update_mode = 4
 
 [node name="UI" type="GridContainer" parent="Main/HSplitContainer"]
@@ -188,7 +188,6 @@ text = "Close"
 [connection signal="item_selected" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]
 [connection signal="id_pressed" from="Main/HSplitContainer/Environments/ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="gui_input" from="Main/HSplitContainer/SubViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
-[connection signal="resized" from="Main/HSplitContainer/SubViewportContainer" to="." method="_on_ViewportContainer_resized"]
 [connection signal="pressed" from="Main/Buttons/Download" to="." method="_on_Download_pressed"]
 [connection signal="pressed" from="Main/Buttons/Share" to="." method="_on_Share_pressed"]
 [connection signal="pressed" from="Main/Buttons/Close" to="." method="queue_free"]
