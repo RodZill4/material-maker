@@ -216,6 +216,7 @@ theme_type_variation = &"MM_AddNodePanelList"
 same_column_width = true
 fixed_icon_size = Vector2i(18, 18)
 
+[connection signal="popup_hide" from="." to="." method="_on_popup_hide"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button1" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button2" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button3" to="." method="add_node"]
