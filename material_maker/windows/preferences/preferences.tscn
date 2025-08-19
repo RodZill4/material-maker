@@ -461,6 +461,23 @@ text = "On"
 flat = false
 config_variable = "auto_size_comment"
 
+[node name="InsertNodeOnConnection" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/InsertNodeOnConnection"]
+layout_mode = 2
+text = "Automatic node insertion"
+
+[node name="InsertNodeOnConnection" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/InsertNodeOnConnection" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, a node positioned on top of a connection line will be automatically inserted into the connection.
+The 'D' key can be used to block the action while dragging a node."
+text = "On"
+flat = false
+config_variable = "node_insertion"
+
 [node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
