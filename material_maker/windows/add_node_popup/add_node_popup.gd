@@ -197,7 +197,8 @@ func update_list(filter_text : String = "") -> void:
 
 		idx += 1
 
-	%List.select(0)
+	if %List.item_count:
+		%List.select(0)
 	%List.ensure_current_is_visible()
 
 func _unhandled_input(event) -> void:
