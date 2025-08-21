@@ -182,7 +182,6 @@ func _gui_input(event) -> void:
 						remove_theme_color_override("activity")
 						remove_theme_color_override("connection_hover_tint_color")
 					target_drop_connection.clear()
-					target_drop_node = null
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
@@ -255,13 +254,12 @@ func _gui_input(event) -> void:
 
 ## Detaches node(s) from connections if alt is held down
 ## while dragging a node.
-## [br][br]Unsets [param target_drop_connection] and [param target_drop_node]
+## [br][br]Unsets [param target_drop_connection]
 func handle_node_detach(event: InputEventMouseMotion) -> void:
 	if (event.alt_pressed and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
 				and get_selected_nodes().size() and event.relative.length() > 0.0):
 		remove_with_reconnections(true)
 		target_drop_connection.clear()
-		target_drop_node = null
 
 
 ## Checks whether a node can be dropped onto a connection (Alt key blocks the action)
@@ -275,6 +273,7 @@ func handle_node_drop(event: InputEventMouseMotion) -> void:
 		var node : GraphElement = get_selected_nodes()[0]
 		if node is not GraphNode:
 			return
+		target_drop_node = node
 		for c in get_connection_list():
 			if node.name in c.values():
 				return
@@ -291,10 +290,8 @@ func handle_node_drop(event: InputEventMouseMotion) -> void:
 			highlight_connection(active_conn)
 			if not event.alt_pressed:
 				target_drop_connection = active_conn
-				target_drop_node = node
 		else:
 			target_drop_connection.clear()
-			target_drop_node = null
 		for c in get_connection_list():
 			if c != active_conn:
 				highlight_connection(c, 0.0)
@@ -352,17 +349,13 @@ func drop_node_on_connection(node : GraphNode, connection : Dictionary) -> void:
 		undoredo.end_group()
 
 
-func hint_node_drop_allowed(should_allow: bool, force_connection_redraw: bool = true) -> void:
+func hint_node_drop_allowed(should_allow: bool) -> void:
+	add_theme_color_override("activity", Color(1.5,1.5,1.5,1.0) if should_allow else Color.BLACK)
 	add_theme_color_override("connection_hover_tint_color", Color.TRANSPARENT)
-	if should_allow:
-		remove_theme_color_override("activity")
-	else:
-		add_theme_color_override("activity", Color.BLACK)
-	if force_connection_redraw:
-		get_node("_connection_layer").queue_redraw()
+	get_node("_connection_layer").queue_redraw()
 
 
-func highlight_connection(connection: Dictionary, amount: float = 0.6) -> void:
+func highlight_connection(connection: Dictionary, amount: float = 0.5) -> void:
 	if not connection.is_empty():
 		set_connection_activity(connection.from_node, connection.from_port,
 				connection.to_node, connection.to_port, amount)
