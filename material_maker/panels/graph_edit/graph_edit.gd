@@ -926,8 +926,8 @@ func remove_with_reconnections(keep_nodes: bool = false) -> void:
 					from_node = from
 					from_slot = c.from_port
 				if from_node and to_node and from_slot != -1 and to_slot != -1:
-					var from_slot_type := from_node.get_output_port_type(c.from_port)
-					var to_slot_type := to_node.get_input_port_type(c.to_port)
+					var from_slot_type := from_node.get_output_port_type(from_slot)
+					var to_slot_type := to_node.get_input_port_type(to_slot)
 					if (from_slot_type == to_slot_type
 							or from_slot_type == 42 or to_slot_type == 42):
 						on_connect_node(from_node.name, from_slot, to_node.name, to_slot)
