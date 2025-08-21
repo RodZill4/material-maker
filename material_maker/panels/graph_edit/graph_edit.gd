@@ -286,7 +286,7 @@ func handle_node_drop(event: InputEventMouseMotion) -> void:
 		var conns := get_connections_intersecting_with_rect(node_rect)
 		if not conns.is_empty():
 			if conns.size() > 1:
-				conns.sort_custom(compare_connection_by_port_position_y)
+				conns.sort_custom(compare_connection_by_port_height)
 			active_conn = conns.front()
 			highlight_connection(active_conn)
 			if not event.alt_pressed:
@@ -303,12 +303,28 @@ func handle_node_drop(event: InputEventMouseMotion) -> void:
 		remove_theme_color_override("connection_hover_tint_color")
 
 
-func compare_connection_by_port_position_y(a, b) -> bool:
-	var upper : GraphNode = get_node(NodePath(a.to_node))
-	var upper_slot_pos: Vector2 = upper.get_input_port_position(a.to_port) + upper.position_offset
-	var lower : GraphNode = get_node(NodePath(b.to_node))
-	var lower_slot_pos : Vector2 = lower.get_input_port_position(b.to_port) + lower.position_offset
-	return upper_slot_pos.y < lower_slot_pos.y
+func compare_connection_by_port_height(a, b) -> bool:
+	var target := target_drop_node
+	if not target:
+		return false
+	var from_node : GraphNode = get_node(NodePath(a.from_node))
+	var to_node : GraphNode = get_node(NodePath(a.to_node))
+	var from_node_dist_to_target := (
+			target.position_offset.distance_squared_to(from_node.position_offset))
+	var to_node_dist_to_target := (
+			target.position_offset.distance_squared_to(to_node.position_offset))
+	if from_node_dist_to_target < to_node_dist_to_target:
+		var upper : GraphNode = get_node(NodePath(a.from_node))
+		var lower : GraphNode = get_node(NodePath(b.from_node))
+		var upper_slot_pos := upper.get_output_port_position(a.from_port) + upper.position_offset
+		var lower_slot_pos := lower.get_output_port_position(b.from_port) + lower.position_offset
+		return upper_slot_pos.y < lower_slot_pos.y
+	else:
+		var upper : GraphNode = get_node(NodePath(a.to_node))
+		var lower : GraphNode = get_node(NodePath(b.to_node))
+		var upper_slot_pos := upper.get_input_port_position(a.to_port) + upper.position_offset
+		var lower_slot_pos := lower.get_input_port_position(b.to_port) + lower.position_offset
+		return upper_slot_pos.y < lower_slot_pos.y
 
 
 func drop_node_on_connection(node : GraphNode, connection : Dictionary) -> void:
