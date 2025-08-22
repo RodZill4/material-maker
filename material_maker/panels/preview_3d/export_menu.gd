@@ -74,6 +74,7 @@ func _on_map_export_file_text_changed(new_text: String) -> void:
 
 func _on_map_resolution_item_selected(index: int) -> void:
 	mm_globals.set_config(SETTING_GENERATE_MAP_RESOLUTION, index)
+	update_generate_map_file_label()
 
 
 func update_generate_map_file_label() -> void:
@@ -91,9 +92,10 @@ func interpret_map_file_name(file_name: String, path:="") -> String:
 	match MapFileType.selected:
 		0: extension += ".png"
 		1: extension += ".exr"
+	
+	var resolution := str(256 << MapResolution.selected)
 
-	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids)
-
+	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids, resolution)
 
 func _on_map_file_type_item_selected(_index: int) -> void:
 	update_generate_map_file_label()
