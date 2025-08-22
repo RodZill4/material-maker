@@ -38,6 +38,11 @@ var has_grab : bool = false:
 					grab_icon, Input.CURSOR_ARROW,
 					grab_icon.get_size() * 0.5)
 		else:
+			if not target_drop_connection.is_empty():
+				drop_node_on_connection(target_drop_node, target_drop_connection)
+				remove_theme_color_override("activity")
+				remove_theme_color_override("connection_hover_tint_color")
+				target_drop_connection.clear()
 			Input.set_custom_mouse_cursor(null)
 
 const PREVIEW_COUNT = 2
@@ -309,9 +314,9 @@ func handle_node_detach(event: InputEventMouseMotion) -> void:
 ## and sets [param target_drop_connection] and [param target_drop_node]
 ## [br][br]Node connections are performed by [method drop_node_on_connection] 
 func handle_node_drop(event: InputEventMouseMotion) -> void:
-	if (get_selected_nodes().size() == 1
-		and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
-		and event.relative.length() > 0.0):
+	var single_node_selected := get_selected_nodes().size() == 1
+	if (single_node_selected and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
+		and event.relative.length() > 0.0) or (has_grab and single_node_selected):
 		hint_node_drop_allowed(not event.alt_pressed)
 		var node : GraphElement = get_selected_nodes()[0]
 		if node is not GraphNode:
