@@ -136,7 +136,7 @@ func _input(event: InputEvent) -> void:
 		var selected_nodes := get_selected_nodes()
 		if event is InputEventMouseMotion:
 			for node : GraphElement in selected_nodes:
-				node.position_offset += event.relative
+				node.position_offset += event.relative / zoom
 		elif (event is InputEventMouseButton
 				and event.button_index == MOUSE_BUTTON_LEFT):
 			accept_event()
