@@ -219,6 +219,7 @@ func _gui_input(event) -> void:
 					target_drop_connection.clear()
 				if event.pressed:
 					has_grab = false
+
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
@@ -253,15 +254,15 @@ func _gui_input(event) -> void:
 							and has_graph_node_selection()):
 						hint_node_drop_allowed(false)
 						highlight_connection(target_drop_connection)
+				KEY_G:
+					if not get_selected_nodes().is_empty():
+						has_grab = true
 		elif not event.pressed:
 			var scancode_with_modifiers = event.get_keycode_with_modifiers()
 			match scancode_with_modifiers:
 				KEY_ALT:
 					if has_graph_node_selection():
 						hint_node_drop_allowed(true)
-				KEY_G:
-					if not get_selected_nodes().is_empty():
-						has_grab = true
 				KEY_ESCAPE:
 					has_grab = false
 		match event.get_keycode():
