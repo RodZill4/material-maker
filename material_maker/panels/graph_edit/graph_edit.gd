@@ -29,7 +29,6 @@ var target_drop_connection : Dictionary
 var target_drop_node : GraphNode
 
 @onready var grab_icon : Texture2D = preload("res://material_maker/icons/grab.svg")
-var previously_selected : Array[GraphElement]
 var has_grab : bool = false:
 	set(v):
 		has_grab = v
@@ -38,12 +37,12 @@ var has_grab : bool = false:
 					grab_icon, Input.CURSOR_ARROW,
 					grab_icon.get_size() * 0.5)
 		else:
+			Input.set_custom_mouse_cursor(null)
 			if not target_drop_connection.is_empty():
 				drop_node_on_connection(target_drop_node, target_drop_connection)
 				remove_theme_color_override("activity")
 				remove_theme_color_override("connection_hover_tint_color")
 				target_drop_connection.clear()
-			Input.set_custom_mouse_cursor(null)
 
 const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
