@@ -593,7 +593,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "The file-name to use. 
 
-You can use $project, $node and $idx to make the file-name auto-adjust."
+You can use $project, $node, $idx and $resolution to make the file-name auto-adjust."
 theme_override_font_sizes/font_size = 15
 text = "$project_$node"
 
@@ -755,6 +755,8 @@ layout_mode = 2
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/ExportFile" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_file_text_changed"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/FileType" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_file_type_item_selected"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/Resolution" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_resolution_item_selected"]
+[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection/CustomResolutionX" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_custom_resolution_x_value_changed"]
+[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection/CustomResolutionY" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_custom_resolution_y_value_changed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Image" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_image_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Reference" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_reference_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Animation" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_animation_pressed"]

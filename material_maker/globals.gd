@@ -181,7 +181,7 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 	do_propagate_shortcuts(control, event)
 
 
-func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}) -> String:
+func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}, resolution="") -> String:
 	for i in additional_identifiers:
 		file_name = file_name.replace(i, additional_identifiers[i])
 
@@ -193,6 +193,9 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 
 	if file_extension != "" and not file_name.ends_with(file_extension):
 		file_name += file_extension
+
+	if resolution:
+		file_name = file_name.replace("$resolution", resolution)
 
 	if "$idx" in file_name:
 		if path:
