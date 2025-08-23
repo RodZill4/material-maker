@@ -40,8 +40,6 @@ var has_grab : bool = false:
 			Input.set_custom_mouse_cursor(null)
 			if not target_drop_connection.is_empty():
 				drop_node_on_connection(target_drop_node, target_drop_connection)
-				remove_theme_color_override("activity")
-				remove_theme_color_override("connection_hover_tint_color")
 				target_drop_connection.clear()
 
 const PREVIEW_COUNT = 2
@@ -136,13 +134,14 @@ func _input(event: InputEvent) -> void:
 		var selected_nodes := get_selected_nodes()
 		if event is InputEventMouseMotion:
 			for node : GraphElement in selected_nodes:
+				if node is not MMGraphComment:
+					node.move_to_front()
 				node.position_offset += event.relative / zoom
 		elif (event is InputEventMouseButton
 				and event.button_index == MOUSE_BUTTON_LEFT):
 			accept_event()
 			has_grab = false
-			# Prevent unintended control activations
-			# on grab release i.e. OptionButton popups
+			# Prevent unintended control activations on grab release
 			for node : GraphElement in selected_nodes:
 				if event.pressed:
 					node.grab_click_focus.call_deferred()
