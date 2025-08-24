@@ -45,6 +45,8 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
+const RECENTS_MENU_CLEAR = 10000
+
 const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
@@ -347,9 +349,15 @@ func create_menu_load_recent(menu) -> void:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
 		menu.connect_id_pressed(self._on_LoadRecent_id_pressed)
+		menu.add_separator()
+		menu.add_item("Clear recent files", RECENTS_MENU_CLEAR)
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	do_load_project(recent_files[id])
+	match id:
+		RECENTS_MENU_CLEAR:
+			clear_recents()
+		_:
+			do_load_project(recent_files[id])
 
 func load_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.READ)
@@ -357,6 +365,10 @@ func load_recents() -> void:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(f.get_as_text())
 		recent_files = test_json_conv.get_data()
+
+func clear_recents() -> void:
+	recent_files.clear()
+	save_recents()
 
 func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
