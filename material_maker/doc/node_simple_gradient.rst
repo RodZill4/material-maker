@@ -22,11 +22,17 @@ Parameters
 
 The **Gradient** nodes accept the following parameters:
 
-* the *number of repetitions* of the gradient
-* the *rotation angle* (only for the linear **Gradient** node)
-* the *perspective effect* (only for the spiral **Gradient** node)
-* the *zoom* (only for the spiral **Gradient** node)
-* the *gradient*
+* **Number of repetitions** of the gradient
+
+* **Rotation angle** (only for the linear **Gradient** node)
+
+* **Perspective effect** (only for the spiral **Gradient** node)
+
+* **Zoom** (only for the spiral **Gradient** node)
+
+* **Mirror** which mirrors the **Gradient**
+
+* The **Gradient**
 
 Example images
 ++++++++++++++
