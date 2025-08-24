@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=118 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=117 format=3 uid="uid://42cileyfwaca"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="2_lsxnf"]
@@ -89,6 +89,13 @@ region = Rect2(96, 112, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b2nb"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.118, 0.145333, 0.2, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m1w7u"]
 atlas = ExtResource("1_7p32q")
@@ -791,6 +798,7 @@ CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
 CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
 CodeEdit/styles/focus = SubResource("StyleBoxEmpty_7b2nb")
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
+FileDialog/styles/panel = SubResource("StyleBoxFlat_7b2nb")
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/constants/port_hotzone_inner_extent = 8
