@@ -93,3 +93,7 @@ func interpret_map_file_name(file_name: String, path:="") -> String:
 		1: extension += ".exr"
 
 	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids)
+
+
+func _on_map_file_type_item_selected(_index: int) -> void:
+	update_generate_map_file_label()
