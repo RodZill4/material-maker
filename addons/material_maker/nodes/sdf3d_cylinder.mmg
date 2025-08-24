@@ -58,7 +58,7 @@
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Length",
 				"longdesc": "The length of the cylinder",
 				"max": 1,
@@ -70,7 +70,7 @@
 			},
 			{
 				"control": "Rect1.x",
-				"default": 0.2,
+				"default": 0.25,
 				"label": "Radius",
 				"longdesc": "The radius of the cylinder",
 				"max": 1,

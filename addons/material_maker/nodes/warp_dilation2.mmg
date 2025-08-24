@@ -120,99 +120,99 @@
 		{
 			"name": "buffer_5",
 			"node_position": {
-				"x": -360.832672,
-				"y": -27.909088
+				"x": -360.832672119141,
+				"y": -27.9090881347656
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 10.0
 			},
-			"seed": 3065,
+			"seed": 3065.0,
 			"type": "buffer"
 		},
 		{
 			"name": "buffer_6",
 			"node_position": {
-				"x": -678.916748,
-				"y": 101.060692
+				"x": -678.916748046875,
+				"y": 101.060691833496
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 10.0
 			},
-			"seed": 20826,
+			"seed": 20826.0,
 			"type": "buffer"
 		},
 		{
 			"name": "buffer_7",
 			"node_position": {
-				"x": -679.734985,
-				"y": 13.878881
+				"x": -679.734985351562,
+				"y": 13.8788814544678
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 10.0
 			},
-			"seed": 12578,
+			"seed": 12578.0,
 			"type": "buffer"
 		},
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1127.189453,
-				"y": -144.691238
+				"x": -1127.189453125,
+				"y": -144.69123840332
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"name": "port1",
 					"type": "f"
 				},
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"name": "port0",
 					"type": "f"
 				}
 			],
-			"seed": 503,
+			"seed": 503.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -70.923584,
-				"y": -122.691238
+				"x": -70.923583984375,
+				"y": -122.69123840332
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"name": "port0",
 					"type": "f"
 				}
 			],
-			"seed": 33280,
+			"seed": 33280.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -383.67511,
-				"y": -437.666565
+				"x": -383.675109863281,
+				"y": -437.666564941406
 			},
 			"parameters": {
-				"a": 0,
-				"angle": 0,
+				"a": 0.0,
+				"angle": 0.0,
 				"d": 0.5,
-				"param0": 1,
-				"s": 10
+				"param0": 1.0,
+				"s": 10.0
 			},
-			"seed": 18589,
+			"seed": 18589.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -284,24 +284,24 @@
 						"False": [
 							{
 								"node": "switch",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							}
 						],
 						"True": [
 							{
 								"node": "switch",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							}
 						]
@@ -327,28 +327,130 @@
 		{
 			"name": "warp_dilation",
 			"node_position": {
-				"x": -392.389465,
-				"y": -173.200409
+				"x": -392.389465332031,
+				"y": -173.200408935547
 			},
 			"parameters": {
-				"a": 0,
-				"angle": 0,
+				"a": 0.0,
+				"angle": 0.0,
 				"d": 0.5,
-				"s": 10
+				"s": 10.0
 			},
-			"seed": 7232,
-			"type": "warp_dilation2_nobuf"
+			"seed": 7232.0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The input image",
+						"name": "in",
+						"shortdesc": "Input",
+						"type": "f"
+					},
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"longdesc": "The height map whose contours or slopes are followed",
+						"name": "hm",
+						"shortdesc": "Height map",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec2 $(name)_slope(vec2 uv, float epsilon) {",
+					"\tfloat dx = $hm(fract(uv+vec2(epsilon, 0.0)))-$hm(fract(uv-vec2(epsilon, 0.0)));",
+					"\tfloat dy = $hm(fract(uv+vec2(0.0, epsilon)))-$hm(fract(uv-vec2(0.0, epsilon)));",
+					"\treturn cos($angle*0.01745329251)*vec2(dx, dy)+sin($angle*0.01745329251)*vec2(-dy, dx);",
+					"}",
+					"",
+					"float $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat v = 0.0;",
+					"\tfor (float x = 0.0; x <= $d; x += e) {",
+					"\t\tv = max(v, $in(fract(uv))*(1.0-x/$d*$a));",
+					"\t\tvec2 delta = $(name)_slope(uv, e);",
+					"\t\tif (delta.x == 0.0 && delta.y == 0.0) {",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t\tuv += e*normalize(delta);",
+					"\t}",
+					"\treturn v;",
+					"}"
+				],
+				"longdesc": "Dilates its input following the contours or slope of an input heightmap",
+				"name": "Warp Dilation 2",
+				"outputs": [
+					{
+						"f": "$(name)_dilate($uv)",
+						"longdesc": "The dilated image",
+						"shortdesc": "Output",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10,
+						"first": 7,
+						"label": "Resolution",
+						"last": 12,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Angle",
+						"longdesc": "The resolution at which the contours or slopes are followed (higher values will be more precise but rendering time will be higher)",
+						"max": 180.0,
+						"min": -180.0,
+						"name": "angle",
+						"shortdesc": "Resolution",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Distance",
+						"longdesc": "The distance along which the contours or slopes are followed",
+						"max": 0.5,
+						"min": 0.0,
+						"name": "d",
+						"shortdesc": "Distance",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Attenuation",
+						"longdesc": "The attenuation applied along the path",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "a",
+						"shortdesc": "Attenuation",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Warp Dilation"
+			},
+			"type": "shader"
 		},
 		{
 			"name": "switch",
 			"node_position": {
-				"x": -653.180054,
-				"y": -235.012421
+				"x": -653.180053710938,
+				"y": -235.012420654297
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 4,
-				"source": 1
+				"choices": 2.0,
+				"outputs": 4.0,
+				"source": 1.0
 			},
 			"seed_int": 0,
 			"type": "switch"
@@ -356,11 +458,11 @@
 		{
 			"name": "uniform_greyscale",
 			"node_position": {
-				"x": -946.973328,
-				"y": -248.096252
+				"x": -946.973327636719,
+				"y": -248.096252441406
 			},
 			"parameters": {
-				"color": 0
+				"color": 0.0
 			},
 			"seed_int": 0,
 			"type": "uniform_greyscale"
@@ -368,24 +470,24 @@
 		{
 			"name": "switch_2",
 			"node_position": {
-				"x": -344.824677,
-				"y": 61.920258
+				"x": -344.824676513672,
+				"y": 61.9202575683594
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 2,
-				"source": 1
+				"choices": 2.0,
+				"outputs": 2.0,
+				"source": 1.0
 			},
 			"seed_int": 0,
 			"type": "switch"
 		}
 	],
 	"parameters": {
-		"a": 0,
-		"angle": 0,
+		"a": 0.0,
+		"angle": 0.0,
 		"d": 0.5,
-		"param0": 1,
-		"s": 10
+		"param0": 1.0,
+		"s": 10.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Warp Dilation 2",
