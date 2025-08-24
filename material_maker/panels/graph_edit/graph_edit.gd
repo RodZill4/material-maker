@@ -169,6 +169,8 @@ func _gui_input(event) -> void:
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
+				elif event.alt_pressed and event.shift_pressed and event.pressed:
+					handle_material_link()
 				else:
 					process_port_click(event.is_pressed())
 			call_deferred("check_previews")
@@ -220,6 +222,77 @@ func _gui_input(event) -> void:
 			var rect = get_global_rect()
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
+
+func handle_material_link() -> void:
+	if get_nodes_under_mouse().is_empty() or subgraph_ui.visible:
+		return
+
+	var target_material_port : int = 0
+	var target_preview_slot : int = -1
+	var current_preview_port : int = -1
+
+	var existing_connection : Dictionary
+	var compatible_preview_map : Dictionary
+
+	var selected_node : GraphNode
+	var material_node : GraphNode = get_node("node_Material")
+	var selection := get_nodes_under_mouse()
+	selection.sort_custom(func(a,b): return a.get_index() > b.get_index())
+
+	if not selection.is_empty():
+		selected_node = selection.front()
+		if selected_node != material_node:
+			set_selected(selected_node)
+
+			for slot_type in mm_io_types.types:
+				var slot_id : int = mm_io_types.types[slot_type]["slot_type"]
+				compatible_preview_map[str(slot_id)] = []
+
+			for slot in selected_node.get_output_port_count():
+				compatible_preview_map[
+						str(selected_node.get_output_port_type(slot))].append(slot)
+
+			for c in get_connection_list():
+				if material_node.name == c.to_node:
+					if (c.from_node == selected_node.name
+							and c.to_node == material_node.name
+							and c.to_port == target_material_port):
+						existing_connection = c
+						current_preview_port = c.from_port
+						break
+
+			var compat_preview_slots : Array = compatible_preview_map[
+					str(material_node.get_input_port_type(0))]
+
+			# "any" slot type (i.e. Switch/Reroute)
+			if selected_node.get_output_port_type(0) == 42:
+				compat_preview_slots = compatible_preview_map["42"]
+
+			if compat_preview_slots.size():
+				target_preview_slot = compat_preview_slots.find(current_preview_port)
+				target_preview_slot = compat_preview_slots[
+						wrap(target_preview_slot+1, 0, compat_preview_slots.size())]
+			else:
+				return
+
+			var same_connection : bool = false
+			if existing_connection:
+				same_connection = (existing_connection.from_node == selected_node.name
+					and existing_connection.to_node == material_node.name
+					and existing_connection.from_port == target_preview_slot
+					and existing_connection.to_port == target_material_port)
+
+			if not same_connection:
+				if existing_connection:
+					undoredo.start_group()
+					on_disconnect_node(existing_connection.from_node,
+							existing_connection.from_port,
+							existing_connection.to_node,
+							existing_connection.to_port)
+				on_connect_node(selected_node.name, target_preview_slot,
+						material_node.name, target_material_port)
+		undoredo.end_group()
+
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
