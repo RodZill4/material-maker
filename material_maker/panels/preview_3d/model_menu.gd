@@ -16,6 +16,9 @@ var custom_models : PackedStringArray = PackedStringArray()
 @onready var SpeedMedium := %Speed_Medium
 @onready var SpeedFast := %Speed_Fast
 
+@onready var SnapTop := %SnapTop
+@onready var SnapFront := %SnapFront
+@onready var SnapRight := %SnapRight
 
 func _ready() -> void:
 	await preview3D.ready
@@ -43,8 +46,10 @@ func _ready() -> void:
 			2: SpeedMedium.button_pressed = true
 			3: SpeedFast.button_pressed = true
 
+
 func _open() -> void:
 	pass
+
 
 func update_model_selector() -> void:
 	var objects_count : int = preview3D.objects.get_child_count()
@@ -54,6 +59,7 @@ func update_model_selector() -> void:
 		Model.add_item(o.name, i)
 	for i in min(custom_models.size(), MAX_CUSTOM_MODELS):
 		Model.add_item(custom_models[i].get_file(), i+objects_count)
+
 
 func _on_model_item_selected(index: int, custom_model_path : String = "") -> void:
 	var objects_count : int = preview3D.objects.get_child_count()
@@ -82,8 +88,6 @@ func _on_model_item_selected(index: int, custom_model_path : String = "") -> voi
 	else:
 		Model.select(0)
 		_on_model_item_selected(0)
-
-
 
 
 func _on_model_configurate_pressed() -> void:
@@ -138,3 +142,9 @@ func _on_snap_right_pressed() -> void:
 			Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
 	tween.parallel().tween_property(camrot1, "rotation",
 			Vector3(camrot1.rotation.x, -PI*0.5 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
+
+func _process(delta: float) -> void:
+	var shift_down : bool = Input.is_key_pressed(KEY_SHIFT)
+	SnapTop.text = "Bottom" if shift_down else "Top"
+	SnapFront.text = "Back" if shift_down else "Front"
+	SnapRight.text = "Left" if shift_down else "Right"

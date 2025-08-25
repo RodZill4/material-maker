@@ -199,21 +199,29 @@ theme_type_variation = &"MM_PanelMenuSubPanelLabel"
 text = "View"
 
 [node name="SnapView" type="HBoxContainer" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="SnapTop" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Top"
 
 [node name="SnapFront" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Front"
 
 [node name="SnapRight" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Right"
 
 [node name="EnvironmentMenu" type="Button" parent="MainMenu/HBox"]
