@@ -1,3 +1,22 @@
+# Material Maker 1.4RC5
+
+## Bug Fixes
+
+- Fixed a bug that caused recents not to be added when a .ptex file is dropped (contributed by williamchange)
+- Fixed lattice grid not updating when the slice count is updated (contributed by williamchange)
+- Fixed SplinesView drawn area offset on start (contributed by williamchange)
+- Fixed splines handle lines not drawing (contributed by williamchange)
+- Fixed typo for transform node's mode tooltip (contributed by williamchange)
+- Updated mode doc for transform node (contributed by williamchange)
+- Fixed tones cursor outline not updating on undo (contributed by williamchange)
+- Missing check for comment line in quick connection (contributed by williamchange)
+- Fix reroute pos y offset when adding from port (contributed by williamchange)
+- Fix filepath format not updating in 3d map export (contributed by williamchange)
+- Fixed crash that occured when deleting an iterate buffer
+- Relaxed render status condition when exporting materials
+- Removed disable render option
+- Documentation fixes (contributed by williamchange)
+
 # Material Maker 1.4RC4
 
 ## General
