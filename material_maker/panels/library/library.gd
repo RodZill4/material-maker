@@ -18,6 +18,8 @@ const MINIMUM_ITEM_HEIGHT : int = 30
 const MENU_CREATE_LIBRARY : int = 1000
 const MENU_LOAD_LIBRARY : int =   1001
 
+const default_theme : Theme = preload("res://material_maker/theme/default.tres")
+
 func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 	context_menu.position = get_window().position+ Vector2i(
 			get_global_mouse_position() * get_window().content_scale_factor)
@@ -32,11 +34,16 @@ func _ready() -> void:
 	# Connect
 	library_manager.libraries_changed.connect(self.update_tree)
 	# Setup section buttons
-	for s in library_manager.get_sections():
-		var button : TextureButton = TextureButton.new()
-		var texture : Texture2D = library_manager.get_section_icon(s)
+	for s : String in library_manager.get_sections():
+		var button : Button = Button.new()
 		button.name = s
-		button.texture_normal = texture
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.expand_icon = true
+		button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
+		button.custom_minimum_size = Vector2(32, 32)
+		button.theme_type_variation = "MM_LibrarySectionButton"
+
+		update_category_button_styleboxes(button, s)
 		%SectionButtons.add_child(button)
 		category_buttons[s] = button
 		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
@@ -47,14 +54,20 @@ func _ready() -> void:
 	update_theme()
 
 func _notification(what: int) -> void:
-	if not is_node_ready():
-		return
-
 	if what == NOTIFICATION_THEME_CHANGED:
+		if not is_node_ready():
+			await ready
+		for s in library_manager.get_sections():
+			var button : Button = category_buttons[s]
+			button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
+			update_category_button_styleboxes(button, s)
 		update_theme()
 
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
+
+	var is_theme_classic : bool = "classic" in mm_globals.main_window.theme.resource_path
+	library_manager.update_section_colors(is_theme_classic)
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
@@ -115,11 +128,22 @@ func get_expanded_items(item : TreeItem = null) -> PackedStringArray:
 
 func update_category_button(category : String) -> void:
 	if library_manager.is_section_enabled(category):
-		category_buttons[category].material = null
+		category_buttons[category].disabled = false
 		category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 	else:
-		category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+		category_buttons[category].disabled = true
 		category_buttons[category].tooltip_text = category+"\nRight click to enable"
+
+func update_category_button_styleboxes(btn : Button, category : String) -> void:
+	for stylebox_name in default_theme.get_stylebox_list("MM_LibrarySectionButton"):
+		var button_stylebox = get_theme_stylebox(
+				stylebox_name, "MM_LibrarySectionButton").duplicate()
+		if btn.has_theme_stylebox_override(stylebox_name):
+			btn.remove_theme_stylebox_override(stylebox_name)
+		if button_stylebox is StyleBoxFlat and stylebox_name != "disabled":
+			button_stylebox.bg_color = get_theme_color(
+					"section_" + category.to_lower(), "MM_LibrarySectionButton")
+			btn.add_theme_stylebox_override(stylebox_name, button_stylebox)
 
 func update_tree() -> void:
 	# update category buttons
@@ -248,10 +272,8 @@ func _on_Section_Button_pressed(category : String) -> void:
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		if library_manager.toggle_section(category):
-			category_buttons[category].material = null
 			category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 		else:
-			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
 			category_buttons[category].tooltip_text = category+"\nRight click to enable"
 			if current_category == category:
 				current_category = ""
