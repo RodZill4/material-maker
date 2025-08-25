@@ -116,7 +116,7 @@ const REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS : Array = [ "code", "custom", "glo
 const REPLACE_MULTILINE_STRINGS_WALK_ITEMS : Array = [ "shader_model", "nodes", "template", "files" ]
 const REPLACE_MULTILINE_STRINGS_WALK_CHILDREN : Array = [ "exports" ]
 
-static func replace_multiline_strings_with_arrays(data, walk_children : bool = false):
+func replace_multiline_strings_with_arrays(data, walk_children : bool = false):
 	if data is Dictionary:
 		for k in data.keys():
 			if k in REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS:
@@ -133,7 +133,7 @@ static func replace_multiline_strings_with_arrays(data, walk_children : bool = f
 			data[i] = replace_multiline_strings_with_arrays(data[i])
 	return data
 
-static func replace_arrays_with_multiline_strings(data, walk_children : bool = false):
+func replace_arrays_with_multiline_strings(data, walk_children : bool = false):
 	if data is Dictionary:
 		for k in data.keys():
 			if k in REPLACE_MULTILINE_STRINGS_PROCESS_ITEMS:
@@ -148,13 +148,13 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 			data[i] = replace_arrays_with_multiline_strings(data[i])
 	return data
 
-static func string_to_dict_tree(string_data : String) -> Dictionary:
+func string_to_dict_tree(string_data : String) -> Dictionary:
 	var test_json_conv : JSON = JSON.new()
 	if test_json_conv.parse(string_data) == OK and test_json_conv.data is Dictionary:
 		return replace_arrays_with_multiline_strings(test_json_conv.data)
 	return {}
 
-static func dict_tree_to_string(data : Dictionary) -> String:
+func dict_tree_to_string(data : Dictionary) -> String:
 	return JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true)
 
 func load_gen(filename: String) -> MMGenBase:
