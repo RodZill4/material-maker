@@ -40,6 +40,12 @@ var undoredo_move_node_selection_changed : bool = true
 enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 var connection_line_style : int = ConnectionStyle.BEZIER
 
+@onready var drag_cut_cursor = preload("res://material_maker/icons/knife.png")
+var connections_to_cut : Array[Dictionary]
+var drag_cut_line : Line2D = Line2D.new()
+var valid_drag_cut_entry: bool = false
+const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -52,6 +58,7 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
+	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -120,6 +127,22 @@ func _gui_input(event) -> void:
 		accept_event()
 		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
+	elif event.is_action_released("ui_cut_drag"):
+		var conns : Array[Dictionary]
+		for p in len(drag_cut_line.points) - 1:
+			var rect : Rect2
+			rect.position = drag_cut_line.points[p]
+			rect.end = drag_cut_line.points[p + 1]
+			conns = get_connections_intersecting_with_rect(rect.abs())
+			if conns.size():
+				connections_to_cut.append_array(conns)
+		if connections_to_cut.size():
+			on_cut_connections(connections_to_cut)
+			connections_to_cut.clear()
+		Input.set_custom_mouse_cursor(null)
+		drag_cut_line.clear_points()
+		conns.clear()
+		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
 	elif event.is_action_pressed("ui_hierarchy_down"):
@@ -141,6 +164,7 @@ func _gui_input(event) -> void:
 				event.control = true
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+			valid_drag_cut_entry = true
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
@@ -160,10 +184,11 @@ func _gui_input(event) -> void:
 								if c.has_method("on_clicked_output"):
 									c.on_clicked_output(slot.index, Input.is_key_pressed(KEY_SHIFT))
 									return
-			# Only popup the UI library if Ctrl is not pressed to avoid conflicting
-			# with the Ctrl + Space shortcut.
-			node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
-			node_popup.show_popup()
+			# Only show add node popup if Ctrl is not pressed to
+			# avoid conflicting with drag-cut shortcut (Ctrl + RMB)
+			if !event.ctrl_pressed:
+				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
+				node_popup.show_popup()
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if event.double_click:
@@ -221,12 +246,26 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
+			if event.ctrl_pressed:
+				Input.set_custom_mouse_cursor(
+						drag_cut_cursor, Input.CURSOR_ARROW, CURSOR_HOT_SPOT)
+				drag_cut_line.add_point(get_local_mouse_position())
+				queue_redraw()
+			elif drag_cut_line.points.size():
+				drag_cut_line.add_point(get_local_mouse_position())
+				queue_redraw()
+
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
 	var padding := 8 * graph_node.get_global_transform().get_scale().x
 	rect.position.x -= padding
 	rect.size.x += padding*2
 	return Rect2(rect.position, rect.size)
+
+func _draw() -> void:
+	if drag_cut_line.points.size() > 1:
+		draw_polyline(drag_cut_line.points, Color.WHITE, 0.5)
 
 
 # Misc. useful functions
@@ -307,6 +346,23 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 				n.on_connections_changed()
 		return true
 	return false
+
+func on_cut_connections(connections_to_cut : Array):
+	var generator_hier_name : String = generator.get_hier_name()
+	var conns : Array = []
+	for c in connections_to_cut:
+		var from_gen = get_node(str(c.from_node)).generator
+		var to_gen = get_node(str(c.to_node)).generator
+		if do_disconnect_node(c.from_node, c.from_port, c.to_node, c.to_port):
+			conns.append({from=from_gen.name,from_port=c.from_port, to=to_gen.name, to_port=c.to_port})
+	var undo_actions = [
+		{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=conns }
+	]
+	var redo_actions = [
+		{ type="remove_connections", parent=generator_hier_name, connections=conns }
+	]
+	undoredo.add("Cut node connections", undo_actions, redo_actions)
+
 
 func on_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
 	var from_gen = get_node(from).generator
