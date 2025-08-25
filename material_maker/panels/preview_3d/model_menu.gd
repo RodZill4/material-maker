@@ -20,6 +20,8 @@ var custom_models : PackedStringArray = PackedStringArray()
 @onready var SnapFront := %SnapFront
 @onready var SnapRight := %SnapRight
 
+enum SnapView {Top, Front, Right}
+
 func _ready() -> void:
 	await preview3D.ready
 	
@@ -114,37 +116,29 @@ func _on_speed_fast_toggled(_toggled_on: bool) -> void:
 	preview3D.set_rotate_model_speed(0.1)
 
 
-func _on_snap_top_pressed() -> void:
-	var tween = get_tree().create_tween()
-	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
-	var camrot1 : Node3D = preview3D.camera_controller.camera_rotation1
-	tween.tween_property(camrot2, "rotation",
-			Vector3(-PI*0.5, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
-	tween.parallel().tween_property(camrot1, "rotation",
-			Vector3(camrot1.rotation.x, 0.0 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
-
-
-func _on_snap_front_pressed() -> void:
-	var tween = get_tree().create_tween()
-	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
-	var camrot1 : Node3D = preview3D.camera_controller.camera_rotation1
-	tween.tween_property(camrot2, "rotation",
-			Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
-	tween.parallel().tween_property(camrot1, "rotation",
-			Vector3(camrot1.rotation.x, 0.0 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
-
-
-func _on_snap_right_pressed() -> void:
-	var tween = get_tree().create_tween()
-	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
-	var camrot1 : Node3D = preview3D.camera_controller.camera_rotation1
-	tween.tween_property(camrot2, "rotation",
-			Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
-	tween.parallel().tween_property(camrot1, "rotation",
-			Vector3(camrot1.rotation.x, -PI*0.5 ,camrot2.rotation.z), 0.2).set_trans(Tween.TRANS_CUBIC)
-
 func _process(delta: float) -> void:
 	var shift_down : bool = Input.is_key_pressed(KEY_SHIFT)
 	SnapTop.text = "Bottom" if shift_down else "Top"
 	SnapFront.text = "Back" if shift_down else "Front"
 	SnapRight.text = "Left" if shift_down else "Right"
+
+
+func _on_snap_pressed(id: int) -> void:
+	var tween = get_tree().create_tween()
+	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
+	var camrot1 : Node3D = preview3D.camera_controller.camera_rotation1
+	var rot2 : Vector3
+	var rot1 : Vector3
+	match id:
+		SnapView.Top:
+			rot2 = Vector3(-PI * 0.5, camrot2.rotation.y, camrot2.rotation.z)
+			rot1 = Vector3(camrot1.rotation.x, 0.0, camrot2.rotation.z)
+		SnapView.Front:
+			rot2 = Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z)
+			rot1 = Vector3(camrot1.rotation.x, 0.0, camrot2.rotation.z)
+		SnapView.Right:
+			rot2 = Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z)
+			rot1 = Vector3(camrot1.rotation.x, -PI * 0.5, camrot2.rotation.z)
+
+	tween.tween_property(camrot2, "rotation", rot2, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(camrot1, "rotation", rot1, 0.2).set_trans(Tween.TRANS_CUBIC)
