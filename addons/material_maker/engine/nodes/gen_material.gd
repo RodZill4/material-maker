@@ -709,7 +709,13 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 			"texture":
 				# Wait until the render queue is empty
 				if mm_deps.get_render_queue_size() > 0:
-					await mm_deps.render_queue_empty
+					var render_queue_size : int = mm_deps.get_render_queue_size()
+					while true:
+						mm_deps.update()
+						await get_tree().process_frame
+						if render_queue_size == mm_deps.get_render_queue_size():
+							break
+						render_queue_size = mm_deps.get_render_queue_size()
 				var file_name = subst_string(f.file_name, export_context)
 				var output_index : int
 				if f.has("output"):
