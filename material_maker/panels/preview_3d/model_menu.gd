@@ -118,13 +118,16 @@ func _on_speed_fast_toggled(_toggled_on: bool) -> void:
 
 func _process(delta: float) -> void:
 	var shift_down : bool = Input.is_key_pressed(KEY_SHIFT)
-	SnapTop.text = "Bottom" if shift_down else "Top"
-	SnapFront.text = "Back" if shift_down else "Front"
-	SnapRight.text = "Left" if shift_down else "Right"
+	if $VBoxContainer/Model/SnapView.get_rect().has_point(get_local_mouse_position()):
+		SnapTop.text = "Bottom" if shift_down else "Top"
+		SnapFront.text = "Back" if shift_down else "Front"
+		SnapRight.text = "Left" if shift_down else "Right"
 
 
 func _on_snap_pressed(id: int) -> void:
 	var tween = get_tree().create_tween()
+	var pivot = preview3D.get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
+	var cam_control = preview3D.get_node("MaterialPreview/Preview3d/CameraController")
 	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
 	var camrot1 : Node3D = preview3D.camera_controller.camera_rotation1
 	var rot2 : Vector3
@@ -142,3 +145,6 @@ func _on_snap_pressed(id: int) -> void:
 
 	tween.tween_property(camrot2, "rotation", rot2, 0.2).set_trans(Tween.TRANS_CUBIC)
 	tween.parallel().tween_property(camrot1, "rotation", rot1, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(pivot, "transform:origin", Vector3.ZERO, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(cam_control, "transform:origin", Vector3.ZERO, 0.2).set_trans(Tween.TRANS_CUBIC)
+	
