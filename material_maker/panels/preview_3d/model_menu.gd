@@ -16,6 +16,11 @@ var custom_models : PackedStringArray = PackedStringArray()
 @onready var SpeedMedium := %Speed_Medium
 @onready var SpeedFast := %Speed_Fast
 
+@onready var SnapTop := %SnapTop
+@onready var SnapFront := %SnapFront
+@onready var SnapRight := %SnapRight
+
+enum SnapView {Top, Front, Right}
 
 func _ready() -> void:
 	await preview3D.ready
@@ -43,8 +48,10 @@ func _ready() -> void:
 			2: SpeedMedium.button_pressed = true
 			3: SpeedFast.button_pressed = true
 
+
 func _open() -> void:
 	pass
+
 
 func update_model_selector() -> void:
 	var objects_count : int = preview3D.objects.get_child_count()
@@ -54,6 +61,7 @@ func update_model_selector() -> void:
 		Model.add_item(o.name, i)
 	for i in min(custom_models.size(), MAX_CUSTOM_MODELS):
 		Model.add_item(custom_models[i].get_file(), i+objects_count)
+
 
 func _on_model_item_selected(index: int, custom_model_path : String = "") -> void:
 	var objects_count : int = preview3D.objects.get_child_count()
@@ -84,8 +92,6 @@ func _on_model_item_selected(index: int, custom_model_path : String = "") -> voi
 		_on_model_item_selected(0)
 
 
-
-
 func _on_model_configurate_pressed() -> void:
 	preview3D.configure_model()
 
@@ -108,3 +114,37 @@ func _on_speed_medium_toggled(_toggled_on: bool) -> void:
 func _on_speed_fast_toggled(_toggled_on: bool) -> void:
 	mm_globals.set_config(SETTING_3D_PREVIEW_ROTATION_SPEED, 3)
 	preview3D.set_rotate_model_speed(0.1)
+
+
+func _process(delta: float) -> void:
+	var shift_down : bool = Input.is_key_pressed(KEY_SHIFT)
+	if $VBoxContainer/Model/SnapView.get_rect().has_point(get_local_mouse_position()):
+		SnapTop.text = "Bottom" if shift_down else "Top"
+		SnapFront.text = "Back" if shift_down else "Front"
+		SnapRight.text = "Left" if shift_down else "Right"
+
+
+func _on_snap_pressed(id: int) -> void:
+	var tween = get_tree().create_tween()
+	var pivot = preview3D.get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
+	var cam_control = preview3D.get_node("MaterialPreview/Preview3d/CameraController")
+	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
+	var camrot1 : Node3D = preview3D.camera_controller.camera_rotation1
+	var rot2 : Vector3
+	var rot1 : Vector3
+	match id:
+		SnapView.Top:
+			rot2 = Vector3(-PI * 0.5, camrot2.rotation.y, camrot2.rotation.z)
+			rot1 = Vector3(camrot1.rotation.x, 0.0, camrot2.rotation.z)
+		SnapView.Front:
+			rot2 = Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z)
+			rot1 = Vector3(camrot1.rotation.x, 0.0, camrot2.rotation.z)
+		SnapView.Right:
+			rot2 = Vector3(0.0, camrot2.rotation.y, camrot2.rotation.z)
+			rot1 = Vector3(camrot1.rotation.x, -PI * 0.5, camrot2.rotation.z)
+
+	tween.tween_property(camrot2, "rotation", rot2, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(camrot1, "rotation", rot1, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(pivot, "transform:origin", Vector3.ZERO, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(cam_control, "transform:origin", Vector3.ZERO, 0.2).set_trans(Tween.TRANS_CUBIC)
+	
