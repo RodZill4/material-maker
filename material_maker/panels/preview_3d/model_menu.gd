@@ -110,7 +110,6 @@ func _on_speed_fast_toggled(_toggled_on: bool) -> void:
 	preview3D.set_rotate_model_speed(0.1)
 
 
-
 func _on_snap_top_pressed() -> void:
 	var tween = get_tree().create_tween()
 	var camrot2 : Node3D = preview3D.camera_controller.camera_rotation2
