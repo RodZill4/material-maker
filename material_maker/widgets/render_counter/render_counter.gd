@@ -22,7 +22,7 @@ const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
 func _ready() -> void:
 	#menu.add_check_item("Render", ITEM_RENDER_ENABLED)
 	#menu.add_separator()
-	menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
+	#menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
 	if mm_renderer.total_renderers > 1:
 		menu.add_check_item("Auto", ITEM_AUTO)
 		menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
