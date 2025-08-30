@@ -10,11 +10,13 @@ var float_value: float = 0.5
 
 @export var min_value: float = 0.0 :
 	set(v):
+		show_hide_out_of_bounds_overlay(float_value < min_value)
 		min_value = v
 		$Slider.min_value = v
 
 @export var max_value: float = 1.0 :
 	set(v):
+		show_hide_out_of_bounds_overlay(float_value > max_value)
 		max_value = v
 		$Slider.max_value = v
 
@@ -97,6 +99,8 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 			$Slider.value = v
 		else:
 			$Slider.value = min_value
+		show_hide_out_of_bounds_overlay(
+				float_value < min_value or float_value > max_value)
 		if notify:
 			emit_signal("value_changed", float_value)
 			emit_signal("value_changed_undo", float_value, merge_undos)
@@ -374,3 +378,6 @@ func _handle_sensitivity_adjustment(event : InputEvent) -> void:
 				if event.button_index == MOUSE_BUTTON_LEFT:
 					adjusting_sensitivity = false
 					$Edit.queue_redraw()
+
+func show_hide_out_of_bounds_overlay(should_show : bool) -> void:
+	modulate = Color(1.0,0.9,0.7,1.0) if should_show else Color.WHITE
