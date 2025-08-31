@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://bd3ummbwaq3i"]
+
+[ext_resource type="Script" uid="uid://p7v3ka7aaxmu" path="res://material_maker/panels/graph_edit/lazy_link/lazy_link.gd" id="1_8la56"]
+
+[sub_resource type="Gradient" id="Gradient_8la56"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 0.2, 0.2, 0.2, 1)
+
+[sub_resource type="Gradient" id="Gradient_pg251"]
+offsets = PackedFloat32Array(0.0416667, 0.0833333, 0.125, 0.166667, 0.833333, 0.875, 0.916667, 0.958333)
+colors = PackedColorArray(0.5, 0.5, 0.5, 0, 0.2, 0.2, 0.2, 0.588235, 0.5, 0.5, 0.5, 1, 0.7, 0.7, 0.7, 1, 0.7, 0.7, 0.7, 1, 0.501961, 0.501961, 0.501961, 1, 0.2, 0.2, 0.2, 0.588235, 0.5, 0.5, 0.5, 0)
+metadata/_snap_count = 24
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qgxkp"]
+gradient = SubResource("Gradient_pg251")
+width = 1
+height = 12
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Shader" id="Shader_8la56"]
+code = "shader_type canvas_item;
+
+uniform vec3 node_color : source_color = vec3(0.643, 0.514, 1.0);
+uniform float radius = 0.3;
+uniform float outline_radius = 0.1;
+
+void fragment() {
+	const float ps = 0.03125; // color rect pixel size (1/32)
+
+	float d = length(UV - 0.5);
+	vec3 col = mix(node_color, node_color * 0.5,
+		smoothstep(radius-outline_radius+ps, radius-outline_radius,d));
+	col = mix(col, col * 0.25, smoothstep(radius-ps + 0.02, radius + 0.02, d));
+	COLOR = vec4(col, smoothstep(radius+ps, radius, d));
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f8ijn"]
+shader = SubResource("Shader_8la56")
+shader_parameter/node_color = Color(0.643, 0.514, 1, 1)
+shader_parameter/radius = 0.3
+shader_parameter/outline_radius = 0.1
+
+[node name="LazyLink" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_8la56")
+
+[node name="Link" type="Line2D" parent="."]
+gradient = SubResource("Gradient_8la56")
+texture = SubResource("GradientTexture2D_qgxkp")
+texture_mode = 1
+
+[node name="NodeA" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_f8ijn")
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="NodeB" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_f8ijn")
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
