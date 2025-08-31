@@ -53,6 +53,7 @@ func _ready() -> void:
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
 
+
 func _exit_tree():
 	remove_crash_recovery_file()
 
@@ -221,6 +222,7 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
 	var padding := 8 * graph_node.get_global_transform().get_scale().x
@@ -230,6 +232,20 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 
 
 # Misc. useful functions
+
+func get_closest_node_at_point(point: Vector2) -> GraphNode:
+	var closest_dist : float = INF
+	var closest_node : GraphNode
+	for node in get_children():
+		if node is GraphNode:
+			var node_rect : Rect2 = node.get_rect()
+			var dist : float = point.clamp(node_rect.position,
+					node_rect.size + node_rect.position).distance_squared_to(point)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest_node = node
+	return closest_node
+
 func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
 		if c.to_node == node and c.to_port == port:
