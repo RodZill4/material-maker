@@ -91,6 +91,8 @@ func on_parameter_changed(n : String, v):
 		disable_undoredo_for_offset = true
 		position_offset -= (size-old_size)/2
 		disable_undoredo_for_offset = false
+	else:
+		update_preview()
 
 func set_preview(v : int):
 	var preview : Control = null
