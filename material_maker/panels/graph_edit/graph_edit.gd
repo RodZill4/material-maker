@@ -1405,12 +1405,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			var f1 : Vector2 = Vector2(max(mid.x, from.x + off), from.y)
 			var t1 : Vector2 = Vector2(mb.x, to.y)
 
-			points.append(from)
-			points.append(f1)
-			points.append(ma)
-			points.append(mb)
-			points.append(t1)
-			points.append(to)
+			points.append_array([from, f1, ma, mb, t1, to])
 			return points
 
 		ConnectionStyle.ROUNDED:
@@ -1508,12 +1503,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			var f1 : Vector2 = Vector2(from.x + off, from.y)
 			var t1 : Vector2 = Vector2(to.x - off, to.y)
 
-			points.append(from)
-			points.append(f1)
-			points.append((f1 + ma) * 0.5)
-			points.append((t1 + mb) * 0.5)
-			points.append(t1)
-			points.append(to)
+			points.append_array([from, f1, (f1 + ma) * 0.5, (t1 + mb) * 0.5, t1, to])
 			return points
 		_:
 			return points
