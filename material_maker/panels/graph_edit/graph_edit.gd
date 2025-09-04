@@ -215,6 +215,7 @@ func _gui_input(event) -> void:
 					found_tip = found_tip or c.set_slot_tip_text(mouse_pos, slot)
 					break
 				else:
+					tooltip_text = ""
 					c.clear_connection_labels()
 		if !found_tip:
 			var rect = get_global_rect()
