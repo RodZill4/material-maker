@@ -1327,7 +1327,7 @@ func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 	if ! removed:
 		var global_scale = Vector2(1, 1) # node.get_global_transform().get_scale()
 		var port_position = node.position_offset+node.get_input_port_position(port_index)/global_scale
-		var reroute_position = port_position+Vector2(-74, -31)
+		var reroute_position = port_position+Vector2(-74, -16)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		for c2 in get_connection_list():
 			if c2.to_node == node.name and c2.to_port == port_index:
@@ -1360,7 +1360,7 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 	if !reroutes:
 		var global_scale = Vector2(1, 1) # node.get_global_transform().get_scale()
 		var port_position = node.position_offset+node.get_output_port_position(port_index)/global_scale
-		var reroute_position = port_position+Vector2(50, -31)
+		var reroute_position = port_position+Vector2(50, -16)
 		var reroute_node = {name="reroute",type="reroute",node_position={x=reroute_position.x,y=reroute_position.y}}
 		var reroute_connections = [ { from=node.generator.name, from_port=port_index, to="reroute", to_port=0 }]
 		for d in destinations:

@@ -6,6 +6,7 @@ const PREVIEW_SIZES : Array[int] = [ 0, 64, 128, 192]
 
 func _ready() -> void:
 	super._ready()
+	get_titlebar_hbox().get_child(0).hide()
 	close_button.visible = false
 	theme_type_variation = "MM_Reroute"
 	#set_theme_type("Reroute")
