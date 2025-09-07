@@ -195,6 +195,8 @@ func _gui_input(event) -> void:
 				KEY_DOWN:
 					scroll_offset.y += 0.5*size.y
 					accept_event()
+				KEY_F:
+					color_comment_nodes()
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -1517,3 +1519,24 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			return points
 		_:
 			return points
+
+func color_comment_nodes() -> void:
+	var comments := get_children().filter(
+			func(n): return (n is MMGraphComment and n.selected))
+	if not comments.is_empty():
+		undoredo.start_group()
+		var picker := preload(
+				"res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
+		picker.hide()
+		add_child(picker)
+		var color_picker := picker.get_node("ColorPicker")
+		for node in comments:
+			color_picker.color_changed.connect(node.set_color)
+			color_picker.color = node.generator.color
+		var csf = get_window().content_scale_factor
+		picker.content_scale_factor = csf
+		picker.min_size = picker.get_contents_minimum_size() * csf
+		picker.position = get_screen_position() + get_local_mouse_position() * csf
+		picker.popup_hide.connect(picker.queue_free)
+		picker.popup_hide.connect(undoredo.end_group)
+		picker.popup()
