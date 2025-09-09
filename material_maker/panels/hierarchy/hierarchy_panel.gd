@@ -22,6 +22,7 @@ func _ready() -> void:
 	default_texture = ImageTexture.new()
 	default_texture.set_image(default_image)
 	%PreviewMenu.get_popup().connect("id_pressed",Callable(self,"_on_PreviewMenu_id_pressed"))
+	update_from_graph_edit(mm_globals.main_window.get_current_graph_edit())
 
 func update_from_graph_edit(graph_edit) -> void:
 	if tree == null:
