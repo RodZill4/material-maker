@@ -51,7 +51,7 @@ func _on_generate_map_button_pressed() -> void:
 	if mm_globals.config.has_section_key("path", "maps"):
 		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
 
-	dialog.current_file = file_name+extension
+	dialog.current_file = file_name.get_basename()+extension
 
 	var files = await dialog.select_files()
 	if files.size() != 1:
