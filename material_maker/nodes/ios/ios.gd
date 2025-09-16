@@ -13,11 +13,6 @@ func on_parameter_changed(p, _v) -> void:
 	if p == "__update_all__":
 		update_node.call_deferred()
 
-func update_up_down_buttons() -> void:
-	for c in get_children():
-		if ! (c is Button):
-			c.update_up_down_button()
-
 func update_node() -> void:
 	for c in get_children():
 		remove_child(c)
@@ -42,7 +37,6 @@ func update_node() -> void:
 	add_child(add_button)
 	add_button.connect("pressed", Callable(generator, "add_port"))
 	set_slot(get_child_count()-1, false, 0, color, false, 0, color)
-	update_up_down_buttons()
 
 func command(command_name : String, command_parameters : Array, update_node : bool = false):
 	var parent_generator = generator.get_parent().get_parent()
