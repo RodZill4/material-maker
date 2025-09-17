@@ -323,7 +323,7 @@ func row_can_drop(_at_pos: Vector2, data: Dictionary, index: int) -> bool:
 func row_drop_data(_at_pos: Vector2, data: Dictionary, index: int) -> void:
 	move_parameter(data.widget_name, floor(index / grid.columns) - data.row_index)
 
-	# workaround FloatEdit' focused state when dropping row towards top
+	# workaround FloatEdits' focused state when dropping rows
 	await get_tree().process_frame
 	for float_edit in grid.get_children():
 		if float_edit is PanelContainer:
