@@ -191,6 +191,9 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 	else:
 		file_name = file_name.replace("$project", "unnamed_project")
 
+	if file_extension != "" and not file_name.ends_with(file_extension):
+		file_name += file_extension
+
 	if "$idx" in file_name:
 		if path:
 			var idx := 1
@@ -199,8 +202,5 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 			file_name = file_name.replace("$idx", str(idx).pad_zeros(2))
 		else:
 			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
-	
-	if file_extension != "" and not file_name.ends_with(file_extension):
-		file_name += file_extension
-	
+
 	return file_name
