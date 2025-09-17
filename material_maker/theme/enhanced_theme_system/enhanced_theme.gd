@@ -165,8 +165,9 @@ func get_dynamic_svg(image_path:String, image_scale:float, color_swaps : Array= 
 	var key : String = image_path+","+str(image_scale)+","+str(color_swaps.hash())
 	if dynamic_svgs.has(key):
 		return dynamic_svgs[key]
-	if FileAccess.file_exists(image_path.trim_suffix(".svg")+"_export.svg"):
-		image_path = image_path.trim_suffix(".svg")+"_export.svg"
+	if not OS.has_feature("editor"):
+		if FileAccess.file_exists(image_path.trim_suffix(".svg")+"_export.svg"):
+			image_path = image_path.trim_suffix(".svg")+"_export.svg"
 	var file : FileAccess = FileAccess.open(image_path, FileAccess.READ)
 	if file == null:
 		print("Cannot open image file ", image_path)
