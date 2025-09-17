@@ -1033,7 +1033,9 @@ func undoredo_command(command : Dictionary) -> void:
 					parent_generator.remove_generator(g)
 		"update_generator":
 			var parent_generator = get_node_from_hier_name(command.parent)
-			var g = parent_generator.get_node(command.name)
+			if parent_generator == null:
+				parent_generator = top_generator
+			var g = parent_generator.get_node(NodePath(command.name))
 			if g != null:
 				g.deserialize(command.data)
 				var updated_generators = [ g ]
