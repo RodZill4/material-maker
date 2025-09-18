@@ -1,18 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://djura7a50b2aq"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/widgets/polygon_edit/polygon_editor.gd" id="2"]
+[ext_resource type="Script" uid="uid://511g8g7afvi8" path="res://material_maker/widgets/polygon_edit/polygon_editor.gd" id="2"]
 
 [node name="PolygonEditor" instance=ExtResource("1")]
 offset_left = 0.0
 offset_top = 0.0
 offset_right = -1.0
 offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 0
 script = ExtResource("2")
 draw_area = true
 auto_rescale = true
 
 [connection signal="gui_input" from="." to="." method="_on_PolygonEditor_gui_input"]
+[connection signal="gui_input" from="@Control@242306" to="@Control@242306" method="_on_ControlPoint_gui_input"]
