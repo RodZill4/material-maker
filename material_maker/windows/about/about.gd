@@ -7,11 +7,14 @@ extends Window
 const CONTRIBUTORS = [
 	{ icon="res://material_maker/icons/godot_logo.svg", contribution="99% of Material Maker's code is the awesome Godot Engine GODOT_VERSION" },
 	{ name="Rodolphe Suescun", contribution="Lead developer" },
+	{ name="williamchange", contribution="Many UI updates, several nodes (including Seven/Sixteen Segment Display, Roman numerals, Japanese Glyphs and Triangle Voronoi) and node updates" },
+	{ name="Jowan-Spooner", contribution="UI redesign" },
+	{ name="NotArme", contribution="Many improvements and bug fixes" },
+	{ name="Thibaud Goiffon", contribution="Website design" },
 	{ name="Kasper Arnklit Frandsen", contribution="Several nodes (including Auto Tones, Mask to SDF, Normal Blend and many Bricks nodes) and node updates, and very nice video tutorials" },
 	{ name="Hugo Locurcio", contribution="Lots of contributions, mostly related to rendering and user interface" },
 	{ name="Roujel Williams", contribution="Curvature, Ambient Occlusion and Thickness maps generation" },
 	{ name="wojtekpil", contribution="Multiwarp, HBAO and Denoiser nodes as well as fixes in baker tools" },
-	{ name="williamchange", contribution="Several nodes (including Seven/Sixteen Segment Display, Roman numerals, Japanese Glyphs and Triangle Voronoi) and node updates" },
 	{ name="GoldenThumbs", contribution="Wavefront (OBJ) model loader" },
 	{ name="Bonbonmiel", contribution="Many user interface improvements (in Nodes popup, 3D preview...)" },
 	{ name="myaaaaaaaaa", contribution="Many improvements and bug fixes including better and faster connection loop detection, nicer file format for shader nodes, as well as colorspace nodes" },
@@ -32,15 +35,20 @@ const CONTRIBUTORS = [
 ]
 
 const PATRONS = [
-	"Edward Herbert", "Andres Hernandez", "LitmusZest", "Hugo Locurcio", "Jose Ivan Lopez Romo",
-	"Interstice", "MrDG", "rustweaver", "BasicIncomePlz", "AdamRatai",
-	"Harken", "Ian Genskowsky Chang", "Hanzhong Wang", "Ryan Roden-Corrent", "Micha Grandel",
-	"Andreas Ratchev", "Miouyouyou", "Valerian Bedin", "Mikael Nordenberg"
+	"Edward Herbert", "Ian Genskowsky Chang", "Andres Hernandez", "Preclude Interactive",
+	"realkotob", "Valerian Bedin", "Mischa", "Hugo Locurcio", "Jose Ivan Lopez Romo",
+	"rustweaver", "MrDG", "Andreas Ratchev", "Miouyouyou", "Thomas Schmall",
+	"Twerknificent", "nargacu83", "Some Critter", "The5", "Shikher Pandey",
+	"Ryan Roden-Corrent", "ww123td", "Tom Wor", "Micha Grandel", "Mikael Nordenberg",
+	"Yumemocchi", "Green Bean", "Leon Krykhtin", "ShinraCorp", "Valerio Marty",
+	"Cam Kilgore"
 ]
 
 const PATRONS2 = [
-	"Preclude Interactive", "nargacu83", "realkotob", "Shikher Pandey", "The5",
-	"a critter in flux", "Tom Wor"
+	"AdamRatai", "Robert Dodd", "LitmusZest", "Interstice", "Harken",
+	"Vlad Erium", "Ap", "Trevor", "思羽 陳", "DroppedBeat", "Zee Gomez",
+	"Richard Nespithal", "Giuseppe Modarelli", "Microplastics Farmer",
+	"Shanxxx Official"
 ]
 
 func _ready() -> void:
@@ -84,6 +92,9 @@ func _ready() -> void:
 	for p in PATRONS:
 		patrons_list.add_item(p)
 	for p in PATRONS2:
+		if p in PATRONS:
+			print(p, " already in patrons list")
+			continue
 		patrons_list.add_item(p)
 
 func open_url(url) -> void:
