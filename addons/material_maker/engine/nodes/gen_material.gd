@@ -179,6 +179,10 @@ func update_material(m, sequential : bool = false) -> void:
 			m.set_shader_parameter(t, preview_texture_dependencies[t])
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
+			if preview_parameters[p] is MMTexture:
+				m.set_shader_parameter(p, await preview_parameters[p].get_texture())
+			else:
+				m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
 	for ppn in external_previews.keys():
