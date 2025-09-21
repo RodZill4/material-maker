@@ -1,3 +1,30 @@
+# Material Maker 1.4RC6
+
+## General
+
+- Updated X icon, added Bluesky and Mastodon in About dialog
+- Updated contributors and patreons lists in About dialog
+
+## Nodes
+
+- Added support for #count in variadic nodes
+
+## Bug Fixes
+
+- Fixed recents not updating when loading from menu (contributed by williamchange)
+- Fixed ExportMenu not shown on custom model drop (contributed by williamchange)
+- Fixed redundant extension when exporting mesh map (contributed by williamchange)
+- Fixed incorrect render index in counter (contributed by williamchange)
+- Fixed reroute showing previous linked node on undo (contributed by williamchange)
+- Fixed tooltip shown when mouse is away from slot (contributed by williamchange)
+- Fixed reroute rect by hiding titlebar_hbox label (contributed by williamchange)
+- Fixed hierarchy tree if MM started without panel (contributed by williamchange)
+- Fixed $idx not working in export (contributed by williamchange)
+- Fixed undo/redo for remote/ios nodes (contributed by williamchange)
+- Fixed theme icon loading in editor (contributed by williamchange)
+- Fixed 3D preview for dynamic materials
+- Fixed shader generation in Debug node for texture uniforms
+
 # Material Maker 1.4RC5
 
 ## Bug Fixes
