@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=118 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=121 format=3 uid="uid://42cileyfwaca"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="2_lsxnf"]
@@ -258,6 +258,32 @@ border_width_bottom = 1
 border_color = Color(1, 0.560784, 0.560784, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p6o2d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_meah8"]
+atlas = ExtResource("1_7p32q")
+region = Rect2(32, 176, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b2nb"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.498039, 0.498039, 0.498039, 0)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swrqc"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.485703, 0.485704, 0.485703, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
@@ -831,6 +857,9 @@ MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
 MM_AddNodePanelList/font_sizes/font_size = 14
 MM_AddNodePanelList/styles/focus = SubResource("StyleBoxEmpty_p6o2d")
+MM_CommentNode/icons/resizer = SubResource("AtlasTexture_meah8")
+MM_CommentNode/styles/default = SubResource("StyleBoxFlat_7b2nb")
+MM_CommentNode/styles/selected = SubResource("StyleBoxFlat_swrqc")
 MM_FilterLineEdit/base_type = &"LineEdit"
 MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_e8p1m")
