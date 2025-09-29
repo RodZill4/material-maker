@@ -11,6 +11,8 @@ var parameter_r : String = ""
 var parameter_a : String = ""
 var is_xy : bool = false
 
+var init_pos : Vector2
+
 var dragging : bool = false
 
 var parent_control_node = null
@@ -177,11 +179,29 @@ func update_position(value : Vector2) -> void:
 	queue_redraw()
 
 func _on_Point_gui_input(event : InputEvent):
-	if event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_LEFT:
-		var new_pos = position+event.position
+	var axes = get_parent().get_node("Axes")
+	axes.hide()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+		init_pos = position + event.position
+	elif event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_LEFT:
+		var new_pos = position + event.position
 		var value = get_parent().pos_to_value(new_pos, true, apply_local_transform)
+		var init_value = get_parent().pos_to_value(init_pos, true, apply_local_transform)
 		if parent_control_node != null:
 			value -= get_parent().pos_to_value(parent_control_node.get_center_position(), true, apply_local_transform)
+			init_value -= get_parent().pos_to_value(parent_control_node.get_center_position(), true, apply_local_transform)
+
+		if event.shift_pressed:
+			# Don't snap axes for rect, scale and angle gizmos
+			if not (control_type > 0 and control_type <= 4) and parameter_a == "":
+				if abs(value.x - init_value.x) > abs(value.y - init_value.y):
+					value.y = init_value.y
+				else:
+					value.x = init_value.x
+				if axes:
+					axes.show()
+					axes.point = init_pos
+
 		if event.is_command_or_control_pressed():
 			var snap : float = 0.0
 			var grid = get_parent().get_node("Guides")
@@ -191,6 +211,10 @@ func _on_Point_gui_input(event : InputEvent):
 				if snap > 0.0:
 					value.x = round((value.x-0.5)*snap)/snap+0.5
 					value.y = round((value.y-0.5)*snap)/snap+0.5
+
+					# Snap axes to grid
+					init_value = round((init_value-Vector2(0.5,0.5))*snap)/snap+Vector2(0.5,0.5)
+					axes.point = get_parent().value_to_pos(init_value)
 			elif parameter_a != "":
 				var l = value.length()
 				var a = value.angle()
