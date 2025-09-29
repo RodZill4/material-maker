@@ -48,6 +48,9 @@ Shapes
 	node_3d_sdf_shapes_cut_sphere
 	node_3d_sdf_shapes_box_frame
 	node_3d_sdf_shapes_solid_angle
+	node_3d_sdf_shapes_pyramid
+	node_3d_sdf_shapes_ellipsoid
+	node_3d_sdf_shapes_octahedron
 
 Operators
 +++++++++
