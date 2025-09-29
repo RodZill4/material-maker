@@ -60,6 +60,10 @@ Edit menu
 
 * *Duplicate with inputs* is similar to *Duplicate*, but with input links kept
 
+* *Detach Connections* detaches selection from existing connections
+
+* *Remove with Reconnect* is similar to *Detach Connections* but removes the selection
+
 * *Select all* selects all nodes in the current graph view
 
 * *Select none* clears the selection in the current graph view
@@ -146,4 +150,3 @@ Help menu
   do not hesitate to use it to suggest improvements for Material Maker.
 
 * *About* Shows the about dialog.
-
