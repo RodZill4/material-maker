@@ -129,7 +129,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.75,
 				"label": "Height",
 				"max": 1,
 				"min": 0,
@@ -140,7 +140,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.05,
 				"label": "Thickness",
 				"max": 1,
 				"min": 0,
@@ -151,7 +151,7 @@
 			},
 			{
 				"control": "None",
-				"default": 1,
+				"default": 5,
 				"label": "Number",
 				"max": 399,
 				"min": 1,
@@ -162,7 +162,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.1,
 				"label": "Bevel",
 				"max": 1,
 				"min": 0,
@@ -173,7 +173,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.0,
 				"label": "Spacing",
 				"max": 1,
 				"min": 0,

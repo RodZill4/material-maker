@@ -46,23 +46,23 @@
 				"y": -274.75
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 9.0
 			},
-			"seed": 1477,
+			"seed": 1477.0,
 			"type": "buffer"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -462.666626,
-				"y": -397.666656
+				"x": -462.666625976562,
+				"y": -397.666656494141
 			},
 			"parameters": {
-				"param0": 10,
-				"param1": 30
+				"param0": 9.0,
+				"param1": 20.0
 			},
-			"seed": 10365,
+			"seed": 10365.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -104,64 +104,64 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -872.666626,
-				"y": -243.392853
+				"x": -872.666625976562,
+				"y": -243.392852783203
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input image",
 					"name": "in",
 					"shortdesc": "Input",
 					"type": "rgba"
 				},
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "A height map whose slopes control the strength and direction of the blur filter",
 					"name": "heightmap",
 					"shortdesc": "Height map",
 					"type": "f"
 				}
 			],
-			"seed": 91624,
+			"seed": 91624.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -45.452393,
-				"y": -195.392853
+				"x": -45.452392578125,
+				"y": -195.392852783203
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the generated blurred image",
 					"name": "port0",
 					"shortdesc": "Output",
 					"type": "rgba"
 				}
 			],
-			"seed": 30896,
+			"seed": 30896.0,
 			"type": "ios"
 		},
 		{
 			"name": "edge_detect_3_3_2",
 			"node_position": {
-				"x": -401.725464,
-				"y": -199.178955
+				"x": -401.725463867188,
+				"y": -199.178955078125
 			},
 			"parameters": {
-				"sigma": 30,
-				"size": 10
+				"sigma": 20.0,
+				"size": 9.0
 			},
-			"seed": -47470,
+			"seed": -47470.0,
 			"seed_locked": true,
 			"shader_model": {
 				"code": "",
@@ -219,10 +219,10 @@
 					},
 					{
 						"control": "None",
-						"default": 0.5,
+						"default": 20.0,
 						"label": "Sigma",
-						"max": 50,
-						"min": 0,
+						"max": 50.0,
+						"min": 0.0,
 						"name": "sigma",
 						"step": 0.1,
 						"type": "float"
@@ -234,20 +234,20 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -392.952209,
-				"y": -115.576294
+				"x": -392.952209472656,
+				"y": -115.576293945312
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 9.0
 			},
-			"seed": 42757,
+			"seed": 42757.0,
 			"type": "buffer"
 		}
 	],
 	"parameters": {
-		"param0": 10,
-		"param1": 30
+		"param0": 9.0,
+		"param1": 20.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Slope blur",

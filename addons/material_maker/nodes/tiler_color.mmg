@@ -196,7 +196,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Rnd Offset",
 				"max": 1,
 				"min": 0,
@@ -206,7 +206,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 45,
 				"label": "Rnd Rotate",
 				"longdesc": "The random rotation applied to each image instance",
 				"max": 180,
@@ -218,7 +218,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.2,
 				"label": "Rnd Scale",
 				"longdesc": "The random scale applied to each image instance",
 				"max": 1,
@@ -230,7 +230,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.0,
 				"label": "Rnd Opacity",
 				"longdesc": "The random opacity applied to each image instance",
 				"max": 1,
