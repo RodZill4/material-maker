@@ -769,7 +769,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					var image : Image = preview_texture_dependencies[t].get_image()
 					if image:
-						e = preview_texture_dependencies[t].get_image().save_png(file_name)
+						image.convert(Image.FORMAT_RGBA8)
+						e = image.save_png(file_name)
 						if e != OK:
 							error_files += 1
 					else:
