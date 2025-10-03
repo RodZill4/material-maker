@@ -28,6 +28,7 @@
 			},
 			{
 				"default": "1.0",
+				"function": true,
 				"label": "5:",
 				"longdesc": "A map that affects the Mortar parameter",
 				"name": "mortar_map",
@@ -36,6 +37,7 @@
 			},
 			{
 				"default": "1.0",
+				"function": true,
 				"label": "",
 				"longdesc": "A map that affects the Bevel parameter",
 				"name": "bevel_map",
@@ -63,7 +65,9 @@
 			"\t\t\t}",
 			"\t\t}",
 			"\t}",
-			"\treturn vec3(clamp((best_d-$mortar)/$bevel, 0.0, 1.0), best_corner);",
+			"\tfloat mortar = $mortar*$mortar_map(p);",
+			"\tfloat bevel = $bevel*$bevel_map(p);",
+			"\treturn vec3(clamp((best_d-mortar)/bevel, 0.0, 1.0), best_corner);",
 			"}"
 		],
 		"longdesc": "Generates a custom tiles pattern, whose shape is defined by an SDF input.",
