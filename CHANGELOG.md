@@ -1,3 +1,12 @@
+# Material Maker 1.4
+
+## Bug Fixes
+
+- Fixed a problem when resizing the reroute node
+- Fixed a problem whe saving textures for dynamic materials export
+- Fixed a missing icon in comment node in Classic theme
+- Fixed support for bevel and mortar inputs in Custom Tile node
+
 # Material Maker 1.4RC6
 
 ## General
