@@ -14,6 +14,9 @@ const CAMERA_FOV_MAX = 90
 @onready var camera = $MaterialPreview/Preview3d/Camera3D
 @onready var sun = $MaterialPreview/Preview3d/Sun
 
+@onready var environment : Environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+@onready var camera_attributes : CameraAttributesPractical = $MaterialPreview/Preview3d/WorldEnvironment.camera_attributes
+
 var trigger_on_right_click = true
 
 var moving = false
@@ -111,23 +114,12 @@ func set_environment(id:int) -> void:
 	if id >= 0:
 		current_environment = id
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
 	if clear_background:
 		$MaterialPreview.transparent_bg = true
 		environment_manager.apply_environment(current_environment, environment, sun, Color.TRANSPARENT, true)
 	else:
 		$MaterialPreview.transparent_bg = false
 		environment_manager.apply_environment(current_environment, environment, sun)
-
-	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
-	environment.tonemap_exposure = mm_globals.get_config("ui_3d_preview_tonemap_exposure")
-	environment.tonemap_white = mm_globals.get_config("ui_3d_preview_tonemap_white")
-
-
-func set_tonemap(id) -> void:
-	mm_globals.set_config("ui_3d_preview_tonemap", id)
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_mode = id
 
 
 func configure_model() -> void:
@@ -249,15 +241,3 @@ func do_generate_map(file_name : String, map : String, image_size : int) -> void
 	var t : MMTexture = await MMMapGenerator.get_map(object.mesh, map, image_size)
 	t.save_to_file(file_name)
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
-
-
-func _on_exposure_value_changed(value: Variant) -> void:
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_exposure = value
-	mm_globals.set_config("ui_3d_preview_tonemap_exposure", value)
-
-
-func _on_white_value_changed(value: Variant) -> void:
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_white = value
-	mm_globals.set_config("ui_3d_preview_tonemap_white", value)
