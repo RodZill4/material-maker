@@ -1,8 +1,8 @@
 Scale XY node
 .............
 
-The **Scale XY** node generates a signed distance image obtained by scaling its input in a non uniform way.
-The result shape is no longer a correct signed distance function, but can be used for many operations like ray marching.
+The **Scale XY** node is variadic and generates signed distance images obtained by scaling its inputs in a non uniform way.
+The result shapes are no longer correct signed distance functions, but can be used for many operations like ray marching.
 
 .. image:: images/node_simple_sdf_transforms_scale_xy.png
 	:align: center
@@ -10,12 +10,12 @@ The result shape is no longer a correct signed distance function, but can be use
 Inputs
 ::::::
 
-The **Scale XY** node accepts a single input in signed distance function format.
+The **Scale XY** node accepts one or more inputs in signed distance function format.
 
 Outputs
 :::::::
 
-The **Scale XY** node generates a signed distance function of the scaled shape.
+The **Scale XY** node generates signed distance functions of the scaled shapes.
 
 Parameters
 ::::::::::

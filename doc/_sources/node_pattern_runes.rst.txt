@@ -16,7 +16,7 @@ The **Runes** node does not accept any input.
 Outputs
 +++++++
 
-The **Runes** generates a single greyscale output texture.
+The **Runes** generates a single grayscale output texture.
 
 Parameters
 ++++++++++

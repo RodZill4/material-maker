@@ -1,7 +1,7 @@
-Normal map node
+Normal Map node
 ~~~~~~~~~~~~~~~~
 
-The **Normal map** node generates a normal map from its input.
+The **Normal Map** node generates a normal map from its input.
 
 .. image:: images/node_filter_normal_map.png
 	:align: center
@@ -9,17 +9,17 @@ The **Normal map** node generates a normal map from its input.
 Inputs
 ++++++
 
-The **Normal map** node accepts a single greyscale image as input, interpreted as a heightmap.
+The **Normal Map** node accepts a single grayscale image as input, interpreted as a heightmap.
 
 Outputs
 +++++++
 
-The **Normal map** node outputs the generated normal map.
+The **Normal Map** node outputs the generated normal map.
 
 Parameters
 ++++++++++
 
-The **Normal map** node has the following parameters:
+The **Normal Map** node has the following parameters:
 
 * the *algorithm* used to generate the normal map (Sobel, Scharr, Simple or Cheap).
   When creating dynamic materials, Cheap is the recommended value

@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uneven Bricks node &mdash; Material Maker  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/js/custom.js?v=c682fb1d"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Uneven Bricks 2 node" href="node_pattern_uneven_bricks_2.html" />
+    <link rel="prev" title="Arc Pavement node" href="node_pattern_arc_pavement.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Material Maker
+              <img src="_static/icon.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nodes.html">Nodes overview</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="base_library.html">Nodes library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nodes_material.html">Material nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_simple.html">Simple nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_3d.html">3D nodes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="nodes_pattern.html">Pattern nodes</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_generic.html">Pattern node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_bricks.html">Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_arc_pavement.html">Arc Pavement node</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Uneven Bricks node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_uneven_bricks_2.html">Uneven Bricks 2 node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_uneven_bricks_3.html">Uneven Bricks 3 node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_skewed_bricks.html">Skewed Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_skewed_uneven_bricks.html">Skewed Uneven Bricks node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_cairo.html">Cairo node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_custom_tiles.html">Custom Tiles node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_weave.html">Weave node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_random_weave.html">Random Weave node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_truchet.html">Truchet node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_fibers.html">Fibers node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_runes.html">Runes node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_runes_i_ching.html">I Ching node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_scratches.html">Scratches node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_beehive.html">Beehive node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_sine_wave.html">Sine Wave node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_mesh.html">Mesh node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_pattern_diagonal_weave.html">Diagonal Weave node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_noise.html">Noise nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_filter.html">Filter nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_transform.html">Transform nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nodes_miscellaneous.html">Miscellaneous nodes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">Exporting Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Material Maker</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="base_library.html">Nodes library</a></li>
+          <li class="breadcrumb-item"><a href="nodes_pattern.html">Pattern nodes</a></li>
+      <li class="breadcrumb-item active">Uneven Bricks node</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="uneven-bricks-node">
+<h1>Uneven Bricks node<a class="headerlink" href="#uneven-bricks-node" title="Permalink to this heading"></a></h1>
+<p>The <strong>Uneven Bricks</strong> node outputs an uneven brick pattern texture that can be used for walls
+or pavement. It generates an uneven pattern by randomly splitting bricks.</p>
+<img alt="_images/node_pattern_uneven_bricks.png" class="align-center" src="_images/node_pattern_uneven_bricks.png" />
+<section id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
+<p>The <strong>Uneven Bricks</strong> node accepts 3 optional grayscale input maps for the shape mortar,
+bevel and round parameters (the corresponding parameter is multiplied by the map value).</p>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
+<p>The <strong>Uneven Bricks</strong> node provides the following textures:</p>
+<ul class="simple">
+<li><p>The first is a grayscale image where bricks are shown in white and mortar in black.</p></li>
+<li><p>The second is Fill information for each brick and must be connected to a Fill companion node.</p></li>
+<li><p>The third is Fill information for each brick corner and must be connected to a Fill companion node.</p></li>
+</ul>
+<p>The second and third outputs can be used in conjunction with <strong>Fill To</strong> nodes to generate random colors,
+custom UVs etc. to create complex materials that show for example bricks of different colors.</p>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<p>The <strong>Uneven Bricks</strong> node accepts the following parameters:</p>
+<ul class="simple">
+<li><p>the <em>Iterations</em> parameter defines number of brick split iterations.</p></li>
+<li><p>the <em>Min size</em> parameter defines the minimum size of a brick.</p></li>
+<li><p>the <em>Randomness</em> parameter defines the randomness introduced when generating the pattern.</p></li>
+<li><p>the <em>Mortar</em> parameter defines the relative thickness of mortar in patterns.</p></li>
+<li><p>the <em>Bevel</em> parameter defines the relative thickness of brick bevel in patterns.</p></li>
+<li><p>the <em>Round</em> parameter defines the radius of each round corner.</p></li>
+<li><p>the <em>Corner</em> parameter defines the size of each corner (for the 3rd output texture).</p></li>
+</ul>
+</section>
+<section id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this heading"></a></h2>
+<img alt="_images/node_unevenbricks_samples.png" class="align-center" src="_images/node_unevenbricks_samples.png" />
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="node_pattern_arc_pavement.html" class="btn btn-neutral float-left" title="Arc Pavement node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="node_pattern_uneven_bricks_2.html" class="btn btn-neutral float-right" title="Uneven Bricks 2 node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-2025, Rodolphe Suescun.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

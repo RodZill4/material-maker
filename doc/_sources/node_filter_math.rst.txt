@@ -9,13 +9,13 @@ The **Math** node performs various math operations between its inputs.
 Inputs
 ++++++
 
-The **Math** node accepts two greyscale inputs. Those inputs are optional, and when
+The **Math** node accepts two grayscale inputs. Those inputs are optional, and when
 left unconnected, the corresponding parameter value is used
 
 Outputs
 +++++++
 
-The **Math** node generates a single greyscale texture that contains the result
+The **Math** node generates a single grayscale texture that contains the result
 of the math operation.
 
 Parameters
