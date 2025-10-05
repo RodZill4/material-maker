@@ -34,9 +34,15 @@ target interval and a step for the output values. For example; using random nois
 it's *Max* value to 1 and it's *Step* value to 0.5 and you would get randomly rotated instances
 snapped to 90 degree intervals.
 
+.. image:: images/node_transform_tiler_advanced_remap.png
+	:align: center
+
 The **Height To Angle** node can be used to easily generate a *Rotate* map from a
 heightmap. All instances will be rotated depending on the slope. When using this
 node to generate the *Rotate* map, the *Rotate* parameter must be set to 180.
+
+.. image:: images/node_transform_tiler_advanced_height_to_angle.png
+	:align: center
 
 The **Height To Offset** node can be used to easily generate a *Translate* map from a
 heightmap. Outputs must be connected to the Translate X and Y inputs of the Tiler node.
@@ -44,6 +50,9 @@ All instances will be translated depending on the slope, to reach the
 specified level, and to be accurate, the slopes must be homogeneous. When using this
 node to generate the *Translate* map, the *Translate X* and *Translate Y* parameters
 must be set to 1.
+
+.. image:: images/node_transform_tiler_advanced_height_to_offset.png
+	:align: center
 
 Outputs
 +++++++

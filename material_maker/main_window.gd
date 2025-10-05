@@ -362,6 +362,7 @@ func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify(recent_files))
+	update_menus()
 
 func add_recent(path, save = true) -> void:
 	remove_recent(path, false)
@@ -614,7 +615,7 @@ func do_load_project(file_name : String) -> bool:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
 			status = do_load_painting(file_name)
-	if ! DirAccess.open("res://").file_exists(file_name):
+	if ! FileAccess.file_exists(file_name):
 		status = false
 	if status:
 		add_recent(file_name)
@@ -1209,7 +1210,11 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		f = file.get_path_absolute()
 		match f.get_extension():
 			"ptex":
-				do_load_material(f)
+				var status : bool = await do_load_material(f)
+				if status:
+					add_recent(f)
+				else:
+					remove_recent(f)
 			"obj", "glb", "gltf":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)

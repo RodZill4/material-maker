@@ -51,7 +51,7 @@ func _on_generate_map_button_pressed() -> void:
 	if mm_globals.config.has_section_key("path", "maps"):
 		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
 
-	dialog.current_file = file_name+extension
+	dialog.current_file = file_name.get_basename()+extension
 
 	var files = await dialog.select_files()
 	if files.size() != 1:
@@ -93,3 +93,7 @@ func interpret_map_file_name(file_name: String, path:="") -> String:
 		1: extension += ".exr"
 
 	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids)
+
+
+func _on_map_file_type_item_selected(_index: int) -> void:
+	update_generate_map_file_label()

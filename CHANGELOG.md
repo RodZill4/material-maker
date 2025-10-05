@@ -1,3 +1,81 @@
+# Material Maker 1.4
+
+## Bug Fixes
+
+- Fixed a problem when resizing the reroute node
+- Fixed a problem when saving textures for dynamic materials export
+- Fixed a missing icon in comment node in Classic theme
+- Fixed support for bevel and mortar inputs in Custom Tile node
+
+# Material Maker 1.4RC6
+
+## General
+
+- Updated X icon, added Bluesky and Mastodon in About dialog
+- Updated contributors and patreons lists in About dialog
+
+## Nodes
+
+- Added support for #count in variadic nodes
+
+## Bug Fixes
+
+- Fixed recents not updating when loading from menu (contributed by williamchange)
+- Fixed ExportMenu not shown on custom model drop (contributed by williamchange)
+- Fixed redundant extension when exporting mesh map (contributed by williamchange)
+- Fixed incorrect render index in counter (contributed by williamchange)
+- Fixed reroute showing previous linked node on undo (contributed by williamchange)
+- Fixed tooltip shown when mouse is away from slot (contributed by williamchange)
+- Fixed reroute rect by hiding titlebar_hbox label (contributed by williamchange)
+- Fixed hierarchy tree if MM started without panel (contributed by williamchange)
+- Fixed $idx not working in export (contributed by williamchange)
+- Fixed undo/redo for remote/ios nodes (contributed by williamchange)
+- Fixed theme icon loading in editor (contributed by williamchange)
+- Fixed 3D preview for dynamic materials
+- Fixed shader generation in Debug node for texture uniforms
+
+# Material Maker 1.4RC5
+
+## Bug Fixes
+
+- Fixed a bug that caused recents not to be added when a .ptex file is dropped (contributed by williamchange)
+- Fixed lattice grid not updating when the slice count is updated (contributed by williamchange)
+- Fixed SplinesView drawn area offset on start (contributed by williamchange)
+- Fixed splines handle lines not drawing (contributed by williamchange)
+- Fixed typo for transform node's mode tooltip (contributed by williamchange)
+- Updated mode doc for transform node (contributed by williamchange)
+- Fixed tones cursor outline not updating on undo (contributed by williamchange)
+- Missing check for comment line in quick connection (contributed by williamchange)
+- Fix reroute pos y offset when adding from port (contributed by williamchange)
+- Fix filepath format not updating in 3d map export (contributed by williamchange)
+- Fixed crash that occured when deleting an iterate buffer
+- Relaxed render status condition when exporting materials
+- Removed disable render option
+- Documentation fixes (contributed by williamchange)
+
+# Material Maker 1.4RC4
+
+## General
+
+- Don't show export menu for 3d preview on start (contributed by williamchange)
+
+## Nodes
+
+- Fixed dynamic pbr preview shader (contributed by williamchange)
+- Fixed dynamic materials export for Godot 4 (contributed by Paulo Poiati)
+
+## Bug Fixes
+
+- Fix global menu translation for macOS (contributed by williamchange)
+- Fix comment nodes not undoing position (contributed by williamchange)
+- Fixed environment preview not showing reflection (contributed by williamchange)
+- Fixed environment thumbnail generation (contributed by williamchange)
+- Fixed window jump when maximizing from splash (contributed by williamchange)
+- Fix connected signals errors when dragging panels (contributed by williamchange)
+- Add null check in set_current_environment (contributed by williamchange)
+- Fixed histogram with buffer inputs bug
+- Fixed problem that caused the iterate buffer to stop updating
+
 # Material Maker 1.4RC3
 
 ## General
@@ -336,7 +414,7 @@
   by williamchange)
 - The Spherize node has been improved (contributed by williamchange)
 - Updated documentation for many nodes (contributed by williamchange)
- 
+
 ## Bug Fixes
 
 - Small fixes in the GLSL parser
@@ -595,7 +673,7 @@
 - Normal maps can now be painted directly or generated from painted depth or both
 - A new a *Paint Project Settings* dialog has been added. It replaces the huge submenu in the Tools menu
 - A new *Stamp* tool has been added. To use it, press the mouse button to place the center of the stamp, then drag around to define the size and angle
-- An implicit mask has been added to painting and it can be configured from an ID map using the new *Mask Selector* tool 
+- An implicit mask has been added to painting and it can be configured from an ID map using the new *Mask Selector* tool
 - The brush parameters panel has been updated to show channel filter parameters in a more intuitive way
 - Parameters expressions can now use new *tilt* (stylus angle), and *stroke_seed* (a random number that is rerolled for each stroke) predefined variables
 - The base brush library has been reorganized, many brushes have been improved and a few brushes have been added

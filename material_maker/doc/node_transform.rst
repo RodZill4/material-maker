@@ -40,7 +40,11 @@ The **Transform** node has the following parameters:
 
 * *Scale X* and *Scale Y* define the scale operations along the X and Y axes.
 
-* If *Repeat* is checked, zooming out will repeat the image, otherwise it will be clamped.
+* *Mode* Defines the behavior beyond the limits for the input image:
+
+    * **Clamp** stretches the edges
+    * **Repeat** tiles the input
+    * **Extend** shows parts of the input that are beyond the edges
 
 Example images
 ++++++++++++++

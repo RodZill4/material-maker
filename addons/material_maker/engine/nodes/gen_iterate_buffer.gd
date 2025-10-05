@@ -104,6 +104,8 @@ func update_shaders() -> void:
 		require_shaders_update = true
 
 func do_update_shaders() -> void:
+	if not is_inside_tree():
+		return
 	require_shaders_update = false
 	var sources : Array[ShaderCode] = [null, null]
 	var new_is_greyscale = true
