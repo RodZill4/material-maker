@@ -275,6 +275,9 @@ func _on_Libraries_about_to_show():
 		popup.set_item_checked(i, library_manager.is_library_enabled(i))
 		if i > 1:
 			unload.add_item(library_manager.get_child(i).library_name, i)
+	if not unload.item_count:
+		unload.add_item("No custom library loaded")
+		unload.set_item_disabled(0, true)
 	popup.add_separator()
 	popup.add_item("Create library", MENU_CREATE_LIBRARY)
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)

@@ -66,10 +66,10 @@ region = Rect2(16, 64, 16, 16)
 
 [sub_resource type="Shader" id="5"]
 resource_local_to_scene = true
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="6"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("5")
 
 [sub_resource type="InputEventKey" id="InputEventKey_83edi"]
