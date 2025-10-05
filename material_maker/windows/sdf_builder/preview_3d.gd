@@ -118,7 +118,6 @@ func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
 
 func _on_Preview3D_resized():
 	if viewport != null:
-		viewport.size = size
 		update_viewport()
 
 func navigation_input(ev) -> bool:
