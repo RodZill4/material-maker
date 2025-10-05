@@ -1,13 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://btww87u0o4x7t"]
+[gd_scene load_steps=16 format=3 uid="uid://btww87u0o4x7t"]
 
 [ext_resource type="Script" uid="uid://c80e0om4076tc" path="res://material_maker/windows/about/about.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://uwqukrk00ios" path="res://material_maker/windows/about/github.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://n121jfbm7ydw" path="res://material_maker/windows/about/twitter.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://d0417sp8jvp7a" path="res://material_maker/windows/about/itchio.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dntvnke4pcqqf" path="res://icon.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://bxfuae46y2fdc" path="res://material_maker/windows/about/youtube.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://c1due54dyeob1" path="res://material_maker/windows/about/x.svg" id="8_a5pf6"]
 [ext_resource type="Texture2D" uid="uid://d3measjdowk0x" path="res://material_maker/windows/about/facebook.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://cnso3ncxhcnek" path="res://material_maker/windows/about/bluesky.svg" id="9_a5pf6"]
 [ext_resource type="Texture2D" uid="uid://dvniks5a8tybt" path="res://material_maker/windows/about/discord.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://clxj8dqkqggfi" path="res://material_maker/windows/about/mastodon.svg" id="10_wcmb3"]
 [ext_resource type="Texture2D" uid="uid://btvwy8odw2nmx" path="res://material_maker/windows/about/patreon.png" id="11"]
 [ext_resource type="Texture2D" uid="uid://t53vu231awns" path="res://material_maker/windows/about/epic_megagrant.svg" id="12"]
 
@@ -228,14 +230,36 @@ texture_normal = ExtResource("10")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="Twitter" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+[node name="X" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
-tooltip_text = "Twitter"
+tooltip_text = "X"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("3")
+texture_normal = ExtResource("8_a5pf6")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="BlueSky" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+tooltip_text = "Bluesky"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("9_a5pf6")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Mastodon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+tooltip_text = "Mastodon"
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource("10_wcmb3")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -266,6 +290,8 @@ stretch_mode = 4
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/ItchIo" to="." method="open_url" binds= ["https://rodzilla.itch.io/material-maker"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Github" to="." method="open_url" binds= ["https://github.com/RodZill4/godot-procedural-textures"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Discord" to="." method="open_url" binds= ["https://discord.gg/PF5V3mFwFM"]]
-[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Twitter" to="." method="open_url" binds= ["https://twitter.com/R0dZill4"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/X" to="." method="open_url" binds= ["https://x.com/R0dZill4"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/BlueSky" to="." method="open_url" binds= ["https://bsky.app/profile/rodzlabs.bsky.social"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Mastodon" to="." method="open_url" binds= ["https://twitter.com/R0dZill4"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Youtube" to="." method="open_url" binds= ["https://www.youtube.com/channel/UCTDByv9i3ul_qQ98zUYlNAQ"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Facebook" to="." method="open_url" binds= ["https://www.facebook.com/RodzLabs"]]

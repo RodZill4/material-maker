@@ -59,6 +59,7 @@ func _on_Preview3D_mouse_entered():
 
 func on_drop_model_file(file_name : String):
 	do_load_custom_mesh(file_name)
+	%MenuBar.get_node("HBox/MainMenu/HBox/ExportMenu").show()
 
 
 func _on_resized() -> void:

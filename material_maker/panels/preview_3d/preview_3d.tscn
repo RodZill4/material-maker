@@ -455,4 +455,5 @@ text = "Generate Map"
 [connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapType" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_type_item_selected"]
 [connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/MapResolution" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_resolution_item_selected"]
 [connection signal="text_changed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapExportFile" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_export_file_text_changed"]
+[connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapFileType" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_file_type_item_selected"]
 [connection signal="pressed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapButton" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_generate_map_button_pressed"]
