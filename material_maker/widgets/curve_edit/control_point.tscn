@@ -1,40 +1,42 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhr7y7noxv5e6"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/slope_point.gd" id="1"]
-[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/control_point.gd" id="2"]
+[ext_resource type="Script" uid="uid://dl376nblfgqfs" path="res://material_maker/widgets/curve_edit/slope_point.gd" id="1"]
+[ext_resource type="Script" uid="uid://lfjxe7jh8oyu" path="res://material_maker/widgets/curve_edit/control_point.gd" id="2"]
 
 [node name="ControlPoint" type="Control"]
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 3
+anchors_preset = 0
 offset_left = 56.9864
 offset_top = 33.8615
 offset_right = 63.9864
 offset_bottom = 40.8615
-custom_minimum_size = Vector2(7, 7)
 script = ExtResource("2")
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="LeftSlope" type="Control" parent="."]
-offset_left = -18.5235
-offset_right = -11.5235
-offset_bottom = 7.0
 custom_minimum_size = Vector2(7, 7)
+anchors_preset = 0
+offset_left = -18.524
+offset_right = -11.524
+offset_bottom = 7.0
 script = ExtResource("1")
-__meta__ = {
-"_edit_use_anchors_": false
-}
 distance = -30.0
 
 [node name="RightSlope" type="Control" parent="."]
-offset_left = 15.6919
-offset_right = 22.6919
+custom_minimum_size = Vector2(7, 7)
+anchors_preset = 0
+offset_left = 15.692
+offset_right = 22.692
 offset_bottom = 7.0
 script = ExtResource("1")
-__meta__ = {
-"_edit_use_anchors_": false
-}
 distance = 30.0
 
 [connection signal="gui_input" from="." to="." method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="gui_input" from="LeftSlope" to="LeftSlope" method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="LeftSlope" to="LeftSlope" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="LeftSlope" to="LeftSlope" method="_on_mouse_exited"]
 [connection signal="gui_input" from="RightSlope" to="RightSlope" method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="RightSlope" to="RightSlope" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="RightSlope" to="RightSlope" method="_on_mouse_exited"]
