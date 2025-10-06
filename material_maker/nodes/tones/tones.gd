@@ -89,6 +89,7 @@ func on_parameter_changed(p, _v) -> void:
 		var cursor = get("cursor_"+p)
 		if cursor != null:
 			cursor.set_value(get_parameter(p))
+			cursor.queue_redraw()
 
 func get_parameter(n : String) -> float:
 	var value = generator.get_parameter(n)

@@ -157,7 +157,7 @@
 			{
 				"default": 0,
 				"label": "Mode",
-				"longdesc": "Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges",
+				"longdesc": "Defines the behavior beyond the limits for the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges",
 				"name": "mode",
 				"shortdesc": "Mode",
 				"type": "enum",

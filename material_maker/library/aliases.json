@@ -21,9 +21,12 @@
 	"Filter/Swap Channels": "shuffle,change,bind",
 	"Filter/Tonality": "curves",
 	"Filter/Tones": "levels",
+	"Filter/Tones/Step": "threshold",
+	"Filter/Dilate": "distance",
 	"Miscellaneous/Buffer": "pause,wait,optimize",
 	"Miscellaneous/Variations/Color": "colour",
 	"Miscellaneous/Comment": "note,frame",
+	"Miscellaneous/Comment/Line": "note,label",
 	"Miscellaneous/Export": "save",
 	"Miscellaneous/Iterate Buffer": "pause,wait,optimize",
 	"Miscellaneous/Switch": "change,trigger,toggle,select",
@@ -78,5 +81,7 @@
 	"Transform/Tiler/Color": "duplicate,copy,clone,repeat,grid,colour",
 	"Transform/Tiler/Advanced/Color": "colour",
 	"Transform/Translate": "move,scroll,shift,push",
-	"Transform/Warp": "distortion,deform,shift,push"
+	"Transform/Warp": "distortion,deform,shift,push",
+	"Transform/Circle Map": "polar",
+	"Filter/Quantize": "posterize"
 }

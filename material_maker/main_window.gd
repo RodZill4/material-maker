@@ -131,7 +131,7 @@ func _ready() -> void:
 	on_config_changed()
 
 	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	get_window().min_size = Vector2(1024, 600) * get_window().content_scale_factor
+	get_window().min_size = Vector2(1024, 600)
 
 	# Restore the window position/size if values are present in the configuration cache
 	if mm_globals.config.has_section_key("window", "screen"):
@@ -144,6 +144,7 @@ func _ready() -> void:
 		if mm_globals.config.has_section_key("window", "position"):
 			get_window().position = mm_globals.config.get_value("window", "position")
 		else:
+			get_window().min_size *= get_window().content_scale_factor
 			get_window().move_to_center()
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
@@ -287,6 +288,8 @@ func on_config_changed() -> void:
 	if locale != "" and locale != TranslationServer.get_locale():
 		TranslationServer.set_locale(locale)
 		get_tree().call_group("updated_from_locale", "update_from_locale")
+		if OS.get_name() == "macOS":
+			mm_globals.main_window.update_menus()
 
 	var ui_scale = mm_globals.get_config("ui_scale")
 	if ui_scale <= 0:
@@ -359,6 +362,7 @@ func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify(recent_files))
+	update_menus()
 
 func add_recent(path, save = true) -> void:
 	remove_recent(path, false)
@@ -611,7 +615,7 @@ func do_load_project(file_name : String) -> bool:
 			hierarchy.update_from_graph_edit(get_current_graph_edit())
 		"mmpp":
 			status = do_load_painting(file_name)
-	if ! DirAccess.open("res://").file_exists(file_name):
+	if ! FileAccess.file_exists(file_name):
 		status = false
 	if status:
 		add_recent(file_name)
@@ -1206,7 +1210,11 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		f = file.get_path_absolute()
 		match f.get_extension():
 			"ptex":
-				do_load_material(f)
+				var status : bool = await do_load_material(f)
+				if status:
+					add_recent(f)
+				else:
+					remove_recent(f)
 			"obj", "glb", "gltf":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
