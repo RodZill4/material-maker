@@ -114,7 +114,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.05,
+				"default": 0.01,
 				"label": "",
 				"longdesc": "Width of the curve",
 				"max": 1,

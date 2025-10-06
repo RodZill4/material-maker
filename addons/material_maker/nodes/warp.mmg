@@ -71,7 +71,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.1,
 				"label": "",
 				"longdesc": "The strength of the warp effect",
 				"max": 1,
@@ -83,7 +83,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.1,
 				"label": "",
 				"longdesc": "The offset used to measure slopes",
 				"max": 0.2,

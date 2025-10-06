@@ -48,16 +48,16 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -522.866638,
-				"y": -383.867035
+				"x": -522.866638183594,
+				"y": -383.867034912109
 			},
 			"parameters": {
-				"param0": 11,
-				"param1": 20,
+				"param0": 11.0,
+				"param1": 20.0,
 				"param2": 1.5,
-				"param3": 1
+				"param3": 1.0
 			},
-			"seed": 29771,
+			"seed": 29771.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -117,100 +117,100 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -842.266602,
-				"y": -108.396729
+				"x": -842.2666015625,
+				"y": -108.396728515625
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input heightmap",
 					"name": "port0",
 					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
-			"seed": 23454,
+			"seed": 23454.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 77.5476,
-				"y": -86.015305
+				"x": 77.5475997924805,
+				"y": -86.0153045654297
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The generated occlusion map",
 					"name": "port0",
 					"shortdesc": "Output",
 					"type": "f"
 				}
 			],
-			"seed": -23559,
+			"seed": -23559.0,
 			"type": "ios"
 		},
 		{
 			"name": "blend",
 			"node_position": {
-				"x": -422.79895,
-				"y": 11.18788
+				"x": -422.798950195312,
+				"y": 11.1878795623779
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 11
+				"amount": 1.0,
+				"blend_type": 11.0
 			},
-			"seed": -19731,
+			"seed": -19731.0,
 			"type": "blend"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": -124.598953,
-				"y": -131.660126
+				"x": -124.59895324707,
+				"y": -131.660125732422
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
-			"seed": 33856,
+			"seed": 33856.0,
 			"seed_locked": true,
 			"type": "colorize"
 		},
 		{
 			"name": "_2",
 			"node_position": {
-				"x": -104.603699,
-				"y": -57.918201
+				"x": -113.603698730469,
+				"y": -45.9182014465332
 			},
 			"parameters": {
 				"g": 1.5
 			},
-			"seed": 42159,
+			"seed": 42159.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -233,10 +233,10 @@
 				"parameters": [
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.5,
 						"label": "",
-						"max": 2,
-						"min": 0,
+						"max": 2.0,
+						"min": 0.0,
 						"name": "g",
 						"step": 0.1,
 						"type": "float"
@@ -270,21 +270,21 @@
 			"longdesc": "",
 			"name": "fast_blur",
 			"node_position": {
-				"x": -435.552002,
-				"y": -135.436234
+				"x": -435.552001953125,
+				"y": -135.436233520508
 			},
 			"nodes": [
 				{
 					"name": "fast_blur_shader",
 					"node_position": {
-						"x": -161.600006,
-						"y": 143.188766
+						"x": -161.600006103516,
+						"y": 143.188766479492
 					},
 					"parameters": {
-						"quality": 1,
-						"sigma": 20
+						"quality": 1.0,
+						"sigma": 20.0
 					},
-					"seed": -37618,
+					"seed": -37618.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -327,22 +327,22 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 1,
+								"default": 20.0,
 								"label": "",
-								"max": 256,
-								"min": 1,
+								"max": 256.0,
+								"min": 1.0,
 								"name": "sigma",
-								"step": 1,
+								"step": 1.0,
 								"type": "float"
 							},
 							{
 								"control": "None",
-								"default": 1,
+								"default": 1.0,
 								"label": "",
-								"max": 3,
-								"min": 0,
+								"max": 3.0,
+								"min": 0.0,
 								"name": "quality",
-								"step": 1,
+								"step": 1.0,
 								"type": "float"
 							}
 						]
@@ -352,20 +352,20 @@
 				{
 					"name": "buffer_2",
 					"node_position": {
-						"x": -187,
+						"x": -187.0,
 						"y": 61.5
 					},
 					"parameters": {
-						"size": 11
+						"size": 11.0
 					},
-					"seed": -48026,
+					"seed": -48026.0,
 					"type": "buffer",
 					"version": 1
 				},
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -602,
+						"x": -602.0,
 						"y": 91.75
 					},
 					"parameters": {
@@ -373,18 +373,18 @@
 					},
 					"ports": [
 						{
-							"group_size": 0,
+							"group_size": 0.0,
 							"name": "port0",
 							"type": "f"
 						}
 					],
-					"seed": -11967,
+					"seed": -11967.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": 88,
+						"x": 88.0,
 						"y": 61.75
 					},
 					"parameters": {
@@ -392,12 +392,12 @@
 					},
 					"ports": [
 						{
-							"group_size": 0,
+							"group_size": 0.0,
 							"name": "port0",
 							"type": "rgba"
 						}
 					],
-					"seed": 45717,
+					"seed": 45717.0,
 					"type": "ios"
 				},
 				{
@@ -407,11 +407,11 @@
 						"y": -122.5
 					},
 					"parameters": {
-						"param0": 11,
-						"param1": 20,
-						"param2": 1
+						"param0": 11.0,
+						"param1": 20.0,
+						"param2": 1.0
 					},
-					"seed": 57528,
+					"seed": 57528.0,
 					"type": "remote",
 					"widgets": [
 						{
@@ -451,20 +451,20 @@
 				}
 			],
 			"parameters": {
-				"param0": 11,
-				"param1": 20,
-				"param2": 1
+				"param0": 11.0,
+				"param1": 20.0,
+				"param2": 1.0
 			},
-			"seed": 57642,
+			"seed": 57642.0,
 			"shortdesc": "",
 			"type": "graph"
 		}
 	],
 	"parameters": {
-		"param0": 11,
-		"param1": 20,
+		"param0": 11.0,
+		"param1": 20.0,
 		"param2": 1.5,
-		"param3": 1
+		"param3": 1.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Occlusion",

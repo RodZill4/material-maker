@@ -78,7 +78,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 0.5,
 				"label": "Center Z",
 				"longdesc": "Z coordinate of the center of the box",
 				"max": 0.5,
@@ -90,7 +90,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Size X",
 				"longdesc": "Size along X axis",
 				"max": 1,
@@ -102,7 +102,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Size Y",
 				"longdesc": "Size along Y axis",
 				"max": 1,
@@ -114,7 +114,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Size Z",
 				"longdesc": "Size along Z axis",
 				"max": 1,

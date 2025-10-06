@@ -129,7 +129,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.0,
 				"label": "Rnd Scale",
 				"longdesc": "The random scale applied to each remapped instance.",
 				"max": 1,

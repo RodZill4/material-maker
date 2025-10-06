@@ -46,7 +46,7 @@
 		"parameters": [
 			{
 				"control": "P1.x",
-				"default": 0,
+				"default": -0.3,
 				"label": "A X",
 				"longdesc": "The position on the X axis of the first point of the line",
 				"max": 1,
@@ -58,7 +58,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": 0,
+				"default": -0.3,
 				"label": "A Y",
 				"longdesc": "The position on the Y axis of the first point of the line",
 				"max": 1,
@@ -70,7 +70,7 @@
 			},
 			{
 				"control": "P2.x",
-				"default": 1,
+				"default": 0.3,
 				"label": "B X",
 				"longdesc": "The position on the X axis of the second point of the line",
 				"max": 1,
@@ -82,7 +82,7 @@
 			},
 			{
 				"control": "P2.y",
-				"default": 1,
+				"default": 0.3,
 				"label": "B Y",
 				"longdesc": "The position on the Y axis of the second point of the line",
 				"max": 1,
@@ -94,7 +94,7 @@
 			},
 			{
 				"control": "Radius1.r",
-				"default": 0,
+				"default": 0.1,
 				"label": "Width",
 				"longdesc": "The width of the capsule shape around the line",
 				"max": 1,

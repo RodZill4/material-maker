@@ -134,7 +134,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.01,
+				"default": 0.05,
 				"label": "",
 				"longdesc": "Width of the transition area between both materials",
 				"max": 0.2,

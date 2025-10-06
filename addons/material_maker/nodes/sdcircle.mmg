@@ -30,7 +30,7 @@
 		"parameters": [
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Radius",
 				"longdesc": "The radius of the circle",
 				"max": 1,

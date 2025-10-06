@@ -31,7 +31,7 @@
 		"parameters": [
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.2,
 				"label": "Radius",
 				"longdesc": "The radius of the hexagram",
 				"max": 1,
@@ -42,7 +42,7 @@
 			},
 			{
 				"control": "P1.x",
-				"default": 0.2,
+				"default": 0.0,
 				"label": "Center X",
 				"longdesc": "The position of the center on the X axis",
 				"max": 0.5,
@@ -54,7 +54,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": -0.25,
+				"default": 0.0,
 				"label": "Center Y",
 				"longdesc": "The position of the center on the Y axis",
 				"max": 0.5,

@@ -31,7 +31,7 @@
 		"parameters": [
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Radius",
 				"longdesc": "Radius of the equilateral triangle",
 				"max": 1,

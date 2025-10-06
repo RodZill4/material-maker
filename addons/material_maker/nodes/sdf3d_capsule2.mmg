@@ -69,7 +69,7 @@
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.25,
+				"default": 0.3,
 				"label": "Length",
 				"longdesc": "The length of the capsule",
 				"max": 1,

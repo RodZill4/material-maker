@@ -89,7 +89,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 6.0,
+				"default": 4.0,
 				"label": "Rows",
 				"longdesc": "The number of rows of a pattern",
 				"max": 64.0,
@@ -113,7 +113,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.25,
 				"label": "Offset",
 				"longdesc": "The offset of each row of the pattern",
 				"max": 1.0,
@@ -133,7 +133,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.1,
+				"default": 0.0,
 				"label": "Mortar",
 				"longdesc": "The width of the space between tiles",
 				"max": 0.5,
@@ -145,7 +145,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0.1,
+				"default": 0.05,
 				"label": "Bevel",
 				"longdesc": "The width of the edge of each tile",
 				"max": 0.5,

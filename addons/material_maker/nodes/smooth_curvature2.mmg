@@ -60,28 +60,28 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": 300.603302,
-				"y": -549.522034
+				"x": 300.603302001953,
+				"y": -549.522033691406
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 10.0
 			},
-			"seed": -31345,
+			"seed": -31345.0,
 			"type": "buffer"
 		},
 		{
 			"name": "598",
 			"node_position": {
-				"x": 286.999847,
-				"y": -359.903259
+				"x": 286.999847412109,
+				"y": -359.903259277344
 			},
 			"parameters": {
-				"quality": 4,
-				"radius": 1,
-				"strength": 1
+				"quality": 16.0,
+				"radius": 2.0,
+				"strength": 2.0
 			},
-			"seed": -50629,
+			"seed": -50629.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -132,23 +132,23 @@
 				"parameters": [
 					{
 						"control": "None",
-						"default": 4,
+						"default": 16.0,
 						"label": "Quality",
 						"longdesc": "How many times the input is sampled to generate the curvature map",
-						"max": 16,
-						"min": 2,
+						"max": 16.0,
+						"min": 2.0,
 						"name": "quality",
 						"shortdesc": "Quality",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 2.0,
 						"label": "Strength",
 						"longdesc": "The intensity of the curvature map",
-						"max": 2,
-						"min": 0,
+						"max": 2.0,
+						"min": 0.0,
 						"name": "strength",
 						"shortdesc": "Strength",
 						"step": 0.01,
@@ -156,11 +156,11 @@
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 2.0,
 						"label": "Radius",
 						"longdesc": "The radius of the smoothing of the curvature effect",
-						"max": 2,
-						"min": 0,
+						"max": 2.0,
+						"min": 0.0,
 						"name": "radius",
 						"shortdesc": "Radius",
 						"step": 0.01,
@@ -174,17 +174,17 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": 242.146149,
-				"y": -788.088806
+				"x": 242.146148681641,
+				"y": -788.088806152344
 			},
 			"parameters": {
-				"param0": 10,
-				"param1": 4,
-				"param2": 1,
-				"param3": 1,
-				"param4": 1
+				"param0": 10.0,
+				"param1": 16.0,
+				"param2": 2.0,
+				"param3": 2.0,
+				"param4": 1.0
 			},
-			"seed": -26718,
+			"seed": -26718.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -248,24 +248,24 @@
 						"False": [
 							{
 								"node": "switch",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							}
 						],
 						"True": [
 							{
 								"node": "switch",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							},
 							{
 								"node": "switch_2",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							}
 						]
@@ -291,97 +291,97 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -135.453888,
-				"y": -518.927429
+				"x": -135.453887939453,
+				"y": -518.927429199219
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input height map",
 					"name": "Heightmap",
 					"shortdesc": "Input",
 					"type": "f"
 				}
 			],
-			"seed": 27485,
+			"seed": 27485.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 586.203247,
-				"y": -534.919678
+				"x": 586.203247070312,
+				"y": -534.919677734375
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the generated curvature map",
 					"name": "Curvature",
 					"shortdesc": "Output",
 					"type": "f"
 				}
 			],
-			"seed": -16100,
+			"seed": -16100.0,
 			"type": "ios"
 		},
 		{
 			"name": "switch",
 			"node_position": {
-				"x": 310.739746,
-				"y": -451.658417
+				"x": 310.73974609375,
+				"y": -451.658416748047
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 1
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 1.0
 			},
-			"seed": -44617,
+			"seed": -44617.0,
 			"type": "switch"
 		},
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": 293.839874,
-				"y": -225.201691
+				"x": 293.839874267578,
+				"y": -225.201690673828
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 10
+				"lod": 0.0,
+				"size": 10.0
 			},
-			"seed": -40604,
+			"seed": -40604.0,
 			"type": "buffer"
 		},
 		{
 			"name": "switch_2",
 			"node_position": {
-				"x": 312.239838,
-				"y": -129.465912
+				"x": 312.239837646484,
+				"y": -129.465911865234
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 1
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 1.0
 			},
-			"seed": -60745,
+			"seed": -60745.0,
 			"type": "switch"
 		},
 		{
 			"name": "blend",
 			"node_position": {
-				"x": 802.064697,
-				"y": -277.727295
+				"x": 802.064697265625,
+				"y": -277.727294921875
 			},
 			"parameters": {
 				"amount": 0.5,
-				"blend_type": 0
+				"blend_type": 0.0
 			},
-			"seed": -32267,
+			"seed": -32267.0,
 			"shader_model": {
 				"code": [
 					"vec4 $(name_uv)_s1 = $s1($uv);",
@@ -498,7 +498,7 @@
 				],
 				"parameters": [
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "",
 						"longdesc": "The algorithm used to blend the inputs",
 						"name": "blend_type",
@@ -560,8 +560,8 @@
 						"default": 0.5,
 						"label": "3:",
 						"longdesc": "The opacity of the blend operation",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "amount",
 						"shortdesc": "Opacity",
 						"step": 0.01,
@@ -574,11 +574,11 @@
 		}
 	],
 	"parameters": {
-		"param0": 10,
-		"param1": 4,
-		"param2": 1,
-		"param3": 1,
-		"param4": 1
+		"param0": 10.0,
+		"param1": 16.0,
+		"param2": 2.0,
+		"param3": 2.0,
+		"param4": 1.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Smooth Curvature",

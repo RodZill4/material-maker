@@ -43,7 +43,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0.5,
+				"default": 0.3,
 				"label": "Distort",
 				"longdesc": "The strength of the distort effect",
 				"max": 1,

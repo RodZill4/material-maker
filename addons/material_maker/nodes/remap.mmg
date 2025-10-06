@@ -37,7 +37,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
+				"default": -1.0,
 				"label": "Min",
 				"longdesc": "The value generated for black areas of the input",
 				"max": 10,
@@ -49,7 +49,7 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
+				"default": 1.0,
 				"label": "Max",
 				"longdesc": "The value generated for white areas of the input",
 				"max": 10,

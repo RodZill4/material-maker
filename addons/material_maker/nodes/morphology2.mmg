@@ -291,7 +291,7 @@
 					},
 					{
 						"control": "None",
-						"default": 0.1,
+						"default": 0.05,
 						"label": "",
 						"max": 0.3,
 						"min": 0,
