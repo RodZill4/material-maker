@@ -4,6 +4,10 @@ var config : ConfigFile
 
 signal config_changed()
 
+
+func _on_ready() -> void:
+	%PreferGlobalMenu.visible = OS.get_name() == "macOS"
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		queue_free()
