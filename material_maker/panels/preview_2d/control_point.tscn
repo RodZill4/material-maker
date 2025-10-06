@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://est6pi7xbptp"]
 
-[ext_resource type="Script" path="res://material_maker/panels/preview_2d/control_point.gd" id="1"]
+[ext_resource type="Script" uid="uid://d5fr47ktyhi" path="res://material_maker/panels/preview_2d/control_point.gd" id="1"]
 
 [node name="Point" type="TextureRect"]
 mouse_filter = 0
