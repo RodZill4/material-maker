@@ -1,22 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://24n1vcw48pi"]
+[gd_scene load_steps=8 format=3 uid="uid://24n1vcw48pi"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/ios/port.gd" id="1"]
+[ext_resource type="Script" uid="uid://74k1155djatm" path="res://material_maker/nodes/ios/port.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="PackedScene" uid="uid://dvp8gd7whg6h7" path="res://material_maker/widgets/linked_widgets/editable_label.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://bi88rsdxt0ld7" path="res://material_maker/widgets/port_group_button/port_group_button.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="5"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_beq70"]
+
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("2")
 region = Rect2(2, 17, 12, 14)
-
-[sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("2")
-region = Rect2(18, 49, 12, 14)
-
-[sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("2")
-region = Rect2(34, 49, 12, 14)
 
 [node name="Port" type="HBoxContainer"]
 anchors_preset = 10
@@ -24,17 +18,14 @@ anchor_right = 1.0
 offset_bottom = 20.0
 script = ExtResource("1")
 
+[node name="Drag" type="Button" parent="."]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_beq70")
+flat = true
+
 [node name="Delete" type="Button" parent="."]
 layout_mode = 2
 icon = SubResource("1")
-
-[node name="Up" type="Button" parent="."]
-layout_mode = 2
-icon = SubResource("2")
-
-[node name="Down" type="Button" parent="."]
-layout_mode = 2
-icon = SubResource("3")
 
 [node name="Name" parent="." instance=ExtResource("3")]
 custom_minimum_size = Vector2(30, 0)
@@ -53,8 +44,6 @@ tooltip_text = "Port type"
 layout_mode = 2
 
 [connection signal="pressed" from="Delete" to="." method="_on_Delete_pressed"]
-[connection signal="pressed" from="Up" to="." method="_on_Up_pressed"]
-[connection signal="pressed" from="Down" to="." method="_on_Down_pressed"]
 [connection signal="label_changed" from="Name" to="." method="_on_Name_label_changed"]
 [connection signal="descriptions_changed" from="Description" to="." method="_on_Description_descriptions_changed"]
 [connection signal="item_selected" from="Type" to="." method="_on_Type_item_selected"]
