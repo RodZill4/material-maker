@@ -16,14 +16,8 @@ func request(object : Object) -> Object:
 	return self
 
 var current_font : String = ""
-func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, center : bool = false) -> Object:
+func render_text(object : Object, text : String, font_path : String, font_size : int, line_spacing : float, alignment : int, x : float, y : float, center : bool = false) -> Object:
 	assert(render_owner == object)
-	size = Vector2(2048, 2048)
-	$Font.visible = true
-	$Font.position = Vector2(0, 0)
-	$Font.size = size
-	$Font/Label.text = text
-	$Font/Label.position = Vector2(2048*(0.5+x), 2048*(0.5+y))
 	var font : Font = FontFile.new()
 	if font.load_dynamic_font(font_path) == OK:
 		pass
@@ -31,10 +25,27 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 		#font.msdf_size = 64
 	elif font.load_bitmap_font(font_path) != OK:
 		font = $Font/Label.get_theme_font("font")
+
+	var label_settings : LabelSettings = LabelSettings.new()
+	label_settings.font = font
+	label_settings.font_size = font_size
+	line_spacing = max(line_spacing,
+			-font.get_string_size(text, 0, -1, font_size).y)
+	label_settings.line_spacing = line_spacing
+	$Font/Label.label_settings = label_settings
+	$Font/Label.horizontal_alignment = alignment
+	$Font/Label.text = text.replace("\\n","\n")
+
+	size = Vector2(2048, 2048)
+	$Font.visible = true
+	$Font.position = Vector2(0, 0)
+	$Font.size = size
+	$Font/Label.position = Vector2(2048*(0.5+x), 2048*(0.5+y))
 	$Font/Label.add_theme_font_override("font", font)
 	$Font/Label.add_theme_font_size_override("font_size", font_size)
 	if center:
-		$Font/Label.position -= 0.5*font.get_string_size(text, 0, -1, font_size)
+		$Font/Label.size = Vector2.ZERO
+		$Font/Label.position -= $Font/Label.get_rect().size * 0.5
 	$ColorRect.visible = false
 	#hdr = true
 	render_target_update_mode = SubViewport.UPDATE_ONCE
