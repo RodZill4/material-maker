@@ -9,38 +9,36 @@
 			"interpolation": 1,
 			"points": [
 				{
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"pos": 0,
-					"r": 0
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"pos": 0.0,
+					"r": 0.0
 				},
 				{
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"pos": 1,
-					"r": 1
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"pos": 1.0,
+					"r": 1.0
 				}
 			],
 			"type": "Gradient"
 		},
-		"repeat": 1
+		"mirror": false,
+		"repeat": 1.0
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
 		"name": "Circular Gradient",
-		"shortdesc": "Circular Gradient",
 		"outputs": [
 			{
 				"longdesc": "Number of repetitions of the gradient",
-				"rgba": "$gradient(fract($repeat*0.15915494309*atan($uv.y-0.5, $uv.x-0.5)))",
+				"rgba": "$gradient($mirror ? 2.0*(0.5-abs(fract($repeat*0.15915494309*atan($uv.y-0.5, $uv.x-0.5))-0.5)) : fract($repeat*0.15915494309*atan($uv.y-0.5, $uv.x-0.5)))",
 				"shortdesc": "Repeat",
 				"type": "rgba"
 			}
@@ -48,33 +46,41 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 1,
+				"default": 1.0,
 				"label": "Repeat",
 				"longdesc": "Number of repetitions of the gradient",
-				"max": 32,
-				"min": 1,
+				"max": 32.0,
+				"min": 1.0,
 				"name": "repeat",
 				"shortdesc": "Repeat",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Mirror",
+				"longdesc": "Mirrors the gradient",
+				"name": "mirror",
+				"shortdesc": "Mirror",
+				"type": "boolean"
 			},
 			{
 				"default": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
@@ -85,7 +91,8 @@
 				"shortdesc": "Gradient",
 				"type": "gradient"
 			}
-		]
+		],
+		"shortdesc": "Circular Gradient"
 	},
 	"type": "shader"
 }
