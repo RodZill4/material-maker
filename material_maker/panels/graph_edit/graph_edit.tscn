@@ -39,6 +39,11 @@ script = ExtResource("1")
 wait_time = 0.2
 one_shot = true
 
+[node name="Lasso" type="Line2D" parent="."]
+top_level = true
+closed = true
+width = 1.0
+
 [node name="GraphUI" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 0

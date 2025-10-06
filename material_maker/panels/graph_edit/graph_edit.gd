@@ -21,6 +21,9 @@ var need_save : bool = false
 var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
 
+@onready var lasso_shape : Line2D = $Lasso
+var lasso_points : PackedVector2Array
+
 var top_generator = null
 var generator = null
 
@@ -120,6 +123,22 @@ func _gui_input(event) -> void:
 		accept_event()
 		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
+	elif event.is_action_released("ui_lasso_select", true):
+		var poly : Polygon2D = Polygon2D.new()
+		poly.polygon = lasso_points
+		poly.offset = get_global_rect().position
+		for node in get_children():
+			if node is GraphElement:
+				var pos : Vector2 = node.get_rect().get_center()
+				if node is MMGraphReroute:
+					pos -= Vector2(0, -36)
+				if Geometry2D.is_point_in_polygon(
+						pos,  poly.polygon):
+					node.selected = true
+		lasso_points.clear()
+		lasso_shape.points = lasso_points
+		lasso_shape.queue_redraw()
+		poly.free()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
 	elif event.is_action_pressed("ui_hierarchy_down"):
@@ -221,6 +240,15 @@ func _gui_input(event) -> void:
 			var rect = get_global_rect()
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
+
+		# lasso selection
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
+			accept_event()
+			lasso_points.append(
+					get_local_mouse_position() + get_global_rect().position)
+			lasso_shape.points = lasso_points
+			lasso_shape.queue_redraw()
+
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
@@ -1520,3 +1548,11 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			return points
 		_:
 			return points
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			if not is_node_ready():
+				await ready
+			lasso_shape.default_color = get_theme_color(
+					"lasso_stroke", "GraphEdit")
