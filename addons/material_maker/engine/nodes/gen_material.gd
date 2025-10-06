@@ -179,6 +179,10 @@ func update_material(m, sequential : bool = false) -> void:
 			m.set_shader_parameter(t, preview_texture_dependencies[t])
 		for p in preview_parameters.keys():
 			m.set_shader_parameter(p, preview_parameters[p])
+			if preview_parameters[p] is MMTexture:
+				m.set_shader_parameter(p, await preview_parameters[p].get_texture())
+			else:
+				m.set_shader_parameter(p, preview_parameters[p])
 
 func update_external_previews() -> void:
 	for ppn in external_previews.keys():
@@ -765,7 +769,8 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					file_name = file_name.replace("$(buffer_index)", str(index))
 					var image : Image = preview_texture_dependencies[t].get_image()
 					if image:
-						e = preview_texture_dependencies[t].get_image().save_png(file_name)
+						image.convert(Image.FORMAT_RGBA8)
+						e = image.save_png(file_name)
 						if e != OK:
 							error_files += 1
 					else:

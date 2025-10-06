@@ -6,6 +6,7 @@ const PREVIEW_SIZES : Array[int] = [ 0, 64, 128, 192]
 
 func _ready() -> void:
 	super._ready()
+	get_titlebar_hbox().get_child(0).hide()
 	close_button.visible = false
 	theme_type_variation = "MM_Reroute"
 	#set_theme_type("Reroute")
@@ -91,6 +92,8 @@ func on_parameter_changed(n : String, v):
 		disable_undoredo_for_offset = true
 		position_offset -= (size-old_size)/2
 		disable_undoredo_for_offset = false
+	else:
+		update_preview()
 
 func set_preview(v : int):
 	var preview : Control = null
@@ -98,6 +101,8 @@ func set_preview(v : int):
 		preview = $Contents.get_child(0)
 	if v == 0:
 		if preview:
+			preview.custom_minimum_size = Vector2(0, 0)
+			preview.size = Vector2(0, 0)
 			preview.queue_free()
 		theme_type_variation = "MM_Reroute"
 		#set_theme_type("Reroute")
