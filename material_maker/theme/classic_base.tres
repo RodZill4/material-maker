@@ -322,12 +322,12 @@ region = Rect2(112, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_1yu4y"]
 atlas = ExtResource("1_7p32q")
 region = Rect2(32, 128, 16, 16)
-metadata/scale = 2.0
+metadata/scale = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ao7ds"]
 atlas = ExtResource("1_7p32q")
 region = Rect2(48, 128, 16, 16)
-metadata/scale = 2.0
+metadata/scale = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hht3q"]
 atlas = ExtResource("1_7p32q")
