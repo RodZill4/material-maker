@@ -4,9 +4,6 @@ extends Control
 var GutEditorGlobals = load('res://addons/gut/gui/editor_globals.gd')
 
 var _interface = null
-var _font = null
-var _font_size = null
-var _editors = null # script_text_editor_controls.gd
 var _output_control = null
 
 @onready var _ctrls = {
@@ -24,6 +21,9 @@ var _output_control = null
 }
 
 func _ready():
+	if(get_parent() is SubViewport):
+		return
+
 	var f = null
 	if ($FontSampler.get_label_settings() == null) :
 		f = get_theme_default_font()
@@ -42,7 +42,7 @@ func _ready():
 	_ctrls.tree.hide_passing = true
 	_ctrls.toolbar.hide_passing.button_pressed = false
 	_ctrls.tree.show_orphans = true
-	_ctrls.tree.item_selected.connect(_on_item_selected)
+	_ctrls.tree.selected.connect(_on_item_selected)
 
 	if(get_parent() == get_tree().root):
 		_test_running_setup()
@@ -127,7 +127,8 @@ func _goto_code(path, line, method_name='', inner_class =''):
 			search_strings.append(method_name)
 
 		await get_tree().process_frame
-		line = _get_line_number_for_seq_search(search_strings, _editors.get_current_text_edit())
+		line = _get_line_number_for_seq_search(search_strings,
+			_interface.get_script_editor().get_current_editor().get_base_editor())
 		if(line != null and line != -1):
 			_interface.get_script_editor().goto_line(line)
 
@@ -202,10 +203,6 @@ func clear():
 
 func set_interface(which):
 	_interface = which
-
-
-func set_script_text_editors(value):
-	_editors = value
 
 
 func collapse_all():
