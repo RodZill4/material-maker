@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://sfb1fw8j6ufu"]
 
-[ext_resource type="Script" path="res://addons/gut/gui/ShortcutButton.gd" id="1"]
+[ext_resource type="Script" uid="uid://k6hvvpekp0xw" path="res://addons/gut/gui/ShortcutButton.gd" id="1"]
 
 [node name="ShortcutButton" type="Control"]
 custom_minimum_size = Vector2(210, 30)
