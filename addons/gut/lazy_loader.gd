@@ -15,6 +15,9 @@ static func print_usage():
 		print(key._path, '  (', usage_counter.things[key], ')')
 
 
+static func clear():
+	usage_counter.things.clear()
+
 # ------------------------------------------------------------------------------
 # Class
 # ------------------------------------------------------------------------------
@@ -31,4 +34,6 @@ func get_loaded():
 		_loaded = WarningsManager.load_script_ignoring_all_warnings(_path)
 	usage_counter.add(self)
 	return _loaded
+
+
 

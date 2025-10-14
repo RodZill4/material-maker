@@ -8,9 +8,15 @@
 # ------------------------------------------------------------------------------
 extends SceneTree
 
+var VersionConversion = load("res://addons/gut/version_conversion.gd")
+
 @warning_ignore("unsafe_method_access")
 @warning_ignore("inferred_declaration")
 func _init() -> void:
+	if(VersionConversion.error_if_not_all_classes_imported()):
+		quit(0)
+		return
+
 	var max_iter := 20
 	var iter := 0
 
