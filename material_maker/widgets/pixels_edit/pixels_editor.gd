@@ -4,6 +4,8 @@ extends "res://material_maker/widgets/pixels_edit/pixels_view.gd"
 
 var current_color: int = -1
 
+var last_mouse_pos : Vector2
+
 @onready var menu_bar: Control = $PixelMenu
 @onready var colors: Control = %Colors
 
@@ -72,9 +74,22 @@ func draw_pixel() -> void:
 	queue_redraw()
 	self.value_changed.emit(pixels)
 
+func draw_pixel_line() -> void:
+	var from : Vector2 = reverse_transform_point(last_mouse_pos)
+	var to : Vector2 = reverse_transform_point(get_local_mouse_position())
+	var pixel_from : Vector2i = Vector2i(Vector2(pixels.size) * from)
+	var pixel_to : Vector2i = Vector2i(Vector2(pixels.size) * to)
+	for pixel : Vector2i in Geometry2D.bresenham_line(pixel_from, pixel_to):
+		pixels.set_color_index(pixel.x, pixel.y, current_color)
+	queue_redraw()
+	self.value_changed.emit(pixels)
+
 func _on_PixelsEditor_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if event.shift_pressed and last_mouse_pos:
+				draw_pixel_line()
+			last_mouse_pos = get_local_mouse_position()
 			draw_pixel()
 			return
 	elif event is InputEventMouseMotion:
