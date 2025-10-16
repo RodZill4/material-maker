@@ -191,7 +191,7 @@ func _ready() -> void:
 	for a in args:
 		if a.get_extension().to_lower() in [ "ptex", "mmpp" ]:
 			do_load_project(get_file_absolute_path(a))
-		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
+		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf", "fbx" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
 			if mesh_filename == "":
 				push_error("Cannot load mesh from '%s' (no such file or directory)" % a)
@@ -1215,7 +1215,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 					add_recent(f)
 				else:
 					remove_recent(f)
-			"obj", "glb", "gltf":
+			"obj", "glb", "gltf", "fbx":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
 			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
