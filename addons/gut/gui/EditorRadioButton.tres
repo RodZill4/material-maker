@@ -1,0 +1,13 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dssgvu257o1si"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u716c"]
+bg_color = Color(0.43137255, 0.8784314, 0.6156863, 0.5254902)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ht2pf"]
+bg_color = Color(0, 0.44705883, 0.23921569, 1)
+
+[resource]
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/styles/hover = SubResource("StyleBoxFlat_u716c")
+Button/styles/pressed = SubResource("StyleBoxFlat_ht2pf")

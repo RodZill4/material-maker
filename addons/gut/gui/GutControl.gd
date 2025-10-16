@@ -9,8 +9,7 @@ var GutConfigGui = load('res://addons/gut/gui/gut_config_gui.gd')
 
 var _config = GutConfig.new()
 var _config_gui = null
-var _gut_runner = GutRunnerScene.instantiate()
-var _has_connected = false
+var _gut_runner = null
 var _tree_root : TreeItem = null
 
 var _script_icon = load('res://addons/gut/images/Script.svg')
@@ -43,6 +42,7 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 
+	_gut_runner = GutRunnerScene.instantiate()
 	$Bg.color = bg_color
 	_ctrls.tabs.set_tab_title(0, 'Tests')
 	_ctrls.tabs.set_tab_title(1, 'Settings')
@@ -260,6 +260,10 @@ func run_tests(options = null):
 		_config.options = _config_gui.get_options(_config.options)
 	else:
 		_config.options = options
+		
+	# We ar running from within the game, so we should not exit, ever.
+	_config.options.should_exit_on_success = false
+	_config.options.should_exit = false
 
 	_gut_runner.get_gut().get_test_collector().clear()
 	_gut_runner.set_gut_config(_config)
