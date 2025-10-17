@@ -46,7 +46,7 @@
 			{
 				"control": "Radius1.r",
 				"default": 0.5,
-				"label": "",
+				"label": "Radius",
 				"longdesc": "The size of the octahedron",
 				"max": 1,
 				"min": 0,
