@@ -18,7 +18,7 @@ func _init(parent) -> void:
 
 func pick(s, n, pn : String, c : bool = false) -> void:
 	source = s
-	end = source.get_global_transform() * 0.5*source.size * get_global_transform()
+	end = get_global_mouse_position() * get_global_transform()
 	node = n
 	param_name = pn
 	creating = c
@@ -48,17 +48,17 @@ func _draw() -> void:
 	if ! ( is_instance_valid(source) and is_instance_valid(self) ):
 		return
 	var start = source.get_global_transform() * 0.5*source.size * get_global_transform()
-	var color = Color(1, 0.5, 0.5, 0.5)
+	var color = Color(1, 0.5, 0.5, 1.0)
 	var rect
 	if target != null:
-		color = Color(0.5, 1, 0.5, 0.5)
+		color = Color(0.5, 1, 0.5, 1.0)
 		rect = target.get_global_transform() * Rect2(Vector2(0, 0), target.size) * get_global_transform()
-		draw_rect(rect, color, false, 2)
+		draw_rect(rect, color, false, 2, true)
 		end = closest(rect, start)
 	rect = source.get_global_transform() * Rect2(Vector2(0, 0), source.size) * get_global_transform()
-	draw_rect(rect, color, false, 2)
+	draw_rect(rect, color, false, 2, true)
 	start = closest(rect, end)
-	draw_line(start,end,color,1.5)
+	draw_line(start, end, color, 1.5, true)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
