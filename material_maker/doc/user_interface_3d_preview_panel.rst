@@ -29,8 +29,8 @@ The *Model* menu can be used to:
   These options are only available for custom meshes.
 
 Selecting the *Custom* option in the model list will show a file dialog to select a
-3D model in Wavefront .obj format. The model should have UV information to correctly
-display materials (normals will be generated if they are missing).
+3D model (``.glb``, ``.gltf``, ``.fbx`` and Wavefront ``.obj`` are supported). The model should have
+UV information to correctly display materials (normals will be generated if they are missing).
 
 When generating a map from a custom mesh, an image node for the generated map will
 be stored in the clipboard, and it is possible to directly paste that node into about
