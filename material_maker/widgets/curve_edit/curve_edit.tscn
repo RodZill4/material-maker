@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cvv8rhglg3jlm"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/curve_edit.gd" id="1"]
+[ext_resource type="Script" uid="uid://cd0ugv3swm5os" path="res://material_maker/widgets/curve_edit/curve_edit.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="2"]
 
 [node name="CurveEdit" type="Button"]
@@ -21,7 +21,5 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [connection signal="pressed" from="." to="." method="_on_CurveEdit_pressed"]

@@ -36,3 +36,4 @@ func _on_Invert_pressed() -> void:
 	for p in old_curve.points:
 		new_curve.add_point(p.p.x, 1.0 - p.p.y, -p.ls, -p.rs)
 	$VBoxContainer/EditorContainer/CurveEditor.set_curve(new_curve)
+	$VBoxContainer/EditorContainer/CurveEditor.update_control_ui()

@@ -6,6 +6,8 @@ extends Control
 
 @export var draw_area : bool = true
 @export var auto_rescale : bool = true
+@export var show_axes : bool = false
+@export var axes_density : int = 5
 
 var polygon : MMPolygon
 
@@ -45,10 +47,15 @@ func _draw():
 	var curve_color : Color = bg.lerp(fg, 0.75)
 	if draw_area:
 		draw_rect(Rect2(draw_offset, draw_size), axes_color, false)
+	if show_axes:
+		for i in range(axes_density):
+			var step : float = 1/(axes_density-1.0)*i
+			draw_line(transform_point(Vector2(0.0, step)), transform_point(Vector2(1.0, step)), axes_color)
+			draw_line(transform_point(Vector2(step, 0.0)), transform_point(Vector2(step, 1.0)), axes_color)
 	var tp : Vector2 = transform_point(polygon.points[polygon.points.size()-1 if closed else 0])
 	for p in polygon.points:
 		var tnp = transform_point(p)
-		draw_line(tp, tnp, curve_color)
+		draw_line(tp, tnp, curve_color, 0.5, true)
 		tp = tnp
 
 func _on_resize() -> void:

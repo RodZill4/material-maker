@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b1o4dgfm2i376"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/lattice_edit/lattice_dialog.gd" id="1_smyqc"]
+[ext_resource type="Script" uid="uid://b6nk3nlq0esen" path="res://material_maker/widgets/lattice_edit/lattice_dialog.gd" id="1_smyqc"]
 [ext_resource type="PackedScene" uid="uid://dicq2cut03ved" path="res://material_maker/widgets/lattice_edit/lattice_editor.tscn" id="2_w8wwg"]
 
 [node name="LatticeDialog" type="Window"]

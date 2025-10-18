@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://da62d56oqbxsd"]
+[gd_scene load_steps=5 format=3 uid="uid://da62d56oqbxsd"]
 
 [ext_resource type="PackedScene" uid="uid://djura7a50b2aq" path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/widgets/polygon_edit/polygon_dialog.gd" id="2"]
+[ext_resource type="Script" uid="uid://be2rg42127n0g" path="res://material_maker/widgets/polygon_edit/polygon_dialog.gd" id="2"]
+[ext_resource type="Script" uid="uid://c8ojysjh2qimr" path="res://material_maker/widgets/polygon_edit/settings_panel.gd" id="2_05k5u"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="3_k7vr5"]
 
 [node name="PolygonDialog" type="Window"]
 script = ExtResource("2")
@@ -15,6 +17,29 @@ offset_top = 5.0
 offset_right = -5.0
 offset_bottom = -5.0
 
+[node name="PolygonViewSettings" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"MM_PanelMenuBar"
+script = ExtResource("2_05k5u")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PolygonViewSettings"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="GridLabel" type="Label" parent="VBoxContainer/PolygonViewSettings/HBoxContainer"]
+layout_mode = 2
+text = "Grid"
+
+[node name="GridDensity" parent="VBoxContainer/PolygonViewSettings/HBoxContainer" instance=ExtResource("3_k7vr5")]
+unique_name_in_owner = true
+layout_mode = 2
+value = 4.0
+min_value = 1.0
+max_value = 16.0
+step = 1.0
+float_only = true
+
 [node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
 clip_contents = true
 layout_mode = 2
@@ -26,8 +51,11 @@ theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
 [node name="PolygonEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource("1")]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
+show_axes = true
+axes_density = 5
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
@@ -47,6 +75,10 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="VBoxContainer/PolygonViewSettings" to="." method="_on_polygon_view_settings_ready"]
+[connection signal="ready" from="VBoxContainer/PolygonViewSettings" to="VBoxContainer/PolygonViewSettings" method="_on_ready"]
+[connection signal="value_changed" from="VBoxContainer/PolygonViewSettings/HBoxContainer/GridDensity" to="VBoxContainer/PolygonViewSettings" method="_on_grid_density_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/EditorContainer/PolygonEditor" to="." method="_on_PolygonEditor_value_changed"]
+[connection signal="gui_input" from="VBoxContainer/EditorContainer/PolygonEditor/@Control@242305" to="VBoxContainer/EditorContainer/PolygonEditor/@Control@242305" method="_on_ControlPoint_gui_input"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
