@@ -2,9 +2,13 @@ extends 'res://addons/gut/gut_to_move.gd'
 class_name GutMain
 ## The GUT brains.
 ##
-## This is responsible for everything.  There aren't a lot of things you should
-## be doing with this, but there are some edge cases where you can/should
-## interact with the instance of this that is making all the magic happen.
+## Most of this class is for internal use only.  Features that can be used are
+## have descriptions and can be accessed through the [member GutTest.gut] variable
+## in your test scripts (extends [GutTest]).
+## The wiki page for this class contains only the usable features.
+## [br][br]
+## GUT Wiki:  [url=https://gut.readthedocs.io]https://gut.readthedocs.io[/url]
+## [br]
 ## @ignore-uncommented
 
 
@@ -57,6 +61,9 @@ var _log_level = 1
 var log_level = _log_level:
 	get: return _log_level
 	set(val): _set_log_level(val)
+
+## The amount of time that must elapse before an "Awaiting" message is printed.
+var wait_log_delay = 0.5
 
 # TODO 4.0
 # This appears to not be used anymore.  Going to wait for more tests to be
@@ -159,19 +166,16 @@ var logger = _lgr :
 		_lgr = val
 		_lgr.set_gut(self)
 
+var error_tracker = GutUtils.get_error_tracker()
+
 var _add_children_to = self
-## Sets the object that GUT will add test objects to as it creates them.  The
-## default is self, but can be set to other objects so that GUT is not obscured
-## by the objects added during tests.
+# Sets the object that GUT will add test objects to as it creates them.  The
+# default is self, but can be set to other objects so that GUT is not obscured
+# by the objects added during tests.
 var add_children_to = self :
 	get: return _add_children_to
 	set(val): _add_children_to = val
 
-
-var _treat_error_as_failure = true
-var treat_error_as_failure = _treat_error_as_failure:
-	get: return _treat_error_as_failure
-	set(val): _treat_error_as_failure = val
 
 # ------------
 # Read only
@@ -188,9 +192,9 @@ var _orphan_counter =  GutUtils.OrphanCounter.new()
 func get_orphan_counter():
 	return _orphan_counter
 
-var _autofree = GutUtils.AutoFree.new()
+# var _autofree = GutUtils.AutoFree.new()
 func get_autofree():
-	return _autofree
+	return _orphan_counter.autofree
 
 var _stubber = GutUtils.Stubber.new()
 func get_stubber():
@@ -258,11 +262,11 @@ var _auto_queue_free_delay = .1
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-func _init():
-	# When running tests for GUT itself, GutUtils has been setup to always return
-	# a new logger so this does not set the gut instance on the base logger
-	# when creating test instances of GUT.
-	_lgr.set_gut(self) # HEY!  What about tests?  ^^^^^^^^^
+func _init(override_logger=null):
+	if(override_logger != null):
+		logger = override_logger
+	else:
+		logger = logger # force setter logic
 
 	_doubler.set_stubber(_stubber)
 	_doubler.set_spy(_spy)
@@ -381,8 +385,19 @@ func _log_test_children_warning(test_script):
 
 
 func _log_end_run():
+	var summary = GutUtils.Summary.new(self)
 	if(_should_print_summary):
-		var summary = GutUtils.Summary.new(self)
+		_orphan_counter.record_orphans("end_run")
+		if(_lgr.is_type_enabled("orphan") and _orphan_counter.get_count() > 0):
+			_lgr.log("\n\n\n")
+			_lgr.orphan("==============================================")
+			_lgr.orphan(str('= ', _orphan_counter.get_count(), ' Orphans'))
+			_lgr.orphan("==============================================")
+			_orphan_counter.log_all()
+			_lgr.log("\n")
+		else:
+			_lgr.log("\n\n\n")
+
 		summary.log_end_run()
 
 
@@ -421,6 +436,7 @@ func _run_hook_script(inst):
 		await inst.run()
 	return inst
 
+
 # ------------------------------------------------------------------------------
 # Initialize variables for each run of a single test script.
 # ------------------------------------------------------------------------------
@@ -445,10 +461,13 @@ func _init_run():
 # Print out run information and close out the run.
 # ------------------------------------------------------------------------------
 func _end_run():
+	await _run_hook_script(get_post_run_script_instance())
+
+	_orphan_counter.record_orphans("end_run")
+	_orphan_counter.orphanage.clean()
 	_log_end_run()
 	_is_running = false
 
-	await _run_hook_script(get_post_run_script_instance())
 	_export_results()
 	end_run.emit()
 
@@ -459,6 +478,7 @@ func _end_run():
 func _export_results():
 	if(_junit_xml_file != ''):
 		_export_junit_xml()
+
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
@@ -493,11 +513,14 @@ func _does_class_name_match(the_class_name, script_class_name):
 
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
-func _setup_script(test_script, collected_script):
+func _create_script_instance(collected_script):
+	var test_script = collected_script.get_new()
+
 	test_script.gut = self
 	test_script.set_logger(_lgr)
 	_add_children_to.add_child(test_script)
 	_test_script_objects.append(test_script)
+	test_script.wait_log_delay = wait_log_delay
 
 	if(!test_script._was_ready_called):
 		test_script._do_ready_stuff()
@@ -515,6 +538,7 @@ func _setup_script(test_script, collected_script):
 			"ideas because I did them.  Hence the warning.  This message is ",
 			"intentially long so that it bothers you and you change your ways.\n\n",
 			"Thank you for using GUT."))
+	return test_script
 
 
 # ------------------------------------------------------------------------------
@@ -550,7 +574,7 @@ func _get_indexes_matching_path(path):
 # Execute all calls of a parameterized test.
 # ------------------------------------------------------------------------------
 func _run_parameterized_test(test_script, test_name):
-	await _run_test(test_script, test_name)
+	await _run_test(test_script, test_name, 0)
 
 	if(_current_test.assert_count == 0 and !_current_test.pending):
 		_lgr.risky('Test did not assert')
@@ -559,11 +583,13 @@ func _run_parameterized_test(test_script, test_name):
 		_lgr.error(str('Parameterized test ', _current_test.name, ' did not call use_parameters for the default value of the parameter.'))
 		_fail(str('Parameterized test ', _current_test.name, ' did not call use_parameters for the default value of the parameter.'))
 	else:
+		var index = 1
 		while(!_parameter_handler.is_done()):
 			var cur_assert_count = _current_test.assert_count
-			await _run_test(test_script, test_name)
+			await _run_test(test_script, test_name, index)
 			if(_current_test.assert_count == cur_assert_count and !_current_test.pending):
 				_lgr.risky('Test did not assert')
+			index += 1
 
 	_parameter_handler = null
 
@@ -571,17 +597,24 @@ func _run_parameterized_test(test_script, test_name):
 # ------------------------------------------------------------------------------
 # Runs a single test given a test.gd instance and the name of the test to run.
 # ------------------------------------------------------------------------------
-func _run_test(script_inst, test_name):
+func _run_test(script_inst, test_name, param_index = -1):
 	_lgr.log_test_name()
 	_lgr.set_indent_level(1)
-	_orphan_counter.add_counter('test')
 
 	await script_inst.before_each()
 
 	start_test.emit(test_name)
+	var test_id = str(script_inst.collected_script.get_filename_and_inner(), ':', test_name)
+	if(param_index != -1):
+		test_id += str('[', param_index, ']')
+	error_tracker.start_test(test_id)
 
 	await script_inst.call(test_name)
 
+	if(error_tracker.should_test_fail_from_errors(test_id)):
+		script_inst._fail(str("Unexpected Errors:\n", error_tracker.get_fail_text_for_errors(test_id)))
+
+	error_tracker.end_test()
 	# if the test called pause_before_teardown then await until
 	# the continue button is pressed.
 	if(_pause_before_teardown and !_ignore_pause_before_teardown):
@@ -590,25 +623,32 @@ func _run_test(script_inst, test_name):
 
 	script_inst.clear_signal_watcher()
 
-	# call each post-each-test method until teardown is removed.
 	await script_inst.after_each()
 
 	# Free up everything in the _autofree.  Yield for a bit if we
 	# have anything with a queue_free so that they have time to
 	# free and are not found by the orphan counter.
-	var aqf_count = _autofree.get_queue_free_count()
-	_autofree.free_all()
+	var aqf_count = _orphan_counter.autofree.get_queue_free_count()
+	_orphan_counter.autofree.free_all()
 	if(aqf_count > 0):
 		await get_tree().create_timer(_auto_queue_free_delay).timeout
 
-	if(_log_level > 0):
-		_orphan_counter.print_orphans('test', _lgr)
+	_orphan_counter.end_test(
+		script_inst.collected_script.get_filename_and_inner(), test_name,
+		_log_level > 0)
 
 	_doubler.get_ignored_methods().clear()
 
 
+func get_current_test_orphans():
+	var sname = get_current_test_object().collected_script.get_ref().get_filename_and_inner()
+	var tname = get_current_test_object().name
+	_orphan_counter.record_orphans(sname, tname)
+	return _orphan_counter.get_orphan_ids(sname, tname)
+
+
 # ------------------------------------------------------------------------------
-# Calls after_all on the passed in test script and takes care of settings so all
+# Calls before_all on the passed in test script and takes care of settings so all
 # logger output appears indented and with a proper heading
 #
 # Calls both pre-all-tests methods until prerun_setup is removed
@@ -687,11 +727,11 @@ func _should_skip_script(test_script, collected_script):
 
 	return should_skip
 
+
 # ------------------------------------------------------------------------------
 # Run all tests in a script.  This is the core logic for running tests.
 # ------------------------------------------------------------------------------
 func _test_the_scripts(indexes=[]):
-	_orphan_counter.add_counter('pre_run')
 
 	_print_versions(false)
 	var is_valid = _init_run()
@@ -720,7 +760,6 @@ func _test_the_scripts(indexes=[]):
 	# loop through scripts
 	for test_indexes in range(indexes_to_run.size()):
 		var coll_script = _test_collector.scripts[indexes_to_run[test_indexes]]
-		_orphan_counter.add_counter('script')
 
 		if(coll_script.tests.size() > 0):
 			_lgr.set_indent_level(0)
@@ -731,15 +770,14 @@ func _test_the_scripts(indexes=[]):
 
 		start_script.emit(coll_script)
 
-		var test_script = coll_script.get_new()
-
-		_setup_script(test_script, coll_script)
+		var test_script = _create_script_instance(coll_script)
 		_doubler.set_strategy(_double_strategy)
 
 		# ----
 		# SHORTCIRCUIT
 		# skip_script logic
 		if(await _should_skip_script(test_script, coll_script)):
+			_orphan_counter.record_orphans(coll_script.get_full_name())
 			continue
 		# ----
 
@@ -754,6 +792,7 @@ func _test_the_scripts(indexes=[]):
 			coll_script.was_run = true
 			await _call_before_all(test_script, coll_script)
 
+		_orphan_counter.record_orphans(coll_script.get_full_name())
 		# Each test in the script
 		for i in range(coll_script.tests.size()):
 			_stubber.clear()
@@ -795,10 +834,13 @@ func _test_the_scripts(indexes=[]):
 
 		_current_test = null
 		_lgr.dec_indent()
-		_orphan_counter.print_orphans('script', _lgr)
 
 		if(_does_class_name_match(_inner_class_name, coll_script.inner_class_name)):
 			await _call_after_all(test_script, coll_script)
+
+		_orphan_counter.end_script(
+			coll_script.get_filename_and_inner(),
+			_log_level > 0)
 
 		_log_test_children_warning(test_script)
 		# This might end up being very resource intensive if the scripts
@@ -812,6 +854,7 @@ func _test_the_scripts(indexes=[]):
 			var script_sum = str(coll_script.get_passing_test_count(), '/', coll_script.get_ran_test_count(), ' passed.')
 			_lgr.log(script_sum, _lgr.fmts.bold)
 
+		test_script.queue_free()
 		end_script.emit()
 		# END TEST SCRIPT LOOP
 
@@ -820,7 +863,11 @@ func _test_the_scripts(indexes=[]):
 	# the orphans.  Without this, the last test's awaiter won't be freed
 	# yet, which messes with the orphans total.  There could also be objects
 	# the user has queued to be freed as well.
-	await get_tree().create_timer(.1).timeout
+	# Bump number from .1 to .5 when inner classes that were not run were still
+	# appearing as orphans.  Maybe this could loop through the orpahns looking
+	# for entries that were not freed but are queued to be freed and wait unitl
+	# they are all gone.  ".5" is a lot easier.
+	await get_tree().create_timer(.5).timeout
 	_end_run()
 
 
@@ -858,16 +905,6 @@ func _fail(text=''):
 		var call_count_text = get_call_count_text()
 		_current_test.line_number = line_number
 		_current_test.add_fail(call_count_text + text + line_text)
-
-
-# ------------------------------------------------------------------------------
-# This is "private" but is only used by the logger, it is not used internally.
-# It was either, make this weird method or "do it the right way" with signals
-# or some other crazy mechanism.
-# ------------------------------------------------------------------------------
-func _fail_for_error(err_text):
-	if(_current_test != null and treat_error_as_failure):
-		_fail(err_text)
 
 
 # ------------------------------------------------------------------------------
@@ -1008,9 +1045,9 @@ func run_tests(run_rest=false):
 # Adds a script to be run when test_scripts called.
 # ------------------------------------------------------------------------------
 func add_script(script):
-	if(!Engine.is_editor_hint()):
-		_test_collector.set_test_class_prefix(_inner_class_prefix)
-		_test_collector.add_script(script)
+	# if(!Engine.is_editor_hint()):
+	_test_collector.set_test_class_prefix(_inner_class_prefix)
+	_test_collector.add_script(script)
 
 
 # ------------------------------------------------------------------------------

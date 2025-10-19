@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://bjkn8mhx2fmt1"]
+
+[ext_resource type="Script" uid="uid://b8lvgepb64m8t" path="res://addons/gut/gui/gut_logo.gd" id="1_ba6lh"]
+[ext_resource type="Texture2D" uid="uid://dyxbmyvpkkcvs" path="res://addons/gut/images/GutIconV2_base.png" id="2_ba6lh"]
+[ext_resource type="Texture2D" uid="uid://dx0yxxn5q7doc" path="res://addons/gut/images/eyey.png" id="3_rc8fb"]
+
+[node name="Logo" type="Node2D"]
+script = ExtResource("1_ba6lh")
+
+[node name="BaseLogo" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_ba6lh")
+
+[node name="LeftEye" type="Sprite2D" parent="BaseLogo"]
+visible = false
+position = Vector2(-238, 16)
+texture = ExtResource("3_rc8fb")
+
+[node name="RightEye" type="Sprite2D" parent="BaseLogo"]
+visible = false
+position = Vector2(239, 16)
+texture = ExtResource("3_rc8fb")
+
+[node name="ResetTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="FaceButton" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_left = -141.0
+offset_top = -113.0
+offset_right = 140.0
+offset_bottom = 175.0
+
+[connection signal="timeout" from="ResetTimer" to="." method="_on_reset_timer_timeout"]
+[connection signal="pressed" from="FaceButton" to="." method="_on_face_button_pressed"]
