@@ -238,6 +238,7 @@ text = "Cancel"
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/name" to="." method="_on_name_focus_exited"]
 [connection signal="text_submitted" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/name" to="." method="_on_name_text_entered"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/prompt_overwrite" to="." method="_on_prompt_overwrite_toggled"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/conditions" to="." method="_on_conditions_focus_exited"]
 [connection signal="text_submitted" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/conditions" to="." method="_on_conditions_text_entered"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/type" to="." method="_on_type_item_selected"]
 [connection signal="focus_exited" from="MarginContainer/VBoxContainer/TabBar/Files/File/Common/expression" to="." method="_on_expression_focus_exited"]
