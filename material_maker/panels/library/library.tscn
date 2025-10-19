@@ -90,6 +90,7 @@ item_4/id = 4
 [connection signal="about_to_popup" from="Library/Filter/Libraries" to="." method="_on_Libraries_about_to_show"]
 [connection signal="item_collapsed" from="Library/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_mouse_selected" from="Library/Tree" to="." method="_on_tree_item_mouse_selected"]
+[connection signal="ready" from="Library/Tree" to="Library/Tree" method="_on_ready"]
 [connection signal="pressed" from="Library/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]
 [connection signal="about_to_popup" from="ItemMenu" to="Library" method="_on_PopupMenu_about_to_show"]
 [connection signal="index_pressed" from="ItemMenu" to="." method="_on_PopupMenu_index_pressed"]

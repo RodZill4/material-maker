@@ -222,6 +222,15 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
+				event.ctrl_pressed or event.meta_pressed):
+			mm_globals.handle_warped_drag_zoom(self,
+			(func() -> void:
+				#force connection lines to redraw
+				set_connection_lines_curvature(connection_lines_curvature)
+				zoom -= event.relative.y * 0.002
+			),get_viewport_rect().position.y,get_rect().size.y, get_local_mouse_position())
+
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
 	var padding := 8 * graph_node.get_global_transform().get_scale().x
@@ -1393,7 +1402,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 			curve.set_point_out(0, Vector2(cp_offset, 0))
 			curve.add_point(to)
 			curve.set_point_in(1, Vector2(-cp_offset, 0))
-			
+
 			if connection_lines_curvature > 0:
 				return curve.tessellate(5, 2.0)
 			else:
@@ -1433,7 +1442,7 @@ func _get_connection_line(from: Vector2, to: Vector2) -> PackedVector2Array:
 
 			var r : float = min(min(abs(to.y - from.y) * 0.25,
 					abs(from.x - to.x) * 0.25), max_radius)
-			
+
 			if from.x < to.x:
 				for i : float in range(pts):
 					var x : float = lerp(mid.x - r, mid.x, i/pts)
