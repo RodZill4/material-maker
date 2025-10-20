@@ -101,6 +101,8 @@ func set_preview(v : int):
 		preview = $Contents.get_child(0)
 	if v == 0:
 		if preview:
+			preview.custom_minimum_size = Vector2(0, 0)
+			preview.size = Vector2(0, 0)
 			preview.queue_free()
 		theme_type_variation = "MM_Reroute"
 		#set_theme_type("Reroute")

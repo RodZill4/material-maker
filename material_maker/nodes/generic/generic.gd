@@ -251,7 +251,8 @@ func _on_float_value_changed(new_value, merge_undo : bool = false, variable : St
 	set_generator_parameter(variable, new_value, merge_undo)
 
 func _on_color_changed(new_color, old_value, variable : String) -> void:
-	set_generator_parameter_ext(variable, new_color, MMType.serialize_value(old_value))
+	if generator and is_instance_valid(generator):
+		set_generator_parameter_ext(variable, new_color, MMType.serialize_value(old_value))
 
 func _on_file_changed(new_file, variable : String) -> void:
 	set_generator_parameter(variable, new_file)
