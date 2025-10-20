@@ -10,6 +10,7 @@ var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 var generic_button : TextureButton
 
+const SETTINGS_NODE_CLOSE_BUTTON := "node_close_button"
 
 const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic.tres")
 
@@ -432,7 +433,8 @@ func update_node() -> void:
 		remove_child(c)
 		c.free()
 	# Show or hide the close button
-	close_button.visible = generator.can_be_deleted()
+	close_button.visible = (generator.can_be_deleted()
+		if mm_globals.get_config(SETTINGS_NODE_CLOSE_BUTTON) else false)
 	# Rebuild node
 	update_title()
 	# Resize to minimum

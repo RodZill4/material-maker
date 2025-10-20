@@ -258,6 +258,16 @@ layout_mode = 2
 text = "Auto size comment node to selection"
 config_variable = "auto_size_comment"
 
+[node name="NodeMinimizeButton" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
+layout_mode = 2
+text = "Show minimize button on nodes"
+config_variable = "node_minimize_button"
+
+[node name="NodeCloseButton" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
+layout_mode = 2
+text = "Show close button on nodes"
+config_variable = "node_close_button"
+
 [node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
