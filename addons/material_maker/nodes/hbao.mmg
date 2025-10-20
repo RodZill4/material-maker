@@ -235,7 +235,7 @@
 			"ports": [
 				{
 					"group_size": 0,
-					"longdesc": "Greyscale heightmap",
+					"longdesc": "Grayscale heightmap",
 					"name": "input",
 					"shortdesc": "Input",
 					"type": "f"
