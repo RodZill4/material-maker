@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="7_qnupl"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="8_1w3oe"]
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
-[ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
+[ext_resource type="ButtonGroup" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true
@@ -118,9 +118,7 @@ autostart = true
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-grow_horizontal = 2
+offset_bottom = 54.0
 mouse_filter = 2
 theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3

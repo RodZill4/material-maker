@@ -116,6 +116,11 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	$SplashFade.visible = true
+
+	# unset clear color set from splash screen (use default)
+	RenderingServer.set_default_clear_color(Color(0.3,0.3,0.3,1.0))
+
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
@@ -221,6 +226,7 @@ func _ready() -> void:
 					"ok":
 						for f in files:
 							var graph_edit = new_graph_panel()
+							await splash_fade_out()
 							graph_edit.load_from_recovery(f)
 							graph_edit.update_tab_title()
 						hierarchy.update_from_graph_edit(get_current_graph_edit())
@@ -229,7 +235,6 @@ func _ready() -> void:
 							DirAccess.remove_absolute(f)
 
 	if get_current_graph_edit() == null:
-		await get_tree().process_frame
 		new_material()
 
 	size = get_window().size
@@ -246,6 +251,8 @@ func _ready() -> void:
 var menu_update_requested : bool = false
 
 func update_menus() -> void:
+	while has_node("root/MainWindow/SplashFade"):
+		await get_tree().process_frame
 	if ! menu_update_requested:
 		menu_update_requested = true
 		do_update_menus.call_deferred()
@@ -543,8 +550,20 @@ func new_graph_panel() -> GraphEdit:
 	projects_panel.get_projects().current_tab = graph_edit.get_index()
 	return graph_edit
 
+func splash_fade_out():
+	if has_node("/root/MainWindow/SplashFade"):
+		var tween = get_tree().create_tween()
+		tween.tween_property($SplashFade, "color",Color(0.0,0.0,0.0,0.0),
+				0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_delay(0.25)
+		tween.tween_callback(func():
+			$SplashFade.hide()
+			$SplashFade.free())
+	while has_node("/root/MainWindow/SplashFade"):
+		await get_tree().process_frame
+
 func new_material() -> void:
 	var graph_edit = new_graph_panel()
+	await splash_fade_out()
 	graph_edit.new_material()
 	graph_edit.top_generator.set_current_mesh(current_mesh)
 	graph_edit.update_tab_title()
@@ -1276,7 +1295,7 @@ func accept_dialog(dialog_text : String, cancel_button : bool = false, autowrap 
 func set_current_mesh(m : Mesh):
 	current_mesh = m
 	var current_graph_edit = get_current_graph_edit()
-	if current_graph_edit:
+	if current_graph_edit and current_graph_edit.top_generator:
 		current_graph_edit.top_generator.set_current_mesh(m)
 
 # Use this to investigate the connect bug
