@@ -1,0 +1,603 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "default_color",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_4",
+			"from_port": 0,
+			"to": "dilate_pass_3",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_1",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "dilate_pass_4",
+			"to_port": 0
+		},
+		{
+			"from": "dilate_pass_3",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "default_color",
+			"from_port": 0,
+			"to": "buffer_4",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_4",
+			"from_port": 0,
+			"to": "dilate_pass_3",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_5",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_5",
+			"from_port": 0,
+			"to": "dilate_pass_1",
+			"to_port": 0
+		}
+	],
+	"label": "Dilate",
+	"longdesc": "Dilates the white areas of a mask, using the colors of an optional input",
+	"name": "dilate2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": 486.103820800781,
+				"y": -848.979248046875
+			},
+			"parameters": {
+				"param0": 11.0,
+				"param1": 0.1,
+				"param2": 0.0,
+				"param3": 0.0,
+				"param4": true,
+				"param5": true
+			},
+			"seed": 1419.0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_1",
+							"widget": "s"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_4",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_5",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the input images",
+					"name": "param0",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_1",
+							"widget": "d"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "d"
+						}
+					],
+					"longdesc": "The length of the dilate effect",
+					"name": "param1",
+					"shortdesc": "Length",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_3",
+							"widget": "amount"
+						}
+					],
+					"longdesc": "0 to generate a gradient to black while dilating, 1 to fill with input color",
+					"name": "param2",
+					"shortdesc": "Fill",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_4",
+							"widget": "distance"
+						}
+					],
+					"name": "param3",
+					"shortdesc": "Distance function",
+					"type": "linked_control"
+				},
+				{
+					"label": "Tile",
+					"linked_widgets": [
+						{
+							"node": "dilate_pass_1",
+							"widget": "tile"
+						},
+						{
+							"node": "dilate_pass_4",
+							"widget": "tile"
+						}
+					],
+					"name": "param4",
+					"type": "linked_control"
+				},
+				{
+					"label": "Filter",
+					"linked_widgets": [
+						{
+							"node": "buffer_5",
+							"widget": "filter"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "filter"
+						},
+						{
+							"node": "buffer_4",
+							"widget": "filter"
+						}
+					],
+					"longdesc": "the filter property, uses bilinear filtering if set",
+					"name": "param5",
+					"shortdesc": "Filter",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -124.306457519531,
+				"y": -462.481384277344
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "The input mask whose white areas will be dilated",
+					"name": "mask",
+					"shortdesc": "Mask",
+					"type": "f"
+				},
+				{
+					"group_size": 0.0,
+					"longdesc": "The optional source for colors",
+					"name": "source",
+					"shortdesc": "Source",
+					"type": "rgb"
+				}
+			],
+			"seed": 317.0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 1126.21105957031,
+				"y": -488.481384277344
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "Shows the dilated image",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "rgb"
+				}
+			],
+			"seed": -14401.0,
+			"seed_locked": true,
+			"type": "ios"
+		},
+		{
+			"name": "dilate_pass_1",
+			"node_position": {
+				"x": 507.326843261719,
+				"y": -562.240783691406
+			},
+			"parameters": {
+				"d": 0.1,
+				"s": 11.0,
+				"tile": true
+			},
+			"seed": 71939.0,
+			"seed_locked": true,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec3 $(name)_distance_h(vec2 uv, bool tile) {",
+					"\tvec2 e = vec2(1.0/$s, 0.0);",
+					"\tint steps = int($s*$d);",
+					"\tfloat rv = 0.0;",
+					"\tvec2 source_uv;",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tsource_uv = uv+float(i)*e;",
+					"\t\tif ((tile || (source_uv.x >= 0.0 && source_uv.x <= 1.0)) && $in(source_uv) > 0.5) {",
+					"\t\t\trv = 1.0-float(i)*e.x/$d;",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t\tsource_uv = uv-float(i)*e;",
+					"\t\tif ((tile || (source_uv.x >= 0.0 && source_uv.x <= 1.0)) && $in(source_uv) > 0.5) {",
+					"\t\t\trv = 1.0-float(i)*e.x/$d;",
+					"\t\t\tbreak;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec3(rv, source_uv);",
+					"}",
+					""
+				],
+				"name": "Dilate pass 1",
+				"outputs": [
+					{
+						"rgb": "vec3($(name)_distance_h($uv, $tile).xy, 0.0)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 6.0,
+						"label": "",
+						"last": 12.0,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": true,
+						"label": "Tile",
+						"name": "tile",
+						"type": "boolean"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "dilate_pass_4",
+			"node_position": {
+				"x": 558.310546875,
+				"y": -294.577270507812
+			},
+			"parameters": {
+				"d": 0.1,
+				"distance": 0.0,
+				"s": 11.0,
+				"tile": true
+			},
+			"seed": 50297.0,
+			"shader_model": {
+				"code": "",
+				"global": [
+					"float dilate_distance_euclidian(float x, float y, float d) {",
+					"\treturn 1.0-sqrt((1.0-x)*(1.0-x)+y*y/d/d);",
+					"}",
+					"",
+					"float dilate_distance_manhattan(float x, float y, float d) {",
+					"\treturn 1.0-(abs(1.0-x)+abs(y)/d);",
+					"}",
+					"",
+					"float dilate_distance_chebyshev(float x, float y, float d) {",
+					"\treturn 1.0-max(abs(1.0-x), abs(y)/d);",
+					"}",
+					"",
+					""
+				],
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					}
+				],
+				"instance": [
+					"vec3 $(name)_distance_v(vec2 uv, bool tile) {",
+					"\tvec2 e = vec2(0.0, 1.0/$s);",
+					"\tint steps = int($s*$d);",
+					"\tvec3 p = vec3($in(uv).xy, uv.y);",
+					"\tvec2 source_uv;",
+					"\tfor (int i = 0; i < steps; ++i) {",
+					"\t\tvec2 dx = float(i)*e;",
+					"\t\tsource_uv = uv+dx;",
+					"\t\tif (tile || (source_uv.y >= 0.0 && source_uv.y < 1.0)) {",
+					"\t\t\tvec3 p2 = vec3($in(source_uv).xy, source_uv.y);",
+					"\t\t\tif (p2.x > p.x) {",
+					"\t\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t\tsource_uv = uv-dx;",
+					"\t\tif (tile || (source_uv.y >= 0.0 && source_uv.y < 1.0)) {",
+					"\t\t\tvec3 p2 = vec3($in(source_uv).xy, source_uv.y);",
+					"\t\t\tif (p2.x > p.x) {",
+					"\t\t\t\tp2.x = dilate_distance_$distance(p2.x, dx.y, $d);",
+					"\t\t\t\tp = mix(p, p2, step(p.x, p2.x));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn p;",
+					"}",
+					""
+				],
+				"name": "Dilate pass 2",
+				"outputs": [
+					{
+						"rgb": "$(name)_distance_v($uv, $tile)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 6.0,
+						"label": "",
+						"last": 12.0,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"default": 2.0,
+						"label": "",
+						"name": "distance",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Euclidian",
+								"value": "euclidian"
+							},
+							{
+								"name": "Manhattan",
+								"value": "manhattan"
+							},
+							{
+								"name": "Chebyshev",
+								"value": "chebyshev"
+							}
+						]
+					},
+					{
+						"default": true,
+						"label": "Tile",
+						"name": "tile",
+						"type": "boolean"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "default_color",
+			"node_position": {
+				"x": 284.131286621094,
+				"y": -66.0206604003906
+			},
+			"parameters": {
+				"default": {
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
+					"type": "Color"
+				}
+			},
+			"seed": 939.0,
+			"type": "default_color"
+		},
+		{
+			"name": "dilate_pass_3",
+			"node_position": {
+				"x": 759.301208496094,
+				"y": -172.368988037109
+			},
+			"parameters": {
+				"amount": 0.0
+			},
+			"seed": 50311.0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"label": "",
+						"name": "distance",
+						"type": "rgb"
+					},
+					{
+						"default": "vec3(1.0)",
+						"label": "",
+						"name": "source",
+						"type": "rgb"
+					}
+				],
+				"instance": "",
+				"name": "Dilate pass 3",
+				"outputs": [
+					{
+						"rgb": "$source($distance($uv).yz)*mix($distance($uv).x, 1.0, $amount)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "amount",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": 544.77001953125,
+				"y": -431.83056640625
+			},
+			"parameters": {
+				"f32": true,
+				"filter": false,
+				"mipmap": false,
+				"size": 11.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": 930.4814453125,
+				"y": -357.159149169922
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": false,
+				"size": 11.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_4",
+			"node_position": {
+				"x": 507.171508789062,
+				"y": -41.1798095703125
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": false,
+				"size": 11.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_5",
+			"node_position": {
+				"x": 264.530487060547,
+				"y": -543.795166015625
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": false,
+				"size": 11.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		}
+	],
+	"parameters": {
+		"param0": 11.0,
+		"param1": 0.1,
+		"param2": 0.0,
+		"param3": 0.0,
+		"param4": true,
+		"param5": true
+	},
+	"seed_int": 0,
+	"shortdesc": "Dilate",
+	"type": "graph"
+}

@@ -2946,7 +2946,7 @@
 				"param2": 0.0
 			},
 			"tree_item": "Filter/Dilate",
-			"type": "dilate"
+			"type": "dilate2"
 		},
 		{
 			"display_name": "Bevel",

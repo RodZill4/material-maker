@@ -35,6 +35,7 @@ The **Dilate** node accepts the following parameters:
   the source (or the white color). Values in between mix both methods
 * the *distance* function used for the Dilate operation (Euclidian, Manhattan or Chebyshev)
 * a *tile* option to create a tileable result
+* the *filter* property; if set, filtering will be applied
 
 Example images
 ++++++++++++++
