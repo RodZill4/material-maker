@@ -180,6 +180,9 @@ func zoom(amount : float):
 func on_gui_input(event : InputEvent) -> void:
 	if camera_controller.process_event(event, get_viewport()):
 		accept_event()
+
+	# TODO check what parts of this are ACTUALLY still necessary.
+	# I (Jowan) believe a bunch of this is now outdated, but unfortunately not ALL of it.
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
 			# Don't stop rotating the preview on mouse wheel usage (zoom change).
