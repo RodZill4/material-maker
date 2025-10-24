@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://drg0s4lftblx3"]
 
-[ext_resource type="Script" path="res://material_maker/windows/preferences/bool_option.gd" id="1"]
+[ext_resource type="Script" uid="uid://r578e00kfyhy" path="res://material_maker/windows/preferences/bool_option.gd" id="1"]
 
 [node name="BooleanOption" type="CheckBox"]
 offset_right = 308.0

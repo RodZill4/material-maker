@@ -1,105 +1,202 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1j6a4jdggjm6"]
+[gd_scene load_steps=7 format=3 uid="uid://c1j6a4jdggjm6"]
 
 [ext_resource type="PackedScene" uid="uid://drg0s4lftblx3" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
+[ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-416.ttf" id="2_vp06c"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
+[ext_resource type="Script" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 
 [node name="Preferences" type="Window"]
+oversampling_override = 1.0
 title = "Preferences"
 position = Vector2i(0, 36)
-size = Vector2i(610, 505)
+size = Vector2i(800, 450)
 exclusive = true
 script = ExtResource("2")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+split_offset = 100
+dragger_visibility = 2
+
+[node name="PreferenceCategory" type="MarginContainer" parent="HSplitContainer"]
+custom_minimum_size = Vector2(86.8, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Tree" type="Tree" parent="HSplitContainer/PreferenceCategory" groups=["updated_from_locale"]]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/item_margin = 2
+theme_override_fonts/font = ExtResource("2_vp06c")
+theme_override_font_sizes/font_size = 18
+auto_tooltip = false
+script = ExtResource("3_mlqij")
+
+[node name="PreferencesPanel" type="MarginContainer" parent="HSplitContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel"]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 current_tab = 0
+tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
-[node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="General" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 metadata/_tab_index = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"MM_PreferenceMargin"
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer"]
 layout_mode = 2
-text = "Language:"
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Language" type="OptionButton" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="Language" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label2" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language"]
+layout_mode = 2
+text = "Language"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Language" type="OptionButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 script = ExtResource("4")
 config_variable = "locale"
 
-[node name="InstallLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="InstallLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language/HBoxContainer"]
 layout_mode = 2
 text = "Install"
 
-[node name="DownloadLanguage" type="Button" parent="VBoxContainer/TabContainer/General/HBoxContainer"]
+[node name="DownloadLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language/HBoxContainer"]
 layout_mode = 2
 text = "Download"
 
-[node name="Space1" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="Spacer3" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="ConfirmQuit" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="ConfirmQuit" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/ConfirmQuit"]
+layout_mode = 2
+text = "Confirm when quitting the application"
+
+[node name="ConfirmQuit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/ConfirmQuit" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
 config_variable = "confirm_quit"
 
-[node name="ConfirmCloseProject" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="ConfirmCloseProject" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/ConfirmCloseProject"]
 layout_mode = 2
 text = "Confirm when closing a project"
+
+[node name="ConfirmCloseProject" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/ConfirmCloseProject" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
 config_variable = "confirm_close_project"
 
-[node name="Space3" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="PreferGlobalMenu" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/PreferGlobalMenu"]
+layout_mode = 2
+text = "Prefer global menu (requires restart)"
+
+[node name="GuiPreferGlobalMenu" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/PreferGlobalMenu" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+text = "On"
+flat = false
+config_variable = "prefer_global_menu"
+
+[node name="Spacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="GuiScale" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="GuiScale" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/GuiScale"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/GuiScale"]
 layout_mode = 2
-text = "UI scale (0 = auto):"
+text = "UI scale (0 = auto)"
 
-[node name="GuiScale" parent="VBoxContainer/TabContainer/General/GuiScale" instance=ExtResource("3")]
+[node name="GuiScale" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/GuiScale" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
+size_flags_horizontal = 10
 config_variable = "ui_scale"
 value = 0.0
 max_value = 2.0
 step = 0.01
 float_only = true
 
-[node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="Gui3DPreviewResolution" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/Gui3DPreviewResolution"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Gui3DPreviewResolution"]
 layout_mode = 2
 tooltip_text = "Higher values result in better antialiasing, but are more demanding to render."
 mouse_filter = 1
-text = "3D preview resolution:"
+text = "3D preview resolution"
 
-[node name="Gui3DPreviewResolution" parent="VBoxContainer/TabContainer/General/Gui3DPreviewResolution" instance=ExtResource("3")]
+[node name="Gui3DPreviewResolution" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Gui3DPreviewResolution" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "Higher values result in better antialiasing, but are more demanding to render."
 config_variable = "ui_3d_preview_resolution"
 value = 2.0
@@ -108,19 +205,22 @@ max_value = 2.5
 step = 0.1
 float_only = true
 
-[node name="Gui3DPreviewTesselationDetail" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="Gui3DPreviewTesselationDetail" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/Gui3DPreviewTesselationDetail"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Gui3DPreviewTesselationDetail"]
 layout_mode = 2
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
 Don't increase this setting above 256 on slower machines!
 This only affects the 3D preview when using tesselation, not parallax occlusion mapping."
 mouse_filter = 1
-text = "3D preview tesselation detail:"
+text = "3D preview tesselation detail"
 
-[node name="Gui3DPreviewTesselationDetail" parent="VBoxContainer/TabContainer/General/Gui3DPreviewTesselationDetail" instance=ExtResource("3")]
+[node name="Gui3DPreviewTesselationDetail" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Gui3DPreviewTesselationDetail" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "Higher values result in better tesselation quality, but are more demanding to render and require more memory.
 Don't increase this setting above 256 on slower machines!
 This only affects the 3D preview when using tesselation, not parallax occlusion mapping."
@@ -131,35 +231,57 @@ max_value = 1024.0
 step = 1.0
 float_only = true
 
-[node name="Gui3DPreviewSunShadow" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="Gui3DPreviewSunShadow" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Gui3DPreviewSunShadow"]
+layout_mode = 2
+text = "3D preview sun shadow (requires restart)"
+
+[node name="Gui3DPreviewSunShadow" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Gui3DPreviewSunShadow" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "If enabled, the DirectionalLight3D will cast shadows in the 3D preview. This has a moderate performance cost.
 The effect of this shadow is only visible when using a tesselated mesh or a custom object.
 Changes to this setting are only applied on application restart."
-text = "3D preview sun shadow (requires restart)"
+text = "On"
+flat = false
 config_variable = "ui_3d_preview_sun_shadow"
 
-[node name="Space2" type="Control" parent="VBoxContainer/TabContainer/General"]
+[node name="Spacer2" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="EnableVSync" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+[node name="EnableVSync" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Enable VSync"
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/EnableVSync"]
+layout_mode = 2
+text = "VSync"
+
+[node name="EnableVSync" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/EnableVSync" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
 config_variable = "vsync"
 
-[node name="FPSLimit" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="FPSLimit" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="Label1" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/FPSLimit"]
 layout_mode = 2
-tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life on laptops."
-mouse_filter = 1
-text = "FPS limit:"
+text = "FPS Limit"
 
-[node name="FPSLimit" parent="VBoxContainer/TabContainer/General/FPSLimit" instance=ExtResource("3")]
+[node name="FPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/FPSLimit" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
 config_variable = "fps_limit"
@@ -169,19 +291,18 @@ max_value = 200.0
 step = 1.0
 float_only = true
 
-[node name="Space" type="Control" parent="VBoxContainer/TabContainer/General/FPSLimit"]
-custom_minimum_size = Vector2(15, 0)
+[node name="IdleFPSLimit" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/IdleFPSLimit"]
 layout_mode = 2
-tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life on laptops."
-mouse_filter = 1
-text = "Idle FPS limit:"
+text = "Idle FPS Limit"
 
-[node name="IdleFPSLimit" parent="VBoxContainer/TabContainer/General/FPSLimit" instance=ExtResource("3")]
+[node name="IdleFPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/IdleFPSLimit" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
+size_flags_horizontal = 10
 tooltip_text = "FPS limit to use when window isn't focused to save CPU/GPU resources.
 Lower values may help reducing power usage, but could increase response time when window is focused again."
 config_variable = "idle_fps_limit"
@@ -191,18 +312,37 @@ max_value = 20.0
 step = 1.0
 float_only = true
 
-[node name="Bake" type="GridContainer" parent="VBoxContainer/TabContainer"]
+[node name="Space3" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Bake" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
-columns = 2
 metadata/_tab_index = 1
 
-[node name="LabelRayCount" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake"]
 layout_mode = 2
-text = "Ray count:"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"MM_PreferenceMargin"
 
-[node name="RayCount" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RayCount" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="LabelRayCount" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/RayCount"]
+layout_mode = 2
+text = "Ray Count"
+
+[node name="RayCount" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/RayCount" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
 config_variable = "bake_ray_count"
 value = 64.0
 min_value = 8.0
@@ -210,12 +350,18 @@ max_value = 256.0
 step = 1.0
 float_only = true
 
-[node name="LabelRayLength" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="RayLength" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Ray length:"
+columns = 2
 
-[node name="RayLength" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="LabelRayLength" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/RayLength"]
 layout_mode = 2
+text = "Ray Length"
+
+[node name="RayLength" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/RayLength" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
 config_variable = "bake_ao_ray_dist"
 value = 128.0
 min_value = 32.0
@@ -223,24 +369,36 @@ max_value = 1024.0
 step = 1.0
 float_only = true
 
-[node name="LabelRayBias" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="RayBias" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Ray bias:"
+columns = 2
 
-[node name="RayBias" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="LabelRayBias" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/RayBias"]
 layout_mode = 2
+text = "Ray Bias"
+
+[node name="RayBias" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/RayBias" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
 config_variable = "bake_ao_ray_bias"
 value = 0.005
 max_value = 1024.0
 step = 0.001
 float_only = true
 
-[node name="LabelDenoiseRadius" type="Label" parent="VBoxContainer/TabContainer/Bake"]
+[node name="DenoiseRadius" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Denoise radius:"
+columns = 2
 
-[node name="DenoiseRadius" parent="VBoxContainer/TabContainer/Bake" instance=ExtResource("3")]
+[node name="LabelDenoiseRadius" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/DenoiseRadius"]
 layout_mode = 2
+text = "Denoise Radius"
+
+[node name="DenoiseRadius" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/MarginContainer/VBoxContainer/DenoiseRadius" instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
 config_variable = "bake_denoise_radius"
 value = 3.0
 min_value = 1.0
@@ -248,59 +406,105 @@ max_value = 10.0
 step = 1.0
 float_only = true
 
-[node name="Graph" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Graph" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="AutoSizeComment" parent="VBoxContainer/TabContainer/Graph" instance=ExtResource("1")]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"MM_PreferenceMargin"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AutoSizeComment" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/MarginContainer/VBoxContainer/AutoSizeComment"]
 layout_mode = 2
 text = "Auto size comment node to selection"
+
+[node name="AutoSizeComment" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/MarginContainer/VBoxContainer/AutoSizeComment" instance=ExtResource("1")]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
 config_variable = "auto_size_comment"
 
-[node name="Export" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+[node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="AnimationLabel" type="Label" parent="VBoxContainer/TabContainer/Export"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_type_variation = &"MM_PreferenceMargin"
+
+[node name="RememberAnimExport" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AnimationLabel" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/MarginContainer/RememberAnimExport"]
 layout_mode = 2
 text = "Animation"
 
-[node name="RememberAnimExport" parent="VBoxContainer/TabContainer/Export" instance=ExtResource("1")]
+[node name="RememberAnimExport" type="GridContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/MarginContainer/RememberAnimExport"]
 layout_mode = 2
-tooltip_text = "Whether to save export parameters in the export animation dialog (i.e. size, begin, end etc.)"
+columns = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/MarginContainer/RememberAnimExport/RememberAnimExport"]
+layout_mode = 2
 text = "Remember last export settings"
+
+[node name="RememberAnimExport" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/MarginContainer/RememberAnimExport/RememberAnimExport" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Whether to save export parameters in the export animation dialog (i.e. size, begin, end etc.)"
+text = "On"
+flat = false
 config_variable = "remember_anim_export"
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Apply" type="Button" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
+[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
+[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(60, 0)
+[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Cancel"
 
-[connection signal="about_to_popup" from="." to="." method="_on_Preferences_about_to_show"]
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
-[connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/General/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="item_selected" from="HSplitContainer/PreferenceCategory/Tree" to="HSplitContainer/PreferenceCategory/Tree" method="_on_item_selected"]
+[connection signal="ready" from="HSplitContainer/PreferenceCategory/Tree" to="HSplitContainer/PreferenceCategory/Tree" method="_on_ready"]
+[connection signal="minimum_size_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Language/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

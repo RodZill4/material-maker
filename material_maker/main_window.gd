@@ -253,7 +253,7 @@ func update_menus() -> void:
 func do_update_menus() -> void:
 	# Create menus
 	var menu_bar_class
-	if DisplayServer.has_feature(DisplayServer.FEATURE_GLOBAL_MENU):
+	if OS.get_name() == "macOS" and mm_globals.get_config("prefer_global_menu"):
 		menu_bar_class = mm_globals.menu_manager.MenuBarDisplayServer
 	else:
 		menu_bar_class = mm_globals.menu_manager.MenuBarGodot
