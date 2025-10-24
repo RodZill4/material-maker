@@ -285,6 +285,7 @@ func _notification(what):
 
 
 func update() -> void:
+	await get_tree().process_frame
 	var is_hovered := Rect2(Vector2(), size).has_point(get_local_mouse_position()) or mode == Modes.SLIDING
 	$Slider.add_theme_stylebox_override("fill", get_theme_stylebox("fill_hover" if is_hovered else "fill_normal"))
 	$Slider.add_theme_stylebox_override("background", get_theme_stylebox("hover" if is_hovered else "normal"))
