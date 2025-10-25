@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://d24qj0s2ime0p"]
 
 [ext_resource type="Script" uid="uid://cms1wqfr4yeb5" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
-[ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
+[ext_resource type="Texture2D" uid="uid://6b2hhcgw86n8" path="res://splash_screen/splash_title.svg" id="2_uba88"]
 [ext_resource type="FontFile" uid="uid://dttdyavpec18b" path="res://material_maker/fonts/vegur_regular.otf" id="3_m0b76"]
 [ext_resource type="Texture2D" uid="uid://dfy67bw73b836" path="res://splash_screen/arrow.svg" id="5_o00vo"]
 [ext_resource type="Shader" uid="uid://b3x7551t5ha0u" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
@@ -53,7 +53,7 @@ layout_mode = 0
 offset_top = 34.0
 offset_right = 435.0
 offset_bottom = 155.0
-texture = ExtResource("2_ryhtq")
+texture = ExtResource("2_uba88")
 
 [node name="MM" type="Label" parent="SplashScreen/TextureRect"]
 layout_mode = 0
