@@ -28,6 +28,8 @@ The **Generalized Kuwahara** node accepts the following parameters:
 
 * **Size** of the filter.
 
+* **Iterations** affects number of times the filter is applied.
+
 * Whether a **Buffer** is used to sample the input before the filter.
 
 Example images
