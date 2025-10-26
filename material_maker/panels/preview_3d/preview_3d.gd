@@ -232,7 +232,7 @@ func on_gui_input(event : InputEvent) -> void:
 			else:
 				motion.y = 0
 			var camera_basis = camera.global_transform.basis
-			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CTRL) else 1 if Input.is_key_pressed(KEY_SHIFT) else 0
+			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CTRL) else 0
 			if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 				objects_pivot.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
 				objects_pivot.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
