@@ -34,9 +34,10 @@ render_target_update_mode = 0
 [node name="CameraRotation2" type="Node3D" parent="PreviewGenerator/CameraPosition/CameraRotation1"]
 
 [node name="Camera3D" type="Camera3D" parent="PreviewGenerator/CameraPosition/CameraRotation1/CameraRotation2"]
-transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2, 4)
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2.275, 4)
 environment = SubResource("2")
 current = true
+fov = 70.0
 
 [node name="Sun" type="DirectionalLight3D" parent="PreviewGenerator"]
 transform = Transform3D(1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0, 0)
