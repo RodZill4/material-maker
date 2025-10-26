@@ -663,9 +663,40 @@ func get_material_node() -> MMGenMaterial:
 	return null
 
 func export_material(export_prefix, profile) -> void:
+	var exports : Array
 	for g in top_generator.get_children():
-		if g.has_method("export_material"):
+		if g.has_method("get_export_profiles"):
 			await g.export_material(export_prefix, profile)
+		elif g.has_method("export_material"):
+			exports.append(g)
+
+	# Show progress for additional exports (export nodes)
+	var dim_color_rect = ColorRect.new()
+	dim_color_rect.modulate = Color(0.05, 0.05, 0.05, 0.5)
+
+	var progress_dialog = null
+	var progress_dialog_scene = load(
+			"res://material_maker/windows/progress_window/progress_window.tscn")
+	if progress_dialog_scene != null:
+		progress_dialog = progress_dialog_scene.instantiate()
+	mm_globals.main_window.add_child(dim_color_rect)
+	
+	await get_tree().process_frame
+	progress_dialog.set_text("Saving additional exports...")
+	get_tree().get_root().add_child(progress_dialog)
+	progress_dialog.set_progress(0)
+
+	var export_count = 0.0
+	for g in exports:
+		await g.export_material(export_prefix, profile)
+		export_count += 1.0
+		progress_dialog.set_progress(export_count / len(exports))
+
+	if progress_dialog != null:
+		# Wait a little to allow progress bar to complete
+		await get_tree().create_timer(0.25).timeout
+		dim_color_rect.queue_free()
+		progress_dialog.queue_free()
 
 
 # Cut / copy / paste / duplicate

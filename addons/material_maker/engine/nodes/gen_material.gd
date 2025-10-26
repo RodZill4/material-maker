@@ -695,6 +695,9 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
 	if progress_dialog_scene != null:
 		progress_dialog = progress_dialog_scene.instantiate()
+	var dim_color_rect = ColorRect.new()
+	dim_color_rect.modulate = Color(0.05, 0.05, 0.05, 0.5)
+	mm_globals.main_window.add_child(dim_color_rect)
 	get_tree().get_root().add_child(progress_dialog)
 	progress_dialog.set_text("Exporting material")
 	progress_dialog.set_progress(0)
@@ -797,6 +800,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					progress_dialog.set_progress(float(processed_files)/float(total_files))
 	if progress_dialog != null:
 		progress_dialog.queue_free()
+		dim_color_rect.queue_free()
 	if error_files == 0:
 		mm_globals.set_tip_text("Files succesfully exported as \"%s\"" % prefix, 5, 1)
 		return
