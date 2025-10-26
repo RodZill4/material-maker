@@ -258,6 +258,7 @@ func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 
 func _on_Libraries_about_to_show():
 	var popup : PopupMenu = libraries_button.get_popup()
+	popup.hide_on_checkable_item_selection = false
 	var unload : PopupMenu = null
 	for c in popup.get_children():
 		if c is PopupMenu:
@@ -315,6 +316,7 @@ func _on_Libraries_id_pressed(id : int) -> void:
 					library_manager.load_library(files[0])
 		_:
 			library_manager.toggle_library(id)
+			libraries_button.get_popup().set_item_checked(id, library_manager.is_library_enabled(id))
 
 func _on_Libraries_Unload_id_pressed(id : int) -> void:
 	library_manager.unload_library(id)
