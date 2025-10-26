@@ -9,38 +9,37 @@
 			"interpolation": 1,
 			"points": [
 				{
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"pos": 0,
-					"r": 0
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"pos": 0.0,
+					"r": 0.0
 				},
 				{
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"pos": 1,
-					"r": 1
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"pos": 1.0,
+					"r": 1.0
 				}
 			],
 			"type": "Gradient"
 		},
-		"repeat": 1,
-		"rotate": 0
+		"mirror": false,
+		"repeat": 1.0,
+		"rotate": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "float $(name_uv)_r = 0.5+(cos($rotate*0.01745329251)*($uv.x-0.5)+sin($rotate*0.01745329251)*($uv.y-0.5))/(cos(abs(mod($rotate, 90.0)-45.0)*0.01745329251)*1.41421356237);",
 		"global": "",
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
 		"name": "Gradient",
 		"outputs": [
 			{
 				"longdesc": "An image showing the gradient",
-				"rgba": "$gradient(fract($(name_uv)_r*$repeat))",
+				"rgba": "$gradient($mirror ? 2.0*(0.5-abs(fract($(name_uv)_r*$repeat)-0.5)) : fract($(name_uv)_r*$repeat))",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}
@@ -48,45 +47,53 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 1,
+				"default": 1.0,
 				"label": "Repeat",
 				"longdesc": "Number of repetitions of the gradient",
-				"max": 32,
-				"min": 1,
+				"max": 32.0,
+				"min": 1.0,
 				"name": "repeat",
 				"shortdesc": "Repeat",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			},
 			{
 				"control": "Radius1.a",
-				"default": 0,
+				"default": 0.0,
 				"label": "Rotate",
 				"longdesc": "Angle of the gradient pattern",
-				"max": 180,
-				"min": -180,
+				"max": 180.0,
+				"min": -180.0,
 				"name": "rotate",
 				"shortdesc": "Rotate",
 				"step": 0.1,
 				"type": "float"
 			},
 			{
+				"default": false,
+				"label": "Mirror",
+				"longdesc": "Mirrors the gradient",
+				"name": "mirror",
+				"shortdesc": "Mirrors the gradient",
+				"type": "boolean"
+			},
+			{
 				"default": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
