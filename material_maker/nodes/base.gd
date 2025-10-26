@@ -5,6 +5,7 @@ class_name MMGraphNodeBase
 var minimize_button : TextureButton
 var randomness_button : TextureButton
 var buffer_button : TextureButton
+var custom_button : TextureButton
 
 var show_inputs : bool = false
 var show_outputs : bool = false
@@ -15,7 +16,6 @@ const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomne
 const RANDOMNESS_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
 const BUFFER_ICON : Texture2D = preload("res://material_maker/icons/buffer.tres")
 const BUFFER_PAUSED_ICON : Texture2D = preload("res://material_maker/icons/buffer_paused.tres")
-const CUSTOM_ICON : Texture2D = preload("res://material_maker/icons/custom.png")
 const PREVIEW_ICON : Texture2D = preload("res://material_maker/icons/preview.png")
 const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/preview_locked.png")
 
@@ -25,6 +25,9 @@ const MENU_SHARE_NODE : int        = 1001
 const MENU_BUFFER_PAUSE : int  = 0
 const MENU_BUFFER_RESUME : int = 1
 const MENU_BUFFER_DUMP : int   = 2
+
+const MENU_CUSTOM_LOAD : int = 0
+const MENU_CUSTOM_SAVE : int = 1
 
 const TIME_COLOR_BAD : Color = Color(1, 0, 0)
 const TIME_COLOR_AVG : Color = Color(1, 1, 0)
@@ -64,6 +67,9 @@ func init_buttons():
 	randomness_button.tooltip_text = tr("Change seed (left mouse button) / Show seed menu (right mouse button)")
 	buffer_button = add_button(BUFFER_ICON, null, buffer_button_create_popup)
 	buffer_button.visible = false
+	custom_button = add_button(get_theme_icon("draw", "MM_Icons"), edit_generator, custom_button_create_popup)
+	custom_button.tooltip_text = tr("Edit node (left mouse button) / Show node menu (right mouse button)")
+	custom_button.visible = false
 
 func on_minimize_pressed():
 	generator.minimized = !generator.minimized
@@ -83,8 +89,8 @@ func randomness_button_create_popup():
 		menu.add_item(tr("Paste seed"), 2)
 	add_child(menu)
 	mm_globals.popup_menu(menu, self)
-	menu.connect("popup_hide", Callable(menu, "queue_free"))
-	menu.connect("id_pressed", Callable(self, "_on_seed_menu"))
+	menu.popup_hide.connect(menu.queue_free)
+	menu.id_pressed.connect(_on_seed_menu)
 
 func buffer_button_create_popup():
 	var menu : PopupMenu = PopupMenu.new()
@@ -97,8 +103,17 @@ func buffer_button_create_popup():
 		menu.add_item(tr("Dump buffers"), MENU_BUFFER_DUMP)
 	add_child(menu)
 	mm_globals.popup_menu(menu, self)
-	menu.connect("popup_hide",Callable(menu,"queue_free"))
-	menu.connect("id_pressed",Callable(self,"_on_buffer_menu"))
+	menu.popup_hide.connect(menu.queue_free)
+	menu.id_pressed.connect(_on_buffer_menu)
+
+func custom_button_create_popup():
+	var menu : PopupMenu = PopupMenu.new()
+	menu.add_item(tr("Load"), MENU_CUSTOM_LOAD)
+	menu.add_item(tr("Save"), MENU_CUSTOM_SAVE)
+	add_child(menu)
+	mm_globals.popup_menu(menu, self)
+	menu.popup_hide.connect(menu.queue_free)
+	menu.id_pressed.connect(_on_custom_menu)
 
 func on_generator_changed(g):
 	if generator == g:
@@ -172,9 +187,7 @@ func _draw() -> void:
 	var inputs = generator.get_input_defs()
 	var font : Font = get_theme_font("default_font")
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
-		draw_texture_rect(CUSTOM_ICON, Rect2(4, 11, 7, 7), false, color)
-		var node_title_label : Label = get_titlebar_hbox().get_child(0)
-		node_title_label.position.x = 8
+		custom_button.visible = true
 	for i in range(inputs.size()):
 		if show_inputs:
 			var string : String = TranslationServer.translate(inputs[i].shortdesc) if inputs[i].has("shortdesc") else TranslationServer.translate(inputs[i].name)
@@ -268,6 +281,13 @@ func _on_buffer_menu(id):
 		MENU_BUFFER_DUMP:
 			for b in generator.get_buffers():
 				mm_deps.print_stats(b)
+
+func _on_custom_menu(id):
+	match id:
+		MENU_CUSTOM_LOAD:
+			load_generator()
+		MENU_CUSTOM_SAVE:
+			save_generator()
 
 var doubleclicked : bool = false
 
@@ -438,6 +458,56 @@ func edit_generator() -> void:
 		edit_generator_prev_state = generator.get_parent().serialize().duplicate(true)
 		edit_generator_next_state = {}
 		generator.edit(self)
+
+func load_generator() -> void:
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	dialog.min_size = Vector2(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dialog.add_filter("*.mmg;Material Maker Generator")
+	if mm_globals.config.has_section_key("path", "template"):
+		dialog.current_dir = mm_globals.config.get_value("path", "template")
+	var files = await dialog.select_files()
+	if files.size() > 0:
+		do_load_generator(files[0])
+
+func do_load_generator(file_name : String) -> void:
+	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
+	var new_generator = null
+	if file_name.ends_with(".mmn"):
+		var file : FileAccess = FileAccess.open(file_name, FileAccess.READ)
+		if file != null:
+			new_generator = MMGenShader.new()
+			var test_json_conv = JSON.new()
+			test_json_conv.parse(file.get_as_text())
+			new_generator.set_shader_model(test_json_conv.get_data())
+
+	else:
+		new_generator = await mm_loader.load_gen(file_name)
+	if new_generator != null:
+		var gen_name = mm_loader.generator_name_from_path(file_name)
+		if gen_name != "":
+			new_generator.model = gen_name
+		var parent_generator = generator.get_parent()
+		parent_generator.replace_generator(generator, new_generator)
+		generator = new_generator
+		update_node.call_deferred()
+
+func save_generator() -> void:
+	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	#dialog.custom_minimum_size = Vector2i(500, 500)
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.add_filter("*.mmg;Material Maker Generator")
+	if mm_globals.config.has_section_key("path", "template"):
+		dialog.current_dir = mm_globals.config.get_value("path", "template")
+	var files = await dialog.select_files()
+	if files.size() > 0:
+		MMGraphNodeGeneric.do_save_generator(files[0], generator)
+
+static func do_save_generator(file_name : String, gen : MMGenBase) -> void:
+	mm_globals.config.set_value("path", "template", file_name.get_base_dir())
+	mm_loader.save_gen(file_name, gen)
 
 func update_shader_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)

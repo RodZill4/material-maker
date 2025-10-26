@@ -618,10 +618,6 @@ func update_node() -> void:
 	if generator.is_editable():
 		for theme_stylebox in ["titlebar", "titlebar_selected"]:
 			remove_theme_stylebox_override(theme_stylebox)
-		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
-		add_child(edit_buttons)
-		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
-		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
 	if generator.minimized:
 		size = Vector2(96, 96)
 	# Preview
