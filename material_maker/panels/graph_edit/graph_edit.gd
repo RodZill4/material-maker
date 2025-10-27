@@ -1630,3 +1630,9 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func _on_theme_changed() -> void:
+	# fix connection lines offset changing to/from classic
+	await get_tree().process_frame
+	select_invert()
+	select_invert()
