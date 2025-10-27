@@ -1,8 +1,8 @@
 [remap]
 
-importer="texture"
-type="CompressedTexture2D"
-uid="uid://clxj8dqkqggfi"
+importer="svg"
+type="DPITexture"
+uid="uid://bhcv8xiydl2fx"
 path="res://.godot/imported/mastodon.svg-26474328390710b9614e9ebd76f5015b.ctex"
 metadata={
 "vram_texture": false
@@ -38,6 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=0.5
+svg/scale=1.0
 editor/scale_with_editor_scale=false
 editor/convert_colors_with_editor_theme=false
