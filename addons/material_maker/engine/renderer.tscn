@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cysjccd1x5mpk"]
 
-[ext_resource type="Script" path="res://addons/material_maker/engine/renderer.gd" id="1"]
+[ext_resource type="Script" uid="uid://ddry0k1nd8do" path="res://addons/material_maker/engine/renderer.gd" id="1"]
 
 [node name="Renderer" type="SubViewport"]
 disable_3d = true
