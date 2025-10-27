@@ -165,6 +165,9 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			valid_drag_cut_entry = true
+			if event.shift_pressed:
+				add_reroute_under_mouse()
+
 			for c in get_children():
 				if ! c is GraphNode:
 					continue
@@ -1391,6 +1394,46 @@ func propagate_node_changes(source : MMGenGraph) -> void:
 	update_view(generator)
 
 # Adding/removing reroute nodes
+
+func add_reroute_under_mouse() -> void:
+	const min_dist_from_ports : float = 16.0
+	const tolerance_pixels : float = 2.0
+	const reroute_offset : Vector2 = Vector2(12, 13)
+
+	var connection : Dictionary = get_closest_connection_at_point(
+			get_local_mouse_position(), connection_lines_thickness + tolerance_pixels)
+
+	if not connection.is_empty():
+		var prev : Dictionary = generator.serialize()
+		var mouse_pos : Vector2 = offset_from_global_position(
+				get_global_transform() * get_local_mouse_position())
+
+		var from_node : GraphNode = get_node(NodePath(connection.from_node))
+		var output_port_position : Vector2 = (
+				from_node.position_offset + from_node.get_output_port_position(connection.from_port))
+
+		var to_node : GraphNode = get_node(NodePath(connection.to_node))
+		var input_port_position : Vector2 = (
+				to_node.position_offset + from_node.get_input_port_position(connection.to_port))
+
+		if (
+				input_port_position.distance_to(mouse_pos) > min_dist_from_ports
+				and output_port_position.distance_to(mouse_pos) > min_dist_from_ports
+				):
+			var reroute_position : Vector2 = mouse_pos - reroute_offset
+
+			var added_reroute : Array = await do_create_nodes(
+					{nodes=[{name ="reroute", type="reroute",
+					node_position={x=reroute_position.x, y=reroute_position.y}}], connections=[]})
+
+			var new_reroute : GraphNode = added_reroute[0]
+			do_disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
+			do_connect_node(connection.from_node, connection.from_port, new_reroute.name, 0)
+			do_connect_node(new_reroute.name, 0, connection.to_node, connection.to_port)
+
+		var next : Dictionary = generator.serialize()
+		undoredo_create_step("Reroute on connection", generator.get_hier_name(), prev, next)
+
 
 func add_reroute_to_input(node : MMGraphNodeMinimal, port_index : int) -> void:
 	var prev = generator.serialize()
