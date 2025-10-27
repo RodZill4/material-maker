@@ -158,3 +158,10 @@ func _gui_input(event: InputEvent) -> void:
 			current_tab = wrapi(current_tab - 1, 0, $TabBar.get_tab_count())
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			current_tab = wrapi(current_tab + 1, 0, $TabBar.get_tab_count())
+
+
+func _on_tab_bar_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_MIDDLE:
+			$TabBar.emit_signal("tab_close_pressed",
+					$TabBar.get_tab_idx_at_point(get_local_mouse_position()))
