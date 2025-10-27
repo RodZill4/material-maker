@@ -45,6 +45,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_3d_preview_dof_near_transition = 1.0,
 	ui_console_open = false,
 	ui_console_height = 100,
+	prefer_global_menu = true,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,
