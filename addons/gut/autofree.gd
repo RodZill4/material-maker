@@ -30,28 +30,57 @@
 # ##############################################################################
 var _to_free = []
 var _to_queue_free = []
+var _ref_counted_doubles = []
+var _all_instance_ids = []
+
+
+func _add_instance_id(thing):
+	if(thing.has_method("get_instance_id")):
+		_all_instance_ids.append(thing.get_instance_id())
+
 
 func add_free(thing):
 	if(typeof(thing) == TYPE_OBJECT):
+		_add_instance_id(thing)
 		if(!thing is RefCounted):
 			_to_free.append(thing)
+		elif(GutUtils.is_double(thing)):
+			_ref_counted_doubles.append(thing)
+
 
 func add_queue_free(thing):
-	_to_queue_free.append(thing)
+	if(typeof(thing) == TYPE_OBJECT):
+		_add_instance_id(thing)
+		_to_queue_free.append(thing)
+
 
 func get_queue_free_count():
 	return _to_queue_free.size()
 
+
 func get_free_count():
 	return _to_free.size()
 
+
 func free_all():
-	for i in range(_to_free.size()):
-		if(is_instance_valid(_to_free[i])):
-			_to_free[i].free()
+	for node in _to_free:
+		if(is_instance_valid(node)):
+			if(GutUtils.is_double(node)):
+				node.__gutdbl_done()
+			node.free()
 	_to_free.clear()
 
 	for i in range(_to_queue_free.size()):
 		if(is_instance_valid(_to_queue_free[i])):
 			_to_queue_free[i].queue_free()
 	_to_queue_free.clear()
+
+	for ref_dbl in _ref_counted_doubles:
+		ref_dbl.__gutdbl_done()
+	_ref_counted_doubles.clear()
+
+	_all_instance_ids.clear()
+
+
+func has_instance_id(id):
+	return _all_instance_ids.has(id)

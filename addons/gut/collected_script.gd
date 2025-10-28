@@ -42,7 +42,9 @@ func _init(logger=null):
 
 
 func get_new():
-	return load_script().new()
+	var inst = load_script().new()
+	inst.collected_script = self
+	return inst
 
 
 func load_script():
