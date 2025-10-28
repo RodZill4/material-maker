@@ -69,8 +69,7 @@ func set_model(id : int, custom_model_path : String = "") -> bool:
 			dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 			for f in MMMeshLoader.get_file_dialog_filters():
 				dialog.add_filter(f)
-			if mm_globals.config.has_section_key("path", "mesh"):
-				dialog.current_dir = mm_globals.config.get_value("path", "mesh")
+			dialog.current_dir = mm_globals.config.get_value("path", "mesh", mm_globals.get_home_directory())
 			var files = await dialog.select_files()
 			if files.size() == 1:
 				custom_model_path = files[0]
