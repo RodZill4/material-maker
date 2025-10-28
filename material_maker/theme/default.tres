@@ -424,6 +424,10 @@ region = Rect2(16, 0, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 32, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqjp3"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(112, 128, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_pkv4t"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 128, 16, 16)
@@ -1116,6 +1120,7 @@ MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
 MM_Icons/icons/export = SubResource("AtlasTexture_5e0gw")
 MM_Icons/icons/folder = SubResource("AtlasTexture_rqlqa")
+MM_Icons/icons/function = SubResource("AtlasTexture_rqjp3")
 MM_Icons/icons/grid = SubResource("AtlasTexture_pkv4t")
 MM_Icons/icons/link = SubResource("AtlasTexture_8uenv")
 MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
