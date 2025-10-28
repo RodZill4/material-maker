@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bnqq3vhwmudkw"]
+[gd_scene load_steps=16 format=3 uid="uid://bnqq3vhwmudkw"]
 
 [ext_resource type="Script" uid="uid://cryayuomvuwbo" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="2_oiaqi"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="7_qnupl"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="8_1w3oe"]
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
+[ext_resource type="Script" uid="uid://pqxjwlcff5ko" path="res://material_maker/panels/graph_edit/graph_align_menu.gd" id="8_r5hxx"]
 [ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
 
 [sub_resource type="Shader" id="1"]
@@ -19,13 +20,13 @@ code = "shader_type canvas_item;"
 resource_local_to_scene = true
 shader = SubResource("1")
 
-[sub_resource type="InputEventKey" id="InputEventKey_83edi"]
+[sub_resource type="InputEventKey" id="InputEventKey_lbgjg"]
+device = -1
 command_or_control_autoremap = true
-pressed = true
-keycode = 82
+keycode = 93
 
 [sub_resource type="Shortcut" id="Shortcut_7tisq"]
-events = [SubResource("InputEventKey_83edi")]
+events = [SubResource("InputEventKey_lbgjg")]
 
 [node name="ProjectsPanel" type="Control"]
 clip_contents = true
@@ -403,6 +404,46 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "arrange_nodes"
 
+[node name="AlignMenu" type="PanelContainer" parent="MenuBar/HBox"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+script = ExtResource("8_r5hxx")
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/AlignMenu"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="AlignStart" type="Button" parent="MenuBar/HBox/AlignMenu/HBox"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Align Start"
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "align_start"
+
+[node name="AlignCenter" type="Button" parent="MenuBar/HBox/AlignMenu/HBox"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Align Center"
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "align_center"
+
+[node name="AlignEnd" type="Button" parent="MenuBar/HBox/AlignMenu/HBox"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Align End"
+shortcut = SubResource("Shortcut_7tisq")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "align_end"
+
 [node name="PreviewsMenu" type="PanelContainer" parent="MenuBar/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -466,6 +507,9 @@ Scroll to zoom the 3D Preview."
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness/LineThickness" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_thickness_value_changed"]
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu" method="_on_line_curvature_value_changed"]
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_curvature_value_changed"]
+[connection signal="pressed" from="MenuBar/HBox/AlignMenu/HBox/AlignStart" to="MenuBar/HBox/AlignMenu" method="_on_align_start_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/AlignMenu/HBox/AlignCenter" to="MenuBar/HBox/AlignMenu" method="_on_align_center_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/AlignMenu/HBox/AlignEnd" to="MenuBar/HBox/AlignMenu" method="_on_align_end_pressed"]
 [connection signal="toggled" from="MenuBar/HBox/PreviewsMenu/HBox/2DPreview" to="." method="show_background_preview_2d"]
 [connection signal="toggled" from="MenuBar/HBox/PreviewsMenu/HBox/3DPreview" to="." method="show_background_preview_3d"]
 [connection signal="gui_input" from="MenuBar/HBox/PreviewsMenu/HBox/ControlView" to="BackgroundPreviews/Preview3D" method="on_gui_input"]

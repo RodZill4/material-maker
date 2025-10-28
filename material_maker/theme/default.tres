@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=145 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=148 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -359,6 +359,18 @@ metadata/recolor = true
 [sub_resource type="AtlasTexture" id="AtlasTexture_86qok"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khddu"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(16, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xbfay"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(32, 208, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ih86u"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 208, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_60g77"]
 atlas = ExtResource("1_s43fy")
@@ -1100,6 +1112,9 @@ MM_Icons/icons/2D_preview = SubResource("AtlasTexture_1yu4y")
 MM_Icons/icons/3D_preview = SubResource("AtlasTexture_ao7ds")
 MM_Icons/icons/3D_preview_control = SubResource("AtlasTexture_hht3q")
 MM_Icons/icons/add_image = SubResource("AtlasTexture_86qok")
+MM_Icons/icons/align_center = SubResource("AtlasTexture_khddu")
+MM_Icons/icons/align_end = SubResource("AtlasTexture_xbfay")
+MM_Icons/icons/align_start = SubResource("AtlasTexture_ih86u")
 MM_Icons/icons/arrange_nodes = SubResource("AtlasTexture_60g77")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
