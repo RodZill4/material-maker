@@ -10,6 +10,7 @@ var custom_button : TextureButton
 var show_inputs : bool = false
 var show_outputs : bool = false
 
+const SETTINGS_NODE_MINIMIZE_BUTTON := "node_minimize_button"
 
 const MINIMIZE_ICON : Texture2D = preload("res://material_maker/icons/minimize.tres")
 const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomness_unlocked.tres")
@@ -140,6 +141,8 @@ func update():
 	if buffer_button.visible:
 		buffer_button.texture_normal = BUFFER_ICON if generator.get_buffers(MMGenBase.BUFFERS_PAUSED).is_empty() else BUFFER_PAUSED_ICON
 		buffer_button.tooltip_text = tr("%d buffer(s), %d paused") % [ generator.get_buffers().size(), generator.get_buffers(MMGenBase.BUFFERS_PAUSED).size() ]
+	minimize_button.visible = mm_globals.get_config(SETTINGS_NODE_MINIMIZE_BUTTON)
+
 
 func _notification(what : int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
