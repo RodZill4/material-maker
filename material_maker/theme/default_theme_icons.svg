@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
-   sodipodi:docname="default_theme_icons.svg"
+   sodipodi:docname="source copy.svg"
    inkscape:export-filename="new_theme_icons.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -28,15 +28,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="16"
-     inkscape:cx="87.25"
-     inkscape:cy="195.09375"
+     inkscape:zoom="8"
+     inkscape:cx="78.25"
+     inkscape:cy="175.25"
      inkscape:window-width="1152"
      inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g31">
+     inkscape:current-layer="g105">
     <inkscape:grid
        id="grid2"
        units="px"
@@ -2583,6 +2583,16 @@
        y1="25"
        x2="126"
        y2="25" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#swatch138"
+       id="linearGradient115"
+       gradientUnits="userSpaceOnUse"
+       x1="14.109887"
+       y1="288.92944"
+       x2="49.890114"
+       y2="288.92944"
+       gradientTransform="matrix(0.26031465,0,0,0.26031465,63.728594,108.77664)" />
   </defs>
   <g
      inkscape:groupmode="layer"
@@ -2710,6 +2720,19 @@
          style="fill:url(#linearGradient31);stroke:none;stroke-width:0;stroke-dasharray:none;paint-order:fill markers stroke"
          inkscape:label="p1"
          d="M 58.742553,177.9367 H 60.5 c 0.848538,0 1.53169,0.68314 1.53169,1.5317 v 9.0632 c 0,0.84853 -0.683152,1.53168 -1.53169,1.53168 h -1.757447 c -0.84854,0 -1.531692,-0.68315 -1.531692,-1.53168 v -9.0632 c 0,-0.84856 0.683152,-1.5317 1.531692,-1.5317 z" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="g105"
+       inkscape:label="Arrow_UpDown"
+       transform="matrix(0.80302859,0,0,0.80302859,62.095492,34.742442)"
+       style="display:inline">
+      <path
+         id="path111"
+         style="display:inline;fill:url(#linearGradient115);fill-opacity:1;stroke:none;stroke-width:0;stroke-dasharray:none;paint-order:fill markers stroke"
+         inkscape:label="arrow"
+         d="m 71.908483,177.99651 c -0.19992,0.0356 -0.380829,0.14068 -0.510762,0.29673 l -3.884221,4.66009 c -0.261616,0.31527 -0.03755,0.79269 0.372126,0.7929 h 2.029964 c 0.305175,-5.2e-4 0.552724,0.24694 0.552109,0.55211 v 3.25671 c 6.24e-4,0.30518 -0.246934,0.55273 -0.552109,0.55211 h -2.029964 c -0.409672,2.1e-4 -0.633738,0.47764 -0.372126,0.7929 l 3.884221,4.66009 c 0.344209,0.41331 0.978907,0.41331 1.323116,0 l 3.881789,-4.66009 c 0.260897,-0.31439 0.03884,-0.79064 -0.369694,-0.7929 h -2.029416 c -0.304226,-7.8e-4 -0.55029,-0.24788 -0.549677,-0.55211 v -3.25671 c -6.24e-4,-0.30423 0.245451,-0.55138 0.549677,-0.55211 h 2.029416 c 0.408539,-0.002 0.630595,-0.47851 0.369694,-0.7929 l -3.881789,-4.66009 c -0.197854,-0.23761 -0.507932,-0.35087 -0.812354,-0.29673 z"
+         sodipodi:nodetypes="sccccccccccccccccccccs" />
     </g>
   </g>
   <g
