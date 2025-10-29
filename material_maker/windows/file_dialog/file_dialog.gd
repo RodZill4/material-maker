@@ -17,7 +17,7 @@ func _ready() -> void:
 	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	content_scale_factor = _content_scale_factor
 	
-	for child in get_children():
+	for child in get_children(true):
 		if child is PopupMenu:
 			child.about_to_popup.connect(_context_menu_about_to_popup.bind(child))
 	
