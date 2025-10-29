@@ -1048,22 +1048,24 @@ func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function
 func create_menu_add_selection_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
-func add_selection_to_library(index) -> void:
+func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> void:
 	var selected_nodes = get_selected_nodes()
 	if selected_nodes.is_empty():
 		return
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
-	add_child(dialog)
-	var current_item_name = ""
+	var current_item_name : String = ""
 	if library.is_inside_tree():
 		current_item_name = library.get_selected_item_name()
-	var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
-	if ! status.ok:
-		return
+	if should_ask_item_name:
+		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+		dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
+		add_child(dialog)
+		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
+		if ! status.ok:
+			return
+		current_item_name = status.text
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	var data
+	var data : Dictionary
 	if selected_nodes.size() == 1:
 		data = selected_nodes[0].generator.serialize()
 		data.erase("node_position")
@@ -1073,7 +1075,7 @@ func add_selection_to_library(index) -> void:
 	var result = await selected_nodes[0].generator.render(self, 0, 64, true)
 	var image : Image = result.get_image()
 	result.release(self)
-	node_library_manager.add_item_to_library(index, status.text, image, data)
+	node_library_manager.add_item_to_library(index, current_item_name, image, data)
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
