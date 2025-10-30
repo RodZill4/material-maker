@@ -7709,7 +7709,7 @@
 						"global": "vec3 brush_flatten(vec2 uv, vec2 angle, vec3 v) {\n\tvec3 target_normal = normalize(view_back*cos(angle.x)*cos(angle.y)+view_right*sin(angle.x)+view_up*sin(angle.y));\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(target_normal, mesh_tangent), dot(target_normal, mesh_bitangent), dot(target_normal, mesh_normal)));\n}\n",
 						"inputs": [],
 						"instance": "",
-						"longdesc": "Draws a uniform greyscale image",
+						"longdesc": "Draws a uniform grayscale image",
 						"name": "Flatten",
 						"outputs": [
 							{
@@ -7856,7 +7856,7 @@
 						"global": "vec3 brush_flatten(vec2 uv, vec2 angle, vec3 v) {\n\tvec3 target_normal = normalize(view_back*cos(angle.x)*cos(angle.y)+view_right*sin(angle.x)+view_up*sin(angle.y));\n\tvec3 mesh_normal = normalize(texture(mesh_normal_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_tangent = normalize(texture(mesh_tangent_tex, uv).rgb*2.0-vec3(1.0));\n\tvec3 mesh_bitangent = cross(mesh_normal, mesh_tangent);\n\treturn vec3(0.5)+0.5*normalize(v*vec3(dot(target_normal, mesh_tangent), dot(target_normal, mesh_bitangent), dot(target_normal, mesh_normal)));\n}\n",
 						"inputs": [],
 						"instance": "",
-						"longdesc": "Draws a uniform greyscale image",
+						"longdesc": "Draws a uniform grayscale image",
 						"name": "Flatten",
 						"outputs": [
 							{
