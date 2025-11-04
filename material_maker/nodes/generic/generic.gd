@@ -17,6 +17,14 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 func _ready() -> void:
 	super._ready()
 	add_to_group("updated_from_locale")
+	
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(preview_timer):
+			preview_timer.stop()
+			preview_timer.queue_free()
+		if is_instance_valid(preview):
+			preview.queue_free()
 
 func init_buttons():
 	super.init_buttons()
