@@ -108,6 +108,53 @@ jobs:
         with:
           name: linux_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
+  export_linux_arm64:
+    name: Linux Export (arm64) 🗔
+    needs: export_windows_linux
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup 💻
+        run: |
+          cp -f material_maker/theme/default_theme_icons.svg material_maker/theme/default_theme_icons_export.svg
+          wget -q ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.arm64.zip
+          unzip Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.arm64.zip
+          wget -q ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
+          mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
+          mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
+          mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+      - name: Linux Build (arm64) 🐧
+        run: |
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.arm64 --headless -v --export-release "Linux/X11 arm64" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64/$EXPORT_NAME.arm64
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.arm64 --headless -v --export-release "Linux/X11 arm64" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64/$EXPORT_NAME.arm64
+      - name: Get documentation 🚀
+        if: ${{ github.event.inputs.gen_doc == 'true' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: doc
+      - name: Copy Material Maker data 📁
+        run: |
+          cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+          cp -R ./material_maker/environments ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+          cp -R ./material_maker/examples ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+          cp -R ./material_maker/library ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+          cp -R ./material_maker/meshes ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+          cp -R ./material_maker/misc/export ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+          cp -R ./material_maker/doc/_build/html ./build/${EXPORT_NAME}_${MM_RELEASE}_linux_arm64/doc || :
+      - name: Create archives 📁
+        run: |
+          cd build
+          tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux_arm64.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux_arm64
+      - name: Upload Linux (arm64) Artifact 🚀
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux_arm64_snapshot
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux_arm64.tar.gz
   export-mac:
     name: Mac Export 🍎
     needs: export_windows_linux
