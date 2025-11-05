@@ -110,6 +110,14 @@ func get_shader_custom_functions():
 
 
 func set_generator(g : MMGenBase, o : int = 0, force : bool = false) -> void:
+	if generator and is_instance_valid(generator):
+		if not is_instance_valid(g) or g != generator:
+			var old_id = generator.get_instance_id()
+			var old_tex_name = "o%d_tex" % old_id
+			if material and material.get_shader_parameter(old_tex_name):
+				# Clean up reference to old buffer texture to free VRAM
+				material.set_shader_parameter(old_tex_name, null)
+
 	super.set_generator(g, o, force)
 	update_shader_options()
 
