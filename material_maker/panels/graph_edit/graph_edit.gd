@@ -59,6 +59,7 @@ func _ready() -> void:
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
 	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
+	setup_scrollbars()
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -150,6 +151,8 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			$ScrollbarController.show_scrollbars()
 		# reverted to default GraphEdit behavior
 		if false and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
 			if event.control:
@@ -234,6 +237,9 @@ func _gui_input(event) -> void:
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
 	elif event is InputEventMouseMotion:
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) !=0:
+			$ScrollbarController.show_scrollbars()
+
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
@@ -1673,3 +1679,19 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func setup_scrollbars() -> void:
+	$ScrollbarController.initialize()
+
+	for node in get_children(true):
+		if len(node.get_children(true)):
+			for scroll_bar in node.get_children(true):
+				if scroll_bar is ScrollBar:
+					$ScrollbarController.should_show_scrollbars(scroll_bar.mouse_entered)
+					$ScrollbarController.should_show_scrollbars(scroll_bar.scrolling)
+					$ScrollbarController.add_scrollbar(scroll_bar)
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			setup_scrollbars()
