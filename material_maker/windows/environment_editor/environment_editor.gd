@@ -109,14 +109,13 @@ func set_current_environment(index : int) -> void:
 		if ui.has_node(k):
 			control = ui.get_node(k)
 		if control is LineEdit:
-			if control.get_script() == preload("res://material_maker/widgets/float_edit/float_edit.gd"):
-				control.set_value(env[k])
-			else:
-				control.text = env[k]
+			control.text = env[k]
 		elif control is ColorPickerButton:
 			control.color = MMType.deserialize_value(env[k])
 		elif control is CheckBox:
 			control.button_pressed = env[k]
+		elif control is FloatEdit:
+			control.set_value(env[k])
 	environment_manager.apply_environment(index, environment, sun)
 	var read_only : bool = environment_manager.is_read_only(index)
 	for c in ui.get_children():
