@@ -24,7 +24,7 @@ var moving = false
 var _mouse_start_position : Vector2 = Vector2.ZERO
 
 var clear_background := true
-var current_environment := 0
+var current_environment : int = mm_globals.get_config("ui_3d_preview_environment")
 
 @onready var main_menu := $MainMenu
 
@@ -113,7 +113,10 @@ func _on_Environment_item_selected(id) -> void:
 func set_environment(id:int) -> void:
 	if id >= 0:
 		current_environment = id
+
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
+	if current_environment > environment_manager.get_environment_list().size() - 1:
+		current_environment = 0
 	if clear_background:
 		$MaterialPreview.transparent_bg = true
 		environment_manager.apply_environment(current_environment, environment, sun, Color.TRANSPARENT, true)
