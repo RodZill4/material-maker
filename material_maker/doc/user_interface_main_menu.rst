@@ -115,7 +115,7 @@ Tools menu
   modify the number of choices and outputs, and input/output modes will
   become editable.
 
-* *Add selected node to user library* is only visible when the current
+* *Add selection to user library* is only visible when the current
   project is a procedural material. It first prompts for an item name. If a name is entered and
   confirmed, the selected nodes in the current material will be added to the user library under
   that name. The user library is saved automatically.

@@ -103,7 +103,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Tools/Create group", command="create_subgraph", shortcut="Control+G" },
 	{ menu="Tools/Make selected nodes editable", command="make_selected_nodes_editable", shortcut="Control+W" },
 	{ menu="Tools/-" },
-	{ menu="Tools/Add selected node to library", submenu="add_selection_to_library", mode="material" },
+	{ menu="Tools/Add selection to library", submenu="add_selection_to_library", mode="material" },
 	{ menu="Tools/Add current brush to library", submenu="add_brush_to_library", mode="paint", not_in_ports=["HTML5"] },
 	{ menu="Tools/Create a screenshot of the current graph", command="generate_graph_screenshot", mode="material" },
 	{ menu="Tools/Paint project settings", command="paint_project_settings", mode="paint", not_in_ports=["HTML5"] },
