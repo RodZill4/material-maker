@@ -74,17 +74,19 @@ clip_text = true
 
 [node name="ItemMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
-item_count = 5
+item_count = 6
 item_0/text = "Rename item"
 item_0/id = 0
 item_1/text = "Update thumbnail"
 item_1/id = 1
-item_2/text = "Remove item"
+item_2/text = "Update item"
 item_2/id = 2
+item_3/text = "Delete item"
 item_3/id = 3
-item_3/separator = true
-item_4/text = "Define aliases"
 item_4/id = 4
+item_4/separator = true
+item_5/text = "Define aliases"
+item_5/id = 5
 
 [connection signal="text_changed" from="Library/Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="about_to_popup" from="Library/Filter/Libraries" to="." method="_on_Libraries_about_to_show"]

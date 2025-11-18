@@ -378,9 +378,11 @@ func _on_PopupMenu_index_pressed(index):
 				return
 			var image : Image = await current_node.generator.render_output(0, Vector2i(64, 64))
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
-		2: # Delete item
+		2: # Update item
+			mm_globals.main_window.add_selection_to_library(library_index, false)
+		3: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)
-		4: # Define aliases
+		5: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor

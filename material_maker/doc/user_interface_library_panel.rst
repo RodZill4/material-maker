@@ -72,6 +72,6 @@ give focus to the search field using the **Control+F** keyboard shortcut.
   :align: center
 
 Each item in the tree view has a context menu that can be used to rename it, redefine
-its thumbnail (using the current 2D preview), or delete it. It is also possible to
-define name aliases that will be used by the filter (in the library panel and in the
-Nodes menu).
+its thumbnail (using the current 2D preview), updated (replaced with current selection),
+or delete it. It is also possible to define name aliases that will be used by the filter
+(in the library panel and in the Nodes menu).
