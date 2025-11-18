@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=121 format=3 uid="uid://42cileyfwaca"]
+[gd_resource type="Theme" load_steps=122 format=3 uid="uid://42cileyfwaca"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_7p32q"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="2_lsxnf"]
@@ -127,6 +127,8 @@ border_width_bottom = 1
 border_color = Color(0.099986, 0.099986, 0.0999859, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62l4s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nblvr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
 content_margin_left = 28.0
@@ -829,6 +831,7 @@ GraphEdit/icons/zoom_out = SubResource("AtlasTexture_scuvh")
 GraphEdit/icons/zoom_reset = SubResource("AtlasTexture_cpts2")
 GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_btw0t")
 GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
+GraphEdit/styles/panel_focus = SubResource("StyleBoxEmpty_nblvr")
 GraphNode/colors/portpreview_color = Color(0.89059, 0.89059, 0.89059, 1)
 GraphNode/colors/title_color = Color(0.87451, 0.878431, 0.886275, 1)
 GraphNode/constants/port_h_offset = 10
