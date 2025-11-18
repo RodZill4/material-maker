@@ -1,18 +1,6 @@
 {
 	"connections": [
 		{
-			"from": "_2",
-			"from_port": 0,
-			"to": "buffer_2",
-			"to_port": 0
-		},
-		{
-			"from": "buffer_2",
-			"from_port": 0,
-			"to": "gen_outputs",
-			"to_port": 0
-		},
-		{
 			"from": "shader_1",
 			"from_port": 0,
 			"to": "gaussian_blur",
@@ -31,14 +19,32 @@
 			"to_port": 1
 		},
 		{
-			"from": "gen_inputs",
+			"from": "iterate_buffer",
 			"from_port": 0,
-			"to": "_2",
+			"to": "gen_outputs",
 			"to_port": 0
+		},
+		{
+			"from": "_2",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
 		},
 		{
 			"from": "gen_inputs",
 			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "_2",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
 			"to": "shader_1",
 			"to_port": 0
 		}
@@ -54,14 +60,14 @@
 		{
 			"name": "_2",
 			"node_position": {
-				"x": -417.600006,
-				"y": 54.384937
+				"x": -388.0,
+				"y": 215.184936523438
 			},
 			"parameters": {
-				"eccentricity": 1,
-				"s": 9,
-				"sharpness": 1,
-				"size": 6
+				"eccentricity": 1.0,
+				"s": 10,
+				"sharpness": 1.0,
+				"size": 6.0
 			},
 			"seed_int": 0,
 			"shader_model": {
@@ -249,39 +255,39 @@
 				],
 				"parameters": [
 					{
-						"default": 10,
-						"first": 4,
+						"default": 10.0,
+						"first": 4.0,
 						"label": "",
-						"last": 13,
+						"last": 13.0,
 						"name": "s",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 6,
+						"default": 6.0,
 						"label": "Size",
-						"max": 100,
-						"min": 0,
+						"max": 100.0,
+						"min": 0.0,
 						"name": "size",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					},
 					{
 						"control": "None",
 						"default": 0.5,
 						"label": "Eccentricity",
-						"max": 2,
-						"min": 0,
+						"max": 2.0,
+						"min": 0.0,
 						"name": "eccentricity",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "Sharpness",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "sharpness",
 						"step": 0.01,
 						"type": "float"
@@ -293,11 +299,11 @@
 		{
 			"name": "shader_1",
 			"node_position": {
-				"x": -655.199951,
-				"y": 58.506279
+				"x": -655.199951171875,
+				"y": 58.5062789916992
 			},
 			"parameters": {
-				"size": 9
+				"size": 10
 			},
 			"seed_int": 0,
 			"shader_model": {
@@ -355,10 +361,10 @@
 				],
 				"parameters": [
 					{
-						"default": 10,
-						"first": 0,
+						"default": 10.0,
+						"first": 0.0,
 						"label": "",
-						"last": 13,
+						"last": 13.0,
 						"name": "size",
 						"type": "size"
 					}
@@ -369,8 +375,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -912.160034,
-				"y": -42.826626
+				"x": -996.06005859375,
+				"y": -29.0266246795654
 			},
 			"parameters": {
 
@@ -389,8 +395,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -180,
-				"y": -40
+				"x": 23.7000026702881,
+				"y": 12.3000020980835
 			},
 			"parameters": {
 
@@ -409,15 +415,16 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -690,
-				"y": -260
+				"x": -690.0,
+				"y": -260.0
 			},
 			"parameters": {
-				"eccentricity": 1,
-				"resolution": 9,
-				"sharpness": 1,
-				"size": 6,
-				"uniformity": 4
+				"eccentricity": 1.0,
+				"iterations": 1.0,
+				"resolution": 10,
+				"sharpness": 1.0,
+				"size": 6.0,
+				"uniformity": 4.0
 			},
 			"seed_int": 0,
 			"type": "remote",
@@ -434,12 +441,12 @@
 							"widget": "size"
 						},
 						{
-							"node": "buffer_2",
-							"widget": "size"
-						},
-						{
 							"node": "gaussian_blur",
 							"widget": "param0"
+						},
+						{
+							"node": "iterate_buffer",
+							"widget": "size"
 						}
 					],
 					"longdesc": "Resolution used to sample the image",
@@ -498,32 +505,33 @@
 					"name": "eccentricity",
 					"shortdesc": "Eccentricity",
 					"type": "linked_control"
+				},
+				{
+					"label": "Iterations",
+					"linked_widgets": [
+						{
+							"node": "iterate_buffer",
+							"widget": "iterations"
+						}
+					],
+					"longdesc": "Number of times the filter is applied",
+					"name": "iterations",
+					"shortdesc": "Iterations",
+					"type": "linked_control"
 				}
 			]
 		},
 		{
-			"name": "buffer_2",
-			"node_position": {
-				"x": -420,
-				"y": -40.799164
-			},
-			"parameters": {
-				"size": 9
-			},
-			"seed_int": 0,
-			"type": "buffer",
-			"version": 1
-		},
-		{
 			"name": "gaussian_blur",
 			"node_position": {
-				"x": -662.080017,
-				"y": 131.919174
+				"x": -662.080017089844,
+				"y": 131.919174194336
 			},
 			"parameters": {
-				"param0": 9,
-				"param1": 1,
-				"param2": 0
+				"param0": 10,
+				"param1": 1.0,
+				"param2": 0.0,
+				"param3": false
 			},
 			"seed_int": 0,
 			"type": "gaussian_blur"
@@ -531,19 +539,17 @@
 		{
 			"name": "_3",
 			"node_position": {
-				"x": -846.400024,
-				"y": 155.288696
+				"x": -846.400024414062,
+				"y": 155.288696289062
 			},
 			"parameters": {
-				"val": 4
+				"val": 4.0
 			},
 			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
-				"inputs": [
-
-				],
+				"inputs": [],
 				"instance": "",
 				"name": "value",
 				"outputs": [
@@ -555,25 +561,45 @@
 				"parameters": [
 					{
 						"control": "None",
-						"default": 4,
+						"default": 4.0,
 						"label": "",
-						"max": 50,
-						"min": 0,
+						"max": 50.0,
+						"min": 0.0,
 						"name": "val",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
 			},
 			"type": "shader"
+		},
+		{
+			"name": "iterate_buffer",
+			"node_position": {
+				"x": -362.592437744141,
+				"y": -13.2783555984497
+			},
+			"parameters": {
+				"autostop": false,
+				"f32": false,
+				"filter": true,
+				"iterations": 1.0,
+				"mipmap": true,
+				"shrink": false,
+				"size": 10
+			},
+			"seed": 29168.0,
+			"seed_locked": true,
+			"type": "iterate_buffer"
 		}
 	],
 	"parameters": {
-		"eccentricity": 1,
-		"resolution": 9,
-		"sharpness": 1,
-		"size": 6,
-		"uniformity": 4
+		"eccentricity": 1.0,
+		"iterations": 1.0,
+		"resolution": 10,
+		"sharpness": 1.0,
+		"size": 6.0,
+		"uniformity": 4.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Anisotropic Kuwahara Filter",
