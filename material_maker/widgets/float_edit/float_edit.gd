@@ -289,7 +289,10 @@ func update() -> void:
 	$Slider.add_theme_stylebox_override("fill", get_theme_stylebox("fill_hover" if is_hovered else "fill_normal"))
 	$Slider.add_theme_stylebox_override("background", get_theme_stylebox("hover" if is_hovered else "normal"))
 
-	$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
+	if editable:
+		$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
+	else:
+		$Edit.remove_theme_color_override("font_uneditable_color")
 	$Edit.queue_redraw()
 
 
