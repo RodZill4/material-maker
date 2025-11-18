@@ -264,7 +264,7 @@
 							"$if $(connected:albedo_tex)",
 							"albedo_texture = ExtResource( 1 )",
 							"$fi",
-							"$if $(connected:metallic_tex)",
+							"$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
 							"orm_texture = ExtResource( 2 )",
 							"$fi",
 							"$if $(connected:normal_tex)",
