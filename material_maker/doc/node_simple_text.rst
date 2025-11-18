@@ -21,15 +21,19 @@ Parameters
 
 The text node accepts the following parameters:
 
-* the string to be displayed
+* String to be displayed
 
-* the font (both TTF and OTF formats are supported)
+* Font (both TTF and OTF formats are supported)
 
-* the font size
+* Font size
 
-* whether the text is centered
+* X and Y coordinates of the location of the text in the generated image
 
-* the X and Y coordinates of the location of the text in the generated image
+* Text color
+
+* Background color
+
+* Whether the text is centered
 
 Notes
 +++++
