@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://nhbn35rfn2m5"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/node_button.gd" id="1_f00x4"]
+[ext_resource type="Script" uid="uid://dgy0cxsasek5u" path="res://material_maker/nodes/node_button.gd" id="1_f00x4"]
 
 [node name="NodeButton" type="TextureButton"]
 anchors_preset = 15
