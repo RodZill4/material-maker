@@ -68,3 +68,4 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_classic_kuwahara
 	node_filter_generalized_kuwahara
 	node_filter_symmetric_nearest_neighbor
+	node_filter_alpha_association
