@@ -241,12 +241,12 @@
 			},
 			"Unity": {
 				"custom": [
-					"func process_option_unity_unlit_tags(input_template : String, _is_definitions : bool) -> String:",
+					"func process_option_unity_unlit_tags(input_template : String, _is_declaration : bool) -> String:",
 					"\tvar blend : String = input_template.strip_edges()",
 					"\tvar out_tag : String = \"Opaque\" if blend == \"mix\" else \"Transparent\"",
 					"\treturn \"\\t\\tTags { \\\"RenderType\\\"=\\\"%s\\\" \\\"Queue\\\"=\\\"%s\\\" }\\n\" % [ out_tag, out_tag ]",
 					"",
-					"func process_option_unity_unlit_blend(input_template : String, _is_definitions : bool) -> String:",
+					"func process_option_unity_unlit_blend(input_template : String, _is_declaration : bool) -> String:",
 					"\tvar blend : String = input_template.strip_edges()",
 					"\tvar blend_mode : String",
 					"\tmatch blend:",
