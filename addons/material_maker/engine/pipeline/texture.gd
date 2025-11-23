@@ -28,7 +28,7 @@ func get_texture_rid(target_rd : RenderingDevice) -> RID:
 	if ! rid.is_valid():
 		var image : Image = texture.get_image()
 		if image == null or image.get_width() == 0 or image.get_height() == 0:
-			print("No image for texture %s" % str(texture))
+			#print("No image for texture %s" % str(texture))
 			image = Image.create(1, 1, false, Image.FORMAT_RH)
 			texture_format = RenderingDevice.DATA_FORMAT_R16_SFLOAT
 		var fmt : RDTextureFormat = RDTextureFormat.new()
