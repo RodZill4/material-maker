@@ -7942,6 +7942,15 @@
 			},
 			"tree_item": "3D/SDF/Shapes/Octahedron",
 			"type": "sdf3d_octahedron"
+		},
+		{
+			"display_name": "Alpha Association",
+			"name": "alpha_association",
+			"parameters": {
+				"mode": 0.0
+			},
+			"tree_item": "Filter/Alpha Association",
+			"type": "alpha_association"
 		}
 	],
 	"name": "Base library"
