@@ -20,7 +20,7 @@ var generator : MMGenComment:
 		if mm_globals.get_config("auto_size_comment"):
 			resize_to_selection()
 
-var pallette_colors = [
+var palette_colors = [
 	Color("F8B8B3"),
 	Color("F7FDAF"),
 	Color("AAF3A2"),
@@ -139,7 +139,7 @@ func _on_change_color_pressed():
 	$Popup.get_window().size = $Popup.get_window().get_contents_minimum_size() * content_scale_factor
 	$Popup.position = get_screen_transform() * get_local_mouse_position()
 	$Popup.popup()
-	var corrected_color = pallette_colors.duplicate(true)
+	var corrected_color = palette_colors.duplicate(true)
 	if !light_theme:
 		for i in corrected_color.size():
 			corrected_color[i] = corrected_color[i].darkened(0.5)
