@@ -49,6 +49,10 @@ func get_filetime(file_path: String) -> int:
 
 func open_image_dialog() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	if image_path:
+		dialog.current_dir = image_path.get_base_dir()
+		if FileAccess.file_exists(image_path):
+			dialog.current_file = image_path.get_file()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
