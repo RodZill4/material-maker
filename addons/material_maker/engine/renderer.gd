@@ -16,7 +16,7 @@ func request(object : Object) -> Object:
 	return self
 
 var current_font : String = ""
-func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, center : bool = false) -> Object:
+func render_text(object : Object, text : String, font_path : String, font_size : int, x : float, y : float, fg : Color, bg : Color, center : bool = false) -> Object:
 	assert(render_owner == object)
 	size = Vector2(2048, 2048)
 	$Font.visible = true
@@ -24,6 +24,8 @@ func render_text(object : Object, text : String, font_path : String, font_size :
 	$Font.size = size
 	$Font/Label.text = text
 	$Font/Label.position = Vector2(2048*(0.5+x), 2048*(0.5+y))
+	$Font/Label.modulate = fg
+	$Font.color = bg
 	var font : Font = FontFile.new()
 	if font.load_dynamic_font(font_path) == OK:
 		pass
