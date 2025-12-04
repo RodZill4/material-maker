@@ -187,9 +187,9 @@ func _gui_input(event) -> void:
 								if c.has_method("on_clicked_output"):
 									c.on_clicked_output(slot.index, Input.is_key_pressed(KEY_SHIFT))
 									return
-			# Only show add node popup if Ctrl is not pressed to
-			# avoid conflicting with drag-cut shortcut (Ctrl + RMB)
-			if !event.ctrl_pressed:
+			# Avoid conflicting with drag-cut (Ctrl + RMB)
+			# and reroute insertion on connection lines (Shift + RMB)
+			if not (event.ctrl_pressed or event.shift_pressed):
 				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 				node_popup.show_popup()
 		else:
