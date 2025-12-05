@@ -38,6 +38,8 @@ The **Anisotropic Kuwahara** node accepts the following parameters:
 
 *  **Eccentricity** affects the directionality of the filter.
 
+* **Iterations** affects number of times the filter is applied.
+
 Example images
 ++++++++++++++
 
