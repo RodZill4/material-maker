@@ -350,6 +350,8 @@ func _run():
 	var string_count : int = 0
 	print("Extracting strings from scenes and scripts")
 	for f in find_files("res://", [ "gd", "tscn" ]):
+		if "addons/gut" in f:
+			continue
 		match f.get_extension():
 			"gd":
 				string_count += ts.extract_strings_from_gd(f)
