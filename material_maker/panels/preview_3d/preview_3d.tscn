@@ -194,6 +194,37 @@ button_group = SubResource("ButtonGroup_v4mxh")
 icon = SubResource("AtlasTexture_xwjbu")
 icon_alignment = 1
 
+[node name="Label" type="Label" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "View"
+
+[node name="SnapView" type="HBoxContainer" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SnapTop" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Top"
+
+[node name="SnapFront" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Front"
+
+[node name="SnapRight" type="Button" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Right"
+
 [node name="EnvironmentMenu" type="Button" parent="MainMenu/HBox"]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
@@ -833,6 +864,9 @@ float_only = true
 [connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Slow" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_slow_toggled"]
 [connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Medium" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_medium_toggled"]
 [connection signal="toggled" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds/Speed_Fast" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_speed_fast_toggled"]
+[connection signal="pressed" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView/SnapTop" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_snap_pressed" binds= [0]]
+[connection signal="pressed" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView/SnapFront" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_snap_pressed" binds= [1]]
+[connection signal="pressed" from="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/SnapView/SnapRight" to="MainMenu/HBox/ModelMenu/ModelMenuPanel" method="_on_snap_pressed" binds= [2]]
 [connection signal="minimum_size_changed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_minimum_size_changed"]
 [connection signal="pressed" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/Box/EnvironmentEditorButton" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_editor_button_pressed"]
 [connection signal="item_selected" from="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel/VBoxContainer/ScrollContainer/EnvironmentList" to="MainMenu/HBox/EnvironmentMenu/EnvironmentMenuPanel" method="_on_environment_list_item_selected"]
