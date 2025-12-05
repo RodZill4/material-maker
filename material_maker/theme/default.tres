@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=150 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=159 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -372,7 +372,8 @@ region = Rect2(32, 208, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ih86u"]
 atlas = ExtResource("1_s43fy")
-region = Rect2(0, 208, 16, 16)
+region = Rect2(64, 144, 16, 16)
+metadata/scale = 3.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_60g77"]
 atlas = ExtResource("1_s43fy")
@@ -386,13 +387,13 @@ region = Rect2(32, 48, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(48, 48, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cscp3"]
-atlas = ExtResource("1_s43fy")
-region = Rect2(80, 192, 16, 16)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_rqjp3"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(112, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cscp3"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(80, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j13i3"]
 atlas = ExtResource("1_s43fy")
@@ -442,10 +443,6 @@ region = Rect2(16, 0, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 32, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rqjp3"]
-atlas = ExtResource("1_s43fy")
-region = Rect2(112, 128, 16, 16)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_pkv4t"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 128, 16, 16)
@@ -485,6 +482,41 @@ region = Rect2(96, 192, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_w0re2"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(96, 128, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_to270"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(16, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhud6"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(112, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elfbf"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(48, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_galqy"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(32, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_si2mq"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oea07"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(80, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a45we"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(96, 144, 16, 16)
+metadata/scale = 3.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ck0hb"]
 atlas = ExtResource("1_s43fy")
@@ -533,6 +565,20 @@ region = Rect2(80, 96, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ngrf6"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(96, 96, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahanl"]
+bg_color = Color(0.266667, 0.278431, 0.301961, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ck0hb"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqwm5"]
 content_margin_left = 10.0
@@ -1129,8 +1175,8 @@ MM_Icons/icons/align_start = SubResource("AtlasTexture_ih86u")
 MM_Icons/icons/arrange_nodes = SubResource("AtlasTexture_60g77")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
-MM_Icons/icons/camera = SubResource("AtlasTexture_cscp3")
 MM_Icons/icons/arrow_updown = SubResource("AtlasTexture_rqjp3")
+MM_Icons/icons/camera = SubResource("AtlasTexture_cscp3")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
 MM_Icons/icons/connection_bezier = SubResource("AtlasTexture_ovvp6")
 MM_Icons/icons/connection_diagonal = SubResource("AtlasTexture_8tn7x")
@@ -1154,6 +1200,14 @@ MM_Icons/icons/pin_pinned = SubResource("AtlasTexture_du4od")
 MM_Icons/icons/pin_unpinned = SubResource("AtlasTexture_nkmvd")
 MM_Icons/icons/reset = SubResource("AtlasTexture_c58nb")
 MM_Icons/icons/reset_view = SubResource("AtlasTexture_w0re2")
+MM_Icons/icons/section_3d = SubResource("AtlasTexture_to270")
+MM_Icons/icons/section_filter = SubResource("AtlasTexture_ih86u")
+MM_Icons/icons/section_miscellaneous = SubResource("AtlasTexture_bhud6")
+MM_Icons/icons/section_noise = SubResource("AtlasTexture_elfbf")
+MM_Icons/icons/section_pattern = SubResource("AtlasTexture_galqy")
+MM_Icons/icons/section_simple = SubResource("AtlasTexture_si2mq")
+MM_Icons/icons/section_transform = SubResource("AtlasTexture_oea07")
+MM_Icons/icons/section_workflow = SubResource("AtlasTexture_a45we")
 MM_Icons/icons/select = SubResource("AtlasTexture_ck0hb")
 MM_Icons/icons/settings = SubResource("AtlasTexture_33srw")
 MM_Icons/icons/snapping = SubResource("AtlasTexture_e07v0")
@@ -1166,6 +1220,27 @@ MM_Icons/icons/zoom = SubResource("AtlasTexture_iyaen")
 MM_Icons/icons/zoom_in = SubResource("AtlasTexture_5k62t")
 MM_Icons/icons/zoom_out = SubResource("AtlasTexture_vqfa7")
 MM_Icons/icons/zoom_reset = SubResource("AtlasTexture_ngrf6")
+MM_LibrarySectionButton/base_type = &"Button"
+MM_LibrarySectionButton/colors/icon_disabled_color = Color(0.443123, 0.452316, 0.470703, 1)
+MM_LibrarySectionButton/colors/icon_focus_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_hover_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_normal_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_pressed_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/section_3d = Color(0.137255, 0.509804, 0.466667, 1)
+MM_LibrarySectionButton/colors/section_filter = Color(0.65098, 0.294118, 0.615686, 1)
+MM_LibrarySectionButton/colors/section_miscellaneous = Color(0.580392, 0.388235, 0.235294, 1)
+MM_LibrarySectionButton/colors/section_noise = Color(0.305882, 0.305882, 0.580392, 1)
+MM_LibrarySectionButton/colors/section_pattern = Color(0.494118, 0.494118, 0.196078, 1)
+MM_LibrarySectionButton/colors/section_simple = Color(0.564706, 0.188235, 0.278431, 1)
+MM_LibrarySectionButton/colors/section_transform = Color(0.278431, 0.478431, 0.278431, 1)
+MM_LibrarySectionButton/colors/section_workflow = Color(0.141176, 0.384314, 0.513726, 1)
+MM_LibrarySectionButton/constants/icon_max_width = 26
+MM_LibrarySectionButton/styles/disabled = SubResource("StyleBoxFlat_ahanl")
+MM_LibrarySectionButton/styles/focus = SubResource("StyleBoxEmpty_m27ao")
+MM_LibrarySectionButton/styles/hover = SubResource("StyleBoxFlat_ck0hb")
+MM_LibrarySectionButton/styles/normal = SubResource("StyleBoxFlat_ck0hb")
+MM_LibrarySectionButton/styles/pressed = SubResource("StyleBoxFlat_ck0hb")
 MM_MainBackground/base_type = &"PanelContainer"
 MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
 MM_Node/constants/minimum_line_height = 20
