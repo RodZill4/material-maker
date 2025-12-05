@@ -4,7 +4,6 @@ var previous_color : Color
 
 signal color_changed_undo(c, previous)
 
-
 func _ready():
 	custom_minimum_size = Vector2(24, 24)
 	connect("color_changed",Callable(self,"on_color_changed"))
@@ -12,6 +11,7 @@ func _ready():
 	connect("popup_closed",Callable(self,"on_popup_closed"))
 	get_popup().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	get_popup().min_size = get_popup().get_contents_minimum_size() * get_popup().content_scale_factor
+
 
 func set_color(c):
 	color = c
