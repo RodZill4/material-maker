@@ -1,8 +1,8 @@
 [remap]
 
-importer="texture"
-type="CompressedTexture2D"
-uid="uid://t53vu231awns"
+importer="svg"
+type="DPITexture"
+uid="uid://c06d6ulgucg4q"
 path="res://.godot/imported/epic_megagrant.svg-5f8c30e623426c4cf4afe393d87e2b99.ctex"
 metadata={
 "vram_texture": false
