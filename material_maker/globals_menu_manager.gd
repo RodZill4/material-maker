@@ -255,7 +255,10 @@ func create_menu(menu_def : Array, object : Object, menu_name : String, menu : M
 					if s == "Alt":
 						shortcut |= KEY_MASK_ALT
 					elif s == "Control":
-						shortcut |= KEY_MASK_CTRL
+						if OS.get_name() == "macOS":
+							shortcut |= KEY_MASK_META
+						else:
+							shortcut |= KEY_MASK_CTRL
 					elif s == "Shift":
 						shortcut |= KEY_MASK_SHIFT
 					else:
