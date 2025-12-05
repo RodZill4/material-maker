@@ -6,7 +6,7 @@
 title = "Open a File"
 initial_position = 2
 size = Vector2i(500, 400)
-visible = true
+visible = false
 ok_button_text = "Open"
 file_mode = 0
 access = 2
