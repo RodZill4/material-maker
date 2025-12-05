@@ -282,6 +282,10 @@ func _notification(what):
 			if get_theme_stylebox("clip") != get_theme_stylebox("panel"):
 				add_theme_stylebox_override("panel", get_theme_stylebox("clip"))
 			update()
+		NOTIFICATION_DRAG_BEGIN:
+			mouse_filter = Control.MOUSE_FILTER_IGNORE
+		NOTIFICATION_DRAG_END:
+			mouse_filter = Control.MOUSE_FILTER_STOP
 
 
 func update() -> void:
