@@ -42,7 +42,7 @@ var connection_line_style : int = ConnectionStyle.BEZIER
 
 @onready var drag_cut_cursor = preload("res://material_maker/icons/knife.png")
 var connections_to_cut : Array[Dictionary]
-var drag_cut_line : Line2D = Line2D.new()
+var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
@@ -129,10 +129,10 @@ func _gui_input(event) -> void:
 		node_popup.show_popup()
 	elif event.is_action_released("ui_cut_drag"):
 		var conns : Array[Dictionary]
-		for p in len(drag_cut_line.points) - 1:
+		for p in len(drag_cut_line) - 1:
 			var rect : Rect2
-			rect.position = drag_cut_line.points[p]
-			rect.end = drag_cut_line.points[p + 1]
+			rect.position = drag_cut_line[p]
+			rect.end = drag_cut_line[p + 1]
 			conns = get_connections_intersecting_with_rect(rect.abs())
 			if conns.size():
 				connections_to_cut.append_array(conns)
@@ -140,7 +140,7 @@ func _gui_input(event) -> void:
 			on_cut_connections(connections_to_cut)
 			connections_to_cut.clear()
 		Input.set_custom_mouse_cursor(null)
-		drag_cut_line.clear_points()
+		drag_cut_line.clear()
 		conns.clear()
 		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
@@ -256,10 +256,10 @@ func _gui_input(event) -> void:
 			if event.ctrl_pressed:
 				Input.set_custom_mouse_cursor(
 						drag_cut_cursor, Input.CURSOR_ARROW, CURSOR_HOT_SPOT)
-				drag_cut_line.add_point(get_local_mouse_position())
+				drag_cut_line.append(get_local_mouse_position())
 				queue_redraw()
-			elif drag_cut_line.points.size():
-				drag_cut_line.add_point(get_local_mouse_position())
+			elif drag_cut_line.size():
+				drag_cut_line.append(get_local_mouse_position())
 				queue_redraw()
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
@@ -270,8 +270,8 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	return Rect2(rect.position, rect.size)
 
 func _draw() -> void:
-	if drag_cut_line.points.size() > 1:
-		draw_polyline(drag_cut_line.points, Color.WHITE, 0.5)
+	if drag_cut_line.size() > 1:
+		draw_polyline(drag_cut_line, Color.WHITE, 0.5)
 
 
 # Misc. useful functions
