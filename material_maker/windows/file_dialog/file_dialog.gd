@@ -80,6 +80,11 @@ func select_files() -> Array:
 	popup_centered()
 	var result = await self.return_paths
 	queue_free()
+
+	# Workaround for macOS native file dialog adding .res for .tres files
+	if OS.get_name() == "macOS" and use_native_dialog:
+		result = result.map(func(p): return p.replace(".res.tres", ".tres"))
+
 	return result
 
 func add_favorite():
