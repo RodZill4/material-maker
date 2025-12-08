@@ -123,6 +123,8 @@ func _on_text_gui_input(event):
 		editor.select_all()
 		editor.grab_focus()
 		accept_event()
+	if mm_globals.has_config("mmb_paste_selection"):
+		%Text.middle_mouse_paste_enabled = mm_globals.get_config("mmb_paste_selection")
 
 func _on_text_focus_exited():
 	editor.editable = false

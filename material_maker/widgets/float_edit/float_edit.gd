@@ -213,6 +213,9 @@ func _gui_input(event: InputEvent) -> void:
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
 		if event is InputEventMouseButton:
+			if mm_globals.has_config("mmb_paste_selection") and get_parent().get_parent() is GraphElement:
+				$Edit.middle_mouse_paste_enabled = mm_globals.get_config("mmb_paste_selection")
+
 			# Handle Right Click (Expression Editor)
 			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and not float_only:
 				var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
