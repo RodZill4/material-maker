@@ -122,7 +122,7 @@ func select_color(cursor:GradientEditCursor) -> void:
 	if mm_globals.has_config("color_picker_color_mode"):
 		color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
 	if mm_globals.has_config("color_picker_shape"):
-		color_picker.color_shape = mm_globals.get_config("color_picker_shape")
+		color_picker.picker_shape = mm_globals.get_config("color_picker_shape")
 
 	# find and focus/highlight hex code
 	for node in color_picker.get_child(0,true).get_child(0,true).get_children(true):
