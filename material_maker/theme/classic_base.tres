@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=139 format=3 uid="uid://w487nirev8y5"]
+[gd_resource type="Theme" load_steps=143 format=3 uid="uid://w487nirev8y5"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
@@ -189,6 +189,25 @@ border_width_right = 1
 border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw8f4"]
+bg_color = Color(0.25077727, 0.27830765, 0.37439138, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbe58"]
+bg_color = Color(0.35748938, 0.39221686, 0.51226014, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_754y2"]
+border_width_top = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 0.11764706)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_lsxnf"]
 color = Color(1, 1, 1, 0.101961)
@@ -852,6 +871,11 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ropwn"]
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0, 0, 0, 0.11764706)
+
 [resource]
 default_font = ExtResource("4_7b2nb")
 default_font_size = 15
@@ -920,6 +944,10 @@ GraphNodeTitleLabel/colors/font_shadow_color = Color(0.1672, 0.1748, 0.19, 0)
 GraphNodeTitleLabel/constants/outline_size = 10
 GraphNodeTitleLabel/constants/shadow_outline_size = 0
 GraphNodeTitleLabel/fonts/font = ExtResource("4_7b2nb")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_fw8f4")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_wbe58")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_wbe58")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_754y2")
 HSeparator/styles/separator = SubResource("StyleBoxLine_lsxnf")
 ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
 ItemList/styles/focus = SubResource("StyleBoxEmpty_v2584")
@@ -1095,3 +1123,7 @@ Tree/styles/focus = SubResource("StyleBoxFlat_w0cma")
 Tree/styles/panel = SubResource("StyleBoxFlat_55ai6")
 Tree/styles/selected = SubResource("StyleBoxFlat_x5l5s")
 Tree/styles/selected_focus = SubResource("StyleBoxFlat_x5l5s")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_fw8f4")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_wbe58")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_wbe58")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_ropwn")

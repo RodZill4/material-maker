@@ -1,4 +1,4 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=39 format=3 uid="uid://dhuhq2immquoh"]
+[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=42 format=3 uid="uid://dhuhq2immquoh"]
 
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="3_xjelh"]
 [ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_0efyb"]
@@ -217,9 +217,30 @@ orig = Color(0.9882353, 0.9882353, 0.9882353, 1)
 target = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
+[sub_resource type="Resource" id="Resource_odamo"]
+script = ExtResource("4_0efyb")
+name = "ScrollBarGrabberHighlight"
+orig = Color(0.9843137, 1, 1, 1)
+target = Color(0.43137255, 0.4509804, 0.49019608, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_baiyy"]
+script = ExtResource("4_0efyb")
+name = "ScrollBarBG"
+orig = Color(0.039215688, 0.039215688, 0.039215688, 1)
+target = Color(0, 0, 0, 0.15686275)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_tcqgv"]
+script = ExtResource("4_0efyb")
+name = "ScrollBarGrabber"
+orig = Color(0.9882353, 1, 1, 1)
+target = Color(0.2509804, 0.26666668, 0.2901961, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
 [resource]
 script = ExtResource("5_yjidp")
 base_theme = ExtResource("3_xjelh")
 font_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf")])
 icon_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo"), SubResource("Resource_5oh4i")])
-theme_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_430ei"), SubResource("Resource_svk4l"), SubResource("Resource_i62a2"), SubResource("Resource_0m7hk"), SubResource("Resource_0s6l0")])
+theme_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_430ei"), SubResource("Resource_svk4l"), SubResource("Resource_i62a2"), SubResource("Resource_0m7hk"), SubResource("Resource_0s6l0"), SubResource("Resource_odamo"), SubResource("Resource_baiyy"), SubResource("Resource_tcqgv")])
