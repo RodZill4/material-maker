@@ -271,7 +271,7 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 
 func _draw() -> void:
 	if drag_cut_line.size() > 1:
-		draw_polyline(drag_cut_line, Color.WHITE, 0.5)
+		draw_polyline(drag_cut_line, get_theme_color("connection_knife", "GraphEdit"), 1.0)
 
 
 # Misc. useful functions

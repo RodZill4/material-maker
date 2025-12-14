@@ -837,6 +837,7 @@ CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
 CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
 CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
+GraphEdit/colors/connection_knife = Color(1, 1, 1, 1)
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/constants/port_hotzone_inner_extent = 8
