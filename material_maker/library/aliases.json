@@ -83,5 +83,6 @@
 	"Transform/Translate": "move,scroll,shift,push",
 	"Transform/Warp": "distortion,deform,shift,push",
 	"Transform/Circle Map": "polar",
+	"Transform/Inverse Circle Map": "cartesian",
 	"Filter/Quantize": "posterize"
 }
