@@ -313,6 +313,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			control.add_item(value.name)
 			control.selected = 0 if !p.has("default") else p.default
 		control.custom_minimum_size.x = 80
+		control.fit_to_longest_item = false
 	elif p.type == "boolean":
 		control = CheckBox.new()
 		control.theme_type_variation = "MM_NodeCheckbox"
@@ -708,3 +709,7 @@ func _input(_event:InputEvent) -> void:
 
 func update_from_locale() -> void:
 	update_title()
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()
