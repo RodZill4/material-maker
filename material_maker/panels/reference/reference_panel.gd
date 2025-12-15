@@ -257,3 +257,7 @@ func _on_paste_image_button_pressed() -> void:
 		var img : Texture2D = ImageTexture.create_from_image(
 				DisplayServer.clipboard_get_image())
 		add_reference(img)
+
+
+func _on_check_clipboard_image_timeout() -> void:
+	$%PasteImageButton.disabled = not DisplayServer.clipboard_has_image()
