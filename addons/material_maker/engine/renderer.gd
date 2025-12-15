@@ -18,7 +18,7 @@ func request(object : Object) -> Object:
 var current_font : String = ""
 func render_text(object: Object, text: String, font_path: String, font_size: int,
 		line_spacing: float, alignment: int, x: float, y: float,
-		fg: Color, bg: Color, center: bool = false) -> Object:
+		fg: Variant, bg: Variant, center: bool = false) -> Object:
 	assert(render_owner == object)
 
 	var font : Font = FontFile.new()
@@ -42,8 +42,8 @@ func render_text(object: Object, text: String, font_path: String, font_size: int
 	$Font/Label.label_settings = label_settings
 	$Font/Label.horizontal_alignment = alignment
 	$Font/Label.text = text.replace("\\n","\n")
-	$Font/Label.modulate = fg
-	$Font.color = bg
+	$Font/Label.modulate = fg if fg is Color else MMType.deserialize_value(fg)
+	$Font.color = bg if bg is Color else MMType.deserialize_value(bg)
 
 	size = Vector2(2048, 2048)
 	$Font.visible = true
