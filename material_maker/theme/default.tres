@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=164 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=165 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -733,6 +733,8 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.0588235)
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k2ns1"]
 bg_color = Color(0.8, 0.8, 0.8, 1)
@@ -1074,6 +1076,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.0588235)
+shadow_size = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iwtn1"]
 content_margin_left = 4.0

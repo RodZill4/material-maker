@@ -86,6 +86,7 @@ func export_files(files, output_dir, target, target_file, image_size) -> void:
 	get_tree().quit()
 
 func _ready():
+	RenderingServer.set_default_clear_color(Color.BLACK)
 	var args : PackedStringArray = OS.get_cmdline_args()
 	if ("--export" in args) or ("--export-material" in args):
 		print("Exporting...")
