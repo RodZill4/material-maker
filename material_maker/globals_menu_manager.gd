@@ -182,6 +182,7 @@ class MenuBarDisplayServer:
 	func create_menus(menu_def : Array, object : Object):
 		DisplayServer.global_menu_clear("_main")
 		DisplayServer.global_menu_clear("_help")
+		DisplayServer.global_menu_clear("_dock")
 		var menus : Array[String] = []
 		for md in menu_def:
 			var menu_name : String = md.menu.split("/")[0]
@@ -192,6 +193,11 @@ class MenuBarDisplayServer:
 		for m in menus:
 			mm_globals.menu_manager.create_menu(menu_def, object, m+"/",
 					MenuDisplayServer.new("_help" if m == "Help" else "_main/"+m))
+
+		var recent_files : Array = mm_globals.main_window.recent_files
+		for id in len(recent_files):
+			DisplayServer.global_menu_add_item("_dock", recent_files[id].get_file(),
+				mm_globals.main_window.do_load_project, Callable(), recent_files[id])
 
 func _ready():
 	pass
