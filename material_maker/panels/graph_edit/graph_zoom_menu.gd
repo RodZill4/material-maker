@@ -39,4 +39,5 @@ func update_zoom() -> void:
 	var graph_edit : GraphEdit = mm_globals.main_window.get_current_graph_edit()
 	if graph_edit:
 		graph_edit.zoom = zoom_level
+		graph_edit.simplify_nodes()
 	mm_globals.set_config(SETTING_GRAPH_ZOOM_LEVEL, zoom_level)
