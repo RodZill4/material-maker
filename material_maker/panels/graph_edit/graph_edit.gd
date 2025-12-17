@@ -236,12 +236,11 @@ func _gui_input(event) -> void:
 				node_popup.target_connection = closest_connection
 				request_popup(closest_connection.from_node, closest_connection.from_port,
 						get_local_mouse_position(), false)
-			else:
+			elif not (event.ctrl_pressed or event.shift_pressed):
 				# Avoid conflicting with drag-cut (Ctrl + RMB)
 				# and reroute insertion on connection lines (Shift + RMB)
-				if not (event.ctrl_pressed or event.shift_pressed):
-					node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
-					node_popup.show_popup()
+				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
+				node_popup.show_popup()
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if not event.pressed:
