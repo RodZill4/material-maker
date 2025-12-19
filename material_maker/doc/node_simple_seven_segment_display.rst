@@ -9,7 +9,11 @@ The **Seven Segment Display** node outputs a seven segment display with variable
 Inputs
 ++++++
 
-The **Seven Segment Display** node accepts an optional bevel map, which the parameter is multiplied by the map value.
+The **Seven Segment Display** node accepts two inputs:
+
+* Optional *Number Map* which the number parameter is multiplied by the map value.
+
+* Optional *Bevel Map* which the bevel parameter is multiplied by the map value.
 
 Outputs
 +++++++

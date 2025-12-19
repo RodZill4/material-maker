@@ -85,6 +85,14 @@
 		"inputs": [
 			{
 				"default": "1.0",
+				"label": "3:",
+				"longdesc": "Map that affects the nnumber parameter",
+				"name": "number_map",
+				"shortdesc": "Number Map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
 				"label": "6:",
 				"longdesc": "Map that affects the bevel parameter",
 				"name": "bevel_map",
@@ -96,7 +104,7 @@
 		"name": "Seven Segment Display",
 		"outputs": [
 			{
-				"f": "ssd_multi($uv, $s, $st, $sl, $bevel*$bevel_map($uv), int($n), int($digits), $spacing)",
+				"f": "ssd_multi($uv, $s, $st, $sl, $bevel*$bevel_map($uv), int($n*$number_map($uv)), int($digits), $spacing)",
 				"shortdesc": "Output",
 				"type": "f"
 			}

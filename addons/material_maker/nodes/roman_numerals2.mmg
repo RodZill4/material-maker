@@ -99,8 +99,16 @@
 		"inputs": [
 			{
 				"default": "1.0",
+				"label": "4:",
+				"longdesc": "Map that affects the number parameter",
+				"name": "number_map",
+				"shortdesc": "Number Map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
 				"label": "5:",
-				"longdesc": "Map that affects the bevel parameter.",
+				"longdesc": "Map that affects the bevel parameter",
 				"name": "bevel_map",
 				"shortdesc": "Bevel Map",
 				"type": "f"
@@ -110,7 +118,7 @@
 		"name": "Roman Numerals",
 		"outputs": [
 			{
-				"f": "roman2($uv, $w, $h, int($n), $bevel*$bevel_map($uv), $r*min($w, $h), (1.0+$s)*$w, $a)",
+				"f": "roman2($uv, $w, $h, int($n*$number_map($uv)), $bevel*$bevel_map($uv), $r*min($w, $h), (1.0+$s)*$w, $a)",
 				"shortdesc": "Output",
 				"type": "f"
 			}
