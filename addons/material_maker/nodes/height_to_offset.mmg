@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"target": 0
+		"target": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -57,10 +57,10 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "",
+				"label": "Target",
 				"longdesc": "The target value on the heightmap",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "target",
 				"shortdesc": "Target",
 				"step": 0.01,

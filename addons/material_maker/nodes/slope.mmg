@@ -78,41 +78,41 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": 79.308716,
-				"y": -434.988342
+				"x": 79.3087158203125,
+				"y": -434.988342285156
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 11
+				"lod": 0.0,
+				"size": 11.0
 			},
-			"seed": 32897,
+			"seed": 32897.0,
 			"type": "buffer"
 		},
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": 551.308716,
-				"y": -656.988403
+				"x": 551.308715820313,
+				"y": -656.988403320313
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 11
+				"lod": 0.0,
+				"size": 11.0
 			},
-			"seed": 65434,
+			"seed": 65434.0,
 			"type": "buffer"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": 434.693542,
-				"y": -807.953613
+				"x": 420.0,
+				"y": -840.0
 			},
 			"parameters": {
-				"length": 0.2,
-				"size": 11,
-				"slope": 1
+				"length": 0.1,
+				"size": 11.0,
+				"slope": 1.0
 			},
-			"seed": 1419,
+			"seed": 1419.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -157,7 +157,7 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "",
+					"label": "Length",
 					"linked_widgets": [
 						{
 							"node": "dilate_pass_1",
@@ -182,7 +182,7 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "",
+					"label": "Slope",
 					"linked_widgets": [
 						{
 							"node": "dilate_pass_4",
@@ -211,58 +211,58 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -285.306458,
-				"y": -444.481384
+				"x": -285.306457519531,
+				"y": -444.481384277344
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "The input mask whose white areas will be dilated",
 					"name": "mask",
 					"shortdesc": "Mask",
 					"type": "f"
 				}
 			],
-			"seed": 317,
+			"seed": 317.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 975.210999,
-				"y": -466.481384
+				"x": 975.210998535156,
+				"y": -466.481384277344
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the dilated image",
 					"name": "out",
 					"shortdesc": "Output",
 					"type": "f"
 				}
 			],
-			"seed": -14401,
+			"seed": -14401.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
 		{
 			"name": "dilate_pass_1",
 			"node_position": {
-				"x": 337.301147,
-				"y": -500.368958
+				"x": 337.301147460938,
+				"y": -500.368957519531
 			},
 			"parameters": {
-				"d": 0.2,
-				"p": 1,
-				"s": 11
+				"d": 0.1,
+				"p": 1.0,
+				"s": 11.0
 			},
-			"seed": 71939,
+			"seed": 71939.0,
 			"seed_locked": true,
 			"shader_model": {
 				"code": [
@@ -320,10 +320,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -331,18 +331,18 @@
 						"control": "None",
 						"default": 0.5,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "p",
 						"step": 0.01,
 						"type": "float"
@@ -354,15 +354,15 @@
 		{
 			"name": "dilate_pass_4",
 			"node_position": {
-				"x": 567.310547,
-				"y": -572.577271
+				"x": 567.310546875,
+				"y": -572.577270507813
 			},
 			"parameters": {
-				"d": 0.2,
-				"p": 1,
-				"s": 11
+				"d": 0.1,
+				"p": 1.0,
+				"s": 11.0
 			},
-			"seed": 50297,
+			"seed": 50297.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -409,10 +409,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -420,18 +420,18 @@
 						"control": "None",
 						"default": 0.5,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "p",
 						"step": 0.01,
 						"type": "float"
@@ -443,11 +443,11 @@
 		{
 			"name": "buffer_3",
 			"node_position": {
-				"x": 760.403809,
-				"y": -455.191284
+				"x": 760.40380859375,
+				"y": -455.191284179688
 			},
 			"parameters": {
-				"size": 11
+				"size": 11.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -456,28 +456,28 @@
 		{
 			"name": "buffer_4",
 			"node_position": {
-				"x": 532.280334,
-				"y": -164.698944
+				"x": 532.280334472656,
+				"y": -164.698944091797
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 11
+				"lod": 0.0,
+				"size": 11.0
 			},
-			"seed": 65434,
+			"seed": 65434.0,
 			"type": "buffer"
 		},
 		{
 			"name": "dilate_pass_2",
 			"node_position": {
-				"x": 336.272766,
-				"y": -358.079498
+				"x": 336.272766113281,
+				"y": -358.079498291016
 			},
 			"parameters": {
-				"d": 0.2,
-				"p": 1,
-				"s": 11
+				"d": 0.1,
+				"p": 1.0,
+				"s": 11.0
 			},
-			"seed": 71939,
+			"seed": 71939.0,
 			"seed_locked": true,
 			"shader_model": {
 				"code": [
@@ -543,10 +543,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -554,18 +554,18 @@
 						"control": "None",
 						"default": 0.5,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 1.0,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "p",
 						"step": 0.01,
 						"type": "float"
@@ -577,15 +577,15 @@
 		{
 			"name": "dilate_pass_3",
 			"node_position": {
-				"x": 553.282166,
-				"y": -285.287811
+				"x": 553.282165527344,
+				"y": -285.287811279297
 			},
 			"parameters": {
-				"d": 0.2,
-				"p": 1,
-				"s": 11
+				"d": 0.1,
+				"p": 1.0,
+				"s": 11.0
 			},
-			"seed": 50297,
+			"seed": 50297.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -632,10 +632,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -643,8 +643,8 @@
 						"control": "None",
 						"default": 0.5,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
@@ -653,8 +653,8 @@
 						"control": "None",
 						"default": 0.5,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "p",
 						"step": 0.01,
 						"type": "float"
@@ -666,23 +666,23 @@
 		{
 			"name": "math",
 			"node_position": {
-				"x": 540.77887,
-				"y": -444.191284
+				"x": 540.778869628906,
+				"y": -444.191284179688
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 14
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 14.0
 			},
 			"seed_int": 0,
 			"type": "math"
 		}
 	],
 	"parameters": {
-		"length": 0.2,
-		"size": 11,
-		"slope": 1
+		"length": 0.1,
+		"size": 11.0,
+		"slope": 1.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Dilate",

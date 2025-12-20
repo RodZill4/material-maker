@@ -5,15 +5,13 @@
 		"y": 0
 	},
 	"parameters": {
-		"axis": 0
+		"axis": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
 		"longdesc": "Generates a plane that can be used to cut other shapes",
 		"name": "Plane",
@@ -27,8 +25,8 @@
 		],
 		"parameters": [
 			{
-				"default": 2,
-				"label": "",
+				"default": 2.0,
+				"label": "Axis",
 				"longdesc": "The axis of the plane",
 				"name": "axis",
 				"shortdesc": "Axis",

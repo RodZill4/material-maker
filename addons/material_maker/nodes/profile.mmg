@@ -9,33 +9,33 @@
 			"interpolation": 2,
 			"points": [
 				{
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"pos": 0,
-					"r": 0
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"pos": 0.0,
+					"r": 0.0
 				},
 				{
-					"a": 1,
-					"b": 0.55,
-					"g": 0.55,
+					"a": 1.0,
+					"b": 0.550000011920929,
+					"g": 0.550000011920929,
 					"pos": 0.504545,
-					"r": 0.55
+					"r": 0.550000011920929
 				},
 				{
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"pos": 1,
-					"r": 1
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"pos": 1.0,
+					"r": 1.0
 				}
 			],
 			"type": "Gradient"
 		},
 		"style": 1,
-		"width": 0.01
+		"width": 0.0
 	},
-	"seed": 65353,
+	"seed": 65353.0,
 	"seed_locked": true,
 	"shader_model": {
 		"code": "",
@@ -51,12 +51,14 @@
 		"inputs": [
 			{
 				"default": "dot($gradient($uv.x).xyz, vec3(1.0/3.0))",
-				"label": "2:",
+				"label": "",
 				"name": "in",
+				"shortdesc": "Input",
 				"type": "f"
 			}
 		],
 		"instance": "",
+		"longdesc": "Generates profile as a grayscale image from specified gradient",
 		"name": "Profile",
 		"outputs": [
 			{
@@ -68,8 +70,35 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
+				"default": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
+						}
+					],
+					"type": "Gradient"
+				},
 				"label": "",
+				"longdesc": "Gradient that defines the profile to be shown",
+				"name": "gradient",
+				"shortdesc": "Gradient",
+				"type": "gradient"
+			},
+			{
+				"default": 0.0,
+				"label": "Style",
 				"longdesc": "Style of the output image (fill or curve)",
 				"name": "style",
 				"shortdesc": "Style",
@@ -86,47 +115,19 @@
 				]
 			},
 			{
-				"default": {
-					"interpolation": 1,
-					"points": [
-						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
-						},
-						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
-						}
-					],
-					"type": "Gradient"
-				},
-				"label": "",
-				"longdesc": "Gradient that defines the profile to be shown",
-				"name": "gradient",
-				"shortdesc": "Gradient",
-				"type": "gradient"
-			},
-			{
 				"control": "None",
 				"default": 0.05,
-				"label": "",
+				"label": "Width",
 				"longdesc": "Width of the curve",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "width",
 				"shortdesc": "Width",
 				"step": 0.01,
 				"type": "float"
 			}
 		],
-		"shortdesc": "Profile",
-		"longdesc": "Generates profile as a grayscale image from specified gradient"
+		"shortdesc": "Profile"
 	},
 	"type": "shader"
 }

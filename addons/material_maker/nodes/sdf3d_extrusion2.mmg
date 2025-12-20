@@ -5,14 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
-		"axis": 1,
+		"axis": 1.0,
 		"d": 0.3
 	},
 	"seed_int": 0,
 	"shader_model": {
-		"code": [
-			"vec2 $(name_uv)_w = vec2($in($axis.xy+vec2(0.5)),abs($axis.z)-$d);"
-		],
+		"code": "vec2 $(name_uv)_w = vec2($in($axis.xy+vec2(0.5)),abs($axis.z)-$d);",
 		"global": "",
 		"inputs": [
 			{
@@ -60,8 +58,8 @@
 			},
 			{
 				"control": "None",
-				"default": 0.30,
-				"label": "",
+				"default": 0.3,
+				"label": "Length",
 				"longdesc": "The length of the extrusion operation",
 				"max": 1.0,
 				"min": 0.0,

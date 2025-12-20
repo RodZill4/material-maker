@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"axis": 2,
+		"axis": 2.0,
 		"d": 0.25
 	},
 	"seed_int": 0,
@@ -38,7 +38,7 @@
 		],
 		"parameters": [
 			{
-				"default": 2,
+				"default": 2.0,
 				"label": "Axis",
 				"longdesc": "Axis to perform the revolution operation on",
 				"name": "axis",
@@ -62,10 +62,10 @@
 			{
 				"control": "None",
 				"default": 0.25,
-				"label": "",
+				"label": "Offset",
 				"longdesc": "The offset applied to the input shape during the revolution operation",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "d",
 				"shortdesc": "Offset",
 				"step": 0.01,

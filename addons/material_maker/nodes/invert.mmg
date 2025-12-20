@@ -14,7 +14,7 @@
 		"inputs": [
 			{
 				"default": "vec4(1.0, 1.0, 1.0, 1.0)",
-				"label": "",
+				"label": "Input",
 				"longdesc": "The input image",
 				"name": "in",
 				"shortdesc": "Input",
@@ -32,9 +32,7 @@
 				"type": "rgba"
 			}
 		],
-		"parameters": [
-
-		],
+		"parameters": [],
 		"shortdesc": "Invert filter"
 	},
 	"type": "shader"

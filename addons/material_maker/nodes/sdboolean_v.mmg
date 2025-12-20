@@ -1,12 +1,12 @@
 {
 	"generic_size": 1,
-	"name": "sdboolean",
+	"name": "sdboolean_v",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"op1": 0
+		"op1": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -49,8 +49,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
-				"label": "2:",
+				"default": 0.0,
+				"label": "Operation",
 				"longdesc": "The operation performed by this node",
 				"name": "op#",
 				"shortdesc": "Operation",

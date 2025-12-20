@@ -6,9 +6,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"s": 1,
-		"sx": 1,
-		"sy": 1
+		"s": 1.0,
+		"sx": 1.0,
+		"sy": 1.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -38,11 +38,11 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 1,
-				"label": "",
+				"default": 1.0,
+				"label": "Scale",
 				"longdesc": "The scale of the transform",
-				"max": 5,
-				"min": 0,
+				"max": 5.0,
+				"min": 0.0,
 				"name": "s",
 				"shortdesc": "Scale",
 				"step": 0.001,
@@ -50,11 +50,11 @@
 			},
 			{
 				"control": "Scale1.x",
-				"default": 1,
+				"default": 1.0,
 				"label": "Scale X",
 				"longdesc": "The scale amount along the X axis",
-				"max": 5,
-				"min": 0,
+				"max": 5.0,
+				"min": 0.0,
 				"name": "sx",
 				"shortdesc": "Scale.x",
 				"step": 0.001,
@@ -62,10 +62,10 @@
 			},
 			{
 				"control": "Scale1.y",
-				"default": 1,
+				"default": 1.0,
 				"label": "Scale Y",
-				"max": 5,
-				"min": 0,
+				"max": 5.0,
+				"min": 0.0,
 				"name": "sy",
 				"shortdesc": "Scale.y",
 				"step": 0.001,

@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"c": 6,
+		"c": 6.0,
 		"variations": false
 	},
 	"seed_int": 0,
@@ -53,14 +53,14 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 4,
-				"label": "",
+				"default": 4.0,
+				"label": "Count",
 				"longdesc": "The number of repetitions of the input shape around the circle",
-				"max": 32,
-				"min": 1,
+				"max": 32.0,
+				"min": 1.0,
 				"name": "c",
 				"shortdesc": "Count",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			},
 			{

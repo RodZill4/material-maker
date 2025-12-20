@@ -5,8 +5,8 @@
 		"y": 0
 	},
 	"parameters": {
-		"angle": 135,
-		"axis": 2
+		"angle": 135.0,
+		"axis": 2.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -21,9 +21,7 @@
 		"includes": [
 			"sdf3d_rotate"
 		],
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
 		"longdesc": "Generates an angle formed by 2 planes that can be used to cut other shapes",
 		"name": "Angle",
@@ -37,8 +35,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Axis",
 				"longdesc": "The axis of the angle",
 				"name": "axis",
 				"shortdesc": "Axis",
@@ -60,11 +58,11 @@
 			},
 			{
 				"control": "None",
-				"default": 180,
-				"label": "",
+				"default": 180.0,
+				"label": "Angle",
 				"longdesc": "The angle of the shape",
-				"max": 360,
-				"min": 0,
+				"max": 360.0,
+				"min": 0.0,
 				"name": "angle",
 				"shortdesc": "Angle",
 				"step": 0.1,

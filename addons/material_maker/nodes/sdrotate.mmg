@@ -6,7 +6,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"a": 0
+		"a": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -47,14 +47,14 @@
 		"parameters": [
 			{
 				"control": "Radius1.a",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Angle",
 				"longdesc": "The rotation angle",
-				"max": 180,
-				"min": -180,
+				"max": 180.0,
+				"min": -180.0,
 				"name": "a",
 				"shortdesc": "Angle",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			}
 		],

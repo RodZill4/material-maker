@@ -35,11 +35,11 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Radius",
 				"longdesc": "The length of the dilate operation",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "r",
 				"shortdesc": "Radius",
 				"step": 0.01,

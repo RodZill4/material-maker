@@ -23,7 +23,7 @@
 		"inputs": [
 			{
 				"default": "vec3(0.0)",
-				"label": "",
+				"label": "Map #",
 				"longdesc": "An input map",
 				"name": "in#",
 				"shortdesc": "Input#",
@@ -41,9 +41,7 @@
 				"type": "rgb"
 			}
 		],
-		"parameters": [
-
-		],
+		"parameters": [],
 		"shortdesc": "Mix Maps"
 	},
 	"type": "shader"
