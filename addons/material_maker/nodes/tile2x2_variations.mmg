@@ -15,7 +15,7 @@
 			{
 				"default": "vec4(0.0)",
 				"function": true,
-				"label": "Input",
+				"label": "",
 				"longdesc": "The first input",
 				"name": "in",
 				"shortdesc": "Input1",
@@ -33,7 +33,9 @@
 				"type": "rgba"
 			}
 		],
-		"parameters": [],
+		"parameters": [
+
+		],
 		"shortdesc": "Tile 2x2"
 	},
 	"type": "shader"

@@ -1,13 +1,13 @@
 {
 	"generic_size": 1,
-	"name": "sdsmoothboolean_v",
+	"name": "sdsmoothboolean",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
 		"k1": 0.15,
-		"op1": 0.0
+		"op1": 0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -63,8 +63,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0.0,
-				"label": "Operation",
+				"default": 0,
+				"label": "2:",
 				"longdesc": "The operation performed by this node",
 				"name": "op#",
 				"shortdesc": "Operation#",
@@ -86,11 +86,11 @@
 			},
 			{
 				"control": "None",
-				"default": 0.0,
-				"label": "Smooth",
+				"default": 0,
+				"label": "2:",
 				"longdesc": "The smoothness of the boolean operation",
-				"max": 1.0,
-				"min": 0.0,
+				"max": 1,
+				"min": 0,
 				"name": "k#",
 				"shortdesc": "Smoothness#",
 				"step": 0.01,

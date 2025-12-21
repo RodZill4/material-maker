@@ -14,7 +14,7 @@
 		"inputs": [
 			{
 				"default": "vec4(0.0)",
-				"label": "Input 1",
+				"label": "",
 				"longdesc": "The first input",
 				"name": "in1",
 				"shortdesc": "Input1",
@@ -22,7 +22,7 @@
 			},
 			{
 				"default": "vec4(0.0)",
-				"label": "Input 2",
+				"label": "",
 				"longdesc": "The second input",
 				"name": "in2",
 				"shortdesc": "Input2",
@@ -30,7 +30,7 @@
 			},
 			{
 				"default": "vec4(0.0)",
-				"label": "Input 3",
+				"label": "",
 				"longdesc": "The third input",
 				"name": "in3",
 				"shortdesc": "Input3",
@@ -38,7 +38,7 @@
 			},
 			{
 				"default": "vec4(0.0)",
-				"label": "Input 4",
+				"label": "",
 				"longdesc": "The fourth input",
 				"name": "in4",
 				"shortdesc": "Input4",
@@ -56,7 +56,9 @@
 				"type": "rgba"
 			}
 		],
-		"parameters": [],
+		"parameters": [
+
+		],
 		"shortdesc": "Tile 2x2"
 	},
 	"type": "shader"
