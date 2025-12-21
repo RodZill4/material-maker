@@ -44,10 +44,10 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "",
+				"label": "Amount",
 				"longdesc": "The amount of the second input in the result",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "amount",
 				"shortdesc": "Amount",
 				"step": 0.01,

@@ -1,15 +1,16 @@
 {
-	"name": "kaleidoscope",
+	"generic_size": 1,
+	"name": "kaleidoscope2",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"count": 5,
-		"offset": 0,
+		"count": 5.0,
+		"offset": 0.0,
 		"variations": false
 	},
-	"seed_int": 1204686787,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "vec3 $(name_uv)_kal = kal_rotate($uv, $count, $offset, $seed);",
 		"global": [
@@ -50,23 +51,23 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 5,
-				"label": "",
+				"default": 5.0,
+				"label": "Count",
 				"longdesc": "The number of replications of an angle of the input",
-				"max": 10,
-				"min": 2,
+				"max": 10.0,
+				"min": 2.0,
 				"name": "count",
 				"shortdesc": "Count",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			},
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Offset",
 				"longdesc": "The angular offset of the replicated angle of the input",
-				"max": 180,
-				"min": -180,
+				"max": 180.0,
+				"min": -180.0,
 				"name": "offset",
 				"shortdesc": "Offset",
 				"step": 0.1,

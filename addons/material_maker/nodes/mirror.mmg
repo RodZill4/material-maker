@@ -1,13 +1,14 @@
 {
+	"generic_size": 1,
 	"name": "mirror",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"direction": 0,
+		"direction": 0.0,
 		"flip_sides": false,
-		"offset": 0
+		"offset": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -44,8 +45,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Direction",
 				"longdesc": "The mirror direction (horizontal or vertical)",
 				"name": "direction",
 				"shortdesc": "Direction",
@@ -63,11 +64,11 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Offset",
 				"longdesc": "The offset from the center",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "offset",
 				"shortdesc": "Offset",
 				"step": 0.005,

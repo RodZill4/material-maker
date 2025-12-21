@@ -6,7 +6,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"s": 1
+		"s": 1.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -36,11 +36,11 @@
 		"parameters": [
 			{
 				"control": "Scale1.x",
-				"default": 1,
-				"label": "",
+				"default": 1.0,
+				"label": "Scale",
 				"longdesc": "The scale of the transform",
-				"max": 5,
-				"min": 0,
+				"max": 5.0,
+				"min": 0.0,
 				"name": "s",
 				"shortdesc": "Scale",
 				"step": 0.01,

@@ -108,13 +108,14 @@
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": -800,
-				"y": 60
+				"x": -800.0,
+				"y": 60.0
 			},
 			"parameters": {
+				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 10
+				"size": 10.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -123,8 +124,8 @@
 		{
 			"name": "invert",
 			"node_position": {
-				"x": -460,
-				"y": 60
+				"x": -460.0,
+				"y": 60.0
 			},
 			"parameters": {
 
@@ -135,12 +136,12 @@
 		{
 			"name": "shape_2",
 			"node_position": {
-				"x": -99,
-				"y": -45
+				"x": -99.0,
+				"y": -45.0
 			},
 			"parameters": {
 				"d": 0.05,
-				"s": 10
+				"s": 10.0
 			},
 			"seed_int": 0,
 			"shader_model": {
@@ -185,10 +186,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -197,7 +198,7 @@
 						"default": 0.1,
 						"label": "",
 						"max": 0.3,
-						"min": 0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
@@ -209,12 +210,12 @@
 		{
 			"name": "shape_3",
 			"node_position": {
-				"x": 37,
-				"y": 280
+				"x": 37.0,
+				"y": 280.0
 			},
 			"parameters": {
 				"d": 0.05,
-				"s": 10
+				"s": 10.0
 			},
 			"seed_int": 0,
 			"shader_model": {
@@ -282,10 +283,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -294,7 +295,7 @@
 						"default": 0.1,
 						"label": "",
 						"max": 0.3,
-						"min": 0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
@@ -306,8 +307,8 @@
 		{
 			"name": "uniform_greyscale",
 			"node_position": {
-				"x": -86.877747,
-				"y": 39.625549
+				"x": -86.8777465820313,
+				"y": 39.6255493164063
 			},
 			"parameters": {
 
@@ -318,13 +319,14 @@
 		{
 			"name": "buffer_3",
 			"node_position": {
-				"x": -86,
-				"y": 98
+				"x": -86.0,
+				"y": 98.0
 			},
 			"parameters": {
+				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 10
+				"size": 10.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -333,8 +335,8 @@
 		{
 			"name": "uniform_greyscale_2",
 			"node_position": {
-				"x": -87.877747,
-				"y": 212.625549
+				"x": -87.8777465820313,
+				"y": 212.625549316406
 			},
 			"parameters": {
 
@@ -345,13 +347,13 @@
 		{
 			"name": "switch",
 			"node_position": {
-				"x": -300,
-				"y": -40
+				"x": -300.0,
+				"y": -40.0
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 0
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 0.0
 			},
 			"seed_int": 0,
 			"type": "switch"
@@ -359,46 +361,17 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -243,
-				"y": -205
+				"x": -240.0,
+				"y": -240.0
 			},
 			"parameters": {
 				"distance": 0.05,
-				"operation": 0,
-				"resolution": 10
+				"operation": 0.0,
+				"resolution": 10.0
 			},
 			"seed_int": 0,
 			"type": "remote",
 			"widgets": [
-				{
-					"configurations": {
-						"Dilation": [
-							{
-								"node": "switch",
-								"value": 0,
-								"widget": "source"
-							}
-						],
-						"Erosion": [
-							{
-								"node": "switch",
-								"value": 1,
-								"widget": "source"
-							}
-						]
-					},
-					"label": "",
-					"linked_widgets": [
-						{
-							"node": "switch",
-							"widget": "source"
-						}
-					],
-					"longdesc": "Morphology operation",
-					"name": "operation",
-					"shortdesc": "Operation",
-					"type": "config_control"
-				},
 				{
 					"label": "",
 					"linked_widgets": [
@@ -425,7 +398,36 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "",
+					"configurations": {
+						"Dilation": [
+							{
+								"node": "switch",
+								"value": 0.0,
+								"widget": "source"
+							}
+						],
+						"Erosion": [
+							{
+								"node": "switch",
+								"value": 1.0,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Operation",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						}
+					],
+					"longdesc": "Morphology operation",
+					"name": "operation",
+					"shortdesc": "Operation",
+					"type": "config_control"
+				},
+				{
+					"label": "Distance",
 					"linked_widgets": [
 						{
 							"node": "shape_2",
@@ -451,7 +453,7 @@
 			"name": "gen_inputs",
 			"node_position": {
 				"x": -1221.203125,
-				"y": 65.215454
+				"y": 65.2154541015625
 			},
 			"parameters": {
 
@@ -468,8 +470,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": 427,
-				"y": 80.583458
+				"x": 427.0,
+				"y": 80.5834579467773
 			},
 			"parameters": {
 
@@ -486,8 +488,8 @@
 		{
 			"name": "uniform_greyscale_3",
 			"node_position": {
-				"x": 178.439911,
-				"y": 43.862778
+				"x": 178.439910888672,
+				"y": 43.8627777099609
 			},
 			"parameters": {
 
@@ -498,13 +500,14 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": 179.317657,
-				"y": 102.237228
+				"x": 179.317657470703,
+				"y": 102.237228393555
 			},
 			"parameters": {
+				"f32": false,
 				"filter": false,
 				"mipmap": false,
-				"size": 10
+				"size": 10.0
 			},
 			"seed_int": 0,
 			"type": "buffer",
@@ -513,8 +516,8 @@
 		{
 			"name": "uniform_greyscale_4",
 			"node_position": {
-				"x": 178.439911,
-				"y": 215.862778
+				"x": 178.439910888672,
+				"y": 215.862777709961
 			},
 			"parameters": {
 
@@ -525,12 +528,12 @@
 		{
 			"name": "shape_4",
 			"node_position": {
-				"x": 166.317657,
-				"y": -40.762772
+				"x": 166.317657470703,
+				"y": -40.7627716064453
 			},
 			"parameters": {
 				"d": 0.05,
-				"s": 10
+				"s": 10.0
 			},
 			"seed_int": 0,
 			"shader_model": {
@@ -575,10 +578,10 @@
 				],
 				"parameters": [
 					{
-						"default": 9,
-						"first": 6,
+						"default": 9.0,
+						"first": 6.0,
 						"label": "",
-						"last": 12,
+						"last": 12.0,
 						"name": "s",
 						"type": "size"
 					},
@@ -587,7 +590,7 @@
 						"default": 0.1,
 						"label": "",
 						"max": 0.3,
-						"min": 0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
@@ -599,8 +602,8 @@
 	],
 	"parameters": {
 		"distance": 0.05,
-		"operation": 0,
-		"resolution": 10
+		"operation": 0.0,
+		"resolution": 10.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Morphology",

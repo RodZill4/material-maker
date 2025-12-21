@@ -1,13 +1,14 @@
 {
+	"generic_size": 1,
 	"name": "shear",
 	"node_position": {
 		"x": 0,
 		"y": 0
 	},
 	"parameters": {
-		"amount": 0,
-		"center": 0,
-		"direction": 1
+		"amount": 1.0,
+		"center": 0.0,
+		"direction": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -36,8 +37,8 @@
 		],
 		"parameters": [
 			{
-				"default": 1,
-				"label": "",
+				"default": 1.0,
+				"label": "Direction",
 				"longdesc": "The direction of the shear transform (horizontal or vertical)",
 				"name": "direction",
 				"shortdesc": "Direction",
@@ -55,11 +56,11 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Amount",
 				"longdesc": "The amount of the transform",
-				"max": 1,
-				"min": -1,
+				"max": 1.0,
+				"min": -1.0,
 				"name": "amount",
 				"shortdesc": "Amount",
 				"step": 0.01,
@@ -67,11 +68,11 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Center",
 				"longdesc": "The position of the shear center",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "center",
 				"shortdesc": "Center",
 				"step": 0.01,

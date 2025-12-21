@@ -1,4 +1,5 @@
 {
+	"generic_size": 1,
 	"name": "warp",
 	"node_position": {
 		"x": 0,
@@ -7,7 +8,7 @@
 	"parameters": {
 		"amount": 0.1,
 		"eps": 0.1,
-		"mode": 0
+		"mode": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -52,8 +53,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Mode",
 				"longdesc": "Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.",
 				"name": "mode",
 				"shortdesc": "Mode",
@@ -71,11 +72,11 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Amount",
 				"longdesc": "The strength of the warp effect",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "amount",
 				"shortdesc": "Strength",
 				"step": 0.005,
@@ -83,8 +84,8 @@
 			},
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Epsilon",
 				"longdesc": "The offset used to measure slopes",
 				"max": 0.2,
 				"min": 0.005,

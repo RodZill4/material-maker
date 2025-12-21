@@ -5,10 +5,10 @@
 		"y": 0
 	},
 	"parameters": {
-		"c": 5,
+		"c": 5.0,
 		"variations": false
 	},
-	"seed_int": 411153024,
+	"seed_int": 0,
 	"shader_model": {
 		"code": [
 			"float $(name_uv)_ids = $variations ? rand(vec2((floor(fract((0.15915494309*atan($uv.x, $uv.y) - 0.5 / $c)) * $c) / $c))) + $seed : 0.0;",
@@ -54,14 +54,14 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 4,
-				"label": "",
+				"default": 4.0,
+				"label": "Count",
 				"longdesc": "The number of repetitions of the input shape around the circle",
-				"max": 32,
-				"min": 1,
+				"max": 32.0,
+				"min": 1.0,
 				"name": "c",
 				"shortdesc": "Count",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			},
 			{

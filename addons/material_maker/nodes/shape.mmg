@@ -7,8 +7,8 @@
 	"parameters": {
 		"edge": 0.1,
 		"radius": 0.85,
-		"shape": 1,
-		"sides": 6
+		"shape": 1.0,
+		"sides": 6.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -86,8 +86,8 @@
 		],
 		"parameters": [
 			{
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Shape",
 				"longdesc": "The type of shape drawn by this node",
 				"name": "shape",
 				"shortdesc": "Shape",
@@ -117,23 +117,23 @@
 			},
 			{
 				"control": "None",
-				"default": 3,
-				"label": "",
+				"default": 3.0,
+				"label": "Sides",
 				"longdesc": "The number of sides of the generated shape (unused for Circle)",
-				"max": 32,
-				"min": 2,
+				"max": 32.0,
+				"min": 2.0,
 				"name": "sides",
 				"shortdesc": "Sides count",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			},
 			{
 				"control": "None",
-				"default": 1,
-				"label": "",
+				"default": 1.0,
+				"label": "Radius",
 				"longdesc": "The size of the generated shape",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "radius",
 				"shortdesc": "Shape size",
 				"step": 0.01,
@@ -142,10 +142,10 @@
 			{
 				"control": "None",
 				"default": 0.2,
-				"label": "",
+				"label": "Edge",
 				"longdesc": "The edge width of the generated shape",
-				"max": 1,
-				"min": 0,
+				"max": 1.0,
+				"min": 0.0,
 				"name": "edge",
 				"shortdesc": "Edge width",
 				"step": 0.01,

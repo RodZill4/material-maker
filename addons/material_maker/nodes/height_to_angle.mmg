@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"angle": 0
+		"angle": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -46,11 +46,11 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 0,
-				"label": "",
+				"default": 0.0,
+				"label": "Angle",
 				"longdesc": "The offset angle applied to the generated map",
-				"max": 180,
-				"min": -180,
+				"max": 180.0,
+				"min": -180.0,
 				"name": "angle",
 				"shortdesc": "Angle",
 				"step": 0.01,
