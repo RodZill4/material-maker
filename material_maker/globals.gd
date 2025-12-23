@@ -135,16 +135,10 @@ func parse_paste_data(data : String):
 			push_error("An error occurred in the HTTP request.")
 		else:
 			var downloaded_data : String = (await http_request.request_completed)[3].get_string_from_utf8()
-			var test_json_conv : JSON = JSON.new()
-			error = test_json_conv.parse(downloaded_data)
-			if error == OK:
-				graph = test_json_conv.get_data()
+			graph = MMLoader.string_to_dict_tree(downloaded_data)
 		http_request.queue_free()
 	else:
-		var test_json_conv = JSON.new()
-		var error = test_json_conv.parse(data)
-		if error == OK:
-			graph = test_json_conv.get_data()
+		graph = MMLoader.string_to_dict_tree(data)
 	if graph != null and graph is Dictionary:
 		if graph.has("nodes"):
 			if graph.has("type") and graph.type == "graph":

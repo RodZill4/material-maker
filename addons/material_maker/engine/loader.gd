@@ -1,4 +1,5 @@
 @tool
+class_name MMLoader
 extends Node
 
 var predefined_generators : Dictionary = {}
@@ -149,13 +150,30 @@ static func replace_arrays_with_multiline_strings(data, walk_children : bool = f
 	return data
 
 static func string_to_dict_tree(string_data : String) -> Dictionary:
+	if string_data.begins_with("MMC:"):
+		string_data = string_data.right(-4)
+		var colon_position = string_data.find(":")
+		var data_length : int = string_data.left(colon_position).to_int()
+		string_data = string_data.right(-colon_position-1)
+		string_data = Marshalls.base64_to_raw(string_data).decompress(data_length, FileAccess.COMPRESSION_ZSTD).get_string_from_ascii()
 	var test_json_conv : JSON = JSON.new()
 	if test_json_conv.parse(string_data) == OK and test_json_conv.data is Dictionary:
 		return replace_arrays_with_multiline_strings(test_json_conv.data)
 	return {}
 
-static func dict_tree_to_string(data : Dictionary) -> String:
-	return JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true)
+static func dict_tree_to_string(data : Dictionary, compress : bool = false) -> String:
+	var string : String
+	if compress:
+		string = JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "", true, true)
+		var buffer : PackedByteArray = string.to_ascii_buffer()
+		var compressed : String = Marshalls.raw_to_base64(buffer.compress(FileAccess.COMPRESSION_ZSTD))
+		compressed = "MMC:"+str(buffer.size())+":"+compressed
+		if string.length() > compressed.length():
+			print(string.length(), "  ", compressed.length())
+			string = compressed
+	else:
+		string = JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true, true)
+	return string
 
 func load_gen(filename: String) -> MMGenBase:
 	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)

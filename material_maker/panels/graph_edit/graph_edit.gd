@@ -820,7 +820,7 @@ func cut() -> void:
 	remove_selection()
 
 func copy() -> void:
-	DisplayServer.clipboard_set(JSON.stringify(serialize_selection()))
+	DisplayServer.clipboard_set(mm_loader.dict_tree_to_string(serialize_selection(), true))
 
 func do_paste(data) -> void:
 	var node_position = scroll_offset+0.5*size

@@ -149,7 +149,7 @@ func _on_Load_Export_pressed():
 			var file : FileAccess = FileAccess.open(files[0], FileAccess.READ)
 			if file == null:
 				return
-			var export_data = mm_loader.string_to_dict_tree(file.get_as_text())
+			var export_data = MMLoader.string_to_dict_tree(file.get_as_text())
 			if export_data.has("name") and export_data.has("files"):
 				export_data.external = true
 				exports[export_data.name] = export_data
