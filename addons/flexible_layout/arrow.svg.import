@@ -1,8 +1,8 @@
 [remap]
 
-importer="texture"
-type="CompressedTexture2D"
-uid="uid://c2ljin3axj2sd"
+importer="svg"
+type="DPITexture"
+uid="uid://7ydi1c1ic17e"
 path="res://.godot/imported/arrow.svg-e1254f39413b91d100a308431d762230.ctex"
 metadata={
 "vram_texture": false
