@@ -1,5 +1,6 @@
 extends MMGraphNodeMinimal
 
+class_name MMGraphReroute
 
 const PREVIEW_SIZES : Array[int] = [ 0, 64, 128, 192]
 
@@ -118,3 +119,4 @@ func set_preview(v : int):
 		theme_type_variation = "MM_ReroutePreview"
 	await get_tree().process_frame
 	size = Vector2(0, 0)
+	get_parent().update_active_connections(true)

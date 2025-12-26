@@ -37,6 +37,8 @@ func update_node() -> void:
 	add_child(add_button)
 	add_button.connect("pressed", Callable(generator, "add_port"))
 	set_slot(get_child_count()-1, false, 0, color, false, 0, color)
+	get_parent().update_active_connections()
+
 
 func command(command_name : String, command_parameters : Array, update_node : bool = false):
 	var parent_generator = generator.get_parent().get_parent()

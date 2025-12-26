@@ -516,6 +516,7 @@ func update_shader_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
 	update_node()
 	get_parent().set_need_save()
+	get_parent().update_active_connections()
 	edit_generator_next_state = generator.get_parent().serialize().duplicate(true)
 
 func update_sdf_generator(sdf_scene) -> void:

@@ -40,6 +40,8 @@ var undoredo_move_node_selection_changed : bool = true
 enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 var connection_line_style : int = ConnectionStyle.BEZIER
 
+var active_connections : Array[Dictionary]
+
 @onready var drag_cut_cursor = preload("res://material_maker/icons/knife.png")
 var connections_to_cut : Array[Dictionary]
 var drag_cut_line : PackedVector2Array
@@ -141,6 +143,7 @@ func _gui_input(event) -> void:
 		if connections_to_cut.size():
 			on_cut_connections(connections_to_cut)
 			connections_to_cut.clear()
+			update_active_connections()
 		Input.set_custom_mouse_cursor(null)
 		drag_cut_line.clear()
 		conns.clear()
@@ -188,6 +191,7 @@ func _gui_input(event) -> void:
 			valid_drag_cut_entry = true
 			if event.shift_pressed:
 				add_reroute_under_mouse()
+				update_active_connections()
 
 			for c in get_children():
 				if ! c is GraphNode:
@@ -308,6 +312,7 @@ func _draw() -> void:
 	if lasso_points.size() > 1:
 		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
 				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
+	$OutlineOverlay.queue_redraw()
 
 
 # Misc. useful functions
@@ -434,6 +439,7 @@ func on_cut_connections(connections_to_cut : Array):
 		var from_gen = get_node(str(c.from_node)).generator
 		var to_gen = get_node(str(c.to_node)).generator
 		if do_disconnect_node(c.from_node, c.from_port, c.to_node, c.to_port):
+			remove_active_connection(c.from_node, c.from_port, c.to_node, c.to_port)
 			conns.append({from=from_gen.name,from_port=c.from_port, to=to_gen.name, to_port=c.to_port})
 	var undo_actions = [
 		{ type="add_to_graph", parent=generator_hier_name, generators=[], connections=conns }
@@ -442,7 +448,6 @@ func on_cut_connections(connections_to_cut : Array):
 		{ type="remove_connections", parent=generator_hier_name, connections=conns }
 	]
 	undoredo.add("Cut node connections", undo_actions, redo_actions)
-
 
 func on_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
 	var from_gen = get_node(from).generator
@@ -457,6 +462,7 @@ func on_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 			{ type="remove_connections", parent=generator_hier_name, connections=[connection] }
 		]
 		undoredo.add("Disconnect nodes", undo_actions, redo_actions)
+	remove_active_connection(from, from_slot, to, to_slot)
 
 func on_connections_changed(removed_connections : Array, added_connections : Array) -> void:
 	for c in removed_connections:
@@ -930,6 +936,7 @@ func duplicate_selected() -> void:
 
 func duplicate_selected_with_inputs() -> void:
 	do_paste(serialize_selection([], true))
+	update_active_connections(true)
 
 func select_all() -> void:
 	for c in get_children():
@@ -1027,14 +1034,24 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 
 var highlighting_connections : bool = false
 
+func update_active_connections(should_hide_first : bool = false) -> void:
+	if should_hide_first:
+		$OutlineOverlay.hide()
+	await get_tree().process_frame
+	active_connections.clear()
+	for c in get_connection_list():
+		if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected:
+			active_connections.append(c)
+	$OutlineOverlay.queue_redraw()
+	$OutlineOverlay.show.call_deferred()
+
 func highlight_connections() -> void:
 	if highlighting_connections:
 		return
 	highlighting_connections = true
 	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		await get_tree().process_frame
-	for c in get_connection_list():
-		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
+	update_active_connections()
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
@@ -1274,6 +1291,7 @@ func undoredo_command(command : Dictionary) -> void:
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
+	update_active_connections()
 
 func undoredo_move_node(node_name : String, old_pos : Vector2, new_pos : Vector2):
 	if old_pos == new_pos:
@@ -1750,3 +1768,12 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func remove_active_connection(from : String, from_slot : int, to : String, to_slot : int) -> void:
+	for c in len(active_connections):
+		var connection : Dictionary = active_connections[c]
+		if (connection.from_node == from and connection.from_port == from_slot
+				and connection.to_node == to and connection.to_port == to_slot):
+			active_connections.remove_at(c)
+			break
+	$OutlineOverlay.queue_redraw()

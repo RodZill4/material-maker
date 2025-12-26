@@ -75,3 +75,4 @@ func update_node() -> void:
 		set_slot(i, has_input, 42, Color(1.0, 1.0, 1.0, 1.0), has_output, 42, Color(1.0, 1.0, 1.0, 1.0))
 	# Preview
 	restore_preview_widget()
+	get_parent().update_active_connections()
