@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://duk4r6tejiina"]
+
+[sub_resource type="Shader" id="Shader_pewh7"]
+code = "shader_type canvas_item;
+uniform vec3 dash_color : source_color = vec3(1.0);
+
+void fragment() {
+	float f = smoothstep(0.0,0.5,abs(fract(UV.x*0.25-TIME)-0.5));
+	f = max(f, 0.5);
+	COLOR = vec4(vec3(f)*dash_color, 1.0);
+}
+"
+
+[resource]
+shader = SubResource("Shader_pewh7")
+shader_parameter/dash_color = Color(1, 1, 1, 1)

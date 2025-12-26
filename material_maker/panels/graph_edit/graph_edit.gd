@@ -40,6 +40,9 @@ var undoredo_move_node_selection_changed : bool = true
 enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 var connection_line_style : int = ConnectionStyle.BEZIER
 
+var active_connections : Array[Dictionary]
+var should_draw_active_overlays : bool = true
+
 @onready var drag_cut_cursor = preload("res://material_maker/icons/knife.png")
 var connections_to_cut : Array[Dictionary]
 var drag_cut_line : PackedVector2Array
@@ -138,6 +141,7 @@ func _gui_input(event) -> void:
 				connections_to_cut.append_array(conns)
 		if connections_to_cut.size():
 			on_cut_connections(connections_to_cut)
+			update_active_connections()
 			connections_to_cut.clear()
 		Input.set_custom_mouse_cursor(null)
 		drag_cut_line.clear()
@@ -192,7 +196,11 @@ func _gui_input(event) -> void:
 			if not (event.ctrl_pressed or event.shift_pressed):
 				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 				node_popup.show_popup()
+		elif event.button_index == MOUSE_BUTTON_MIDDLE:
+			should_draw_active_overlays = not event.is_pressed()
+			queue_redraw()
 		else:
+			
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
@@ -272,6 +280,7 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 func _draw() -> void:
 	if drag_cut_line.size() > 1:
 		draw_polyline(drag_cut_line, get_theme_color("connection_knife", "GraphEdit"), 1.0)
+	draw_active_overlays()
 
 
 # Misc. useful functions
@@ -354,6 +363,7 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 	return false
 
 func on_cut_connections(connections_to_cut : Array):
+	queue_redraw()
 	var generator_hier_name : String = generator.get_hier_name()
 	var conns : Array = []
 	for c in connections_to_cut:
@@ -950,14 +960,20 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 
 var highlighting_connections : bool = false
 
+func update_active_connections() -> void:
+	active_connections.clear()
+	for c in get_connection_list():
+		if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected:
+			active_connections.append(c)
+
 func highlight_connections() -> void:
 	if highlighting_connections:
 		return
 	highlighting_connections = true
 	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		await get_tree().process_frame
-	for c in get_connection_list():
-		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
+	update_active_connections()
+	queue_redraw()
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
@@ -1180,6 +1196,7 @@ func undoredo_command(command : Dictionary) -> void:
 					get_node("node_"+k).do_set_position(command.positions[k])
 				else:
 					parent_generator.get_node(k).set_position(command.positions[k])
+			draw_active_overlays.call_deferred()
 		"resize_comment":
 			var g = get_node_from_hier_name(command.node)
 			g.size = command.size
@@ -1673,3 +1690,42 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func draw_active_overlays() -> void:
+	for node in get_children():
+		if node is Line2D:
+			remove_child(node)
+			node.free()
+	if active_connections.size() and should_draw_active_overlays:
+		for line in active_connections:
+			if has_node(NodePath(line.to_node)) and has_node(NodePath(line.to_node)):
+				var from_node : GraphNode = get_node(NodePath(line.from_node))
+				var to_node : GraphNode = get_node(NodePath(line.to_node))
+				if from_node and to_node:
+					var from_pos : Vector2 = from_node.get_output_port_position(line.from_port)*zoom + from_node.position
+					var to_pos : Vector2 = to_node.get_input_port_position(line.to_port)*zoom + to_node.position
+					var line2d : Line2D = Line2D.new()
+					if get_viewport_rect().has_point(from_pos) or get_viewport_rect().has_point(to_pos):
+						var lm : ShaderMaterial = load("res://material_maker/panels/graph_edit/active_connection_overlay.tres")
+						line2d.texture_mode = Line2D.LINE_TEXTURE_TILE
+						line2d.material = lm.duplicate(true)
+						line2d.material.set_shader_parameter("dash_color", to_node.get_input_port_color(line.to_port))
+						line2d.points = _get_connection_line(from_pos, to_pos)
+						line2d.width = connection_lines_thickness
+						line2d.round_precision = 4
+						line2d.begin_cap_mode = Line2D.LINE_CAP_ROUND
+						line2d.end_cap_mode = Line2D.LINE_CAP_ROUND
+						add_child(line2d)
+
+func _on_connection_drag_started(_from_node: StringName, _from_port: int, _is_output: bool) -> void:
+	active_connections.clear()
+	should_draw_active_overlays = false
+
+func _on_end_node_move() -> void:
+	should_draw_active_overlays = true
+
+func _on_begin_node_move() -> void:
+	should_draw_active_overlays = false
+
+func _on_connection_drag_ended() -> void:
+	should_draw_active_overlays = true

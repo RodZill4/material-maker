@@ -86,6 +86,10 @@ func export_files(files, output_dir, target, target_file, image_size) -> void:
 	get_tree().quit()
 
 func _ready():
+	# Briefly show the shader at launch to allow it to compile
+	# to avoid the initial stutter when highlighting active connections
+	$ActiveOutlineOverlay.free()
+
 	var args : PackedStringArray = OS.get_cmdline_args()
 	if ("--export" in args) or ("--export-material" in args):
 		print("Exporting...")

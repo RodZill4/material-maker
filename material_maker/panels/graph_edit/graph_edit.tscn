@@ -26,7 +26,6 @@ offset_right = 1529.0
 offset_bottom = 1193.0
 grow_horizontal = 2
 grow_vertical = 2
-scroll_offset = Vector2(-1, -1)
 grid_pattern = 1
 right_disconnects = true
 zoom_min = 0.25
@@ -86,12 +85,16 @@ layout_mode = 2
 [node name="UndoRedo" type="Node" parent="."]
 script = ExtResource("3")
 
+[connection signal="begin_node_move" from="." to="." method="_on_begin_node_move"]
+[connection signal="connection_drag_ended" from="." to="." method="_on_connection_drag_ended"]
+[connection signal="connection_drag_started" from="." to="." method="_on_connection_drag_started"]
 [connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [true]]
 [connection signal="connection_request" from="." to="." method="on_connect_node"]
 [connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [false]]
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
 [connection signal="disconnection_request" from="." to="." method="on_disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
+[connection signal="end_node_move" from="." to="." method="_on_end_node_move"]
 [connection signal="node_deselected" from="." to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="node_selected" from="." to="." method="_on_GraphEdit_node_selected"]
 [connection signal="paste_nodes_request" from="." to="." method="paste"]
