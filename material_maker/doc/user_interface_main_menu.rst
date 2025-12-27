@@ -65,6 +65,9 @@ Edit menu
 
 * *Duplicate with inputs* is similar to *Duplicate*, but with input links kept
 
+* *Swap node inputs* swap inputs of the selected node. When there is exactly one
+  input, this cycles through compatible slots of for the existing connection. 
+
 * *Frame selected nodes* creates a comment node that frames selected nodes
 
 * *Select all* selects all nodes in the current graph view

@@ -74,6 +74,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
 	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
+	{ menu="Edit/Swap node inputs", command="edit_swap_node_inputs", shortcut="Alt+S"},
 	{ menu="Edit/-" },
 	{ menu="Edit/Frame selected nodes", command="frame_nodes", shortcut="Control+Shift+F" },
 	{ menu="Edit/-" },
@@ -874,6 +875,11 @@ func edit_duplicate_with_inputs() -> void:
 
 func edit_duplicate_with_inputs_is_disabled() -> bool:
 	return edit_cut_is_disabled()
+
+func edit_swap_node_inputs() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.swap_node_inputs()
 
 func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
