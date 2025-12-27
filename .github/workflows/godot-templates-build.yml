@@ -23,6 +23,7 @@ jobs:
       - name: Clone latest stable Godot source into ./godot
         run: |
           git clone --depth 1 --branch ${GODOT_VERSION}-${GODOT_SUB} https://github.com/godotengine/godot.git godot
+          du .
           cd godot
           patch -p1 < ../material-maker/material-maker/misc/mm.patch
 
