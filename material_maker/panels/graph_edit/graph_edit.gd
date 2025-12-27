@@ -40,6 +40,8 @@ var undoredo_move_node_selection_changed : bool = true
 enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 var connection_line_style : int = ConnectionStyle.BEZIER
 
+var active_connections : Array[Dictionary]
+
 @onready var drag_cut_cursor = preload("res://material_maker/icons/knife.png")
 var connections_to_cut : Array[Dictionary]
 var drag_cut_line : PackedVector2Array
@@ -272,6 +274,18 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 func _draw() -> void:
 	if drag_cut_line.size() > 1:
 		draw_polyline(drag_cut_line, get_theme_color("connection_knife", "GraphEdit"), 1.0)
+
+	# Outline highlighted connections
+	if active_connections.size():
+		for line in active_connections:
+			if has_node(NodePath(line.to_node)) and has_node(NodePath(line.to_node)):
+				var from_node : GraphNode = get_node(NodePath(line.from_node))
+				var to_node : GraphNode = get_node(NodePath(line.to_node))
+				if from_node and to_node:
+					var from_pos : Vector2 =  from_node.get_output_port_position(line.from_port) + from_node.position_offset
+					var to_pos : Vector2 = to_node.get_input_port_position(line.to_port) + to_node.position_offset
+					draw_polyline(_get_connection_line(from_pos*zoom - scroll_offset, to_pos*zoom - scroll_offset),
+							to_node.get_input_port_color(line.to_port).darkened(0.35), max(10, connection_lines_thickness)*zoom, true)
 
 
 # Misc. useful functions
@@ -954,10 +968,13 @@ func highlight_connections() -> void:
 	if highlighting_connections:
 		return
 	highlighting_connections = true
+	active_connections.clear()
 	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		await get_tree().process_frame
 	for c in get_connection_list():
-		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
+		if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected:
+			active_connections.append(c)
+	queue_redraw()
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
@@ -1673,3 +1690,12 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+
+func _on_connection_drag_started(from_node: StringName, from_port: int, is_output: bool) -> void:
+	active_connections.clear()
+	queue_redraw()
+
+func _on_connection_drag_ended() -> void:
+	active_connections.clear()
+	queue_redraw()
