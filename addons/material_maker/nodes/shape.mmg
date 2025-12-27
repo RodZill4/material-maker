@@ -78,7 +78,7 @@
 		"name": "Shape",
 		"outputs": [
 			{
-				"f": "shape_$(shape)($(uv), $(sides), $(radius)*$radius_map($uv), $(edge)*$edge_map($uv))",
+				"f": "shape_$(shape)($(uv), $(sides)+1.0e-5, $(radius)*$radius_map($uv), $(edge)*$edge_map($uv))",
 				"longdesc": "Shows a white shape on a black background",
 				"shortdesc": "Output",
 				"type": "f"
