@@ -1676,7 +1676,7 @@
 		{
 			"display_name": "Seven Segment Display",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAQdJREFUaIHtmsEOwyAMQ9v9/z+zA6hiozsktupF+J1LHENhS8pxGANxsgK11mLCJ0eaEyWa/dBmeCCEyGU/5GEP6Hgk+5EB5mH7FejU2wM94zkD5BRaowXiJMbMueKzCEYLD1hnGvGAR4s9/es9yXmgRHslhP8KG1BjA2psQI0NqLEBNTagJmaA1QshShD+BhPrgScKmi/hXFV5O+q5kvISJtbE6WXctSsxo+0LlT9Gy79C+RVA+znAAfARJzes9jFa+4fsdpqJja1oqNgewL8G0CXKH6M2oMYG1NiAGhtQYwNqbEDNZh+6V9V6Vw1m1aqXPVbc2MrjK2fVV6BTew90VBdfjQF5A3+vllnSsA/eAAAAAElFTkSuQmCC",
-			"name": "seven_segment",
+			"name": "seven_segment2",
 			"parameters": {
 				"bevel": 0.0,
 				"n": 8.0,
@@ -1685,7 +1685,7 @@
 				"st": 0.3
 			},
 			"tree_item": "Simple/Seven Segment Display",
-			"type": "seven_segment"
+			"type": "seven_segment2"
 		},
 		{
 			"display_name": "Sixteen Segment Display",
@@ -1709,7 +1709,7 @@
 		{
 			"display_name": "Roman Numerals",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAYJJREFUeJztmsGOgzAQQ1+q/dDwUXzv7KGq1Kosm6TErpSxxHFgZHh2DhQgWFg39wJupQHuBdxKA9wLuLW8AT9X3CRirElLKZfMf6LlvwC4H4SmXLXWiPvrHboiImqt0/YDojD5JBgRw5/qJ7OtWh4BiQG1VsnMiCQIQH9ij871KhGY/YBt2yyzrZqOAIyluaIBIBHQGdCT6qoGACEC0J7oqgaAREBjwEiaKxoARAhAX6qrGgASAa0BLemubAAQIwD/J7uyASAR0BnQk+qqBgAhAtCW7soGgERAb8BZyqsbAAwIwN8Jr24ASAS0BrSku7IBQIwAnKe8ugEgEfAYcJT2jgYAEwLwnvSOBoBEQG/AWcqrGwAMCMBx2jsaABIBnwHPqe9qADAiAO//CCUCBlkMOEp7RwOACQF4TX1XA0AicM2PkqNypv9DVgReFkkEPLIZ8Jz6rgYAIwLgPQA9lAi4F3BreQOs54B9352PB8wh+A1aHoE0wL2AW2mAewG3ljfgFz4S06ZyFqaeAAAAAElFTkSuQmCC",
-			"name": "roman_numerals2",
+			"name": "roman_numerals3",
 			"parameters": {
 				"a": 0.5,
 				"bevel": 0.1,
@@ -1721,7 +1721,7 @@
 			},
 			"seed_int": 0.0,
 			"tree_item": "Simple/Roman Numerals",
-			"type": "roman_numerals2"
+			"type": "roman_numerals3"
 		},
 		{
 			"display_name": "Runes",
