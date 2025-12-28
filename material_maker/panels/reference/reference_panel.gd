@@ -25,6 +25,7 @@ func _ready():
 	%Image.material.set_shader_parameter("image_size", Vector2(1.0, 1.0))
 
 	%AddImageButton.icon = get_theme_icon("add_image", "MM_Icons")
+	%PasteImageButton.icon = get_theme_icon("paste_image", "MM_Icons")
 	%RemoveImageButton.icon = get_theme_icon("delete", "MM_Icons")
 
 	%PrevImageButton.icon = get_theme_icon("arrow_left", "MM_Icons")
@@ -249,3 +250,14 @@ func handle_picking(event: InputEvent) -> void:
 			gradient.add_point(1.0, get_color_under_cursor())
 			selected_slot.set_gradient(gradient)
 			gradient_length = new_gradient_length
+
+
+func _on_paste_image_button_pressed() -> void:
+	if DisplayServer.clipboard_has_image():
+		var img : Texture2D = ImageTexture.create_from_image(
+				DisplayServer.clipboard_get_image())
+		add_reference(img)
+
+
+func _on_check_clipboard_image_timeout() -> void:
+	$%PasteImageButton.disabled = not DisplayServer.clipboard_has_image()
