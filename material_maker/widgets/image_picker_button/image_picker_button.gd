@@ -68,7 +68,7 @@ func open_image_dialog() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
-	dialog.add_filter("*.dds;Diret Draw Surface Image")
+	dialog.add_filter("*.dds;DirectDraw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		set_image_path(files[0])

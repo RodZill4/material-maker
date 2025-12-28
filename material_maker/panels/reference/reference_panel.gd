@@ -118,7 +118,7 @@ func _on_add_image_button_pressed() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
-	dialog.add_filter("*.dds;Direct Draw Surface Image")
+	dialog.add_filter("*.dds;DirectDraw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		add_reference(files[0])
