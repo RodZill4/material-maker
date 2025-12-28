@@ -105,6 +105,13 @@ metadata/recolor = false
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oy0ko"]
 bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ck0hb"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.13333334, 0.14509805, 0.14509805, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_m1w7u"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 128, 16, 16)
@@ -572,13 +579,6 @@ region = Rect2(96, 96, 16, 16)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahanl"]
 bg_color = Color(0.266667, 0.278431, 0.301961, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ck0hb"]
-bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -1116,6 +1116,7 @@ CodeEdit/styles/normal = SubResource("StyleBoxFlat_oy0ko")
 FileDialog/colors/file_disabled_color = Color(0.301961, 0.305882, 0.309804, 1)
 FileDialog/colors/file_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
 FileDialog/colors/folder_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
+FileDialog/styles/panel = SubResource("StyleBoxFlat_ck0hb")
 GraphEdit/colors/connection_knife = Color(0.99215686, 0.9843137, 1, 1)
 GraphEdit/colors/grid_major = Color(0.137255, 0.141176, 0.152941, 1)
 GraphEdit/colors/grid_minor = Color(0.137255, 0.141176, 0.152941, 1)
