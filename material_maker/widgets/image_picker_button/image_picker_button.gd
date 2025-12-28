@@ -15,9 +15,13 @@ func _ready() -> void:
 func update_image() -> void:
 	if %Image.texture == null:
 		%Image.texture = ImageTexture.new()
-	
+
 	if FileAccess.file_exists(image_path):
-		var image: Image = Image.load_from_file(image_path)
+		var image: Image = Image.new()
+		if image_path.get_extension() == "dds":
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(image_path))
+		else:
+			image = Image.load_from_file(image_path)
 		%Image.texture.set_image(image)
 		queue_redraw()
 
@@ -64,6 +68,7 @@ func open_image_dialog() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
+	dialog.add_filter("*.dds;Diret Draw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		set_image_path(files[0])

@@ -1361,7 +1361,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"obj", "glb", "gltf", "fbx":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
-			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
+			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
 				var test_json_conv : JSON = JSON.new()

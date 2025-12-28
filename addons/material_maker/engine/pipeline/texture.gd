@@ -95,6 +95,12 @@ func set_texture(new_texture : ImageTexture) -> void:
 				texture_format = RenderingDevice.DATA_FORMAT_R16_SFLOAT
 			Image.FORMAT_RGBAH:
 				texture_format = RenderingDevice.DATA_FORMAT_R16G16B16A16_SFLOAT
+			Image.FORMAT_DXT1:
+				texture_format = RenderingDevice.DATA_FORMAT_BC1_RGBA_SRGB_BLOCK
+			Image.FORMAT_DXT3:
+				texture_format = RenderingDevice.DATA_FORMAT_BC2_SRGB_BLOCK
+			Image.FORMAT_DXT5:
+				texture_format = RenderingDevice.DATA_FORMAT_BC3_SRGB_BLOCK
 			#Image.FORMAT_RGBA8:
 			#	texture_format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
 			_:

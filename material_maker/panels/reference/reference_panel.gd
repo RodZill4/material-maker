@@ -47,7 +47,12 @@ func add_reference(from:Variant) -> void:
 	var texture: Texture2D
 
 	if typeof(from) == TYPE_STRING:
-		var image: Image = Image.load_from_file(from)
+		var image: Image = Image.new()
+		if from.get_extension() == "dds":
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(from))
+		else:
+			image = Image.load_from_file(from)
+
 		if image != null:
 			texture = ImageTexture.create_from_image(image)
 		else:
@@ -113,6 +118,7 @@ func _on_add_image_button_pressed() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
+	dialog.add_filter("*.dds;Direct Draw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		add_reference(files[0])
