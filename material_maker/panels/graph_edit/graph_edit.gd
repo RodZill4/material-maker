@@ -211,6 +211,9 @@ func _gui_input(event) -> void:
 				KEY_C:
 					if OS.get_name() == "macOS":
 						center_view()
+				KEY_MASK_ALT | KEY_S:
+					if OS.get_name() == "macOS":
+						swap_node_inputs()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -288,6 +291,44 @@ func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
 	node.connect("delete_request", Callable(self, "remove_node").bind(node))
+
+func swap_node_inputs() -> void:
+	var selected_nodes : Array = get_selected_nodes()
+	if selected_nodes.size() != 1:
+		return
+	var node : GraphNode = selected_nodes[0]
+
+	if node.get_input_port_count() > 1:
+		# Get input connections to selected node only
+		var links := get_connection_list_from_node(node.name).filter(func(d): return d.from_node != node.name)
+		if links.size() == 2:
+			# Don't do anything if links are from the same source(port/node)
+			if links[0].from_node == links[1].from_node and links[0].from_port == links[1].from_port:
+				return
+
+			# Swap if resulting links connect to compatible ports
+			if node.get_input_port_type(links[0].to_port) == node.get_input_port_type(links[1].to_port):
+				undoredo.start_group()
+				on_disconnect_node(links[0].from_node, links[0].from_port, links[0].to_node, links[0].to_port)
+				on_disconnect_node(links[1].from_node, links[1].from_port, links[1].to_node, links[1].to_port)
+				on_connect_node(links[0].from_node, links[0].from_port, links[1].to_node, links[1].to_port)
+				on_connect_node(links[1].from_node, links[1].from_port, links[0].to_node, links[0].to_port)
+				undoredo.end_group()
+		elif links.size() == 1:
+			if node.name == links[0].to_node:
+				# Find compatible ports to connect to
+				var compatible_ports : Array[int]
+				for port in node.get_input_port_count():
+					if node.get_input_port_type(port) == node.get_input_port_type(links[0].to_port):
+						compatible_ports.append(port)
+
+				# Cycle compatible ports
+				var next_port := (compatible_ports.find(links[0].to_port) + 1) % compatible_ports.size()
+				undoredo.start_group()
+				on_disconnect_node(links[0].from_node, links[0].from_port, links[0].to_node, links[0].to_port)
+				on_connect_node(links[0].from_node, links[0].from_port, links[0].to_node,
+						compatible_ports[next_port])
+				undoredo.end_group()
 
 func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
 	var from_node : MMGraphNodeMinimal = get_node(from)
