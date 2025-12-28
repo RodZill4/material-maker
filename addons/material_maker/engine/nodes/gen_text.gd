@@ -27,7 +27,7 @@ func get_parameter_defs() -> Array:
 	return [
 		{ name="text", label="Text", type="string", default="Text" },
 		{ name="font", label="Font", type="file", filters=[ "*.otf,*.ttf,*.fnt;Font file" ], default="" },
-		{ name="fg", label="Foreground", type="color", default={ r=1.0, g=0.0, b=1.0, a=1.0} },
+		{ name="fg", label="Foreground", type="color", default={ r=1.0, g=1.0, b=1.0, a=1.0} },
 		{ name="bg", label="Background", type="color", default={ r=0.0, g=0.0, b=0.0, a=1.0} },
 		{ name="font_size", label="Font size", type="float", min=0, max=128, step=1, default=32 },
 		{ name="line_spacing", label="Line Spacing", type="float", min=-512, max=512, step=1, default=0.0 },
