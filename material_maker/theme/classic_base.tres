@@ -895,6 +895,7 @@ FileDialog/styles/panel = SubResource("StyleBoxFlat_7b2nb")
 GraphEdit/colors/connection_knife = Color(1, 1, 1, 1)
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
 GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
+GraphEdit/colors/lasso_stroke = Color(1, 1, 1, 1)
 GraphEdit/constants/port_hotzone_inner_extent = 8
 GraphEdit/constants/port_hotzone_outer_extent = 50
 GraphEdit/icons/grid_toggle = SubResource("AtlasTexture_m1w7u")

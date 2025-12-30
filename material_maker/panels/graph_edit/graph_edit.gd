@@ -46,6 +46,8 @@ var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
+var lasso_points : PackedVector2Array
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -143,6 +145,25 @@ func _gui_input(event) -> void:
 		drag_cut_line.clear()
 		conns.clear()
 		queue_redraw()
+	elif event.is_action_released("ui_lasso_select", true):
+		for node in get_children():
+			if node is GraphElement:
+				var node_rect = node.get_rect()
+				# Check against node's 8 corners and its center for lazy selection
+				var node_points = PackedVector2Array([
+					node_rect.position,
+					node_rect.position + node_rect.size * Vector2(0.5, 0.0),
+					node_rect.position + node_rect.size * Vector2(1.0, 0.0),
+					node_rect.position + node_rect.size * Vector2(0.0, 0.5),
+					node_rect.get_center(),
+					node_rect.position + node_rect.size * Vector2(1.0, 0.5),
+					node_rect.position + node_rect.size * Vector2(0.0, 1.0),
+					node_rect.position + node_rect.size * Vector2(0.5, 1.0),
+					node_rect.end])
+				for point in node_points:
+					node.selected = node.selected or Geometry2D.is_point_in_polygon(point,  lasso_points)
+		lasso_points.clear()
+		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
 	elif event.is_action_pressed("ui_hierarchy_down"):
@@ -187,9 +208,11 @@ func _gui_input(event) -> void:
 								if c.has_method("on_clicked_output"):
 									c.on_clicked_output(slot.index, Input.is_key_pressed(KEY_SHIFT))
 									return
-			# Avoid conflicting with drag-cut (Ctrl + RMB)
-			# and reroute insertion on connection lines (Shift + RMB)
-			if not (event.ctrl_pressed or event.shift_pressed):
+			# Avoid conflicting with:
+			# - drag-cut (Ctrl + RMB)
+			# - reroute insertion on connection lines (Shift + RMB)
+			# - lasso selection (Alt + LMB)
+			if not (event.ctrl_pressed or event.shift_pressed or event.alt_pressed):
 				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 				node_popup.show_popup()
 		else:
@@ -265,6 +288,13 @@ func _gui_input(event) -> void:
 				drag_cut_line.append(get_local_mouse_position())
 				queue_redraw()
 
+		# lasso selection
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
+			accept_event()
+			lasso_points.append(get_local_mouse_position())
+			queue_redraw()
+
+
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
 	var padding := 8 * graph_node.get_global_transform().get_scale().x
@@ -275,6 +305,9 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 func _draw() -> void:
 	if drag_cut_line.size() > 1:
 		draw_polyline(drag_cut_line, get_theme_color("connection_knife", "GraphEdit"), 1.0)
+	if lasso_points.size() > 1:
+		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
+				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
 
 
 # Misc. useful functions
