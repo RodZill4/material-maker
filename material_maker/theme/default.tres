@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=160 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=164 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -206,6 +206,30 @@ border_color = Color(0.745098, 0.752941, 0.772549, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fs6qc"]
+bg_color = Color(0.9882353, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_70aex"]
+bg_color = Color(0.9843137, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iofl8"]
+draw_center = false
+border_width_top = 4
+border_width_bottom = 4
+border_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2221"]
 content_margin_left = 3.0
@@ -1060,6 +1084,16 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w0re2"]
+draw_center = false
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font = ExtResource("1_5tfb1")
 default_font_size = 16
@@ -1145,6 +1179,10 @@ GraphNodeTitleLabel/colors/font_shadow_color = Color(0.168627, 0.176471, 0.19215
 GraphNodeTitleLabel/constants/outline_size = 5
 GraphNodeTitleLabel/constants/shadow_outline_size = 6
 GraphNodeTitleLabel/fonts/font = ExtResource("2_5e0gw")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_fs6qc")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_70aex")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_70aex")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_iofl8")
 ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
 ItemList/styles/hovered = SubResource("StyleBoxFlat_m2221")
 ItemList/styles/selected = SubResource("StyleBoxFlat_attdh")
@@ -1371,3 +1409,7 @@ Tree/styles/focus = SubResource("StyleBoxEmpty_iwtn1")
 Tree/styles/panel = SubResource("StyleBoxEmpty_yrroa")
 Tree/styles/selected = SubResource("StyleBoxFlat_x5l5s")
 Tree/styles/selected_focus = SubResource("StyleBoxFlat_x5l5s")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_fs6qc")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_70aex")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_70aex")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_w0re2")
