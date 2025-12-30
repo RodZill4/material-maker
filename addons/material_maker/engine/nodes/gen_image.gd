@@ -74,8 +74,6 @@ func _on_timeout() -> void:
 		var image : Image = Image.new()
 		if file_path.get_extension() == "dds":
 			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(file_path))
-			var image_texture : ImageTexture = ImageTexture.create_from_image(image)
-			texture.set_texture(image_texture)
 		else:
 			image.load(file_path)
 		var image_texture : ImageTexture = ImageTexture.create_from_image(image)
