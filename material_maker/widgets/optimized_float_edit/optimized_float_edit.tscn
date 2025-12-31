@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://diyr805vgrnjg"]
+
+[ext_resource type="Script" uid="uid://c5ivxjo28kuvh" path="res://material_maker/widgets/optimized_float_edit/optimized_float_edit.gd" id="1_0qopg"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2_3ygqk"]
+[ext_resource type="Script" uid="uid://dv8nq27x5vw1s" path="res://material_maker/widgets/optimized_float_edit/fake_float_edit.gd" id="3_worje"]
+
+[node name="OptimizedFloatEdit" type="PanelContainer"]
+offset_right = 66.5625
+offset_bottom = 23.0
+script = ExtResource("1_0qopg")
+
+[node name="FakeFloatEdit" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"MM_NodeFloatEdit"
+script = ExtResource("3_worje")
+
+[node name="Label" type="Label" parent="FakeFloatEdit"]
+layout_mode = 2
+horizontal_alignment = 2
+text_overrun_behavior = 1
+
+[node name="FloatEdit" parent="." instance=ExtResource("2_3ygqk")]
+layout_mode = 2

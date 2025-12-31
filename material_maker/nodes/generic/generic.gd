@@ -116,7 +116,7 @@ func update_generic(generic_size : int) -> void:
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
 	if parameter_controls.has(p):
 		var o = parameter_controls[p]
-		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is OptimizedFloatEdit:
 			o.set_value(v)
 		elif o is HSlider:
 			o.value = v
@@ -181,8 +181,8 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 		var o = control_list[c]
 		if gen.parameters.has(c):
 			object.on_parameter_changed(c, gen.get_parameter(c))
-		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
-			o.connect("value_changed_undo",Callable(object,"_on_float_value_changed").bind( o.name ))
+		if o is OptimizedFloatEdit:
+			o.get_node("FloatEdit").connect("value_changed_undo",Callable(object,"_on_float_value_changed").bind( o.name ))
 		elif o is LineEdit:
 			o.connect("text_changed",Callable(object,"_on_text_changed").bind( o.name ))
 		elif o is SizeOptionButton:
@@ -292,7 +292,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 	if !p.has("type"):
 		return null
 	if p.type == "float":
-		control = preload("res://material_maker/widgets/float_edit/float_edit.tscn").instantiate()
+		control = preload("res://material_maker/widgets/optimized_float_edit/optimized_float_edit.tscn").instantiate()
 		if ! accept_float_expressions:
 			control.float_only = true
 		control.min_value = p.min

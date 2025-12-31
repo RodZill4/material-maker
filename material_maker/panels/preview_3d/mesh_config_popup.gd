@@ -34,7 +34,7 @@ func configure_mesh(m : MeshInstance3D) -> void:
 		label.text = (p.label if p.has("label") else p.name)+":"
 		label.theme_type_variation = "MM_PanelMenuSubPanelLabel"
 		%Parameters.add_child(label)
-		var float_edit := preload("res://material_maker/widgets/float_edit/float_edit.tscn").instantiate()
+		var float_edit := preload("res://material_maker/widgets/optimized_float_edit/optimized_float_edit.tscn").instantiate()
 		float_edit.float_only = true
 		float_edit.step = 0.01
 		float_edit.min_value = p.min_value
