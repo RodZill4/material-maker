@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dy1u50we7gtru"]
+[gd_scene format=3 uid="uid://dy1u50we7gtru"]
 
 [ext_resource type="Script" uid="uid://dkp4w3at1o6cm" path="res://material_maker/panels/graph_edit/graph_edit.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="Script" uid="uid://dlah77kjy12l6" path="res://material_maker/panels/graph_edit/highlights_overlay.gd" id="5_u5byk"]
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("2")
@@ -17,7 +18,7 @@ region = Rect2(15.4016, 47.1451, 16.7512, 17.8319)
 atlas = ExtResource("2")
 region = Rect2(0, 48, 16, 16)
 
-[node name="GraphEdit" type="GraphEdit" groups=["mm_graphedit"]]
+[node name="GraphEdit" type="GraphEdit" unique_id=175822157 groups=["mm_graphedit"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -34,11 +35,11 @@ show_menu = false
 show_zoom_label = true
 script = ExtResource("1")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=654752788]
 wait_time = 0.2
 one_shot = true
 
-[node name="GraphUI" type="HBoxContainer" parent="."]
+[node name="GraphUI" type="HBoxContainer" parent="." unique_id=45635343]
 top_level = true
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 1
@@ -51,42 +52,46 @@ offset_bottom = 31.0
 grow_horizontal = 0
 alignment = 2
 
-[node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
+[node name="SubGraphUI" type="HBoxContainer" parent="GraphUI" unique_id=1847281688]
 layout_mode = 2
 size_flags_horizontal = 9
 
-[node name="Label" type="LineEdit" parent="GraphUI/SubGraphUI"]
+[node name="Label" type="LineEdit" parent="GraphUI/SubGraphUI" unique_id=1166036264]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 9
 
-[node name="Description" parent="GraphUI/SubGraphUI" instance=ExtResource("4")]
+[node name="Description" parent="GraphUI/SubGraphUI" unique_id=610946558 instance=ExtResource("4")]
 layout_mode = 2
 
-[node name="ButtonTransmitsSeed" type="Button" parent="GraphUI/SubGraphUI"]
+[node name="ButtonTransmitsSeed" type="Button" parent="GraphUI/SubGraphUI" unique_id=1858333769]
 layout_mode = 2
 size_flags_horizontal = 9
 tooltip_text = "Affect children seeds"
 toggle_mode = true
 icon = SubResource("3")
 
-[node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI"]
+[node name="ButtonUp" type="Button" parent="GraphUI/SubGraphUI" unique_id=1608742490]
 layout_mode = 2
 size_flags_horizontal = 9
 tooltip_text = "Back to parent"
 icon = SubResource("4")
 
-[node name="ButtonShowTree" type="Button" parent="GraphUI"]
+[node name="ButtonShowTree" type="Button" parent="GraphUI" unique_id=1663795300]
 layout_mode = 2
 tooltip_text = "Show hierarchy"
 icon = SubResource("5")
 
-[node name="Control" type="Control" parent="GraphUI"]
+[node name="Control" type="Control" parent="GraphUI" unique_id=265307966]
 custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
-[node name="UndoRedo" type="Node" parent="."]
+[node name="UndoRedo" type="Node" parent="." unique_id=476880472]
 script = ExtResource("3")
+
+[node name="HighlightsOverlay" type="Control" parent="." unique_id=2128156926]
+anchors_preset = 0
+script = ExtResource("5_u5byk")
 
 [connection signal="connection_drag_ended" from="." to="." method="_on_connection_drag_ended"]
 [connection signal="connection_drag_started" from="." to="." method="_on_connection_drag_started"]
