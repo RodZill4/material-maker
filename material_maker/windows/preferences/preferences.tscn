@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 
 [node name="Preferences" type="Window"]
+oversampling_override = 1.0
 title = "Preferences"
 position = Vector2i(0, 36)
 size = Vector2i(610, 505)
@@ -184,6 +185,7 @@ layout_mode = 2
 
 [node name="Label2" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
 Higher values may increase power usage, leading to reduced battery life on laptops."
 mouse_filter = 1
