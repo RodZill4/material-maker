@@ -95,6 +95,8 @@ View menu
 
 * *Center view* Centers the current material graph view
 
+* *Zoom in/out* Increases/Decreases the zoom level of the current material graph view
+
 * *Reset zoom* Resets the zoom level of the current material graph view
 
 * *Show/Hide side panels* (or the *Control+SpaceBar* keyboard shortcut) can
