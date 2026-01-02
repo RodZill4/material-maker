@@ -361,6 +361,12 @@ func _gui_input(event) -> void:
 			elif drag_cut_line.size():
 				drag_cut_line.append(get_local_mouse_position())
 				queue_redraw()
+
+		# lasso selection
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
+			accept_event()
+			lasso_points.append(get_local_mouse_position())
+			queue_redraw()
 		handle_node_detach(event)
 		handle_node_drop(event)
 
@@ -472,13 +478,6 @@ func highlight_connection(connection: Dictionary, amount: float = 0.5) -> void:
 	if not connection.is_empty():
 		set_connection_activity(connection.from_node, connection.from_port,
 				connection.to_node, connection.to_port, amount)
-
-
-		# lasso selection
-		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
-			accept_event()
-			lasso_points.append(get_local_mouse_position())
-			queue_redraw()
 
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
