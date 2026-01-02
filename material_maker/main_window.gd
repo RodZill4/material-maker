@@ -78,6 +78,8 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Swap node inputs", command="edit_swap_node_inputs", shortcut="Alt+S"},
 	{ menu="Edit/-" },
 	{ menu="Edit/Frame selected nodes", command="frame_nodes", shortcut="Control+Shift+F" },
+	{ menu="Edit/Detach Connections", command="edit_detach_node_connections", shortcut="Control+Shift+C" },
+	{ menu="Edit/Remove with Reconnect", command="edit_remove_with_reconnections", shortcut="Control+Shift+X" },
 	{ menu="Edit/-" },
 	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
 	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
@@ -887,6 +889,15 @@ func edit_duplicate_with_inputs() -> void:
 func edit_duplicate_with_inputs_is_disabled() -> bool:
 	return edit_cut_is_disabled()
 
+func edit_remove_with_reconnections() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.remove_with_reconnections()
+
+func edit_detach_node_connections() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.remove_with_reconnections(true)
 func edit_swap_node_inputs() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
