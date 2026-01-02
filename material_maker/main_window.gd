@@ -46,6 +46,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 const RECENT_FILES_COUNT = 15
 
 const MENU_QUICK_EXPORT : int = 1000
+const RECENTS_MENU_CLEAR = 1001
 
 const THEMES = ["Default Dark", "Default Light", "Classic"]
 
@@ -74,6 +75,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
 	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
+	{ menu="Edit/Swap node inputs", command="edit_swap_node_inputs", shortcut="Alt+S"},
 	{ menu="Edit/-" },
 	{ menu="Edit/Frame selected nodes", command="frame_nodes", shortcut="Control+Shift+F" },
 	{ menu="Edit/Detach Connections", command="edit_detach_node_connections", shortcut="Control+Shift+C" },
@@ -357,9 +359,15 @@ func create_menu_load_recent(menu) -> void:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
 		menu.connect_id_pressed(self._on_LoadRecent_id_pressed)
+		menu.add_separator()
+		menu.add_item("Clear recent files", RECENTS_MENU_CLEAR)
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	do_load_project(recent_files[id])
+	match id:
+		RECENTS_MENU_CLEAR:
+			clear_recents()
+		_:
+			do_load_project(recent_files[id])
 
 func load_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.READ)
@@ -367,6 +375,10 @@ func load_recents() -> void:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(f.get_as_text())
 		recent_files = test_json_conv.get_data()
+
+func clear_recents() -> void:
+	recent_files.clear()
+	save_recents()
 
 func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
@@ -886,6 +898,10 @@ func edit_detach_node_connections() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
 		graph_edit.remove_with_reconnections(true)
+func edit_swap_node_inputs() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.swap_node_inputs()
 
 func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1268,6 +1284,8 @@ func _notification(what : int) -> void:
 			# Return to the normal FPS limit when the window is focused.
 			@warning_ignore("narrowing_conversion")
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+		NOTIFICATION_WM_ABOUT:
+			about.call_deferred()
 
 func on_close_requested():
 	await get_tree().process_frame
@@ -1373,7 +1391,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"obj", "glb", "gltf", "fbx":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
-			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
+			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
 				var test_json_conv : JSON = JSON.new()

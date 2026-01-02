@@ -22,6 +22,17 @@ func _ready() -> void:
 		get_parent().add_menu_bar(menu_bar, self)
 
 
+func _draw() -> void:
+	super._draw()
+	var val : Vector2 = reverse_transform_point(get_local_mouse_position())
+	var pixels_size : Vector2 = Vector2(pixels.size)
+	val = snapped(val - (Vector2(0.5, 0.5) / pixels_size), Vector2.ONE / pixels_size)
+	if Rect2(draw_offset, draw_size).has_point(get_local_mouse_position()):
+		var rect = Rect2(transform_point(val), draw_size / pixels_size)
+		draw_rect(rect.grow(-1.0), Color.BLACK, false, 1.0)
+		draw_rect(rect, Color.WHITE, false, 1.0)
+
+
 func set_pixels(p : MMPixels) -> void:
 	pixels = p
 	queue_redraw()
@@ -93,6 +104,7 @@ func _on_PixelsEditor_gui_input(event : InputEvent):
 			draw_pixel()
 			return
 	elif event is InputEventMouseMotion:
+		queue_redraw()
 		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
 			draw_pixel()
 			return

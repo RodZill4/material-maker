@@ -64,6 +64,8 @@ var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
+var lasso_points : PackedVector2Array
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -184,6 +186,25 @@ func _gui_input(event) -> void:
 		drag_cut_line.clear()
 		conns.clear()
 		queue_redraw()
+	elif event.is_action_released("ui_lasso_select", true):
+		for node in get_children():
+			if node is GraphElement:
+				var node_rect = node.get_rect()
+				# Check against node's 8 corners and its center for lazy selection
+				var node_points = PackedVector2Array([
+					node_rect.position,
+					node_rect.position + node_rect.size * Vector2(0.5, 0.0),
+					node_rect.position + node_rect.size * Vector2(1.0, 0.0),
+					node_rect.position + node_rect.size * Vector2(0.0, 0.5),
+					node_rect.get_center(),
+					node_rect.position + node_rect.size * Vector2(1.0, 0.5),
+					node_rect.position + node_rect.size * Vector2(0.0, 1.0),
+					node_rect.position + node_rect.size * Vector2(0.5, 1.0),
+					node_rect.end])
+				for point in node_points:
+					node.selected = node.selected or Geometry2D.is_point_in_polygon(point,  lasso_points)
+		lasso_points.clear()
+		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
 	elif event.is_action_pressed("ui_hierarchy_down"):
@@ -236,9 +257,11 @@ func _gui_input(event) -> void:
 				node_popup.target_connection = closest_connection
 				request_popup(closest_connection.from_node, closest_connection.from_port,
 						get_local_mouse_position(), false)
-			elif not (event.ctrl_pressed or event.shift_pressed):
-				# Avoid conflicting with drag-cut (Ctrl + RMB)
-				# and reroute insertion on connection lines (Shift + RMB)
+			# Avoid conflicting with:
+			# - drag-cut (Ctrl + RMB)
+			# - reroute insertion on connection lines (Shift + RMB)
+			# - lasso selection (Alt + LMB)
+			elif not (event.ctrl_pressed or event.shift_pressed or event.alt_pressed):
 				node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 				node_popup.show_popup()
 		else:
@@ -269,6 +292,9 @@ func _gui_input(event) -> void:
 				KEY_C:
 					if OS.get_name() == "macOS":
 						center_view()
+				KEY_MASK_ALT | KEY_S:
+					if OS.get_name() == "macOS":
+						swap_node_inputs()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -448,6 +474,13 @@ func highlight_connection(connection: Dictionary, amount: float = 0.5) -> void:
 				connection.to_node, connection.to_port, amount)
 
 
+		# lasso selection
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
+			accept_event()
+			lasso_points.append(get_local_mouse_position())
+			queue_redraw()
+
+
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
 	var padding := 8 * graph_node.get_global_transform().get_scale().x
@@ -458,6 +491,9 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 func _draw() -> void:
 	if drag_cut_line.size() > 1:
 		draw_polyline(drag_cut_line, get_theme_color("connection_knife", "GraphEdit"), 1.0)
+	if lasso_points.size() > 1:
+		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
+				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
 
 
 # Misc. useful functions
@@ -478,6 +514,44 @@ func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
 	node.connect("delete_request", Callable(self, "remove_node").bind(node))
+
+func swap_node_inputs() -> void:
+	var selected_nodes : Array = get_selected_nodes()
+	if selected_nodes.size() != 1:
+		return
+	var node : GraphNode = selected_nodes[0]
+
+	if node.get_input_port_count() > 1:
+		# Get input connections to selected node only
+		var links := get_connection_list_from_node(node.name).filter(func(d): return d.from_node != node.name)
+		if links.size() == 2:
+			# Don't do anything if links are from the same source(port/node)
+			if links[0].from_node == links[1].from_node and links[0].from_port == links[1].from_port:
+				return
+
+			# Swap if resulting links connect to compatible ports
+			if node.get_input_port_type(links[0].to_port) == node.get_input_port_type(links[1].to_port):
+				undoredo.start_group()
+				on_disconnect_node(links[0].from_node, links[0].from_port, links[0].to_node, links[0].to_port)
+				on_disconnect_node(links[1].from_node, links[1].from_port, links[1].to_node, links[1].to_port)
+				on_connect_node(links[0].from_node, links[0].from_port, links[1].to_node, links[1].to_port)
+				on_connect_node(links[1].from_node, links[1].from_port, links[0].to_node, links[0].to_port)
+				undoredo.end_group()
+		elif links.size() == 1:
+			if node.name == links[0].to_node:
+				# Find compatible ports to connect to
+				var compatible_ports : Array[int]
+				for port in node.get_input_port_count():
+					if node.get_input_port_type(port) == node.get_input_port_type(links[0].to_port):
+						compatible_ports.append(port)
+
+				# Cycle compatible ports
+				var next_port := (compatible_ports.find(links[0].to_port) + 1) % compatible_ports.size()
+				undoredo.start_group()
+				on_disconnect_node(links[0].from_node, links[0].from_port, links[0].to_node, links[0].to_port)
+				on_connect_node(links[0].from_node, links[0].from_port, links[0].to_node,
+						compatible_ports[next_port])
+				undoredo.end_group()
 
 func do_connect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
 	var from_node : MMGraphNodeMinimal = get_node(from)
@@ -1116,6 +1190,7 @@ func do_send_changed_signal() -> void:
 func _can_drop_data(_position, data) -> bool:
 	return (
 		(typeof(data) == TYPE_OBJECT and data is MMCurve)
+		or (typeof(data) == TYPE_OBJECT and data is MMSplines)
 		or typeof(data) == TYPE_COLOR
 		or typeof(data) == TYPE_DICTIONARY
 		and (data.has('type')
@@ -1135,6 +1210,8 @@ func _drop_data(node_position, data) -> void:
 		do_paste({type="colorize", gradient=data})
 	elif typeof(data) == TYPE_OBJECT and data is MMCurve:
 		do_paste({type="tonality", curve=data})
+	elif typeof(data) == TYPE_OBJECT and data is MMSplines:
+		do_paste({type="splines", splines=data})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform() * node_position))
 

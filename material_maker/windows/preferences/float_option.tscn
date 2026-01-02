@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://3lo2jh781ten"]
 
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/float_option.gd" id="2"]
+[ext_resource type="Script" uid="uid://dlpvopqjvlj0i" path="res://material_maker/windows/preferences/float_option.gd" id="2"]
 
 [node name="FloatOption" instance=ExtResource("1")]
 script = ExtResource("2")
