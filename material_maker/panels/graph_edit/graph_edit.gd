@@ -362,6 +362,7 @@ func _gui_input(event) -> void:
 				drag_cut_line.append(get_local_mouse_position())
 				queue_redraw()
 
+		# TODO fix lasso shortcut conflicting with node detach
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
 			accept_event()
@@ -377,8 +378,10 @@ func _gui_input(event) -> void:
 func handle_node_detach(event: InputEventMouseMotion) -> void:
 	if (event.alt_pressed and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
 				and get_selected_nodes().size() and event.relative.length() > 0.0):
-		remove_with_reconnections(true)
-		target_drop_connection.clear()
+		if not get_nodes_under_mouse().is_empty():
+			accept_event()
+			remove_with_reconnections(true)
+			target_drop_connection.clear()
 
 
 ## Checks whether a node can be dropped onto a connection (Alt key blocks the action)
