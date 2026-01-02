@@ -27,4 +27,4 @@ The **Image** node has three parameters:
 * **Clamp** will disable the default tiling behavior.
   Useful when dealing with non-square images as they cannot easily be clamped further down the graph.
 
-The supported formats are BMP, HDR, JPEG, PNG, SVG, TGA and WebP.
+The supported formats are BMP, EXR, HDR, JPEG, PNG, SVG, TGA, WebP and DDS.

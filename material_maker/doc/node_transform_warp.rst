@@ -10,11 +10,13 @@ derivative of a grayscale image.
 Inputs
 ++++++
 
-The **Warp** node accepts two inputs:
+The **Warp** node accepts three inputs:
 
 * The *Source* input is the image to be deformed.
 
-* The *Displace* input is a grayscale image whose derivative will be used to deform the source.
+* The *Height map* input is a grayscale image whose derivative will be used to deform the source.
+
+* Optional *Strength map* which multiplies the *strength* parameter by the map value.
 
 Outputs
 +++++++
@@ -33,7 +35,7 @@ The **Warp** node has three parameters:
 
 * *strength* to scale the warp effect.
 
-* *epsilon* is used to evaluate the second input's derivative
+* *epsilon* is used to evaluate the second input's derivative.
 
 Example images
 ++++++++++++++

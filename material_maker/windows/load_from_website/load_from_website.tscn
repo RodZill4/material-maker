@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cwdsenmji25k1" path="res://material_maker/windows/load_from_website/load_from_website.gd" id="1"]
 
 [node name="LoadFromWebsite" type="Window"]
+oversampling_override = 1.0
 title = "Load from website"
 exclusive = true
 script = ExtResource("1")
@@ -63,3 +64,4 @@ text = "Cancel"
 [connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="request_completed" from="ImageHTTPRequest" to="." method="_on_image_http_request_request_completed"]

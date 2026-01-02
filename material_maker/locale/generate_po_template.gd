@@ -136,9 +136,9 @@ class TranslationStrings:
 		var f : FileAccess = FileAccess.open(fn, FileAccess.WRITE)
 		if f.get_error() == OK:
 			f.store_line("# Translations template for Material Maker.")
-			f.store_line("# Copyright (C) 2018-2025 Rodolphe Suescun and contributors")
+			f.store_line("# Copyright (C) 2018-2026 Rodolphe Suescun and contributors")
 			f.store_line("# This file is distributed under the same license as the Material Maker project.")
-			f.store_line("# Rodolphe Suescun <rodzilla@free.fr>, 2025.")
+			f.store_line("# Rodolphe Suescun <rodzilla@free.fr>, 2026.")
 			f.store_line("#")
 			f.store_line("#, fuzzy")
 			f.store_line("msgid \"\"")
@@ -350,6 +350,8 @@ func _run():
 	var string_count : int = 0
 	print("Extracting strings from scenes and scripts")
 	for f in find_files("res://", [ "gd", "tscn" ]):
+		if "addons/gut" in f:
+			continue
 		match f.get_extension():
 			"gd":
 				string_count += ts.extract_strings_from_gd(f)

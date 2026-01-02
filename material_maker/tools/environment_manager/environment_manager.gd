@@ -39,8 +39,8 @@ func _ready():
 				var image : Image = Image.new()
 				if image.load_png_from_buffer(Marshalls.base64_to_raw(environments[i].thumbnail)) == OK:
 					texture.set_image(image)
-					print("created thumbnail")
-					print(texture.get_size())
+					#print("created thumbnail")
+					#print(texture.get_size())
 				else:
 					print("Failed to read thumbnail for environment")
 			environment_textures.push_back({ thumbnail=texture })

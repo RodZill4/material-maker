@@ -87,7 +87,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 6
-text = "© 2018-2025 Rodolphe Suescun and contributors"
+text = "© 2018-2026 Rodolphe Suescun and contributors"
 
 [node name="VBoxContainer" type="TabContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -160,7 +160,7 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "Copyright (c) 2018-2025 Rodolphe Suescun and contributors
+text = "Copyright (c) 2018-2026 Rodolphe Suescun and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

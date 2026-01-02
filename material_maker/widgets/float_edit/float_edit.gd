@@ -1,5 +1,5 @@
 class_name FloatEdit
-extends Container
+extends Control
 
 var float_value: float = 0.5
 @export var value: float = 0.5 :

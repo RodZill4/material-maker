@@ -32,7 +32,7 @@ func update(at:Node=null) -> void:
 		at.theme = null
 
 	updating = true
-	print("THEME UPDATE")
+	#print("THEME UPDATE")
 
 	clear()
 
