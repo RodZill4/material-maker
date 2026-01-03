@@ -1,5 +1,7 @@
 extends CheckBox
 
+class_name BoolOption
+
 @export var config_variable : String
 
 func _ready() -> void:
