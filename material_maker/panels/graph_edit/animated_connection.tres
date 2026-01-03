@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dv1bc32kluxlg"]
+
+[sub_resource type="Shader" id="Shader_pewh7"]
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(vec3(0.0), 0.25 * sin(UV.x - TIME * TAU) + 0.25);
+}"
+
+[resource]
+shader = SubResource("Shader_pewh7")
