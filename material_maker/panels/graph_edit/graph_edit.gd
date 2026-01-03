@@ -62,6 +62,7 @@ func _ready() -> void:
 		add_valid_connection_type(42, t)
 	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
 
+
 func _exit_tree():
 	remove_crash_recovery_file()
 
@@ -311,6 +312,20 @@ func _draw() -> void:
 
 
 # Misc. useful functions
+
+func get_closest_node_at_point(point: Vector2) -> GraphNode:
+	var closest_dist : float = INF
+	var closest_node : GraphNode
+	for node in get_children():
+		if node is GraphNode:
+			var node_rect : Rect2 = node.get_rect()
+			var dist : float = point.clamp(node_rect.position,
+					node_rect.size + node_rect.position).distance_squared_to(point)
+			if dist < closest_dist:
+				closest_dist = dist
+				closest_node = node
+	return closest_node
+
 func get_source(node, port) -> Dictionary:
 	for c in get_connection_list():
 		if c.to_node == node and c.to_port == port:
