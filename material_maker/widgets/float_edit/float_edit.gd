@@ -1,5 +1,5 @@
 class_name FloatEdit
-extends Container
+extends Control
 
 var float_value: float = 0.5
 @export var value: float = 0.5 :
@@ -137,7 +137,6 @@ func _gui_input(event: InputEvent) -> void:
 				from_lower_bound = float_value <= min_value
 				from_upper_bound = float_value >= max_value
 				actually_dragging = false
-				$Edit.grab_focus()
 
 		if event.is_action("ui_accept") and event.pressed:
 			mode = Modes.EDITING
@@ -283,6 +282,10 @@ func _notification(what):
 			if get_theme_stylebox("clip") != get_theme_stylebox("panel"):
 				add_theme_stylebox_override("panel", get_theme_stylebox("clip"))
 			update()
+		NOTIFICATION_DRAG_BEGIN:
+			mouse_filter = Control.MOUSE_FILTER_IGNORE
+		NOTIFICATION_DRAG_END:
+			mouse_filter = Control.MOUSE_FILTER_STOP
 
 
 func update() -> void:
@@ -290,7 +293,10 @@ func update() -> void:
 	$Slider.add_theme_stylebox_override("fill", get_theme_stylebox("fill_hover" if is_hovered else "fill_normal"))
 	$Slider.add_theme_stylebox_override("background", get_theme_stylebox("hover" if is_hovered else "normal"))
 
-	$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
+	if editable:
+		$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
+	else:
+		$Edit.remove_theme_color_override("font_uneditable_color")
 	$Edit.queue_redraw()
 
 
@@ -309,5 +315,8 @@ func _on_mouse_exited() -> void:
 
 
 func _on_edit_draw() -> void:
-	if get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() ==  $Edit:
+	var is_focused = get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() == $Edit
+	var is_dragging = mode == Modes.SLIDING
+
+	if is_focused or is_dragging:
 		$Edit.draw_style_box(get_theme_stylebox("focus"), Rect2(Vector2(), size))

@@ -27,6 +27,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Static PBR Material",
+		"longdesc": "PBR material with maps generated as static images",
 		"code": "",
 		"exports": {
 			"Blender": {
@@ -72,12 +74,6 @@
 						"conditions": "$(connected:emission_tex)",
 						"file_name": "$(path_prefix)_emission.png",
 						"output": 2,
-						"type": "texture"
-					},
-					{
-						"conditions": "$(connected:ao_tex)",
-						"file_name": "$(path_prefix)_occlusion.exr",
-						"output": 9,
 						"type": "texture"
 					}
 				]
@@ -268,7 +264,7 @@
 							"$if $(connected:albedo_tex)",
 							"albedo_texture = ExtResource( 1 )",
 							"$fi",
-							"$if $(connected:metallic_tex)",
+							"$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
 							"orm_texture = ExtResource( 2 )",
 							"$fi",
 							"$if $(connected:normal_tex)",

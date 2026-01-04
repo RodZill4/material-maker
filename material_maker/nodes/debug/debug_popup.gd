@@ -56,6 +56,7 @@ func generate_shadertoy() -> String:
 	code += "}\n"
 	#print("GENERATED SHADER:\n"+shader_code)
 	code = code.replace("uniform", "const")
+	code = code.replace("const sampler2D", "uniform sampler2D")
 	code = code.replace("elapsed_time", "iTime")
 	return code
 
@@ -78,6 +79,7 @@ func generate_godot_canvasitem() -> String:
 	code += "}\n"
 	#print("GENERATED SHADER:\n"+shader_code)
 	code = code.replace("uniform", "const")
+	code = code.replace("const sampler2D", "uniform sampler2D")
 	return code
 
 func generate_godot_spatial() -> String:
@@ -100,4 +102,5 @@ func generate_godot_spatial() -> String:
 	code += "}\n"
 	#print("GENERATED SHADER:\n"+shader_code)
 	code = code.replace("uniform", "const")
+	code = code.replace("const sampler2D", "uniform sampler2D")
 	return code

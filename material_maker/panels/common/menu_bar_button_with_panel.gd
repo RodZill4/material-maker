@@ -17,6 +17,8 @@ func _ready() -> void:
 
 	theme_arrow_icon = get_theme_icon("arrow", "OptionButton")
 	icon = get_theme_icon(icon_name, "MM_Icons")
+	mouse_entered.connect(func():
+		mm_globals.set_tip_text("#LMB: Open/Close panel, #RMB: Pin/Unpin Panel"))
 
 
 func _enter_tree() -> void:
@@ -26,7 +28,8 @@ func _enter_tree() -> void:
 		if menu_container == get_tree().root:
 			break
 	if menu_container is ScrollContainer:
-		menu_container.item_rect_changed.connect(position_panel)
+		if not menu_container.is_connected("item_rect_changed", position_panel):
+			menu_container.item_rect_changed.connect(position_panel)
 	else:
 		owner.item_rect_changed.connect(position_panel)
 
@@ -37,8 +40,8 @@ func _draw() -> void:
 	draw_texture(theme_arrow_icon, Vector2(18, 5), get_theme_color("icon_normal_color"))
 
 
-func _on_toggled(pressed:bool) -> void:
-	panel.visible = pressed
+func _on_toggled(toggled_on : bool) -> void:
+	panel.visible = toggled_on
 	panel.size = Vector2()
 
 	if panel.visible:
@@ -58,7 +61,7 @@ func position_panel() -> void:
 	panel.global_position = at_position
 
 
-func _input(event:InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	if event.is_pressed():
 		mm_globals.propagate_shortcuts(self, event)
 

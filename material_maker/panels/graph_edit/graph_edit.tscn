@@ -26,7 +26,6 @@ offset_right = 1529.0
 offset_bottom = 1193.0
 grow_horizontal = 2
 grow_vertical = 2
-scroll_offset = Vector2(-1, -1)
 grid_pattern = 1
 right_disconnects = true
 zoom_min = 0.25
@@ -40,6 +39,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="GraphUI" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0

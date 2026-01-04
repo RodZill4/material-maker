@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqbkylpsatcqm"]
+
+[ext_resource type="Script" uid="uid://g7qu8ihdt3pd" path="res://addons/gut/gui/about.gd" id="1_bg86c"]
+[ext_resource type="PackedScene" uid="uid://bjkn8mhx2fmt1" path="res://addons/gut/gui/GutLogo.tscn" id="3_kpic4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8rky"]
+bg_color = Color(0, 0, 0, 0.49803922)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kpic4"]
+
+[node name="About" type="AcceptDialog"]
+oversampling_override = 1.0
+title = "About GUT"
+position = Vector2i(0, 36)
+size = Vector2i(1500, 800)
+visible = true
+min_size = Vector2i(800, 800)
+script = ExtResource("1_bg86c")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 1492.0
+offset_bottom = 751.0
+alignment = 1
+
+[node name="MakeRoomForLogo" type="CenterContainer" parent="HBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_q8rky")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_kpic4")
+bbcode_enabled = true
+fit_content = true
+
+[node name="Logo" parent="." instance=ExtResource("3_kpic4")]
+modulate = Color(0.74509805, 0.74509805, 0.74509805, 1)
+position = Vector2(151, 265)
+scale = Vector2(0.8, 0.8)
+active = true
+disabled = true
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="meta_clicked" from="HBox/Scroll/RichTextLabel" to="." method="_on_rich_text_label_meta_clicked"]
+[connection signal="meta_hover_ended" from="HBox/Scroll/RichTextLabel" to="." method="_on_rich_text_label_meta_hover_ended"]
+[connection signal="meta_hover_started" from="HBox/Scroll/RichTextLabel" to="." method="_on_rich_text_label_meta_hover_started"]
+[connection signal="pressed" from="Logo" to="." method="_on_logo_pressed"]

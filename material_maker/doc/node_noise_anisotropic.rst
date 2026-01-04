@@ -14,7 +14,7 @@ The **Anisotropic noise** node does not accept any input.
 Outputs
 +++++++
 
-The **Anisotropic noise** node provides a greyscale Anisotropic noise texture.
+The **Anisotropic noise** node provides a grayscale Anisotropic noise texture.
 
 Parameters
 ++++++++++

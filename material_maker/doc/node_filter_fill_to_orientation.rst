@@ -2,7 +2,7 @@ Fill to Orientation node
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **Fill to Orientation** node uses the output of the **Fill** node and fills
-all detected areas with a greyscale color that depends on their orientation.
+all detected areas with a grayscale color that depends on their orientation.
 
 .. image:: images/node_filter_fill_to_orientation.png
 	:align: center
@@ -16,7 +16,7 @@ compatible output of another node) as input.
 Outputs
 +++++++
 
-The **Fill to Orientation** node generates a single greyscale image map whose value
+The **Fill to Orientation** node generates a single grayscale image map whose value
 is the orientation of the input (white: horizontal, black: vertical).
 
 Parameters

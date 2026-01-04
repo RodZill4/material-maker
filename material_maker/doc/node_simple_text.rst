@@ -1,7 +1,11 @@
 Text node
 ~~~~~~~~~
 
-The text node outputs a single texture that shows a text.
+The text node outputs a single texture that shows a text. New lines
+can be added by using the '\n' character (without single quotes).
+
+The text field has a context menu option which opens a text editor
+which can make it easier to edit multiple lines of text.
 
 .. image:: images/node_simple_text.png
 	:align: center
@@ -21,15 +25,23 @@ Parameters
 
 The text node accepts the following parameters:
 
-* the string to be displayed
+* String to be displayed
 
-* the font (both TTF and OTF formats are supported)
+* Font (both TTF and OTF formats are supported)
 
-* the font size
+* Text color
 
-* whether the text is centered
+* Background color
 
-* the X and Y coordinates of the location of the text in the generated image
+* Font size
+
+* The (extra, can be negative) line spacing, if there are multiple lines
+
+* horizontal alignment(left, right or center) of the text
+
+* Whether the text is centered
+
+* X and Y coordinates of the location of the text in the generated image
 
 Notes
 +++++

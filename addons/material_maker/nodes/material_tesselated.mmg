@@ -27,6 +27,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Static PBR Material Displacement",
+		"longdesc": "PBR material with maps generated as static images. Identical to Static PBR Material, but with depth previewed as displacement in the 3D Preview",
 		"code": "",
 		"custom": "",
 		"exports": {
@@ -74,16 +76,10 @@
 						"file_name": "$(path_prefix)_emission.png",
 						"output": 2,
 						"type": "texture"
-					},
-					{
-						"conditions": "$(connected:ao_tex)",
-						"file_name": "$(path_prefix)_occlusion.exr",
-						"output": 9,
-						"type": "texture"
 					}
 				]
 			},
-			"Godot/G3 Spatial": {
+			"Godot/Godot 3 Spatial": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -197,7 +193,7 @@
 					}
 				]
 			},
-			"Godot/G4 ORM": {
+			"Godot/Godot 4 ORM": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -263,7 +259,7 @@
 							"$if $(connected:albedo_tex)",
 							"albedo_texture = ExtResource( 1 )",
 							"$fi",
-							"$if $(connected:metallic_tex)",
+							"$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
 							"orm_texture = ExtResource( 2 )",
 							"$fi",
 							"$if $(connected:normal_tex)",
@@ -296,7 +292,7 @@
 					}
 				]
 			},
-			"Godot/G4 Standard": {
+			"Godot/Godot 4 Standard": {
 				"export_extension": "tres",
 				"files": [
 					{

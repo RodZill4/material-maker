@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bf5k7ed5a8ny1"]
 
 [ext_resource type="PackedScene" uid="uid://b7x7yqgsurxhv" path="res://material_maker/panels/preview_2d/preview_2d_panel.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/windows/sdf_builder/preview_2d.gd" id="2"]
+[ext_resource type="Script" uid="uid://smxngjtiyd0i" path="res://material_maker/windows/sdf_builder/preview_2d.gd" id="2"]
 
 [sub_resource type="Shader" id="2"]
 resource_local_to_scene = true
@@ -18,10 +18,10 @@ shader = SubResource("2")
 
 [sub_resource type="Shader" id="4"]
 resource_local_to_scene = true
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="5"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("4")
 
 [node name="Preview2D" instance=ExtResource("1")]
@@ -47,6 +47,7 @@ layout_mode = 2
 layout_mode = 2
 item_count = 6
 popup/item_0/text = "SDF+Albedo"
+popup/item_0/id = 0
 popup/item_1/text = "SDF"
 popup/item_1/id = 1
 popup/item_2/text = "Albedo"

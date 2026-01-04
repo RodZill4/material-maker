@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cp2mbbfmrv6sf"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/render_counter/render_counter.gd" id="1"]
+[ext_resource type="Script" uid="uid://4ajg6j8vvfvo" path="res://material_maker/widgets/render_counter/render_counter.gd" id="1"]
 
 [node name="RenderCounter" type="HBoxContainer" groups=["render_counter"]]
 offset_right = 158.0

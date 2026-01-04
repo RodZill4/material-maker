@@ -36,7 +36,7 @@
 		"outputs": [
 			{
 				"f": "oldweave($uv, vec2($columns, $rows), $width*$width_map($uv))",
-				"longdesc": "Shows the generated greyscale weave pattern.",
+				"longdesc": "Shows the generated grayscale weave pattern.",
 				"shortdesc": "Output",
 				"type": "f"
 			}

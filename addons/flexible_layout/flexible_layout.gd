@@ -542,13 +542,16 @@ class FlexWindow:
 	var overlay : Control
 	
 	func _init(main_control : Control, first_panel : Control = null):
+		content_scale_factor = main_control.get_window().content_scale_factor
+		if OS.get_name() == "macOS":
+			unfocusable = true
 		if first_panel:
-			position = Vector2i(first_panel.get_global_rect().position)+first_panel.get_window().position
-			size = first_panel.size
+			position = Vector2i(first_panel.get_global_rect().position*content_scale_factor)+first_panel.get_window().position
+			size = first_panel.size*content_scale_factor
 		panel = Control.new()
 		add_child(panel)
 		panel.position = Vector2i(0, 0)
-		panel.size = size
+		panel.size = size/content_scale_factor
 		panel.theme = main_control.owner.theme
 		flex_layout = FlexLayout.new(main_control, panel)
 		main_control.get_viewport().add_child(self)
@@ -561,7 +564,7 @@ class FlexWindow:
 	
 	func resize():
 		panel.position = Vector2i(0, 0)
-		panel.size = size
+		panel.size = size/content_scale_factor
 		flex_layout.layout()
 	
 	func serialize() -> Dictionary:
@@ -680,17 +683,26 @@ func serialize() -> Dictionary:
 func start_flexlayout_drag():
 	overlay = OVERLAY_SCENE.instantiate()
 	overlay.position = Vector2(0, 0)
-	overlay.size = size
 	overlay.flex_layout = flex_layout
+	overlay.z_index = 1
 	add_child(overlay)
+	var tween = get_tree().create_tween()
+	overlay.modulate = Color.TRANSPARENT
+	tween.tween_property(overlay, "modulate", Color.WHITE, 0.2).set_trans(Tween.TRANS_CUBIC)
 	for w in subwindows:
 		w.start_flexlayout_drag()
 
 func end_flexlayout_drag():
-	overlay.queue_free()
-	overlay = null
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+			overlay, "modulate", Color.TRANSPARENT, 0.3).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_callback(func():
+		overlay.queue_free()
+		overlay = null
+		)
 	for w in subwindows:
 		w.end_flexlayout_drag()
+
 
 func _on_resized():
 	flex_layout.layout()

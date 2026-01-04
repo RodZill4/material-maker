@@ -9,7 +9,7 @@ The **Occlusion** node generates an ambient occlusion texture from its input.
 Inputs
 ++++++
 
-The **Occlusion** node accepts a single greyscale image as input, interpreted as a heightmap.
+The **Occlusion** node accepts a single grayscale image as input, interpreted as a heightmap.
 
 Outputs
 +++++++

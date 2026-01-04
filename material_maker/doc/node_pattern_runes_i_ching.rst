@@ -14,7 +14,7 @@ The **I Ching** node does not accept any input.
 Outputs
 +++++++
 
-The **I Ching** generates a single greyscale output texture.
+The **I Ching** generates a single grayscale output texture.
 
 Parameters
 ++++++++++

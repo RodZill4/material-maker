@@ -29,6 +29,7 @@ theme_override_constants/margin_bottom = 4
 [node name="SplinesEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource("2")]
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
+draw_control_lines = true
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2

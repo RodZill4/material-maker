@@ -34,14 +34,14 @@
 			{
 				"default": "$uv.x",
 				"label": "",
-				"longdesc": "The input greyscale image",
+				"longdesc": "The input grayscale image",
 				"name": "input",
 				"shortdesc": "Input",
 				"type": "f"
 			}
 		],
 		"instance": "",
-		"longdesc": "Remaps a greyscale image to a custom gradient",
+		"longdesc": "Remaps a grayscale image to a custom gradient",
 		"name": "Colorize",
 		"outputs": [
 			{

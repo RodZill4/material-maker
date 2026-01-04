@@ -1,6 +1,8 @@
 extends Node
 
 
+signal updated
+
 class Buffer:
 	enum {
 		Invalidated,
@@ -208,6 +210,7 @@ func do_update():
 		if invalidated_buffers == 0:
 			emit_signal("render_queue_empty")
 	updating = false
+	updated.emit()
 
 func get_render_queue_size() -> int:
 	var invalidated_buffers : int = 0

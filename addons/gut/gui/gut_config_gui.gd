@@ -3,105 +3,33 @@ var GutConfig = load('res://addons/gut/gut_config.gd')
 
 const DIRS_TO_LIST = 6
 
-var _base_container = null
-# All the various PanelControls indexed by thier gut_config keys.
-var _cfg_ctrls = {}
-
 # specific titles that we need to do stuff with
 var _titles = {
 	dirs = null
 }
-# All titles so we can free them when we want.
-var _all_titles = []
 
+var _cfg_ctrls = {}
+var opt_maker = null
 
 func _init(cont):
-	_base_container = cont
-
-
-func _add_title(text):
-	var row = PanelControls.BaseGutPanelControl.new(text, text)
-	_base_container.add_child(row)
-	row.connect('draw', _on_title_cell_draw.bind(row))
-	_all_titles.append(row)
-	return row
-
-func _add_ctrl(key, ctrl):
-	_cfg_ctrls[key] = ctrl
-	_base_container.add_child(ctrl)
-
-
-func _add_number(key, value, disp_text, v_min, v_max, hint=''):
-	var ctrl = PanelControls.NumberControl.new(disp_text, value, v_min, v_max, hint)
-	_add_ctrl(key, ctrl)
-	return ctrl
-
-
-func _add_select(key, value, values, disp_text, hint=''):
-	var ctrl = PanelControls.SelectControl.new(disp_text, value, values, hint)
-	_add_ctrl(key, ctrl)
-	return ctrl
-
-
-func _add_value(key, value, disp_text, hint=''):
-	var ctrl = PanelControls.StringControl.new(disp_text, value, hint)
-	_add_ctrl(key, ctrl)
-	return ctrl
-
-
-func _add_boolean(key, value, disp_text, hint=''):
-	var ctrl = PanelControls.BooleanControl.new(disp_text, value, hint)
-	_add_ctrl(key, ctrl)
-	return ctrl
-
-
-func _add_directory(key, value, disp_text, hint=''):
-	var ctrl = PanelControls.DirectoryControl.new(disp_text, value, hint)
-	_add_ctrl(key, ctrl)
-	ctrl.dialog.title = disp_text
-	return ctrl
-
-
-func _add_file(key, value, disp_text, hint=''):
-	var ctrl = PanelControls.DirectoryControl.new(disp_text, value, hint)
-	_add_ctrl(key, ctrl)
-	ctrl.dialog.file_mode = ctrl.dialog.FILE_MODE_OPEN_FILE
-	ctrl.dialog.title = disp_text
-	return ctrl
-
-
-func _add_save_file_anywhere(key, value, disp_text, hint=''):
-	var ctrl = PanelControls.DirectoryControl.new(disp_text, value, hint)
-	_add_ctrl(key, ctrl)
-	ctrl.dialog.file_mode = ctrl.dialog.FILE_MODE_SAVE_FILE
-	ctrl.dialog.access = ctrl.dialog.ACCESS_FILESYSTEM
-	ctrl.dialog.title = disp_text
-	return ctrl
-
-
-func _add_color(key, value, disp_text, hint=''):
-	var ctrl = PanelControls.ColorControl.new(disp_text, value, hint)
-	_add_ctrl(key, ctrl)
-	return ctrl
+	opt_maker = GutUtils.OptionMaker.new(cont)
+	_cfg_ctrls = opt_maker.controls
+	# _base_container = cont
 
 
 func _add_save_load():
 	var ctrl = PanelControls.SaveLoadControl.new('Config', '', '')
-	_base_container.add_child(ctrl)
 
 	ctrl.save_path_chosen.connect(_on_save_path_chosen)
 	ctrl.load_path_chosen.connect(_on_load_path_chosen)
 
-	_cfg_ctrls['save_load'] = ctrl
+	#_cfg_ctrls['save_load'] = ctrl
+	opt_maker.add_ctrl('save_load', ctrl)
 	return ctrl
 
 # ------------------
 # Events
 # ------------------
-func _on_title_cell_draw(which):
-	which.draw_rect(Rect2(Vector2(0, 0), which.size), Color(0, 0, 0, .15))
-
-
 func _on_save_path_chosen(path):
 	save_file(path)
 
@@ -145,15 +73,7 @@ func get_config_issues():
 
 
 func clear():
-	for key in _cfg_ctrls:
-		_cfg_ctrls[key].free()
-
-	_cfg_ctrls.clear()
-
-	for entry in _all_titles:
-		entry.free()
-
-	_all_titles.clear()
+	opt_maker.clear()
 
 
 func save_file(path):
@@ -191,54 +111,65 @@ func set_options(opts):
 	# _add_title('Save/Load')
 	_add_save_load()
 
-	_add_title("Settings")
-	_add_number("log_level", options.log_level, "Log Level", 0, 3,
+	opt_maker.add_title("Settings")
+	opt_maker.add_number("log_level", options.log_level, "Log Level", 0, 3,
 		"Detail level for log messages.\n" + \
 		"\t0: Errors and failures only.\n" + \
 		"\t1: Adds all test names + warnings + info\n" + \
 		"\t2: Shows all asserts\n" + \
 		"\t3: Adds more stuff probably, maybe not.")
-	_add_boolean('ignore_pause', options.ignore_pause, 'Ignore Pause',
+	opt_maker.add_float("wait_log_delay", options.wait_log_delay, "Wait Log Delay", 0.1, 0.0, 999.1,
+		"How long to wait before displaying 'Awaiting' messages.")
+	opt_maker.add_boolean('ignore_pause', options.ignore_pause, 'Ignore Pause',
 		"Ignore calls to pause_before_teardown")
-	_add_boolean('hide_orphans', options.hide_orphans, 'Hide Orphans',
+	opt_maker.add_boolean('hide_orphans', options.hide_orphans, 'Hide Orphans',
 		'Do not display orphan counts in output.')
-	_add_boolean('should_exit', options.should_exit, 'Exit on Finish',
+	opt_maker.add_boolean('should_exit', options.should_exit, 'Exit on Finish',
 		"Exit when tests finished.")
-	_add_boolean('should_exit_on_success', options.should_exit_on_success, 'Exit on Success',
+	opt_maker.add_boolean('should_exit_on_success', options.should_exit_on_success, 'Exit on Success',
 		"Exit if there are no failures.  Does nothing if 'Exit on Finish' is enabled.")
-	_add_select('double_strategy', 'Script Only', ['Include Native', 'Script Only'], 'Double Strategy',
+	opt_maker.add_select('double_strategy', 'Script Only', ['Include Native', 'Script Only'], 'Double Strategy',
 		'"Include Native" will include native methods in Doubles.  "Script Only" will not.  ' + "\n" + \
 		'The native method override warning is disabled when creating Doubles.' + "\n" + \
 		'This is the default, you can override this at the script level or when creating doubles.')
 	_cfg_ctrls.double_strategy.value = GutUtils.get_enum_value(
 		options.double_strategy, GutUtils.DOUBLE_STRATEGY, GutUtils.DOUBLE_STRATEGY.SCRIPT_ONLY)
-	_add_boolean('errors_cause_failure', !options.errors_do_not_cause_failure, 'Errors cause failures.',
-		"When GUT generates an error (not an engine error) it causes tests to fail.")
 
 
-	_add_title('Runner Appearance')
-	hide_this = _add_boolean("gut_on_top", options.gut_on_top, "On Top",
+	opt_maker.add_title("Fail Error Types")
+	opt_maker.add_boolean("error_tracking", !options.no_error_tracking, 'Track Errors',
+		"Enable/Disable GUT's ability to detect engine and push errors.")
+	opt_maker.add_boolean('engine_errors_cause_failure', options.failure_error_types.has(GutConfig.FAIL_ERROR_TYPE_ENGINE),
+		'Engine', 'Any script/engine error that occurs during a test will cause the test to fail.')
+	opt_maker.add_boolean('push_error_errors_cause_failure', options.failure_error_types.has(GutConfig.FAIL_ERROR_TYPE_PUSH_ERROR),
+		'Push', 'Any error generated by a call to push_error that occurs during a test will cause the test to fail.')
+	opt_maker.add_boolean('gut_errors_cause_failure', options.failure_error_types.has(GutConfig.FAIL_ERROR_TYPE_GUT),
+		'GUT', 'Any internal GUT error that occurs while a test is running will cause it to fail..')
+
+
+	opt_maker.add_title('Runner Appearance')
+	hide_this = opt_maker.add_boolean("gut_on_top", options.gut_on_top, "On Top",
 		"The GUT Runner appears above children added during tests.")
-	_add_number('opacity', options.opacity, 'Opacity', 0, 100,
+	opt_maker.add_number('opacity', options.opacity, 'Opacity', 0, 100,
 		"The opacity of GUT when tests are running.")
-	hide_this = _add_boolean('should_maximize', options.should_maximize, 'Maximize',
+	hide_this = opt_maker.add_boolean('should_maximize', options.should_maximize, 'Maximize',
 		"Maximize GUT when tests are being run.")
-	_add_boolean('compact_mode', options.compact_mode, 'Compact Mode',
+	opt_maker.add_boolean('compact_mode', options.compact_mode, 'Compact Mode',
 		'The runner will be in compact mode.  This overrides Maximize.')
-	_add_select('font_name', options.font_name, GutUtils.avail_fonts, 'Font',
+	opt_maker.add_select('font_name', options.font_name, GutUtils.avail_fonts, 'Font',
 		"The font to use for text output in the Gut Runner.")
-	_add_number('font_size', options.font_size, 'Font Size', 5, 100,
+	opt_maker.add_number('font_size', options.font_size, 'Font Size', 5, 100,
 		"The font size for text output in the Gut Runner.")
-	hide_this = _add_color('font_color', options.font_color, 'Font Color',
+	hide_this = opt_maker.add_color('font_color', options.font_color, 'Font Color',
 		"The font color for text output in the Gut Runner.")
-	_add_color('background_color', options.background_color, 'Background Color',
+	opt_maker.add_color('background_color', options.background_color, 'Background Color',
 		"The background color for text output in the Gut Runner.")
-	_add_boolean('disable_colors', options.disable_colors, 'Disable Formatting',
+	opt_maker.add_boolean('disable_colors', options.disable_colors, 'Disable Formatting',
 		'Disable formatting and colors used in the Runner.  Does not affect panel output.')
 
 
-	_titles.dirs = _add_title('Test Directories')
-	_add_boolean('include_subdirs', options.include_subdirs, 'Include Subdirs',
+	_titles.dirs = opt_maker.add_title('Test Directories')
+	opt_maker.add_boolean('include_subdirs', options.include_subdirs, 'Include Subdirs',
 		"Include subdirectories of the directories configured below.")
 
 	var dirs_to_load = options.configured_dirs
@@ -250,39 +181,34 @@ func set_options(opts):
 		if(dirs_to_load.size() > i):
 			value = dirs_to_load[i]
 
-		var test_dir = _add_directory(str('directory_', i), value, str(i))
+		var test_dir = opt_maker.add_directory(str('directory_', i), value, str(i))
 		test_dir.enabled_button.visible = true
 		test_dir.enabled_button.button_pressed = options.dirs.has(value)
 
 
-	_add_title("XML Output")
-	_add_save_file_anywhere("junit_xml_file", options.junit_xml_file, "Output Path",
-		"Path3D and filename where GUT should create a JUnit compliant XML file.  " +
+	opt_maker.add_title("XML Output")
+	opt_maker.add_save_file_anywhere("junit_xml_file", options.junit_xml_file, "Output Path",
+		"Path and filename where GUT should create a JUnit compliant XML file.  " +
 		"This file will contain the results of the last test run.  To avoid " +
 		"overriding the file use Include Timestamp.")
-	_add_boolean("junit_xml_timestamp", options.junit_xml_timestamp, "Include Timestamp",
+	opt_maker.add_boolean("junit_xml_timestamp", options.junit_xml_timestamp, "Include Timestamp",
 		"Include a timestamp in the filename so that each run gets its own xml file.")
 
 
-	_add_title('Hooks')
-	_add_file('pre_run_script', options.pre_run_script, 'Pre-Run Hook',
+	opt_maker.add_title('Hooks')
+	opt_maker.add_file('pre_run_script', options.pre_run_script, 'Pre-Run Hook',
 		'This script will be run by GUT before any tests are run.')
-	_add_file('post_run_script', options.post_run_script, 'Post-Run Hook',
+	opt_maker.add_file('post_run_script', options.post_run_script, 'Post-Run Hook',
 		'This script will be run by GUT after all tests are run.')
 
 
-	_add_title('Misc')
-	_add_value('prefix', options.prefix, 'Script Prefix',
+	opt_maker.add_title('Misc')
+	opt_maker.add_value('prefix', options.prefix, 'Script Prefix',
 		"The filename prefix for all test scripts.")
-	_add_value('suffix', options.suffix, 'Script Suffix',
+	opt_maker.add_value('suffix', options.suffix, 'Script Suffix',
 		"Script suffix, including .gd extension.  For example '_foo.gd'.")
-	_add_number('paint_after', options.paint_after, 'Paint After', 0.0, 1.0,
+	opt_maker.add_float('paint_after', options.paint_after, 'Paint After', .05, 0.0, 1.0,
 		"How long GUT will wait before pausing for 1 frame to paint the screen.  0 is never.")
-
-	# since _add_number doesn't set step property, it will default to a step of
-	# 1 and cast values to int.  Give it a .5 step and re-set the value.
-	_cfg_ctrls.paint_after.value_ctrl.step = .05
-	_cfg_ctrls.paint_after.value = options.paint_after
 
 
 
@@ -291,13 +217,12 @@ func get_options(base_opts):
 
 	# Settings
 	to_return.log_level = _cfg_ctrls.log_level.value
+	to_return.wait_log_delay = _cfg_ctrls.wait_log_delay.value
 	to_return.ignore_pause = _cfg_ctrls.ignore_pause.value
 	to_return.hide_orphans = _cfg_ctrls.hide_orphans.value
 	to_return.should_exit = _cfg_ctrls.should_exit.value
 	to_return.should_exit_on_success = _cfg_ctrls.should_exit_on_success.value
 	to_return.double_strategy = _cfg_ctrls.double_strategy.value
-	to_return.errors_do_not_cause_failure = !_cfg_ctrls.errors_cause_failure.value
-
 
 	# Runner Appearance
 	to_return.font_name = _cfg_ctrls.font_name.text
@@ -311,6 +236,17 @@ func get_options(base_opts):
 	to_return.gut_on_top = _cfg_ctrls.gut_on_top.value
 	to_return.paint_after = _cfg_ctrls.paint_after.value
 
+	# Fail Error Types
+	to_return.no_error_tracking = !_cfg_ctrls.error_tracking
+
+	var fail_error_types = []
+	if(_cfg_ctrls.engine_errors_cause_failure.value):
+		fail_error_types.append(GutConfig.FAIL_ERROR_TYPE_ENGINE)
+	if(_cfg_ctrls.push_error_errors_cause_failure.value):
+		fail_error_types.append(GutConfig.FAIL_ERROR_TYPE_PUSH_ERROR)
+	if(_cfg_ctrls.gut_errors_cause_failure.value):
+		fail_error_types.append(GutConfig.FAIL_ERROR_TYPE_GUT)
+	to_return.failure_error_types = fail_error_types
 
 	# Directories
 	to_return.include_subdirs = _cfg_ctrls.include_subdirs.value

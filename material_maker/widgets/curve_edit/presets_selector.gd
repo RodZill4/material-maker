@@ -9,7 +9,7 @@ var presets : Array[Dictionary] = [
 	{ name="EaseIn", curve=[MP.new(0.0, 0.0, 0.0, 0.0), MP.new(0.707107, 0.292893, 1.0, 1.0), MP.new(1.0, 1.0, 4.0, 0.0)] },
 	{ name="SawTooth", curve=[MP.new(0.0, 0.0, 0.0, 2.0), MP.new(0.5, 1.0, 2.0, -2.0), MP.new(1.0, 0.0, -2.0, 0.0)] },
 	{ name="Bounce", curve=[MP.new(0.0, 0.0, 0.0, 5.0), MP.new(0.15, 0.65, 2.45201, 2.45201), MP.new(0.5, 1.0, 0.0, 0.0), MP.new(0.85, 0.65, -2.45201, -2.45201), MP.new(1.0, 0.0, -5.0, 0.0)] },
-	{ name="Bevel", curve=[MP.new(0.0, 0.0, 0.0, 2.38507), MP.new(0.292893, 0.707107, 2.34362, 0.428147), MP.new(1.0, 1.0, 0.410866, 0.0)] }
+	{ name="Bevel", curve=[MP.new(0.0, 0.0, 0.0, 6.553708), MP.new(0.117274, 0.774309, 6.784962, 0.250337), MP.new(1.0, 1.0,  0.256162, 0.0)] }
 ] 
 
 func _enter_tree() -> void:
@@ -33,3 +33,4 @@ func _menu_item_selected(index : int) -> void:
 	var curve = MMCurve.new()
 	curve.points = presets[index].curve
 	get_parent().get_parent().get_node("EditorContainer/CurveEditor").set_curve(curve)
+	get_parent().get_parent().get_node("ControlUIContainer/ControlUI").hide()

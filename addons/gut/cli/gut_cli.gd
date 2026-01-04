@@ -105,6 +105,10 @@ Options whose values are lists/arrays can be specified multiple times:
 	-gdir c,d
 	-gdir e
 	# results in -gdir equaling [a, b, c, d, e]
+
+To not use an empty value instead of a default value, specifiy the option with
+an immediate "=":
+	-gconfig=
 """
 	opts.add_heading("Test Config:")
 	opts.add('-gdir', options.dirs, 'List of directories to search for test scripts in.')
@@ -125,6 +129,8 @@ Options whose values are lists/arrays can be specified multiple times:
 	opts.add('-gexit', false, 'Exit after running tests.  If not specified you have to manually close the window.')
 	opts.add('-gexit_on_success', false, 'Only exit if zero tests fail.')
 	opts.add('-gignore_pause', false, 'Ignores any calls to pause_before_teardown.')
+	opts.add('-gno_error_tracking', false, 'Disable error tracking.')
+	opts.add('-gfailure_error_types', options.failure_error_types, 'Error types that will cause tests to fail if the are encountered during the execution of a test.  Default "[default]"')
 
 	opts.add_heading("Display Settings:")
 	opts.add('-glog', options.log_level, 'Log level [0-3].  Default [default]')
@@ -138,6 +144,7 @@ Options whose values are lists/arrays can be specified multiple times:
 	opts.add('-gbackground_color', options.background_color, 'Background color as an html color, default "[default]"')
 	opts.add('-gfont_color',options.font_color, 'Font color as an html color, default "[default]"')
 	opts.add('-gpaint_after', options.paint_after, 'Delay before GUT will add a 1 frame pause to paint the screen/GUI.  default [default]')
+	opts.add('-gwait_log_delay', options.wait_log_delay, 'Delay before GUT will print a message to indicate a test is awaiting one of the wait_* methods.  Default [default]')
 
 	opts.add_heading("Result Export:")
 	opts.add('-gjunit_xml_file', options.junit_xml_file, 'Export results of run to this file in the Junit XML format.')
@@ -148,16 +155,22 @@ Options whose values are lists/arrays can be specified multiple times:
 	opts.add('-gpo', false, 'Print option values from all sources and the value used.')
 	opts.add('-gprint_gutconfig_sample', false, 'Print out json that can be used to make a gutconfig file.')
 
+	# run as in editor, for shelling out purposes through Editor.
+	var o = opts.add('-graie', false, 'do not use')
+	o.show_in_help = false
 	return opts
 
 
 # Parses options, applying them to the _tester or setting values
 # in the options struct.
 func extract_command_line_options(from, to):
+	to.compact_mode = from.get_value_or_null('-gcompact_mode')
 	to.config_file = from.get_value_or_null('-gconfig')
 	to.dirs = from.get_value_or_null('-gdir')
 	to.disable_colors =  from.get_value_or_null('-gdisable_colors')
 	to.double_strategy = from.get_value_or_null('-gdouble_strategy')
+	to.errors_do_not_cause_failure = from.get_value_or_null('-gerrors_do_not_cause_failure')
+	to.hide_orphans = from.get_value_or_null('-ghide_orphans')
 	to.ignore_pause = from.get_value_or_null('-gignore_pause')
 	to.include_subdirs = from.get_value_or_null('-ginclude_subdirs')
 	to.inner_class = from.get_value_or_null('-ginner_class')
@@ -170,21 +183,23 @@ func extract_command_line_options(from, to):
 	to.should_exit = from.get_value_or_null('-gexit')
 	to.should_exit_on_success = from.get_value_or_null('-gexit_on_success')
 	to.should_maximize = from.get_value_or_null('-gmaximize')
-	to.compact_mode = from.get_value_or_null('-gcompact_mode')
-	to.hide_orphans = from.get_value_or_null('-ghide_orphans')
 	to.suffix = from.get_value_or_null('-gsuffix')
-	to.errors_do_not_cause_failure = from.get_value_or_null('-gerrors_do_not_cause_failure')
 	to.tests = from.get_value_or_null('-gtest')
 	to.unit_test_name = from.get_value_or_null('-gunit_test_name')
+	to.wait_log_delay = from.get_value_or_null('-gwait_log_delay')
 
-	to.font_size = from.get_value_or_null('-gfont_size')
-	to.font_name = from.get_value_or_null('-gfont_name')
 	to.background_color = from.get_value_or_null('-gbackground_color')
 	to.font_color = from.get_value_or_null('-gfont_color')
+	to.font_name = from.get_value_or_null('-gfont_name')
+	to.font_size = from.get_value_or_null('-gfont_size')
 	to.paint_after = from.get_value_or_null('-gpaint_after')
 
 	to.junit_xml_file = from.get_value_or_null('-gjunit_xml_file')
 	to.junit_xml_timestamp = from.get_value_or_null('-gjunit_xml_timestamp')
+
+	to.failure_error_types = from.get_value_or_null('-gfailure_error_types')
+	to.no_error_tracking = from.get_value_or_null('-gno_error_tracking')
+	to.raie = from.get_value_or_null('-graie')
 
 
 
@@ -217,7 +232,10 @@ func _run_tests(opt_resolver):
 	runner.set_gut_config(_gut_config)
 	get_tree().root.add_child(runner)
 
-	runner.run_tests()
+	if(opt_resolver.cmd_opts.raie):
+		runner.run_from_editor()
+	else:
+		runner.run_tests()
 
 
 # parse options and run Gut
