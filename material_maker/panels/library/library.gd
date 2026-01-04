@@ -18,6 +18,8 @@ const MINIMUM_ITEM_HEIGHT : int = 30
 const MENU_CREATE_LIBRARY : int = 1000
 const MENU_LOAD_LIBRARY : int =   1001
 
+const default_theme : Theme = preload("res://material_maker/theme/default.tres")
+
 func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 	context_menu.position = get_window().position+ Vector2i(
 			get_global_mouse_position() * get_window().content_scale_factor)
@@ -32,11 +34,16 @@ func _ready() -> void:
 	# Connect
 	library_manager.libraries_changed.connect(self.update_tree)
 	# Setup section buttons
-	for s in library_manager.get_sections():
-		var button : TextureButton = TextureButton.new()
-		var texture : Texture2D = library_manager.get_section_icon(s)
+	for s : String in library_manager.get_sections():
+		var button : Button = Button.new()
 		button.name = s
-		button.texture_normal = texture
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.expand_icon = true
+		button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
+		button.custom_minimum_size = Vector2(32, 32)
+		button.theme_type_variation = "MM_LibrarySectionButton"
+
+		update_category_button_styleboxes(button, s)
 		%SectionButtons.add_child(button)
 		category_buttons[s] = button
 		button.connect("pressed", self._on_Section_Button_pressed.bind(s))
@@ -47,14 +54,20 @@ func _ready() -> void:
 	update_theme()
 
 func _notification(what: int) -> void:
-	if not is_node_ready():
-		return
-
 	if what == NOTIFICATION_THEME_CHANGED:
+		if not is_node_ready():
+			await ready
+		for s in library_manager.get_sections():
+			var button : Button = category_buttons[s]
+			button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
+			update_category_button_styleboxes(button, s)
 		update_theme()
 
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
+
+	var is_theme_classic : bool = "classic" in mm_globals.main_window.theme.resource_path
+	library_manager.update_section_colors(is_theme_classic)
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
@@ -115,11 +128,22 @@ func get_expanded_items(item : TreeItem = null) -> PackedStringArray:
 
 func update_category_button(category : String) -> void:
 	if library_manager.is_section_enabled(category):
-		category_buttons[category].material = null
+		category_buttons[category].disabled = false
 		category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 	else:
-		category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
+		category_buttons[category].disabled = true
 		category_buttons[category].tooltip_text = category+"\nRight click to enable"
+
+func update_category_button_styleboxes(btn : Button, category : String) -> void:
+	for stylebox_name in default_theme.get_stylebox_list("MM_LibrarySectionButton"):
+		var button_stylebox = get_theme_stylebox(
+				stylebox_name, "MM_LibrarySectionButton").duplicate()
+		if btn.has_theme_stylebox_override(stylebox_name):
+			btn.remove_theme_stylebox_override(stylebox_name)
+		if button_stylebox is StyleBoxFlat and stylebox_name != "disabled":
+			button_stylebox.bg_color = get_theme_color(
+					"section_" + category.to_lower(), "MM_LibrarySectionButton")
+			btn.add_theme_stylebox_override(stylebox_name, button_stylebox)
 
 func update_tree() -> void:
 	# update category buttons
@@ -248,16 +272,15 @@ func _on_Section_Button_pressed(category : String) -> void:
 func _on_Section_Button_event(event : InputEvent, category : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		if library_manager.toggle_section(category):
-			category_buttons[category].material = null
 			category_buttons[category].tooltip_text = category+"\nLeft click to show\nRight click to disable"
 		else:
-			category_buttons[category].material = preload("res://material_maker/panels/library/button_greyed.tres")
 			category_buttons[category].tooltip_text = category+"\nRight click to enable"
 			if current_category == category:
 				current_category = ""
 
 func _on_Libraries_about_to_show():
 	var popup : PopupMenu = libraries_button.get_popup()
+	popup.hide_on_checkable_item_selection = false
 	var unload : PopupMenu = null
 	for c in popup.get_children():
 		if c is PopupMenu:
@@ -282,6 +305,26 @@ func _on_Libraries_about_to_show():
 	popup.add_item("Create library", MENU_CREATE_LIBRARY)
 	popup.add_item("Load library", MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
+	if not popup.window_input.is_connected(_on_Libraries_window_input):
+		popup.window_input.connect(_on_Libraries_window_input.bind(popup))
+
+func _on_Libraries_window_input(event: InputEvent, popup: PopupMenu) -> void:
+	# show user/custom library path on right click
+	var focused_library_id : int = popup.get_focused_item()
+	var valid_library : bool = (focused_library_id and
+			focused_library_id < library_manager.get_child_count())
+	if valid_library:
+		mm_globals.set_tip_text("#LMB: Enable/Disable Library, #RMB: Show library path")
+	elif focused_library_id == 0:
+		mm_globals.set_tip_text("#LMB: Enable/Disable Library")
+	else:
+		mm_globals.set_tip_text("")
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
+		if valid_library:
+			popup.hide()
+			OS.shell_show_in_file_manager(ProjectSettings.globalize_path(
+					library_manager.get_child(focused_library_id).library_path), true)
+
 
 func on_html5_load_file(file_name, _file_type, file_data):
 	match file_name.get_extension():
@@ -315,6 +358,7 @@ func _on_Libraries_id_pressed(id : int) -> void:
 					library_manager.load_library(files[0])
 		_:
 			library_manager.toggle_library(id)
+			libraries_button.get_popup().set_item_checked(id, library_manager.is_library_enabled(id))
 
 func _on_Libraries_Unload_id_pressed(id : int) -> void:
 	library_manager.unload_library(id)
@@ -356,9 +400,11 @@ func _on_PopupMenu_index_pressed(index):
 				return
 			var image : Image = await current_node.generator.render_output(0, Vector2i(64, 64))
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
-		2: # Delete item
+		2: # Update item
+			mm_globals.main_window.add_selection_to_library(library_index, false)
+		3: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)
-		4: # Define aliases
+		5: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
 			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor

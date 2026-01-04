@@ -64,6 +64,7 @@
 	"Simple/Shape/Curved Star": "basic",
 	"Simple/Shape/Rays": "basic",
 	"Simple/Shape/Star": "basic",
+	"Simple/Shape/Square": "basic,square,box,rectangle",
 	"Simple/Text": "label",
 	"Simple/Uniform": "color,colour,rgb,fill,solid",
 	"Simple/Uniform/Grayscale": "value,fill,solid,greyscale",
@@ -83,5 +84,6 @@
 	"Transform/Translate": "move,scroll,shift,push",
 	"Transform/Warp": "distortion,deform,shift,push",
 	"Transform/Circle Map": "polar",
+	"Transform/Inverse Circle Map": "cartesian",
 	"Filter/Quantize": "posterize"
 }

@@ -33,6 +33,7 @@ func _on_ModelFile_pressed():
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.glb,*.gltf;GLTF file")
 	dialog.add_filter("*.obj;Wavefront OBJ file")
+	dialog.add_filter("*.fbx;FBX file")
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		set_mesh(files[0])

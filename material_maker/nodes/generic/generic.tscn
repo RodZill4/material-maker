@@ -7,3 +7,5 @@ offset_right = 95.0
 offset_bottom = 29.0
 title = "Generic"
 script = ExtResource("1")
+
+[connection signal="minimum_size_changed" from="." to="." method="_on_minimum_size_changed"]

@@ -116,7 +116,7 @@ func update_generic(generic_size : int) -> void:
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
 	if parameter_controls.has(p):
 		var o = parameter_controls[p]
-		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is FloatEdit:
 			o.set_value(v)
 		elif o is HSlider:
 			o.value = v
@@ -181,7 +181,7 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 		var o = control_list[c]
 		if gen.parameters.has(c):
 			object.on_parameter_changed(c, gen.get_parameter(c))
-		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is FloatEdit:
 			o.connect("value_changed_undo",Callable(object,"_on_float_value_changed").bind( o.name ))
 		elif o is LineEdit:
 			o.connect("text_changed",Callable(object,"_on_text_changed").bind( o.name ))
@@ -313,6 +313,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			control.add_item(value.name)
 			control.selected = 0 if !p.has("default") else p.default
 		control.custom_minimum_size.x = 80
+		control.fit_to_longest_item = false
 	elif p.type == "boolean":
 		control = CheckBox.new()
 		control.theme_type_variation = "MM_NodeCheckbox"
@@ -337,7 +338,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 	elif p.type == "lattice":
 		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
-		control = LineEdit.new()
+		control = TextLineEdit.new()
 		control.custom_minimum_size.x = 80
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()
@@ -618,10 +619,6 @@ func update_node() -> void:
 	if generator.is_editable():
 		for theme_stylebox in ["titlebar", "titlebar_selected"]:
 			remove_theme_stylebox_override(theme_stylebox)
-		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
-		add_child(edit_buttons)
-		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
-		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
 	if generator.minimized:
 		size = Vector2(96, 96)
 	# Preview
@@ -712,3 +709,7 @@ func _input(_event:InputEvent) -> void:
 
 func update_from_locale() -> void:
 	update_title()
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()

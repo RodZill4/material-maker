@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bsm7wtt1gie4v"]
 
-[ext_resource type="Script" path="res://addons/gut/UserFileViewer.gd" id="1"]
+[ext_resource type="Script" uid="uid://x51wilphva3d" path="res://addons/gut/UserFileViewer.gd" id="1"]
 
 [node name="UserFileViewer" type="Window"]
 exclusive = true

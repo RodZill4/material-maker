@@ -93,7 +93,7 @@
 		"outputs": [
 			{
 				"f": "fbm_shard(vec3($uv,$offset_in($uv)),vec3($sx,$sy,1.0),int($folds),int($iter),$per,pow(2,$sharp_in($uv)*$sharp*8.0),$seed)",
-				"longdesc": "Greyscale image of the generated noise",
+				"longdesc": "Grayscale image of the generated noise",
 				"shortdesc": "Output",
 				"type": "f"
 			}

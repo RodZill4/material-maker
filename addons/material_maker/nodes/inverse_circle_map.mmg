@@ -1,0 +1,40 @@
+{
+	"generic_size": 1,
+	"name": "inverse_circle_map",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "float $(name_uv)_a = TAU*$uv.x;",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The input image to be remapped",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Unwraps its input from a circle. The opposite of Circle Map.",
+		"name": "Inverse Circle Map",
+		"outputs": [
+			{
+				"longdesc": "Shows the remapped image",
+				"rgba": "$in#((vec2(0.5)+0.5*fract($uv.y)*vec2(cos($(name_uv)_a), sin($(name_uv)_a))))",
+				"shortdesc": "Output#",
+				"type": "rgba"
+			}
+		],
+		"parameters": [],
+		"shortdesc": "Inverse Circle Map"
+	},
+	"type": "shader"
+}

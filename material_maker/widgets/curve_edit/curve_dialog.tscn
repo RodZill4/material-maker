@@ -1,11 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmfusfaiojjvf"]
+[gd_scene load_steps=6 format=3 uid="uid://dmfusfaiojjvf"]
 
 [ext_resource type="PackedScene" uid="uid://c2ns17avhb2nx" path="res://material_maker/widgets/curve_edit/curve_editor.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/curve_dialog.gd" id="2"]
-[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/presets_selector.gd" id="3"]
+[ext_resource type="Script" uid="uid://06osuiqfmilt" path="res://material_maker/widgets/curve_edit/curve_dialog.gd" id="2"]
+[ext_resource type="Script" uid="uid://pgn60kk5fcj6" path="res://material_maker/widgets/curve_edit/settings_panel.gd" id="2_fe25e"]
+[ext_resource type="Script" uid="uid://df24muo083lfx" path="res://material_maker/widgets/curve_edit/presets_selector.gd" id="3"]
+[ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="3_fe25e"]
 
 [node name="CurveDialog" type="Window"]
 title = "Edit curve"
+position = Vector2i(0, 36)
 size = Vector2i(300, 300)
 exclusive = true
 min_size = Vector2i(300, 300)
@@ -20,15 +23,106 @@ offset_top = 5.0
 offset_right = -5.0
 offset_bottom = -5.0
 
+[node name="CurveViewSettingsContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 4
+
+[node name="CurveViewSettings" type="PanelContainer" parent="VBoxContainer/CurveViewSettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"MM_PanelMenuBar"
+script = ExtResource("2_fe25e")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="GridLabel" type="Label" parent="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings/HBoxContainer"]
+layout_mode = 2
+text = "Grid"
+
+[node name="GridDensity" parent="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings/HBoxContainer" instance=ExtResource("3_fe25e")]
+unique_name_in_owner = true
+layout_mode = 2
+value = 4.0
+min_value = 1.0
+max_value = 16.0
+step = 1.0
+float_only = true
+
 [node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
 
 [node name="CurveEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource("1")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="ControlUIContainer" type="VBoxContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+
+[node name="ControlUI" type="HBoxContainer" parent="VBoxContainer/ControlUIContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="PositionLabel" type="Label" parent="VBoxContainer/ControlUIContainer/ControlUI"]
+layout_mode = 2
+text = "Position"
+
+[node name="PositionX" parent="VBoxContainer/ControlUIContainer/ControlUI" instance=ExtResource("3_fe25e")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="PositionY" parent="VBoxContainer/ControlUIContainer/ControlUI" instance=ExtResource("3_fe25e")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+value = 0.0
+step = 0.01
+float_only = true
+
+[node name="Spacer" type="Control" parent="VBoxContainer/ControlUIContainer/ControlUI"]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+
+[node name="SlopeLabel" type="Label" parent="VBoxContainer/ControlUIContainer/ControlUI"]
+layout_mode = 2
+text = "Handles"
+
+[node name="LeftSlope" parent="VBoxContainer/ControlUIContainer/ControlUI" instance=ExtResource("3_fe25e")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+value = 0.0
+min_value = -89.0
+max_value = 89.0
+step = 0.1
+float_only = true
+
+[node name="RightSlope" parent="VBoxContainer/ControlUIContainer/ControlUI" instance=ExtResource("3_fe25e")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+value = 45.0
+min_value = -89.0
+max_value = 89.0
+step = 0.1
+float_only = true
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
 layout_mode = 2
@@ -63,7 +157,16 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
+[connection signal="ready" from="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings" to="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings" method="_on_ready"]
+[connection signal="value_changed" from="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings/HBoxContainer/GridDensity" to="VBoxContainer/CurveViewSettingsContainer/CurveViewSettings" method="_on_grid_density_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/EditorContainer/CurveEditor" to="." method="_on_CurveEditor_value_changed"]
+[connection signal="gui_input" from="VBoxContainer/EditorContainer/CurveEditor/@Control@283287" to="VBoxContainer/EditorContainer/CurveEditor/@Control@283287" method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="VBoxContainer/EditorContainer/CurveEditor/@Control@283287" to="VBoxContainer/EditorContainer/CurveEditor/@Control@283287" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/EditorContainer/CurveEditor/@Control@283287" to="VBoxContainer/EditorContainer/CurveEditor/@Control@283287" method="_on_mouse_exited"]
+[connection signal="value_changed" from="VBoxContainer/ControlUIContainer/ControlUI/PositionX" to="VBoxContainer/EditorContainer/CurveEditor" method="_on_position_x_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ControlUIContainer/ControlUI/PositionY" to="VBoxContainer/EditorContainer/CurveEditor" method="_on_position_y_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ControlUIContainer/ControlUI/LeftSlope" to="VBoxContainer/EditorContainer/CurveEditor" method="_on_left_slope_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/ControlUIContainer/ControlUI/RightSlope" to="VBoxContainer/EditorContainer/CurveEditor" method="_on_right_slope_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Invert" to="." method="_on_Invert_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]

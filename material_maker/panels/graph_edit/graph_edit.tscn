@@ -26,7 +26,6 @@ offset_right = 1529.0
 offset_bottom = 1193.0
 grow_horizontal = 2
 grow_vertical = 2
-scroll_offset = Vector2(-1, -1)
 grid_pattern = 1
 right_disconnects = true
 zoom_min = 0.25

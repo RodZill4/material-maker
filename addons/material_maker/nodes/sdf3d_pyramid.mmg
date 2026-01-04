@@ -5,7 +5,9 @@
 		"y": 0
 	},
 	"parameters": {
-		"r": 0.4
+		"axis": 1,
+		"r": 0.4,
+		"b": 0.3
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -39,22 +41,52 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the pyramid",
-				"sdf3d": "sdPyramid($uv.xzy, $r)",
+				"sdf3d": "sdPyramid(0.5*($axis-vec3(0.0, -$r, 0.0))/$b, $r/$b)*$b*2.0",
 				"shortdesc": "Output",
 				"type": "sdf3d"
 			}
 		],
 		"parameters": [
 			{
+				"default": 2,
+				"label": "Axis",
+				"name": "axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": "$uv.yxz"
+					},
+					{
+						"name": "Y",
+						"value": "-$uv"
+					},
+					{
+						"name": "Z",
+						"value": "$uv.xzy"
+					}
+				]
+			},
+			{
 				"control": "Radius1.r",
 				"default": 0.5,
-				"label": "",
+				"label": "Height",
 				"longdesc": "The height of the pyramid",
 				"max": 1,
 				"min": 0,
 				"name": "r",
 				"shortdesc": "Height",
 				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Radius",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "b",
+				"step": 0.1,
 				"type": "float"
 			}
 		],
