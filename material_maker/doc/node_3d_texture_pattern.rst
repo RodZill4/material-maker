@@ -14,7 +14,7 @@ The **Pattern** node does not accept any input.
 Outputs
 .......
 
-The **Pattern** node provides a greyscale 3D texture obtained by mixing a pattern on each X, Y and Z axes.
+The **Pattern** node provides a grayscale 3D texture obtained by mixing a pattern on each X, Y and Z axes.
 
 Many different patterns can be created using this node, do not hesitate to experiment.
 

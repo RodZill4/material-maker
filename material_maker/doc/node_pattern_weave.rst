@@ -9,13 +9,13 @@ The **Weave** node outputs a weave pattern, that can be used for cloth.
 Inputs
 ++++++
 
-The **Weave** node accepts an optional greyscale input map for the width parameter
+The **Weave** node accepts an optional grayscale input map for the width parameter
 (whose value is multiplied by the map value).
 
 Outputs
 +++++++
 
-The **Weave** generates a greyscale heightmap for the pattern as well as masks
+The **Weave** generates a grayscale heightmap for the pattern as well as masks
 for the horizontal and vertical stripes.
 
 Parameters

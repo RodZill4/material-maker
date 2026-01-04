@@ -73,7 +73,7 @@
 		"outputs": [
 			{
 				"f": "mix_$(mix)(wave_$(x_wave)($(x_scale)*$uv.x), wave_$(y_wave)($(y_scale)*$uv.y))",
-				"longdesc": "A greyscale image that combines the horizontal and vertical patterns",
+				"longdesc": "A grayscale image that combines the horizontal and vertical patterns",
 				"shortdesc": "Output",
 				"type": "f"
 			}

@@ -95,6 +95,13 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Mesh Map"
 
+func get_description() -> String:
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Mesh Map"))
+	var longdesc = "Generates mesh maps for the current custom mesh"
+	desc_list.push_back(TranslationServer.translate(longdesc))
+	return "\n".join(desc_list)
+
 func get_parameter_defs() -> Array:
 	return [
 		{ name="map", type="enum", values=MESH_MAPS, label="Map", default=0 },

@@ -33,8 +33,13 @@ File menu
 
 * the *Export* submenu can be used to export the current Material or painted textures for Godot, Unity
   or Unreal. It will prompt for a file name and generate PNG files for all components
-  of the material. Exporting to one of those engines is described in the
+  of the material.
+
+  Exporting to one of those engines is described in the
   :ref:`export-section` section.
+
+  Additionally, *Quick Export* allows for simpler exports which only saves images
+  connected to export nodes in the graph. This is useful when a full material isn't required.
 
 * *Close* closes the current project.
 
@@ -60,6 +65,11 @@ Edit menu
 
 * *Duplicate with inputs* is similar to *Duplicate*, but with input links kept
 
+* *Swap node inputs* swap inputs of the selected node. When there is exactly one
+  input, this cycles through compatible slots of for the existing connection. 
+
+* *Frame selected nodes* creates a comment node that frames selected nodes
+
 * *Select all* selects all nodes in the current graph view
 
 * *Select none* clears the selection in the current graph view
@@ -69,6 +79,8 @@ Edit menu
 * *Select sources* selects all direct and indirect source nodes of the current selection
 
 * *Select targets* selects all direct and indirect target nodes of the current selection
+
+* *Align Start/Center/End* align selections horizontally
 
 * *Load Selection* Loads a graph selection previously saved into a file
 
@@ -108,7 +120,7 @@ Tools menu
   modify the number of choices and outputs, and input/output modes will
   become editable.
 
-* *Add selected node to user library* is only visible when the current
+* *Add selection to user library* is only visible when the current
   project is a procedural material. It first prompts for an item name. If a name is entered and
   confirmed, the selected nodes in the current material will be added to the user library under
   that name. The user library is saved automatically.
@@ -148,4 +160,3 @@ Help menu
   do not hesitate to use it to suggest improvements for Material Maker.
 
 * *About* Shows the about dialog.
-

@@ -98,9 +98,9 @@ Unless specified otherwise, all items apply a union operation to their children.
 
   * Uniform: a uniform color
   * SimpleGradient: Create a gradient between 2 colors (defined as parameters) following
-    its greyscale child texture
-  * Pattern: A greyscale pattern similar to the Pattern node
-  * FBM: A greyscale noise similar to the FBM node
+    its grayscale child texture
+  * Pattern: A grayscale pattern similar to the Pattern node
+  * FBM: A grayscale noise similar to the FBM node
 
 Preview
 -------

@@ -14,7 +14,7 @@ The **Pattern** node does not accept any input.
 Outputs
 +++++++
 
-The **Pattern** node provides a greyscale texture obtained by mixing a horizontal and
+The **Pattern** node provides a grayscale texture obtained by mixing a horizontal and
 a vertical pattern.
 
 Many different patterns can be created using this node, do not hesitate to experiment.

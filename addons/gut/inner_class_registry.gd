@@ -19,7 +19,7 @@ func _register_inners(base_path, obj, prev_inner = ''):
 		var key = consts[const_idx]
 		var thing = const_map[key]
 
-		if(typeof(thing) == TYPE_OBJECT):
+		if(typeof(thing) == TYPE_OBJECT and thing.resource_path == ''):
 			var cur_inner = str(prev_inner, ".", key)
 			_registry[thing] = _create_reg_entry(base_path, cur_inner)
 			_register_inners(base_path, thing, cur_inner)

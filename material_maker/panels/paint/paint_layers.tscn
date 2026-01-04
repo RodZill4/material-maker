@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://drudtoqh4ks4n"]
 
-[ext_resource type="Script" path="res://material_maker/panels/paint/paint_layers.gd" id="1"]
-[ext_resource type="Shader" path="res://material_maker/tools/painter/shaders/normal_map.gdshader" id="7"]
+[ext_resource type="Script" uid="uid://rtkjvv8ld24b" path="res://material_maker/panels/paint/paint_layers.gd" id="1"]
+[ext_resource type="Shader" uid="uid://rimxtvra8mct" path="res://material_maker/tools/painter/shaders/normal_map.gdshader" id="7"]
 
 [sub_resource type="ViewportTexture" id="1"]
 viewport_path = NodePath("Depth")
@@ -12,10 +12,10 @@ viewport_path = NodePath("Normal")
 [sub_resource type="ShaderMaterial" id="3"]
 resource_local_to_scene = true
 shader = ExtResource("7")
-shader_parameter/bump_strength = 0.5
-shader_parameter/epsilon = 0.0078125
 shader_parameter/normal_tex = SubResource("2")
 shader_parameter/depth_tex = SubResource("1")
+shader_parameter/bump_strength = 0.5
+shader_parameter/epsilon = 0.0078125
 
 [node name="PaintLayers" type="Node"]
 script = ExtResource("1")

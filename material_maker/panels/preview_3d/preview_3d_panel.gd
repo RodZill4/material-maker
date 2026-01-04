@@ -43,6 +43,7 @@ func on_right_click():
 
 
 func _on_PopupMenu_id_pressed(id):
+	var objs_pivot : Node3D = get_node("MaterialPreview/Preview3d/ObjectsPivot")
 	var pivot = get_node("MaterialPreview/Preview3d/ObjectsPivot/Objects")
 	var cam_control = get_node("MaterialPreview/Preview3d/CameraController")
 	match id:
@@ -51,6 +52,8 @@ func _on_PopupMenu_id_pressed(id):
 			cam_control.transform.origin = Vector3(0, 0, 0)
 		1:
 			pivot.transform.origin = new_pivot_position
+		2:
+			objs_pivot.rotation = Vector3(0, 0, 0)
 
 
 func _on_Preview3D_mouse_entered():
@@ -59,6 +62,7 @@ func _on_Preview3D_mouse_entered():
 
 func on_drop_model_file(file_name : String):
 	do_load_custom_mesh(file_name)
+	%MenuBar.get_node("HBox/MainMenu/HBox/ExportMenu").show()
 
 
 func _on_resized() -> void:

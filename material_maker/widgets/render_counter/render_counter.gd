@@ -20,8 +20,9 @@ const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
 
 
 func _ready() -> void:
-	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
-	menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
+	#menu.add_check_item("Render", ITEM_RENDER_ENABLED)
+	#menu.add_separator()
+	#menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
 	if mm_renderer.total_renderers > 1:
 		menu.add_check_item("Auto", ITEM_AUTO)
 		menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
@@ -30,7 +31,6 @@ func _ready() -> void:
 		for i in range(mm_renderer.total_renderers):
 			renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
 		renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
-	menu.add_separator()
 	# Render size limit menu
 	menu.add_submenu_item("Maximum render size", "MaxRenderSize")
 	var render_size = mm_globals.get_config("max_viewport_size")
@@ -64,7 +64,9 @@ func on_counter_change(count : int, pending : int) -> void:
 			start_time = Time.get_ticks_msec()
 			$ProgressBar/Label.text = "%d/%d - ? s" % [ 0, pending ]
 		else:
+			@warning_ignore("integer_division")
 			var remaining_time_msec = (Time.get_ticks_msec()-start_time)*pending/(count-pending)
+			@warning_ignore("integer_division")
 			$ProgressBar/Label.text = "%d/%d - %d s" % [ count-pending, count, remaining_time_msec/1000 ]
 		$ProgressBar.value = count-pending
 
@@ -156,5 +158,5 @@ func _on_MaxBufferSize_id_pressed(id):
 
 func _on_RenderCounter_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		menu.position = get_global_mouse_position() * mm_globals.main_window.get_window().content_scale_factor
+		menu.position = get_screen_transform() * get_local_mouse_position()
 		menu.popup()

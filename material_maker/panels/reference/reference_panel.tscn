@@ -26,7 +26,7 @@ shader_parameter/canvas_size = Vector2(200, 200)
 shader_parameter/image_size = Vector2(256, 256)
 shader_parameter/scale = 2.02
 shader_parameter/center = Vector2(0.5, 0.5)
-shader_parameter/bg_color = null
+shader_parameter/bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_82qg5"]
 resource_local_to_scene = false
@@ -105,12 +105,22 @@ layout_mode = 2
 tooltip_text = "Add Image"
 icon_alignment = 1
 
+[node name="PasteImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Paste Image"
+icon_alignment = 1
+
 [node name="RemoveImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Remove Image"
 icon_alignment = 1
+
+[node name="CheckClipboardImage" type="Timer" parent="MenuBar/HBox/MainMenu/HBox"]
+autostart = true
 
 [node name="NavigationMenu" type="PanelContainer" parent="MenuBar/HBox"]
 unique_name_in_owner = true
@@ -204,6 +214,8 @@ button_group = SubResource("ButtonGroup_82qg5")
 [connection signal="gui_input" from="Image" to="." method="_on_image_gui_input"]
 [connection signal="resized" from="Image" to="." method="_on_image_resized"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/AddImageButton" to="." method="_on_add_image_button_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/PasteImageButton" to="." method="_on_paste_image_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/RemoveImageButton" to="." method="_on_remove_image_button_pressed"]
+[connection signal="timeout" from="MenuBar/HBox/MainMenu/HBox/CheckClipboardImage" to="." method="_on_check_clipboard_image_timeout"]
 [connection signal="pressed" from="MenuBar/HBox/NavigationMenu/HBox/PrevImageButton" to="." method="_on_prev_image_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/NavigationMenu/HBox/NextImageButton" to="." method="_on_next_image_button_pressed"]

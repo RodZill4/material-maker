@@ -55,7 +55,12 @@ func set_parameter(n : String, v) -> void:
 	super.set_parameter(n, v)
 	if n == "image" and FileAccess.file_exists(v):
 		filetime = get_filetime(v)
-		var image : Image = Image.load_from_file(v)
+		var image : Image = Image.new()
+		if v.get_extension() == "dds":
+			# load_from_file does not work with dds, see godot issue #113063
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(v))
+		else:
+			image = Image.load_from_file(v)
 		if image != null:
 			var image_texture : ImageTexture = ImageTexture.create_from_image(image)
 			texture.set_texture(image_texture)
@@ -67,7 +72,10 @@ func _on_timeout() -> void:
 	if filetime != new_filetime:
 		filetime = new_filetime
 		var image : Image = Image.new()
-		image.load(file_path)
+		if file_path.get_extension() == "dds":
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(file_path))
+		else:
+			image.load(file_path)
 		var image_texture : ImageTexture = ImageTexture.create_from_image(image)
 		if image_texture:
 			texture.set_texture(image_texture)

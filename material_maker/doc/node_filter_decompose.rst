@@ -1,7 +1,7 @@
 Decompose node
 ~~~~~~~~~~~~~~
 
-The **Decompose** node decomposes an RGBA input into four greyscale outputs.
+The **Decompose** node decomposes an RGBA input into four grayscale outputs.
 
 .. image:: images/node_filter_decompose.png
 	:align: center
@@ -14,4 +14,4 @@ The **Decompose** node has a single color input.
 Outputs
 +++++++
 
-The **Decompose** node outputs 4 greyscale images, one for each (red, green, blue and alpha) channel.
+The **Decompose** node outputs 4 grayscale images, one for each (red, green, blue and alpha) channel.

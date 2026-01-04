@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c2ns17avhb2nx"]
 
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/widgets/curve_edit/curve_editor.gd" id="2"]
+[ext_resource type="Script" uid="uid://cvdqhv71gc0un" path="res://material_maker/widgets/curve_edit/curve_editor.gd" id="2"]
 
 [node name="CurveEditor" instance=ExtResource("1")]
 offset_left = 10.0
@@ -10,5 +10,9 @@ offset_right = -10.0
 offset_bottom = -10.0
 mouse_filter = 0
 script = ExtResource("2")
+show_axes = true
 
 [connection signal="gui_input" from="." to="." method="_on_CurveEditor_gui_input"]
+[connection signal="gui_input" from="ControlPoint" to="ControlPoint" method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="ControlPoint" to="ControlPoint" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="ControlPoint" to="ControlPoint" method="_on_mouse_exited"]

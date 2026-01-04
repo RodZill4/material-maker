@@ -116,7 +116,7 @@ func update_generic(generic_size : int) -> void:
 static func update_control_from_parameter(parameter_controls : Dictionary, p : String, v) -> void:
 	if parameter_controls.has(p):
 		var o = parameter_controls[p]
-		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is FloatEdit:
 			o.set_value(v)
 		elif o is HSlider:
 			o.value = v
@@ -181,7 +181,7 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 		var o = control_list[c]
 		if gen.parameters.has(c):
 			object.on_parameter_changed(c, gen.get_parameter(c))
-		if o is Control and o.scene_file_path == "res://material_maker/widgets/float_edit/float_edit.tscn":
+		if o is FloatEdit:
 			o.connect("value_changed_undo",Callable(object,"_on_float_value_changed").bind( o.name ))
 		elif o is LineEdit:
 			o.connect("text_changed",Callable(object,"_on_text_changed").bind( o.name ))
@@ -251,7 +251,8 @@ func _on_float_value_changed(new_value, merge_undo : bool = false, variable : St
 	set_generator_parameter(variable, new_value, merge_undo)
 
 func _on_color_changed(new_color, old_value, variable : String) -> void:
-	set_generator_parameter_ext(variable, new_color, MMType.serialize_value(old_value))
+	if generator and is_instance_valid(generator):
+		set_generator_parameter_ext(variable, new_color, MMType.serialize_value(old_value))
 
 func _on_file_changed(new_file, variable : String) -> void:
 	set_generator_parameter(variable, new_file)
@@ -312,6 +313,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			control.add_item(value.name)
 			control.selected = 0 if !p.has("default") else p.default
 		control.custom_minimum_size.x = 80
+		control.fit_to_longest_item = false
 	elif p.type == "boolean":
 		control = CheckBox.new()
 		control.theme_type_variation = "MM_NodeCheckbox"
@@ -336,7 +338,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 	elif p.type == "lattice":
 		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
-		control = LineEdit.new()
+		control = TextLineEdit.new()
 		control.custom_minimum_size.x = 80
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()
@@ -371,7 +373,7 @@ func restore_preview_widget() -> void:
 		if preview.get_parent():
 			preview.get_parent().remove_child(preview)
 		preview.add_child(preview_timer)
-		var child_count = get_child_count()
+		var _child_count = get_child_count()
 		#var preview_parent = get_child(child_count-1)
 		#while preview_parent is Container:
 			#child_count = preview_parent.get_child_count()
@@ -514,6 +516,8 @@ func update_node() -> void:
 				if result:
 					index = result.get_string(1).to_int()-1
 					label = result.get_string(2)
+					if index < get_child_count() and get_child(index).get_child_count() > 2:
+						first = false
 				elif label.substr(0, 2) == "-:":
 					label = label.right(-2)
 					first = false
@@ -543,6 +547,8 @@ func update_node() -> void:
 					if first:
 						var replace : Control = hsizer.get_child(1)
 						hsizer.remove_child(replace)
+						if replace in property_labels:
+							property_labels.erase(replace)
 						replace.free()
 						hsizer.add_child(label_widget)
 						hsizer.move_child(label_widget, 1)
@@ -611,12 +617,8 @@ func update_node() -> void:
 	
 	# Edit buttons
 	if generator.is_editable():
-		for theme_stylebox in ["frame", "selected_frame"]:
+		for theme_stylebox in ["titlebar", "titlebar_selected"]:
 			remove_theme_stylebox_override(theme_stylebox)
-		var edit_buttons = preload("res://material_maker/nodes/edit_buttons.tscn").instantiate()
-		add_child(edit_buttons)
-		edit_buttons.connect_buttons(self, "edit_generator", "load_generator", "save_generator")
-		set_slot(edit_buttons.get_index(), false, 0, Color(0.0, 0.0, 0.0), false, 0, Color(0.0, 0.0, 0.0))
 	if generator.minimized:
 		size = Vector2(96, 96)
 	# Preview
@@ -707,3 +709,7 @@ func _input(_event:InputEvent) -> void:
 
 func update_from_locale() -> void:
 	update_title()
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()

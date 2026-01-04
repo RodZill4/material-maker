@@ -97,6 +97,7 @@ func _on_resolution_item_selected(index: int) -> void:
 	if index != RESOLUTION_CUSTOM:
 		%CustomResolutionX.set_value(64 << index)
 		%CustomResolutionY.set_value(64 << index)
+	update()
 
 
 func get_export_resolution() -> Vector2i:
@@ -177,5 +178,19 @@ func interpret_file_name(file_name: String, path:="") -> String:
 	match %FileType.selected:
 		0: extension += ".png"
 		1: extension += ".exr"
+	
+	var resolution : String
+	if %CustomResolutionSection.visible:
+		resolution = "%sx%s" % [ int(%CustomResolutionX.value), int(%CustomResolutionY.value) ]
+	else:
+		resolution = str(64 << %Resolution.selected)
 
-	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids)
+	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids, resolution)
+
+
+func _on_custom_resolution_x_value_changed(value: Variant) -> void:
+	update()
+
+
+func _on_custom_resolution_y_value_changed(value: Variant) -> void:
+	update()

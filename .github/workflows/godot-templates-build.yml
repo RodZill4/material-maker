@@ -1,0 +1,92 @@
+name: Build Export Templates (Single Job)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build_templates:
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: 4.5.1
+      GODOT_SUB: stable
+      GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
+      SCONSFLAGS: verbose=yes warnings=all use_lto=yes
+
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+        with:
+          path: material-maker
+
+      - name: Clone latest stable Godot source into ./godot
+        run: |
+          git clone --depth 1 --branch ${GODOT_VERSION}-${GODOT_SUB} https://github.com/godotengine/godot.git godot
+          cd godot
+          patch -p1 < ../material-maker/material_maker/misc/mm.patch
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get update
+          sudo apt-get install -y build-essential scons pkg-config libx11-dev \
+            libxcursor-dev libxinerama-dev libgl1-mesa-dev libglu1-mesa-dev \
+            libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev \
+            libwayland-dev
+          sudo apt-get install -y build-essential scons pkg-config python3 \
+               mingw-w64 clang zip unzip curl git cmake
+          sudo update-alternatives --install /usr/bin/x86_64-w64-mingw32-g++ \
+            x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix 100
+          sudo update-alternatives --install /usr/bin/x86_64-w64-mingw32-gcc \
+            x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix 100
+          sudo update-alternatives --set x86_64-w64-mingw32-g++ \
+            /usr/bin/x86_64-w64-mingw32-g++-posix
+          sudo update-alternatives --set x86_64-w64-mingw32-gcc \
+            /usr/bin/x86_64-w64-mingw32-gcc-posix
+
+      - name: Cache SCons build artifacts
+        uses: actions/cache@v3
+        with:
+          path: |
+            godot/.sconsign.dblite
+            godot/bin/
+          key: ${{ runner.os }}-godot-${{ hashFiles('godot/**/*.cpp', 'godot/**/*.h', 'godot/SConstruct', 'godot/SCsub') }}
+          restore-keys: |
+            ${{ runner.os }}-godot-
+
+      - name: Build export templates (Linux)
+        run: |
+          cd godot
+          scons platform=linuxbsd target=template_release tools=no
+          cd ..
+
+      - name: Build export templates (Windows)
+        run: |
+          cd godot
+          scons platform=windows target=template_release arch=x86_64 tools=no
+          cd ..
+
+      - name: Package Linux build
+        run: |
+          mkdir -p templates_linux
+          cp godot/bin/*linuxbsd* templates_linux/
+          (cd templates_linux && zip -9 -r ../export_templates_linux.zip .)
+
+      - name: Package Windows build
+        run: |
+          mkdir -p templates_windows
+          cp godot/bin/*windows* templates_windows/
+          (cd templates_windows && zip -9 -r ../export_templates_windows.zip .)
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-templates
+          path: export_templates_linux.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-templates
+          path: export_templates_windows.zip

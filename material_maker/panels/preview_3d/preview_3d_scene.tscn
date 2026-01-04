@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dpulty2lkvcht"]
+[gd_scene load_steps=10 format=3 uid="uid://dpulty2lkvcht"]
 
 [ext_resource type="PackedScene" uid="uid://cxcw0mi4sfl2x" path="res://material_maker/panels/preview_3d/preview_objects.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://dw4wghi1pn4qr" path="res://material_maker/windows/environment_editor/camera_controller.tscn" id="2_g4ldw"]
@@ -37,6 +37,8 @@ sky = SubResource("Sky_wye7d")
 ambient_light_source = 3
 reflected_light_source = 2
 
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_g4ldw"]
+
 [node name="Preview3dScene" type="Node3D"]
 
 [node name="ObjectsPivot" type="Node3D" parent="."]
@@ -64,3 +66,4 @@ directional_shadow_max_distance = 5.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qxxdb")
+camera_attributes = SubResource("CameraAttributesPractical_g4ldw")

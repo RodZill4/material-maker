@@ -12,15 +12,15 @@ func _open() -> void:
 	bpp.value = float(pixel_editor.pixels.bpp)
 
 
-func _on_width_value_changed(value: Variant) -> void:
+func _on_width_value_changed(_value: Variant) -> void:
 	update_from_values()
 
 
-func _on_height_value_changed(value: Variant) -> void:
+func _on_height_value_changed(_value: Variant) -> void:
 	update_from_values()
 
 
-func _on_bpp_value_changed(value: Variant) -> void:
+func _on_bpp_value_changed(_value: Variant) -> void:
 	update_from_values()
 
 

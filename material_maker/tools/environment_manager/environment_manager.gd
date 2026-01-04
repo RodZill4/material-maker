@@ -39,8 +39,8 @@ func _ready():
 				var image : Image = Image.new()
 				if image.load_png_from_buffer(Marshalls.base64_to_raw(environments[i].thumbnail)) == OK:
 					texture.set_image(image)
-					print("created thumbnail")
-					print(texture.get_size())
+					#print("created thumbnail")
+					#print(texture.get_size())
 				else:
 					print("Failed to read thumbnail for environment")
 			environment_textures.push_back({ thumbnail=texture })
@@ -125,6 +125,8 @@ func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_col
 	elif env.show_color:
 		e.background_mode = Environment.BG_COLOR
 		e.background_color = MMType.deserialize_value(env.color)
+		e.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+		e.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	else:
 		e.background_mode = Environment.BG_SKY
 		e.background_energy_multiplier = env.sky_energy
@@ -188,6 +190,9 @@ func read_hdr(index : int, url : String) -> bool:
 		accept_dialog = AcceptDialog.new()
 		accept_dialog.title = "HDRI download error"
 		accept_dialog.dialog_text = "Failed to download %s" % url
+		accept_dialog.content_scale_factor = get_window().content_scale_factor
+		accept_dialog.min_size = accept_dialog.get_contents_minimum_size() * accept_dialog.content_scale_factor
+		accept_dialog.min_size.y = 40
 		mm_globals.main_window.add_child(accept_dialog)
 		accept_dialog.connect("confirmed", Callable(accept_dialog, "queue_free"))
 		accept_dialog.connect("popup_hide", Callable(accept_dialog, "queue_free"))

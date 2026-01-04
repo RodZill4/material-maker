@@ -22,6 +22,7 @@ func _ready() -> void:
 	default_texture = ImageTexture.new()
 	default_texture.set_image(default_image)
 	%PreviewMenu.get_popup().connect("id_pressed",Callable(self,"_on_PreviewMenu_id_pressed"))
+	update_from_graph_edit(mm_globals.main_window.get_current_graph_edit())
 
 func update_from_graph_edit(graph_edit) -> void:
 	if tree == null:
@@ -52,10 +53,13 @@ func update_from_graph_edit(graph_edit) -> void:
 	current_graph_edit.connect("view_updated", Callable(self, "on_view_updated"))
 	current_generator = graph_edit.generator
 	current_generator.connect("hierarchy_changed", Callable(self, "on_hierarchy_changed"))
-	var file_name = "PTex"
+	var file_name : String
 	if graph_edit.save_path != null:
 		file_name = graph_edit.save_path.get_file()
+		if file_name == "":
+			file_name = "PTex"
 	fill_item(tree.create_item(null), graph_edit.top_generator, graph_edit.generator, file_name)
+
 
 func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 	var index = update_index
@@ -63,15 +67,11 @@ func set_icon(item : TreeItem, generator : MMGenGraph, output : int) -> void:
 		return
 	if mm_deps.get_render_queue_size() > 0:
 		await mm_deps.render_queue_empty
-	var result = await generator.render(self, output, 24, true)
+	var result = await generator.render_output_to_texture(output, Vector2i(24, 24))
 	if index == update_index:
-		var tex = ImageTexture.new()
-		result.copy_to_texture(tex)
-		result.release(self)
-# warning-ignore:narrowing_conversion
+		var tex = await result.get_texture()
+		@warning_ignore("narrowing_conversion")
 		item.set_icon(1-min(generator.get_output_defs().size()-preview, 0)+output, tex)
-	else:
-		result.release(self)
 
 func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, item_name = null) -> void:
 	item.set_text(0, item_name if item_name != null else generator.get_type_name())

@@ -17,12 +17,12 @@
 
 		],
 		"instance": "",
-		"longdesc": "Draws a greyscale sine wave pattern",
+		"longdesc": "Draws a grayscale sine wave pattern",
 		"name": "Sine Wave",
 		"outputs": [
 			{
 				"f": "1.0-abs(2.0*($uv.y-0.5)-$amplitude*sin(($frequency*$uv.x+$phase)*6.28318530718))",
-				"longdesc": "Shows a greyscale image of a sine wave",
+				"longdesc": "Shows a grayscale image of a sine wave",
 				"shortdesc": "Output",
 				"type": "f"
 			}

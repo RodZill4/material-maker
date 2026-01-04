@@ -10,6 +10,10 @@ func indent(s, ind):
 	to_return = to_return.replace("\n", "\n" + ind)
 	return to_return
 
+# Wraps content in CDATA section because it may contain special characters
+# e.g. str(null) becomes <null> and can break XML parsing.
+func wrap_cdata(content):
+	return "<![CDATA[" + str(content) + "]]>"
 
 ## @ignore should be private I think
 func add_attr(name, value):
@@ -22,10 +26,10 @@ func _export_test_result(test):
 	# Right now the pending and failure messages won't fit in the message
 	# attribute because they can span multiple lines and need to be escaped.
 	if(test.status == 'pending'):
-		var skip_tag = str("<skipped message=\"pending\">", test.pending[0], "</skipped>")
+		var skip_tag = str("<skipped message=\"pending\">", wrap_cdata(test.pending[0]), "</skipped>")
 		to_return += skip_tag
 	elif(test.status == 'fail'):
-		var fail_tag = str("<failure message=\"failed\">", test.failing[0], "</failure>")
+		var fail_tag = str("<failure message=\"failed\">", wrap_cdata(test.failing[0]), "</failure>")
 		to_return += fail_tag
 
 	return to_return

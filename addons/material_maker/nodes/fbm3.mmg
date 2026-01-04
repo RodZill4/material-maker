@@ -116,7 +116,7 @@
 			"",
 			"vec2 fbm_2d_rgrad2(vec2 p, float rot, float seed) {",
 			"\tfloat u = fbm_2d_permute(fbm_2d_permute(p.x) + p.y) * 0.0243902439 + rot; // Rotate by shift",
-			"\tu = fract(u) * 6.28318530718; // 2*pi",
+			"\tu = fract(u+seed) * 6.28318530718; // 2*pi",
 			"\treturn vec2(cos(u), sin(u));",
 			"}",
 			"",
@@ -447,7 +447,7 @@
 		"outputs": [
 			{
 				"f": "fbm_2d_$noise($(uv), vec2($(scale_x), $(scale_y)), int($(folds)), int($(iterations)), $(persistence), $offset_in($uv), $(seed))",
-				"longdesc": "Shows a greyscale image of the generated noise",
+				"longdesc": "Shows a grayscale image of the generated noise",
 				"shortdesc": "Output",
 				"type": "f"
 			}

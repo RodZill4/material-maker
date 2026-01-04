@@ -82,7 +82,10 @@ func on_parameter_changed(n : String, v) -> void:
 				set_generator(generator, output, true)
 
 func on_dep_update_value(_buffer_name, parameter_name, value) -> bool:
-	$ViewportImage/ColorRect.material.set_shader_parameter(parameter_name, value)
+	if value is MMTexture:
+		$ViewportImage/ColorRect.material.set_shader_parameter(parameter_name, await value.get_texture())
+	else:
+		$ViewportImage/ColorRect.material.set_shader_parameter(parameter_name, value)
 	return false
 
 func on_dep_update_buffer(_buffer_name) -> bool:
