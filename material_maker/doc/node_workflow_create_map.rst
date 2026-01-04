@@ -4,7 +4,7 @@ Create Map node
 The **Create Map** node creates a map holding height, orientation and offset information
 used to combine simple materials.
 
-.. image:: images/node_workflow_createmap.png
+.. image:: images/node_workflow_create_map.png
 	:align: center
 
 Inputs
@@ -12,7 +12,7 @@ Inputs
 
 The **Create Map** node accepts two inputs:
 
-* the *height* component as a greyscale image.
+* the *height* component as a grayscale image.
 
 * an optional offset map.
 

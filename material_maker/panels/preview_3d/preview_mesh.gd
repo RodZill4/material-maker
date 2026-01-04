@@ -15,10 +15,13 @@ var parameter_values : Dictionary = {}
 
 var material : ShaderMaterial
 
+const scale_config_key : String = "3D_preview_objects/%s_uv_scale"
 
 func _ready():
 	material = ShaderMaterial.new()
 	material.shader = Shader.new()
+	if mm_globals.has_config(scale_config_key % name.to_snake_case()):
+		uv_scale = mm_globals.get_config(scale_config_key % name.to_snake_case())
 	material.set_shader_parameter("uv1_scale", Vector3(uv_scale.x, uv_scale.y, 1))
 	for p in parameters:
 		if p.get("save_in_config", false):

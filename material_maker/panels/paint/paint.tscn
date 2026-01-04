@@ -34,8 +34,8 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_updt6"]
 render_priority = 0
 shader = SubResource("Shader_dye6v")
-shader_parameter/id = null
-shader_parameter/id_selected = null
+shader_parameter/id = Vector4(0, 0, 0, 0)
+shader_parameter/id_selected = false
 
 [sub_resource type="Sky" id="2"]
 radiance_size = 4
@@ -45,9 +45,9 @@ background_mode = 2
 sky = SubResource("2")
 
 [sub_resource type="Shader" id="4"]
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="5"]
-render_priority = 0
 shader = SubResource("4")
 
 [sub_resource type="AtlasTexture" id="32"]
@@ -176,7 +176,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="31"]
 shader = SubResource("30")
-shader_parameter/preview_2d_size = null
+shader_parameter/preview_2d_size = Vector2(0, 0)
 shader_parameter/preview_2d_scale = 1.0
 shader_parameter/preview_2d_center = Vector2(0.5, 0.5)
 

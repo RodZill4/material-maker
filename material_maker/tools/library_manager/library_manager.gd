@@ -8,8 +8,11 @@ extends Node
 @export var sections : PackedStringArray
 @export var config_section : String = ""
 
-var section_icons : Dictionary = {}
+#var section_icons : Dictionary = {}
 var section_colors : Dictionary = {}
+
+var section_default_colors : Dictionary = {}
+var section_classic_colors : Dictionary = {}
 
 var node_sections : Dictionary = {}
 
@@ -26,7 +29,6 @@ var item_usage : Dictionary
 @export var item_usage_file : String = ""
 
 const LIBRARY = preload("res://material_maker/tools/library_manager/library.gd")
-
 
 signal libraries_changed()
 
@@ -208,28 +210,30 @@ func update_item_icon_in_library(index : int, item_name : String, icon : Image) 
 
 # Section icons
 
+func update_section_colors(is_theme_classic : bool = false) -> void:
+	section_colors = section_classic_colors if is_theme_classic else section_default_colors
+
 func init_section_icons() -> void:
-	var atlas = load("res://material_maker/icons/icons.tres")
-	var atlas_image = atlas.get_image()
+	const default_theme : Theme = preload("res://material_maker/theme/default.tres")
+	const classic_theme : Theme = preload("res://material_maker/theme/classic_base.tres")
+
+	# node colors
 	for i in sections.size():
-		var x = 128+32*(i%4)
-		var y = 32+32*(i/4)
-		var texture : AtlasTexture = AtlasTexture.new()
-		texture.atlas = atlas
-		texture.region = Rect2(x, y, 32, 32)
-		section_icons[sections[i]] = texture
-		section_colors[sections[i]] = atlas_image.get_pixel(x, y)
+		section_default_colors[sections[i]] = default_theme.get_color(
+				"section_" + sections[i].to_lower(), "MM_LibrarySectionButton")
+		section_classic_colors[sections[i]] = classic_theme.get_color(
+				"section_" + sections[i].to_lower(), "MM_LibrarySectionButton")
+
+	section_colors = section_default_colors
 
 
 func get_sections() -> Array:
 	var section_list : Array = Array()
 	for s in get_child(0).get_sections():
-		if section_icons.has(s):
+		if section_colors.has(s):
 			section_list.push_back(s)
 	return section_list
 
-func get_section_icon(section_name : String) -> Texture2D:
-	return section_icons[section_name] if section_icons.has(section_name) else null
 
 func get_section_color(section_name : String) -> Color:
 	if section_colors.has(section_name):
@@ -237,7 +241,7 @@ func get_section_color(section_name : String) -> Color:
 	for s in section_colors.keys():
 		if TranslationServer.translate(s) == section_name:
 			return section_colors[s]
-	return Color(0.0, 0.0, 0.0, 0.0)
+	return Color.DIM_GRAY
 
 func is_section_enabled(section_name : String) -> bool:
 	return disabled_sections.find(section_name) == -1

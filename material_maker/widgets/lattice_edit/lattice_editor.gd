@@ -1,3 +1,4 @@
+@tool
 extends "res://material_maker/widgets/lattice_edit/lattice_view.gd"
 
 
@@ -49,6 +50,7 @@ func is_editing() -> bool:
 func _on_size_value_changed(value):
 	if value != lattice.size.x:
 		lattice.resize(value, value)
+		queue_redraw()
 		update_controls()
 
 func _on_ControlPoint_moved(index):

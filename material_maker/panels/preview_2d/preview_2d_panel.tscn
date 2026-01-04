@@ -1,8 +1,9 @@
-[gd_scene load_steps=29 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=30 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
+[ext_resource type="Script" uid="uid://cjtefdp8oh215" path="res://material_maker/panels/preview_2d/axes.gd" id="3_r76ng"]
 [ext_resource type="Script" uid="uid://cj476fi1ociuw" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://djura7a50b2aq" path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" id="4_gd40d"]
 [ext_resource type="Script" uid="uid://p2topj3y4p63" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
@@ -16,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="14_qr76f"]
 [ext_resource type="Script" uid="uid://ca5sfnwa05qm2" path="res://material_maker/panels/preview_2d/export_menu.gd" id="16_0fl4g"]
 [ext_resource type="Script" uid="uid://pielyrq85378" path="res://material_maker/panels/preview_2d/two_icon_toggle_button.gd" id="17_07kc5"]
-[ext_resource type="FontFile" uid="uid://dgkwr5jydtk6p" path="res://material_maker/theme/font_rubik/Rubik-VariableFont_wght.ttf" id="18_kn37y"]
+[ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="18_kn37y"]
 
 [sub_resource type="Shader" id="Shader_0mwcg"]
 resource_local_to_scene = true
@@ -29,6 +30,7 @@ uniform int mode = 0;
 uniform vec4 background_color = vec4(0.0);
 uniform vec4 background_color_1 = vec4(0.0);
 uniform vec4 background_color_2 = vec4(1.0);
+uniform float checker_size = 32.0;
 
 void fragment() {
 	vec2 ratio = preview_2d_size;
@@ -39,7 +41,7 @@ void fragment() {
 		if (mode == 1) {
 			uv = fract(uv);
 		}
-		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		float checkerboard = mod(floor(uv.x*checker_size)+floor(uv.y*checker_size), 2.0);
 		COLOR = vec4(mix(background_color_1, background_color_2, checkerboard).rgb, 1.0);
 	}
 }
@@ -55,6 +57,7 @@ shader_parameter/mode = 2
 shader_parameter/background_color = Vector4(0, 0, 0, 0.575)
 shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 1)
 shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 1)
+shader_parameter/checker_size = 32.0
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("1")
@@ -66,10 +69,10 @@ region = Rect2(16, 64, 16, 16)
 
 [sub_resource type="Shader" id="5"]
 resource_local_to_scene = true
+code = "shader_type canvas_item;"
 
 [sub_resource type="ShaderMaterial" id="6"]
 resource_local_to_scene = true
-render_priority = 0
 shader = SubResource("5")
 
 [sub_resource type="InputEventKey" id="InputEventKey_83edi"]
@@ -143,6 +146,7 @@ uniform int mode = 0;
 uniform vec4 background_color = vec4(0.0);
 uniform vec4 background_color_1 = vec4(0.0);
 uniform vec4 background_color_2 = vec4(1.0);
+uniform float checker_size = 32.0;
 
 void fragment() {
 	vec2 ratio = preview_2d_size;
@@ -154,7 +158,7 @@ void fragment() {
 			uv = fract(uv);
 		}
 		vec4 image = preview_2d_postprocessed(uv);
-		float checkerboard = mod(floor(uv.x*32.0)+floor(uv.y*32.0), 2.0);
+		float checkerboard = mod(floor(uv.x*checker_size)+floor(uv.y*checker_size), 2.0);
 		vec3 image_with_background = mix(mix(background_color_1, background_color_2, checkerboard).rgb, image.rgb, image.a);
 		COLOR = vec4(image_with_background, 1.0);
 	}
@@ -168,7 +172,14 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("5")
 
-[node name="PolygonEditor" parent="." index="1" instance=ExtResource("4_gd40d")]
+[node name="Axes" type="Control" parent="." index="1"]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_r76ng")
+
+[node name="PolygonEditor" parent="." index="2" instance=ExtResource("4_gd40d")]
 visible = false
 layout_mode = 1
 offset_right = 0.0
@@ -176,25 +187,25 @@ offset_bottom = 0.0
 draw_area = false
 auto_rescale = false
 
-[node name="SplinesEditor" parent="." index="2" instance=ExtResource("5_5hlfo")]
+[node name="SplinesEditor" parent="." index="3" instance=ExtResource("5_5hlfo")]
 visible = false
 layout_mode = 1
 draw_area = false
 draw_control_lines = true
 
-[node name="PixelsEditor" parent="." index="3" instance=ExtResource("6_m4663")]
+[node name="PixelsEditor" parent="." index="4" instance=ExtResource("6_m4663")]
 visible = false
 layout_mode = 1
 draw_area = false
 alpha = 0.5
 
-[node name="LatticeEditor" parent="." index="4" instance=ExtResource("7_u2w4r")]
+[node name="LatticeEditor" parent="." index="5" instance=ExtResource("7_u2w4r")]
 visible = false
 layout_mode = 1
 offset_right = 0.0
 offset_bottom = 0.0
 
-[node name="P1" parent="." index="5" instance=ExtResource("2")]
+[node name="P1" parent="." index="6" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.466667, 0, 1)
 layout_mode = 0
@@ -204,7 +215,7 @@ offset_right = 37.0
 offset_bottom = 61.0
 texture = SubResource("3")
 
-[node name="P2" parent="." index="6" instance=ExtResource("2")]
+[node name="P2" parent="." index="7" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(0, 0.505882, 1, 1)
 layout_mode = 0
@@ -214,7 +225,7 @@ offset_right = 37.0
 offset_bottom = 61.0
 texture = SubResource("3")
 
-[node name="P11" parent="." index="7" instance=ExtResource("2")]
+[node name="P11" parent="." index="8" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(0, 0.505882, 1, 1)
 layout_mode = 0
@@ -226,7 +237,7 @@ texture = SubResource("3")
 parent_control = "P1"
 apply_local_transform = true
 
-[node name="RadiusP11" parent="." index="8" instance=ExtResource("2")]
+[node name="RadiusP11" parent="." index="9" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -239,7 +250,7 @@ texture = SubResource("4")
 parent_control = "P11"
 control_type = 2
 
-[node name="P12" parent="." index="9" instance=ExtResource("2")]
+[node name="P12" parent="." index="10" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(0, 0.505882, 1, 1)
 layout_mode = 0
@@ -251,7 +262,7 @@ texture = SubResource("3")
 parent_control = "P1"
 apply_local_transform = true
 
-[node name="P3" parent="." index="10" instance=ExtResource("2")]
+[node name="P3" parent="." index="11" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(0, 1, 0.380392, 1)
 layout_mode = 0
@@ -261,7 +272,7 @@ offset_right = 21.0
 offset_bottom = 45.0
 texture = SubResource("4")
 
-[node name="Rect1" parent="." index="11" instance=ExtResource("2")]
+[node name="Rect1" parent="." index="12" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -274,7 +285,7 @@ parent_control = "P1"
 control_type = 1
 apply_local_transform = true
 
-[node name="Radius1" parent="." index="12" instance=ExtResource("2")]
+[node name="Radius1" parent="." index="13" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -287,7 +298,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="Radius2" parent="." index="13" instance=ExtResource("2")]
+[node name="Radius2" parent="." index="14" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(0, 0.505882, 1, 1)
 layout_mode = 0
@@ -300,7 +311,7 @@ texture = SubResource("4")
 parent_control = "P2"
 control_type = 2
 
-[node name="Radius11" parent="." index="14" instance=ExtResource("2")]
+[node name="Radius11" parent="." index="15" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -313,7 +324,7 @@ texture = SubResource("4")
 parent_control = "Radius1"
 control_type = 2
 
-[node name="Scale1" parent="." index="15" instance=ExtResource("2")]
+[node name="Scale1" parent="." index="16" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -326,7 +337,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 3
 
-[node name="RotateScale1" parent="." index="16" instance=ExtResource("2")]
+[node name="RotateScale1" parent="." index="17" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -339,7 +350,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 4
 
-[node name="Angle1" parent="." index="17" instance=ExtResource("2")]
+[node name="Angle1" parent="." index="18" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -352,7 +363,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="Angle2" parent="." index="18" instance=ExtResource("2")]
+[node name="Angle2" parent="." index="19" instance=ExtResource("2")]
 visible = false
 self_modulate = Color(1, 0.631373, 0, 1)
 layout_mode = 0
@@ -365,7 +376,7 @@ texture = SubResource("4")
 parent_control = "P1"
 control_type = 2
 
-[node name="Accumulate" type="SubViewport" parent="." index="19"]
+[node name="Accumulate" type="SubViewport" parent="." index="20"]
 disable_3d = true
 handle_input_locally = false
 gui_snap_controls_to_pixels = false
@@ -378,7 +389,7 @@ material = SubResource("6")
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="MenuBar" type="ScrollContainer" parent="." index="20"]
+[node name="MenuBar" type="ScrollContainer" parent="." index="21"]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 1
@@ -521,6 +532,40 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 
+[node name="AlphaLabel" type="Label" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="7"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+text = "Alpha"
+
+[node name="BoxContainer2" type="BoxContainer" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox" index="8"]
+layout_mode = 2
+
+[node name="CheckerBrightness" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2" index="0"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Transparency checkers brightness"
+selected = 1
+item_count = 3
+popup/item_0/text = "Light"
+popup/item_0/id = 0
+popup/item_1/text = "Mid-tones"
+popup/item_1/id = 1
+popup/item_2/text = "Dark"
+popup/item_2/id = 2
+
+[node name="CheckerSize" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2" index="1"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Transparency checkers size"
+selected = 1
+item_count = 3
+popup/item_0/text = "Small"
+popup/item_0/id = 0
+popup/item_1/text = "Medium"
+popup/item_1/id = 1
+popup/item_2/text = "Large"
+popup/item_2/id = 2
+
 [node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 25)
@@ -593,7 +638,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "The file-name to use. 
 
-You can use $project, $node and $idx to make the file-name auto-adjust."
+You can use $project, $node, $idx and $resolution to make the file-name auto-adjust."
 theme_override_font_sizes/font_size = 15
 text = "$project_$node"
 
@@ -741,6 +786,7 @@ layout_mode = 2
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="unhandled_event" from="PolygonEditor" to="." method="_on_gui_input"]
+[connection signal="gui_input" from="PolygonEditor/@Control@42512" to="PolygonEditor/@Control@42512" method="_on_ControlPoint_gui_input"]
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
@@ -750,11 +796,15 @@ layout_mode = 2
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/Guides" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_item_selected"]
 [connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/CustomGridSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_custom_grid_size_value_changed"]
 [connection signal="color_changed" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/GuidesColor" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_color_color_changed"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2/CheckerBrightness" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_checker_brightness_item_selected"]
+[connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer2/CheckerSize" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_checker_size_item_selected"]
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder/ExportFolder" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_text_changed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFolder/ExportFolderButton" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_folder_button_pressed"]
 [connection signal="text_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/ExportFile" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_export_file_text_changed"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ExportFile/BoxContainer/FileType" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_file_type_item_selected"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/Resolution" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_resolution_item_selected"]
+[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection/CustomResolutionX" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_custom_resolution_x_value_changed"]
+[connection signal="value_changed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/ResolutionSection/CustomResolutionSection/CustomResolutionY" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_custom_resolution_y_value_changed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Image" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_image_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Reference" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_reference_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer/Animation" to="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_animation_pressed"]

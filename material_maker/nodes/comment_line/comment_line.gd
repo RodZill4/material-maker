@@ -6,6 +6,7 @@ class_name MMGraphCommentLine
 @onready var editor = %TextEditor
 @onready var label = %TextLabel
 
+var disable_undoredo_for_offset : bool = false
 
 var generator : MMGenCommentLine:
 	set(g):
@@ -15,22 +16,22 @@ var generator : MMGenCommentLine:
 
 
 func do_set_position(o : Vector2) -> void:
+	disable_undoredo_for_offset = true
 	position_offset = o
 	generator.position = o
+	disable_undoredo_for_offset = false
 
 
 func _on_node_selected() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property($PanelContainer, "self_modulate",
 			Color(1.0, 1.0, 1.0, 0.2), 0.4).set_trans(Tween.TRANS_CUBIC)
-	_on_raise_request()
 
 
 func _on_node_deselected() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property($PanelContainer, "self_modulate",
 			Color(1.0, 1.0, 1.0, 0.0), 0.4).set_trans(Tween.TRANS_CUBIC)
-	_on_raise_request()
 
 
 func _on_text_focus_exited() -> void:
@@ -43,24 +44,14 @@ func _on_text_focus_exited() -> void:
 	generator.text = editor.text
 
 
-func _on_dragged(from, to) -> void:
-	_on_raise_request()
+func _on_dragged(_from, to) -> void:
 	generator.position = to
 
 
 func _on_position_offset_changed() -> void:
-	_on_raise_request()
-
-
-func _on_raise_request() -> void:
-	var parent = get_parent()
-	for i in parent.get_child_count():
-		var child = parent.get_child(i)
-		if child == self:
-			break
-		if not child is MMGraphCommentLine:
-			get_parent().move_child(self, i)
-			break
+	if ! disable_undoredo_for_offset:
+		get_parent().undoredo_move_node(generator.name, generator.position, position_offset)
+		generator.set_position(position_offset)
 
 
 func _on_text_label_gui_input(event: InputEvent) -> void:
@@ -73,5 +64,9 @@ func _on_text_label_gui_input(event: InputEvent) -> void:
 		accept_event()
 
 
-func _on_text_text_submitted(new_text: String) -> void:
+func _on_text_text_submitted(_new_text: String) -> void:
 	_on_text_focus_exited()
+
+
+func _on_minimum_size_changed() -> void:
+	size = get_combined_minimum_size()

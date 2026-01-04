@@ -170,13 +170,13 @@
 		"outputs": [
 			{
 				"f": "length($(name_uv)_m3[0].yz)",
-				"longdesc": "A greyscale pattern based on the distance to cell centers",
+				"longdesc": "A grayscale pattern based on the distance to cell centers",
 				"shortdesc": "Nodes",
 				"type": "f"
 			},
 			{
 				"f": "$(name_uv)_m3[0].x",
-				"longdesc": "A greyscale pattern based on the distance to borders",
+				"longdesc": "A grayscale pattern based on the distance to borders",
 				"shortdesc": "Border",
 				"type": "f"
 			},

@@ -5,27 +5,28 @@
 		"y": 0
 	},
 	"parameters": {
-		"amount": 1,
+		"amount": 1.0,
 		"gradient": {
 			"interpolation": 1,
 			"points": [
 				{
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"pos": 0,
-					"r": 0
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"pos": 0.0,
+					"r": 0.0
 				},
 				{
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"pos": 1,
-					"r": 1
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"pos": 1.0,
+					"r": 1.0
 				}
 			],
 			"type": "Gradient"
 		},
+		"mirror": false,
 		"perspective": 0.3,
 		"use_perspective": true
 	},
@@ -41,16 +42,13 @@
 			"  return fract(0.15915494309 * atan(uv.x, uv.y));",
 			"}"
 		],
-		"inputs": [
-
-		],
+		"inputs": [],
 		"instance": "",
 		"name": "Spiral Gradient",
-		"shortdesc": "Spiral Gradient",
 		"outputs": [
 			{
 				"longdesc": "Number of repetitions of the gradient",
-				"rgba": "$gradient(spiral_$(name_uv))",
+				"rgba": "$gradient($mirror ? 2.0*(0.5-abs(spiral_$(name_uv)-0.5)) : spiral_$(name_uv))",
 				"shortdesc": "Gradient",
 				"type": "rgba"
 			}
@@ -58,20 +56,20 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 1,
+				"default": 1.0,
 				"label": "Repeat",
-				"max": 20,
-				"min": 0,
+				"max": 20.0,
+				"min": 0.0,
 				"name": "amount",
-				"step": 1,
+				"step": 1.0,
 				"type": "float"
 			},
 			{
 				"control": "Radius1.r",
 				"default": 0.3,
 				"label": "Zoom",
-				"max": 10,
-				"min": 0,
+				"max": 10.0,
+				"min": 0.0,
 				"name": "perspective",
 				"step": 0.01,
 				"type": "float"
@@ -83,22 +81,30 @@
 				"type": "boolean"
 			},
 			{
+				"default": false,
+				"label": "Mirror",
+				"longdesc": "Mirrors the gradient",
+				"name": "mirror",
+				"shortdesc": "Mirror",
+				"type": "boolean"
+			},
+			{
 				"default": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
@@ -109,7 +115,8 @@
 				"shortdesc": "Gradient",
 				"type": "gradient"
 			}
-		]
+		],
+		"shortdesc": "Spiral Gradient"
 	},
 	"type": "shader"
 }

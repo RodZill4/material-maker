@@ -1,0 +1,325 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 1,
+			"to": "shader_1",
+			"to_port": 0
+		},
+		{
+			"from": "shader_1",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 1
+		},
+		{
+			"from": "iterate_buffer",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "iterate_buffer",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		}
+	],
+	"label": "Symmetric Nearest Neighbor",
+	"longdesc": "Edge-preserving smoothing filter",
+	"name": "symmetric_nearest_neighbor",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -723.91015625,
+				"y": -199.916687011719
+			},
+			"parameters": {
+				"buffer": 1.0,
+				"filter_size": 6.0,
+				"iterations": 1.0,
+				"resolution": 10.0
+			},
+			"seed": 56582.0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "shader_1",
+							"widget": "size"
+						},
+						{
+							"node": "iterate_buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "Resolution used to sample the input",
+					"name": "resolution",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"False": [
+							{
+								"node": "switch",
+								"value": 0.0,
+								"widget": "source"
+							}
+						],
+						"True": [
+							{
+								"node": "switch",
+								"value": 1.0,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Buffer",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						}
+					],
+					"longdesc": "When set, a buffer is used to sample the input before the filter",
+					"name": "buffer",
+					"shortdesc": "Buffer",
+					"type": "config_control"
+				},
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "shader_1",
+							"widget": "kernel_size"
+						}
+					],
+					"longdesc": "Size of the filer",
+					"name": "filter_size",
+					"shortdesc": "Filter Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Iterations",
+					"linked_widgets": [
+						{
+							"node": "iterate_buffer",
+							"widget": "iterations"
+						}
+					],
+					"longdesc": "Number of times the filter is applied to the input image",
+					"name": "iterations",
+					"shortdesc": "Iterations",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -193.81379699707,
+				"y": 19.1073608398438
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "Filtered Image",
+					"name": "out",
+					"shortdesc": "Output",
+					"type": "rgb"
+				}
+			],
+			"seed": -6314.0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1098.91015625,
+				"y": 18.04736328125
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "Input image",
+					"name": "in",
+					"shortdesc": "Input",
+					"type": "rgb"
+				}
+			],
+			"seed": 12483.0,
+			"seed_locked": true,
+			"type": "ios"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -689.5,
+				"y": 75.29736328125
+			},
+			"parameters": {
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 1.0
+			},
+			"seed": -53264.0,
+			"type": "switch"
+		},
+		{
+			"name": "shader_1",
+			"node_position": {
+				"x": -450.362731933594,
+				"y": 247.702178955078
+			},
+			"parameters": {
+				"kernel_size": 6.0,
+				"size": 10.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(0.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					}
+				],
+				"instance": [
+					"// Based on https://github.com/fiveko/fivekogfx/blob/master/src/modules/symmetricnn.js",
+					"// The MIT License",
+					"// Copyright © 2017 fiveko.com",
+					"",
+					"vec3 $(name)_symmetric_nearest_neighbor(vec2 uv, int kernel_size) {",
+					"\tkernel_size += ~(kernel_size & 1);",
+					"\tvec2 one_pixel = vec2(1.0 / $size);",
+					"\tint half_size = kernel_size / 2;",
+					"\tvec3 v = $in(uv).rgb;",
+					"\tvec4 mean_color = vec4(0.0);",
+					"\tfor (int y = 0; y <= half_size; y++){",
+					"\t\tfor (int x = -half_size; x <= half_size; x++){",
+					"\t\t\tvec3 v1 = $in(uv + vec2(float(x), float(y)) * one_pixel);  ",
+					"\t\t\tvec3 v2 = $in(uv + vec2(float(-x), float(-y)) * one_pixel);",
+					"\t\t\tvec3 d1 = abs(v - v1);",
+					"\t\t\tvec3 d2 = abs(v - v2);",
+					"\t\t\tvec4 rv = vec4(((d1[0] < d2[0]) ? v1[0] : v2[0]),",
+					"\t\t\t\t((d1[1] < d2[1]) ? v1[1] : v2[1]),",
+					"\t\t\t\t((d1[2] < d2[2]) ? v1[2] : v2[2]),1);",
+					"\t\t\tmean_color += rv;",
+					"\t\t}",
+					"\t}",
+					"\treturn mean_color.rgb / float(kernel_size*(half_size + 1));",
+					"}"
+				],
+				"name": "snn",
+				"outputs": [
+					{
+						"rgb": "$(name)_symmetric_nearest_neighbor($uv, int($kernel_size*2.0))",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 10.0,
+						"first": 4.0,
+						"label": "",
+						"last": 13.0,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 4.0,
+						"label": "",
+						"max": 32.0,
+						"min": 4.0,
+						"name": "kernel_size",
+						"step": 1.0,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "iterate_buffer",
+			"node_position": {
+				"x": -479.833770751953,
+				"y": 22.0710678100586
+			},
+			"parameters": {
+				"autostop": false,
+				"f32": false,
+				"filter": true,
+				"iterations": 1.0,
+				"mipmap": false,
+				"shrink": false,
+				"size": 10.0
+			},
+			"seed": 29168.0,
+			"seed_locked": true,
+			"type": "iterate_buffer"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -939.553833007812,
+				"y": 156.022216796875
+			},
+			"parameters": {
+				"size": 10.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 1
+		}
+	],
+	"parameters": {
+		"buffer": 0.0,
+		"filter_size": 6.0,
+		"iterations": 1,
+		"resolution": 9.0
+	},
+	"seed_int": 0,
+	"shortdesc": "Symmetric Nearest Neighbor Filter",
+	"type": "graph"
+}

@@ -138,7 +138,7 @@ class MenuDisplayServer:
 			accel = ((accel & ~KEY_MASK_CTRL) | KEY_MASK_META) as Key
 		var tag = str(get_instance_id())+","+str(id)
 		var callback : Callable = mm_globals.menu_manager.my_callback
-		var index : int = DisplayServer.global_menu_add_item(menu_name, label, callback, callback, tag, accel)
+		var index : int = DisplayServer.global_menu_add_item(menu_name, tr(label), callback, callback, tag, accel)
 		if id == -1:
 			id = index
 			tag = str(get_instance_id())+","+str(id)
@@ -170,23 +170,28 @@ class MenuDisplayServer:
 			DisplayServer.global_menu_set_item_checked(menu_name, index, checked)
 	
 	func add_submenu(name : String) -> MenuBase:
-		var full_name : String = menu_name+"/"+name
-		DisplayServer.global_menu_add_submenu_item(menu_name, name, full_name)
-		return new(full_name)
+		var full_name : String = menu_name+"/"+tr(name)
+		DisplayServer.global_menu_add_submenu_item(menu_name,tr(name), full_name)
+		var menu : MenuDisplayServer = new(full_name)
+		menu.clear()
+		return menu
 
 class MenuBarDisplayServer:
 	extends MenuBarBase
 	
 	func create_menus(menu_def : Array, object : Object):
 		DisplayServer.global_menu_clear("_main")
+		DisplayServer.global_menu_clear("_help")
 		var menus : Array[String] = []
 		for md in menu_def:
 			var menu_name : String = md.menu.split("/")[0]
 			if menus.find(menu_name) == -1:
-				DisplayServer.global_menu_add_submenu_item("_main", menu_name, "_main/"+menu_name)
+				var menu_id = "_help" if menu_name == "Help" else "_main"
+				DisplayServer.global_menu_add_submenu_item(menu_id, tr(menu_name), menu_id+"/"+menu_name)
 				menus.append(menu_name)
 		for m in menus:
-			mm_globals.menu_manager.create_menu(menu_def, object, m+"/", MenuDisplayServer.new("_main/"+m))
+			mm_globals.menu_manager.create_menu(menu_def, object, m+"/",
+					MenuDisplayServer.new("_help" if m == "Help" else "_main/"+m))
 
 func _ready():
 	pass

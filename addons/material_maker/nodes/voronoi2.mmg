@@ -72,13 +72,13 @@
 		"outputs": [
 			{
 				"f": "$(name_uv)_xyzw.z",
-				"longdesc": "A greyscale pattern based on the distance to cell centers",
+				"longdesc": "A grayscale pattern based on the distance to cell centers",
 				"shortdesc": "Nodes",
 				"type": "f"
 			},
 			{
 				"f": "$(name_uv)_xyzw.w",
-				"longdesc": "A greyscale pattern based on the distance to borders",
+				"longdesc": "A grayscale pattern based on the distance to borders",
 				"shortdesc": "Borders",
 				"type": "f"
 			},
@@ -142,7 +142,7 @@
 				"control": "None",
 				"default": 0.75,
 				"label": "Intensity",
-				"longdesc": "A value factor for greyscale outputs",
+				"longdesc": "A value factor for grayscale outputs",
 				"max": 1,
 				"min": 0,
 				"name": "intensity",

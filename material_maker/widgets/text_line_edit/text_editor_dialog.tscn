@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2qrt0ahydwf"]
+
+[ext_resource type="Script" uid="uid://bvl0nlonp7hfy" path="res://material_maker/widgets/text_line_edit/text_editor_dialog.gd" id="1_1t5ho"]
+
+[node name="TextEditorDialog" type="Window"]
+position = Vector2i(0, 36)
+size = Vector2i(550, 300)
+exclusive = true
+script = ExtResource("1_1t5ho")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="OkButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "(Shift+Enter)"
+text = "OK"
+
+[node name="CancelButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "(Esc)"
+text = "Cancel"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/TextEdit" to="." method="_on_text_edit_gui_input"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

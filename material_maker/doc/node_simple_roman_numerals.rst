@@ -9,12 +9,16 @@ The **Roman numerals** node outputs roman numbers up to 3999
 Inputs
 ++++++
 
-The **Roman numerals** node accepts an optional bevel map, which the parameter is multiplied by the map value.
+The **Roman numerals** node accepts two inputs:
+
+* Optional *Number Map* which the number parameter is multiplied by the map value.
+
+* Optional *Bevel Map* which the bevel parameter is multiplied by the map value.
 
 Outputs
 +++++++
 
-The **Roman numerals** node outputs a greyscale texture.
+The **Roman numerals** node outputs a grayscale texture.
 
 Parameters
 ++++++++++

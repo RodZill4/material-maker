@@ -1649,8 +1649,8 @@ Zoom In|放大
 Zoom Reset|缩放重置 
 Enable snap and show grid.|启用捕捉并显示网格。
 Enable grid minimap.|启用网格小地图。
-Connect to web site|连接到网站
-Send material to web site|将材质发送到网站
+Connect to website|连接到网站
+Send material to website|将材质发送到网站
 polycurve|多段线曲线
 Edit polygon|编辑多边形
 Top|顶部
@@ -1706,7 +1706,7 @@ Enter a name for the new configuration|为新配置命名
 <add configuration>|<添加新配置>
 Move parameter up|上移参数
 Move parameter down|下移参数
-Open Material Maker web site|打开Material Maker网站
+Open Material Maker website|打开Material Maker网站
 Add current color as a preset.|添加当前颜色作为预设。
 Pick a color from the editor window.|从编辑器拾取一个颜色。
 Wavefront OBJ file (*.obj)|Wavefront OBJ 文件 (*.obj)

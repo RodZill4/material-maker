@@ -1,45 +1,6 @@
-# ------------------------------------------------------------------------------
-# A stroke of genius if I do say so.  This allows for doubling a scene without
-# having  to write any files.  By overloading the "instantiate" method  we can
-# make whatever we want.
-# ------------------------------------------------------------------------------
-class PackedSceneDouble:
-	extends PackedScene
-	var _script =  null
-	var _scene = null
-
-	func set_script_obj(obj):
-		_script = obj
-
-	@warning_ignore("native_method_override")
-	func instantiate(edit_state=0):
-		var inst = _scene.instantiate(edit_state)
-		var export_props = []
-		var script_export_flag = (PROPERTY_USAGE_STORAGE | PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_SCRIPT_VARIABLE)
-
-		if(_script !=  null):
-			if(inst.get_script() != null):
-				# Get all the exported props and values so we can set them again
-				for prop in inst.get_property_list():
-					var is_export = prop.usage & (script_export_flag) == script_export_flag
-					if(is_export):
-						export_props.append([prop.name, inst.get(prop.name)])
-
-			inst.set_script(_script)
-			for exported_value in export_props:
-				inst.set(exported_value[0], exported_value[1])
-
-		return inst
-
-	func load_scene(path):
-		_scene = load(path)
+extends RefCounted
 
 
-
-
-# ------------------------------------------------------------------------------
-# START Doubler
-# ------------------------------------------------------------------------------
 var _base_script_text = GutUtils.get_file_as_text('res://addons/gut/double_templates/script_template.txt')
 var _script_collector = GutUtils.ScriptCollector.new()
 # used by tests for debugging purposes.
@@ -177,41 +138,35 @@ func _create_script_no_warnings(src):
 
 
 func _create_double(parsed, strategy, override_path, partial):
-	var path = ""
-
-	path = parsed.script_path
 	var dbl_src = ""
 	var included_methods = []
 
 	for method in parsed.get_local_methods():
 		if(_is_method_eligible_for_doubling(parsed, method)):
 			included_methods.append(method.meta.name)
-			var mthd = parsed.get_local_method(method.meta.name)
-			if(parsed.is_native):
-				dbl_src += _get_func_text(method.meta, parsed.resource)
-			else:
-				dbl_src += _get_func_text(method.meta, path)
+			dbl_src += _get_func_text(method.meta)
 
 	if(strategy == GutUtils.DOUBLE_STRATEGY.INCLUDE_NATIVE):
 		for method in parsed.get_super_methods():
 			if(_is_method_eligible_for_doubling(parsed, method)):
 				included_methods.append(method.meta.name)
 				_stub_to_call_super(parsed, method.meta.name)
-				if(parsed.is_native):
-					dbl_src += _get_func_text(method.meta, parsed.resource)
-				else:
-					dbl_src += _get_func_text(method.meta, path)
+				dbl_src += _get_func_text(method.meta)
 
 	var base_script = _get_base_script_text(parsed, override_path, partial, included_methods)
 	dbl_src = base_script + "\n\n" + dbl_src
 
-
 	if(print_source):
-		print(GutUtils.add_line_numbers(dbl_src))
+		var to_print :String = GutUtils.add_line_numbers(dbl_src)
+		to_print = to_print.rstrip("\n")
+		_lgr.log(str(to_print))
 
 	var DblClass = _create_script_no_warnings(dbl_src)
 	if(_stubber != null):
 		_stub_method_default_values(DblClass, parsed, strategy)
+
+	if(print_source):
+		_lgr.log(str("  path | ", DblClass.resource_path, "\n"))
 
 	return DblClass
 
@@ -222,21 +177,27 @@ func _stub_method_default_values(which, parsed, strategy):
 			_stubber.stub_defaults_from_meta(parsed.script_path, method.meta)
 
 
-
 func _double_scene_and_script(scene, strategy, partial):
-	var to_return = PackedSceneDouble.new()
-	to_return.load_scene(scene.get_path())
-
+	var dbl_bundle = scene._bundled.duplicate(true)
 	var script_obj = GutUtils.get_scene_script_object(scene)
+	# I'm not sure if the script object for the root node of a packed scene is
+	# always the first entry in "variants" so this tries to find it.
+	var script_index = dbl_bundle["variants"].find(script_obj)
+	var script_dbl = null
+
 	if(script_obj != null):
-		var script_dbl = null
 		if(partial):
 			script_dbl = _partial_double(script_obj, strategy, scene.get_path())
 		else:
 			script_dbl = _double(script_obj, strategy, scene.get_path())
-		to_return.set_script_obj(script_dbl)
 
-	return to_return
+	if(script_index != -1):
+		dbl_bundle["variants"][script_index] = script_dbl
+
+	var doubled_scene = PackedScene.new()
+	doubled_scene._set_bundled_scene(dbl_bundle)
+
+	return doubled_scene
 
 
 func _get_inst_id_ref_str(inst):
@@ -246,14 +207,8 @@ func _get_inst_id_ref_str(inst):
 	return ref_str
 
 
-func _get_func_text(method_hash, path):
-	var override_count = null;
-	if(_stubber != null):
-		override_count = _stubber.get_parameter_count(path, method_hash.name)
-
-	var text = _method_maker.get_function_text(method_hash, override_count) + "\n"
-
-	return text
+func _get_func_text(method_hash):
+	return _method_maker.get_function_text(method_hash) + "\n"
 
 
 func _parse_script(obj):
@@ -299,12 +254,14 @@ func partial_double(obj, strategy=_strategy):
 func double_scene(scene, strategy=_strategy):
 	return _double_scene_and_script(scene, strategy, false)
 
+
 func partial_double_scene(scene, strategy=_strategy):
 	return _double_scene_and_script(scene, strategy, true)
 
 
 func double_gdnative(which):
 	return _double(which, GutUtils.DOUBLE_STRATEGY.INCLUDE_NATIVE)
+
 
 func partial_double_gdnative(which):
 	return _partial_double(which, GutUtils.DOUBLE_STRATEGY.INCLUDE_NATIVE)

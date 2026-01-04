@@ -5,7 +5,7 @@ var _content_scale_factor: float = 1.0
 var left_panel = null
 var volume_option = null
 
-const DIALOG_HACK : bool = true
+var dialog_hack : bool = true
 
 signal return_paths(path_list)
 
@@ -14,11 +14,14 @@ func _context_menu_about_to_popup(context_menu : PopupMenu):
 			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
+	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
+		ok_button_text = tr("Save")
+
+	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
 	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	content_scale_factor = _content_scale_factor
-	min_size = _content_scale_factor * Vector2(650, 500)
 	
-	for child in get_children():
+	for child in get_children(true):
 		if child is PopupMenu:
 			child.about_to_popup.connect(_context_menu_about_to_popup.bind(child))
 	
@@ -30,7 +33,9 @@ func _ready() -> void:
 					context_menu.about_to_popup.connect(
 							_context_menu_about_to_popup.bind(context_menu))
 
-	if DIALOG_HACK:
+	dialog_hack = dialog_hack or not use_native_dialog
+
+	if dialog_hack:
 		var vbox = get_vbox()
 		var hbox = HSplitContainer.new()
 		add_child(hbox)
@@ -47,6 +52,9 @@ func _ready() -> void:
 			volume_option = vbox.get_child(0).get_child(3)
 			if ! volume_option is OptionButton:
 				volume_option = null
+		
+	min_size = _content_scale_factor * get_contents_minimum_size()
+	min_size.y = 500 * int(_content_scale_factor)
 
 func get_full_current_dir() -> String:
 	var prefix = ""
@@ -55,12 +63,12 @@ func get_full_current_dir() -> String:
 	return prefix+get_current_dir()
 
 func _on_FileDialog_file_selected(path) -> void:
-	if DIALOG_HACK:
+	if dialog_hack:
 		left_panel.add_recent(get_full_current_dir())
 	emit_signal("return_paths", [ path ])
 
 func _on_FileDialog_files_selected(paths) -> void:
-	if DIALOG_HACK:
+	if dialog_hack:
 		left_panel.add_recent(get_full_current_dir())
 	emit_signal("return_paths", paths)
 
@@ -79,7 +87,7 @@ func select_files() -> Array:
 	return result
 
 func add_favorite():
-	if DIALOG_HACK:
+	if dialog_hack:
 		left_panel.add_favorite(get_full_current_dir())
 
 func _on_child_entered_tree(node: Node) -> void:

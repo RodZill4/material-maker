@@ -15,7 +15,7 @@ The **Warp Dilation** node accepts two inputs:
 
 * The *Input* input is the image to be deformed.
 
-* The *Heightmap* input is a greyscale image whose slopes or contours will be used to deform the source.
+* The *Heightmap* input is a grayscale image whose slopes or contours will be used to deform the source.
 
 Outputs
 +++++++

@@ -15,16 +15,16 @@ config/description="An open source, extensible procedural material authoring too
 config/tags=PackedStringArray("material_maker")
 run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
-config/custom_user_dir_name="material_maker_dev"
-config/features=PackedStringArray("4.4")
+config/custom_user_dir_name="material_maker_2"
+config/features=PackedStringArray("4.5")
 boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="1.4.0.4"
-config/actual_release="1.4b2"
+config/release="1.5.0.0"
+config/actual_release="1.5pre"
 
 [audio]
 
@@ -59,8 +59,10 @@ window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
 
+run/main_run_args="--no-splash"
 run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\suzanne.mmpp"
 run/main_run_args_nosplash="--no-splash"
+run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\nov25 --output-file %a_%n website:1179-1215"
 
 [editor_plugins]
 
@@ -107,6 +109,16 @@ ui_previous_tab={
 ui_next_tab={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":true,"pressed":false,"keycode":16777218,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+ui_cut_drag={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":false,"button_mask":2,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+ui_lasso_select={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":true,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(391, 10),"global_position":Vector2(407, 91),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
 

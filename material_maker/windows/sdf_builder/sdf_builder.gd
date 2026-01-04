@@ -504,7 +504,7 @@ func show_item_parameters(prefix : String):
 		controls[p.name] = control
 		if p.type == "float":
 			var button : Button = Button.new()
-			button.text = "f(x)"
+			button.icon = get_theme_icon("function", "MM_Icons")
 			item_parameters_panel.add_child(button)
 			button.flat = not ( item_scene.has("parmexprs") and item_scene.parmexprs.has(p.name.right(-(p.name.find("_")+1))) )
 			button.connect("pressed",Callable(self,"on_parameter_expression_button").bind( p.name ))
@@ -617,7 +617,9 @@ func _on_Tree_item_selected():
 			preview_3d.setup_controls("n%d" % index)
 			$GenSDF.set_parameter("index", float(index))
 
-func _on_Tree_button_pressed(item, _column, _id):
+func _on_tree_button_clicked(item, _column, _id, mouse_button_index):
+	if mouse_button_index != MOUSE_BUTTON_LEFT:
+		return
 	var item_scene : Dictionary = item.get_meta("scene")
 	if item_scene.has("hidden") and item_scene.hidden:
 		item_scene.erase("hidden")

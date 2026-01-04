@@ -15,9 +15,13 @@ func _ready() -> void:
 func update_image() -> void:
 	if %Image.texture == null:
 		%Image.texture = ImageTexture.new()
-	
+
 	if FileAccess.file_exists(image_path):
-		var image: Image = Image.load_from_file(image_path)
+		var image: Image = Image.new()
+		if image_path.get_extension() == "dds":
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(image_path))
+		else:
+			image = Image.load_from_file(image_path)
 		%Image.texture.set_image(image)
 		queue_redraw()
 
@@ -49,6 +53,10 @@ func get_filetime(file_path: String) -> int:
 
 func open_image_dialog() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	if image_path:
+		dialog.current_dir = image_path.get_base_dir()
+		if FileAccess.file_exists(image_path):
+			dialog.current_file = image_path.get_file()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
@@ -60,6 +68,7 @@ func open_image_dialog() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
+	dialog.add_filter("*.dds;DirectDraw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		set_image_path(files[0])

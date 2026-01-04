@@ -7,8 +7,8 @@ Creating a paint project
 To start painting in Material Maker, just use the *File -> New paint project* menu.
 This will show a dialog where a model file and a texture size can be specified.
 
-The model must be provided in Wavefront .OBJ format and have a single submesh.
-Of course, the model must have textures coordinates information.
+The model must be provided in either Wavefront ``.obj``, ``.glb``, ``.gltf`` or ``.fbx`` format and
+have a single submesh. Of course, the model must have textures coordinates information.
 
 .. image:: images/new_paint_project.png
   :align: center
@@ -114,11 +114,11 @@ creating materials, except the target node is the Brush node (instead of Materia
 
 The Brush node has 6 inputs:
 
-* the brush input is a greyscale image that defines the shape of the brush. White pixels are painted,
+* the brush input is a grayscale image that defines the shape of the brush. White pixels are painted,
   black pixels are not and grey values are used as alpha. The Brush input is implicitely modified using
   the Brush hardness and the Brush opacity parameters.
 
-* the other channels are color (Albedo and Emission) and greyscale (Metallic, Roughness and Depth)
+* the other channels are color (Albedo and Emission) and grayscale (Metallic, Roughness and Depth)
   images that define the patterns painted on each component of the model's material. Albedo has its
   own alpha channel that is combined with the Brush value and used as transparency for all components.
 

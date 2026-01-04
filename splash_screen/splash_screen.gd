@@ -175,7 +175,7 @@ func start_ui(scene : PackedScene):
 		do_start_ui(scene)
 
 func do_start_ui(scene : PackedScene):
-	var window : Window = get_window()
+	var _window : Window = get_window()
 	if OS.get_name() == "HTML5":
 		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = """

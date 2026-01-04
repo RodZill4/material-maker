@@ -15,7 +15,6 @@ var preview_mode := Modes.CUSTOM_PREVIEW:
 
 @export_multiline var shader_accumulate : String = "" # (String, MULTILINE)
 @export_multiline var shader_divide : String = "" # (String, MULTILINE)
-# warning-ignore:unused_class_variable
 @export var control_target : NodePath
 
 var center : Vector2 = Vector2(0.5, 0.5)
@@ -37,6 +36,27 @@ var view_filter : int = 0:
 		set_generator(generator, output, true)
 		mm_globals.set_config("preview"+config_var_suffix+"_view_postprocess", view_filter)
 
+var checker_size : int = 1:
+	set(v):
+		if v == checker_size:
+			return
+		checker_size = v
+		material.set_shader_parameter("checker_size",
+				CHECKER_SIZE_OPTIONS[checker_size])
+		mm_globals.set_config("preview"+config_var_suffix+"_checker_size", checker_size)
+
+var checker_brightness: int = 1:
+	set(v):
+		if v == checker_brightness:
+			return
+		checker_brightness = v
+		var color = func(v) : return Color(v,v,v,1.0)
+		var color_a = color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][0])
+		var color_b = color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][1])
+		material.set_shader_parameter("background_color_1", color_a)
+		material.set_shader_parameter("background_color_2", color_b)
+		mm_globals.set_config("preview"+config_var_suffix+"_checker_brightness", checker_brightness)
+
 const POSTPROCESS_OPTIONS : Array = [
 	{ name="None", function="preview_2d(uv)" },
 	{ name="Lowres 32x32", function="preview_2d((floor(uv*32.0)+vec2(0.5))/32.0)" },
@@ -46,6 +66,13 @@ const POSTPROCESS_OPTIONS : Array = [
 	{ name="Lowres 512x512", function="preview_2d((floor(uv*512.0)+vec2(0.5))/512.0)" }
 ]
 
+const CHECKER_SIZE_OPTIONS : Array[float] = [ 64.0, 32.0, 16.0 ]
+
+const CHECKER_BRIGHTNESS_OPTIONS: Array[Vector2] = [
+	Vector2(1.0,0.8),
+	Vector2(0.4,0.6),
+	Vector2(0.2,0.0)
+]
 
 func _ready():
 	var content_scale_factor = mm_globals.get_window().content_scale_factor
@@ -60,7 +87,10 @@ func _ready():
 		view_mode = mm_globals.get_config("preview"+config_var_suffix+"_view_mode")
 	if mm_globals.has_config("preview"+config_var_suffix+"_view_postprocess"):
 		view_filter = mm_globals.get_config("preview"+config_var_suffix+"_view_postprocess")
-
+	if mm_globals.has_config("preview"+config_var_suffix+"_checker_size"):
+		checker_size = mm_globals.get_config("preview"+config_var_suffix+"_checker_size")
+	if mm_globals.has_config("preview"+config_var_suffix+"_checker_brightness"):
+		checker_brightness = mm_globals.get_config("preview"+config_var_suffix+"_checker_brightness")
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
@@ -95,8 +125,14 @@ func update_material(source):
 	super.update_material(source)
 	material.set_shader_parameter("mode", view_mode)
 	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
-	material.set_shader_parameter("background_color_1", Color(0.4, 0.4, 0.4))
-	material.set_shader_parameter("background_color_2", Color(0.6, 0.6, 0.6))
+	
+	var color = func(v) : return Color(v,v,v,1.0)
+	material.set_shader_parameter("background_color_1",
+			color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][0]))
+	material.set_shader_parameter("background_color_2",
+			color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][1]))
+	
+	material.set_shader_parameter("checker_size", CHECKER_SIZE_OPTIONS[checker_size])
 
 
 func set_preview_shader_parameter(parameter_name, value):

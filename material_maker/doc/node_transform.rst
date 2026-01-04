@@ -12,10 +12,10 @@ Inputs
 
 The **Transform** node accepts one or more color images as input.
 
-It also accepts a greyscale input image for each transform parameter. In that case,
+It also accepts a grayscale input image for each transform parameter. In that case,
 instead of applying a uniform transform to the input image, the transform parameter
 will, for each pixel, be multiplied by a value from -1 to 1 that depends linearly
-on the corresponding greyscale input image (a black pixel will multiply the parameter
+on the corresponding grayscale input image (a black pixel will multiply the parameter
 by -1, a white pixel will not change the parameter, a grey50 pixel will set it to 0).
 
 Outputs
@@ -40,7 +40,11 @@ The **Transform** node has the following parameters:
 
 * *Scale X* and *Scale Y* define the scale operations along the X and Y axes.
 
-* If *Repeat* is checked, zooming out will repeat the image, otherwise it will be clamped.
+* *Mode* Defines the behavior beyond the limits for the input image:
+
+    * **Clamp** stretches the edges
+    * **Repeat** tiles the input
+    * **Extend** shows parts of the input that are beyond the edges
 
 Example images
 ++++++++++++++

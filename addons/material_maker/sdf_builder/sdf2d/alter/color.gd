@@ -2,7 +2,7 @@ extends "res://addons/material_maker/sdf_builder/sdf2d/boolean/union.gd"
 
 
 @export var channel_name : String
-@export var type : int # (int, "greyscale", "rgb", "rgba")
+@export var type : int # (int, "grayscale", "rgb", "rgba")
 
 
 func _ready():

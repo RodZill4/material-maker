@@ -16,19 +16,19 @@ region = Rect2(224, 16, 32, 16)
 [node name="Share" type="HBoxContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
-tooltip_text = "Open Material Maker web site"
+tooltip_text = "Open Material Maker website"
 script = ExtResource("2")
 
 [node name="ConnectButton" type="TextureButton" parent="."]
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Connect to web site"
+tooltip_text = "Connect to website"
 texture_normal = ExtResource("1")
 
 [node name="SendButton" type="TextureButton" parent="."]
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Send material to web site"
+tooltip_text = "Send material to website"
 disabled = true
 texture_normal = SubResource("1")
 texture_disabled = SubResource("2")
