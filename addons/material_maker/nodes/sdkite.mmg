@@ -1,0 +1,89 @@
+{
+	"name": "sdkite",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"apex": -0.3,
+		"base": 0.4,
+		"width": 0.225
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float sdKite(vec2 p, float w, float hb, float ht) {",
+			"\tvec2 v[] = { vec2(-w, 0.0), vec2(0.0, ht), vec2(w, 0.0), vec2(0.0, hb) };",
+			"\tint l = 4;",
+			"\tfloat d = dot(p-v[0],p-v[0]);",
+			"\tfloat s = 1.0;",
+			"\tint j = l-1;",
+			"\tfor(int i=0; i<l; i++)",
+			"\t{",
+			"\t\tvec2 e = v[j] - v[i];",
+			"\t\tvec2 w = p - v[i];",
+			"\t\tvec2 b = w - e*clamp( dot(w,e)/dot(e,e), 0.0, 1.0 );",
+			"\t\td = min( d, dot(b,b) );",
+			"\t\tbvec3 c = bvec3(p.y>=v[i].y,p.y<v[j].y,e.x*w.y>e.y*w.x);",
+			"\t\tif( all(c) || all(not(c)) ) s*=-1.0;",
+			"\t\tj=i;",
+			"\t}",
+			"\treturn s*sqrt(d);",
+			"}",
+			""
+		],
+		"inputs": [],
+		"instance": "",
+		"longdesc": "A kite as a signed distance function",
+		"name": "sdKite",
+		"outputs": [
+			{
+				"longdesc": "The kite as a signed distance function",
+				"sdf2d": "sdKite($uv-0.5, $width, min($apex,0.0), max($base,0.0))",
+				"shortdesc": "Output",
+				"type": "sdf2d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "P1.y",
+				"default": -0.3,
+				"label": "Apex",
+				"longdesc": "Position of the top vertex along the Y axis",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "apex",
+				"shortdesc": "Apex",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P2.y",
+				"default": 0.4,
+				"label": "Base",
+				"longdesc": "Position of the bottom vertex along the Y axis",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "base",
+				"shortdesc": "Base",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P3.x",
+				"default": 0.225,
+				"label": "Width",
+				"longdesc": "Width of the kite",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "width",
+				"shortdesc": "Width",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "sdKite"
+	},
+	"type": "shader"
+}

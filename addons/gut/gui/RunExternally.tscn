@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://cftcb0e6g7tu1"]
+
+[ext_resource type="Script" uid="uid://bi8pg352un4om" path="res://addons/gut/gui/RunExternally.gd" id="1_lrqqi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_haowt"]
+bg_color = Color(0.025935074, 0.17817128, 0.30283752, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 5
+shadow_offset = Vector2(7, 7)
+
+[node name="DoShellOut" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 774.0
+offset_bottom = 260.0
+script = ExtResource("1_lrqqi")
+bg_color = Color(0.025935074, 0.17817128, 0.30283752, 1)
+
+[node name="BgControl" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_haowt")
+
+[node name="VBox" type="VBoxContainer" parent="BgControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer" type="CenterContainer" parent="BgControl/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="Label" parent="BgControl/VBox"]
+layout_mode = 2
+text = "Running Tests"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="CenterContainer" parent="BgControl/VBox"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Kill" type="Button" parent="BgControl/VBox"]
+visible = false
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Stop"
+
+[node name="Spacer3" type="CenterContainer" parent="BgControl/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="gui_input" from="BgControl" to="." method="_on_color_rect_gui_input"]
+[connection signal="pressed" from="BgControl/VBox/Kill" to="." method="_on_kill_pressed"]

@@ -14,6 +14,9 @@ const CAMERA_FOV_MAX = 90
 @onready var camera = $MaterialPreview/Preview3d/Camera3D
 @onready var sun = $MaterialPreview/Preview3d/Sun
 
+@onready var environment : Environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+@onready var camera_attributes : CameraAttributesPractical = $MaterialPreview/Preview3d/WorldEnvironment.camera_attributes
+
 var trigger_on_right_click = true
 
 var moving = false
@@ -21,7 +24,7 @@ var moving = false
 var _mouse_start_position : Vector2 = Vector2.ZERO
 
 var clear_background := true
-var current_environment := 0
+var current_environment : int = mm_globals.get_config("ui_3d_preview_environment")
 
 @onready var main_menu := $MainMenu
 
@@ -110,24 +113,16 @@ func _on_Environment_item_selected(id) -> void:
 func set_environment(id:int) -> void:
 	if id >= 0:
 		current_environment = id
+
 	var environment_manager = get_node("/root/MainWindow/EnvironmentManager")
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
+	if current_environment > environment_manager.get_environment_list().size() - 1:
+		current_environment = 0
 	if clear_background:
 		$MaterialPreview.transparent_bg = true
 		environment_manager.apply_environment(current_environment, environment, sun, Color.TRANSPARENT, true)
 	else:
 		$MaterialPreview.transparent_bg = false
 		environment_manager.apply_environment(current_environment, environment, sun)
-
-	environment.tonemap_mode = mm_globals.get_config("ui_3d_preview_tonemap")
-	environment.tonemap_exposure = mm_globals.get_config("ui_3d_preview_tonemap_exposure")
-	environment.tonemap_white = mm_globals.get_config("ui_3d_preview_tonemap_white")
-
-
-func set_tonemap(id) -> void:
-	mm_globals.set_config("ui_3d_preview_tonemap", id)
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_mode = id
 
 
 func configure_model() -> void:
@@ -232,7 +227,7 @@ func on_gui_input(event : InputEvent) -> void:
 			else:
 				motion.y = 0
 			var camera_basis = camera.global_transform.basis
-			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CTRL) else 1 if Input.is_key_pressed(KEY_SHIFT) else 0
+			var objects_rotation : int = -1 if Input.is_key_pressed(KEY_CTRL) else 0
 			if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
 				objects_pivot.rotate(camera_basis.x.normalized(), objects_rotation * motion.y)
 				objects_pivot.rotate(camera_basis.y.normalized(), objects_rotation * motion.x)
@@ -249,15 +244,3 @@ func do_generate_map(file_name : String, map : String, image_size : int) -> void
 	var t : MMTexture = await MMMapGenerator.get_map(object.mesh, map, image_size)
 	t.save_to_file(file_name)
 	DisplayServer.clipboard_set("{\"name\":\"image\",\"parameters\":{\"image\":\"%s\"},\"type\":\"image\"}" % file_name)
-
-
-func _on_exposure_value_changed(value: Variant) -> void:
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_exposure = value
-	mm_globals.set_config("ui_3d_preview_tonemap_exposure", value)
-
-
-func _on_white_value_changed(value: Variant) -> void:
-	var environment = $MaterialPreview/Preview3d/WorldEnvironment.environment
-	environment.tonemap_white = value
-	mm_globals.set_config("ui_3d_preview_tonemap_white", value)

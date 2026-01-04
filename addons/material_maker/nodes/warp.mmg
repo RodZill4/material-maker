@@ -33,6 +33,15 @@
 				"name": "d",
 				"shortdesc": "Height map",
 				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"function": false,
+				"label": "",
+				"longdesc": "Map that affects the strength parameter",
+				"name": "strength_map",
+				"shortdesc": "Strength map",
+				"type": "f"
 			}
 		],
 		"instance": [
@@ -45,7 +54,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the warped image",
-				"rgba": "$in#($uv+$amount*$(name_uv)_warp)",
+				"rgba": "$in#($uv+$amount*$strength_map($uv)*$(name_uv)_warp)",
 				"shortdesc": "Output#",
 				"type": "rgba"
 			}

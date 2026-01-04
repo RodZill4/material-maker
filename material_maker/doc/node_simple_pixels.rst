@@ -3,6 +3,9 @@ Pixels node
 
 The **Pixels** node outputs a pixelated image that can be created with a simple pixel art editor
 
+.. image:: images/node_simple_pixels.png
+	:align: center
+
 Inputs
 ++++++
 

@@ -222,6 +222,7 @@ func set_generic_size(size : int) -> void:
 
 func expand_generic_code(code : String, first_generic_value : int = 1) -> String:
 	var rv : String = ""
+	code = code.replace("#count", str(generic_size))
 	while code != "":
 		var for_position : int = code.find("#for")
 		if for_position == -1:

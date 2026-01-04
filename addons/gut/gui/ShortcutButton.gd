@@ -120,6 +120,8 @@ func get_shortcut():
 	to_return.events.append(_source_event)
 	return to_return
 
+func get_input_event():
+	return _source_event
 
 func set_shortcut(sc):
 	if(sc == null or sc.events == null || sc.events.size() <= 0):

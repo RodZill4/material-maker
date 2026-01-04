@@ -20,8 +20,9 @@ const ITEM_TRIGGER_DEPENDENCY_MANAGER : int = 1003
 
 
 func _ready() -> void:
-	menu.add_check_item("Render", ITEM_RENDER_ENABLED)
-	menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
+	#menu.add_check_item("Render", ITEM_RENDER_ENABLED)
+	#menu.add_separator()
+	#menu.set_item_checked(menu.get_item_index(ITEM_RENDER_ENABLED), true)
 	if mm_renderer.total_renderers > 1:
 		menu.add_check_item("Auto", ITEM_AUTO)
 		menu.set_item_checked(menu.get_item_index(ITEM_AUTO), true)
@@ -30,7 +31,6 @@ func _ready() -> void:
 		for i in range(mm_renderer.total_renderers):
 			renderers_menu.add_radio_check_item("%d" % (i+1), i+1)
 		renderers_menu.set_item_checked(renderers_menu.get_item_index(mm_renderer.max_renderers), true)
-	menu.add_separator()
 	# Render size limit menu
 	menu.add_submenu_item("Maximum render size", "MaxRenderSize")
 	var render_size = mm_globals.get_config("max_viewport_size")

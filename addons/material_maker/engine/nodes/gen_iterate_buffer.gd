@@ -104,6 +104,8 @@ func update_shaders() -> void:
 		require_shaders_update = true
 
 func do_update_shaders() -> void:
+	if not is_inside_tree():
+		return
 	require_shaders_update = false
 	var sources : Array[ShaderCode] = [null, null]
 	var new_is_greyscale = true
@@ -179,7 +181,8 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	
 	is_rendering = true
 	
-	var shader_compute : MMShaderCompute = shader_computes[0] if current_iteration == 0 else shader_computes[1]
+	var first_iteration : bool = ( current_iteration == 0 )
+	var shader_compute : MMShaderCompute = shader_computes[0] if first_iteration else shader_computes[1]
 	# Calculate iteration count
 	var iterations = calculate_float_parameter("iterations")
 	if iterations.has("used_named_parameters"):
@@ -229,7 +232,7 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 	else:
 		set_current_iteration(current_iteration+1)
 	
-	
+	mm_deps.dependency_update(buffer_name_init_input if first_iteration else buffer_name_loop_input, texture, true)
 	if current_iteration > iterations:
 		mm_deps.dependency_update(buffer_name_output, texture, true)
 	else:

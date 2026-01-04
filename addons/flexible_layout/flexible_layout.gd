@@ -684,15 +684,25 @@ func start_flexlayout_drag():
 	overlay = OVERLAY_SCENE.instantiate()
 	overlay.position = Vector2(0, 0)
 	overlay.flex_layout = flex_layout
+	overlay.z_index = 1
 	add_child(overlay)
+	var tween = get_tree().create_tween()
+	overlay.modulate = Color.TRANSPARENT
+	tween.tween_property(overlay, "modulate", Color.WHITE, 0.2).set_trans(Tween.TRANS_CUBIC)
 	for w in subwindows:
 		w.start_flexlayout_drag()
 
 func end_flexlayout_drag():
-	overlay.queue_free()
-	overlay = null
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+			overlay, "modulate", Color.TRANSPARENT, 0.3).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_callback(func():
+		overlay.queue_free()
+		overlay = null
+		)
 	for w in subwindows:
 		w.end_flexlayout_drag()
+
 
 func _on_resized():
 	flex_layout.layout()

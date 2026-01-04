@@ -1,0 +1,1129 @@
+[gd_resource type="Theme" load_steps=143 format=3 uid="uid://w487nirev8y5"]
+
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
+[ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
+[ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="4_7b2nb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7d7ll"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.203922, 0.231373, 0.309804, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inl5r"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.180392, 0.207843, 0.278431, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvrsn"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.490196, 0.505882, 0.545098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2qiie"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.183886, 0.211227, 0.279542, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_644rd"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1254902, 0.14509805, 0.19215687, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rxikb"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chskd"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iyqub"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_td4qu"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s31a3"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdh87"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8fbk7"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5s2d2"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vngdy"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 112, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b2nb"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.118, 0.145333, 0.2, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1w7u"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 128, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ph34"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 128, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4i44b"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uxdun"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_scuvh"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cpts2"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 96, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btw0t"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.2, 0.231373, 0.309804, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.099986, 0.099986, 0.0999859, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62l4s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
+content_margin_left = 28.0
+content_margin_top = 8.0
+content_margin_right = 28.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.666667)
+border_color = Color(0.145762, 0.145765, 0.164989, 1)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryqkj"]
+content_margin_left = 10.0
+content_margin_top = 28.0
+content_margin_right = 10.0
+content_margin_bottom = 28.0
+bg_color = Color(0.017329, 0.0173288, 0.0216428, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.745098, 0.752941, 0.772549, 1)
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.15686275)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imqse"]
+content_margin_left = 12.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0.38, 0.38, 0.38, 0.7)
+border_color = Color(0.490196, 0.505882, 0.545098, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+shadow_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ru0kh"]
+content_margin_left = 12.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.490196, 0.505882, 0.545098, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.745098, 0.752941, 0.772549, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fw8f4"]
+bg_color = Color(0.25077727, 0.27830765, 0.37439138, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wbe58"]
+bg_color = Color(0.35748938, 0.39221686, 0.51226014, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_754y2"]
+border_width_top = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 0.11764706)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_lsxnf"]
+color = Color(1, 1, 1, 0.101961)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v2584"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2221"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.473976, 0.473976, 0.473975, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fbnbn"]
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_attdh"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+draw_center = false
+border_color = Color(0.529067, 0.529067, 0.529066, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_162wu"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 10.0
+content_margin_bottom = 2.0
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.393945, 0.409143, 0.439527, 1)
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ldwc"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.23, 0.31, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k7e83"]
+content_margin_left = 6.0
+content_margin_top = 3.0
+content_margin_right = 6.0
+content_margin_bottom = 3.0
+bg_color = Color(0.171112, 0.176202, 0.191467, 1)
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f0kci"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.192157, 0.223529, 0.298039, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.560784, 0.560784, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p6o2d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 10.0
+content_margin_bottom = 2.0
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.393945, 0.409143, 0.439527, 1)
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8p1m"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.23, 0.31, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8fwsx"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gvlse"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yu4y"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 128, 16, 16)
+metadata/scale = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ao7ds"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 128, 16, 16)
+metadata/scale = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hht3q"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 128, 16, 16)
+metadata/scale = 1.0
+metadata/recolor = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q32qs"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r3xak"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oy0ko"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gawd"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x8swe"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5e0gw"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqlqa"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m27ao"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asgc8"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dsr33"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_du4od"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkmvd"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsxnf"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 128, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vbdqj"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5b0q"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_754y2"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhqc2"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fw8f4"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_meah8"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w8nfu"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ropwn"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 144, 16, 16)
+metadata/scale = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ck0hb"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_33srw"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fs6qc"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_70aex"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahanl"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iofl8"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_en6gw"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h5b0q"]
+bg_color = Color(0.266667, 0.278431, 0.301961, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fw8f4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vbdqj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rhqc2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w8nfu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqwm5"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwwye"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s6o4g"]
+bg_color = Color(0.3, 0.33, 0.41, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8m00c"]
+bg_color = Color(0.3478, 0.37835, 0.47, 0.588235)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77egl"]
+content_margin_left = 3.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.490196, 0.505882, 0.545098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_56r42"]
+content_margin_left = 3.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.183886, 0.211227, 0.279542, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmyhr"]
+content_margin_left = 3.0
+content_margin_top = 1.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.23, 0.31, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omwbs"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.145098, 0.145098, 0.164706, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bflk3"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 16, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofcpt"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2id4"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.2, 0.231373, 0.309804, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.556194, 0.581022, 0.642742, 1)
+shadow_size = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k2ns1"]
+bg_color = Color(0.8, 0.8, 0.8, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_detail = 1
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uujf1"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.23, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lsxnf"]
+content_margin_left = 5.0
+content_margin_top = 3.0
+content_margin_right = 5.0
+content_margin_bottom = 3.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_meah8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5e0gw"]
+bg_color = Color(0.165, 0.165, 0.165, 1)
+border_width_top = 3
+border_width_bottom = 3
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m27ao"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.196078, 0.231373, 0.317647, 1)
+corner_detail = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5e0gw"]
+content_margin_top = 3.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u368o"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc6mb"]
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24h6y"]
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l27kp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lg0bb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gn0j1"]
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vt7k"]
+bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xyfhj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hrav"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.111197, 0.111197, 0.111197, 1)
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dscxc"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4s7x"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2h4v4"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upgdi"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xbg4"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8u2ty"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uodmo"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5cv8u"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxwwn"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 112, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ftwxj"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 112, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fq0uc"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8p2hu"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.2, 0.231373, 0.309804, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.423529, 0.482353, 1)
+shadow_color = Color(0, 0, 0, 0.301961)
+shadow_size = 4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1wpt7"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nmb2"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.397249, 0.42247, 0.493787, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_62r2q"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.393524, 0.418633, 0.489644, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4jxv"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.34902, 0.372549, 0.439216, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofwe7"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.138777, 0.161166, 0.217148, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc388"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.2, 0.231373, 0.309804, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l61pc"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.34902, 0.372549, 0.439216, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lsxnf"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kg2s6"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.34902, 0.372549, 0.439216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lejgr"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swrqc"]
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nblvr"]
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qpu3p"]
+bg_color = Color(0.180392, 0.207843, 0.278431, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rnro"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0.0666667, 0.0666667, 0.0784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.145098, 0.145098, 0.164706, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w0cma"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.544974, 0.544974, 0.544974, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_55ai6"]
+content_margin_left = 5.0
+bg_color = Color(0.14902, 0.172549, 0.231373, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.103744, 0.103744, 0.103743, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x5l5s"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.446777, 0.446777, 0.446777, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ropwn"]
+border_width_left = 4
+border_width_right = 4
+border_color = Color(0, 0, 0, 0.11764706)
+
+[resource]
+default_font = ExtResource("4_7b2nb")
+default_font_size = 15
+AcceptDialog/styles/panel = SubResource("StyleBoxFlat_7d7ll")
+Button/colors/font_color = Color(0.8, 0.807843, 0.827451, 1)
+Button/colors/font_hover_color = Color(0.878431, 0.886275, 0.898039, 1)
+Button/colors/font_pressed_color = Color(0.411765, 0.611765, 0.909804, 1)
+Button/colors/icon_hover_color = Color(1, 1, 1, 1)
+Button/colors/icon_hover_pressed_color = Color(0.384766, 0.574929, 1, 1)
+Button/colors/icon_pressed_color = Color(0.57, 0.7, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_inl5r")
+Button/styles/focus = SubResource("StyleBoxFlat_kvrsn")
+Button/styles/hover = SubResource("StyleBoxFlat_2qiie")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_2qiie")
+Button/styles/normal = SubResource("StyleBoxFlat_644rd")
+Button/styles/pressed = SubResource("StyleBoxFlat_rxikb")
+CheckBox/icons/checked = SubResource("AtlasTexture_chskd")
+CheckBox/icons/checked_disabled = SubResource("AtlasTexture_iyqub")
+CheckBox/icons/radio_checked = SubResource("AtlasTexture_td4qu")
+CheckBox/icons/radio_checked_disabled = SubResource("AtlasTexture_s31a3")
+CheckBox/icons/radio_unchecked = SubResource("AtlasTexture_rdh87")
+CheckBox/icons/radio_unchecked_disabled = SubResource("AtlasTexture_8fbk7")
+CheckBox/icons/unchecked = SubResource("AtlasTexture_5s2d2")
+CheckBox/icons/unchecked_disabled = SubResource("AtlasTexture_vngdy")
+CodeEdit/colors/built_in_function_color = Color(0.278431, 0.54902, 0.705882, 1)
+CodeEdit/colors/caret_color = Color(0.87451, 0.87451, 0.87451, 1)
+CodeEdit/colors/current_line_color = Color(0.48, 0.51, 0.6, 0.313726)
+CodeEdit/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+CodeEdit/colors/function_color = Color(0.278431, 0.54902, 0.705882, 1)
+CodeEdit/colors/keyword_color = Color(1, 0.576471, 0.592157, 1)
+CodeEdit/colors/line_number_color = Color(0.67, 0.67, 0.67, 0.4)
+CodeEdit/colors/member_variable_color = Color(0.945098, 0.231373, 0.317647, 1)
+CodeEdit/colors/multi_line_comment_color = Color(0, 0.509804, 0, 1)
+CodeEdit/colors/number_color = Color(0.905882, 0.521569, 0.0313726, 1)
+CodeEdit/colors/selection_color = Color(0.501961, 0.501961, 0.501961, 1)
+CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
+CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
+CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
+CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
+FileDialog/styles/panel = SubResource("StyleBoxFlat_7b2nb")
+GraphEdit/colors/connection_knife = Color(1, 1, 1, 1)
+GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
+GraphEdit/colors/grid_minor = Color(0.321569, 0.337255, 0.384314, 1)
+GraphEdit/colors/lasso_stroke = Color(1, 1, 1, 1)
+GraphEdit/constants/port_hotzone_inner_extent = 8
+GraphEdit/constants/port_hotzone_outer_extent = 50
+GraphEdit/icons/grid_toggle = SubResource("AtlasTexture_m1w7u")
+GraphEdit/icons/minimap_toggle = SubResource("AtlasTexture_3ph34")
+GraphEdit/icons/snapping_toggle = SubResource("AtlasTexture_4i44b")
+GraphEdit/icons/zoom_in = SubResource("AtlasTexture_uxdun")
+GraphEdit/icons/zoom_out = SubResource("AtlasTexture_scuvh")
+GraphEdit/icons/zoom_reset = SubResource("AtlasTexture_cpts2")
+GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_btw0t")
+GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
+GraphNode/colors/portpreview_color = Color(0.89059, 0.89059, 0.89059, 1)
+GraphNode/colors/title_color = Color(1, 1, 1, 1)
+GraphNode/constants/port_h_offset = 10
+GraphNode/constants/portpreview_radius = 6
+GraphNode/constants/portpreview_width = 15
+GraphNode/styles/panel = SubResource("StyleBoxFlat_uwck0")
+GraphNode/styles/panel_selected = SubResource("StyleBoxFlat_ryqkj")
+GraphNode/styles/titlebar = SubResource("StyleBoxFlat_imqse")
+GraphNode/styles/titlebar_selected = SubResource("StyleBoxFlat_ru0kh")
+GraphNodeTitleLabel/colors/font_outline_color = Color(0.1672, 0.1748, 0.19, 0.501961)
+GraphNodeTitleLabel/colors/font_shadow_color = Color(0.1672, 0.1748, 0.19, 0)
+GraphNodeTitleLabel/constants/outline_size = 10
+GraphNodeTitleLabel/constants/shadow_outline_size = 0
+GraphNodeTitleLabel/fonts/font = ExtResource("4_7b2nb")
+HScrollBar/styles/grabber = SubResource("StyleBoxFlat_fw8f4")
+HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_wbe58")
+HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_wbe58")
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_754y2")
+HSeparator/styles/separator = SubResource("StyleBoxLine_lsxnf")
+ItemList/colors/guide_color = Color(0.701961, 0.701961, 0.701961, 0.129412)
+ItemList/styles/focus = SubResource("StyleBoxEmpty_v2584")
+ItemList/styles/hovered = SubResource("StyleBoxFlat_m2221")
+ItemList/styles/panel = SubResource("StyleBoxFlat_fbnbn")
+ItemList/styles/selected = SubResource("StyleBoxFlat_attdh")
+ItemList/styles/selected_focus = SubResource("StyleBoxFlat_attdh")
+Label/colors/font_color = Color(0.8, 0.807843, 0.827451, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 0)
+LineEdit/colors/selection_color = Color(0.411765, 0.611765, 0.909804, 0.4)
+LineEdit/styles/focus = SubResource("StyleBoxFlat_162wu")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_8ldwc")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
+MM_AddNodePanel/base_type = &"PanelContainer"
+MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
+MM_AddNodePanelList/base_type = &"ItemList"
+MM_AddNodePanelList/font_sizes/font_size = 14
+MM_AddNodePanelList/styles/focus = SubResource("StyleBoxEmpty_p6o2d")
+MM_FilterLineEdit/base_type = &"LineEdit"
+MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
+MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_e8p1m")
+MM_FlexibleTab/base_type = &"TabBar"
+MM_FlexibleTab/constants/separation = 3
+MM_FlexibleTab/icons/close = SubResource("AtlasTexture_8fwsx")
+MM_FlexibleTab/icons/undock = SubResource("AtlasTexture_gvlse")
+MM_Icons/icons/2D_preview = SubResource("AtlasTexture_1yu4y")
+MM_Icons/icons/3D_preview = SubResource("AtlasTexture_ao7ds")
+MM_Icons/icons/3D_preview_control = SubResource("AtlasTexture_hht3q")
+MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
+MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
+MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
+MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
+MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
+MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
+MM_Icons/icons/export = SubResource("AtlasTexture_5e0gw")
+MM_Icons/icons/folder = SubResource("AtlasTexture_rqlqa")
+MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
+MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
+MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
+MM_Icons/icons/pin_pinned = SubResource("AtlasTexture_du4od")
+MM_Icons/icons/pin_unpinned = SubResource("AtlasTexture_nkmvd")
+MM_Icons/icons/reset_view = SubResource("AtlasTexture_lsxnf")
+MM_Icons/icons/section_3d = SubResource("AtlasTexture_vbdqj")
+MM_Icons/icons/section_filter = SubResource("AtlasTexture_h5b0q")
+MM_Icons/icons/section_miscellaneous = SubResource("AtlasTexture_754y2")
+MM_Icons/icons/section_noise = SubResource("AtlasTexture_rhqc2")
+MM_Icons/icons/section_pattern = SubResource("AtlasTexture_fw8f4")
+MM_Icons/icons/section_simple = SubResource("AtlasTexture_meah8")
+MM_Icons/icons/section_transform = SubResource("AtlasTexture_w8nfu")
+MM_Icons/icons/section_workflow = SubResource("AtlasTexture_ropwn")
+MM_Icons/icons/select = SubResource("AtlasTexture_ck0hb")
+MM_Icons/icons/settings = SubResource("AtlasTexture_33srw")
+MM_Icons/icons/spline_link = SubResource("AtlasTexture_fs6qc")
+MM_Icons/icons/spline_progressive = SubResource("AtlasTexture_70aex")
+MM_Icons/icons/spline_reverse = SubResource("AtlasTexture_ahanl")
+MM_Icons/icons/spline_unlink = SubResource("AtlasTexture_iofl8")
+MM_Icons/icons/view = SubResource("AtlasTexture_en6gw")
+MM_LibrarySectionButton/base_type = &"Button"
+MM_LibrarySectionButton/colors/icon_disabled_color = Color(0.443137, 0.45098, 0.470588, 1)
+MM_LibrarySectionButton/colors/icon_focus_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_hover_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_normal_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/icon_pressed_color = Color(1, 1, 1, 1)
+MM_LibrarySectionButton/colors/section_3d = Color(0.266667, 0.666667, 0.6, 1)
+MM_LibrarySectionButton/colors/section_filter = Color(0.666667, 0.266667, 0.6, 1)
+MM_LibrarySectionButton/colors/section_miscellaneous = Color(0.8, 0.4, 0.466667, 1)
+MM_LibrarySectionButton/colors/section_noise = Color(0.196078, 0.133333, 0.533333, 1)
+MM_LibrarySectionButton/colors/section_pattern = Color(0.866667, 0.8, 0.466667, 1)
+MM_LibrarySectionButton/colors/section_simple = Color(0.533333, 0.133333, 0.333333, 1)
+MM_LibrarySectionButton/colors/section_transform = Color(0.0666667, 0.466667, 0.2, 1)
+MM_LibrarySectionButton/colors/section_workflow = Color(0.533333, 0.8, 0.933333, 1)
+MM_LibrarySectionButton/constants/icon_max_width = 26
+MM_LibrarySectionButton/styles/disabled = SubResource("StyleBoxFlat_h5b0q")
+MM_LibrarySectionButton/styles/focus = SubResource("StyleBoxEmpty_fw8f4")
+MM_LibrarySectionButton/styles/hover = SubResource("StyleBoxFlat_vbdqj")
+MM_LibrarySectionButton/styles/normal = SubResource("StyleBoxFlat_rhqc2")
+MM_LibrarySectionButton/styles/pressed = SubResource("StyleBoxFlat_w8nfu")
+MM_MainBackground/base_type = &"PanelContainer"
+MM_MainBackground/styles/panel = SubResource("StyleBoxFlat_wqwm5")
+MM_Node/constants/minimum_line_height = 16
+MM_NodeCheckbox/base_type = &"Button"
+MM_NodeFloatEdit/base_type = &"Button"
+MM_NodeFloatEdit/font_sizes/font_size = 15
+MM_NodeFloatEdit/fonts/font = ExtResource("3_h5b0q")
+MM_NodeFloatEdit/styles/clip = SubResource("StyleBoxFlat_pwwye")
+MM_NodeFloatEdit/styles/fill_hover = SubResource("StyleBoxFlat_s6o4g")
+MM_NodeFloatEdit/styles/fill_normal = SubResource("StyleBoxFlat_8m00c")
+MM_NodeFloatEdit/styles/focus = SubResource("StyleBoxFlat_77egl")
+MM_NodeFloatEdit/styles/hover = SubResource("StyleBoxFlat_56r42")
+MM_NodeFloatEdit/styles/normal = SubResource("StyleBoxFlat_kmyhr")
+MM_NodeGradientEdit/base_type = &"Button"
+MM_NodeGradientEditPopup/base_type = &"PanelContainer"
+MM_NodeGradientEditPopup/styles/panel = SubResource("StyleBoxFlat_omwbs")
+MM_NodeImageEdit/base_type = &"Button"
+MM_NodeOptionEdit/base_type = &"OptionButton"
+MM_NodeOptionEdit/icons/arrow = SubResource("AtlasTexture_bflk3")
+MM_NodeOptionEditPopup/base_type = &"PopupMenu"
+MM_NodeOptionEditPopup/styles/hover = SubResource("StyleBoxFlat_ofcpt")
+MM_NodeOptionEditPopup/styles/panel = SubResource("StyleBoxFlat_g2id4")
+MM_NodePortGroup/constants/width = 2
+MM_NodePortGroup/styles/panel = SubResource("StyleBoxFlat_k2ns1")
+MM_NodePropertyLabel/base_type = &"Label"
+MM_NodePropertyLabel/font_sizes/font_size = 15
+MM_PanelBackground/base_type = &"PanelContainer"
+MM_PanelBackground/styles/panel = SubResource("StyleBoxFlat_uujf1")
+MM_PanelMenuBackground/base_type = &"ScrollContainer"
+MM_PanelMenuBackground/styles/panel = SubResource("StyleBoxFlat_lsxnf")
+MM_PanelMenuBar/base_type = &"PanelContainer"
+MM_PanelMenuBar/constants/separation = 3
+MM_PanelMenuBar/styles/panel = SubResource("StyleBoxEmpty_meah8")
+MM_PanelMenuButton/font_sizes/font_size = 14
+MM_PanelMenuSeparator/constants/separation = 2
+MM_PanelMenuSeparator/styles/separator = SubResource("StyleBoxFlat_5e0gw")
+MM_PanelMenuSubPanel/base_type = &"PanelContainer"
+MM_PanelMenuSubPanel/styles/panel = SubResource("StyleBoxFlat_m27ao")
+MM_PanelMenuSubPanelLabel/base_type = &"Label"
+MM_PanelMenuSubPanelLabel/colors/font_color = Color(0.881937, 0.881937, 0.881937, 1)
+MM_PanelMenuSubPanelLabel/font_sizes/font_size = 15
+MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_5e0gw")
+MM_ProjectsBackground/base_type = &"Panel"
+MM_ProjectsBackground/styles/panel = SubResource("StyleBoxEmpty_u368o")
+MM_Reroute/base_type = &"GraphNode"
+MM_Reroute/constants/port_h_offset = 0
+MM_Reroute/styles/panel = SubResource("StyleBoxFlat_wc6mb")
+MM_Reroute/styles/panel_selected = SubResource("StyleBoxFlat_24h6y")
+MM_Reroute/styles/titlebar = SubResource("StyleBoxEmpty_l27kp")
+MM_Reroute/styles/titlebar_selected = SubResource("StyleBoxEmpty_lg0bb")
+MM_ReroutePreview/base_type = &"GraphNode"
+MM_ReroutePreview/constants/port_h_offset = 5
+MM_ReroutePreview/styles/panel = SubResource("StyleBoxFlat_gn0j1")
+MM_ReroutePreview/styles/panel_selected = SubResource("StyleBoxFlat_5vt7k")
+MM_ReroutePreview/styles/titlebar = SubResource("StyleBoxEmpty_xyfhj")
+MM_ReroutePreview/styles/titlebar_selected = SubResource("StyleBoxEmpty_xyfhj")
+MM_StatusBarBackground/base_type = &"PanelContainer"
+MM_StatusBarBackground/styles/panel = SubResource("StyleBoxFlat_7hrav")
+Panel/styles/panel = SubResource("StyleBoxFlat_dscxc")
+PopupMenu/colors/font_accelerator_color = Color(1, 1, 1, 0.301961)
+PopupMenu/colors/font_color = Color(0.8, 0.807843, 0.827451, 1)
+PopupMenu/colors/font_disabled_color = Color(1, 1, 1, 0.301961)
+PopupMenu/colors/font_hover_color = Color(0.878431, 0.886275, 0.898039, 1)
+PopupMenu/icons/checked = SubResource("AtlasTexture_q4s7x")
+PopupMenu/icons/checked_disabled = SubResource("AtlasTexture_2h4v4")
+PopupMenu/icons/radio_checked = SubResource("AtlasTexture_upgdi")
+PopupMenu/icons/radio_checked_disabled = SubResource("AtlasTexture_2xbg4")
+PopupMenu/icons/radio_unchecked = SubResource("AtlasTexture_8u2ty")
+PopupMenu/icons/radio_unchecked_disabled = SubResource("AtlasTexture_uodmo")
+PopupMenu/icons/submenu = SubResource("AtlasTexture_5cv8u")
+PopupMenu/icons/unchecked = SubResource("AtlasTexture_bxwwn")
+PopupMenu/icons/unchecked_disabled = SubResource("AtlasTexture_ftwxj")
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")
+TabBar/constants/h_separation = 6
+TabBar/icons/close = SubResource("AtlasTexture_1wpt7")
+TabBar/styles/tab_focus = SubResource("StyleBoxFlat_7nmb2")
+TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_62r2q")
+TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
+TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_ofwe7")
+TabContainer/styles/panel = SubResource("StyleBoxFlat_wc388")
+TabContainer/styles/tab_disabled = SubResource("StyleBoxFlat_7b2nb")
+TabContainer/styles/tab_focus = SubResource("StyleBoxFlat_l61pc")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxEmpty_lsxnf")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_kg2s6")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_lejgr")
+TextEdit/styles/focus = SubResource("StyleBoxFlat_swrqc")
+TextEdit/styles/normal = SubResource("StyleBoxFlat_nblvr")
+TextEdit/styles/read_only = SubResource("StyleBoxFlat_qpu3p")
+TooltipLabel/font_sizes/font_size = 15
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
+Tree/constants/draw_guides = 0
+Tree/constants/draw_relationship_lines = 0
+Tree/styles/focus = SubResource("StyleBoxFlat_w0cma")
+Tree/styles/panel = SubResource("StyleBoxFlat_55ai6")
+Tree/styles/selected = SubResource("StyleBoxFlat_x5l5s")
+Tree/styles/selected_focus = SubResource("StyleBoxFlat_x5l5s")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_fw8f4")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_wbe58")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_wbe58")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_ropwn")

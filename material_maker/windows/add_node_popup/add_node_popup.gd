@@ -68,8 +68,12 @@ func todo_renamed_hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
-	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	size = Vector2.ZERO
+	max_size = Vector2.ZERO
+	var csf : float = mm_globals.main_window.get_window().content_scale_factor
+	get_window().content_scale_factor = csf
 	size = get_contents_minimum_size()
+	max_size = size / csf
 	var current_graph = get_current_graph()
 	insert_position = current_graph.offset_from_global_position(current_graph.get_global_mouse_position())
 	popup()
@@ -97,7 +101,7 @@ func check_quick_connect(obj) -> bool:
 	if mm_loader.predefined_generators.has(obj.type):
 		ref_obj = mm_loader.predefined_generators[obj.type]
 	# comment and remote nodes have neither input nor output
-	if ! ref_obj.has("type") or ref_obj.type == "comment" or ref_obj.type == "remote":
+	if ! ref_obj.has("type") or ref_obj.type == "comment" or ref_obj.type == "comment_line" or ref_obj.type == "remote":
 		return false
 	if qc_is_output:
 		if ref_obj.has("shader_model"):
