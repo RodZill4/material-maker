@@ -90,3 +90,59 @@ jobs:
         with:
           name: windows-templates
           path: export_templates_windows.zip
+  build_linux_aarch64_template:
+    runs-on: ubuntu-24.04-arm
+    env:
+      GODOT_VERSION: 4.5.1
+      GODOT_SUB: stable
+      GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
+      SCONSFLAGS: verbose=yes warnings=all use_lto=yes arch=arm64
+
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+        with:
+          path: material-maker
+
+      - name: Clone latest stable Godot source into ./godot
+        run: |
+          git clone --depth 1 --branch ${GODOT_VERSION}-${GODOT_SUB} https://github.com/godotengine/godot.git godot
+          cd godot
+          patch -p1 < ../material-maker/material_maker/misc/mm.patch
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential scons pkg-config libx11-dev libxcursor-dev \
+            libxinerama-dev libgl1-mesa-dev libglu1-mesa-dev libasound2-dev \
+            libpulse-dev libudev-dev libxi-dev libxrandr-dev libwayland-dev \
+
+      - name: Cache SCons build artifacts
+        uses: actions/cache@v3
+        with:
+          path: |
+            godot/.sconsign.dblite
+            godot/bin/
+          key: ${{ runner.os }}-godot-${{ hashFiles('godot/**/*.cpp', 'godot/**/*.h', 'godot/SConstruct', 'godot/SCsub') }}
+          restore-keys: |
+            ${{ runner.os }}-godot-
+
+      - name: Build export templates (Linux arm64)
+        run: |
+          cd godot
+          scons platform=linuxbsd target=template_release tools=no
+          cd ..
+
+      - name: Package Linux(arm64) build
+        run: |
+          mkdir -p templates_linux_arm64
+          cp godot/bin/*linuxbsd* templates_linux_arm64/
+          (cd templates_linux_arm64 && zip -9 -r ../export_templates_linux_arm64.zip .)
+
+      - name: Upload Linux(arm64) artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64-templates
+          path: export_templates_linux_arm64.zip
