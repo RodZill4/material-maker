@@ -23,11 +23,20 @@ function_color = Color(0.792157, 0, 0.796078, 1)
 member_variable_color = Color(0, 0.639216, 0.635294, 1)
 
 [node name="NodeEditor" type="Window"]
+oversampling_override = 1.0
 title = "Node Editor"
 initial_position = 2
 size = Vector2i(950, 450)
 exclusive = true
 script = ExtResource("1")
+
+[node name="BG" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.043137256, 0.043137256, 0.047058824, 1)
 
 [node name="Sizer" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -35,6 +44,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="TopSpacer" type="Control" parent="Sizer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
 
 [node name="TabBar" type="TabContainer" parent="Sizer"]
 layout_mode = 2
@@ -189,6 +202,10 @@ text = "OK"
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "Cancel"
+
+[node name="BottomSpacer" type="Control" parent="Sizer"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="ready" from="." to="." method="_on_ready"]
