@@ -70,6 +70,10 @@ Edit menu
 
 * *Frame selected nodes* creates a comment node that frames selected nodes
 
+* *Detach Connections* detaches selection from existing connections
+
+* *Remove with Reconnect* is similar to *Detach Connections* but removes the selection
+
 * *Select all* selects all nodes in the current graph view
 
 * *Select none* clears the selection in the current graph view
