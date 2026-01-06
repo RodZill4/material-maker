@@ -2797,6 +2797,11 @@
 			"type": "decompose"
 		},
 		{
+			"display_name": "Color Pick",
+			"tree_item": "Filter/Color Pick",
+			"type": "color_pick"
+		},
+		{
 			"display_name": "Swap Channels",
 			"icon": "filter_swapchannels",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAKtJREFUeJzt0LENgEAMxdA7NmD/QaGDghFSPAnZ/U8s72etZw04R+uPe8+OXIP5Mfr8AwqgBTQF0AKaAmgBTQG0gKYAWkBTAC2gKYAW0BRAC2gKoAU0BdACmgJoAU0BtICmAFpAUwAtoCmAFtAUQAtoCqAFNAXQApoCaAFNAbSApgBaQFMALaApgBbQFEALaAqgBTQF0AKaAmgBTQG0gKYAWkBTAC2gKYAW0LxUJAd8/F0wqAAAAABJRU5ErkJggg==",
