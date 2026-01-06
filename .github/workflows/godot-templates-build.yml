@@ -1,18 +1,17 @@
 name: Build Export Templates (Single Job)
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+
+env:
+    GODOT_VERSION: 4.5.1
+    GODOT_SUB: stable
+    GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
+    SCONSFLAGS: verbose=yes warnings=all use_lto=yes
 
 jobs:
   build_templates:
     runs-on: ubuntu-latest
-    env:
-      GODOT_VERSION: 4.5.1
-      GODOT_SUB: stable
-      GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
-      SCONSFLAGS: verbose=yes warnings=all use_lto=yes
 
     steps:
       - name: Checkout current repo
@@ -90,3 +89,45 @@ jobs:
         with:
           name: windows-templates
           path: export_templates_windows.zip
+  build_templates_macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v4
+        with:
+          path: material-maker
+
+      - name: Clone latest stable Godot source into ./godot
+        run: |
+          git clone --depth 1 --branch ${GODOT_VERSION}-${GODOT_SUB} https://github.com/godotengine/godot.git godot
+          cd godot
+          patch -p1 < ../material-maker/material_maker/misc/mm.patch
+
+      - name: Install dependencies
+        run: |
+          brew install scons
+          ./godot/misc/scripts/install_vulkan_sdk_macos.sh
+
+      - name: Cache SCons build artifacts
+        uses: actions/cache@v3
+        with:
+          path: |
+            godot/.sconsign.dblite
+            godot/bin/
+          key: ${{ runner.os }}-godot-${{ hashFiles('godot/**/*.cpp', 'godot/**/*.h', 'godot/SConstruct', 'godot/SCsub') }}
+          restore-keys: |
+            ${{ runner.os }}-godot-
+
+      - name: Build export templates (MacOS)
+        run: |
+          cd godot
+          scons platform=macos arch=x86_64 target=template_release tools=no
+          scons platform=macos arch=arm64 target=template_release tools=no generate_bundle=yes
+          cp ./bin/godot_macos.zip ../export_templates_macos.zip
+
+      - name: Upload MacOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-templates
+          path: export_templates_macos.zip
