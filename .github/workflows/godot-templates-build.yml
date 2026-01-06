@@ -5,14 +5,15 @@ on:
     branches: [main]
   workflow_dispatch:
 
-jobs:
-  build_templates:
-    runs-on: ubuntu-latest
-    env:
+env:
       GODOT_VERSION: 4.5.1
       GODOT_SUB: stable
       GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
       SCONSFLAGS: verbose=yes warnings=all use_lto=yes
+
+jobs:
+  build_templates:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout current repo
@@ -92,11 +93,6 @@ jobs:
           path: export_templates_windows.zip
   build_linux_aarch64_template:
     runs-on: ubuntu-24.04-arm
-    env:
-      GODOT_VERSION: 4.5.1
-      GODOT_SUB: stable
-      GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
-      SCONSFLAGS: verbose=yes warnings=all use_lto=yes arch=arm64
 
     steps:
       - name: Checkout current repo
