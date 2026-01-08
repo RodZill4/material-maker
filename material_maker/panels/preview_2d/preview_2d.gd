@@ -15,6 +15,8 @@ var last_export_size = 4
 
 signal generator_changed
 
+func _on_ready() -> void:
+	mm_globals.main_window.config_changed.connect(force_update_preview)
 
 func _enter_tree():
 	set_generator(generator, output, true)
@@ -154,3 +156,6 @@ func export_to_reference(image_size : Vector2i):
 func _on_Preview2D_visibility_changed():
 	if need_generate and is_visible_in_tree():
 		set_generator(generator, output, true)
+
+func force_update_preview():
+	set_generator(generator, output, true)

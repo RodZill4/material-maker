@@ -36,5 +36,6 @@ void fragment() {
 	COLOR = vec4(image_with_background, step(max(uv.x, uv.y), 0.5)*0.8+0.2);
 }"
 
+[connection signal="ready" from="." to="." method="_on_ready"]
 [connection signal="resized" from="." to="." method="on_resized"]
 [connection signal="visibility_changed" from="." to="." method="_on_Preview2D_visibility_changed"]
