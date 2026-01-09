@@ -1,4 +1,4 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=62 format=3 uid="uid://u00kx2lkkx8j"]
+[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=65 format=3 uid="uid://u00kx2lkkx8j"]
 
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="1_ugsao"]
 [ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_rhf2q"]
@@ -377,9 +377,28 @@ name = "RichTextLabelDefaultColor"
 orig = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
+[sub_resource type="Resource" id="Resource_kh8x1"]
+script = ExtResource("4_rhf2q")
+name = "RichTextLabelDefaultColor"
+orig = Color(1, 1, 1, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_d2i8i"]
+script = ExtResource("4_rhf2q")
+name = "GraphFrameEditorPlaceholderColor"
+orig = Color(1, 1, 1, 0.49019608)
+target = Color(0, 0, 0, 0.49019608)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_jbrv2"]
+script = ExtResource("4_rhf2q")
+name = "GraphFrameOutlineColor"
+orig = Color(1, 1, 1, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
 [resource]
 script = ExtResource("5_fagh3")
 base_theme = ExtResource("1_ugsao")
 font_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf"), SubResource("Resource_3wcad"), SubResource("Resource_mhcke")])
 icon_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo"), SubResource("Resource_5oh4i")])
-theme_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_upxps"), SubResource("Resource_lk0mo"), SubResource("Resource_sgt8g"), SubResource("Resource_p6yfp"), SubResource("Resource_mntha"), SubResource("Resource_5l403"), SubResource("Resource_qx1ic"), SubResource("Resource_skxhu"), SubResource("Resource_gf74u"), SubResource("Resource_6iwcg"), SubResource("Resource_emwrq"), SubResource("Resource_g0345"), SubResource("Resource_mqr67"), SubResource("Resource_enwto"), SubResource("Resource_t0kvp"), SubResource("Resource_tw3yc"), SubResource("Resource_5w06f"), SubResource("Resource_m8hbw"), SubResource("Resource_xnhnj"), SubResource("Resource_jh8b5"), SubResource("Resource_2d8ce"), SubResource("Resource_qqxbn"), SubResource("Resource_4naeq"), SubResource("Resource_pu57y"), SubResource("Resource_wwbst"), SubResource("Resource_q74a5"), SubResource("Resource_41atc")])
+theme_color_swaps = Array[ExtResource("4_rhf2q")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_upxps"), SubResource("Resource_lk0mo"), SubResource("Resource_sgt8g"), SubResource("Resource_p6yfp"), SubResource("Resource_mntha"), SubResource("Resource_5l403"), SubResource("Resource_qx1ic"), SubResource("Resource_skxhu"), SubResource("Resource_gf74u"), SubResource("Resource_6iwcg"), SubResource("Resource_emwrq"), SubResource("Resource_g0345"), SubResource("Resource_mqr67"), SubResource("Resource_enwto"), SubResource("Resource_t0kvp"), SubResource("Resource_tw3yc"), SubResource("Resource_5w06f"), SubResource("Resource_m8hbw"), SubResource("Resource_xnhnj"), SubResource("Resource_jh8b5"), SubResource("Resource_2d8ce"), SubResource("Resource_qqxbn"), SubResource("Resource_4naeq"), SubResource("Resource_pu57y"), SubResource("Resource_wwbst"), SubResource("Resource_q74a5"), SubResource("Resource_41atc"), SubResource("Resource_kh8x1"), SubResource("Resource_d2i8i"), SubResource("Resource_jbrv2")])

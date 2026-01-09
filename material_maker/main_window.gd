@@ -1055,7 +1055,6 @@ func frame_nodes() -> void:
 			# Avoid calling resize twice
 			if not mm_globals.get_config("auto_size_comment"):
 				nodes[0].resize_to_selection()
-			nodes[0].selected = true
 
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()

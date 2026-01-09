@@ -235,3 +235,11 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
 
 	return file_name
+
+## Whether light theme (i.e. Default Light) is currently set.
+func is_theme_light() -> bool:
+	return "light" in main_window.theme.resource_path
+
+## Whether dark theme(i.e. Default Dark or Classic) is currently set.
+func is_theme_dark() -> bool:
+	return "light" not in main_window.theme.resource_path
