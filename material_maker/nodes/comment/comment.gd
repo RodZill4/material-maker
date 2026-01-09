@@ -2,7 +2,7 @@ extends GraphFrame
 class_name MMGraphComment
 
 
-@onready var editor = %Text
+@onready var editor := %Text
 var title_label : Label
 var title_edit : LineEdit
 
@@ -28,7 +28,7 @@ var generator : MMGenComment:
 			autoshrink_enabled = false
 			resizable = true
 
-var pallette_colors = [
+var pallette_colors := [
 	Color("F8B8B3"),
 	Color("F7FDAF"),
 	Color("AAF3A2"),
@@ -118,7 +118,7 @@ func resize_to_selection() -> void:
 
 # Title / Text edit
 
-func _on_gui_input(event):
+func _on_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
 		if title_label.get_rect().has_point(get_local_mouse_position()):
 			title_edit.text = title
@@ -135,29 +135,29 @@ func _on_gui_input(event):
 			editor.grab_focus()
 			accept_event()
 
-func _on_title_edit_focus_exited():
+func _on_title_edit_focus_exited() -> void:
 	title = title_edit.text
 	generator.title = title
 	title_label.show()
 	title_edit.hide()
 
-func _on_title_edit_text_submitted(_new_text):
+func _on_title_edit_text_submitted(_new_text) -> void:
 	_on_title_edit_focus_exited()
 
-func _on_node_selected():
+func _on_node_selected() -> void:
 	%Text.placeholder_text = tr("Double click to add your comment here")
 
-func _on_node_deselected():
+func _on_node_deselected() -> void:
 	%Text.placeholder_text = ""
 
-func _on_text_focus_exited():
+func _on_text_focus_exited() -> void:
 	editor.editable = false
 	editor.mouse_filter = MOUSE_FILTER_IGNORE
 	generator.text = editor.text
 
 # Comment color
 
-func _on_change_color_pressed():
+func _on_change_color_pressed() -> void:
 	var light_theme = "light" in mm_globals.main_window.theme.resource_path
 	accept_event()
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
@@ -182,7 +182,7 @@ func update_node() -> void:
 	size = generator.size
 	update_theme()
 
-func set_color(c):
+func set_color(c) -> void:
 	$Popup.hide()
 	if c == generator.color:
 		return
@@ -194,13 +194,13 @@ func set_color(c):
 	update_theme()
 	get_parent().send_changed_signal()
 
-func update_theme():
+func update_theme() -> void:
 	var c : Color = generator.color
 	c.a = 0.5
 	tint_color = c
 	_on_theme_changed()
 
-func _on_ColorChooser_gui_input(event: InputEvent) -> void:
+func _on_ColorChooser_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
@@ -213,7 +213,7 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 		if not $PopupSelector/PanelContainer/ColorPicker.color_changed.is_connected(self.set_color):
 			$PopupSelector/PanelContainer/ColorPicker.color_changed.connect(self.set_color)
 
-func _on_autoshrink_gui_input(event: InputEvent) -> void:
+func _on_autoshrink_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.shift_pressed:
 			autoshrink_enabled = not autoshrink_enabled
@@ -227,13 +227,13 @@ func _on_autoshrink_gui_input(event: InputEvent) -> void:
 				autoshrink_enabled = false
 				resizable = true
 
-func _on_close_pressed():
+func _on_close_pressed() -> void:
 	get_parent().remove_node(self)
 
-func _on_dragged(_from, to):
+func _on_dragged(_from, to) -> void:
 	generator.position = to
 
-func _on_position_offset_changed():
+func _on_position_offset_changed() -> void:
 	if ! disable_undoredo_for_offset:
 		get_parent().undoredo_move_node(generator.name, generator.position, position_offset)
 		generator.set_position(position_offset)
