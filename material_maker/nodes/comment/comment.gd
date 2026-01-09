@@ -50,7 +50,7 @@ func _ready() -> void:
 	title_edit.hide()
 	title_edit.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_edit.text_submitted.connect(_on_title_edit_text_submitted)
+	title_edit.text_submitted.connect(_on_title_edit_focus_exited.unbind(1))
 	title_edit.focus_exited.connect(_on_title_edit_focus_exited)
 
 	var change_color_button := TextureButton.new()
@@ -138,9 +138,6 @@ func _on_title_edit_focus_exited() -> void:
 	generator.title = title
 	title_label.show()
 	title_edit.hide()
-
-func _on_title_edit_text_submitted(_new_text) -> void:
-	_on_title_edit_focus_exited()
 
 func _on_node_selected() -> void:
 	%Text.placeholder_text = tr("Double click to add your comment here")
