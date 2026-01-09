@@ -14,8 +14,6 @@ var autoshrink : bool = false
 var color = null
 
 func _ready() -> void:
-	if !parameters.has("size"):
-		parameters.size = 4
 	if color == null:
 		color = Color.WHITE if "light" in mm_globals.main_window.theme.resource_path else Color.BLACK
 
