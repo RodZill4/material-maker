@@ -26,9 +26,6 @@ var generator : MMGenComment:
 			resize_to_selection()
 		autoshrink_enabled = generator.autoshrink
 		update_theme()
-		if not autoshrink_enabled:
-			autoshrink_enabled = false
-			resizable = true
 
 var pallette_colors := [
 	Color("F8B8B3"),
@@ -115,7 +112,6 @@ func resize_to_selection() -> void:
 		graph.attach_graph_element_to_frame(el.name, name)
 	autoshrink_enabled = true
 	autoshrink_enabled = false
-	resizable = true
 	generator.position = position_offset
 
 # Title / Text edit
@@ -227,7 +223,6 @@ func _on_autoshrink_gui_input(event : InputEvent) -> void:
 			else:
 				autoshrink_enabled = true
 				autoshrink_enabled = false
-				resizable = true
 
 func _on_close_pressed() -> void:
 	get_parent().remove_node(self)
