@@ -11,6 +11,8 @@ var autoshrink_button : TextureButton
 
 var disable_undoredo_for_offset : bool = false
 
+const CHANGE_COLOR_ICON = preload("res://material_maker/icons/color_palette.png")
+const CLOSE_BUTTON_ICON = preload("res://material_maker/icons/close.tres")
 
 var generator : MMGenComment:
 	set(g):
@@ -55,13 +57,13 @@ func _ready() -> void:
 	title_edit.focus_exited.connect(_on_title_edit_focus_exited)
 
 	var change_color_button := TextureButton.new()
-	change_color_button.texture_normal = preload("res://material_maker/icons/color_palette.png")
+	change_color_button.texture_normal = CHANGE_COLOR_ICON
 	change_color_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	change_color_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	change_color_button.pressed.connect(_on_change_color_pressed)
 
 	close_button = TextureButton.new()
-	close_button.texture_normal = preload("res://material_maker/icons/close.tres")
+	close_button.texture_normal = CLOSE_BUTTON_ICON
 	close_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	close_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	close_button.pressed.connect(_on_close_pressed)
