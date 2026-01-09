@@ -68,7 +68,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 1
-mouse_filter = 1
+mouse_filter = 2
 wrap_mode = 1
 caret_blink = true
 caret_multiple = false
@@ -161,6 +161,5 @@ edit_alpha = false
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBox/TitleBar/ChangeColor" to="." method="_on_change_color_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/VBox/TitleBar/Close" to="." method="_on_close_pressed"]
 [connection signal="focus_exited" from="PanelContainer/MarginContainer/VBox/Text" to="." method="_on_text_focus_exited"]
-[connection signal="gui_input" from="PanelContainer/MarginContainer/VBox/Text" to="." method="_on_text_gui_input"]
 [connection signal="ready" from="PanelContainer/MarginContainer/VBox/Text" to="." method="_on_text_ready"]
 [connection signal="gui_input" from="Popup/GridContainer/ColorChooser" to="." method="_on_ColorChooser_gui_input"]
