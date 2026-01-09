@@ -251,6 +251,8 @@ func _gui_input(event) -> void:
 					accept_event()
 				KEY_F:
 					color_comment_nodes()
+				KEY_D:
+					detach_nodes()
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -1038,13 +1040,7 @@ func highlight_connections() -> void:
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
-	if node is MMGraphComment:
-		print("Selecting enclosed nodes...")
-		for c in get_children():
-			if (c is GraphNode or c is MMGraphCommentLine) and c != node:
-				if node.get_rect().encloses(c.get_rect()):
-					c.selected = true
-	elif node is MMGraphCommentLine:
+	if node is MMGraphCommentLine or node is MMGraphComment:
 		pass
 	else:
 		highlight_connections()
@@ -1750,3 +1746,14 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func _on_graph_elements_linked_to_frame_request(elements: Array, frame: StringName) -> void:
+	for el in elements:
+		attach_graph_element_to_frame(el, frame)
+
+func detach_nodes() -> void:
+	if get_selected_nodes().is_empty():
+		return
+
+	for n in get_selected_nodes():
+		detach_graph_element_from_frame(n.name)

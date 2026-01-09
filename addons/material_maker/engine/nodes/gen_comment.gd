@@ -7,8 +7,9 @@ class_name MMGenComment
 
 
 var text : String = ""
-var size : Vector2 = Vector2(300, 200)
+var size : Vector2 = Vector2(350, 200)
 var title : String = "Comment"
+var autoshrink : bool = false
 
 var color = null
 
@@ -39,6 +40,7 @@ func _serialize(data: Dictionary) -> Dictionary:
 	data.color = MMType.serialize_value(color)
 	data.text = text
 	data.size = { x=size.x, y=size.y }
+	data.autoshrink = MMType.serialize_value(autoshrink)
 	return data
 
 func _deserialize(data : Dictionary) -> void:
@@ -50,3 +52,5 @@ func _deserialize(data : Dictionary) -> void:
 		title = data.title
 	if data.has("color"):
 		color = MMType.deserialize_value(data.color)
+	if data.has("autoshrink"):
+		autoshrink = MMType.deserialize_value(data.autoshrink)
