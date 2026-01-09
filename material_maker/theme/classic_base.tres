@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=148 format=3 uid="uid://w487nirev8y5"]
+[gd_resource type="Theme" load_steps=150 format=3 uid="uid://w487nirev8y5"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
@@ -139,6 +139,29 @@ border_width_bottom = 1
 border_color = Color(0.099986, 0.099986, 0.0999859, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62l4s"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a74kv"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(31.18, 176, 16, 16)
+margin = Rect2(-2, -2, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a74kv"]
+bg_color = Color(0.3137255, 0.3137255, 0.34901962, 1)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmkov"]
+bg_color = Color(0.42352942, 0.42352942, 0.4627451, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
 content_margin_left = 28.0
@@ -441,6 +464,10 @@ region = Rect2(80, 0, 16, 16)
 atlas = ExtResource("1_fw8f4")
 region = Rect2(32, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wbe58"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 208, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fs6qc"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(64, 16, 16, 16)
@@ -611,24 +638,6 @@ corner_detail = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5e0gw"]
 content_margin_top = 3.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a74kv"]
-bg_color = Color(0.3137255, 0.3137255, 0.34901962, 1)
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmkov"]
-bg_color = Color(0.42352942, 0.42352942, 0.4627451, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ppdpb"]
 
@@ -960,6 +969,10 @@ GraphEdit/icons/zoom_out = SubResource("AtlasTexture_scuvh")
 GraphEdit/icons/zoom_reset = SubResource("AtlasTexture_cpts2")
 GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_btw0t")
 GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
+GraphFrame/colors/editor_placeholder_color = Color(1, 1, 1, 0.49803922)
+GraphFrame/icons/resizer = SubResource("AtlasTexture_a74kv")
+GraphFrame/styles/panel = SubResource("StyleBoxFlat_a74kv")
+GraphFrame/styles/panel_selected = SubResource("StyleBoxFlat_nmkov")
 GraphNode/colors/portpreview_color = Color(0.89059, 0.89059, 0.89059, 1)
 GraphNode/colors/title_color = Color(1, 1, 1, 1)
 GraphNode/constants/port_h_offset = 10
@@ -1030,6 +1043,7 @@ MM_Icons/icons/section_transform = SubResource("AtlasTexture_w8nfu")
 MM_Icons/icons/section_workflow = SubResource("AtlasTexture_ropwn")
 MM_Icons/icons/select = SubResource("AtlasTexture_ck0hb")
 MM_Icons/icons/settings = SubResource("AtlasTexture_33srw")
+MM_Icons/icons/shrink = SubResource("AtlasTexture_wbe58")
 MM_Icons/icons/spline_link = SubResource("AtlasTexture_fs6qc")
 MM_Icons/icons/spline_progressive = SubResource("AtlasTexture_70aex")
 MM_Icons/icons/spline_reverse = SubResource("AtlasTexture_ahanl")
