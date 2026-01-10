@@ -87,6 +87,19 @@ func expand_panel_width() -> void:
 	custom_minimum_size.x = (custom_min_width + v_scroll.size.x
 			if v_scroll.visible else custom_min_width)
 
+func is_section_not_default(section : String):
+	var not_default := true
+	for config in mm_globals.DEFAULT_CONFIG.keys():
+		var key := "ui_3d_preview_" + section
+		if key in config and "enable" not in config:
+			not_default = not_default and (mm_globals.get_config(config) == mm_globals.DEFAULT_CONFIG[config])
+	return not_default
+
+func _process(_delta: float) -> void:
+	$ScrollContainer/VBoxContainer/TonemapHeader/ResetTonemapSection.disabled = is_section_not_default("tonemap")
+	$ScrollContainer/VBoxContainer/GlowHeader/ResetGlowSection.disabled = is_section_not_default("glow")
+	$ScrollContainer/VBoxContainer/AdjustmentHeader/ResetAdjustmentSection.disabled = is_section_not_default("adjustment")
+	$ScrollContainer/VBoxContainer/DepthOfFieldHeader/ResetDofSection.disabled = is_section_not_default("dof")
 
 func _ready() -> void:
 	custom_min_width = custom_minimum_size.x
