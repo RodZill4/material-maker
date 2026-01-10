@@ -326,7 +326,7 @@ func row_drop_data(_at_pos: Vector2, data: Dictionary, index: int) -> void:
 	# workaround FloatEdits' focused state when dropping rows
 	await get_tree().process_frame
 	for float_edit in grid.get_children():
-		if float_edit is PanelContainer:
+		if float_edit is FloatEdit:
 			float_edit.get_child(0).add_theme_stylebox_override(
 					"fill", get_theme_stylebox("fill_normal", "MM_NodeFloatEdit"))
 			float_edit.get_child(0).add_theme_stylebox_override(
