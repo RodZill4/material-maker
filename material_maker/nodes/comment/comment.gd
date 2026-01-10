@@ -95,6 +95,12 @@ func _on_gui_input(event):
 			mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
 		else:
 			mouse_default_cursor_shape = Control.CURSOR_ARROW
+	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
+		editor.editable = true
+		editor.mouse_filter = MOUSE_FILTER_STOP
+		editor.select_all()
+		editor.grab_focus()
+		accept_event()
 
 func _on_Title_gui_input(event):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
@@ -116,17 +122,9 @@ func _on_title_edit_text_submitted(_new_text):
 
 # Text edit
 
-func _on_text_gui_input(event):
-	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
-		editor.editable = true
-		editor.mouse_filter = MOUSE_FILTER_STOP
-		editor.select_all()
-		editor.grab_focus()
-		accept_event()
-
 func _on_text_focus_exited():
 	editor.editable = false
-	editor.mouse_filter = MOUSE_FILTER_PASS
+	editor.mouse_filter = MOUSE_FILTER_IGNORE
 	generator.text = editor.text
 
 # Comment color
