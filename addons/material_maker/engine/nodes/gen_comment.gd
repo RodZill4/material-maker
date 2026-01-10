@@ -1,5 +1,5 @@
 @tool
-extends MMGenTexture
+extends MMGenBase
 class_name MMGenComment
 
 
