@@ -94,8 +94,6 @@ func do_set_position(o : Vector2) -> void:
 	generator.position = o
 	disable_undoredo_for_offset = false
 
-
-
 func resize_to_selection() -> void:
 	var graph : MMGraphEdit = get_parent()
 	var selected_nodes : Array = graph.get_selected_nodes()
