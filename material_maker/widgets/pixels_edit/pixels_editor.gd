@@ -4,6 +4,8 @@ extends "res://material_maker/widgets/pixels_edit/pixels_view.gd"
 
 var current_color: int = -1
 
+var last_mouse_pos : Vector2
+
 @onready var menu_bar: Control = $PixelMenu
 @onready var colors: Control = %Colors
 
@@ -18,6 +20,17 @@ func _ready() -> void:
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
+
+
+func _draw() -> void:
+	super._draw()
+	var val : Vector2 = reverse_transform_point(get_local_mouse_position())
+	var pixels_size : Vector2 = Vector2(pixels.size)
+	val = snapped(val - (Vector2(0.5, 0.5) / pixels_size), Vector2.ONE / pixels_size)
+	if Rect2(draw_offset, draw_size).has_point(get_local_mouse_position()):
+		var rect = Rect2(transform_point(val), draw_size / pixels_size)
+		draw_rect(rect.grow(-1.0), Color.BLACK, false, 1.0)
+		draw_rect(rect, Color.WHITE, false, 1.0)
 
 
 func set_pixels(p : MMPixels) -> void:
@@ -72,12 +85,26 @@ func draw_pixel() -> void:
 	queue_redraw()
 	self.value_changed.emit(pixels)
 
+func draw_pixel_line() -> void:
+	var from : Vector2 = reverse_transform_point(last_mouse_pos)
+	var to : Vector2 = reverse_transform_point(get_local_mouse_position())
+	var pixel_from : Vector2i = Vector2i(Vector2(pixels.size) * from)
+	var pixel_to : Vector2i = Vector2i(Vector2(pixels.size) * to)
+	for pixel : Vector2i in Geometry2D.bresenham_line(pixel_from, pixel_to):
+		pixels.set_color_index(pixel.x, pixel.y, current_color)
+	queue_redraw()
+	self.value_changed.emit(pixels)
+
 func _on_PixelsEditor_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if event.shift_pressed and last_mouse_pos:
+				draw_pixel_line()
+			last_mouse_pos = get_local_mouse_position()
 			draw_pixel()
 			return
 	elif event is InputEventMouseMotion:
+		queue_redraw()
 		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
 			draw_pixel()
 			return

@@ -42,6 +42,7 @@ func _on_environment_editor_button_pressed() -> void:
 
 func _on_environment_list_item_selected(index: int) -> void:
 	preview3D.set_environment(index)
+	mm_globals.set_config("ui_3d_preview_environment", index)
 
 
 func _on_clear_background_toggled(toggled_on: bool) -> void:

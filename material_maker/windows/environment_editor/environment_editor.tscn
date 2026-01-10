@@ -91,7 +91,7 @@ float_only = true
 
 [node name="AmbientLightLabel" type="Label" parent="Main/HSplitContainer/UI"]
 layout_mode = 2
-text = "Ambient color:"
+text = "Ambient Color:"
 
 [node name="ambient_light_color" type="ColorPickerButton" parent="Main/HSplitContainer/UI"]
 layout_mode = 2
@@ -111,7 +111,7 @@ float_only = true
 
 [node name="AmbientLightSkyContributionLabel" type="Label" parent="Main/HSplitContainer/UI"]
 layout_mode = 2
-text = "Sky contribution:"
+text = "Sky Contribution:"
 
 [node name="ambient_light_sky_contribution" parent="Main/HSplitContainer/UI" instance=ExtResource("3")]
 layout_mode = 2
@@ -122,7 +122,7 @@ float_only = true
 
 [node name="SunLabel" type="Label" parent="Main/HSplitContainer/UI"]
 layout_mode = 2
-text = "Sun color:"
+text = "Sun Color:"
 
 [node name="sun_color" type="ColorPickerButton" parent="Main/HSplitContainer/UI"]
 layout_mode = 2

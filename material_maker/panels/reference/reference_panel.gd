@@ -25,6 +25,7 @@ func _ready():
 	%Image.material.set_shader_parameter("image_size", Vector2(1.0, 1.0))
 
 	%AddImageButton.icon = get_theme_icon("add_image", "MM_Icons")
+	%PasteImageButton.icon = get_theme_icon("paste_image", "MM_Icons")
 	%RemoveImageButton.icon = get_theme_icon("delete", "MM_Icons")
 
 	%PrevImageButton.icon = get_theme_icon("arrow_left", "MM_Icons")
@@ -47,7 +48,12 @@ func add_reference(from:Variant) -> void:
 	var texture: Texture2D
 
 	if typeof(from) == TYPE_STRING:
-		var image: Image = Image.load_from_file(from)
+		var image: Image = Image.new()
+		if from.get_extension() == "dds":
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(from))
+		else:
+			image = Image.load_from_file(from)
+
 		if image != null:
 			texture = ImageTexture.create_from_image(image)
 		else:
@@ -113,6 +119,7 @@ func _on_add_image_button_pressed() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
+	dialog.add_filter("*.dds;DirectDraw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		add_reference(files[0])
@@ -249,3 +256,14 @@ func handle_picking(event: InputEvent) -> void:
 			gradient.add_point(1.0, get_color_under_cursor())
 			selected_slot.set_gradient(gradient)
 			gradient_length = new_gradient_length
+
+
+func _on_paste_image_button_pressed() -> void:
+	if DisplayServer.clipboard_has_image():
+		var img : Texture2D = ImageTexture.create_from_image(
+				DisplayServer.clipboard_get_image())
+		add_reference(img)
+
+
+func _on_check_clipboard_image_timeout() -> void:
+	$%PasteImageButton.disabled = not DisplayServer.clipboard_has_image()

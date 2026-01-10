@@ -46,6 +46,7 @@ const IDLE_FPS_LIMIT_MAX = 100
 const RECENT_FILES_COUNT = 15
 
 const MENU_QUICK_EXPORT : int = 1000
+const RECENTS_MENU_CLEAR = 1001
 
 const THEMES = ["Default Dark", "Default Light", "Classic"]
 
@@ -74,6 +75,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
 	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
+	{ menu="Edit/Swap node inputs", command="edit_swap_node_inputs", shortcut="Alt+S"},
 	{ menu="Edit/-" },
 	{ menu="Edit/Frame selected nodes", command="frame_nodes", shortcut="Control+Shift+F" },
 	{ menu="Edit/-" },
@@ -355,9 +357,15 @@ func create_menu_load_recent(menu) -> void:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
 		menu.connect_id_pressed(self._on_LoadRecent_id_pressed)
+		menu.add_separator()
+		menu.add_item("Clear recent files", RECENTS_MENU_CLEAR)
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	do_load_project(recent_files[id])
+	match id:
+		RECENTS_MENU_CLEAR:
+			clear_recents()
+		_:
+			do_load_project(recent_files[id])
 
 func load_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.READ)
@@ -365,6 +373,10 @@ func load_recents() -> void:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(f.get_as_text())
 		recent_files = test_json_conv.get_data()
+
+func clear_recents() -> void:
+	recent_files.clear()
+	save_recents()
 
 func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
@@ -875,6 +887,11 @@ func edit_duplicate_with_inputs() -> void:
 func edit_duplicate_with_inputs_is_disabled() -> bool:
 	return edit_cut_is_disabled()
 
+func edit_swap_node_inputs() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.swap_node_inputs()
+
 func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
@@ -1048,22 +1065,24 @@ func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function
 func create_menu_add_selection_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
-func add_selection_to_library(index) -> void:
+func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> void:
 	var selected_nodes = get_selected_nodes()
 	if selected_nodes.is_empty():
 		return
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
-	add_child(dialog)
-	var current_item_name = ""
+	var current_item_name : String = ""
 	if library.is_inside_tree():
 		current_item_name = library.get_selected_item_name()
-	var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
-	if ! status.ok:
-		return
+	if should_ask_item_name:
+		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+		dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
+		add_child(dialog)
+		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
+		if ! status.ok:
+			return
+		current_item_name = status.text
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	var data
+	var data : Dictionary
 	if selected_nodes.size() == 1:
 		data = selected_nodes[0].generator.serialize()
 		data.erase("node_position")
@@ -1073,7 +1092,7 @@ func add_selection_to_library(index) -> void:
 	var result = await selected_nodes[0].generator.render(self, 0, 64, true)
 	var image : Image = result.get_image()
 	result.release(self)
-	node_library_manager.add_item_to_library(index, status.text, image, data)
+	node_library_manager.add_item_to_library(index, current_item_name, image, data)
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
@@ -1254,6 +1273,8 @@ func _notification(what : int) -> void:
 			# Return to the normal FPS limit when the window is focused.
 			@warning_ignore("narrowing_conversion")
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+		NOTIFICATION_WM_ABOUT:
+			about.call_deferred()
 
 func on_close_requested():
 	await get_tree().process_frame
@@ -1359,7 +1380,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 			"obj", "glb", "gltf", "fbx":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
-			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
+			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
 				var test_json_conv : JSON = JSON.new()

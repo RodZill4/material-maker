@@ -59,8 +59,10 @@ window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
 
+run/main_run_args="--no-splash"
 run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\suzanne.mmpp"
 run/main_run_args_nosplash="--no-splash"
+run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\nov25 --output-file %a_%n website:1179-1215"
 
 [editor_plugins]
 
@@ -114,6 +116,11 @@ ui_cut_drag={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":false,"button_mask":2,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+ui_lasso_select={
+"deadzone": 0.5,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":true,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(391, 10),"global_position":Vector2(407, 91),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
 
 [locale]
 
@@ -133,6 +140,7 @@ limits/debugger/max_chars_per_second=204800000
 
 [rendering]
 
+rendering_device/driver.macos="vulkan"
 textures/vram_compression/import_etc2_astc=true
 shading/overrides/force_lambert_over_burley.mobile=false
 environment/defaults/default_environment="res://default_env.tres"

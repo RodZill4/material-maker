@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://cy7mimh863mo4" path="res://material_maker/panels/preview_3d/export_menu.gd" id="8_w881c"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="9_iu7lt"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="9_xygyl"]
-[ext_resource type="Script" path="res://material_maker/panels/preview_3d/post_process_menu.gd" id="12_osyun"]
+[ext_resource type="Script" uid="uid://bspumned10eag" path="res://material_maker/panels/preview_3d/post_process_menu.gd" id="12_osyun"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yosc0"]
 atlas = ExtResource("6_osyun")
@@ -367,7 +367,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "The file-name to use. 
-Use $project, $type and $idx to make it auto-adjust."
+Use $project, $type, $idx and $resolution to make it auto-adjust."
 theme_override_font_sizes/font_size = 15
 text = "$project_$type_map"
 
@@ -725,7 +725,7 @@ text = "Depth Of Field"
 
 [node name="ResetDofSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldHeader"]
 layout_mode = 2
-tooltip_text = "Reset glow settings"
+tooltip_text = "Reset depth of field settings"
 script = ExtResource("8_13pve")
 icon_name = "reset"
 

@@ -15,6 +15,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	idle_fps_limit = 20,
 	max_viewport_size = 2048,
 	ui_scale = 0,
+	ui_3d_preview_environment = 0,
 	ui_3d_preview_resolution = 2.0,
 	ui_3d_preview_tesselation_detail = 256,
 	ui_3d_preview_sun_shadow = false,
@@ -52,6 +53,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
+	ui_use_native_file_dialogs = true,
 }
 
 
@@ -177,7 +179,10 @@ func popup_menu(menu : PopupMenu, parent : Control):
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
-	main_window.set_tip_text(TranslationServer.translate(tip), timeout, priority)
+	if main_window:
+		main_window.set_tip_text(TranslationServer.translate(tip), timeout, priority)
+	else:
+		print(tip)
 
 static func do_propagate_shortcuts(control : Control, event : InputEvent):
 	for child in control.get_children():
@@ -203,7 +208,7 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 	do_propagate_shortcuts(control, event)
 
 
-func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}) -> String:
+func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}, resolution="") -> String:
 	for i in additional_identifiers:
 		file_name = file_name.replace(i, additional_identifiers[i])
 
@@ -215,6 +220,9 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 
 	if file_extension != "" and not file_name.ends_with(file_extension):
 		file_name += file_extension
+
+	if resolution:
+		file_name = file_name.replace("$resolution", resolution)
 
 	if "$idx" in file_name:
 		if path:

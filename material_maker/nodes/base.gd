@@ -223,13 +223,24 @@ func _draw() -> void:
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
-		@warning_ignore("narrowing_conversion")
-		draw_string(font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
+		var buffer_timing_font : Font = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
+		@warning_ignore_start("narrowing_conversion")
+		draw_string_outline(buffer_timing_font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, 4, Color.BLACK)
+		draw_string(buffer_timing_font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
+		@warning_ignore_restore("narrowing_conversion")
 	if generator != null and generator.preview >= 0 and get_output_port_count() > 0:
 		var conn_pos = get_output_port_position(generator.preview)
 		draw_circle(conn_pos, 3, portpreview_color, true)
-	
-	
+
+	# Simplify nodes when zoomed out
+	const start_fade := 0.5
+	var opacity : float = clamp(
+			inverse_lerp(0.3, start_fade, get_parent().zoom), 0.0, 1.0)
+	get_titlebar_hbox().modulate.a = opacity
+	for control in get_children():
+		if control.get("modulate"):
+			control.modulate.a = opacity
+
 func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
 	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * portgroup_width
 	var stylebox_size: Vector2 = Vector2(portgroup_width, last_port.y - first_port.y + portgroup_width)
