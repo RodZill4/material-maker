@@ -32,6 +32,8 @@ var pallette_colors = [
 const AUTO_SIZE_PADDING : int = 22
 const AUTO_SIZE_TOP_PADDING : int = 72
 
+var is_resizing : bool = false
+var undo_action : Dictionary = { type="resize_comment" }
 
 func do_set_position(o : Vector2) -> void:
 	disable_undoredo_for_offset = true
@@ -40,16 +42,18 @@ func do_set_position(o : Vector2) -> void:
 	disable_undoredo_for_offset = false
 
 func _on_resize_request(new_size : Vector2) -> void:
-	var parent : GraphEdit = get_parent()
-	if parent.snapping_enabled:
-		new_size = parent.snapping_distance*Vector2(round(new_size.x/parent.snapping_distance), round(new_size.y/parent.snapping_distance))
-	if size == new_size:
+	if is_resizing:
 		return
-	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
-	var redo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
-	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
+	undo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
+	is_resizing = true
+	size = new_size
+
+func _on_resize_end(new_size: Vector2) -> void:
+	is_resizing = false
 	size = new_size
 	generator.size = new_size
+	var redo_action := { type="resize_comment", node=generator.get_hier_name(), size=size }
+	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
 
 func resize_to_selection() -> void:
 	# If any nodes are selected on initialization automatically adjust size to match
