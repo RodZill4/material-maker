@@ -11,6 +11,11 @@ var autoshrink_button : TextureButton
 
 var disable_undoredo_for_offset : bool = false
 
+var undo_action : Dictionary
+var redo_action : Dictionary
+
+var is_resizing : bool = false
+
 const CHANGE_COLOR_ICON = preload("res://material_maker/icons/color_palette.png")
 const CLOSE_BUTTON_ICON = preload("res://material_maker/icons/close.tres")
 
@@ -234,11 +239,6 @@ func _on_theme_changed() -> void:
 	else:
 		autoshrink_button.modulate = Color.WHITE
 		close_button.modulate = Color.WHITE
-
-var undo_action : Dictionary
-var redo_action : Dictionary
-
-var is_resizing : bool = false
 
 func _on_resize_request(_new_size : Vector2) -> void:
 	if is_resizing:
