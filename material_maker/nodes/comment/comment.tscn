@@ -153,6 +153,7 @@ edit_alpha = false
 [connection signal="node_selected" from="." to="." method="_on_node_selected"]
 [connection signal="position_offset_changed" from="." to="." method="_on_position_offset_changed"]
 [connection signal="raise_request" from="." to="." method="_on_raise_request"]
+[connection signal="resize_end" from="." to="." method="_on_resize_end"]
 [connection signal="resize_request" from="." to="." method="_on_resize_request"]
 [connection signal="gui_input" from="PanelContainer/MarginContainer/VBox/TitleBar/Title" to="." method="_on_Title_gui_input"]
 [connection signal="focus_exited" from="PanelContainer/MarginContainer/VBox/TitleBar/TitleEdit" to="." method="_on_title_edit_focus_exited"]
