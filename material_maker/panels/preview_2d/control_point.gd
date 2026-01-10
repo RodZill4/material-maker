@@ -1,3 +1,5 @@
+class_name ControlPoint
+
 extends TextureRect
 
 @export var parent_control : String = ""
@@ -17,6 +19,23 @@ var dragging : bool = false
 
 var parent_control_node = null
 var children_control_nodes = []
+
+enum GizmoSize {
+	SMALL,
+	LARGE,
+}
+
+const SMALL_ATLAS_REGION : Rect2 = Rect2(16.0,64.0,16.0,16.0)
+const LARGE_ATLAS_REGION : Rect2 = Rect2(64.0,48.0,32.0,32.0)
+
+const DEFAULT_GIZMO_SIZES : Dictionary[String, GizmoSize] = {
+	"P1": GizmoSize.LARGE,
+	"P2": GizmoSize.LARGE,
+	"P3": GizmoSize.SMALL,
+	"P4": GizmoSize.LARGE,
+	"Scale1": GizmoSize.SMALL,
+	"Rect1": GizmoSize.SMALL,
+}
 
 func _ready() -> void:
 	if parent_control != "":
@@ -66,17 +85,28 @@ func setup_control(g : MMGenBase, param_defs : Array) -> void:
 	for p in param_defs:
 		if p.has("control"):
 			if p.control == String(name)+".x":
+				if p.has("control_size") and "P" in name:
+					set_control_atlas(p.control_size)
+				else:
+					set_control_atlas(DEFAULT_GIZMO_SIZES[name])
 				show()
 				parameter_x = p.name
 			elif p.control == String(name)+".y":
+				if p.has("control_size") and "P" in name:
+					set_control_atlas(p.control_size)
+				else:
+					set_control_atlas(DEFAULT_GIZMO_SIZES[name])
 				show()
 				parameter_y = p.name
 			elif p.control == String(name)+".r":
+				set_control_atlas()
 				show()
 				parameter_r = p.name
 			elif p.control == String(name)+".a":
+				set_control_atlas()
 				show()
 				parameter_a = p.name
+
 	is_xy = parameter_x != "" or parameter_y != ""
 	if visible:
 		generator.parameter_changed.connect(self.on_parameter_changed)
@@ -246,3 +276,12 @@ func _on_Point_gui_input(event : InputEvent):
 		dragging = false
 		for c in children_control_nodes:
 			c.update_position(c.get_value())
+
+func set_control_atlas(gizmo_size : int = GizmoSize.SMALL):
+	var atlas : AtlasTexture = texture
+	if gizmo_size == GizmoSize.SMALL:
+		atlas.region = SMALL_ATLAS_REGION
+		stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	else:
+		atlas.region = LARGE_ATLAS_REGION
+		stretch_mode = TextureRect.STRETCH_SCALE
