@@ -1,42 +1,65 @@
-[gd_scene load_steps=16 format=3 uid="uid://btww87u0o4x7t"]
+[gd_scene load_steps=22 format=3 uid="uid://btww87u0o4x7t"]
 
 [ext_resource type="Script" uid="uid://c80e0om4076tc" path="res://material_maker/windows/about/about.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://uwqukrk00ios" path="res://material_maker/windows/about/github.png" id="2"]
-[ext_resource type="Texture2D" uid="uid://d0417sp8jvp7a" path="res://material_maker/windows/about/itchio.png" id="5"]
+[ext_resource type="Shader" uid="uid://clbm7f7vq3mgp" path="res://material_maker/windows/about/about_light_dark.gdshader" id="3_a5pf6"]
+[ext_resource type="Texture2D" uid="uid://e6bml33fn07p" path="res://material_maker/windows/about/itchio.svg" id="5_a5pf6"]
+[ext_resource type="Texture2D" uid="uid://deyqa1lpneeew" path="res://material_maker/windows/about/patreon.svg" id="5_wcmb3"]
 [ext_resource type="Texture2D" uid="uid://dntvnke4pcqqf" path="res://icon.png" id="6"]
-[ext_resource type="Texture2D" uid="uid://bxfuae46y2fdc" path="res://material_maker/windows/about/youtube.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://c1due54dyeob1" path="res://material_maker/windows/about/x.svg" id="8_a5pf6"]
+[ext_resource type="Texture2D" uid="uid://n8jt6rureb5f" path="res://material_maker/windows/about/discord.svg" id="6_0an10"]
+[ext_resource type="Texture2D" uid="uid://bjhogo6c5ev1x" path="res://material_maker/windows/about/github.svg" id="6_a5pf6"]
+[ext_resource type="Texture2D" uid="uid://dxn6pembncyas" path="res://material_maker/windows/about/x.svg" id="8_a5pf6"]
 [ext_resource type="Texture2D" uid="uid://d3measjdowk0x" path="res://material_maker/windows/about/facebook.png" id="9"]
-[ext_resource type="Texture2D" uid="uid://cnso3ncxhcnek" path="res://material_maker/windows/about/bluesky.svg" id="9_a5pf6"]
-[ext_resource type="Texture2D" uid="uid://dvniks5a8tybt" path="res://material_maker/windows/about/discord.png" id="10"]
-[ext_resource type="Texture2D" uid="uid://clxj8dqkqggfi" path="res://material_maker/windows/about/mastodon.svg" id="10_wcmb3"]
-[ext_resource type="Texture2D" uid="uid://btvwy8odw2nmx" path="res://material_maker/windows/about/patreon.png" id="11"]
-[ext_resource type="Texture2D" uid="uid://t53vu231awns" path="res://material_maker/windows/about/epic_megagrant.svg" id="12"]
-
-[sub_resource type="Shader" id="Shader_0an10"]
-code = "shader_type canvas_item;
-
-uniform sampler2D tex;
-uniform bool invert = false;
-
-void fragment() {
-	vec4 col = texture(tex, UV);
-	COLOR = invert ? col : vec4(1.0-col.rgb, col.a);
-}
-"
+[ext_resource type="Texture2D" uid="uid://dranxt7hxluot" path="res://material_maker/windows/about/bluesky.svg" id="9_a5pf6"]
+[ext_resource type="Texture2D" uid="uid://bhcv8xiydl2fx" path="res://material_maker/windows/about/mastodon.svg" id="10_wcmb3"]
+[ext_resource type="Texture2D" uid="uid://c06d6ulgucg4q" path="res://material_maker/windows/about/epic_megagrant.svg" id="12"]
+[ext_resource type="Texture2D" uid="uid://ck3om64nu1ghj" path="res://material_maker/windows/about/youtube.svg" id="12_wcmb3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a5pf6"]
-shader = SubResource("Shader_0an10")
+shader = ExtResource("3_a5pf6")
 shader_parameter/tex = ExtResource("12")
+shader_parameter/scale = 1.0
 shader_parameter/invert = false
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0an10"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y717h"]
+shader = ExtResource("3_a5pf6")
+shader_parameter/tex = ExtResource("5_wcmb3")
+shader_parameter/scale = 4.0
+shader_parameter/invert = false
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_71vq8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wcmb3"]
+shader = ExtResource("3_a5pf6")
+shader_parameter/tex = ExtResource("6_a5pf6")
+shader_parameter/scale = 4.0
+shader_parameter/invert = false
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_a5pf6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_71vq8"]
+shader = ExtResource("3_a5pf6")
+shader_parameter/tex = ExtResource("8_a5pf6")
+shader_parameter/scale = 4.0
+shader_parameter/invert = false
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wcmb3"]
+
 [node name="About" type="Window"]
+oversampling_override = 1.0
 title = "About Material Maker"
 position = Vector2i(0, 36)
 size = Vector2i(600, 500)
 script = ExtResource("1")
+
+[node name="BG" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.91764706, 0.91764706, 0.91764706, 0)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
@@ -184,18 +207,17 @@ theme_override_constants/margin_bottom = 8
 
 [node name="SocialNetworks" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="Patreon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+material = SubResource("ShaderMaterial_y717h")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "Patreon"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("11")
-ignore_texture_size = true
-stretch_mode = 4
+texture_normal = SubResource("PlaceholderTexture2D_71vq8")
+stretch_mode = 5
 
 [node name="ItchIo" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
@@ -204,20 +226,20 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "itch.io"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("5")
+texture_normal = ExtResource("5_a5pf6")
 ignore_texture_size = true
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="Github" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+material = SubResource("ShaderMaterial_wcmb3")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "GitHub"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("2")
-ignore_texture_size = true
-stretch_mode = 4
+texture_normal = SubResource("PlaceholderTexture2D_a5pf6")
+stretch_mode = 0
 
 [node name="Discord" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
@@ -226,20 +248,20 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "Discord"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("10")
+texture_normal = ExtResource("6_0an10")
 ignore_texture_size = true
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="X" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+material = SubResource("ShaderMaterial_71vq8")
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "X"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("8_a5pf6")
-ignore_texture_size = true
-stretch_mode = 4
+texture_normal = SubResource("PlaceholderTexture2D_wcmb3")
+stretch_mode = 5
 
 [node name="BlueSky" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
@@ -250,7 +272,7 @@ tooltip_text = "Bluesky"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("9_a5pf6")
 ignore_texture_size = true
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="Mastodon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
@@ -261,7 +283,7 @@ tooltip_text = "Mastodon"
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("10_wcmb3")
 ignore_texture_size = true
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="Youtube" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 custom_minimum_size = Vector2(32, 32)
@@ -270,9 +292,9 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 tooltip_text = "YouTube"
 mouse_default_cursor_shape = 2
-texture_normal = ExtResource("7")
+texture_normal = ExtResource("12_wcmb3")
 ignore_texture_size = true
-stretch_mode = 4
+stretch_mode = 5
 
 [node name="Facebook" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 visible = false
