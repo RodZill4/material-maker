@@ -94,14 +94,7 @@ func do_set_position(o : Vector2) -> void:
 	generator.position = o
 	disable_undoredo_for_offset = false
 
-func _on_resize_request(new_size : Vector2) -> void:
-	if size == new_size:
-		return
-	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
-	var redo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
-	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
-	size = new_size
-	generator.size = new_size
+
 
 func resize_to_selection() -> void:
 	var graph : MMGraphEdit = get_parent()
@@ -243,3 +236,21 @@ func _on_theme_changed() -> void:
 	else:
 		autoshrink_button.modulate = Color.WHITE
 		close_button.modulate = Color.WHITE
+
+var undo_action : Dictionary
+var redo_action : Dictionary
+
+var is_resizing : bool = false
+
+func _on_resize_request(_new_size : Vector2) -> void:
+	if is_resizing:
+		return
+	is_resizing = true
+	await get_tree().process_frame
+	undo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
+
+func _on_resize_end(_new_size: Vector2) -> void:
+	is_resizing = false
+	redo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
+	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
+	generator.size = size
