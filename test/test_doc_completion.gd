@@ -10,13 +10,13 @@ var noise_nodes: Array[String]
 var filter_nodes: Array[String]
 var transform_nodes: Array[String]
 var workflow_nodes: Array[String]
+var miscellaneous_nodes: Array[String]
 
 func before_all() -> void:
-	
 	var file := FileAccess.open(library_json_path, FileAccess.READ)
 	var lib_data = file.get_as_text()
 	file.close()
-	
+
 	var json = JSON.new()
 	var error = json.parse(lib_data)
 	if error == OK:
@@ -46,7 +46,10 @@ func before_all() -> void:
 				if node.begins_with("workflow"):
 					workflow_nodes.append(node)
 					continue
-				
+				if node.begins_with("miscellaneous"):
+					miscellaneous_nodes.append(node)
+					continue
+
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", lib_data, " at line ", json.get_error_line())
 	print("done")
@@ -79,6 +82,10 @@ func test_workflow_nodes_documentation_completion() -> void:
 	var ratio: float = check_node_array_for_completion(workflow_nodes)
 	assert_eq(ratio, 1.0, "WORKFLOW NODES DOCUMENTATION: %d%%" % [ratio*100])
 
+func test_miscellaneous_nodes_documentation_completion() -> void:
+	var ratio: float = check_node_array_for_completion(miscellaneous_nodes)
+	assert_eq(ratio, 1.0, "MISCELLANEOUS NODES DOCUMENTATION: %d%%" % [ratio*100])
+
 func check_node_array_for_completion(node_list: Array) -> float:
 	var failed_tests: int = 0
 	for node in node_list:
@@ -88,7 +95,7 @@ func check_node_array_for_completion(node_list: Array) -> float:
 			if FileAccess.file_exists(doc_path):
 				assert_true(true, "Found docs for node \"%s\" at file \"%s\"" % [node,doc_path])
 				break
-				
+
 			else:
 				var next_underscore = found_node_doc.rfind("_")
 				if next_underscore == -1:
