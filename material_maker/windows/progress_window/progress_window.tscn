@@ -1,45 +1,40 @@
-[gd_scene load_steps=2 format=3 uid="uid://dn262nq5pxuwx"]
+[gd_scene load_steps=3 format=3 uid="uid://dn262nq5pxuwx"]
 
-[ext_resource type="Script" path="res://material_maker/windows/progress_window/progress_window.gd" id="1"]
+[ext_resource type="Script" uid="uid://dc3whtfw8v3lr" path="res://material_maker/windows/progress_window/progress_window.gd" id="1"]
+[ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="2_ja6xq"]
 
 [node name="ProgressWindow" type="Popup"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -293.0
-offset_top = -163.0
-offset_right = 5.0
-offset_bottom = -98.0
+oversampling_override = 1.0
+size = Vector2i(250, 100)
+visible = true
 exclusive = true
+theme = ExtResource("2_ja6xq")
 script = ExtResource("1")
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(250, 0)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-offset_left = 7.0
-offset_top = 7.0
-offset_right = 291.0
-offset_bottom = 58.0
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
 
-[node name="Step" type="Label" parent="PanelContainer/VBoxContainer"]
-offset_top = 9.0
-offset_right = 284.0
-offset_bottom = 23.0
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Step" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
 size_flags_vertical = 6
 text = "Doing this, doing that"
-align = 1
+horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="PanelContainer/VBoxContainer"]
-offset_top = 37.0
-offset_right = 284.0
-offset_bottom = 51.0
+[node name="ProgressBar" type="ProgressBar" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
 rounded = true
+
+[connection signal="minimum_size_changed" from="PanelContainer" to="." method="_on_panel_container_minimum_size_changed"]
