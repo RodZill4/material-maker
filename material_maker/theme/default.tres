@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=165 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=166 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -456,6 +456,11 @@ region = Rect2(64, 192, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jwmb"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 64, 16, 16)
+metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oy0ko"]
 atlas = ExtResource("1_s43fy")
@@ -1237,6 +1242,7 @@ MM_Icons/icons/connection_direct = SubResource("AtlasTexture_pfiqs")
 MM_Icons/icons/connection_manhattan = SubResource("AtlasTexture_pfsii")
 MM_Icons/icons/connection_rounded = SubResource("AtlasTexture_1lfk8")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
+MM_Icons/icons/download = SubResource("AtlasTexture_0jwmb")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")

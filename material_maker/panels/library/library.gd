@@ -57,6 +57,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
 		if not is_node_ready():
 			await ready
+		%Download.texture = get_theme_icon("download", "MM_Icons")
 		for s in library_manager.get_sections():
 			var button : Button = category_buttons[s]
 			button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
