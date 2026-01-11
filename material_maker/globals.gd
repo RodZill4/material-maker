@@ -2,6 +2,7 @@ extends Node
 
 
 @onready var menu_manager = $MenuManager
+@onready var achievements = $Achievements
 
 var main_window
 

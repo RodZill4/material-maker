@@ -23,7 +23,6 @@ var preview_tesselation_detail : int = 256
 @onready var node_library_manager = $NodeLibraryManager
 @onready var brush_library_manager = $BrushLibraryManager
 
-
 @onready var projects_panel = $VBoxContainer/Layout/FlexibleLayout/Main
 
 @onready var layout = $VBoxContainer/Layout
@@ -116,6 +115,7 @@ const MENU : Array[Dictionary] = [
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
+	{ menu="Help/Show achievements", command="show_achievements"},
 	{ menu="Help/Report a bug", command="bug_report" },
 	{ menu="Help/" },
 	{ menu="Help/About", command="about" }
@@ -251,7 +251,6 @@ func _ready() -> void:
 
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
-
 
 var menu_update_requested : bool = false
 
@@ -1172,6 +1171,12 @@ func show_library_item_doc() -> void:
 
 func show_library_item_doc_is_disabled() -> bool:
 	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
+
+func show_achievements() -> void:
+	var dialog = load("res://material_maker/tools/achievements/achievements_window.tscn").instantiate()
+	dialog.set_achievements(Achievements.ITEMS, mm_globals.achievements.unlocked)
+	add_child(dialog)
+	dialog.popup_centered()
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")

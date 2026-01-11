@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cs1kujuvmgvoq"]
+
+[ext_resource type="Script" uid="uid://dpl4q21rcsd61" path="res://material_maker/tools/achievements/achievement_section.gd" id="1"]
+
+[node name="AchievementSection" type="Label"]
+custom_minimum_size = Vector2(0, 50)
+size_flags_horizontal = 6
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+text = "User interface"
+vertical_alignment = 1
+script = ExtResource("1")
+
+[connection signal="gui_input" from="." to="." method="_on_AchievementSection_gui_input"]

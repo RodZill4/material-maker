@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=3 uid="uid://biqjbvjybs1nv"]
+
+[ext_resource type="Texture2D" uid="uid://nwy0o088txw3" path="res://material_maker/tools/achievements/mmcup.png" id="1"]
+[ext_resource type="Script" uid="uid://ihgr25as6cww" path="res://material_maker/tools/achievements/achievement.gd" id="2"]
+
+[sub_resource type="Shader" id="1"]
+code = "shader_type canvas_item;
+
+uniform float c = 0.0;
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = mix(vec4(vec3(dot(color.rgb, vec3(1.0))/3.0), color.a*0.25), color, c);
+}"
+
+[sub_resource type="ShaderMaterial" id="2"]
+resource_local_to_scene = true
+shader = SubResource("1")
+shader_parameter/c = 0.0
+
+[node name="Achievement" type="Panel"]
+size_flags_horizontal = 3
+script = ExtResource("2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Text" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="HBoxContainer/MarginContainer/Text"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="HBoxContainer/MarginContainer/Text"]
+modulate = Color(1, 1, 1, 0.627451)
+layout_mode = 2
+size_flags_vertical = 3
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer"]
+material = SubResource("2")
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1")
