@@ -9,16 +9,18 @@
 code = "shader_type canvas_item;
 
 uniform float c = 0.0;
+uniform float alpha = 1.0;
 
 void fragment() {
 	vec4 color = texture(TEXTURE, UV);
-	COLOR = mix(vec4(vec3(dot(color.rgb, vec3(1.0))/3.0), color.a*0.25), color, c);
+	COLOR = mix(vec4(vec3(dot(color.rgb, vec3(1.0))/3.0), color.a*0.25*alpha), color, c);
 }"
 
 [sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
 shader = SubResource("1")
 shader_parameter/c = 0.0
+shader_parameter/alpha = 1.0
 
 [node name="Achievement" type="MarginContainer"]
 offset_right = 206.0
@@ -36,6 +38,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
 layout_mode = 2
+theme_type_variation = &"PanelContainer"
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer"]
 layout_mode = 2

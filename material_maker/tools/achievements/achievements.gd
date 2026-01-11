@@ -9,19 +9,20 @@ var unlocked : Array = []
 func _ready() -> void:
 	if mm_globals.config.has_section_key("achievements", "unlocked"):
 		unlocked = mm_globals.config.get_value("achievements", "unlocked").split(",")
+	await get_tree().create_timer(1.0).timeout
 	unlock("ui_start")
 
 func unlock(achievement : String):
 	if unlocked.find(achievement) != -1:
 		return
 	unlocked.push_back(achievement)
-	#config.set_value("achievements", "unlocked", PackedStringArray(unlocked).join(","))
+	mm_globals.config.set_value("achievements", "unlocked", ",".join(unlocked))
 	for s in ITEMS:
 		for a in s.achievements:
 			if achievement == a.id:
 				var achievement_widget = load("res://material_maker/tools/achievements/new_achievement.tscn").instantiate()
 				achievement_widget.set_texts(a.name, a.description)
-				add_child(achievement_widget)
+				mm_globals.main_window.add_child(achievement_widget)
 				return
 
 const ITEMS : Array = [

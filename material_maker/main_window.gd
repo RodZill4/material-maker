@@ -22,6 +22,7 @@ var preview_tesselation_detail : int = 256
 
 @onready var node_library_manager = $NodeLibraryManager
 @onready var brush_library_manager = $BrushLibraryManager
+@onready var achievements = $Achievements
 
 @onready var projects_panel = $VBoxContainer/Layout/FlexibleLayout/Main
 
@@ -1174,7 +1175,7 @@ func show_library_item_doc_is_disabled() -> bool:
 
 func show_achievements() -> void:
 	var dialog = load("res://material_maker/tools/achievements/achievements_window.tscn").instantiate()
-	dialog.set_achievements(Achievements.ITEMS, mm_globals.achievements.unlocked)
+	dialog.set_achievements(Achievements.ITEMS, achievements.unlocked)
 	add_child(dialog)
 	dialog.popup_centered()
 
