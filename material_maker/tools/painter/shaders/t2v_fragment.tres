@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://vl3mifeswrlj"]
 
-[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_yim88"]
+[ext_resource type="Script" uid="uid://bc3eljtuurjsd" path="res://addons/material_maker/engine/text_resource.gd" id="1_yim88"]
 
 [resource]
 script = ExtResource("1_yim88")

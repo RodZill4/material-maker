@@ -19,6 +19,7 @@ func set_achievements(achievements, unlocked):
 		var locked_count : int = 0
 		for a in s.achievements:
 			var achievement = load("res://material_maker/tools/achievements/achievement.tscn").instantiate()
+			achievement.custom_minimum_size.y = 100
 			section.add_child(achievement)
 			if unlocked.find(a.id) != -1:
 				achievement.set_texts(a.name, a.description, true)

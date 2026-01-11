@@ -1,17 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://b2jxlaq3ywpr4"]
 
-[ext_resource path="res://material_maker/tools/achievements/new_achievement.gd" type="Script" id=1]
-[ext_resource path="res://material_maker/tools/achievements/achievement.tscn" type="PackedScene" id=2]
+[ext_resource type="Script" uid="uid://dhq12trphdd3w" path="res://material_maker/tools/achievements/new_achievement.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://biqjbvjybs1nv" path="res://material_maker/tools/achievements/achievement.tscn" id="2"]
 
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0.0784314, 0.0784314, 0.0784314, 1 )
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color( 0.807843, 0.576471, 0, 1 )
-
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
 
 uniform float c = 0.0;
@@ -21,131 +13,114 @@ void fragment() {
 	COLOR = mix(vec4(vec3(dot(color.rgb, vec3(1.0))/3.0), color.a*0.25), color, c);
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="2"]
 resource_local_to_scene = true
-shader = SubResource( 1 )
-shader_param/c = 0.0
+shader = SubResource("1")
+shader_parameter/c = 0.0
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id="3"]
 length = 2.0
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 2 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ true, false ]
+"values": [true, false]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath(".:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.1, 1.5, 2 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
 tracks/2/path = NodePath(".:cup_color")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.3, 0.4 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [ 0.0, 0.0, 1.0 ]
+"values": [0.0, 0.0, 1.0]
 }
 tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
 tracks/3/path = NodePath("Particles2D:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ false, true ]
+"values": [false, true]
 }
 tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
 tracks/4/path = NodePath(".")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 2 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "queue_free"
-} ]
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
 }
 
-[sub_resource type="ParticlesMaterial" id=4]
-flag_disable_z = true
-direction = Vector3( 0, -1, 0 )
-gravity = Vector3( 0, 98, 0 )
-initial_velocity = 254.5
-initial_velocity_random = 0.79
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-scale = 6.0
-scale_random = 1.0
-hue_variation = 1.0
-hue_variation_random = 1.0
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vkbud"]
+_data = {
+&"show": SubResource("3")
+}
 
-[node name="Achievement" instance=ExtResource( 2 )]
-modulate = Color( 1, 1, 1, 0 )
+[sub_resource type="ParticleProcessMaterial" id="4"]
+direction = Vector3(0, -1, 0)
+gravity = Vector3(0, 98, 0)
+scale_min = 0.0
+scale_max = 0.0
+
+[node name="Achievement" instance=ExtResource("2")]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -503.0
-margin_top = -73.0
-margin_right = -3.0
-margin_bottom = -3.0
 mouse_default_cursor_shape = 2
-custom_styles/panel = SubResource( 5 )
-script = ExtResource( 1 )
-
-[node name="MarginContainer" parent="HBoxContainer" index="0"]
-margin_right = 426.0
-
-[node name="Text" parent="HBoxContainer/MarginContainer" index="0"]
-margin_right = 423.0
-
-[node name="Title" parent="HBoxContainer/MarginContainer/Text" index="0"]
-margin_right = 420.0
-
-[node name="Text" parent="HBoxContainer/MarginContainer/Text" index="1"]
-margin_right = 420.0
+script = ExtResource("1")
 
 [node name="Icon" parent="HBoxContainer" index="1"]
-material = SubResource( 2 )
-margin_left = 430.0
-margin_right = 494.0
+material = SubResource("2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+&"": SubResource("AnimationLibrary_vkbud")
+}
 autoplay = "show"
-anims/show = SubResource( 3 )
 
-[node name="Particles2D" type="Particles2D" parent="." index="2"]
-position = Vector2( 469.063, 6.02751 )
+[node name="Particles2D" type="GPUParticles2D" parent="." index="2"]
+position = Vector2(469.063, 6.02751)
+emitting = false
 amount = 64
 lifetime = 1.5
 one_shot = true
 explosiveness = 0.81
 randomness = 1.0
-process_material = SubResource( 4 )
+process_material = SubResource("4")
 
 [connection signal="gui_input" from="." to="." method="_on_Achievement_gui_input"]
