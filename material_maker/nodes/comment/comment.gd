@@ -32,6 +32,8 @@ var pallette_colors = [
 const AUTO_SIZE_PADDING : int = 22
 const AUTO_SIZE_TOP_PADDING : int = 72
 
+var is_resizing : bool = false
+var undo_action : Dictionary = { type="resize_comment" }
 
 func do_set_position(o : Vector2) -> void:
 	disable_undoredo_for_offset = true
@@ -40,16 +42,18 @@ func do_set_position(o : Vector2) -> void:
 	disable_undoredo_for_offset = false
 
 func _on_resize_request(new_size : Vector2) -> void:
-	var parent : GraphEdit = get_parent()
-	if parent.snapping_enabled:
-		new_size = parent.snapping_distance*Vector2(round(new_size.x/parent.snapping_distance), round(new_size.y/parent.snapping_distance))
-	if size == new_size:
+	if is_resizing:
 		return
-	var undo_action = { type="resize_comment", node=generator.get_hier_name(), size=size }
-	var redo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
-	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
+	undo_action = { type="resize_comment", node=generator.get_hier_name(), size=new_size }
+	is_resizing = true
+	size = new_size
+
+func _on_resize_end(new_size: Vector2) -> void:
+	is_resizing = false
 	size = new_size
 	generator.size = new_size
+	var redo_action := { type="resize_comment", node=generator.get_hier_name(), size=size }
+	get_parent().undoredo.add("Resize comment", [undo_action], [redo_action], true)
 
 func resize_to_selection() -> void:
 	# If any nodes are selected on initialization automatically adjust size to match
@@ -95,6 +99,12 @@ func _on_gui_input(event):
 			mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
 		else:
 			mouse_default_cursor_shape = Control.CURSOR_ARROW
+	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
+		editor.editable = true
+		editor.mouse_filter = MOUSE_FILTER_STOP
+		editor.select_all()
+		editor.grab_focus()
+		accept_event()
 
 func _on_Title_gui_input(event):
 	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
@@ -116,17 +126,9 @@ func _on_title_edit_text_submitted(_new_text):
 
 # Text edit
 
-func _on_text_gui_input(event):
-	if event is InputEventMouseButton and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
-		editor.editable = true
-		editor.mouse_filter = MOUSE_FILTER_STOP
-		editor.select_all()
-		editor.grab_focus()
-		accept_event()
-
 func _on_text_focus_exited():
 	editor.editable = false
-	editor.mouse_filter = MOUSE_FILTER_PASS
+	editor.mouse_filter = MOUSE_FILTER_IGNORE
 	generator.text = editor.text
 
 # Comment color
@@ -183,10 +185,19 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 		$PopupSelector.get_window().content_scale_factor = content_scale_factor
 		$PopupSelector.get_window().min_size = $PopupSelector.get_window().get_contents_minimum_size() * content_scale_factor
 		$PopupSelector.get_window().position = get_global_mouse_position() * content_scale_factor
+		var color_picker : ColorPicker = $PopupSelector/PanelContainer/ColorPicker
+		$PopupSelector.about_to_popup.connect(func():
+			if mm_globals.has_config("color_picker_color_mode"):
+				color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
+			if mm_globals.has_config("color_picker_shape"):
+				color_picker.picker_shape = mm_globals.get_config("color_picker_shape"))
+		$PopupSelector.popup_hide.connect(func():
+			mm_globals.set_config("color_picker_color_mode", color_picker.color_mode)
+			mm_globals.set_config("color_picker_shape", color_picker.picker_shape))
 		$PopupSelector.popup()
-		$PopupSelector/PanelContainer/ColorPicker.color = generator.color
-		if not $PopupSelector/PanelContainer/ColorPicker.color_changed.is_connected(self.set_color):
-			$PopupSelector/PanelContainer/ColorPicker.color_changed.connect(self.set_color)
+		color_picker.color = generator.color
+		if not color_picker.color_changed.is_connected(self.set_color):
+			color_picker.color_changed.connect(self.set_color)
 
 func _on_close_pressed():
 	get_parent().remove_node(self)
@@ -204,10 +215,12 @@ func _on_position_offset_changed():
 func _on_node_selected():
 	_on_raise_request()
 	update_stylebox()
+	%Text.placeholder_text = TranslationServer.translate("Type your comment here")
 
 func _on_node_deselected():
 	_on_raise_request()
 	update_stylebox()
+	%Text.placeholder_text = ""
 
 func _on_raise_request():
 	var parent = get_parent()

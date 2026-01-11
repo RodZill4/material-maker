@@ -1,0 +1,187 @@
+{
+	"generic_size": 1,
+	"name": "custom_uv2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"inputs": 0.0,
+		"mode": 0.0,
+		"rotate": 0.0,
+		"scale": 0.0,
+		"sx": 1.0,
+		"sy": 1.0,
+		"variations": false
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec3 $(name_uv)_map = $map($uv);",
+			"float $(name_uv)_rnd =  float($seed)+$(name_uv)_map.z;",
+			""
+		],
+		"global": [
+			"vec2 get_from_tileset_extend(float count, float seed, vec2 uv) {",
+			"\treturn (uv+floor(rand2(vec2(seed))*count))/count;",
+			"}",
+			"",
+			"vec2 get_from_tileset_clamp(float count, float seed, vec2 uv) {",
+			"\treturn clamp((uv+floor(rand2(vec2(seed))*count))/count, vec2(0.0), vec2(1.0));",
+			"}",
+			"",
+			"vec2 get_from_tileset_repeat(float count, float seed, vec2 uv) {",
+			"\treturn fract(uv+floor(rand2(vec2(seed))*count))/count;",
+			"}",
+			"",
+			"",
+			"vec2 custom_uv_transform(vec2 uv, vec2 cst_scale, float rnd_rotate, float rnd_scale, vec2 seed) {",
+			"\tseed = rand2(seed);",
+			"\tuv -= vec2(0.5);",
+			"\tfloat angle = (seed.x * 2.0 - 1.0) * rnd_rotate;",
+			"\tfloat ca = cos(angle);",
+			"\tfloat sa = sin(angle);",
+			"\tuv = vec2(ca*uv.x+sa*uv.y, -sa*uv.x+ca*uv.y);",
+			"\tuv *= (seed.y-0.5)*2.0*rnd_scale+1.0;",
+			"\tuv /= cst_scale;",
+			"\tuv += vec2(0.5);",
+			"\treturn uv;",
+			"}",
+			""
+		],
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "Input#",
+				"longdesc": "The image or atlas of images to be remapped.",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			},
+			{
+				"default": "vec3(1.0)",
+				"label": "UV",
+				"longdesc": "The custom UV map to be used for remapping.",
+				"name": "map",
+				"shortdesc": "Map",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"longdesc": "Remaps an Input image using a custom UV map.",
+		"name": "Custom UV",
+		"outputs": [
+			{
+				"longdesc": "Shows the remapped image",
+				"rgba": "$in#.variation(get_from_tileset_$(mode)($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))), $variations ? $(name_uv)_rnd : 0.0)",
+				"shortdesc": "Output#",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "2:Inputs",
+				"longdesc": "The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.",
+				"name": "inputs",
+				"shortdesc": "Inputs",
+				"type": "enum",
+				"values": [
+					{
+						"name": "1",
+						"value": "1.0"
+					},
+					{
+						"name": "4",
+						"value": "2.0"
+					},
+					{
+						"name": "16",
+						"value": "4.0"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 1.0,
+				"label": "Scale X",
+				"longdesc": "The scale of the input image along the X axis.",
+				"max": 5.0,
+				"min": 0.0,
+				"name": "sx",
+				"shortdesc": "Scale.x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1.0,
+				"label": "Scale Y",
+				"longdesc": "The scale of the input image along the Y axis.",
+				"max": 5.0,
+				"min": 0.0,
+				"name": "sy",
+				"shortdesc": "Scale.y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "Rnd Rotate",
+				"longdesc": "The random rotation applied to each remapped instance.",
+				"max": 180.0,
+				"min": 0.0,
+				"name": "rotate",
+				"shortdesc": "RndRotate",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Rnd Scale",
+				"longdesc": "The random scale applied to each remapped instance.",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "scale",
+				"shortdesc": "RndScale",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 2.0,
+				"label": "UV Mode",
+				"longdesc": "Clamp: Stretches the edges\nRepeat: Tiles the input UV\nExtend: Shows parts of the UV beyond the edges",
+				"name": "mode",
+				"shortdesc": "UV Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Clamp",
+						"value": "clamp"
+					},
+					{
+						"name": "Repeat",
+						"value": "repeat"
+					},
+					{
+						"name": "Extend",
+						"value": "extend"
+					}
+				]
+			},
+			{
+				"default": false,
+				"label": "Variations",
+				"longdesc": "Check to use variations of the input image",
+				"name": "variations",
+				"shortdesc": "Variations",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Custom UV remapper"
+	},
+	"type": "shader"
+}

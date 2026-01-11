@@ -4,6 +4,7 @@ class_name CurveView
 extends Control
 
 @export var show_axes : bool = false
+@export var axes_density : int = 5
 
 var curve : MMCurve
 
@@ -29,8 +30,8 @@ func _draw():
 	var axes_color : Color = bg.lerp(fg, 0.25)
 	var curve_color : Color = bg.lerp(fg, 0.75)
 	if show_axes:
-		for i in range(5):
-			var p = transform_point(0.25*Vector2(i, i))
+		for i in range(axes_density):
+			var p = transform_point(1.0/(axes_density-1)*Vector2(i, i))
 			draw_line(Vector2(p.x, 0), Vector2(p.x, size.y-1), axes_color)
 			draw_line(Vector2(0, p.y), Vector2(size.x-1, p.y), axes_color)
 	var points : PackedVector2Array = PackedVector2Array()
@@ -54,7 +55,7 @@ func _draw():
 			var x = p1.x+(p2.x-p1.x)*t
 			p = transform_point(Vector2(x, p1.y*omt3 + yac*omt2*t*3.0 + ybc*omt*t2*3.0 + p2.y*t3))
 			points.push_back(p)
-	draw_polyline(points, curve_color)
+	draw_polyline(points, curve_color, 0.5, true)
 
 func _on_resize() -> void:
 	queue_redraw()

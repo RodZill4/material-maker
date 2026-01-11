@@ -13,7 +13,19 @@ var links = {}
 func _ready():
 	super._ready()
 
-func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "", is_first : bool = false, is_last : bool = false) -> void:
+
+func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "") -> void:
+	var drag_button := Button.new()
+	drag_button.flat = true
+	drag_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	drag_button.icon = get_theme_icon("arrow_updown", "MM_Icons")
+	drag_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	grid.add_child(drag_button)
+	drag_button.set_drag_forwarding(
+			row_get_data.bind(drag_button.get_index(), control.name),
+			row_can_drop.bind(drag_button.get_index()),
+			row_drop_data.bind(drag_button.get_index()))
+
 	var line_edit : LineEdit = LineEdit.new()
 	line_edit.set_text(control.name)
 	line_edit.custom_minimum_size.x = 80
@@ -21,10 +33,12 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	line_edit.connect("text_changed", Callable(self, "on_param_name_changed").bind(control.name, line_edit))
 	line_edit.connect("text_submitted", Callable(self, "on_param_name_entered").bind(control.name, line_edit))
 	line_edit.connect("focus_exited", Callable(self, "on_param_name_entered2").bind(control.name, line_edit))
+
 	var label = preload("res://material_maker/widgets/linked_widgets/editable_label.tscn").instantiate()
 	label.set_text(text)
 	label.connect("label_changed", Callable(self, "on_label_changed").bind(control.name))
 	grid.add_child(label)
+
 	var description = preload("res://material_maker/widgets/desc_button/desc_button.tscn").instantiate()
 	description.short_description = short_description
 	description.long_description = long_description
@@ -34,6 +48,7 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	control.connect("mouse_entered", Callable(self, "on_enter_widget").bind(control))
 	control.connect("mouse_exited", Callable(self, "on_exit_widget").bind(control))
 	control.tooltip_text = ""
+
 	var button = Button.new()
 	if is_named_param:
 		button.icon = preload("res://material_maker/icons/edit.tres")
@@ -50,22 +65,6 @@ func add_control(text : String, control : Control, is_named_param : bool, short_
 	button.tooltip_text = "Remove parameter"
 	grid.add_child(button)
 	button.connect("pressed", Callable(self, "remove_parameter").bind(control.name))
-	button = Button.new()
-	button.icon = preload("res://material_maker/icons/up.tres")
-	button.tooltip_text = "Move parameter up"
-	grid.add_child(button)
-	if is_first:
-		button.disabled = true
-	else:
-		button.connect("pressed", Callable(self, "move_parameter").bind(control.name, -1))
-	button = Button.new()
-	button.icon = preload("res://material_maker/icons/down.tres")
-	button.tooltip_text = "Move parameter down"
-	grid.add_child(button)
-	if is_last:
-		button.disabled = true
-	else:
-		button.connect("pressed", Callable(self, "move_parameter").bind(control.name, 1))
 
 func update_node() -> void:
 	await get_tree().process_frame
@@ -88,7 +87,7 @@ func update_node() -> void:
 			var shortdesc : String = widget.shortdesc if widget.has("shortdesc") else ""
 			var longdesc : String = widget.longdesc if widget.has("longdesc") else ""
 			var is_named_param : bool = ( p.widget_type == "named_parameter" )
-			add_control(generator.get_widget(p.name).label, control, is_named_param, shortdesc, longdesc, i == 0, i == parameter_count-1)
+			add_control(generator.get_widget(p.name).label, control, is_named_param, shortdesc, longdesc)
 			if generator.widgets[i].type == "config_control" and control is OptionButton:
 				var current = null
 				if control.get_item_count() > 0 and generator.parameters.has(p.name):
@@ -269,3 +268,72 @@ func on_exit_widget(widget) -> void:
 		for l in links[widget]:
 			l.queue_free()
 		links.erase(widget)
+
+
+func modulate_row_controls(row_index: int, color: Color):
+	for i in range(grid.columns * row_index, grid.columns * row_index + grid.columns):
+		grid.get_child(i).modulate = color
+
+
+func row_get_data(_at_pos: Vector2, index: int, widget_name: String) -> Dictionary:
+	var preview_root := Control.new()
+
+	var bg_panel := PanelContainer.new()
+	bg_panel.theme_type_variation = "MM_PanelBackground"
+
+	var panel_stylebox := get_theme_stylebox("panel", "GraphNode").duplicate()
+	panel_stylebox.set_corner_radius_all(5)
+	panel_stylebox.set_border_width_all(0)
+	panel_stylebox.set_expand_margin_all(0)
+	panel_stylebox.set_content_margin_all(4.0)
+	panel_stylebox.bg_color.a = 0.8
+	bg_panel.add_theme_stylebox_override("panel", panel_stylebox)
+
+	var grid_container := GridContainer.new()
+	bg_panel.add_child(grid_container)
+	grid_container.columns = grid.columns
+	for c in range(index, index + grid.columns):
+		var src := grid.get_child(c)
+		var dupe := src.duplicate(true)
+
+		if c == index and dupe is Button:
+			dupe.toggle_mode = true
+			dupe.button_pressed = true
+
+		dupe.custom_minimum_size.x = src.size.x
+		grid_container.add_child(dupe)
+
+	bg_panel.position = -Vector2(16, 16)
+	preview_root.add_child(bg_panel)
+
+	# match control scale to graph edit zoom
+	preview_root.scale = Vector2.ONE * get_parent().zoom
+
+	var row_index : int = floor(index / grid.columns)
+	modulate_row_controls(row_index, Color.TRANSPARENT)
+	set_drag_preview(preview_root)
+
+	return { "row_index": row_index, "widget_name": widget_name, "node_name": name }
+
+
+func row_can_drop(_at_pos: Vector2, data: Dictionary, index: int) -> bool:
+	return data.row_index != floor(index / grid.columns) and data.node_name == name
+
+
+func row_drop_data(_at_pos: Vector2, data: Dictionary, index: int) -> void:
+	move_parameter(data.widget_name, floor(index / grid.columns) - data.row_index)
+
+	# workaround FloatEdits' focused state when dropping rows
+	await get_tree().process_frame
+	for float_edit in grid.get_children():
+		if float_edit is FloatEdit:
+			float_edit.get_child(0).add_theme_stylebox_override(
+					"fill", get_theme_stylebox("fill_normal", "MM_NodeFloatEdit"))
+			float_edit.get_child(0).add_theme_stylebox_override(
+					"background", get_theme_stylebox("normal","MM_NodeFloatEdit"))
+
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_DRAG_END:
+			grid.get_children().map(func(c): c.modulate = Color.WHITE)

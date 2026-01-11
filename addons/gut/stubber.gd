@@ -1,3 +1,28 @@
+
+static var _class_db_name_hash = {} :
+	get():
+		if(_class_db_name_hash == {}):
+			_class_db_name_hash = _make_crazy_dynamic_over_engineered_class_db_hash()
+		return _class_db_name_hash
+
+
+# So, I couldn't figure out how to get to a reference for a GDNative Class
+# using a string.  ClassDB has all thier names...so I made a hash using those
+# names and the classes.  Then I dynmaically make a script that has that as
+# the source and grab the hash out of it and return it.  Super Rube Golbergery,
+# but tons of fun.
+static func _make_crazy_dynamic_over_engineered_class_db_hash():
+	var text = "var all_the_classes: Dictionary = {\n"
+	for classname in ClassDB.get_class_list():
+		if(ClassDB.can_instantiate(classname)):
+			text += str('"', classname, '": ', classname, ", \n")
+		else:
+			text += str('# ', classname, "\n")
+	text += "}"
+	var inst =  GutUtils.create_script_from_source(text).new()
+	return inst.all_the_classes
+
+
 # -------------
 # returns{} and parameters {} have the followin structure
 # -------------
@@ -14,30 +39,10 @@
 var returns = {}
 var _lgr = GutUtils.get_logger()
 var _strutils = GutUtils.Strutils.new()
-var _class_db_name_hash = {}
-
-func _init():
-	_class_db_name_hash = _make_crazy_dynamic_over_engineered_class_db_hash()
-
-# So, I couldn't figure out how to get to a reference for a GDNative Class
-# using a string.  ClassDB has all thier names...so I made a hash using those
-# names and the classes.  Then I dynmaically make a script that has that as
-# the source and grab the hash out of it and return it.  Super Rube Golbergery,
-# but tons of fun.
-func _make_crazy_dynamic_over_engineered_class_db_hash():
-	var text = "var all_the_classes: Dictionary = {\n"
-	for classname in ClassDB.get_class_list():
-		if(ClassDB.can_instantiate(classname)):
-			text += str('"', classname, '": ', classname, ", \n")
-		else:
-			text += str('# ', classname, "\n")
-	text += "}"
-	var inst =  GutUtils.create_script_from_source(text).new()
-	return inst.all_the_classes
 
 
 func _find_matches(obj, method):
-	var matches = null
+	var matches = []
 	var last_not_null_parent = null
 
 	# Search for what is passed in first.  This could be a class or an instance.
@@ -77,7 +82,7 @@ func _find_stub(obj, method, parameters=null, find_overloads=false):
 	var to_return = null
 	var matches = _find_matches(obj, method)
 
-	if(matches == null):
+	if(matches.size() == 0):
 		return null
 
 	var param_match = null
@@ -89,10 +94,10 @@ func _find_stub(obj, method, parameters=null, find_overloads=false):
 		if(cur_stub.parameters == parameters):
 			param_match = cur_stub
 
-		if(cur_stub.parameters == null and !cur_stub.is_param_override_only()):
+		if(cur_stub.parameters == null and !cur_stub.is_default_override_only()):
 			null_match = cur_stub
 
-		if(cur_stub.has_param_override()):
+		if(cur_stub.is_defaults_override):
 			if(overload_match == null || overload_match.is_script_default):
 				overload_match = cur_stub
 
@@ -180,25 +185,26 @@ func get_call_this(obj, method, parameters=null):
 		return stub_info.call_this
 
 
-func get_parameter_count(obj, method):
-	var to_return = null
-	var stub_info = _find_stub(obj, method, null, true)
-
-	if(stub_info != null and stub_info.has_param_override()):
-		to_return = stub_info.parameter_count
-
-	return to_return
-
-
 func get_default_value(obj, method, p_index):
+	var matches = _find_matches(obj, method)
+	var the_defaults = []
+	var script_defaults = []
+	var i = matches.size() -1
+
+	while(i >= 0 and the_defaults.is_empty()):
+		if(matches[i].is_defaults_override()):
+			if(matches[i].is_script_default):
+				script_defaults = matches[i].parameter_defaults
+			else:
+				the_defaults = matches[i].parameter_defaults
+		i -= 1
+
+	if(the_defaults.is_empty() and !script_defaults.is_empty()):
+		the_defaults = script_defaults
+
 	var to_return = null
-	var stub_info = _find_stub(obj, method, null, true)
-
-	if(stub_info != null and
-		stub_info.parameter_defaults != null and
-		stub_info.parameter_defaults.size() > p_index):
-
-		to_return = stub_info.parameter_defaults[p_index]
+	if(the_defaults.size() > p_index):
+		to_return = the_defaults[p_index]
 
 	return to_return
 

@@ -59,7 +59,7 @@ Inputs
 ~~~~~~
 
 Inputs can be added and removed, have a name and a label (but no label trick) just
-like parameters. they also have a type that can be **Greyscale**, **Color** or
+like parameters. they also have a type that can be **Grayscale**, **Color** or
 **RGBA**.
 Please note that Material Maker will convert automatically if you connect an input
 to an output of a different but compatible type.
@@ -68,7 +68,7 @@ The yellow document button can be used to define a name and add a tooltip to the
 
 On the right of the input type, you must define a default value that will be used
 if the input is not connected. The default value is a GLSL expression that must
-evaluate to a **float** for **Greyscale**, a **vec3** for **Color** or a **vec4**
+evaluate to a **float** for **Grayscale**, a **vec3** for **Color** or a **vec4**
 for **RGBA**. Inputs default values can use the **$uv** implicit variable. You may
 want to define interesting default inputs for your nodes, so it is possible
 to see their effect without connecting the inputs (the screenshot above is the
@@ -88,7 +88,7 @@ Outputs
 
 Outputs are defined in the **Outputs** tab and are very similar to inputs, but instead
 of a default value, the generated value of the output should be specified as a
-GLSL expression (**float** for **Greyscale**, a **vec3** for **Color** or a
+GLSL expression (**float** for **Grayscale**, a **vec3** for **Color** or a
 **vec4** for **RGBA**). This expression can use everything in the node (parameters,
 inputs, main code, instance functions and global functions) except other outputs.
 And generally, complex nodes mean complex output expressions. You may thus want to

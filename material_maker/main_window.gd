@@ -45,6 +45,9 @@ const IDLE_FPS_LIMIT_MAX = 100
 
 const RECENT_FILES_COUNT = 15
 
+const MENU_QUICK_EXPORT : int = 1000
+const RECENTS_MENU_CLEAR = 1001
+
 const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
@@ -72,12 +75,19 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Paste", command="edit_paste", shortcut="Control+V" },
 	{ menu="Edit/Duplicate", command="edit_duplicate", shortcut="Control+D" },
 	{ menu="Edit/Duplicate with inputs", command="edit_duplicate_with_inputs", shortcut="Control+Shift+D" },
+	{ menu="Edit/Swap node inputs", command="edit_swap_node_inputs", shortcut="Alt+S"},
+	{ menu="Edit/-" },
+	{ menu="Edit/Frame selected nodes", command="frame_nodes", shortcut="Control+Shift+F" },
 	{ menu="Edit/-" },
 	{ menu="Edit/Select All", command="edit_select_all", shortcut="Control+A" },
 	{ menu="Edit/Select None", command="edit_select_none", shortcut="Control+Shift+A" },
 	{ menu="Edit/Invert Selection", command="edit_select_invert", shortcut="Control+I" },
 	{ menu="Edit/Select Sources", command="edit_select_sources", shortcut="Control+L" },
 	{ menu="Edit/Select Targets", command="edit_select_targets", shortcut="Control+Shift+L" },
+	{ menu="Edit/-" },
+	{ menu="Edit/Align Start", command="edit_align_start", shortcut="Control+BRACKETLEFT" },
+	{ menu="Edit/Align Center", command="edit_align_center", shortcut="Control+BACKSLASH" },
+	{ menu="Edit/Align End", command="edit_align_end", shortcut="Control+BRACKETRIGHT" },
 	{ menu="Edit/-" },
 	{ menu="Edit/Load Selection", command="edit_load_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/Save Selection", command="edit_save_selection", not_in_ports=["HTML5"] },
@@ -95,7 +105,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Tools/Create group", command="create_subgraph", shortcut="Control+G" },
 	{ menu="Tools/Make selected nodes editable", command="make_selected_nodes_editable", shortcut="Control+W" },
 	{ menu="Tools/-" },
-	{ menu="Tools/Add selected node to library", submenu="add_selection_to_library", mode="material" },
+	{ menu="Tools/Add selection to library", submenu="add_selection_to_library", mode="material" },
 	{ menu="Tools/Add current brush to library", submenu="add_brush_to_library", mode="paint", not_in_ports=["HTML5"] },
 	{ menu="Tools/Create a screenshot of the current graph", command="generate_graph_screenshot", mode="material" },
 	{ menu="Tools/Paint project settings", command="paint_project_settings", mode="paint", not_in_ports=["HTML5"] },
@@ -191,7 +201,7 @@ func _ready() -> void:
 	for a in args:
 		if a.get_extension().to_lower() in [ "ptex", "mmpp" ]:
 			do_load_project(get_file_absolute_path(a))
-		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf" ]:
+		elif a.get_extension().to_lower() in [ "obj", "glb", "gltf", "fbx" ]:
 			var mesh_filename : String = get_file_absolute_path(a)
 			if mesh_filename == "":
 				push_error("Cannot load mesh from '%s' (no such file or directory)" % a)
@@ -347,9 +357,15 @@ func create_menu_load_recent(menu) -> void:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
 		menu.connect_id_pressed(self._on_LoadRecent_id_pressed)
+		menu.add_separator()
+		menu.add_item("Clear recent files", RECENTS_MENU_CLEAR)
 
 func _on_LoadRecent_id_pressed(id) -> void:
-	do_load_project(recent_files[id])
+	match id:
+		RECENTS_MENU_CLEAR:
+			clear_recents()
+		_:
+			do_load_project(recent_files[id])
 
 func load_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.READ)
@@ -357,6 +373,10 @@ func load_recents() -> void:
 		var test_json_conv = JSON.new()
 		test_json_conv.parse(f.get_as_text())
 		recent_files = test_json_conv.get_data()
+
+func clear_recents() -> void:
+	recent_files.clear()
+	save_recents()
 
 func save_recents() -> void:
 	var f : FileAccess = FileAccess.open("user://recent_files.bin", FileAccess.WRITE)
@@ -385,6 +405,85 @@ func remove_recent(path, save = true) -> void:
 func export_profile_config_key(profile : String) -> String:
 	var key = "export_"+profile.to_lower().replace(" ", "_")
 	return key
+
+func quick_export() -> void:
+	var project = get_current_project()
+	if project == null:
+		return
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit == null:
+		return
+
+	# get project filename
+	var project_file : String
+	if not graph_edit.save_path.is_empty():
+		project_file = graph_edit.save_path.right(-(graph_edit.save_path.rfind("/")+1))
+		project_file = project_file.trim_suffix(".ptex")
+	else:
+		project_file = "unnamed"
+
+	var export_prefix : String
+	var exports : Array
+	var has_unconnected_exports : bool = false
+
+	for g in graph_edit.top_generator.get_children():
+		if g.has_method("export_material") and !g.has_method("get_export_profiles"):
+			if g.get_source(0) != null:
+				exports.append(g)
+			else:
+				has_unconnected_exports = true
+
+	# No export nodes
+	if not exports.size():
+		var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+		var error_text = "Quick export requires at least one export node"
+		if has_unconnected_exports:
+			error_text += " with connected input"
+		dialog.dialog_text = TranslationServer.translate(error_text)
+		add_child(dialog)
+		await dialog.ask()
+		return
+
+	var file_dialog := preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_DIR
+	file_dialog.title = "Quick Export"
+	if mm_globals.config.has_section_key("path", "quick_export"):
+		file_dialog.current_dir = mm_globals.config.get_value("path", "quick_export")
+
+	var files = await file_dialog.select_files()
+	if files.size() == 1:
+		export_prefix = files[0]
+	else:
+		return
+
+	var progress_dialog = null
+	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
+	if progress_dialog_scene != null:
+		progress_dialog = progress_dialog_scene.instantiate()
+	var dim_color_rect = ColorRect.new()
+	dim_color_rect.modulate = Color(0.05, 0.05, 0.05, 0.5)
+	add_child(dim_color_rect)
+	get_tree().get_root().add_child(progress_dialog)
+	progress_dialog.set_text("Quick Export")
+	progress_dialog.set_progress(0)
+
+	var export_count = 0.0
+	for export_node in exports:
+		await export_node.export_material(
+				"%s/%s" % [export_prefix, project_file], "Quick Export")
+		export_count += 1.0
+		progress_dialog.set_progress(export_count / len(exports))
+
+	if progress_dialog != null:
+		# Wait a little to allow progress bar to complete
+		await get_tree().create_timer(0.25).timeout
+		dim_color_rect.queue_free()
+		progress_dialog.queue_free()
+
+	mm_globals.config.set_value("path", "quick_export", export_prefix)
+	mm_globals.set_tip_text(
+			"Quick exported %s file(s) to %s" % [len(exports), export_prefix], 3, 1)
 
 func export_material(file_path : String, profile : String) -> void:
 	var project = get_current_project()
@@ -416,7 +515,8 @@ func export_again() -> void:
 	var export_path : String = material_node.get_export_path(export_target)
 	export_material(export_path, export_target)
 
-func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String = "", export_profiles = null) -> void:
+func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String = "",
+		export_profiles = null, add_quick_export : bool = true) -> void:
 	if prefix == "":
 		menu.clear()
 	var project = get_current_project()
@@ -427,8 +527,10 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 		return
 	var prefix_len = prefix.length()
 	var submenus : Array[String] = []
+
 	if export_profiles == null:
 		export_profiles = material_node.get_export_profiles()
+
 	for id in range(export_profiles.size()):
 		var p : String = export_profiles[id]
 		if prefix_len > 0:
@@ -442,17 +544,29 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 			var submenu_name : String = p.left(slash_position)
 			if submenus.find(submenu_name) == -1:
 				var submenu : MMMenuManager.MenuBase = menu.add_submenu(submenu_name)
-				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles)
+				create_menu_export_material(submenu, p.left(slash_position+1), export_profiles, false)
 				submenus.append(submenu_name)
 	menu.connect_id_pressed(self._on_ExportMaterial_id_pressed)
 
+	if add_quick_export:
+		# This work as stated in godot docs, but still shows a warning
+		# https://github.com/godotengine/godot/issues/101320
+		@warning_ignore("int_as_enum_without_cast")
+		@warning_ignore("int_as_enum_without_match")
+		menu.add_item("Quick Export", MENU_QUICK_EXPORT, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_E )
+
 func _on_ExportMaterial_id_pressed(id) -> void:
+	if id == MENU_QUICK_EXPORT:
+		quick_export()
+		return
+
 	var project = get_current_project()
 	if project == null:
 		return
 	var material_node = project.get_material_node()
 	if material_node == null:
 		return
+
 	var profile = material_node.get_export_profiles()[id]
 	var export_extension : String = material_node.get_export_extension(profile)
 	if export_extension == "":
@@ -478,7 +592,6 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		var files = await dialog.select_files()
 		if files.size() > 0:
 			export_material(files[0], profile)
-
 
 func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
@@ -774,6 +887,11 @@ func edit_duplicate_with_inputs() -> void:
 func edit_duplicate_with_inputs_is_disabled() -> bool:
 	return edit_cut_is_disabled()
 
+func edit_swap_node_inputs() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.swap_node_inputs()
+
 func edit_select_all() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null:
@@ -866,6 +984,35 @@ func edit_preferences() -> void:
 	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	dialog.edit_preferences(mm_globals.config)
 
+func edit_align_start() -> void:
+	var nodes : Array = get_current_graph_edit().get_selected_nodes()
+	var min_offset : float = INF
+
+	for node : GraphElement in nodes:
+		min_offset = min(min_offset, node.position_offset.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = min_offset
+
+func edit_align_center() -> void:
+	var nodes : Array = get_current_graph_edit().get_selected_nodes()
+	var min_offset : float = INF
+	var max_offset : float = -INF
+
+	for node : GraphElement in nodes:
+		max_offset = max(max_offset, node.position_offset.x + node.size.x)
+		min_offset = min(min_offset, node.position_offset.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = (max_offset + min_offset) * 0.5 - (node.size.x * 0.5)
+
+func edit_align_end() -> void:
+	var nodes : Array = get_current_graph_edit().get_selected_nodes()
+	var max_offset : float = -INF
+
+	for node : GraphElement in nodes:
+		max_offset = max(max_offset, node.position_offset.x + node.size.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = max_offset - node.size.x
+
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.center_view()
@@ -889,6 +1036,17 @@ func create_subgraph() -> void:
 	if graph_edit != null:
 		graph_edit.create_subgraph()
 
+func frame_nodes() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null and get_selected_nodes().size():
+		var nodes : Array = await graph_edit.create_nodes(
+				{"type":"comment", "title":"Frame"}, Vector2())
+		if nodes.size():
+			# Avoid calling resize twice
+			if not mm_globals.get_config("auto_size_comment"):
+				nodes[0].resize_to_selection()
+			nodes[0].selected = true
+
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
 	if !selected_nodes.is_empty():
@@ -907,22 +1065,24 @@ func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function
 func create_menu_add_selection_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
-func add_selection_to_library(index) -> void:
+func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> void:
 	var selected_nodes = get_selected_nodes()
 	if selected_nodes.is_empty():
 		return
-	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
-	add_child(dialog)
-	var current_item_name = ""
+	var current_item_name : String = ""
 	if library.is_inside_tree():
 		current_item_name = library.get_selected_item_name()
-	var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
-	if ! status.ok:
-		return
+	if should_ask_item_name:
+		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+		dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
+		add_child(dialog)
+		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
+		if ! status.ok:
+			return
+		current_item_name = status.text
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
-	var data
+	var data : Dictionary
 	if selected_nodes.size() == 1:
 		data = selected_nodes[0].generator.serialize()
 		data.erase("node_position")
@@ -932,7 +1092,7 @@ func add_selection_to_library(index) -> void:
 	var result = await selected_nodes[0].generator.render(self, 0, 64, true)
 	var image : Image = result.get_image()
 	result.release(self)
-	node_library_manager.add_item_to_library(index, status.text, image, data)
+	node_library_manager.add_item_to_library(index, current_item_name, image, data)
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
@@ -1113,6 +1273,8 @@ func _notification(what : int) -> void:
 			# Return to the normal FPS limit when the window is focused.
 			@warning_ignore("narrowing_conversion")
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
+		NOTIFICATION_WM_ABOUT:
+			about.call_deferred()
 
 func on_close_requested():
 	await get_tree().process_frame
@@ -1215,10 +1377,10 @@ func on_files_dropped(files : PackedStringArray) -> void:
 					add_recent(f)
 				else:
 					remove_recent(f)
-			"obj", "glb", "gltf":
+			"obj", "glb", "gltf", "fbx":
 				if ! run_method_at_position(get_global_mouse_position(), "on_drop_model_file", [ f ]):
 					await new_paint_project(f)
-			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp":
+			"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
 				run_method_at_position(get_global_mouse_position(), "on_drop_image_file", [ f ])
 			"mme":
 				var test_json_conv : JSON = JSON.new()

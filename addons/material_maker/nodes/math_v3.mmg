@@ -22,6 +22,9 @@
 			""
 		],
 		"global": "",
+		"includes": [
+			"sdf3d_rotate"
+		],
 		"inputs": [
 			{
 				"default": "vec3($d_in1_x, $d_in1_y, $d_in1_z)",
@@ -187,6 +190,10 @@
 					{
 						"name": "log(A, B)",
 						"value": "log($in1($uv))/log($in2($uv))"
+					},
+					{
+						"name": "rotate(A, B)",
+						"value": "rotate3d($in1($uv),$in2($uv))"
 					}
 				]
 			},
@@ -256,7 +263,7 @@
 			},
 			{
 				"default": false,
-				"label": "Clamp result",
+				"label": "Clamp",
 				"longdesc": "The result is clamped to [0, 1] if this option is checked",
 				"name": "clamp",
 				"shortdesc": "Clamp",

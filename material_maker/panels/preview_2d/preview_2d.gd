@@ -31,6 +31,10 @@ func do_update_material(source, target_material : ShaderMaterial, template : Str
 		print("Template has time") # This should not happen
 	var code = generate_preview_shader(source, template)
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+	# Remove the Texture2D references, otherwise they will remain
+	for p in target_material.get_property_list():
+		if p.hint_string == "Texture2D" and p.name.begins_with("shader_parameter/"):
+			target_material.set_shader_parameter(p.name.right(-17), null)
 	await mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(target_material), code)
 	for u in source.uniforms:
 		if u.value:

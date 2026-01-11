@@ -504,7 +504,7 @@ func show_item_parameters(prefix : String):
 		controls[p.name] = control
 		if p.type == "float":
 			var button : Button = Button.new()
-			button.text = "f(x)"
+			button.icon = get_theme_icon("function", "MM_Icons")
 			item_parameters_panel.add_child(button)
 			button.flat = not ( item_scene.has("parmexprs") and item_scene.parmexprs.has(p.name.right(-(p.name.find("_")+1))) )
 			button.connect("pressed",Callable(self,"on_parameter_expression_button").bind( p.name ))

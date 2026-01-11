@@ -15,7 +15,7 @@ var update_again : bool = false
 var preview_material : ShaderMaterial = null
 var preview_parameters : Dictionary = {}
 var preview_textures = {}
-var preview_texture_dependencies = {}
+var preview_texture_dependencies : Dictionary[String, MMTexture] = {}
 
 var external_previews : Dictionary[Node, Array] = {}
 var export_output_def : Dictionary
@@ -134,7 +134,7 @@ func on_dep_update_value(buffer_name, parameter_name, value) -> bool:
 				if value is MMTexture:
 					var texture = await value.get_texture()
 					p.set_shader_parameter(parameter_name, texture)
-					preview_texture_dependencies[parameter_name] = texture
+					preview_texture_dependencies[parameter_name] = value
 				else:
 					p.set_shader_parameter(parameter_name, value)
 	else:
@@ -200,8 +200,8 @@ func update() -> void:
 	for u in result.uniforms:
 		if u.value:
 			if u.type == "sampler2D":
+				preview_texture_dependencies[u.name] = u.value
 				var texture = await u.value.get_texture()
-				preview_texture_dependencies[u.name] = texture
 				preview_material.set_shader_parameter(u.name, texture)
 			else:
 				preview_material.set_shader_parameter(u.name, u.value)
@@ -647,7 +647,7 @@ func get_connections_and_parameters_context() -> Dictionary:
 				context["$(param:"+p.name+".a)"] = str(value.a)
 	return context
 
-func export_material(prefix : String, profile : String, size : int = 0) -> void:
+func export_material(prefix : String, profile : String, size : int = 0, command_line : bool = false) -> void:
 	reset_uids()
 	if size == 0:
 		size = get_image_size()
@@ -680,7 +680,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				overwrite_files.push_back(f)
 				continue
 		exported_files.push_back(f)
-	if ! overwrite_files.is_empty():
+	if not command_line and not overwrite_files.is_empty():
 		var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 		dialog.dialog_text = "Overwrite existing files?"
 		for f in overwrite_files:
@@ -692,12 +692,18 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 		if result == "ok":
 			exported_files.append_array(overwrite_files)
 	var progress_dialog = null
-	var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
-	if progress_dialog_scene != null:
-		progress_dialog = progress_dialog_scene.instantiate()
-	get_tree().get_root().add_child(progress_dialog)
-	progress_dialog.set_text("Exporting material")
-	progress_dialog.set_progress(0)
+	var dim_color_rect = null
+	if not command_line:
+		var progress_dialog_scene = load("res://material_maker/windows/progress_window/progress_window.tscn")
+		if progress_dialog_scene != null:
+			progress_dialog = progress_dialog_scene.instantiate()
+		dim_color_rect = ColorRect.new()
+		dim_color_rect.modulate = Color(0.05, 0.05, 0.05, 0.5)
+		mm_globals.main_window.add_child(dim_color_rect)
+	if progress_dialog:
+		get_tree().get_root().add_child(progress_dialog)
+		progress_dialog.set_text("Exporting material")
+		progress_dialog.set_progress(0)
 	var total_files : int = 0
 	for f in exported_files:
 		match f.type:
@@ -708,6 +714,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 	var processed_files = 0
 	var error_files = 0
 	for f in exported_files:
+		#print("Exporting ", f)
 		var e: Error = OK
 		match f.type:
 			"texture":
@@ -716,7 +723,7 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					var render_queue_size : int = mm_deps.get_render_queue_size()
 					while true:
 						mm_deps.update()
-						await get_tree().process_frame
+						await mm_deps.updated
 						if render_queue_size == mm_deps.get_render_queue_size():
 							break
 						render_queue_size = mm_deps.get_render_queue_size()
@@ -741,14 +748,16 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 					e = FAILED
 					processed_files += 1
 					error_files += 1
-					progress_dialog.set_progress(float(processed_files)/float(total_files))
+					if progress_dialog:
+						progress_dialog.set_progress(float(processed_files)/float(total_files))
 					continue
 				var result : MMTexture = await render_output_to_texture(output_index, Vector2i(size, size))
 				e = await result.save_to_file(file_name)
 				if e != OK:
 					error_files += 1
 				processed_files += 1
-				progress_dialog.set_progress(float(processed_files)/float(total_files))
+				if progress_dialog:
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"template":
 				var file_export_context = export_context.duplicate()
 				if f.has("file_params"):
@@ -759,15 +768,24 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 				if e != OK:
 					error_files += 1
 				processed_files += 1
-				progress_dialog.set_progress(float(processed_files)/float(total_files))
+				if progress_dialog:
+					progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"buffers":
-				var index : int = 1
+				# Wait until the render queue is empty
 				if mm_deps.get_render_queue_size() > 0:
-					await mm_deps.render_queue_empty
+					var render_queue_size : int = mm_deps.get_render_queue_size()
+					while true:
+						mm_deps.update()
+						await mm_deps.updated
+						if render_queue_size == mm_deps.get_render_queue_size():
+							break
+						render_queue_size = mm_deps.get_render_queue_size()
+				var index : int = 1
 				for t in preview_texture_dependencies.keys():
 					var file_name = subst_string(f.file_name, export_context)
 					file_name = file_name.replace("$(buffer_index)", str(index))
-					var image : Image = preview_texture_dependencies[t].get_image()
+					var texture : Texture2D = await preview_texture_dependencies[t].get_texture()
+					var image : Image = texture.get_image()
 					if image:
 						image.convert(Image.FORMAT_RGBA8)
 						e = image.save_png(file_name)
@@ -775,10 +793,12 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 							error_files += 1
 					else:
 						print("No image for texture file ", file_name)
+						print(preview_texture_dependencies[t])
 						error_files += 1
 					index += 1
 					processed_files += 1
-					progress_dialog.set_progress(float(processed_files)/float(total_files))
+					if progress_dialog:
+						progress_dialog.set_progress(float(processed_files)/float(total_files))
 			"buffer_templates":
 				var index : int = 1
 				for t in preview_texture_dependencies.keys():
@@ -794,14 +814,20 @@ func export_material(prefix : String, profile : String, size : int = 0) -> void:
 						error_files += 1
 					index += 1
 					processed_files += 1
-					progress_dialog.set_progress(float(processed_files)/float(total_files))
+					if progress_dialog:
+						progress_dialog.set_progress(float(processed_files)/float(total_files))
 	if progress_dialog != null:
 		progress_dialog.queue_free()
+	if dim_color_rect != null:
+		dim_color_rect.queue_free()
 	if error_files == 0:
 		mm_globals.set_tip_text("Files succesfully exported as \"%s\"" % prefix, 5, 1)
 		return
 	if error_files >= total_files:
-		mm_globals.main_window.accept_dialog("Could not export files to \"%s\"" % prefix.get_base_dir(), false, true)
+		if command_line:
+			print("Could not export files to \"%s\"" % prefix.get_base_dir())
+		else:
+			mm_globals.main_window.accept_dialog("Could not export files to \"%s\"" % prefix.get_base_dir(), false, true)
 		return
 	if error_files < total_files:
 		mm_globals.set_tip_text("%d errors encountered when exporting files" % error_files, 5, 1)

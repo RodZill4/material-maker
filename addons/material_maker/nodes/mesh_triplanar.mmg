@@ -26,7 +26,7 @@
 		}
 	],
 	"label": "Mesh Triplanar",
-	"longdesc": "",
+	"longdesc": "Generates a box-mapped image to be used on a custom model",
 	"name": "mesh_triplanar",
 	"node_position": {
 		"x": 0,
@@ -143,6 +143,7 @@
 			},
 			"ports": [
 				{
+					"shortdesc": "Input",
 					"name": "port0",
 					"type": "rgba"
 				}
@@ -161,6 +162,7 @@
 			},
 			"ports": [
 				{
+					"shortdesc": "Output",
 					"name": "port0",
 					"type": "rgba"
 				}
@@ -182,6 +184,8 @@
 			"widgets": [
 				{
 					"label": "K",
+					"shortdesc": "Blend",
+					"longdesc": "Blending strength",
 					"linked_widgets": [
 						{
 							"node": "brush_triplanar",
@@ -198,6 +202,6 @@
 		"param0": 32
 	},
 	"seed_int": 0,
-	"shortdesc": "",
+	"shortdesc": "Mesh Triplanar",
 	"type": "graph"
 }

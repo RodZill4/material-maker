@@ -1,0 +1,82 @@
+{
+	"generic_size": 1,
+	"name": "directional_warp",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"angle": 0.0,
+		"strength": 0.1
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "Input image to be warped",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "An optional map for warp angle (in degrees)",
+				"name": "anglemap",
+				"shortdesc": "AngleMap",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"label": "",
+				"longdesc": "An optional map for intensity of the warp operation",
+				"name": "strengthmap",
+				"shortdesc": "StrengthMap",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Warps an image towards a specified direction",
+		"name": "Directional Warp",
+		"outputs": [
+			{
+				"longdesc": "Shows the warped image",
+				"rgba": "$in#($uv + vec2(cos($angle * $anglemap($uv) * 0.01745329251), sin($angle * $anglemap($uv) * 0.01745329251)) * ($strengthmap($uv) - 0.5) * $strength )",
+				"shortdesc": "Output#",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "Angle1.a",
+				"default": 0.0,
+				"label": "2:Angle",
+				"longdesc": "Angle of the warp operation",
+				"max": 180.0,
+				"min": -180.0,
+				"name": "angle",
+				"shortdesc": "Angle",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Strength",
+				"longdesc": "Intensity of the warp operation",
+				"max": 1.0,
+				"min": -1.0,
+				"name": "strength",
+				"shortdesc": "Strength",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Directional Warp"
+	},
+	"type": "shader"
+}

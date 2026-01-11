@@ -1,5 +1,8 @@
 {func_decleration}
-	{vararg_warning}__gutdbl.spy_on('{method_name}', {param_array})
+	if(__gutdbl == null):
+		return
+
+	__gutdbl.spy_on('{method_name}', {param_array})
 	if(__gutdbl.is_stubbed_to_call_super('{method_name}', {param_array})):
 		return {super_call}
 	else:

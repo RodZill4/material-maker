@@ -40,6 +40,11 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 				camera_rotation2.rotate_x(-0.01*event.relative.y)
 				camera_rotation1.rotate_y(-0.01*event.relative.x)
 			return true
+		elif event.button_mask & MOUSE_BUTTON_MASK_RIGHT != 0:
+			if event.shift_pressed:
+				var world_env : WorldEnvironment = get_node("../WorldEnvironment")
+				world_env.environment.sky_rotation.y += event.relative.x * 0.001
+			return false
 	elif event is InputEventMouseButton:
 		if not event.is_command_or_control_pressed():
 			var zoom = 0.0
