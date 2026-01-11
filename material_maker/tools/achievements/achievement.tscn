@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://biqjbvjybs1nv"]
+[gd_scene load_steps=7 format=3 uid="uid://biqjbvjybs1nv"]
 
 [ext_resource type="Texture2D" uid="uid://nwy0o088txw3" path="res://material_maker/tools/achievements/mmcup.png" id="1"]
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="1_r2e5m"]
 [ext_resource type="Script" uid="uid://ihgr25as6cww" path="res://material_maker/tools/achievements/achievement.gd" id="2"]
+[ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-416.ttf" id="3_p77pn"]
 
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
@@ -50,6 +51,7 @@ mouse_filter = 2
 [node name="Title" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/Text"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_p77pn")
 text = "Achievement Title"
 
 [node name="Text" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/Text"]
@@ -64,7 +66,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 material = SubResource("2")
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 4
 mouse_filter = 2
 texture = ExtResource("1")
 stretch_mode = 3
