@@ -54,6 +54,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
 	ui_use_native_file_dialogs = true,
+	win_tablet_driver = 0,
 }
 
 
