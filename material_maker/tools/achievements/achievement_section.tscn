@@ -1,12 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cs1kujuvmgvoq"]
+[gd_scene load_steps=3 format=3 uid="uid://cs1kujuvmgvoq"]
 
 [ext_resource type="Script" uid="uid://dpl4q21rcsd61" path="res://material_maker/tools/achievements/achievement_section.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://dq4ssdyyfotag" path="res://material_maker/theme/font_rubik/Rubik-Bold.ttf" id="1_dnw6i"]
 
 [node name="AchievementSection" type="Label"]
 custom_minimum_size = Vector2(0, 50)
 size_flags_horizontal = 6
 mouse_filter = 0
 mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("1_dnw6i")
 text = "User interface"
 vertical_alignment = 1
 script = ExtResource("1")

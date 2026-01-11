@@ -1,14 +1,14 @@
 class_name Achievement
 
-extends Panel
+extends MarginContainer
 
 @export var cup_color : Color
 
 func set_texts(title : String, text : String, unlocked : bool = false):
-	$HBoxContainer/MarginContainer/Text/Title.text = title
-	$HBoxContainer/MarginContainer/Text/Text.text = text
+	%Title.text = title
+	%Text.text = text
 	if unlocked:
-		$HBoxContainer/Icon.material = null
+		%Icon.material = null
 
 func set_cup_color(c : Color):
 	cup_color = c

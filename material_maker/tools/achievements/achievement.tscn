@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://biqjbvjybs1nv"]
+[gd_scene load_steps=6 format=3 uid="uid://biqjbvjybs1nv"]
 
 [ext_resource type="Texture2D" uid="uid://nwy0o088txw3" path="res://material_maker/tools/achievements/mmcup.png" id="1"]
+[ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="1_r2e5m"]
 [ext_resource type="Script" uid="uid://ihgr25as6cww" path="res://material_maker/tools/achievements/achievement.gd" id="2"]
 
 [sub_resource type="Shader" id="1"]
@@ -18,37 +19,52 @@ resource_local_to_scene = true
 shader = SubResource("1")
 shader_parameter/c = 0.0
 
-[node name="Achievement" type="Panel"]
+[node name="Achievement" type="MarginContainer"]
+custom_minimum_size = Vector2(0, 80)
+offset_right = 206.0
+offset_bottom = 80.0
 size_flags_horizontal = 3
+theme = ExtResource("1_r2e5m")
 script = ExtResource("2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Text" type="VBoxContainer" parent="PanelContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="Text" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+[node name="Title" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/Text"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
+text = "Achievement Title"
 
-[node name="Title" type="Label" parent="HBoxContainer/MarginContainer/Text"]
-layout_mode = 2
-
-[node name="Text" type="Label" parent="HBoxContainer/MarginContainer/Text"]
+[node name="Text" type="Label" parent="PanelContainer/HBoxContainer/MarginContainer/Text"]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.627451)
 layout_mode = 2
 size_flags_vertical = 3
+text = "Placeholder text"
 vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer"]
+[node name="Icon" type="TextureRect" parent="PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
 material = SubResource("2")
 layout_mode = 2
+size_flags_vertical = 8
 mouse_filter = 2
 texture = ExtResource("1")
+stretch_mode = 3
