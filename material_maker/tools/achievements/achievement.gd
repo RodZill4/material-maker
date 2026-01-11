@@ -1,3 +1,5 @@
+class_name Achievement
+
 extends Panel
 
 @export var cup_color : Color

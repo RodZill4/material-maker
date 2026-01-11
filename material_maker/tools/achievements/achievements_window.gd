@@ -1,7 +1,10 @@
 extends Window
 
 func _ready():
-	pass # Replace with function body.
+	var csf : float = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = csf
+	min_size = size * content_scale_factor
+
 
 func set_achievements(achievements, unlocked):
 	var container = $VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer
@@ -130,3 +133,7 @@ const ACHIEVEMENTS : Array = [
 		]
 	}
 ]
+
+
+func _on_close_requested() -> void:
+	queue_free()
