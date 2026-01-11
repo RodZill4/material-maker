@@ -1,5 +1,5 @@
 Octahedron node
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 The **Octahedron** node generates a 3d signed distance function for an octahedron.
 
