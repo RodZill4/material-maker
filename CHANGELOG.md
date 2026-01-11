@@ -6,6 +6,7 @@
 - Reintroduced CLI to export materials on command line (including mass export materials from the website)
 - Updated the color picker to remember the selected color mode and picker shape (contributed by williamchange)
 - Eased start and ending flexible layout drag (contributed by williamchange)
+- Added pen tablet driver preference for Windows (contributed by williamchange)
 - Normalized mac icon size (contributed by williamchange)
 
 ### Graph editor
