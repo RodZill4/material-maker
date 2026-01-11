@@ -21,11 +21,14 @@ shader = SubResource("1")
 shader_parameter/c = 0.0
 
 [node name="Achievement" type="MarginContainer"]
-custom_minimum_size = Vector2(0, 80)
 offset_right = 206.0
 offset_bottom = 80.0
 size_flags_horizontal = 3
 theme = ExtResource("1_r2e5m")
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 script = ExtResource("2")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -69,4 +72,3 @@ layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = ExtResource("1")
-stretch_mode = 3
