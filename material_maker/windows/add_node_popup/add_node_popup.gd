@@ -221,7 +221,6 @@ func _on_list_gui_input(event: InputEvent) -> void:
 			_on_list_item_activated(idx)
 	elif event is InputEventMouseMotion:
 		var list_rect = %List.get_rect()
-		var list_viewport_rect = %List.get_viewport_rect()
 		mm_globals.handle_warped_mmb_scroll(event, %List, %List.get_v_scroll_bar(),
 				0, list_rect.size.y, %List.get_local_mouse_position(), Control.CURSOR_DRAG)
 
