@@ -35,7 +35,7 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 						camera_position.position.z = clamp(
 								camera_position.position.z * amount,
 								preview_3d.CAMERA_DISTANCE_MIN, preview_3d.CAMERA_DISTANCE_MAX)
-					), 0, preview_3d.get_rect().size.y, preview_3d.get_local_mouse_position())
+					), 0, preview_3d.get_rect().size.y)
 			else:
 				camera_rotation2.rotate_x(-0.01*event.relative.y)
 				camera_rotation1.rotate_y(-0.01*event.relative.x)

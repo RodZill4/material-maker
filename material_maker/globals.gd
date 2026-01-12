@@ -179,10 +179,10 @@ func do_warp_mouse(position : Vector2, node : Node) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
-		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2) -> void:
+		from_rect_y : float, to_rect_y : float) -> void:
 	node.accept_event()
 	zoom_func.call()
-
+	var mouse_pos := node.get_local_mouse_position()
 	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
 	if mouse_pos.y != mouse_pos_y_warpped:
 		do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)

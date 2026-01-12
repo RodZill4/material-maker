@@ -209,8 +209,7 @@ func handle_movement(event: InputEvent) -> void:
 			is_drag_zooming = true
 			var sca : Array[float] = [new_scale]
 			mm_globals.handle_warped_drag_zoom(self,
-				(func(): sca[0] *= 1.0 + 0.005 * event.relative.y),0,
-				get_rect().size.y, get_local_mouse_position())
+				(func(): sca[0] *= 1.0 + 0.005 * event.relative.y),0, get_rect().size.y)
 			new_scale = clamp(sca[0], 0.005, 3.0)
 		else:
 			if is_dragging:
