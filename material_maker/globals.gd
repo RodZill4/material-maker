@@ -183,10 +183,9 @@ func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 	node.accept_event()
 	zoom_func.call()
 
-	if mouse_pos.y > to_rect_y:
-		do_warp_mouse(Vector2(mouse_pos.x, from_rect_y), node)
-	elif mouse_pos.y < from_rect_y:
-		do_warp_mouse(Vector2(mouse_pos.x, to_rect_y), node)
+	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
+	if mouse_pos.y != mouse_pos_y_warpped:
+		do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
 
 func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
 		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
@@ -196,10 +195,9 @@ func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScr
 
 		vscroll.value -= event.relative.y * relative_offset_multiplier
 
-		if mouse_pos.y > to_rect_y:
-			do_warp_mouse(Vector2(mouse_pos.x, from_rect_y), node)
-		elif mouse_pos.y < from_rect_y:
-			do_warp_mouse(Vector2(mouse_pos.x, to_rect_y), node)
+	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
+	if mouse_pos.y != mouse_pos_y_warpped:
+		do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
 	else:
 		node.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
