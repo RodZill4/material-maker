@@ -172,32 +172,31 @@ func parse_paste_data(data : String):
 
 # Misc. UI functions
 
-func do_warp_mouse(position : Vector2, node : Node) -> void:
+func warp_mouse(position : Vector2, node : Control) -> void:
 	if mm_globals.get_config("ui_warp_mouse_gestures"):
 		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 		node.warp_mouse(position)
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+func do_warp_mouse_y(node : Control, from_y : float, to_y : float) -> void:
+	var mouse_pos := node.get_local_mouse_position()
+	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_y, to_y)
+	if mouse_pos.y != mouse_pos_y_warpped:
+		warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
+
 func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 		from_rect_y : float, to_rect_y : float) -> void:
 	node.accept_event()
 	zoom_func.call()
-	var mouse_pos := node.get_local_mouse_position()
-	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
-	if mouse_pos.y != mouse_pos_y_warpped:
-		do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
+	do_warp_mouse_y(node, from_rect_y, to_rect_y)
 
 func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
-		from_rect_y : float, to_rect_y : float, relative_offset_multiplier := 1.0) -> void:
+		from_rect_y : float, to_rect_y : float, relative_offset_mult := 1.0) -> void:
 	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
 		node.mouse_default_cursor_shape = Control.CURSOR_DRAG
 
-		vscroll.value -= event.relative.y * relative_offset_multiplier
-
-		var mouse_pos := node.get_local_mouse_position()
-		var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
-		if mouse_pos.y != mouse_pos_y_warpped:
-			do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
+		vscroll.value -= event.relative.y * relative_offset_mult
+		do_warp_mouse_y(node, from_rect_y, to_rect_y)
 	else:
 		node.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
