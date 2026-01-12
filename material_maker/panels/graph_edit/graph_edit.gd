@@ -282,8 +282,6 @@ func _gui_input(event) -> void:
 				event.ctrl_pressed or event.meta_pressed):
 			mm_globals.handle_warped_drag_zoom(self,
 			(func() -> void:
-				#force connection lines to redraw
-				set_connection_lines_curvature(connection_lines_curvature)
 				zoom -= event.relative.y * 0.002
 			),get_viewport_rect().position.y,get_rect().size.y, get_local_mouse_position())
 		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
