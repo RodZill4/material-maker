@@ -193,10 +193,9 @@ func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 
 func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
 		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
-		dragging_cursor := Control.CURSOR_DRAG,
 		relative_offset_multiplier := 1.0) -> void:
 	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
-		node.mouse_default_cursor_shape = dragging_cursor
+		node.mouse_default_cursor_shape = Control.CURSOR_DRAG
 
 		vscroll.value -= event.relative.y * relative_offset_multiplier
 
