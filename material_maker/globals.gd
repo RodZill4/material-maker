@@ -195,9 +195,9 @@ func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScr
 
 		vscroll.value -= event.relative.y * relative_offset_multiplier
 
-	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
-	if mouse_pos.y != mouse_pos_y_warpped:
-		do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
+		var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_rect_y, to_rect_y)
+		if mouse_pos.y != mouse_pos_y_warpped:
+			do_warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
 	else:
 		node.mouse_default_cursor_shape = Control.CURSOR_ARROW
 

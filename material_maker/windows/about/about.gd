@@ -128,5 +128,4 @@ func _on_authors_gui_input(event : InputEvent) -> void:
 
 func _on_license_gui_input(event : InputEvent) -> void:
 	mm_globals.handle_warped_mmb_scroll(event, %License, %License.get_v_scroll_bar(), 0,
-	%License.get_rect().size.y, %License.get_local_mouse_position(),
-			1.0 / %License.get_line_height())
+	%License.get_rect().size.y, %License.get_local_mouse_position(), 1.0 / %License.get_line_height())
