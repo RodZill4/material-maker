@@ -180,7 +180,7 @@ func do_warp_mouse(position : Vector2, node : Node) -> void:
 
 func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
-		should_accept_event : bool = true) -> void:
+		should_accept_event := true) -> void:
 	if should_accept_event:
 		node.accept_event()
 
@@ -193,13 +193,12 @@ func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
 
 func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
 		from_rect_y : float, to_rect_y : float, mouse_pos : Vector2,
-		dragging_cursor : Control.CursorShape = Control.CURSOR_DRAG,
-		relative_offset_multiplier : float = 1.0) -> void:
+		dragging_cursor := Control.CURSOR_DRAG,
+		relative_offset_multiplier := 1.0) -> void:
 	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
 		node.mouse_default_cursor_shape = dragging_cursor
 
-		if event.relative.abs().y < 96:
-			vscroll.value -= event.relative.y * relative_offset_multiplier
+		vscroll.value -= event.relative.y * relative_offset_multiplier
 
 		if mouse_pos.y > to_rect_y:
 			do_warp_mouse(Vector2(mouse_pos.x, from_rect_y), node)
