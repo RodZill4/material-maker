@@ -53,7 +53,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
-	ui_warp_mouse_gestures = true,
+	ui_warp_mouse_gestures = false,
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 }
