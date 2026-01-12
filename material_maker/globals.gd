@@ -57,6 +57,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	graph_line_style = 1,
 	ui_warp_mouse_gestures = true,
 	ui_use_native_file_dialogs = true,
+	win_tablet_driver = 0,
 }
 
 

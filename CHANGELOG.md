@@ -1,5 +1,123 @@
 # Material Maker 1.5
 
+## General
+- Added support for loading DDS images (contributed by williamchange)
+- Support FBX mesh loading (contributed by williamchange)
+- Reintroduced CLI to export materials on command line (including mass export materials from the website)
+- Updated the color picker to remember the selected color mode and picker shape (contributed by williamchange)
+- Eased start and ending flexible layout drag (contributed by williamchange)
+- Normalized mac icon size (contributed by williamchange)
+
+### Graph editor
+- Added lasso selection for nodes (contributed by williamchange)
+- Added node inputs swapping with the Alt+S shortcut (contributed by williamchange)
+- Implemented ctrl + rmb drag to cut connections (contributed by williamchange)
+- Added a node alignment toolbar for the graph panel (contributed by williamchange)
+- Added shortcuts to align nodes horizontally (contributed by williamchange)
+- Added a shortcut (Shift+RMB) to create reroutes anywhere on a connection (contributed by williamchange)
+- Added a shortcut (Control+Shift+F) to frame selected nodes (contributed by williamchange)
+- Added UI tooltips for menubar buttons (contributed by williamchange)
+
+### Library panel
+- Added library menu option to update library item (contributed by williamchange)
+- Improved menu text for adding item to library (contributed by williamchange)
+- Updated the Library panel to show library path (contributed by williamchange)
+- Keep popup open when toggling libraries (contributed by williamchange)
+
+### Reference panel
+- Added pasting clipboard image to reference panel (contributed by williamchange)
+- Added an item to clear recents in load recent menu (contributed by williamchange)
+- Improved progress window dialog (contributed by williamchange)
+- Added a preference to use system native file dialogs (contributed by williamchange)
+- Allowed creation of splines node from data drag to graph (contributed by williamchange)
+
+### 2D Preview panel
+- Added $resolution as a filepath variable for export file name (contributed by williamchange)
+- Snap transform gizmo to a specific axis for Preview2D (contributed by williamchange)
+- Made 2D Preview alpha checkers customizable (contrtibuted by williamchange)
+
+### 3D Preview panel
+- Updated the 3D preview panel to remember environment selection (contributed by williamchange)
+- Added an option to reset the object rotation in the 3D preview panel (contributed by williamchange)
+- Added post-processing options to the 3D Preview (contributed by williamchange)
+- Added Shift+RMB shortcut to rotate environment (contributed by williamchange)
+
+### Environment editor
+- Made environment editor labels casing consistent (contributed by williamchange)
+- Improved environment thumbnail generation (contributed by williamchange)
+
+### Themes
+- Improved Classic theme (contributed by williamchange)
+- Improved scrollbar theme consistency/legibility (contributed by williamchange)
+- Improved buffer timing legibility in light themes (contributed by williamchange)
+- Added outline for current pixel cell in the pixels parameter editor (contributed by williamchange)
+- Improved FloatEdit uneditable font color (contributed by williamchange)
+
+### About dialog
+- Implemented opening the About dialog from the app menu on macOS (contributed by williamchange)
+- Added link support for contributor names in about dialog (contributed by williamchange)
+
+### Performance
+- Updated the “Load From Website” dialog to load thumbnails based on the active filter
+- Optimized graph rendering by simplifying nodes when zoomed out (contributed by williamchange)
+- Improved Gradient parameter editor peformance (contributed by williamchange)
+- Improved floatedit performance (contributed by williamchange)
+
+## Nodes
+
+### New nodes
+- Added a Kite SDF node (contributed by williamchange)
+- Added Directional Warp node (contributed by williamchange)
+- Added Inverse Circle Map node (contributed by williamchange)
+- Added Symmetric Nearest Neighbor filter node (contributed by williamchange)
+- Added missing SDF nodes (ellipse, tunnel, stairs, pyramid, ellipsoid, octahedron) to the base library (contributed by williamchange)
+- Added the Mesh Triplanar node to the base library (contributed by williamchange)
+
+### Updated nodes
+- Exposed number as an input map for 7 Segment and Roman Number nodes (contributed by williamchange)
+- Added strength map input for warp node (contributed by williamchange)
+- Added 3D rotation for Vec3 Math node (contributed by williamchange)
+- Added support for multiple lines in text node (contributed by williamchange)
+- Added support for forground and background colors in text node (contributed by williamchange)
+- Added button to reset Tones node levels (contributed by williamchange)
+- Set file dialog path to image directory in image node (contributed by williamchange)
+- Made godot export target names more consistent (contributed by williamchange)
+- Added line tool for the pixels node (contributed by williamchange)
+- Enabled drag-and-drop to rearrange remote/ios params (contributed by williamchange)
+- Added icons for 3D primitives in the EasySDF editor (contributed by williamchange)
+- Shrinked nodes when possible (contributed by williamchange)
+- Improved the bevel preset in the curve editor (contributed by williamchange)
+- Updated node edit and node load/save buttons (contributed by williamchange)
+- Removed AO export for Blender export target (contributed by williamchange)
+- Improved the Export node (contributed by williamchange)
+- Updated comment node to show placeholder text only on selection (contributed by williamchange)
+- Improved remote link drawing (contributed by williamchange)
+- Improved the Curve and Polygon parameter editors (contributed by williamchange)
+- Added UV Mode for Custom UV node (contributed by williamchange)
+- Added option to mirror gradient in gradient nodes (contributed by williamchange)
+- Added a shortcut to color one or more comment nodes (contributed by williamchange)
+
+## Bug Fixes
+- Fixed texture leak in Preview2D
+- Fixed drag/drop focus style on floatedit in remote (contributed by williamchange)
+- Fixed RichTextLabel colors in light theme (contributed by williamchange)
+- Fixed align start toolbar button icon and library section buttons (contributed by williamchange)
+- Fixed star shape artifacts (contributed by williamchange)
+- Fixed error when editing color in gradient nodes (contributed by williamchange)
+- Fixed FileDialog context menu position (contributed by williamchange)
+- Fixed file dialog save button text (contributed by williamchange)
+- Fixed white pixels in graph panel (contributed by williamchange)
+- Fixed environment editor not loading config values (contributed by williamchange)
+- Fixed missing ORM texture in PBR Material Godot 4 export (contributed by williamchange)
+- Fixed the Dynamic PBR preview and Godot 4 export (contributed by williamchange)
+- Fixed classic reroute not draggable (contributed by williamchange)
+- Fixed export target condition not saving (contributed by williamchange)
+- Fixed reroute positions when added from in/output (contributed by williamchange)
+- Fixed add node popup size (contributed by williamchange)
+
+## Misc
+- Material Maker is now based on Godot 4.5.1
+
 # Material Maker 1.4
 
 ## Bug Fixes

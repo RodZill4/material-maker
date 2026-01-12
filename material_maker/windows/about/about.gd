@@ -7,7 +7,7 @@ extends Window
 const CONTRIBUTORS = [
 	{ icon="res://material_maker/icons/godot_logo.svg", contribution="99% of Material Maker's code is the awesome Godot Engine GODOT_VERSION", url="https://godotengine.org/" },
 	{ name="Rodolphe Suescun", contribution="Lead developer", url="https://github.com/RodZill4/material-maker/commits/master/?author=RodZill4" },
-	{ name="williamchange", contribution="Many UI updates, several nodes (including Seven/Sixteen Segment Display, Roman numerals, Japanese Glyphs and Triangle Voronoi) and node updates", url="https://github.com/RodZill4/material-maker/commits/master/?author=williamchange" },
+	{ name="williamchange", contribution="Many UI updates, many nodes (including Seven/Sixteen Segment Display, Roman numerals, Japanese Glyphs and Triangle Voronoi) and node updates", url="https://github.com/RodZill4/material-maker/commits/master/?author=williamchange" },
 	{ name="Jowan-Spooner", contribution="UI redesign", url="https://github.com/RodZill4/material-maker/commits/master/?author=Jowan-Spooner" },
 	{ name="NotArme", contribution="Many improvements and bug fixes", url="https://github.com/RodZill4/material-maker/commits/master/?author=NotArme" },
 	{ name="Thibaud Goiffon", contribution="Website design", url="https://github.com/gtibo" },
@@ -35,20 +35,23 @@ const CONTRIBUTORS = [
 ]
 
 const PATRONS = [
-	"Edward Herbert", "Ian Genskowsky Chang", "Andres Hernandez", "Preclude Interactive",
-	"realkotob", "Valerian Bedin", "Mischa", "Hugo Locurcio", "Jose Ivan Lopez Romo",
-	"rustweaver", "MrDG", "Andreas Ratchev", "Miouyouyou", "Thomas Schmall",
-	"Twerknificent", "nargacu83", "Some Critter", "The5", "Shikher Pandey",
-	"Ryan Roden-Corrent", "ww123td", "Tom Wor", "Micha Grandel", "Mikael Nordenberg",
-	"Yumemocchi", "Green Bean", "Leon Krykhtin", "ShinraCorp", "Valerio Marty",
-	"Cam Kilgore"
+	"Andres Hernandez", "Ian Genskowsky Chang", "Hugo Locurcio", "Jose Ivan Lopez Romo",
+	"rustweaver", "Ryan Roden-Corrent", "ww123td",
+	"Thomas Schmall", "Valerio Marty", "Twerknificent", "Cam Kilgore",
+	"Schrottkatze", "3ookeeper", "Montey", "Nick", "Florian Bruehl",
+	"fisj", "Botan dragneel", "Deniz Ündan"
 ]
 
 const PATRONS2 = [
-	"AdamRatai", "Robert Dodd", "LitmusZest", "Interstice", "Harken",
-	"Vlad Erium", "Ap", "Trevor", "思羽 陳", "DroppedBeat", "Zee Gomez",
+	"Valerian Bedin", "BasicIncomePlz", "AdamRatai", "Robert Dodd",
+	"Edward Herbert", "LitmusZest", "Interstice", "Harken",
+	"Vlad Erium", "MrDG", "Ap", "Trevor", "Mikael Nordenberg",
+	"Miouyouyou", "Preclude Interactive", "思羽 陳", "nargacu83",
+	"celestialmaze", "Andreas Ratchev", "Micha Grandel", "realkotob",
+	"Mischa", "Yumemocchi", "Shikher Pandey", "The5", "Zee Gomez",
 	"Richard Nespithal", "Giuseppe Modarelli", "Microplastics Farmer",
-	"Shanxxx Official"
+	"Some Critter", "Green Bean", "Shanxxx Official", "Leon Krykhtin",
+	"Lusia Shinra", "Tom Wor"
 ]
 
 func _ready() -> void:
