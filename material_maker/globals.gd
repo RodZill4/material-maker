@@ -178,9 +178,9 @@ func warp_mouse(position : Vector2, node : Control) -> void:
 		node.warp_mouse(position)
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func do_warp_mouse_y(node : Control, from_y : float, to_y : float) -> void:
+func do_warp_mouse_y(node : Control, from_y : float, to_y : float, margin := 2) -> void:
 	var mouse_pos := node.get_local_mouse_position()
-	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_y, to_y)
+	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_y + margin, to_y - margin)
 	if mouse_pos.y != mouse_pos_y_warpped:
 		warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
 
