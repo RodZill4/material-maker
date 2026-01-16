@@ -71,6 +71,19 @@ func _ready() -> void:
 	$Histogram.add_child(cursor_out_max)
 
 func update_node() -> void:
+	# handle minimized mode
+	if generator.minimized:
+		$Bar.custom_minimum_size.y = get_theme_constant("minimum_line_height", "MM_Node")
+		$Bar.get_children().map(func(c): c.hide())
+		$Spacer1.hide()
+		$Spacer2.hide()
+		$Histogram.hide()
+		$Histogram.queue_redraw()
+	else:
+		$Bar.custom_minimum_size.y = 0
+		$Bar.get_children().map(func(c): c.show())
+		get_children().map(func(c): c.show())
+
 	_on_Mode_item_selected(0)
 	on_parameter_changed("__input_changed__", 0)
 	# Preview
