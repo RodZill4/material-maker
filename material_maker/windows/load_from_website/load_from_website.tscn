@@ -4,7 +4,7 @@
 
 [node name="LoadFromWebsite" type="Window"]
 oversampling_override = 1.0
-title = "Load from website"
+title = "Load From Website"
 exclusive = true
 script = ExtResource("1")
 
