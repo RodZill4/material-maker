@@ -1,4 +1,4 @@
-extends MarginContainer
+extends PanelContainer
 
 
 var resource_path : String
