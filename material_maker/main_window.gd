@@ -1059,10 +1059,16 @@ func frame_nodes() -> void:
 
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
+	var has_subgraph : bool = false
 	if !selected_nodes.is_empty():
 		for n in selected_nodes:
+			if n.generator is MMGenGraph:
+				has_subgraph = true
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
+	var graph : MMGraphEdit = get_current_graph_edit()
+	if has_subgraph and graph != null:
+		hierarchy.update_from_graph_edit(graph)
 
 func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function) -> void:
 	menu.clear()
