@@ -150,14 +150,14 @@ UV coordinates).</p>
 <section id="inputs">
 <h3>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h3>
 <p>Inputs can be added and removed, have a name and a label (but no label trick) just
-like parameters. they also have a type that can be <strong>Greyscale</strong>, <strong>Color</strong> or
+like parameters. they also have a type that can be <strong>Grayscale</strong>, <strong>Color</strong> or
 <strong>RGBA</strong>.
 Please note that Material Maker will convert automatically if you connect an input
 to an output of a different but compatible type.</p>
 <p>The yellow document button can be used to define a name and add a tooltip to the input.</p>
 <p>On the right of the input type, you must define a default value that will be used
 if the input is not connected. The default value is a GLSL expression that must
-evaluate to a <strong>float</strong> for <strong>Greyscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a <strong>vec4</strong>
+evaluate to a <strong>float</strong> for <strong>Grayscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a <strong>vec4</strong>
 for <strong>RGBA</strong>. Inputs default values can use the <strong>$uv</strong> implicit variable. You may
 want to define interesting default inputs for your nodes, so it is possible
 to see their effect without connecting the inputs (the screenshot above is the
@@ -174,7 +174,7 @@ example <strong>$myinput(2.0*$uv+vec2(0.2, 0.3))</strong> refers to <strong>myin
 <h3>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h3>
 <p>Outputs are defined in the <strong>Outputs</strong> tab and are very similar to inputs, but instead
 of a default value, the generated value of the output should be specified as a
-GLSL expression (<strong>float</strong> for <strong>Greyscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a
+GLSL expression (<strong>float</strong> for <strong>Grayscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a
 <strong>vec4</strong> for <strong>RGBA</strong>). This expression can use everything in the node (parameters,
 inputs, main code, instance functions and global functions) except other outputs.
 And generally, complex nodes mean complex output expressions. You may thus want to
@@ -245,7 +245,7 @@ will be replaced in each repetition with the repetition index.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2025, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

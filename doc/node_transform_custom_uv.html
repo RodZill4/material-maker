@@ -83,6 +83,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_transform_slope.html">Slope node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_swirl.html">Swirl node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_transform_spherize.html">Spherize node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_transform_inverse_circle_map.html">Inverse Circle Map node</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a></li>
@@ -120,7 +121,8 @@
              
   <section id="custom-uv-node">
 <h1>Custom UV node<a class="headerlink" href="#custom-uv-node" title="Permalink to this heading"></a></h1>
-<p>The <strong>Custom UV</strong> node deforms an input image according to a custom UV map given as input.</p>
+<p>The <strong>Custom UV</strong> node is variadic and deforms one or more input images
+according to a custom UV map given as input.</p>
 <img alt="_images/node_transform_custom_uv.png" class="align-center" src="_images/node_transform_custom_uv.png" />
 <section id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
@@ -139,12 +141,21 @@ a value to be used for pseudo-random scale and rotate transforms.</p></li>
 <section id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <p>The <strong>Custom UV</strong> node accepts the following parameters:</p>
-<ul class="simple">
+<ul>
 <li><p><em>Inputs</em> is the number of alternate shapes in the input (1, 4 or 16). Images containing several
 shapes can easily be created using the <strong>Tile2x2</strong> node.</p></li>
 <li><p><em>Scale X and Scale Y</em> are the scale along X and Y axes applied to each instance.</p></li>
 <li><p><em>Rnd Rotate</em> is the maximum angle of the random rotation applied to each instance.</p></li>
 <li><p><em>Rnd Scale</em> is the amount of random scaling applied to each instance.</p></li>
+<li><p><em>UV Mode</em> defines the behavior beyond the limits for the input UV:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Clamp</strong> stretches the edges</p></li>
+<li><p><strong>Repeat</strong> tiles the input UV</p></li>
+<li><p><strong>Extend</strong> shows parts of the input UV that are beyond the edges</p></li>
+</ul>
+</div></blockquote>
+</li>
 <li><p><em>Variations</em>: if checked, the node will deform different variations of its input
 (i.e. roll a different seed for each instance)</p></li>
 </ul>
@@ -162,7 +173,7 @@ shapes can easily be created using the <strong>Tile2x2</strong> node.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2025, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

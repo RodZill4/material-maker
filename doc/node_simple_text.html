@@ -116,7 +116,10 @@
              
   <section id="text-node">
 <h1>Text node<a class="headerlink" href="#text-node" title="Permalink to this heading"></a></h1>
-<p>The text node outputs a single texture that shows a text.</p>
+<p>The text node outputs a single texture that shows a text. New lines
+can be added by using the ‘n’ character (without single quotes).</p>
+<p>The text field has a context menu option which opens a text editor
+which can make it easier to edit multiple lines of text.</p>
 <img alt="_images/node_simple_text.png" class="align-center" src="_images/node_simple_text.png" />
 <section id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
@@ -130,11 +133,15 @@
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <p>The text node accepts the following parameters:</p>
 <ul class="simple">
-<li><p>the string to be displayed</p></li>
-<li><p>the font (both TTF and OTF formats are supported)</p></li>
-<li><p>the font size</p></li>
-<li><p>whether the text is centered</p></li>
-<li><p>the X and Y coordinates of the location of the text in the generated image</p></li>
+<li><p>String to be displayed</p></li>
+<li><p>Font (both TTF and OTF formats are supported)</p></li>
+<li><p>Text color</p></li>
+<li><p>Background color</p></li>
+<li><p>Font size</p></li>
+<li><p>The (extra, can be negative) line spacing, if there are multiple lines</p></li>
+<li><p>horizontal alignment(left, right or center) of the text</p></li>
+<li><p>Whether the text is centered</p></li>
+<li><p>X and Y coordinates of the location of the text in the generated image</p></li>
 </ul>
 </section>
 <section id="notes">
@@ -154,7 +161,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2025, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

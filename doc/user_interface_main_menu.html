@@ -106,7 +106,7 @@
 </ul>
 <section id="file-menu">
 <h2>File menu<a class="headerlink" href="#file-menu" title="Permalink to this heading"></a></h2>
-<ul class="simple">
+<ul>
 <li><p><em>New material</em> creates a new material and opens a tab in the center panel to edit it</p></li>
 <li><p><em>New paint project</em> prompts for a 3D model to be painted and opens a tab in the center
 panel to paint it.</p></li>
@@ -122,8 +122,12 @@ will be displayed to select a location and file name.</p></li>
 saved are ignored.</p></li>
 <li><p>the <em>Export</em> submenu can be used to export the current Material or painted textures for Godot, Unity
 or Unreal. It will prompt for a file name and generate PNG files for all components
-of the material. Exporting to one of those engines is described in the
-<a class="reference internal" href="export.html#export-section"><span class="std std-ref">Exporting Materials</span></a> section.</p></li>
+of the material.</p>
+<p>Exporting to one of those engines is described in the
+<a class="reference internal" href="export.html#export-section"><span class="std std-ref">Exporting Materials</span></a> section.</p>
+<p>Additionally, <em>Quick Export</em> allows for simpler exports which only saves images
+connected to export nodes in the graph. This is useful when a full material isn’t required.</p>
+</li>
 <li><p><em>Close</em> closes the current project.</p></li>
 <li><p><em>Quit</em> closes the software.</p></li>
 </ul>
@@ -142,11 +146,15 @@ Pasting also unselects all previously selected nodes and selects all newly creat
 so they can easily be moved around.</p></li>
 <li><p><em>Duplicate</em> creates a copy of the current selection without affecting the clipboard</p></li>
 <li><p><em>Duplicate with inputs</em> is similar to <em>Duplicate</em>, but with input links kept</p></li>
+<li><p><em>Swap node inputs</em> swap inputs of the selected node. When there is exactly one
+input, this cycles through compatible slots of for the existing connection.</p></li>
+<li><p><em>Frame selected nodes</em> creates a comment node that frames selected nodes</p></li>
 <li><p><em>Select all</em> selects all nodes in the current graph view</p></li>
 <li><p><em>Select none</em> clears the selection in the current graph view</p></li>
 <li><p><em>Invert selection</em> inverts the selection in the current graph view</p></li>
 <li><p><em>Select sources</em> selects all direct and indirect source nodes of the current selection</p></li>
 <li><p><em>Select targets</em> selects all direct and indirect target nodes of the current selection</p></li>
+<li><p><em>Align Start/Center/End</em> align selections horizontally</p></li>
 <li><p><em>Load Selection</em> Loads a graph selection previously saved into a file</p></li>
 <li><p><em>Save Selection</em> Saves the current graph selection into a file</p></li>
 <li><p><em>Set Theme</em> is used to select the UI Theme</p></li>
@@ -176,7 +184,7 @@ all selected nodes that support it. Shader and graph nodes will show
 3 buttons to edit, load and save the node, switches will show controls to
 modify the number of choices and outputs, and input/output modes will
 become editable.</p></li>
-<li><p><em>Add selected node to user library</em> is only visible when the current
+<li><p><em>Add selection to user library</em> is only visible when the current
 project is a procedural material. It first prompts for an item name. If a name is entered and
 confirmed, the selected nodes in the current material will be added to the user library under
 that name. The user library is saved automatically.</p></li>
@@ -224,7 +232,7 @@ do not hesitate to use it to suggest improvements for Material Maker.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-2025, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

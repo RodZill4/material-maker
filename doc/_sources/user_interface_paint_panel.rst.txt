@@ -7,8 +7,8 @@ Creating a paint project
 To start painting in Material Maker, just use the *File -> New paint project* menu.
 This will show a dialog where a model file and a texture size can be specified.
 
-The model must be provided in Wavefront .OBJ format and have a single submesh.
-Of course, the model must have textures coordinates information.
+The model must be provided in either Wavefront ``.obj``, ``.glb``, ``.gltf`` or ``.fbx`` format and
+have a single submesh. Of course, the model must have textures coordinates information.
 
 .. image:: images/new_paint_project.png
   :align: center
