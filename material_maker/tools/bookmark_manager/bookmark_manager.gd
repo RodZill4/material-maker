@@ -8,7 +8,7 @@ var bookmarks : Dictionary[String, Dictionary]
 
 signal bookmark_added
 
-func add_bookmark(node : GraphElement, is_in_subgraph : bool) -> void:
+func add_bookmark(node : GraphElement) -> void:
 	var new_bookmark := {}
 
 	new_bookmark.node_name = node.name
@@ -16,10 +16,6 @@ func add_bookmark(node : GraphElement, is_in_subgraph : bool) -> void:
 
 	# temporary reference(unsaved to .ptex) to track subgraph inclusion
 	new_bookmark.generator = node.generator
-
-	# Not part of top-level graph
-	if is_in_subgraph:
-		return
 
 	if not bookmarks.has(node.name):
 		bookmarks[node.name] = new_bookmark

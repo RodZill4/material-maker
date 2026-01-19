@@ -1760,10 +1760,11 @@ func color_comment_nodes() -> void:
 		picker.popup()
 
 func bookmark_node() -> void:
+	if generator != top_generator:
+		return
 	var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
 	var selected_nodes := get_selected_nodes()
 	if selected_nodes.size() != 1:
 		return
 	var selected_node : GraphElement = selected_nodes[0]
-	var is_in_subgraph : bool = selected_node.generator.get_parent() != top_generator
-	bookmark_manager.add_bookmark(selected_node, is_in_subgraph)
+	bookmark_manager.add_bookmark(selected_node)
