@@ -405,8 +405,10 @@ icon_name = "bookmark"
 
 [node name="BookmarkMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/BookmarkMenu"]
 top_level = true
-custom_minimum_size = Vector2(180, 200)
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 0
+offset_right = 200.0
+offset_bottom = 200.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("11_qnupl")
 
@@ -427,7 +429,7 @@ vertical_alignment = 1
 
 [node name="Tree" type="Tree" parent="MenuBar/HBox/MainGraphMenuBar/HBox/BookmarkMenu/BookmarkMenuPanel"]
 layout_mode = 2
-theme_override_constants/item_margin = 4
+theme_override_constants/item_margin = 0
 allow_reselect = true
 allow_rmb_select = true
 hide_root = true

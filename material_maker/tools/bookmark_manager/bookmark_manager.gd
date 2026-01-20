@@ -8,6 +8,7 @@ var bookmarks : Dictionary[String, Dictionary]
 
 signal bookmark_added
 
+
 func add_bookmark(node : GraphElement) -> void:
 	var new_bookmark := {}
 
@@ -22,23 +23,26 @@ func add_bookmark(node : GraphElement) -> void:
 		mm_globals.set_tip_text("Added bookmark for %s" % node.name.trim_prefix("node_"), 1.0, 1)
 	bookmark_added.emit()
 
-func remove_bookmark(node_name : String) -> void:
+
+func add_bookmark_entry(bookmark : Dictionary) -> void:
+	bookmarks[bookmark.node_name] = bookmark
+
+
+func remove_bookmark(node_name: String) -> void:
 	bookmarks.erase(node_name)
 
-func set_generator(bookmark : Dictionary, subgraph_gen : MMGenGraph) -> void:
-	bookmark.generator = subgraph_gen
 
-func set_node(bookmark : Dictionary, node_name : String) -> void:
-	bookmark.node_name = node_name
-
-func edit_bookmark(bookmark : Dictionary, new_label : String) -> void:
+func edit_bookmark(bookmark: Dictionary, new_label: String) -> void:
 	bookmark.label = new_label
+
 
 func get_bookmarks() -> Dictionary[String, Dictionary]:
 	return bookmarks
 
+
 func _enter_tree() -> void:
 	pass
+
 
 func _exit_tree() -> void:
 	pass
