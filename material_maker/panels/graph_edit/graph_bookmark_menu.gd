@@ -60,20 +60,22 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 
 	for item : TreeItem in tree.get_root().get_children():
 		var bookmark_path : String = item.get_metadata(0)
+
+		# Material & Brush nodes are always in top level graph
 		if bookmark_path in ["./Material", "./Brush"]:
 			continue
 
-		# Path does not point to anything
+		# Bookmarked path does not point to anything
 		if not graph.top_generator.has_node(bookmark_path):
 			var target_node : String = bookmark_path.split("/")[-1]
-
-			# Check if the node is part of the updated graph view
-			# i.e. from grouping the currently bookmarked node
 
 			# Remove invalid reference
 			bookmark_manager.remove_bookmark(bookmark_path)
 
-			# Add bookmark
+			# Check if the node is part of the updated graph view
+			# i.e. from grouping the currently bookmarked node
+
+			# Add bookmark if it's in the updated view
 			if updated_view != null:
 				var node_path := "node_" + target_node
 				if graph.has_node(node_path):
