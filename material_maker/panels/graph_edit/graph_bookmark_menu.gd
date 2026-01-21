@@ -22,7 +22,7 @@ func _ready() -> void:
 			break
 
 	bookmark_manager = mm_globals.main_window.bookmark_manager
-	bookmark_manager.bookmark_added.connect(update_bookmarks)
+	bookmark_manager.should_refresh_bookmarks.connect(update_bookmarks)
 
 	%Projects.tab_changed.connect(projects_panel_tab_changed.unbind(1))
 

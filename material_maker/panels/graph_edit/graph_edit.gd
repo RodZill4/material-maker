@@ -326,6 +326,7 @@ func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
 	node.connect("delete_request", Callable(self, "remove_node").bind(node))
+	add_default_bookmark(node)
 
 func swap_node_inputs() -> void:
 	var selected_nodes : Array = get_selected_nodes()
@@ -486,6 +487,7 @@ func do_remove_node(node) -> void:
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
+		get_node("/root/MainWindow/BookmarkManager").should_refresh_bookmarks.emit()
 
 # Global operations on graph
 
@@ -1772,3 +1774,11 @@ func bookmark_node() -> void:
 	else:
 		generator_path = BookmarkManager.get_path_from_gen(selected_node.generator, top_generator)
 	bookmark_manager.add_bookmark(selected_node, generator_path)
+
+func add_default_bookmark(node : GraphElement) -> void:
+	print(node.generator.name)
+	if node.get_script() in [MMGraphReroute, MMGraphComment]:
+		await get_tree().process_frame
+		var node_path = BookmarkManager.get_path_from_gen(node.generator, top_generator)
+		var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
+		bookmark_manager.add_bookmark_from_path(node_path, node.generator.name)
