@@ -2,7 +2,7 @@ extends Node
 
 class_name BookmarkManager
 
-## Top-level graph bookmarks to revisit them later
+## Graph bookmarks to revisit them later
 
 var bookmarks : Dictionary[String, String]
 
