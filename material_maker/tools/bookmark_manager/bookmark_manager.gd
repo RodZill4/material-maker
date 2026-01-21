@@ -4,40 +4,46 @@ class_name BookmarkManager
 
 ## Top-level graph bookmarks to revisit them later
 
-var bookmarks : Dictionary[String, Dictionary]
+var bookmarks : Dictionary[String, String]
 
 signal bookmark_added
 
 
-func add_bookmark(node : GraphElement) -> void:
-	var new_bookmark := {}
-
-	new_bookmark.node_name = node.name
-	new_bookmark.label = node.name.trim_prefix("node_")
-
-	# temporary reference(unsaved to .ptex) to track subgraph inclusion
-	new_bookmark.generator = node.generator
-
-	if not bookmarks.has(node.name):
-		bookmarks[node.name] = new_bookmark
+func add_bookmark(node: GraphElement, gen_path: String) -> void:
+	if not bookmarks.has(gen_path):
+		bookmarks[gen_path] = node.name.trim_prefix("node_")
 		mm_globals.set_tip_text("Added bookmark for %s" % node.name.trim_prefix("node_"), 1.0, 1)
 	bookmark_added.emit()
 
 
-func add_bookmark_entry(bookmark : Dictionary) -> void:
-	bookmarks[bookmark.node_name] = bookmark
+func add_bookmark_from_path(path: String, label: String) -> void:
+	bookmarks[path] = label 
 
 
-func remove_bookmark(node_name: String) -> void:
-	bookmarks.erase(node_name)
+func remove_bookmark(path: String) -> void:
+	bookmarks.erase(path)
 
 
 func edit_bookmark(bookmark: Dictionary, new_label: String) -> void:
 	bookmark.label = new_label
 
 
-func get_bookmarks() -> Dictionary[String, Dictionary]:
+func get_bookmarks() -> Dictionary[String, String]:
 	return bookmarks
+
+
+static func get_path_from_gen(generator: MMGenBase, top_generator: MMGenGraph) -> String:
+	var parent_gen = generator.get_parent()
+	var node_path : PackedStringArray
+	var current_gen : MMGenGraph = parent_gen
+	node_path.append(current_gen.name)
+	while current_gen.get_parent() != top_generator:
+		current_gen = current_gen.get_parent()
+		node_path.append(current_gen.name)
+	node_path.append(".")
+	node_path.reverse()
+	node_path.append(generator.name)
+	return "/".join(node_path)
 
 
 func _enter_tree() -> void:

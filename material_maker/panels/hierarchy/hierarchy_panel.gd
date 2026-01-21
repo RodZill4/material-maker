@@ -96,6 +96,7 @@ func fill_item(item : TreeItem, generator : MMGenGraph, selected : MMGenGraph, i
 
 func _on_Hierarchy_item_double_clicked() -> void:
 	if tree.get_selected() != null:
+		print(tree.get_selected().get_metadata(0).get_tree_string())
 		emit_signal("group_selected", tree.get_selected().get_metadata(0))
 
 func on_view_updated(generator) -> void:

@@ -1760,11 +1760,15 @@ func color_comment_nodes() -> void:
 		picker.popup()
 
 func bookmark_node() -> void:
-	if generator != top_generator:
-		return
 	var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
 	var selected_nodes := get_selected_nodes()
 	if selected_nodes.size() != 1:
 		return
 	var selected_node : GraphElement = selected_nodes[0]
-	bookmark_manager.add_bookmark(selected_node)
+	var generator_path : String
+
+	if generator == top_generator:
+		generator_path = "./" + selected_node.generator.name
+	else:
+		generator_path = BookmarkManager.get_path_from_gen(selected_node.generator, top_generator)
+	bookmark_manager.add_bookmark(selected_node, generator_path)

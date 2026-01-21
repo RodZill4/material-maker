@@ -24,10 +24,9 @@ func _ready() -> void:
 	bookmark_manager = mm_globals.main_window.bookmark_manager
 	bookmark_manager.bookmark_added.connect(update_bookmarks)
 
-	%Projects.tab_changed.connect(connect_graph_view_update_signal.unbind(1))
+	%Projects.tab_changed.connect(projects_panel_tab_changed.unbind(1))
 
-
-func connect_graph_view_update_signal():
+func projects_panel_tab_changed():
 	var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
 	if not graph.view_updated.is_connected(update_bookmarks):
 		graph.view_updated.connect(update_bookmarks)
@@ -47,45 +46,40 @@ func _open() -> void:
 	update_bookmarks()
 
 
-func update_bookmarks(with_updated_view : MMGenGraph = null) -> void:
-	validate_bookmarks(with_updated_view)
+func update_bookmarks(updated_view : MMGenGraph = null) -> void:
+	validate_bookmarks(updated_view)
 	rebuild_bookmark_tree()
 
 
-func validate_bookmarks(current_subgraph : MMGenGraph) -> void:
+func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
+	# Update and remove invalid references
 	var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
 
-	if tree.get_root():
-		for item : TreeItem in tree.get_root().get_children():
-			var bookmark : Dictionary = item.get_metadata(0)
-			var node_name : String = bookmark.node_name
+	if tree.get_root() == null:
+		return
 
-			if node_name in ["node_Material", "node_Brush"]:
-				continue
+	for item : TreeItem in tree.get_root().get_children():
+		var bookmark_path : String = item.get_metadata(0)
+		if bookmark_path in ["./Material", "./Brush"]:
+			continue
 
-			# Top-level graph
-			if graph.generator == graph.top_generator:
-				# Remove invalid reference
-				if not graph.has_node(NodePath(node_name)):
-					bookmark_manager.remove_bookmark(node_name)
-			# Inside subgraph
-			else:
-				# Update bookmark to reference new subgraph node(at top-level)
-				if not is_instance_valid(bookmark.generator):
-					continue
-				if current_subgraph != null and current_subgraph.get_children().has(bookmark.generator):
-					var top_subgraph : MMGenGraph = current_subgraph
-					while top_subgraph.get_parent().get_parent() is not MMGraphEdit:
-						top_subgraph = top_subgraph.get_parent()
+		# Path does not point to anything
+		if not graph.top_generator.has_node(bookmark_path):
+			var target_node : String = bookmark_path.split("/")[-1]
 
-					var new_node_name := "node_" + top_subgraph.name
-					bookmark_manager.remove_bookmark(node_name)
-					bookmark_manager.add_bookmark_entry({
-							"node_name": new_node_name,
-							"label": top_subgraph.name,
-							"generator": top_subgraph
-					})
-					
+			# Check if the node is part of the updated graph view
+			# i.e. from grouping the currently bookmarked node
+
+			# Remove invalid reference
+			bookmark_manager.remove_bookmark(bookmark_path)
+
+			# Add bookmark
+			if updated_view != null:
+				var node_path := "node_" + target_node
+				if graph.has_node(node_path):
+					var gen : MMGenBase = graph.get_node(node_path).generator
+					var new_path := BookmarkManager.get_path_from_gen(gen, graph.top_generator)
+					bookmark_manager.add_bookmark_from_path(new_path, target_node)
 
 
 func rebuild_bookmark_tree() -> void:
@@ -93,12 +87,11 @@ func rebuild_bookmark_tree() -> void:
 	tree.clear()
 	var root : TreeItem = tree.create_item()
 
-	var bookmarks : Dictionary[String, Dictionary] = bookmark_manager.get_bookmarks()
-	for bookmark_key : String in bookmarks:
+	var bookmarks : Dictionary[String, String] = bookmark_manager.get_bookmarks()
+	for path : String in bookmarks:
 		var new_item : TreeItem = tree.create_item(root)
-		var bookmark = bookmarks[bookmark_key]
-		new_item.set_metadata(0, bookmark)
-		new_item.set_text(0, bookmark["label"])
+		new_item.set_metadata(0, path)
+		new_item.set_text(0, bookmarks[path])
 
 	# Show placeholder/hint if bookmarks are empty
 	tree.visible = tree.get_root().get_child_count() != 0
@@ -107,22 +100,43 @@ func rebuild_bookmark_tree() -> void:
 
 func _on_tree_item_lmb_selected() -> void:
 	var selected_item : TreeItem = tree.get_selected()
-	var bookmark : Dictionary = selected_item.get_metadata(0)
-	var node_path := NodePath(bookmark.node_name)
+	var path : String = selected_item.get_metadata(0)
+	path = path.get_slice("./", 1)
 	var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
 
-	# Jump back to top-level graph
-	if graph.generator != graph.top_generator:
-		graph.update_view(graph.top_generator)
+	var target_gen : MMGenBase
+
+	# Top-level bookmark
+	if "/" not in path:
+		# Jump back to top if we are in a subgraph
+		if graph.generator != graph.top_generator:
+			graph.update_view(graph.top_generator)
+		# Get target node from current graph
+		var node_path := NodePath("node_" + path)
+		if graph.has_node(node_path):
+			target_gen = graph.get_node(node_path).generator
+	else:
+		# Subgraph bookmark
+		target_gen = graph.top_generator.get_node(NodePath(path))
+
+	if target_gen == null:
+		# bookmark no longer exists
+		return
+
+	if target_gen.get_parent() is MMGenGraph and target_gen.get_parent() != graph.top_generator:
+		# Jump to node's subgraph if we are not already in it
+		if graph.generator != target_gen.get_parent():
+			graph.update_view(target_gen.get_parent())
 
 	# Center view on bookmarked node
-	if graph.has_node(node_path):
-		var node : GraphElement = graph.get_node(node_path)
+	var bookmark_node_path : NodePath = "node_" + target_gen.name
+	if graph.has_node(bookmark_node_path):
+		var node : GraphElement = graph.get_node(bookmark_node_path)
 		if node != null:
 			graph.select_none()
 			node.selected = true
-			var tween := get_tree().create_tween()
 			var center := node.position_offset + 0.5 * node.size
+			var tween := get_tree().create_tween()
 			var target_offset := center * graph.zoom - 0.5 * graph.size
 			tween.tween_property(graph, "scroll_offset", target_offset, 0.5).set_ease(
 					Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
