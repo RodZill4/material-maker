@@ -113,7 +113,7 @@ func _on_tree_item_lmb_selected() -> void:
 		# Jump back to top if we are in a subgraph
 		if graph.generator != graph.top_generator:
 			graph.update_view(graph.top_generator)
-		# Get target node from current graph
+		# Get bookmarked node from current graph
 		var node_path := NodePath("node_" + path)
 		if graph.has_node(node_path):
 			target_gen = graph.get_node(node_path).generator
