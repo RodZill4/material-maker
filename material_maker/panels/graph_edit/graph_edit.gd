@@ -1768,7 +1768,11 @@ func bookmark_node() -> void:
 		return
 	var selected_node : GraphElement = selected_nodes[0]
 	var generator_path : String = "./" + str(top_generator.get_path_to(selected_node.generator))
-	bookmark_manager.add_bookmark(selected_node, generator_path)
+	if not bookmark_manager.bookmarks.has(generator_path):
+		var tween := get_tree().create_tween()
+		tween.tween_property(selected_node, "modulate", Color.DIM_GRAY, 0.1)
+		tween.parallel().tween_property(selected_node, "modulate", Color.WHITE, 0.15).set_delay(0.15)
+		bookmark_manager.add_bookmark(selected_node, generator_path)
 
 func add_default_bookmark(node : GraphElement) -> void:
 	if BookmarkManager.is_default_bookmark_node(node):
