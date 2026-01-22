@@ -21,8 +21,11 @@ static func is_default_bookmark_node(node: GraphElement) -> bool:
 
 func add_bookmark(node: GraphElement, gen_path: String) -> void:
 	if not bookmarks.has(gen_path):
-		bookmarks[gen_path] = node.name.trim_prefix("node_")
-		mm_globals.set_tip_text("Added bookmark for %s" % node.name.trim_prefix("node_"), 1.0, 1)
+		var label : String = node.title
+		if label == "":
+			label = node.name.trim_prefix("node_")
+		bookmarks[gen_path] = label
+		mm_globals.set_tip_text("Added bookmark for %s" % label, 1.0, 1)
 	should_refresh_bookmarks.emit()
 
 
