@@ -37,9 +37,12 @@ func projects_panel_tab_changed() -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if not graph.view_updated.is_connected(update_bookmarks):
 		graph.view_updated.connect(update_bookmarks)
+	if graph.top_generator == null:
+		await get_tree().process_frame
+	update_bookmarks(graph.top_generator)
 
 
-func fix_tree_line_edit_size(p : Popup) -> void:
+func fix_tree_line_edit_size(p: Popup) -> void:
 	var vbox : VBoxContainer = p.get_child(0)
 	vbox.minimum_size_changed.connect(
 		func():
@@ -49,7 +52,7 @@ func fix_tree_line_edit_size(p : Popup) -> void:
 			vbox.get_window().max_size.y = contents_min_size + get_theme_constant("v_separation", "Tree"))
 
 
-func update_bookmarks(updated_view : MMGenGraph = null) -> void:
+func update_bookmarks(updated_view: MMGenGraph = null) -> void:
 	validate_bookmarks(updated_view)
 	save_bookmarks()
 	rebuild_bookmark_tree()
@@ -59,14 +62,10 @@ func save_bookmarks() -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if graph.top_generator != null:
 		var current_bookmarks = bookmark_manager.bookmarks.duplicate()
-		current_bookmarks.erase("./Material")
-		if current_bookmarks.is_empty():
-			graph.top_generator.bookmarks = null
-		else:
-			graph.top_generator.bookmarks = current_bookmarks
+		graph.top_generator.bookmarks = current_bookmarks
 
 
-func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
+func validate_bookmarks(updated_view: MMGenGraph = null) -> void:
 	# Update and remove invalid references
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if updated_view != null and updated_view == graph.top_generator:
@@ -159,7 +158,7 @@ func _on_tree_item_lmb_selected() -> void:
 					Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 
 
-func _on_tree_item_rmb_selected(_mouse_position : Vector2i) -> void:
+func _on_tree_item_rmb_selected(_mouse_position: Vector2i) -> void:
 	mm_globals.popup_menu($ContextMenu, self)
 
 
