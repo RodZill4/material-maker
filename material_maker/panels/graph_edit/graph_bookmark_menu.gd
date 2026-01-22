@@ -28,7 +28,9 @@ func _ready() -> void:
 			break
 
 	bookmark_manager = mm_globals.main_window.bookmark_manager
-	bookmark_manager.should_refresh_bookmarks.connect(update_bookmarks)
+	bookmark_manager.bookmarks_added.connect(update_bookmarks)
+	bookmark_manager.updated_from_graph.connect(update_bookmarks)
+	bookmark_manager.bookmarks_edit_removed.connect(save_bookmarks)
 
 	%Projects.tab_changed.connect(projects_panel_tab_changed.unbind(1))
 
@@ -171,6 +173,10 @@ func _on_tree_gui_input(event: InputEvent) -> void:
 				# keep panel pinned while editing
 				is_unpinned_double_click_edited = not get_parent().pinned
 				get_parent().pinned = true
+	elif event is InputEventKey and event.pressed:
+			match event.get_keycode_with_modifiers():
+				KEY_X, KEY_DELETE:
+					_on_context_menu_id_pressed(ContextMenu.DELETE)
 
 
 func _on_tree_item_mouse_selected(mouse_position: Vector2, mouse_button_index: int) -> void:

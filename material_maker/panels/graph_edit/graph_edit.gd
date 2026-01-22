@@ -487,7 +487,7 @@ func do_remove_node(node) -> void:
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
-		get_node("/root/MainWindow/BookmarkManager").should_refresh_bookmarks.emit()
+		get_node("/root/MainWindow/BookmarkManager").updated_from_graph.emit()
 
 # Global operations on graph
 
