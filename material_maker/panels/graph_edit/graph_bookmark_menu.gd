@@ -1,8 +1,9 @@
 extends PanelContainer
 
-var bookmark_manager : BookmarkManager
 
 @onready var tree := $Tree
+
+var bookmark_manager : BookmarkManager
 
 var is_unpinned_double_click_edited := false
 
@@ -27,7 +28,7 @@ func _ready() -> void:
 	%Projects.tab_changed.connect(projects_panel_tab_changed.unbind(1))
 
 func projects_panel_tab_changed():
-	var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
+	var graph : MMGraphEdit = owner.current_graph_edit
 	if not graph.view_updated.is_connected(update_bookmarks):
 		graph.view_updated.connect(update_bookmarks)
 
@@ -53,7 +54,11 @@ func update_bookmarks(updated_view : MMGenGraph = null) -> void:
 
 func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 	# Update and remove invalid references
-	var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
+	var graph : MMGraphEdit = owner.current_graph_edit
+	if updated_view != null and updated_view == graph.top_generator:
+		if updated_view.bookmarks != null:
+			# load bookmarks from gen, skpping material and brush
+			pass
 
 	if tree.get_root() == null:
 		return
@@ -104,7 +109,7 @@ func _on_tree_item_lmb_selected() -> void:
 	var selected_item : TreeItem = tree.get_selected()
 	var path : String = selected_item.get_metadata(0)
 	path = path.get_slice("./", 1)
-	var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
+	var graph : MMGraphEdit = owner.current_graph_edit
 
 	var target_gen : MMGenBase
 
