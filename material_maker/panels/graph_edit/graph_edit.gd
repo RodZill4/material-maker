@@ -1771,9 +1771,9 @@ func bookmark_node() -> void:
 	bookmark_manager.add_bookmark(selected_node, generator_path)
 
 func add_default_bookmark(node : GraphElement) -> void:
-	if (node.get_script() in [MMGraphReroute, MMGraphComment, MMGraphCommentLine]
-			or node.name == "node_Material"):
-		await get_tree().process_frame
+	if BookmarkManager.is_default_bookmark_node(node):
+		if not node.generator:
+			await get_tree().process_frame
 		var node_path = "./" + str(top_generator.get_path_to(node.generator))
 		var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
 		bookmark_manager.add_bookmark_from_path(node_path, node.generator.name)

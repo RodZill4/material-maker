@@ -539,9 +539,8 @@ func _serialize(data: Dictionary) -> Dictionary:
 		data.nodes.append(c.serialize())
 	#data.connections = connections_to_compact(connections)
 	data.connections = connections
-	if self == get_top():
-		# save bookmarks
-		pass
+	if self == get_top() and bookmarks != null:
+		data.bookmarks = bookmarks
 	return data
 
 func _deserialize(data : Dictionary) -> void:
@@ -559,9 +558,8 @@ func _deserialize(data : Dictionary) -> void:
 		elif data.connections is Dictionary:
 			connection_array = connections_from_compact(data.connections)
 	var new_stuff = await mm_loader.add_to_gen_graph(self, nodes, connection_array)
-	if self == get_top():
-		# load bookmarks
-		pass
+	if self == get_top() and data.has("bookmarks"):
+		bookmarks = data.bookmarks
 
 #region Node Graph Diff
 func apply_diff_from(graph : MMGenGraph) -> void:

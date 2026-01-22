@@ -4,9 +4,14 @@ class_name BookmarkManager
 
 ## Graph bookmarks to revisit them later
 
-var bookmarks : Dictionary[String, String]
+var bookmarks: Dictionary[String, String]
 
 signal should_refresh_bookmarks
+
+
+static func is_default_bookmark_node(node: GraphElement) -> bool:
+	return (node.get_script() in [MMGraphReroute, MMGraphComment, MMGraphCommentLine]
+			or node.name in ["node_Material"])
 
 
 func add_bookmark(node: GraphElement, gen_path: String) -> void:
@@ -27,14 +32,3 @@ func remove_bookmark(path: String) -> void:
 
 func edit_bookmark(path: String, new_label: String) -> void:
 	bookmarks[path] = new_label
-
-
-func get_bookmarks() -> Dictionary[String, String]:
-	return bookmarks
-
-func _enter_tree() -> void:
-	pass
-
-
-func _exit_tree() -> void:
-	pass

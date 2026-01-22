@@ -12,6 +12,11 @@ enum ContextMenu {
 	DELETE,
 }
 
+
+func _open() -> void:
+	update_bookmarks()
+
+
 func _ready() -> void:
 	if not mm_globals.main_window.is_node_ready():
 		await mm_globals.main_window.ready
@@ -27,13 +32,14 @@ func _ready() -> void:
 
 	%Projects.tab_changed.connect(projects_panel_tab_changed.unbind(1))
 
-func projects_panel_tab_changed():
+
+func projects_panel_tab_changed() -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if not graph.view_updated.is_connected(update_bookmarks):
 		graph.view_updated.connect(update_bookmarks)
 
 
-func fix_tree_line_edit_size(p : Popup):
+func fix_tree_line_edit_size(p : Popup) -> void:
 	var vbox : VBoxContainer = p.get_child(0)
 	vbox.minimum_size_changed.connect(
 		func():
@@ -43,13 +49,21 @@ func fix_tree_line_edit_size(p : Popup):
 			vbox.get_window().max_size.y = contents_min_size + get_theme_constant("v_separation", "Tree"))
 
 
-func _open() -> void:
-	update_bookmarks()
-
-
 func update_bookmarks(updated_view : MMGenGraph = null) -> void:
 	validate_bookmarks(updated_view)
+	save_bookmarks()
 	rebuild_bookmark_tree()
+
+
+func save_bookmarks() -> void:
+	var graph : MMGraphEdit = owner.current_graph_edit
+	if graph.top_generator != null:
+		var current_bookmarks = bookmark_manager.bookmarks.duplicate()
+		current_bookmarks.erase("./Material")
+		if current_bookmarks.is_empty():
+			graph.top_generator.bookmarks = null
+		else:
+			graph.top_generator.bookmarks = current_bookmarks
 
 
 func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
@@ -57,8 +71,7 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if updated_view != null and updated_view == graph.top_generator:
 		if updated_view.bookmarks != null:
-			# load bookmarks from gen, skpping material and brush
-			pass
+			bookmark_manager.bookmarks = updated_view.bookmarks
 
 	if tree.get_root() == null:
 		return
@@ -67,7 +80,7 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 		var bookmark_path : String = item.get_metadata(0)
 
 		# Material & Brush nodes are always in top level graph
-		if bookmark_path in ["./Material", "./Brush"]:
+		if bookmark_path in ["./Material"]:
 			continue
 
 		# Bookmarked path does not point to anything
@@ -79,8 +92,6 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 
 			# Check if the node is part of the updated graph view
 			# i.e. from grouping the currently bookmarked node
-
-			# Add bookmark if it's in the updated view
 			if updated_view != null:
 				var node_path := "node_" + target_node
 				if graph.has_node(node_path):
@@ -88,13 +99,12 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 					var new_path : String = "./" + str(graph.top_generator.get_path_to(gen))
 					bookmark_manager.add_bookmark_from_path(new_path, target_node)
 
-
 func rebuild_bookmark_tree() -> void:
 	await get_tree().process_frame
 	tree.clear()
 	var root : TreeItem = tree.create_item()
 
-	var bookmarks : Dictionary[String, String] = bookmark_manager.get_bookmarks()
+	var bookmarks := bookmark_manager.bookmarks
 	for path : String in bookmarks:
 		var new_item : TreeItem = tree.create_item(root)
 		new_item.set_metadata(0, path)
@@ -149,7 +159,7 @@ func _on_tree_item_lmb_selected() -> void:
 					Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 
 
-func _on_tree_item_rmb_selected(_mouse_position : Vector2i):
+func _on_tree_item_rmb_selected(_mouse_position : Vector2i) -> void:
 	mm_globals.popup_menu($ContextMenu, self)
 
 
