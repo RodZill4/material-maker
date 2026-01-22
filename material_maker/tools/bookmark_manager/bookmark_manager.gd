@@ -25,8 +25,8 @@ func remove_bookmark(path: String) -> void:
 	bookmarks.erase(path)
 
 
-func edit_bookmark(bookmark: Dictionary, new_label: String) -> void:
-	bookmark.label = new_label
+func edit_bookmark(path: String, new_label: String) -> void:
+	bookmarks[path] = new_label
 
 
 func get_bookmarks() -> Dictionary[String, String]:
