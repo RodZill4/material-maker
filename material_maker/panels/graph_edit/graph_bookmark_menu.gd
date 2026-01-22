@@ -70,7 +70,6 @@ func validate_bookmarks(updated_view: MMGenGraph = null) -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if updated_view != null and updated_view == graph.top_generator:
 		if updated_view.bookmarks != null:
-			await get_tree().process_frame
 			bookmark_manager.bookmarks = updated_view.bookmarks
 
 	if tree.get_root() == null:

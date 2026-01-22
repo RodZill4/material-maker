@@ -4,9 +4,14 @@ class_name BookmarkManager
 
 ## Graph bookmarks to revisit them later
 
-var bookmarks: Dictionary[String, String]
+var bookmarks : Dictionary
 
 signal should_refresh_bookmarks
+
+
+
+func set_bookmarks(new_bookmarks: Dictionary) -> void:
+	bookmarks = new_bookmarks
 
 
 static func is_default_bookmark_node(node: GraphElement) -> bool:
