@@ -193,8 +193,9 @@ func _on_context_menu_id_pressed(id: int) -> void:
 			item.set_editable(0, true)
 			tree.edit_selected()
 		ContextMenu.DELETE:
-			bookmark_manager.remove_bookmark(item.get_metadata(0))
-			rebuild_bookmark_tree()
+			if item != null:
+				bookmark_manager.remove_bookmark(item.get_metadata(0))
+				rebuild_bookmark_tree()
 
 
 func _on_tree_item_edited() -> void:
