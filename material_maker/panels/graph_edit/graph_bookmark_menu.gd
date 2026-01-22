@@ -80,7 +80,7 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 				var node_path := "node_" + target_node
 				if graph.has_node(node_path):
 					var gen : MMGenBase = graph.get_node(node_path).generator
-					var new_path := BookmarkManager.get_path_from_gen(gen, graph.top_generator)
+					var new_path : String = "./" + str(graph.top_generator.get_path_to(gen))
 					bookmark_manager.add_bookmark_from_path(new_path, target_node)
 
 

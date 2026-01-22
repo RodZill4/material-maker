@@ -1767,18 +1767,13 @@ func bookmark_node() -> void:
 	if selected_nodes.size() != 1:
 		return
 	var selected_node : GraphElement = selected_nodes[0]
-	var generator_path : String
-
-	if generator == top_generator:
-		generator_path = "./" + selected_node.generator.name
-	else:
-		generator_path = BookmarkManager.get_path_from_gen(selected_node.generator, top_generator)
+	var generator_path : String = "./" + str(top_generator.get_path_to(selected_node.generator))
 	bookmark_manager.add_bookmark(selected_node, generator_path)
 
 func add_default_bookmark(node : GraphElement) -> void:
 	if (node.get_script() in [MMGraphReroute, MMGraphComment, MMGraphCommentLine]
 			or node.name == "node_Material"):
 		await get_tree().process_frame
-		var node_path = BookmarkManager.get_path_from_gen(node.generator, top_generator)
+		var node_path = "./" + str(top_generator.get_path_to(node.generator))
 		var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
 		bookmark_manager.add_bookmark_from_path(node_path, node.generator.name)
