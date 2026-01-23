@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
 [ext_resource type="Script" uid="uid://pqxjwlcff5ko" path="res://material_maker/panels/graph_edit/graph_align_menu.gd" id="8_r5hxx"]
 [ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
-[ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_bookmark_menu.gd" id="11_qnupl"]
+[ext_resource type="Script" uid="uid://dxreq1nitp4as" path="res://material_maker/panels/graph_edit/graph_bookmark_menu.gd" id="11_qnupl"]
 
 [sub_resource type="Shader" id="1"]
 resource_local_to_scene = true

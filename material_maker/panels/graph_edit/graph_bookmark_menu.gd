@@ -146,6 +146,7 @@ func _on_tree_item_lmb_selected() -> void:
 		if graph.generator != target_gen.get_parent():
 			graph.update_view(target_gen.get_parent())
 
+
 	# Center view on bookmarked node
 	var bookmark_node_path : NodePath = "node_" + target_gen.name
 	if graph.has_node(bookmark_node_path):

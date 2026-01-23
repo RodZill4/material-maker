@@ -17,15 +17,26 @@ func set_bookmarks(new_bookmarks: Dictionary) -> void:
 
 
 static func is_default_bookmark_node(node: GraphElement) -> bool:
-	return (node.get_script() in [MMGraphReroute, MMGraphComment, MMGraphCommentLine]
+	return (node.get_script() in [MMGraphComment, MMGraphCommentLine]
 			or node.name in ["node_Material"])
+
+
+static func get_label_from_node(node: GraphElement) -> String:
+	var label : String = ""
+	if node is GraphNode and node.get("title"):
+		label = node.title
+	elif node is MMGraphComment:
+		label = node.generator.title
+	elif node is MMGraphCommentLine:
+		label = node.generator.text
+	if label == "":
+		label = node.name.trim_prefix("node_")
+	return label
 
 
 func add_bookmark(node: GraphElement, gen_path: String) -> void:
 	if not bookmarks.has(gen_path):
-		var label : String = node.title
-		if label == "":
-			label = node.name.trim_prefix("node_")
+		var label : String = get_label_from_node(node)
 		bookmarks[gen_path] = label
 		mm_globals.set_tip_text("Added bookmark for %s" % label, 1.0, 1)
 	bookmarks_added.emit()

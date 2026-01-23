@@ -1780,4 +1780,5 @@ func add_default_bookmark(node : GraphElement) -> void:
 			await get_tree().process_frame
 		var node_path = "./" + str(top_generator.get_path_to(node.generator))
 		var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
-		bookmark_manager.add_bookmark_from_path(node_path, node.generator.name)
+		if not bookmark_manager.bookmarks.has(node_path) and node.name == "node_Material":
+			bookmark_manager.add_bookmark_from_path(node_path, BookmarkManager.get_label_from_node(node))
