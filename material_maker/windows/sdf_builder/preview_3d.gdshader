@@ -92,6 +92,7 @@ void vertex() {
 
 void fragment() {
     float _seed_variation_ = 0.0;
+	vec4 _controlled_variation_ = vec4(0.0);
 	vec3 ro = world_camera;
 	vec3 rd =  normalize(world_position - world_camera);
 	

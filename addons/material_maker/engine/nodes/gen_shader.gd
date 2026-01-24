@@ -105,11 +105,11 @@ func find_instance_functions(code : String):
 	for r in result:
 		if not r.strings[1] in [ "return" ]:
 			functions.push_back(r.strings[2]);
-			code = code.replace(r.strings[0], "%s %s(%s, float _seed_variation_) {" % [ r.strings[1], r.strings[2], r.strings[3] ])
+			code = code.replace(r.strings[0], "%s %s(%s, float _seed_variation_, vec4 _controlled_variation_) {" % [ r.strings[1], r.strings[2], r.strings[3] ])
 	return { code=code, functions=functions }
 
 func fix_instance_functions(code : String, instance_functions : Array):
-	var variation_parameter = ", _seed_variation_"
+	var variation_parameter = ", _seed_variation_, _controlled_variation_"
 	var variation_parameter_length = variation_parameter.length()
 	for f in instance_functions:
 		var location : int = 0
@@ -411,7 +411,7 @@ func find_keyword_call(string : String, keyword : String):
 	print(string)
 	return "#error"
 
-func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", _seed_variation_", input_suffix : String = "") -> String:
+func replace_input_with_function_call(string : String, input : String, seed_parameter : String = ", _seed_variation_, _controlled_variation_", input_suffix : String = "") -> String:
 	var genname = "o"+str(get_instance_id())
 	while true:
 		var uv : String = find_keyword_call(string, input+input_suffix)
@@ -493,7 +493,7 @@ func generate_input_function(index : int, input: Dictionary, rv : ShaderCode, co
 	rv.add_uniforms(source_rv.uniforms)
 	rv.defs += source_rv.defs
 	rv.add_globals(source_rv.globals)
-	rv.defs += "%s %s_input_%s(%s, float _seed_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
+	rv.defs += "%s %s_input_%s(%s, float _seed_variation_, vec4 _controlled_variation_) {\n" % [ mm_io_types.types[input.type].type, genname, input.name, mm_io_types.types[input.type].paramdefs ]
 	rv.defs += "%s\n" % source_rv.code
 	rv.defs += "return %s;\n}\n" % source_rv.output_values[input.type]
 
@@ -611,9 +611,16 @@ func replace_input(input_name : String, suffix : String, parameters : String, va
 	if input_def.has("function") and input_def.function:
 		var function_name : String = "o%s_input_%s" % [ str(get_instance_id()), input_def.name ]
 		if suffix == "variation":
-			return function_name+parameters
+			var parameter_list : Array[String] = split_parameters(parameters)
+			var parameters_suffix : String = ")"
+			match parameter_list.size():
+				1:
+					parameters_suffix = ", _seed_variation_, _controlled_variation_)"
+				2:
+					parameters_suffix = ", _controlled_variation_)"
+			return function_name+"("+", ".join(split_parameters(parameters))+parameters_suffix
 		else:
-			return function_name+"("+parameters+", _seed_variation_)"
+			return function_name+"("+parameters+", _seed_variation_, _controlled_variation_)"
 	var source_rv : ShaderCode = source.generator.get_shader_code(parameters, source.output_index, context)
 	rv.add_uniforms(source_rv.uniforms)
 	rv.defs += source_rv.defs

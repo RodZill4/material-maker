@@ -630,6 +630,22 @@ static func find_matching_parenthesis(string : String, i : int, op : String = '(
 		i = max_p if min_p < 0 else min_p
 	return i
 
+static func split_parameters(string : String) -> Array[String]:
+	if string[0] != "(" or find_matching_parenthesis(string, 0) != string.length()-1:
+		print("bad")
+		return []
+	string = string.substr(1, string.length()-2)
+	var parameters : Array[String] = []
+	var p : String = ""
+	for s in string.split(","):
+		if p != "":
+			p += ","
+		p += s
+		if p.count("(") == p.count(")") and p.count("[") == p.count("]"):
+			parameters.append(p.strip_edges())
+			p = ""
+	return parameters
+
 static var re_line_comment : RegEx = RegEx.create_from_string("//.*")
 
 static func remove_comments(s : String) -> String:

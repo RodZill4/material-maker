@@ -148,7 +148,7 @@ func export_as_image_file(file_name : String, image_size : Vector2i) -> void:
 func export_to_reference(image_size : Vector2i):
 	if generator != null:
 		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
-		mm_globals.main_window.get_panel("Reference").add_reference(await texture.get_texture())
+		mm_globals.main_window.get_panel("Reference").add_reference(ImageTexture.create_from_image(await texture.get_image()))
 
 
 func _on_Preview2D_visibility_changed():
