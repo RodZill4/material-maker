@@ -424,8 +424,10 @@ func replace_input_with_function_call(string : String, input : String, seed_para
 		string = string.replace("$%s(%s)" % [ input+input_suffix, uv ], "%s_input_%s(%s%s)" % [ genname, input, uv, seed_parameter ])
 	return string
 
+const WORD_LETTERS : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_?"
+
 func is_word_letter(l) -> bool:
-	return "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN1234567890_".find(l) != -1
+	return WORD_LETTERS.find(l) != -1
 
 func replace_rnd(string : String, offset : int = 0) -> String:
 	while true:
@@ -454,8 +456,6 @@ func replace_rndi(string : String, offset : int = 0) -> String:
 			var with = "param_rndi(%s, $seed+%f)" % [ params, sin(position)+offset ]
 			string = string.replace(replace, with)
 	return string
-
-const WORD_LETTERS : String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 
 func generate_parameter_declarations(rv : ShaderCode) -> void:
 	var genname = "o"+str(get_instance_id())
@@ -716,6 +716,10 @@ func get_common_replace_variables(uv : String, rv : ShaderCode) -> Dictionary:
 		variables["seed"] = "seed_"+genname
 	else:
 		variables["seed"] = "(seed_"+genname+"+fract(_seed_variation_))"
+	variables["?1"] = "_controlled_variation_.x"
+	variables["?2"] = "_controlled_variation_.y"
+	variables["?3"] = "_controlled_variation_.z"
+	variables["?4"] = "_controlled_variation_.w"
 	variables["node_id"] = str(get_instance_id())
 	return variables
 
