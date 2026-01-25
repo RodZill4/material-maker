@@ -1,0 +1,138 @@
+{
+	"name": "layer_variations",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"randomize": true,
+		"step": 0.1,
+		"v1": 0.0,
+		"v2": 1.0,
+		"variable": 0.0
+	},
+	"seed_int": 285134496,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input mask",
+				"name": "mask",
+				"shortdesc": "Mask",
+				"type": "f"
+			}
+		],
+		"instance": [
+			"float layer_variations_$(name)(vec2 uv, float v1, float v2, float step) {",
+			"\tfloat v = 0.0;",
+			"\tif (sign(step) == sign(v2-v1)) {",
+			"\t\tfloat count = 1.0+floor((v2-v1)/step);",
+			"\t\tfloat seedvar = _seed_variation_;",
+			"\t\tvec4 var = _controlled_variation_;",
+			"\t\tvar.$variable = v1;",
+			"\t\tfloat input_v = $in.variation(uv, seedvar, var);",
+			"\t\tv = input_v;",
+			"\t\tfor (float x = v1+step; x < v2; x += step) {",
+			"\t\t\tvar.$variable = x;",
+			"\t\t\tinput_v = $in.variation(uv, seedvar, var);",
+			"\t\t\tfloat mask_v = $mask.variation(uv, seedvar, var);",
+			"\t\t\tv = mix(v, input_v, mask_v);",
+			"\t\t\tif ($randomize) {",
+			"\t\t\t\tseedvar = rand(vec2(seedvar,x));",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"\treturn v;",
+			"}"
+		],
+		"longdesc": "Layers controlled variations for its input using the variations of the mask by iterating on the variable",
+		"name": "Layer Variations",
+		"outputs": [
+			{
+				"f": "layer_variations_$(name)($uv, $v1, $v2, $step)",
+				"longdesc": "Shows a variation of the input",
+				"shortdesc": "Output1",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "Variable",
+				"name": "variable",
+				"type": "enum",
+				"values": [
+					{
+						"name": "$?1",
+						"value": "x"
+					},
+					{
+						"name": "$?2",
+						"value": "y"
+					},
+					{
+						"name": "$?3",
+						"value": "z"
+					},
+					{
+						"name": "$?4",
+						"value": "w"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "From",
+				"longdesc": "Seed modifier for output 1",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "v1",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1.0,
+				"label": "To",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "v2",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.1,
+				"label": "Step",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "step",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"default": true,
+				"label": "Randomize",
+				"name": "randomize",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "Layer Variations"
+	},
+	"type": "shader"
+}
