@@ -6,11 +6,11 @@
 	},
 	"parameters": {
 		"combine": 0,
-		"randomize": false,
+		"randomize": true,
 		"step": 0.1,
 		"v1": 0.0,
 		"v2": 1.0,
-		"variable": 0
+		"variable": 0.0
 	},
 	"seed_int": 285134496,
 	"shader_model": {
@@ -31,14 +31,15 @@
 			"float iterate_variations_$(name)(vec2 uv, float v1, float v2, float step) {",
 			"\tfloat v = 0.0;",
 			"\tif (sign(step) == sign(v2-v1)) {",
-			"\t\tfloat count = floor((v2-v1)/step);",
+			"\t\tfloat count = 1.0+floor((v2-v1)/step);",
 			"\t\tfloat seedvar = _seed_variation_;",
 			"\t\tvec4 var = _controlled_variation_;",
 			"\t\tvar.$variable = v1;",
-			"\t\tv = $in.variation(uv, _seed_variation_, var);",
+			"\t\tfloat input_v = $in.variation(uv, _seed_variation_, var);",
+			"\t\tv = $combine;",
 			"\t\tfor (float x = v1+step; x < v2; x += step) {",
 			"\t\t\tvar.$variable = x;",
-			"\t\t\tfloat input_v = $in.variation(uv, seedvar, var);",
+			"\t\t\tinput_v = $in.variation(uv, seedvar, var);",
 			"\t\t\tv = $combine;",
 			"\t\t\tif ($randomize) {",
 			"\t\t\t\tseedvar = rand(vec2(seedvar,x));",
@@ -116,7 +117,7 @@
 				"type": "float"
 			},
 			{
-				"default": 0,
+				"default": 0.0,
 				"label": "Combine",
 				"name": "combine",
 				"type": "enum",
