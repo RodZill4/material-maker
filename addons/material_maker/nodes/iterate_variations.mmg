@@ -5,10 +5,12 @@
 		"y": 0
 	},
 	"parameters": {
+		"combine": 0,
+		"randomize": false,
 		"step": 0.1,
 		"v1": 0.0,
 		"v2": 1.0,
-		"variable": 0.0
+		"variable": 0
 	},
 	"seed_int": 285134496,
 	"shader_model": {
@@ -28,12 +30,19 @@
 		"instance": [
 			"float iterate_variations_$(name)(vec2 uv, float v1, float v2, float step) {",
 			"\tfloat v = 0.0;",
-			"\tvec4 var = _controlled_variation_;",
 			"\tif (sign(step) == sign(v2-v1)) {",
-			"\t\tfor (float x = v1; x < v2; x += step) {",
+			"\t\tfloat count = floor((v2-v1)/step);",
+			"\t\tfloat seedvar = _seed_variation_;",
+			"\t\tvec4 var = _controlled_variation_;",
+			"\t\tvar.$variable = v1;",
+			"\t\tv = $in.variation(uv, _seed_variation_, var);",
+			"\t\tfor (float x = v1+step; x < v2; x += step) {",
 			"\t\t\tvar.$variable = x;",
-			"\t\t\tfloat input = $in.variation(uv, _seed_variation_, var);",
-			"\t\t\tv = v+input;",
+			"\t\t\tfloat input_v = $in.variation(uv, seedvar, var);",
+			"\t\t\tv = $combine;",
+			"\t\t\tif ($randomize) {",
+			"\t\t\t\tseedvar = rand(vec2(seedvar,x));",
+			"\t\t\t}",
 			"\t\t}",
 			"\t}",
 			"\treturn v;",
@@ -105,6 +114,36 @@
 				"name": "step",
 				"step": 0.001,
 				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Combine",
+				"name": "combine",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Add",
+						"value": "v+input_v"
+					},
+					{
+						"name": "Max",
+						"value": "max(v, input_v)"
+					},
+					{
+						"name": "Min",
+						"value": "min(v, input_v)"
+					},
+					{
+						"name": "Average",
+						"value": "v+input_v/count"
+					}
+				]
+			},
+			{
+				"default": true,
+				"label": "Randomize",
+				"name": "randomize",
+				"type": "boolean"
 			}
 		],
 		"shortdesc": "Iterate Variations"
