@@ -216,8 +216,8 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="VBoxContainer/TabContainer/General/FPSLimit"]
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "A higher FPS limit may result in smoother operation but may use more CPU/GPU resources.
-Higher values may increase power usage, leading to reduced battery life on laptops."
+tooltip_text = "FPS limit to use when window isn't focused to save CPU/GPU resources.
+Lower values may help reducing power usage, but could increase response time when window is focused again."
 mouse_filter = 1
 text = "Idle FPS limit:"
 
