@@ -71,4 +71,4 @@ func export_material(prefix : String, _profile : String, size : int = 0, command
 		if parameters.suffix != "":
 			await texture.save_to_file("%s_%s.%s" % [ prefix, parameters.suffix, get_image_format() ])
 		else:
-			await texture.result.save_to_file("%s.%s" % [ prefix, get_image_format() ])
+			await texture.save_to_file("%s.%s" % [ prefix, get_image_format() ])
