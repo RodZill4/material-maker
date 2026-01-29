@@ -538,3 +538,19 @@ func finalize_generator_update() -> void:
 		get_parent().undoredo_create_step("Edit node", generator.get_parent().get_hier_name(), edit_generator_prev_state, edit_generator_next_state)
 		edit_generator_prev_state = {}
 		edit_generator_next_state = {}
+
+func _process(_delta: float) -> void:
+	# Disable node controls when zoomed out
+	const simplified_zoom = 0.3
+	var is_simplified : bool = get_parent().zoom <= simplified_zoom
+	var control_nodes : Array[Node]
+	for c in get_children():
+		if c is Container:
+			control_nodes.append_array(c.get_children())
+		elif c is not Label:
+			control_nodes.append(c)
+	for control in control_nodes:
+		if control.get_script() != null or control is BaseButton:
+			control.mouse_filter = MOUSE_FILTER_IGNORE if is_simplified else MOUSE_FILTER_STOP
+			if control is GradientEdit:
+				control.get_child(0).visible = not is_simplified

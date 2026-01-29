@@ -33,6 +33,8 @@ class Cursor:
 		draw_polyline(polygon, Color(outline_color, outline_color, outline_color), 1.0, true)
 
 	func _gui_input(ev) -> void:
+		if get_parent().modulate.a == 0.0:
+			return
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
 			position.x += ev.relative.x
 			position.x = min(max(-0.5*WIDTH, position.x), get_parent().size.x-0.5*WIDTH)
