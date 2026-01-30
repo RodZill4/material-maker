@@ -10,6 +10,8 @@ var export_settings := {
 
 const RESOLUTION_CUSTOM := 8
 
+var additional_ids := {"$node":"unnamed"}
+
 func _ready() -> void:
 	for val in export_settings.values():
 		val = val.replace("$SUFFIX", owner.config_var_suffix)
@@ -48,6 +50,8 @@ func _open() -> void:
 
 
 func update() -> void:
+	additional_ids["$node"] = mm_globals.get_node_title_from_gen(owner.generator)
+
 	if not is_visible_in_tree():
 		return
 
@@ -169,10 +173,8 @@ func interpret_file_name(file_name: String, path:="") -> String:
 	if path.is_empty():
 		path = %ExportFolder.text
 
-	var additional_ids := {"$node":"unnamed"}
-
-	if owner.generator:
-		additional_ids["$node"] = owner.generator.name
+	if not owner.generator:
+		additional_ids["$name"] = "unnamed"
 
 	var extension := ""
 	match %FileType.selected:

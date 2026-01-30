@@ -235,3 +235,14 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
 
 	return file_name
+
+func get_node_title_from_gen(generator : MMGenBase) -> String:
+	# Get GraphNode title from generator (in current graph)
+	if generator != null:
+		var graph : MMGraphEdit = main_window.get_current_graph_edit()
+		if graph != null:
+			var node_path := NodePath("node_" + generator.name)
+			if graph.has_node(node_path):
+				var gnode : GraphNode = graph.get_node(node_path)
+				return gnode.title.to_snake_case()
+	return "unnamed"
