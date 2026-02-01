@@ -108,7 +108,7 @@ func select_file(i : int) -> void:
 		match f.type:
 			"texture":
 				export_file_type.select(0)
-				export_file_expression.text = str(f.output) if f.has("output") else f.expression
+				export_file_expression.text = str(int(f.output)) if f.has("output") else f.expression
 			"template","buffer_templates":
 				export_file_type.select(1 if f.type == "template" else 3)
 				var file_export_context = {}
