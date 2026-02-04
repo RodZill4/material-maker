@@ -17,22 +17,13 @@ var color = null
 
 func _ready() -> void:
 	if color == null:
-		color = Color.WHITE if "light" in mm_globals.main_window.theme.resource_path else Color.BLACK
+		color = Color.WHITE if mm_globals.is_theme_light() else Color.BLACK
 
 func get_type() -> String:
 	return "comment"
 
 func get_type_name() -> String:
 	return "Comment"
-
-func get_parameter_defs() -> Array:
-	return []
-
-func get_input_defs() -> Array:
-	return []
-
-func get_output_defs(_show_hidden : bool = false) -> Array:
-	return []
 
 func _serialize(data : Dictionary) -> Dictionary:
 	data.type = "comment"
