@@ -40,7 +40,7 @@ func _serialize(data : Dictionary) -> Dictionary:
 	data.color = MMType.serialize_value(color)
 	data.text = text
 	data.size = { x=size.x, y=size.y }
-	data.autoshrink = MMType.serialize_value(autoshrink)
+	data.autoshrink = autoshrink
 	data.attached = attached
 	return data
 
@@ -54,6 +54,6 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("color"):
 		color = MMType.deserialize_value(data.color)
 	if data.has("autoshrink"):
-		autoshrink = MMType.deserialize_value(data.autoshrink)
+		autoshrink = data.autoshrink
 	if data.has("attached"):
 		attached = data.attached
