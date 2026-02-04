@@ -33,6 +33,7 @@ func _serialize(data : Dictionary) -> Dictionary:
 	data.size = { x=size.x, y=size.y }
 	data.autoshrink = autoshrink
 	data.attached = attached
+	data.erase("parameters")
 	return data
 
 func _deserialize(data : Dictionary) -> void:
