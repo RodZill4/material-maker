@@ -631,8 +631,7 @@ func load_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
-	if mm_globals.config.has_section_key("path", "template"):
-		dialog.current_dir = mm_globals.config.get_value("path", "template")
+	dialog.current_dir = mm_globals.config.get_value("path", "template", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		do_load_generator(files[0])
@@ -665,8 +664,7 @@ func save_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
-	if mm_globals.config.has_section_key("path", "template"):
-		dialog.current_dir = mm_globals.config.get_value("path", "template")
+	dialog.current_dir = mm_globals.config.get_value("path", "template", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		MMGraphNodeGeneric.do_save_generator(files[0], generator)
