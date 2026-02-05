@@ -1049,13 +1049,15 @@ func create_subgraph() -> void:
 func frame_nodes() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and get_selected_nodes().size():
+		graph_edit.undoredo.start_group()
 		var nodes : Array = await graph_edit.create_nodes(
-				{"type":"comment", "title":"Frame"}, Vector2())
+				{"type":"comment", "title":"Frame"})
 		if nodes.size():
 			# Avoid calling resize twice
 			if not mm_globals.get_config("auto_size_comment"):
 				nodes[0].resize_to_selection()
 			nodes[0].selected = true
+		graph_edit.undoredo.end_group()
 
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
