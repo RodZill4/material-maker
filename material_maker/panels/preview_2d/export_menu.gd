@@ -69,9 +69,7 @@ func _on_export_folder_button_pressed() -> void:
 	#file_dialog.add_filter("*.exr; EXR image file")
 
 	if %ExportFolder.text:
-		var current_dir = mm_globals.config.get_value("path", %ExportFolder.text)
-		if current_dir is String:
-			file_dialog.current_dir = current_dir
+		file_dialog.current_dir = %ExportFolder.text
 
 	var files = await file_dialog.select_files()
 
