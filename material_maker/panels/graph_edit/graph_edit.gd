@@ -1275,7 +1275,8 @@ func undoredo_command(command : Dictionary) -> void:
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for k in command.positions.keys():
 				if parent_generator == generator:
-					get_node("node_"+k).do_set_position(command.positions[k])
+					if has_node("node_"+k):
+						get_node("node_"+k).do_set_position(command.positions[k])
 				else:
 					parent_generator.get_node(k).set_position(command.positions[k])
 		"resize_comment":
