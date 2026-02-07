@@ -41,12 +41,14 @@ enum ConnectionStyle {DIRECT, BEZIER, ROUNDED, MANHATTAN, DIAGONAL}
 var connection_line_style : int = ConnectionStyle.BEZIER
 
 @onready var drag_cut_cursor = preload("res://material_maker/icons/knife.png")
-var connections_to_cut : Array[Dictionary]
-var drag_cut_line : PackedVector2Array
-var valid_drag_cut_entry: bool = false
-const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
+@onready var drag_reroute_cursor = preload("res://material_maker/icons/cross.png")
+const DRAG_CUT_CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
 var lasso_points : PackedVector2Array
+
+var drag_line : PackedVector2Array
+enum DragLineMode {CUT, REROUTE, NONE}
+var drag_line_mode : int = DragLineMode.NONE
 
 signal save_path_changed
 signal graph_changed
@@ -60,7 +62,7 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
-	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
+	node_popup.about_to_popup.connect(func(): drag_line_mode = DragLineMode.NONE)
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -129,22 +131,46 @@ func _gui_input(event) -> void:
 		accept_event()
 		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
-	elif event.is_action_released("ui_cut_drag"):
-		var conns : Array[Dictionary]
-		for p in len(drag_cut_line) - 1:
-			var rect : Rect2
-			rect.position = drag_cut_line[p]
-			rect.end = drag_cut_line[p + 1]
-			conns = get_connections_intersecting_with_rect(rect.abs())
-			if conns.size():
-				connections_to_cut.append_array(conns)
-		if connections_to_cut.size():
-			on_cut_connections(connections_to_cut)
-			connections_to_cut.clear()
-		Input.set_custom_mouse_cursor(null)
-		drag_cut_line.clear()
-		conns.clear()
-		queue_redraw()
+	elif event.is_action_released("ui_cut_drag") or event.is_action_released("ui_reroute_drag"):
+		match drag_line_mode:
+			DragLineMode.CUT:
+				var connections_to_cut : Array[Dictionary]
+				var conns : Array[Dictionary]
+				for p in len(drag_line) - 1:
+					var rect : Rect2
+					rect.position = drag_line[p]
+					rect.end = drag_line[p + 1]
+					conns = get_connections_intersecting_with_rect(rect.abs())
+					if conns.size():
+						connections_to_cut.append_array(conns)
+				if connections_to_cut.size():
+					on_cut_connections(connections_to_cut)
+					connections_to_cut.clear()
+				Input.set_custom_mouse_cursor(null)
+				drag_line.clear()
+				conns.clear()
+				queue_redraw()
+			DragLineMode.REROUTE:
+				if drag_line.size() < 2:
+					return
+				var drag_reroute_line := Curve2D.new()
+				for p in drag_line:
+					drag_reroute_line.add_point(p)
+				var points = drag_reroute_line.tessellate_even_length(5, connection_lines_thickness*0.5)
+				var target_connections : Array[Dictionary]
+				for p in points:
+					var conn := get_closest_connection_at_point(p, connection_lines_thickness)
+					if not conn.is_empty() and target_connections.find_custom(func(d):
+							return (d.from_node == conn.from_node and d.from_port == conn.from_port
+							and d.to_node == conn.to_node and d.to_port == conn.to_port)) == -1:
+						conn.position = p
+						target_connections.append(conn)
+				if target_connections.size():
+					on_reroute_connections(target_connections)
+					target_connections.clear()
+				Input.set_custom_mouse_cursor(null)
+				drag_line.clear()
+				queue_redraw()
 	elif event.is_action_released("ui_lasso_select", true):
 		for node in get_children():
 			if node is GraphElement:
@@ -185,7 +211,7 @@ func _gui_input(event) -> void:
 				event.control = true
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
-			valid_drag_cut_entry = true
+			drag_line_mode = DragLineMode.CUT
 			if event.shift_pressed:
 				add_reroute_under_mouse()
 
@@ -278,15 +304,24 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
-		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
+		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0:
+			drag_line_mode = DragLineMode.CUT
 			if event.ctrl_pressed:
 				Input.set_custom_mouse_cursor(
-						drag_cut_cursor, Input.CURSOR_ARROW, CURSOR_HOT_SPOT)
-				drag_cut_line.append(get_local_mouse_position())
+						drag_cut_cursor, Input.CURSOR_ARROW, DRAG_CUT_CURSOR_HOT_SPOT)
+				drag_line.append(get_local_mouse_position())
 				queue_redraw()
-			elif drag_cut_line.size():
-				drag_cut_line.append(get_local_mouse_position())
+			elif drag_line.size():
+				drag_line.append(get_local_mouse_position())
 				queue_redraw()
+
+		if (event.button_mask & MOUSE_BUTTON_RIGHT) !=0 and event.shift_pressed:
+			Input.set_custom_mouse_cursor(
+					drag_reroute_cursor, Input.CURSOR_ARROW, drag_reroute_cursor.get_size() * 0.5)
+			drag_line_mode = DragLineMode.REROUTE
+			drag_line.append(get_local_mouse_position())
+			queue_redraw()
+			accept_event()
 
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
@@ -303,8 +338,8 @@ func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	return Rect2(rect.position, rect.size)
 
 func _draw() -> void:
-	if drag_cut_line.size() > 1:
-		draw_polyline(drag_cut_line, get_theme_color("connection_knife", "GraphEdit"), 1.0)
+	if drag_line.size() > 1:
+		draw_polyline(drag_line, get_theme_color("line_gesture", "GraphEdit"), 1.0)
 	if lasso_points.size() > 1:
 		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
 				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
@@ -427,6 +462,42 @@ func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : i
 		return true
 	return false
 
+func on_reroute_connections(target_connections : Array[Dictionary]) -> void:
+	var prev : Dictionary = generator.serialize()
+	var grouped_connections : Dictionary
+
+	# group connections by their source node/port
+	for link in target_connections:
+		var key := "%s_%d" % [link.from_node, link.from_port]
+		if not grouped_connections.has(key):
+			grouped_connections[key] = []
+		grouped_connections[key].append(link)
+
+	for group in grouped_connections:
+		# find center for the connection group
+		var group_rect := Rect2(grouped_connections[group][0].position, Vector2.ZERO)
+		for group_link in grouped_connections[group]:
+			group_rect = group_rect.expand(group_link.position)
+		var group_center := (group_rect.abs().get_center() + scroll_offset)/zoom
+
+		# make reroute
+		var reroute : Array = await do_create_nodes({nodes=[{name ="reroute", type="reroute",
+				node_position={x=group_center.x, y=group_center.y}}], connections=[]})
+		var group_reroute : GraphNode = reroute[0]
+		group_reroute.position_offset -= group_reroute.size * 0.5
+
+		# reroute connections
+		for same_link in grouped_connections[group]:
+			var from_node : GraphNode = get_node(NodePath(same_link.from_node))
+			var to_node : GraphNode = get_node(NodePath(same_link.to_node))
+			do_disconnect_node(same_link.from_node, same_link.from_port, same_link.to_node, same_link.to_port)
+			do_connect_node(same_link.from_node, same_link.from_port, group_reroute.name, 0)
+			do_connect_node(group_reroute.name, 0, same_link.to_node, same_link.to_port)
+
+	# undo/redo
+	var next : Dictionary = generator.serialize()
+	undoredo_create_step("Reroute multiple connections", generator.get_hier_name(), prev, next)
+
 func on_cut_connections(connections_to_cut : Array):
 	var generator_hier_name : String = generator.get_hier_name()
 	var conns : Array = []
@@ -442,7 +513,6 @@ func on_cut_connections(connections_to_cut : Array):
 		{ type="remove_connections", parent=generator_hier_name, connections=conns }
 	]
 	undoredo.add("Cut node connections", undo_actions, redo_actions)
-
 
 func on_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> void:
 	var from_gen = get_node(from).generator
