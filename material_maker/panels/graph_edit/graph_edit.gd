@@ -44,11 +44,11 @@ var connection_line_style : int = ConnectionStyle.BEZIER
 @onready var drag_reroute_cursor = preload("res://material_maker/icons/cross.png")
 const DRAG_CUT_CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
-var lasso_points : PackedVector2Array
-
 var drag_line : PackedVector2Array
-enum DragLineMode {CUT, REROUTE, NONE}
-var drag_line_mode : int = DragLineMode.NONE
+enum DragLineGesture {CUT, REROUTE, NONE}
+var drag_line_mode : int = DragLineGesture.NONE
+
+var lasso_points : PackedVector2Array
 
 signal save_path_changed
 signal graph_changed
@@ -62,7 +62,7 @@ func _ready() -> void:
 	for t in range(41):
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
-	node_popup.about_to_popup.connect(func(): drag_line_mode = DragLineMode.NONE)
+	node_popup.about_to_popup.connect(func(): drag_line_mode = DragLineGesture.NONE)
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -133,7 +133,7 @@ func _gui_input(event) -> void:
 		node_popup.show_popup()
 	elif event.is_action_released("ui_cut_drag") or event.is_action_released("ui_reroute_drag"):
 		match drag_line_mode:
-			DragLineMode.CUT:
+			DragLineGesture.CUT:
 				var connections_to_cut : Array[Dictionary]
 				var links : Array[Dictionary]
 				for p in len(drag_line) - 1:
@@ -150,27 +150,26 @@ func _gui_input(event) -> void:
 				drag_line.clear()
 				links.clear()
 				queue_redraw()
-			DragLineMode.REROUTE:
-				if drag_line.size() < 2:
-					return
-				var drag_reroute_line := Curve2D.new()
-				for p in drag_line:
-					drag_reroute_line.add_point(p)
-				var points = drag_reroute_line.tessellate_even_length(4, connection_lines_thickness*0.5)
-				var target_connections : Array[Dictionary]
-				for p in points:
-					var link := get_closest_connection_at_point(p, connection_lines_thickness)
-					if not link.is_empty() and target_connections.find_custom(func(d):
-							return (d.from_node == link.from_node and d.from_port == link.from_port
-							and d.to_node == link.to_node and d.to_port == link.to_port)) == -1:
-						link.position = p
-						target_connections.append(link)
-				if target_connections.size():
-					on_reroute_connections(target_connections)
-					target_connections.clear()
-				Input.set_custom_mouse_cursor(null)
-				drag_line.clear()
-				queue_redraw()
+			DragLineGesture.REROUTE:
+				if drag_line.size() >= 2:
+					var drag_reroute_line := Curve2D.new()
+					for p in drag_line:
+						drag_reroute_line.add_point(p)
+					var points = drag_reroute_line.tessellate_even_length(4, connection_lines_thickness)
+					var target_connections : Array[Dictionary]
+					for p in points:
+						var link := get_closest_connection_at_point(p, connection_lines_thickness)
+						if not link.is_empty() and target_connections.find_custom(func(d):
+								return (d.from_node == link.from_node and d.from_port == link.from_port
+								and d.to_node == link.to_node and d.to_port == link.to_port)) == -1:
+							link.position = p
+							target_connections.append(link)
+					if target_connections.size():
+						on_reroute_connections(target_connections)
+						target_connections.clear()
+					Input.set_custom_mouse_cursor(null)
+					drag_line.clear()
+					queue_redraw()
 	elif event.is_action_released("ui_lasso_select", true):
 		for node in get_children():
 			if node is GraphElement:
@@ -211,7 +210,7 @@ func _gui_input(event) -> void:
 				event.control = true
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
-			drag_line_mode = DragLineMode.CUT
+			drag_line_mode = DragLineGesture.CUT
 			if event.shift_pressed:
 				add_reroute_under_mouse()
 
@@ -306,21 +305,20 @@ func _gui_input(event) -> void:
 
 		# drag line gesture (cut/reroute)
 		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0:
+			if drag_line_mode != DragLineGesture.NONE:
+				drag_line.append(get_local_mouse_position())
+				queue_redraw()
 			if event.ctrl_pressed:
-				drag_line_mode = DragLineMode.CUT
-				Input.set_custom_mouse_cursor(
-						drag_cut_cursor, Input.CURSOR_ARROW, DRAG_CUT_CURSOR_HOT_SPOT)
-				drag_line.append(get_local_mouse_position())
-				queue_redraw()
+				drag_line_mode = DragLineGesture.CUT
+				Input.set_custom_mouse_cursor(drag_cut_cursor,
+						Input.CURSOR_ARROW, DRAG_CUT_CURSOR_HOT_SPOT)
 			elif event.shift_pressed:
-				drag_line_mode = DragLineMode.REROUTE
-				Input.set_custom_mouse_cursor(
-					drag_reroute_cursor, Input.CURSOR_ARROW, drag_reroute_cursor.get_size() * 0.5)
-				drag_line.append(get_local_mouse_position())
-				queue_redraw()
+				drag_line_mode = DragLineGesture.REROUTE
+				Input.set_custom_mouse_cursor(drag_reroute_cursor,
+						Input.CURSOR_ARROW, drag_reroute_cursor.get_size() * 0.5)
 			else:
+				drag_line_mode = DragLineGesture.NONE
 				Input.set_custom_mouse_cursor(null)
-				drag_line_mode = DragLineMode.NONE
 				if drag_line.size():
 					drag_line.clear()
 				queue_redraw()
