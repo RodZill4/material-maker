@@ -135,20 +135,20 @@ func _gui_input(event) -> void:
 		match drag_line_mode:
 			DragLineMode.CUT:
 				var connections_to_cut : Array[Dictionary]
-				var conns : Array[Dictionary]
+				var links : Array[Dictionary]
 				for p in len(drag_line) - 1:
 					var rect : Rect2
 					rect.position = drag_line[p]
 					rect.end = drag_line[p + 1]
-					conns = get_connections_intersecting_with_rect(rect.abs())
-					if conns.size():
-						connections_to_cut.append_array(conns)
+					links = get_connections_intersecting_with_rect(rect.abs())
+					if links.size():
+						connections_to_cut.append_array(links)
 				if connections_to_cut.size():
 					on_cut_connections(connections_to_cut)
 					connections_to_cut.clear()
 				Input.set_custom_mouse_cursor(null)
 				drag_line.clear()
-				conns.clear()
+				links.clear()
 				queue_redraw()
 			DragLineMode.REROUTE:
 				if drag_line.size() < 2:
@@ -156,15 +156,15 @@ func _gui_input(event) -> void:
 				var drag_reroute_line := Curve2D.new()
 				for p in drag_line:
 					drag_reroute_line.add_point(p)
-				var points = drag_reroute_line.tessellate_even_length(5, connection_lines_thickness*0.5)
+				var points = drag_reroute_line.tessellate_even_length(4, connection_lines_thickness*0.5)
 				var target_connections : Array[Dictionary]
 				for p in points:
-					var conn := get_closest_connection_at_point(p, connection_lines_thickness)
-					if not conn.is_empty() and target_connections.find_custom(func(d):
-							return (d.from_node == conn.from_node and d.from_port == conn.from_port
-							and d.to_node == conn.to_node and d.to_port == conn.to_port)) == -1:
-						conn.position = p
-						target_connections.append(conn)
+					var link := get_closest_connection_at_point(p, connection_lines_thickness)
+					if not link.is_empty() and target_connections.find_custom(func(d):
+							return (d.from_node == link.from_node and d.from_port == link.from_port
+							and d.to_node == link.to_node and d.to_port == link.to_port)) == -1:
+						link.position = p
+						target_connections.append(link)
 				if target_connections.size():
 					on_reroute_connections(target_connections)
 					target_connections.clear()
@@ -304,24 +304,26 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		# drag line gesture (cut/reroute)
 		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0:
-			drag_line_mode = DragLineMode.CUT
 			if event.ctrl_pressed:
+				drag_line_mode = DragLineMode.CUT
 				Input.set_custom_mouse_cursor(
 						drag_cut_cursor, Input.CURSOR_ARROW, DRAG_CUT_CURSOR_HOT_SPOT)
 				drag_line.append(get_local_mouse_position())
 				queue_redraw()
-			elif drag_line.size():
+			elif event.shift_pressed:
+				drag_line_mode = DragLineMode.REROUTE
+				Input.set_custom_mouse_cursor(
+					drag_reroute_cursor, Input.CURSOR_ARROW, drag_reroute_cursor.get_size() * 0.5)
 				drag_line.append(get_local_mouse_position())
 				queue_redraw()
-
-		if (event.button_mask & MOUSE_BUTTON_RIGHT) !=0 and event.shift_pressed:
-			Input.set_custom_mouse_cursor(
-					drag_reroute_cursor, Input.CURSOR_ARROW, drag_reroute_cursor.get_size() * 0.5)
-			drag_line_mode = DragLineMode.REROUTE
-			drag_line.append(get_local_mouse_position())
-			queue_redraw()
-			accept_event()
+			else:
+				Input.set_custom_mouse_cursor(null)
+				drag_line_mode = DragLineMode.NONE
+				if drag_line.size():
+					drag_line.clear()
+				queue_redraw()
 
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
@@ -487,12 +489,12 @@ func on_reroute_connections(target_connections : Array[Dictionary]) -> void:
 		group_reroute.position_offset -= group_reroute.size * 0.5
 
 		# reroute connections
-		for same_link in grouped_connections[group]:
-			var from_node : GraphNode = get_node(NodePath(same_link.from_node))
-			var to_node : GraphNode = get_node(NodePath(same_link.to_node))
-			do_disconnect_node(same_link.from_node, same_link.from_port, same_link.to_node, same_link.to_port)
-			do_connect_node(same_link.from_node, same_link.from_port, group_reroute.name, 0)
-			do_connect_node(group_reroute.name, 0, same_link.to_node, same_link.to_port)
+		for link in grouped_connections[group]:
+			var from_node : GraphNode = get_node(NodePath(link.from_node))
+			var to_node : GraphNode = get_node(NodePath(link.to_node))
+			do_disconnect_node(link.from_node, link.from_port, link.to_node, link.to_port)
+			do_connect_node(link.from_node, link.from_port, group_reroute.name, 0)
+			do_connect_node(group_reroute.name, 0, link.to_node, link.to_port)
 
 	# undo/redo
 	var next : Dictionary = generator.serialize()
