@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://8ne0p5ahkdw1"]
+
+[ext_resource type="Script" uid="uid://bqruhogmtlu81" path="res://material_maker/nodes/portal/portal.gd" id="1_qhgt7"]
+
+[sub_resource type="Theme" id="Theme_fybc5"]
+
+[node name="Portal" type="GraphNode"]
+offset_right = 60.0
+offset_bottom = 79.0
+theme = SubResource("Theme_fybc5")
+theme_type_variation = &"MM_Portal"
+slot/0/left_enabled = false
+slot/0/left_type = 42
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 42
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_qhgt7")
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Dragger" type="Control" parent="Control"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
+mouse_default_cursor_shape = 13
+
+[connection signal="node_deselected" from="." to="." method="_on_node_deselected"]
+[connection signal="node_selected" from="." to="." method="_on_node_selected"]
+[connection signal="gui_input" from="Control/Dragger" to="." method="_on_dragger_gui_input"]

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=143 format=3 uid="uid://w487nirev8y5"]
+[gd_resource type="Theme" load_steps=147 format=3 uid="uid://w487nirev8y5"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
@@ -612,6 +612,28 @@ corner_detail = 4
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5e0gw"]
 content_margin_top = 3.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a74kv"]
+bg_color = Color(0.3137255, 0.3137255, 0.34901962, 1)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmkov"]
+bg_color = Color(0.3137255, 0.3137255, 0.34901962, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ppdpb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btb0w"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u368o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc6mb"]
@@ -1069,6 +1091,15 @@ MM_PanelMenuSubPanelLabel/base_type = &"Label"
 MM_PanelMenuSubPanelLabel/colors/font_color = Color(0.881937, 0.881937, 0.881937, 1)
 MM_PanelMenuSubPanelLabel/font_sizes/font_size = 15
 MM_PanelMenuSubPanelLabel/styles/normal = SubResource("StyleBoxEmpty_5e0gw")
+MM_Portal/base_type = &"GraphNode"
+MM_Portal/colors/in_color = Color(0.3019608, 0.3529412, 0.54901963, 1)
+MM_Portal/colors/link = Color(0.61960787, 0.49411765, 0.7254902, 1)
+MM_Portal/colors/out_color = Color(0.5803922, 0.3764706, 0.3137255, 1)
+MM_Portal/constants/port_h_offset = 0
+MM_Portal/styles/panel = SubResource("StyleBoxFlat_a74kv")
+MM_Portal/styles/panel_selected = SubResource("StyleBoxFlat_nmkov")
+MM_Portal/styles/titlebar = SubResource("StyleBoxEmpty_ppdpb")
+MM_Portal/styles/titlebar_selected = SubResource("StyleBoxEmpty_btb0w")
 MM_ProjectsBackground/base_type = &"Panel"
 MM_ProjectsBackground/styles/panel = SubResource("StyleBoxEmpty_u368o")
 MM_Reroute/base_type = &"GraphNode"

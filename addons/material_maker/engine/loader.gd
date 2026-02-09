@@ -246,6 +246,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 		debug = MMGenDebug,
 		reroute = MMGenReroute,
 		comment_line = MMGenCommentLine,
+		portal = MMGenPortal,
 	}
 	var generator = null
 	for g in guess:

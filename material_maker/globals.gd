@@ -210,7 +210,6 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 		return
 	do_propagate_shortcuts(control, event)
 
-
 func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}, resolution="") -> String:
 	for i in additional_identifiers:
 		file_name = file_name.replace(i, additional_identifiers[i])
@@ -237,3 +236,6 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
 
 	return file_name
+
+func graph_node_center(n : GraphNode, g : MMGraphEdit) -> Vector2:
+	return (n.position_offset + n.size * 0.5) * g.zoom - g.scroll_offset
