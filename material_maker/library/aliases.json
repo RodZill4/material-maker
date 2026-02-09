@@ -30,6 +30,8 @@
 	"Miscellaneous/Export": "save",
 	"Miscellaneous/Iterate Buffer": "pause,wait,optimize",
 	"Miscellaneous/Switch": "change,trigger,toggle,select",
+	"Miscellaneous/Aperture/In": "set,named,portal,tunnel,conduit,teleport,wifi",
+	"Miscellaneous/Aperture/Out": "get,named,portal,tunnel,conduit,teleport,wifi",
 	"Noise": "pixel,static",
 	"Noise/Color": "pixel,static,colour",
 	"Noise/Value/Color": "colour",

@@ -472,7 +472,7 @@ func get_targets(output_index : int) -> Array:
 		return parent.get_port_targets(name, output_index)
 	return []
 
-# get the list of outputs that depend on the input whose index is passed as parameter
+## Get the list of outputs that depend on the input whose index is passed as parameter
 func follow_input(_input_index : int) -> Array:
 	var rv = []
 	for i in range(get_output_defs().size()):
