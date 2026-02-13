@@ -11,7 +11,7 @@ var force_update : bool = false
 var render_size : Vector2i = Vector2i(512, 512)
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
 	acc_texture = MMTexture.new()
 	avg_texture = MMTexture.new()
