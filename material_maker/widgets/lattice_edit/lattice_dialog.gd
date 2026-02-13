@@ -10,7 +10,7 @@ signal return_lattice(lattice)
 
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
 
 func set_closed(c : bool = true):

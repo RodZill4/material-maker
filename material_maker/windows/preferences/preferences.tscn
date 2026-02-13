@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 
 [node name="Preferences" type="Window"]
 oversampling_override = 1.0
@@ -99,6 +99,15 @@ layout_mode = 2
 tooltip_text = "Prefer the use of native file dialogs"
 text = "Use native file dialogs"
 config_variable = "ui_use_native_file_dialogs"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
+layout_mode = 2
+
+[node name="GuiSingleWindowMode" parent="VBoxContainer/TabContainer/General/HBoxContainer3" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Enables subwindow embedding"
+text = "Single window mode (requires restart)"
+config_variable = "ui_single_window_mode"
 
 [node name="Gui3DPreviewResolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 layout_mode = 2

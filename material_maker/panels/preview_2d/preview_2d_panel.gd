@@ -75,7 +75,7 @@ const CHECKER_BRIGHTNESS_OPTIONS: Array[Vector2] = [
 ]
 
 func _ready():
-	var content_scale_factor = mm_globals.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	%GuidesColor.get_popup().content_scale_factor = content_scale_factor
 	%GuidesColor.get_popup().min_size = %GuidesColor.get_popup().get_contents_minimum_size() * content_scale_factor
 

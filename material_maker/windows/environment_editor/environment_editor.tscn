@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="3"]
 
 [node name="EnvironmentEditor" type="Window"]
+oversampling_override = 1.0
 position = Vector2i(0, 36)
 exclusive = true
 script = ExtResource("2")

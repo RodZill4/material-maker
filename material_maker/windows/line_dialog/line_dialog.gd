@@ -36,12 +36,5 @@ func enter_text(window_title : String, label : String, value : String) -> Dictio
 func _on_VBoxContainer_minimum_size_changed():
 	size = ($VBoxContainer.get_minimum_size() + Vector2(20, 4))*content_scale_factor
 
-func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
-	context_menu.position =  get_window().position + Vector2i(
-			get_mouse_position() * content_scale_factor)
-
 func _on_ready() -> void:
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	var line_edit_context : PopupMenu = $VBoxContainer/LineEdit.get_menu()
-	line_edit_context.about_to_popup.connect(
-			_context_menu_about_to_popup.bind(line_edit_context))
+	content_scale_factor = mm_globals.ui_scale_factor()

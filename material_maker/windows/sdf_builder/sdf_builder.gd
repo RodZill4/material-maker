@@ -43,6 +43,12 @@ func _ready():
 	for c in [ "ViewModeLabel", "ViewMode", "PostProcessingLabel", "PostProcessing" ]:
 		viewmenu_panel_grid.get_node(c).visible = false
 
+	await get_tree().process_frame
+	content_scale_factor = mm_globals.ui_scale_factor()
+	min_size = Vector2(800, 400) * content_scale_factor
+	size = min_size
+	move_to_center()
+
 func get_next_index() -> int:
 	next_index += 1
 	return next_index
