@@ -18,7 +18,7 @@ func _ready() -> void:
 		ok_button_text = tr("Save")
 
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
-	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	_content_scale_factor = mm_globals.ui_scale_factor()
 	content_scale_factor = _content_scale_factor
 	
 	for child in get_children(true):
@@ -92,7 +92,7 @@ func add_favorite():
 
 func _on_child_entered_tree(node: Node) -> void:
 	if node is ConfirmationDialog or node is AcceptDialog:
-		node.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		node.content_scale_factor = mm_globals.ui_scale_factor()
 		var min_size_scale = Vector2(0,0)
 		match node.title:
 			"Alert!":

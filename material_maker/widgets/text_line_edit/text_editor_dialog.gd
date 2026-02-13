@@ -10,7 +10,7 @@ func _on_ready() -> void:
 	editor_context.about_to_popup.connect(
 			_context_menu_about_to_popup.bind(editor_context))
 	
-	var csf = mm_globals.main_window.get_window().content_scale_factor
+	var csf = mm_globals.ui_scale_factor()
 	get_window().content_scale_factor = csf
 	get_window().min_size = size * csf
 

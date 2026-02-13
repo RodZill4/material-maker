@@ -23,7 +23,7 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 									"normalize" ]
 
 func _context_menu_about_to_popup() -> void:
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	get_menu().position = get_window().position + Vector2i(
 			get_global_mouse_position() * content_scale_factor)
 

@@ -695,12 +695,11 @@ func load_file(filename) -> bool:
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
 		add_child(dialog)
-		var content_scale_factor = (mm_globals.main_window
-				.get_window().content_scale_factor)
+		var content_scale_factor = mm_globals.ui_scale_factor()
 		dialog.content_scale_factor = content_scale_factor
+		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
-		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false
@@ -1743,7 +1742,6 @@ func color_comment_nodes() -> void:
 		for node in comments:
 			color_picker.color_changed.connect(node.set_color)
 			color_picker.color = node.generator.color
-		var csf = get_window().content_scale_factor
 		picker.about_to_popup.connect(func():
 			if mm_globals.has_config("color_picker_color_mode"):
 				color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
@@ -1752,6 +1750,7 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(func():
 			mm_globals.set_config("color_picker_color_mode", color_picker.color_mode)
 			mm_globals.set_config("color_picker_shape", color_picker.picker_shape))
+		var csf = mm_globals.ui_scale_factor()
 		picker.content_scale_factor = csf
 		picker.min_size = picker.get_contents_minimum_size() * csf
 		picker.position = get_screen_position() + get_local_mouse_position() * csf

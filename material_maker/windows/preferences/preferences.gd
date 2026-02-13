@@ -13,6 +13,7 @@ func edit_preferences(c : ConfigFile) -> void:
 	var main_window = mm_globals.main_window
 	main_window.add_dialog(self)
 	config_changed.connect(main_window.on_config_changed)
+	content_scale_factor = mm_globals.ui_scale_factor()
 	update_controls(self)
 	size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
 	hide()
