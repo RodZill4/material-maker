@@ -542,11 +542,14 @@ class FlexWindow:
 	var overlay : Control
 	
 	func _init(main_control : Control, first_panel : Control = null):
-		content_scale_factor = main_control.get_window().content_scale_factor
-		if OS.get_name() == "macOS":
-			unfocusable = true
+		if not main_control.get_window().gui_embed_subwindows:
+			content_scale_factor = main_control.get_window().content_scale_factor
+			if OS.get_name() == "macOS":
+				unfocusable = true
 		if first_panel:
-			position = Vector2i(first_panel.get_global_rect().position*content_scale_factor)+first_panel.get_window().position
+			position = Vector2i(first_panel.get_global_rect().position*content_scale_factor)
+			if not main_control.get_window().gui_embed_subwindows:
+				position += first_panel.get_window().position
 			size = first_panel.size*content_scale_factor
 		panel = Control.new()
 		add_child(panel)

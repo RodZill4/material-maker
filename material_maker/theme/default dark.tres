@@ -1,4 +1,4 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=42 format=3 uid="uid://dhuhq2immquoh"]
+[gd_resource type="Theme" script_class="EnhancedTheme" format=3 uid="uid://dhuhq2immquoh"]
 
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="3_xjelh"]
 [ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_0efyb"]

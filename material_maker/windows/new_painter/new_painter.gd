@@ -18,7 +18,7 @@ signal return_status(status : Dictionary)
 
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = Vector2(500, 300) * content_scale_factor
 	if mesh_material:
 		mesh_instance.set_surface_override_material(0, mesh_material)
