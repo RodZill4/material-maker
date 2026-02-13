@@ -76,7 +76,7 @@ func fill_list(filter : String):
 func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 	# Hide the window until the asset list is loaded
 	visible = false
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	mm_globals.main_window.add_dialog(self)
 	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 	if error == OK:

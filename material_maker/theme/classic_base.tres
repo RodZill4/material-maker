@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=148 format=3 uid="uid://w487nirev8y5"]
+[gd_resource type="Theme" load_steps=150 format=3 uid="uid://w487nirev8y5"]
 
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_fw8f4"]
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="3_h5b0q"]
@@ -613,22 +613,32 @@ corner_detail = 4
 content_margin_top = 3.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a74kv"]
-bg_color = Color(0.3137255, 0.3137255, 0.34901962, 1)
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
+bg_color = Color(0.19685599, 0.22558257, 0.2973433, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 4.0
+expand_margin_top = 35.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmkov"]
-bg_color = Color(0.42352942, 0.42352942, 0.4627451, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-corner_radius_bottom_right = 11
-corner_radius_bottom_left = 11
+bg_color = Color(0.1525, 0.18175, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 4.0
+expand_margin_top = 35.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ppdpb"]
 
@@ -906,6 +916,34 @@ border_width_left = 4
 border_width_right = 4
 border_color = Color(0, 0, 0, 0.11764706)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ppdpb"]
+bg_color = Color(0.19685599, 0.22558257, 0.2973433, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 4.0
+expand_margin_top = 35.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btb0w"]
+bg_color = Color(0.1525, 0.18175, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 4.0
+expand_margin_top = 35.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
+
 [resource]
 default_font = ExtResource("4_7b2nb")
 default_font_size = 15
@@ -1169,3 +1207,5 @@ VScrollBar/styles/grabber = SubResource("StyleBoxFlat_fw8f4")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_wbe58")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_wbe58")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_ropwn")
+Window/styles/embedded_border = SubResource("StyleBoxFlat_ppdpb")
+Window/styles/embedded_unfocused_border = SubResource("StyleBoxFlat_btb0w")

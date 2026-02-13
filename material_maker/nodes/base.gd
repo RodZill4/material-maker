@@ -455,7 +455,7 @@ func _on_menu_id_pressed(id : int) -> void:
 				status.append({ ok=false, message="The following outputs do not have a short and a long description: "+", ".join(bad) })
 			# Show warning dialog
 			var dialog = preload("res://material_maker/tools/share/share_node_dialog.tscn").instantiate()
-			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			dialog.content_scale_factor = mm_globals.ui_scale_factor()
 			dialog.min_size = Vector2(600, 400) * dialog.content_scale_factor
 			var result = await dialog.ask(status)
 			if result != "ok":

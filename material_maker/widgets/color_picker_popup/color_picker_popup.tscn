@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://85acplyebptc"]
 
 [node name="ColorPickerPopup" type="PopupPanel"]
-size = Vector2i(298, 576)
+oversampling_override = 1.0
+size = Vector2i(306, 615)
 visible = true
 
 [node name="ColorPicker" type="ColorPicker" parent="."]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 294.0
-offset_bottom = 572.0
+offset_right = 302.0
+offset_bottom = 611.0

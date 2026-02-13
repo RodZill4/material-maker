@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
 [ext_resource type="Script" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 
 [node name="Preferences" type="Window"]
 oversampling_override = 1.0
@@ -190,6 +190,24 @@ tooltip_text = "Toggle background dimming when a dialog is visible."
 text = "On"
 flat = false
 config_variable = "dialog_dim_background"
+
+[node name="GuiSingleWindowMode" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiSingleWindowMode"]
+layout_mode = 2
+tooltip_text = "Enables single-window mode."
+mouse_filter = 1
+text = "Single window mode (requires restart)"
+
+[node name="GuiSingleWindowMode" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiSingleWindowMode" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Enables single-window mode."
+text = "On"
+flat = false
+config_variable = "ui_single_window_mode"
 
 [node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)

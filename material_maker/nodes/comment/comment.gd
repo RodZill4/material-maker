@@ -136,7 +136,7 @@ func _on_text_focus_exited():
 func _on_change_color_pressed():
 	var light_theme = "light" in mm_globals.main_window.theme.resource_path
 	accept_event()
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	$Popup.get_window().content_scale_factor = content_scale_factor
 	$Popup.get_window().size = $Popup.get_window().get_contents_minimum_size() * content_scale_factor
 	$Popup.position = get_screen_transform() * get_local_mouse_position()
@@ -181,7 +181,7 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
-		var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		var content_scale_factor = mm_globals.ui_scale_factor()
 		$PopupSelector.get_window().content_scale_factor = content_scale_factor
 		$PopupSelector.get_window().min_size = $PopupSelector.get_window().get_contents_minimum_size() * content_scale_factor
 		$PopupSelector.get_window().position = get_global_mouse_position() * content_scale_factor
@@ -231,17 +231,3 @@ func _on_raise_request():
 		if not child is MMGraphComment:
 			get_parent().move_child(self, i)
 			break
-
-
-func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
-	context_menu.position = get_screen_transform() * get_local_mouse_position()
-
-
-func _on_title_edit_ready() -> void:
-	%TitleEdit.get_menu().about_to_popup.connect(
-			_context_menu_about_to_popup.bind(%TitleEdit.get_menu()))
-
-
-func _on_text_ready() -> void:
-	%Text.get_menu().about_to_popup.connect(
-			_context_menu_about_to_popup.bind(%Text.get_menu()))

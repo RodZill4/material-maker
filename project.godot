@@ -57,6 +57,7 @@ window/size/transparent=true
 window/size/window_width_override=1
 window/size/window_height_override=1
 window/per_pixel_transparency/allowed=true
+window/subwindows/embed_subwindows=false
 window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
