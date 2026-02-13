@@ -5,7 +5,7 @@ var mesh : MeshInstance3D
 const config_key : String = "3D_preview_objects/%s_uv_scale"
 
 func _ready() -> void:
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = get_contents_minimum_size() * content_scale_factor
 	%ScaleLinked.icon = get_theme_icon("link", "MM_Icons")
 
