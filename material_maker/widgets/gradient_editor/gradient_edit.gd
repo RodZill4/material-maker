@@ -133,15 +133,17 @@ func select_color(cursor:GradientEditCursor) -> void:
 				hex.grab_focus()
 				hex.select_all()
 
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	color_picker_popup.content_scale_factor = content_scale_factor
 	color_picker_popup.min_size = color_picker_popup.get_contents_minimum_size() * content_scale_factor
 
 	var _scale := get_global_transform().get_scale()
-	
+
 	color_picker_popup.position.x = (global_position.x + size.x*_scale.x) * content_scale_factor
 	color_picker_popup.position.y = global_position.y * content_scale_factor
-	color_picker_popup.position += get_window().position
+
+	if not get_tree().root.gui_embed_subwindows:
+		color_picker_popup.position += get_window().position
 
 	color_picker_popup.popup_hide.connect(color_picker_popup.queue_free)
 	color_picker_popup.popup_hide.connect(set.bind("mode", Modes.IDLE))
