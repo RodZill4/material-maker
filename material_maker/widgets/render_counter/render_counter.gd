@@ -85,7 +85,7 @@ func e3tok(value : float) -> String:
 
 func _process(_delta):
 	var fps : float = Performance.get_monitor(Performance.TIME_FPS)
-	$FpsCounter.text = "%.1f FPS " % fps
+	$FpsCounter.text = "%.0f FPS " % fps
 	if auto and mm_renderer.total_renderers > 1:
 		if fps > 50.0:
 			fast_counter += 1
