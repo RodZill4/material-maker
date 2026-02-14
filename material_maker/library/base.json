@@ -3088,7 +3088,7 @@
 				}
 			},
 			"tree_item": "Filter/Fill/To Random Color",
-			"type": "fill_to_random_color2"
+			"type": "fill_to_random_color3"
 		},
 		{
 			"display_name": "To UV",
