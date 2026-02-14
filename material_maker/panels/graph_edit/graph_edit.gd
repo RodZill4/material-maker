@@ -24,6 +24,17 @@ var need_save_crash_recovery : bool = false
 var top_generator = null
 var generator = null
 
+@onready var grab_icon := preload("res://material_maker/icons/grab.svg")
+var has_grab : bool = false:
+	set(v):
+		has_grab = v
+		if has_grab:
+			Input.set_custom_mouse_cursor(
+					grab_icon, Input.CURSOR_ARROW,
+					grab_icon.get_size() * 0.5)
+		else:
+			Input.set_custom_mouse_cursor(null)
+
 const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
@@ -117,6 +128,29 @@ func process_port_click(pressed : bool):
 							set_current_preview(1 if is_shift_pressed else 0, port_click_node, port_click_port_index, is_control_pressed)
 							port_click_port_index = -1
 						return
+
+
+func _input(event: InputEvent) -> void:
+	# Handle node grab
+	if has_grab:
+		var selected_nodes := get_selected_nodes()
+		if event is InputEventMouseMotion:
+			for node in selected_nodes:
+				if node is not MMGraphComment:
+					node.move_to_front()
+				node.position_offset += event.relative / zoom
+		elif (event is InputEventMouseButton
+				and event.button_index == MOUSE_BUTTON_LEFT):
+			accept_event()
+			has_grab = false
+			# Prevent unintended control activations on grab release
+			for node in selected_nodes:
+				if event.pressed:
+					node.grab_click_focus.call_deferred()
+					# keep node selection on release in an empty area
+					if get_nodes_under_mouse().is_empty():
+						node.set_deferred("selected", true)
+
 
 func _gui_input(event) -> void:
 	if (
@@ -217,6 +251,8 @@ func _gui_input(event) -> void:
 				node_popup.show_popup()
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
+				if event.pressed:
+					has_grab = false
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
@@ -251,6 +287,11 @@ func _gui_input(event) -> void:
 					accept_event()
 				KEY_F:
 					color_comment_nodes()
+				KEY_G:
+					if not get_selected_nodes().is_empty():
+						has_grab = true
+				KEY_ESCAPE:
+					has_grab = false
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
