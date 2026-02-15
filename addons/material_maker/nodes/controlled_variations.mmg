@@ -1,0 +1,84 @@
+{
+	"generic_size": 1,
+	"name": "controlled_variations",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"v1": 0.5,
+		"variable": 0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"#for",
+			"vec4 $(name_uv)_cv_# = _controlled_variation_;",
+			"$(name_uv)_cv_#.$variable = $v#;",
+			"#end"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Generates controlled variations for its input",
+		"name": "Controlled Variations",
+		"outputs": [
+			{
+				"f": "$in.variation($uv, _seed_variation_, $(name_uv)_cv_#)",
+				"longdesc": "Shows a variation of the input",
+				"shortdesc": "Output1",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "Seed modifier for output 1",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "v#",
+				"shortdesc": "Seed modifier",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": 0,
+				"label": "Variable",
+				"name": "variable",
+				"type": "enum",
+				"values": [
+					{
+						"name": "$?1",
+						"value": "x"
+					},
+					{
+						"name": "$?2",
+						"value": "y"
+					},
+					{
+						"name": "$?3",
+						"value": "z"
+					},
+					{
+						"name": "$?4",
+						"value": "w"
+					}
+				]
+			}
+		],
+		"shortdesc": "Controlled Variations"
+	},
+	"type": "shader"
+}

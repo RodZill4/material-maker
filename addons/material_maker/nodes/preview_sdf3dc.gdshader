@@ -2,6 +2,7 @@ uniform float variation = 0.0;
 
 vec2 calcdist(vec3 uv) {
 	float _seed_variation_ = variation;
+	vec4 _controlled_variation_ = vec4(0.0);
 	$(code)
 	vec2 v = $(value);
 	v.x = v.x == 0.0 ? 1.0 : v.x;

@@ -58,6 +58,7 @@ float sstep(float v1, float v2) {
 
 void fragment() {
 	float _seed_variation_ = 0.0;
+	vec4 _controlled_variation_ = vec4(0.0);
 	vec2 ratio = preview_2d_size;
 	vec2 uv = preview_2d_center-vec2(0.5)+(UV-0.5)*preview_2d_scale*ratio/min(ratio.x, ratio.y);
 	
@@ -65,8 +66,8 @@ void fragment() {
 	
 	float edgewidth = 0.0001;
 	float d = -DIST_FCT(uv, 0, _seed_variation_);
-	float d2 = -DIST_FCT(uv, int(round(INDEX_UNIFORM)), _seed_variation_);
-	float d3 = -DIST_FCT(uv, -int(round(INDEX_UNIFORM)), _seed_variation_);
+	float d2 = -DIST_FCT(uv, int(round(INDEX_UNIFORM)), _seed_variation_, _controlled_variation_);
+	float d3 = -DIST_FCT(uv, -int(round(INDEX_UNIFORM)), _seed_variation_, _controlled_variation_);
 	float color = 0.5*sstep(0.0, d);
 	color += sstep(abs(d2), 0.002*preview_2d_scale);
 	color += sstep(abs(d3), 0.003*preview_2d_scale);
@@ -75,7 +76,7 @@ void fragment() {
 	float metallic;
 	float roughness;
 	vec3 emission;
-	COLOR_FCT(uv, albedo, metallic, roughness, emission, _seed_variation_);
+	COLOR_FCT(uv, albedo, metallic, roughness, emission, _seed_variation_, _controlled_variation_);
 	vec4 image;
 	if (view_style == 0) {
 		 image = clamp(albedo+vec4(vec3(clamp(color, 0.0, 1.0)), 1.0), vec4(0.0), vec4(1.0));
