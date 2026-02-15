@@ -23,12 +23,13 @@ Parameters
 
 The FBM node accepts the following parameters:
 
-* the noise type: value, perlin, simplex, cellular types or voronoise noise
-* the *X* and *Y* scale of the first octave noise
-* the number of folds (offsetting the noise negatively and taking the absolute value)
-* the number of iterations
-* the persistance, i.e. the strength of each subsequent iteration
-* the offset of the points, can be used to animate the noise
+* **Noise** type: value, perlin, simplex, cellular types or voronoise noise
+* **X** and **Y** scale of the first octave noise
+* Number of **Folds** (offsetting the noise negatively and taking the absolute value)
+* Number of **Iterations**
+* **Persistance**, i.e. the strength of each subsequent iteration
+* **Lacunarity**, i.e. the scale of each subsequent iteration
+* **Offset** of the points, can be used to animate the noise
 
 Example images
 ++++++++++++++
