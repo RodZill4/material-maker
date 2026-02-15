@@ -725,11 +725,11 @@ code,
 
 /* Keyboard shortcuts tweaks */
 kbd, .kbd {
-    background-color: var(--kbd-background-color);
-    border: 1px solid var(--kbd-outline-color);
+    background-color: var(--kbd-background-color) !important;
+    border: 1px solid var(--kbd-outline-color) !important;
     border-radius: 3px;
-    box-shadow: inset 0 -1px 0 var(--kbd-shadow-color);
-    color: var(--kbd-text-color);
+    box-shadow: inset 0 -1px 0 var(--kbd-shadow-color) !important;
+    color: var(--kbd-text-color) !important;
     display: inline-block;
     font-size: 12px;
     line-height: 11px;
