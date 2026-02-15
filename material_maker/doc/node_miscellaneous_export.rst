@@ -3,7 +3,8 @@ Export node
 
 The **Export** node defines a texture that will be saved together with the
 material textures when exporting the project. This node can also be triggered
-manually via **Quick Export** under material exports.
+manually via **Quick Export** under material exports without exporting a full
+materaial.
 
 .. image:: images/node_miscellaneous_export.png
 	:align: center
@@ -11,7 +12,7 @@ manually via **Quick Export** under material exports.
 Inputs
 ++++++
 
-The **Export** node has an input that will be saved when exporting the project.
+The **Export** node has an input that will be saved when exporting the project or triggered via **Quick Export**.
 
 Outputs
 +++++++
@@ -23,8 +24,8 @@ Parameters
 
 The **Export** node has three parameters:
 
-* the resolution size of the exported file
+* *Resolution* size of the exported file
 
-* the format of the exported file (i.e. PNG, JPG, WebP or EXR)
+* *Format* of the exported file (i.e. PNG, JPG, WebP or EXR)
 
-* the suffix of the file that will be created
+* *Filename* of the created file. $node, $project, $idx and $resolution can be used.
