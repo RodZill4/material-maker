@@ -1,10 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://d24qj0s2ime0p"]
+[gd_scene load_steps=15 format=3 uid="uid://d24qj0s2ime0p"]
 
 [ext_resource type="Script" uid="uid://cms1wqfr4yeb5" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
 [ext_resource type="FontFile" uid="uid://dttdyavpec18b" path="res://material_maker/fonts/vegur_regular.otf" id="3_m0b76"]
 [ext_resource type="Texture2D" uid="uid://dfy67bw73b836" path="res://splash_screen/arrow.svg" id="5_o00vo"]
 [ext_resource type="Shader" uid="uid://b3x7551t5ha0u" path="res://splash_screen/splash_screen_bottom.gdshader" id="5_xhfa4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uba88"]
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jeaul"]
 size = Vector2(760, 430)
@@ -35,10 +42,12 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("5_o00vo")
 region = Rect2(64, 32, 64, 32)
 
-[node name="Container" type="MarginContainer"]
+[node name="Container" type="PanelContainer"]
+clip_children = 2
 custom_minimum_size = Vector2(760, 430)
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 760.0
+offset_bottom = 430.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_uba88")
 script = ExtResource("1_q7nii")
 
 [node name="SplashScreen" type="TextureRect" parent="."]
@@ -103,7 +112,7 @@ offset_bottom = 43.986
 [node name="DarkenBottom" type="ColorRect" parent="SplashScreen"]
 material = SubResource("ShaderMaterial_dfnby")
 custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 331.0
@@ -165,7 +174,7 @@ mouse_filter = 2
 
 [node name="Previous" type="TextureButton" parent="BackgroundSelect"]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 368.0
 offset_top = 65.0
 offset_right = 400.0
@@ -179,7 +188,7 @@ flip_h = true
 
 [node name="Next" type="TextureButton" parent="BackgroundSelect"]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 456.0
 offset_top = 67.0
 offset_right = 488.0
