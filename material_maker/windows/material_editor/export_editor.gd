@@ -140,7 +140,7 @@ func _on_Load_Export_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
-	dialog.title = "Load export target from file"
+	dialog.title = "Load Export Target"
 	dialog.add_filter("*.mme;Material Maker Export target")
 	var files = await dialog.select_files()
 	if files.size() > 0:
@@ -163,7 +163,7 @@ func _on_Save_Export_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	dialog.title = "Save export target to file"
+	dialog.title = "Save Export Target"
 	dialog.add_filter("*.mme;Material Maker Export target")
 	var files = await dialog.select_files()
 	if files.size() > 0:
