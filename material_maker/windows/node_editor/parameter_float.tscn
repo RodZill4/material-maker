@@ -1,7 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://dn13ybhfpg52k"]
+[gd_scene load_steps=6 format=3 uid="uid://dn13ybhfpg52k"]
 
-[ext_resource type="Script" path="res://material_maker/windows/node_editor/parameter_float.gd" id="1"]
+[ext_resource type="Script" uid="uid://dv7vvyci7v4ma" path="res://material_maker/windows/node_editor/parameter_float.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://cvorvnes6fiq7" path="res://material_maker/icons/icons.svg" id="3_y55bf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2folb"]
+atlas = ExtResource("3_y55bf")
+region = Rect2(16, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y55bf"]
+atlas = ExtResource("3_y55bf")
+region = Rect2(64, 48, 32, 32)
 
 [node name="float" type="HBoxContainer"]
 offset_right = 400.0
@@ -14,7 +23,6 @@ text = "Min:"
 
 [node name="Min" parent="." instance=ExtResource("2")]
 layout_mode = 2
-text = "0"
 value = 0.0
 min_value = -65536.0
 max_value = 65536.0
@@ -26,7 +34,6 @@ text = "Max:"
 
 [node name="Max" parent="." instance=ExtResource("2")]
 layout_mode = 2
-text = "1"
 value = 1.0
 min_value = -65536.0
 max_value = 65536.0
@@ -38,7 +45,6 @@ text = "Step:"
 
 [node name="Step" parent="." instance=ExtResource("2")]
 layout_mode = 2
-text = "0.1"
 value = 0.1
 max_value = 10.0
 step = 0.005
@@ -58,6 +64,29 @@ text = "Control:"
 [node name="Control" type="OptionButton" parent="."]
 layout_mode = 2
 
+[node name="ControlSize" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="ControlSmall" type="Button" parent="ControlSize"]
+visible = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Small Gizmo"
+icon = SubResource("AtlasTexture_2folb")
+expand_icon = true
+
+[node name="ControlLarge" type="Button" parent="ControlSize"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+tooltip_text = "Large Gizmo"
+icon = SubResource("AtlasTexture_y55bf")
+expand_icon = true
+
 [connection signal="value_changed" from="Min" to="." method="_on_Min_value_changed"]
 [connection signal="value_changed" from="Max" to="." method="_on_Max_value_changed"]
 [connection signal="value_changed" from="Step" to="." method="_on_Step_value_changed"]
+[connection signal="item_selected" from="Control" to="." method="_on_control_item_selected"]
+[connection signal="pressed" from="ControlSize/ControlSmall" to="." method="_on_control_small_pressed"]
+[connection signal="pressed" from="ControlSize/ControlLarge" to="." method="_on_control_large_pressed"]
