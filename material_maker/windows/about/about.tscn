@@ -97,6 +97,7 @@ tab_alignment = 1
 current_tab = 0
 
 [node name="Authors" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -148,6 +149,7 @@ size_flags_horizontal = 4
 text = "Sponsors"
 
 [node name="Patrons" type="ItemList" parent="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -156,6 +158,7 @@ same_column_width = true
 fixed_column_width = 190
 
 [node name="License" type="TextEdit" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -286,6 +289,10 @@ texture_normal = ExtResource("9")
 stretch_mode = 4
 
 [connection signal="close_requested" from="." to="." method="queue_free"]
+[connection signal="gui_input" from="HBoxContainer/VBoxContainer/VBoxContainer/Authors" to="." method="_on_authors_gui_input"]
+[connection signal="gui_input" from="HBoxContainer/VBoxContainer/VBoxContainer/Donors" to="." method="_on_donors_gui_input"]
+[connection signal="gui_input" from="HBoxContainer/VBoxContainer/VBoxContainer/Donors/VBoxContainer/Patrons" to="." method="_on_patrons_gui_input"]
+[connection signal="gui_input" from="HBoxContainer/VBoxContainer/VBoxContainer/License" to="." method="_on_license_gui_input"]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Patreon" to="." method="open_url" binds= ["https://www.patreon.com/rodzlabs"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/ItchIo" to="." method="open_url" binds= ["https://rodzilla.itch.io/material-maker"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Github" to="." method="open_url" binds= ["https://github.com/RodZill4/godot-procedural-textures"]]

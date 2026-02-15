@@ -117,3 +117,15 @@ func _notification(what: int) -> void:
 		NOTIFICATION_THEME_CHANGED:
 			%EpicLogo.material.set_shader_parameter("invert", 
 					"light" in mm_globals.main_window.theme.resource_path)
+
+func _on_patrons_gui_input(event : InputEvent) -> void:
+	mm_globals.handle_warped_mmb_scroll(event, %Patrons, %Patrons.get_v_scroll_bar(), 0,
+			%Patrons.get_rect().size.y)
+
+func _on_authors_gui_input(event : InputEvent) -> void:
+	mm_globals.handle_warped_mmb_scroll(event, %Authors, %Authors.get_v_scroll_bar(), 0,
+			%Authors.get_rect().size.y)
+
+func _on_license_gui_input(event : InputEvent) -> void:
+	mm_globals.handle_warped_mmb_scroll(event, %License, %License.get_v_scroll_bar(), 0,
+	%License.get_rect().size.y, 1.0 / %License.get_line_height())

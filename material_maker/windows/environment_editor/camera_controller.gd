@@ -25,6 +25,17 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 				var factor = 0.0025*camera_position.position.z
 				camera_target_position.translate(-factor*event.relative.x*camera_position.global_transform.basis.x)
 				camera_target_position.translate(factor*event.relative.y*camera_position.global_transform.basis.y)
+			elif event.ctrl_pressed or event.meta_pressed:
+				if get_parent().name == "Preview3d":
+					var preview_3d : SubViewportContainer = get_parent().owner
+
+					mm_globals.handle_warped_drag_zoom(preview_3d,
+					(func() -> void:
+						var amount : float = 1.0 + event.relative.y * 0.002
+						camera_position.position.z = clamp(
+								camera_position.position.z * amount,
+								preview_3d.CAMERA_DISTANCE_MIN, preview_3d.CAMERA_DISTANCE_MAX)
+					), 0, preview_3d.get_rect().size.y)
 			else:
 				camera_rotation2.rotate_x(-0.01*event.relative.y)
 				camera_rotation1.rotate_y(-0.01*event.relative.x)

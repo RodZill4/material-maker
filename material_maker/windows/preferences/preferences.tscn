@@ -91,6 +91,16 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
+[node name="GuiWarpMouseGestures" parent="VBoxContainer/TabContainer/General" instance=ExtResource("1")]
+layout_mode = 2
+tooltip_text = "Warps mouse around panel for supported gestures:
+Drag zoom/scroll via  Ctrl + MMB / MMB
+
+This makes it possible to move over a large area without
+exiting and having to adjust mouse position, but may cause
+issues with some OSes and/or pen input devices."
+text = "Warp mouse gestures"
+config_variable = "ui_warp_mouse_gestures"
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/TabContainer/General"]
 layout_mode = 2
 

@@ -53,6 +53,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	auto_size_comment = true,
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
+	ui_warp_mouse_gestures = false,
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 }
@@ -171,11 +172,39 @@ func parse_paste_data(data : String):
 
 # Misc. UI functions
 
+func warp_mouse(position : Vector2, node : Control) -> void:
+	if mm_globals.get_config("ui_warp_mouse_gestures"):
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+		node.warp_mouse(position)
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func do_warp_mouse_y(node : Control, from_y : float, to_y : float, margin := 2) -> void:
+	var mouse_pos := node.get_local_mouse_position()
+	var mouse_pos_y_warpped := wrapf(mouse_pos.y, from_y + margin, to_y - margin)
+	if mouse_pos.y != mouse_pos_y_warpped:
+		warp_mouse(Vector2(mouse_pos.x, mouse_pos_y_warpped), node)
+
+func handle_warped_drag_zoom(node : Control, zoom_func : Callable,
+		from_rect_y : float, to_rect_y : float) -> void:
+	node.accept_event()
+	zoom_func.call()
+	do_warp_mouse_y(node, from_rect_y, to_rect_y)
+
+func handle_warped_mmb_scroll(event : InputEvent, node : Control, vscroll : VScrollBar,
+		from_rect_y : float, to_rect_y : float, relative_offset_mult := 1.0) -> void:
+	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
+		node.mouse_default_cursor_shape = Control.CURSOR_DRAG
+
+		vscroll.value -= event.relative.y * relative_offset_mult
+		do_warp_mouse_y(node, from_rect_y, to_rect_y)
+	else:
+		node.mouse_default_cursor_shape = Control.CURSOR_ARROW
+
 func popup_menu(menu : PopupMenu, parent : Control):
 	var zoom_fac = 1.0
 	if parent is GraphNode:
 		zoom_fac *= mm_globals.main_window.get_current_graph_edit().zoom
-	
+
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 

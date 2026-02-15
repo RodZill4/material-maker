@@ -157,3 +157,7 @@ func _on_VBoxContainer_minimum_size_changed():
 
 func _on_Filter_changed(new_text):
 	fill_list(new_text)
+
+func _on_item_list_gui_input(event: InputEvent) -> void:
+	mm_globals.handle_warped_mmb_scroll(event, item_list, item_list.get_v_scroll_bar(), 0,
+	item_list.get_rect().size.y)

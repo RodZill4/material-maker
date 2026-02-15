@@ -482,7 +482,7 @@ layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Middle-Mouse click and drag to turn the 3D preview.
 
-Scroll to zoom the 3D Preview."
+Scroll/Ctrl+MMB drag to zoom the 3D Preview."
 
 [connection signal="resized" from="." to="." method="_on_projects_panel_resized"]
 [connection signal="no_more_tabs" from="Projects" to="." method="_on_projects_no_more_tabs"]
