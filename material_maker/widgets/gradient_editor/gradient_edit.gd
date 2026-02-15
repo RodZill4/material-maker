@@ -1,5 +1,7 @@
 extends PanelContainer
 
+class_name GradientEdit
+
 # Emitted whenever the gradient changed
 signal updated(value, merge_undos:bool)
 # Emitted whenever the active cursor index changed
