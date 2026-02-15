@@ -289,6 +289,8 @@ visible = false
 [connection signal="gui_input" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
 [connection signal="mouse_exited" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_mouse_exited"]
 [connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
+[connection signal="meta_hover_ended" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_hover_ended"]
+[connection signal="meta_hover_started" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_hover_started"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/HBox/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
 [connection signal="pressed" from="VBoxContainer/StatusBar/HBox/ConsoleButton" to="VBoxContainer/Console" method="toggle"]
 [connection signal="timeout" from="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" method="_on_Timer_timeout"]
