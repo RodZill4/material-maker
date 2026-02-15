@@ -7963,6 +7963,15 @@
 			"type": "sdf3d_octahedron"
 		},
 		{
+			"display_name": "Alpha Association",
+			"name": "alpha_association",
+			"parameters": {
+				"mode": 0.0
+			},
+			"tree_item": "Filter/Alpha Association",
+			"type": "alpha_association"
+		},
+		{
 			"display_name": "Inverse Circle Map",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAArlJREFUeJztmj1LI3scRs/e+DJYJDLBtyZKQCIWqcRSG1sLK7/OfhQRLBS7TNRC0FiICIIMKMYhasbGiDMYFTKi42yzG272uly3eor8DwQMPM7vcEiRIt+SJEnoYv5RC6gxAdQCakwAtYAaE0AtoMYEUAuoMQHUAmpMALWAGhNALaDGBFALqDEB1AJqTAC1gBoTQC2gxgRQC6gxAdQCaro+QM+/34RhiO/7vL6+kslkmJycJJVKffqPvu/TaDQAGBkZIZfLfbqL4xjP82g2m/T395PL5bBt+9Ot4n47wPn5OcfHx9TrdaIoIpPJUCgUmJubI5vNdjy0Uqngui53d3cAjI6OUiwWmZ+f79gFQcDBwQHVapVms4llWYyPjzM7O8v09HTHVnW/B6BarVIqlTg6OuLm5oYoihgcHGRqaoqnpyeWl5exLAuA3d1ddnZ2OD097RCo1+u8vb2xsLAAQBRFOI7D/v4+FxcXPD4+YlkWExMTNBoNUqkUhUIB9f2eVqtFuVzGcRwODw/5+PhoF/Q8j5eXF9LpNEtLS7iuS7lcZmtri8vLy/bu7OyM29tb4jhmeHiYYrHI9vY2juOwt7dHEATtreu6PDw80Nvb2/7YKu+nZmZmvq+trVGpVPj9txKtVourqysGBgYoFAo4jsP6+jqe5/E7QRAQBAHpdJqhoSFWV1fZ3Nzk+fm5Y5ckCb7vE8cx2WyWWq2G8n7Ktu3vGxsb/3ngL97f37m/v2dsbIxSqcTJyckft2EYEscxfX19rKysEIbhH7fX19fYtk2tVkN5n3w+nwD/+1pcXPzS7m+2+Xw+Ud/nqw+1LOvLAn+zVd//9vOPrqXrvwmaAGoBNSaAWkCNCaAWUGMCqAXUmABqATUmgFpAjQmgFlBjAqgF1JgAagE1JoBaQI0JoBZQYwKoBdR0fYAftHRSm0MKpOEAAAAASUVORK5CYII=",
 			"name": "inverse_circle_map",
