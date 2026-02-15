@@ -28,15 +28,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="16"
-     inkscape:cx="113.5"
-     inkscape:cy="206.84375"
+     inkscape:zoom="32"
+     inkscape:cx="53.625"
+     inkscape:cy="214.0625"
      inkscape:window-width="1152"
      inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g11-3"
+     inkscape:current-layer="g34"
      showguides="false">
     <inkscape:grid
        id="grid2"
@@ -2716,8 +2716,7 @@
      inkscape:groupmode="layer"
      id="g44"
      inkscape:label="fourteenth_row"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <g
        id="g155"
        transform="translate(-0.12677126)"
@@ -2781,7 +2780,8 @@
       </g>
     </g>
     <g
-       id="g196">
+       id="g196"
+       inkscape:label="align_center">
       <g
          id="g182"
          inkscape:label="nodebottom"
@@ -2804,6 +2804,17 @@
          id="g184"
          inkscape:label="nodetop"
          transform="translate(16.507087)" />
+    </g>
+    <g
+       id="g34"
+       inkscape:label="bookmark"
+       transform="translate(31.004724)">
+      <path
+         id="rect34"
+         style="display:inline;fill:#ffffff;stroke:#ffffff;stroke-width:2.25638;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m 53.12126,210.7382 5.75622,-0.0364 v 10.74072 L 56,216.61735 l -2.87874,4.82516 z"
+         sodipodi:nodetypes="cccccc"
+         transform="translate(-31.004724)" />
     </g>
   </g>
   <g

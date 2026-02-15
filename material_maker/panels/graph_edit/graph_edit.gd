@@ -251,6 +251,8 @@ func _gui_input(event) -> void:
 					accept_event()
 				KEY_F:
 					color_comment_nodes()
+				KEY_B:
+					bookmark_node()
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -324,6 +326,7 @@ func add_node(node) -> void:
 	add_child(node)
 	move_child(node, 0)
 	node.connect("delete_request", Callable(self, "remove_node").bind(node))
+	add_default_bookmark(node)
 
 func swap_node_inputs() -> void:
 	var selected_nodes : Array = get_selected_nodes()
@@ -484,6 +487,7 @@ func do_remove_node(node) -> void:
 		remove_child(node)
 		node.queue_free()
 		send_changed_signal()
+		get_node("/root/MainWindow/BookmarkManager").updated_from_graph.emit()
 
 # Global operations on graph
 
@@ -1004,7 +1008,6 @@ func create_subgraph() -> void:
 	undoredo_create_step("Create subgraph", generator.get_hier_name(), prev, next)
 	if subgraph != null:
 		update_view(subgraph)
-
 
 func _on_ButtonShowTree_pressed() -> void:
 	var graph_tree : Popup = preload("res://material_maker/widgets/graph_tree/graph_tree.tscn").instantiate()
@@ -1758,3 +1761,25 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func bookmark_node() -> void:
+	var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
+	var selected_nodes := get_selected_nodes()
+	if selected_nodes.size() != 1:
+		return
+	var selected_node : GraphElement = selected_nodes[0]
+	var generator_path : String = "./" + str(top_generator.get_path_to(selected_node.generator))
+	if not bookmark_manager.bookmarks.has(generator_path):
+		var tween := get_tree().create_tween()
+		tween.tween_property(selected_node, "modulate", Color.DIM_GRAY, 0.1)
+		tween.parallel().tween_property(selected_node, "modulate", Color.WHITE, 0.15).set_delay(0.15)
+		bookmark_manager.add_bookmark(selected_node, generator_path)
+
+func add_default_bookmark(node : GraphElement) -> void:
+	if BookmarkManager.is_default_bookmark_node(node):
+		if not node.generator:
+			await get_tree().process_frame
+		var node_path = "./" + str(top_generator.get_path_to(node.generator))
+		var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
+		if not bookmark_manager.bookmarks.has(node_path) and node.name == "node_Material":
+			bookmark_manager.add_bookmark_from_path(node_path, BookmarkManager.get_label_from_node(node))
