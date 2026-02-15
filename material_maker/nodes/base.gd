@@ -247,6 +247,9 @@ func _draw() -> void:
 		if control.get("modulate"):
 			control.modulate.a = opacity
 
+	get_parent().get_node("HighlightsOverlay").update_connections()
+	
+	
 func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
 	var stylebox_position: Vector2 = first_port + Vector2(-0.5,-0.5) * portgroup_width
 	var stylebox_size: Vector2 = Vector2(portgroup_width, last_port.y - first_port.y + portgroup_width)

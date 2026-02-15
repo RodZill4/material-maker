@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dy1u50we7gtru"]
+[gd_scene load_steps=9 format=3 uid="uid://dy1u50we7gtru"]
 
 [ext_resource type="Script" uid="uid://dkp4w3at1o6cm" path="res://material_maker/panels/graph_edit/graph_edit.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="Script" uid="uid://dlah77kjy12l6" path="res://material_maker/panels/graph_edit/highlights_overlay.gd" id="5_u5byk"]
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("2")
@@ -84,6 +85,10 @@ layout_mode = 2
 
 [node name="UndoRedo" type="Node" parent="."]
 script = ExtResource("3")
+
+[node name="HighlightsOverlay" type="Control" parent="."]
+anchors_preset = 0
+script = ExtResource("5_u5byk")
 
 [connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [true]]
 [connection signal="connection_request" from="." to="." method="on_connect_node"]

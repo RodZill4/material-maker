@@ -1025,18 +1025,6 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 
 # Node selection
 
-var highlighting_connections : bool = false
-
-func highlight_connections() -> void:
-	if highlighting_connections:
-		return
-	highlighting_connections = true
-	while Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		await get_tree().process_frame
-	for c in get_connection_list():
-		set_connection_activity(c.from_node, c.from_port, c.to_node, c.to_port, 1.0 if get_node(NodePath(c.from_node)).selected or get_node(NodePath(c.to_node)).selected else 0.0)
-	highlighting_connections = false
-
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	if node is MMGraphComment:
 		#print("Selecting enclosed nodes...")
@@ -1047,7 +1035,6 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	elif node is MMGraphCommentLine:
 		pass
 	else:
-		highlight_connections()
 		await get_tree().process_frame
 		if current_preview[0] != null:
 			for n in get_selected_nodes():
@@ -1066,7 +1053,6 @@ func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	mm_globals.main_window.update_menus()
 
 func _on_GraphEdit_node_unselected(_node):
-	highlight_connections()
 	undoredo_move_node_selection_changed = true
 	mm_globals.main_window.update_menus()
 
