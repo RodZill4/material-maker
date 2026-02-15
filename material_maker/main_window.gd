@@ -1190,7 +1190,7 @@ func bug_report() -> void:
 
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
-	add_child(about_box)
+	add_dialog(about_box)
 	about_box.hide()
 	about_box.popup_centered()
 
@@ -1428,7 +1428,10 @@ func add_dialog(dialog : Window):
 	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
 	add_child(background)
 	add_child(dialog)
-	dialog.connect("tree_exited", background.queue_free)
+	dialog.tree_exited.connect(func():
+		var tween := get_tree().create_tween()
+		tween.tween_property(background, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_CUBIC)
+		tween.tween_callback(background.queue_free))
 
 # Accept dialog
 
