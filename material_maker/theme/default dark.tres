@@ -205,7 +205,7 @@ metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
 [sub_resource type="Resource" id="Resource_0m7hk"]
 script = ExtResource("4_0efyb")
-name = "GraphEditConnectionKnife"
+name = "GraphEditLineGesture"
 orig = Color(0.99215686, 0.9843137, 1, 1)
 target = Color(1, 1, 1, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
