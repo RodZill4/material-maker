@@ -2,6 +2,16 @@ class_name FloatEdit
 extends Control
 
 var float_value: float = 0.5
+var default_float_value: float = 0.0
+
+enum ContextMenu {RESET_VALUE, EDIT_EXPRESSION, COPY, PASTE, COPY_REFERENCE}
+
+@export var default_value: float = 0.0 :
+	get:
+		return default_float_value
+	set(default_value):
+		default_float_value = default_value
+
 @export var value: float = 0.5 :
 	get:
 		return float_value
@@ -81,7 +91,7 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 		v = float(v)
 
 	if v is String and float_only:
-		v = min_value
+		v = float_value
 
 	if v is float:
 		float_value = v
@@ -213,14 +223,66 @@ func _gui_input(event: InputEvent) -> void:
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
 		if event is InputEventMouseButton:
-			# Handle Right Click (Expression Editor)
-			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and not float_only:
-				var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
-				add_child(expression_editor)
-				expression_editor.edit_parameter(
-					"Expression editor - " + name,
-					$Edit.text, self,
-					"set_value_from_expression_editor")
+
+			# Handle Right Click
+			if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+				var context_menu : PopupMenu = PopupMenu.new()
+				var copy_submenu : PopupMenu = null
+				context_menu.position = get_local_mouse_position() + get_screen_position()
+
+				context_menu.add_item("Reset value", ContextMenu.RESET_VALUE)
+				if not float_only:
+					context_menu.add_item("Edit expression", ContextMenu.EDIT_EXPRESSION)
+
+				context_menu.add_separator()
+
+				if not float_only:
+					copy_submenu = PopupMenu.new()
+					copy_submenu.add_item("Value", ContextMenu.COPY)
+					copy_submenu.add_item("Reference", ContextMenu.COPY_REFERENCE)
+					context_menu.add_submenu_node_item("Copy", copy_submenu)
+				else:
+					context_menu.add_item("Copy", ContextMenu.COPY)
+
+				if DisplayServer.clipboard_has():
+					context_menu.add_item("Paste", ContextMenu.PASTE)
+
+				if copy_submenu != null:
+					copy_submenu.id_pressed.connect(func(id):
+						match id:
+							ContextMenu.COPY_REFERENCE:
+								DisplayServer.clipboard_set("$" + str(name))
+							ContextMenu.COPY:
+								DisplayServer.clipboard_set(str(get_value()))
+						)
+
+				context_menu.id_pressed.connect(func(id):
+					match id:
+						ContextMenu.RESET_VALUE:
+							set_value(default_float_value, true, true)
+						ContextMenu.EDIT_EXPRESSION:
+							var expression_editor: Window = load("res://material_maker/widgets/float_edit/expression_editor.tscn").instantiate()
+							add_child(expression_editor)
+							expression_editor.edit_parameter(
+									"Expression editor - " + name,
+									$Edit.text, self,
+									"set_value_from_expression_editor")
+						ContextMenu.COPY:
+							DisplayServer.clipboard_set(str(get_value()))
+						ContextMenu.PASTE:
+							var clipboard = DisplayServer.clipboard_get()
+							if name in clipboard:
+								var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+								dialog.dialog_text = TranslationServer.translate("Resulting paste will cause parameter to reference itself")
+								dialog.dialog_text += " ( $%s )" % [ name ]
+								add_child(dialog)
+								await dialog.ask()
+								return
+							set_value(DisplayServer.clipboard_get(), true, true)
+				)
+				context_menu.popup_hide.connect(context_menu.queue_free)
+				add_child(context_menu)
+				context_menu.popup()
 				accept_event()
 
 			# Handle CTRL+Scrolling
