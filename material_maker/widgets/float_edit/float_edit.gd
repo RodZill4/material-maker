@@ -10,11 +10,13 @@ var float_value: float = 0.5
 
 @export var min_value: float = 0.0 :
 	set(v):
+		show_hide_out_of_bounds_overlay(float_value < min_value)
 		min_value = v
 		$Slider.min_value = v
 
 @export var max_value: float = 1.0 :
 	set(v):
+		show_hide_out_of_bounds_overlay(float_value > max_value)
 		max_value = v
 		$Slider.max_value = v
 
@@ -93,6 +95,8 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 			$Slider.value = v
 		else:
 			$Slider.value = min_value
+		show_hide_out_of_bounds_overlay(
+				float_value < min_value or float_value > max_value)
 		if notify:
 			emit_signal("value_changed", float_value)
 			emit_signal("value_changed_undo", float_value, merge_undos)
@@ -103,6 +107,13 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 		if notify:
 			emit_signal("value_changed", v)
 			emit_signal("value_changed_undo", v, merge_undos)
+
+
+func show_hide_out_of_bounds_overlay(should_show: bool) -> void:
+	var mod := Color(1.0,0.8,0.5,1.0) if should_show else Color.WHITE
+	if is_inside_tree():
+		var t : Tween = get_tree().create_tween()
+		t.tween_property(self, "modulate", mod, 0.25)
 
 
 func set_value_from_expression_editor(v: String) -> void:
