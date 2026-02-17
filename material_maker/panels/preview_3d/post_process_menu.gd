@@ -134,7 +134,7 @@ func _ready() -> void:
 	restore_dof_settings()
 
 
-func _on_glow_blending_item_selected(index: int) -> void:
+func _on_glow_blending_item_selected(index: Environment.GlowBlendMode) -> void:
 	environment.glow_blend_mode = index
 	mm_globals.set_config(SETTING_PREVIEW_GLOW_BLEND_MODE, index)
 	GlowBlendMix.visible = index == Environment.GLOW_BLEND_MODE_MIX
@@ -326,7 +326,7 @@ func show_hide_tonemap_white(tonemapper: int) -> void:
 			TonemapWhite.show()
 
 
-func _on_tone_map_item_selected(tonemapper: int) -> void:
+func _on_tone_map_item_selected(tonemapper: Environment.ToneMapper) -> void:
 	environment.tonemap_mode = tonemapper
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP, tonemapper)
 	show_hide_tonemap_white(tonemapper)

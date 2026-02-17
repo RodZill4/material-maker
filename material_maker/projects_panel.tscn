@@ -151,7 +151,7 @@ button_mask = 3
 script = ExtResource("6_r5hxx")
 icon_name = "zoom"
 
-[node name="ZoomeMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu"]
+[node name="ZoomMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu"]
 top_level = true
 layout_mode = 0
 offset_left = 283.0
@@ -161,10 +161,10 @@ offset_bottom = -32.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("7_lbgjg")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel"]
+[node name="VBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel"]
 layout_mode = 2
 
-[node name="ZoomOut" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomOut" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -175,7 +175,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "zoom_out"
 
-[node name="ZoomIn" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomIn" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -186,7 +186,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "zoom_in"
 
-[node name="ZoomReset" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomReset" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -197,7 +197,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "zoom_reset"
 
-[node name="ZoomLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_NumberLabel"
@@ -491,9 +491,9 @@ Scroll to zoom the 3D Preview."
 [connection signal="tab_changed" from="Projects/TabBar" to="Projects" method="set_current_tab"]
 [connection signal="tab_close_pressed" from="Projects/TabBar" to="Projects" method="close_tab"]
 [connection signal="timeout" from="Projects/CrashRecoveryTimer" to="Projects" method="_on_CrashRecoveryTimer_timeout"]
-[connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomOut" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_out_pressed"]
-[connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomIn" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_in_pressed"]
-[connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer/ZoomReset" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" method="_on_zoom_reset_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer/ZoomOut" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel" method="_on_zoom_out_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer/ZoomIn" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel" method="_on_zoom_in_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel/VBoxContainer/ZoomReset" to="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomMenuPanel" method="_on_zoom_reset_pressed"]
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridVisibility" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_visibility_toggled"]
 [connection signal="toggled" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridSnapping" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_snapping_toggled"]
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer/GridSize" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_grid_size_value_changed"]
