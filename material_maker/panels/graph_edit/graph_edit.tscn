@@ -91,6 +91,7 @@ script = ExtResource("3")
 [connection signal="copy_nodes_request" from="." to="." method="copy"]
 [connection signal="disconnection_request" from="." to="." method="on_disconnect_node"]
 [connection signal="duplicate_nodes_request" from="." to="." method="duplicate_selected"]
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="node_deselected" from="." to="." method="_on_GraphEdit_node_unselected"]
 [connection signal="node_selected" from="." to="." method="_on_GraphEdit_node_selected"]
 [connection signal="paste_nodes_request" from="." to="." method="paste"]
