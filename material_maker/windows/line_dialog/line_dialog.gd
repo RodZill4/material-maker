@@ -41,7 +41,7 @@ func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 			get_mouse_position() * content_scale_factor)
 
 func _on_ready() -> void:
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	var line_edit_context : PopupMenu = $VBoxContainer/LineEdit.get_menu()
 	line_edit_context.about_to_popup.connect(
 			_context_menu_about_to_popup.bind(line_edit_context))
