@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=166 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=168 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -1017,26 +1017,7 @@ content_margin_right = 7.0
 content_margin_bottom = 5.0
 bg_color = Color(0.117647, 0.121569, 0.133333, 1)
 draw_center = false
-border_width_top = 2
 border_color = Color(0.266667, 0.278431, 0.301961, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_708uu"]
-content_margin_left = 7.0
-content_margin_top = 5.0
-content_margin_right = 7.0
-content_margin_bottom = 5.0
-bg_color = Color(0.145098, 0.14902, 0.164706, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4jxv"]
-content_margin_left = 7.0
-content_margin_top = 5.0
-content_margin_right = 7.0
-content_margin_bottom = 5.0
-bg_color = Color(0.129412, 0.137255, 0.152941, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 
@@ -1045,7 +1026,16 @@ content_margin_left = 7.0
 content_margin_top = 5.0
 content_margin_right = 7.0
 content_margin_bottom = 5.0
-bg_color = Color(0.109804, 0.113725, 0.12549, 1)
+bg_color = Color(0.12941177, 0.13725491, 0.15294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r4jxv"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.09411765, 0.09803922, 0.101960786, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 
@@ -1059,6 +1049,26 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rqlqa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pkv4t"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.12941177, 0.13725491, 0.15294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uenv"]
+content_margin_left = 7.0
+content_margin_top = 5.0
+content_margin_right = 7.0
+content_margin_bottom = 5.0
+bg_color = Color(0.09411765, 0.09803922, 0.101960786, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_asgc8"]
 
@@ -1403,12 +1413,21 @@ TabBar/colors/font_hovered_color = Color(0.95, 0.95, 0.95, 1)
 TabBar/colors/font_selected_color = Color(0.95, 0.95, 0.95, 1)
 TabBar/colors/font_unselected_color = Color(0.7, 0.7, 0.7, 1)
 TabBar/constants/h_separation = 6
+TabBar/constants/tab_separation = 4
 TabBar/icons/close = SubResource("AtlasTexture_1wpt7")
 TabBar/styles/tab_focus = SubResource("StyleBoxFlat_ax2cv")
-TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_708uu")
+TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_w1kc3")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_r4jxv")
 TabBar/styles/tab_unselected = SubResource("StyleBoxFlat_w1kc3")
+TabContainer/colors/font_hovered_color = Color(0.49019608, 0.5058824, 0.54509807, 1)
+TabContainer/colors/font_selected_color = Color(1, 1, 1, 1)
+TabContainer/colors/font_unselected_color = Color(0.49019608, 0.5058824, 0.54509807, 1)
+TabContainer/constants/tab_separation = 3
 TabContainer/styles/panel = SubResource("StyleBoxFlat_wc388")
+TabContainer/styles/tab_focus = SubResource("StyleBoxEmpty_rqlqa")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_pkv4t")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_8uenv")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_pkv4t")
 TextEdit/styles/focus = SubResource("StyleBoxEmpty_asgc8")
 TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
