@@ -49,6 +49,7 @@ offset_bottom = 24.0
 alignment = 2
 
 [node name="SubGraphUI" type="HBoxContainer" parent="GraphUI"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 9
 

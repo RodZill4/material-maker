@@ -150,6 +150,7 @@ func set_screen(bi : int, sub_index = -1) -> void:
 			%Title.gui_input.disconnect(c.callable)
 
 func _ready():
+	RenderingServer.set_default_clear_color(Color.BLACK)
 	set_process(false)
 
 	resource_path = "res://material_maker/main_window.tscn"
@@ -208,7 +209,9 @@ func _process(delta) -> void:
 			if tween:
 				tween.kill()
 			tween = get_tree().create_tween()
-			tween.tween_property(progress_bar, "value", 100.0, 1.0).set_trans(Tween.TRANS_LINEAR)
+			tween.tween_property(progress_bar, "value", 80.0, 0.7).set_trans(Tween.TRANS_LINEAR)
+			tween.tween_property(progress_bar, "value", 100.0, 0.7).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			tween.parallel().tween_property($SplashFade, "color", Color.BLACK, 0.6).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_delay(0.15)
 			tween.tween_callback(self.start_ui.bind(ResourceLoader.load_threaded_get(resource_path)))
 		_:
 			print("error "+str(status))
@@ -217,10 +220,31 @@ func _process(delta) -> void:
 func _on_secret_button_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if mm_scene != null:
-			do_start_ui(mm_scene)
+			var splash_fade = ColorRect.new()
+			splash_fade.color = Color(0.0,0.0,0.0,0.0)
+			add_child(splash_fade)
+			if tween:
+				tween.kill()
+			tween = get_tree().create_tween()
+			tween.tween_property(splash_fade, "color",
+					Color.BLACK, 0.7).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			tween.tween_callback(do_start_ui.bind(mm_scene))
 		else:
 			delay_start = true
 			$BackgroundSelect.visible = true
+
+			tween.pause()
+			var pause_color = $SplashFade.color
+			var splash_fade_rewind = ColorRect.new()
+			splash_fade_rewind.color = pause_color
+			splash_fade_rewind.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			add_child(splash_fade_rewind)
+			$SplashFade.visible = false
+			$SplashFade.free()
+			tween.play()
+			tween = get_tree().create_tween()
+			tween.tween_property(splash_fade_rewind, "color",
+					Color(0.0,0.0,0.0,0.0), 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 func _on_previous_pressed():
 	if BACKGROUNDS[background_index].has("entries") and background_subindex > 0:
