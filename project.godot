@@ -17,7 +17,7 @@ run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker_2"
 config/features=PackedStringArray("4.5")
-boot_splash/bg_color=Color(0, 0, 0, 0)
+boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
@@ -53,8 +53,10 @@ gdscript/warnings/unused_class_variable=true
 window/size/viewport_width=1
 window/size/viewport_height=1
 window/size/borderless=true
+window/size/transparent=true
 window/size/window_width_override=1
 window/size/window_height_override=1
+window/per_pixel_transparency/allowed=true
 window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
