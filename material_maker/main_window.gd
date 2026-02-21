@@ -115,6 +115,7 @@ const MENU : Array[Dictionary] = [
 	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
+	{ menu="Help/Example projects", command="show_example_projects"},
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
 	{ menu="Help/Report a bug", command="bug_report" },
 	{ menu="Help/" },
@@ -1193,6 +1194,9 @@ func about() -> void:
 	add_child(about_box)
 	about_box.hide()
 	about_box.popup_centered()
+
+func show_example_projects() -> void:
+	OS.shell_open(ProjectSettings.globalize_path("res://material_maker/examples"))
 
 # Preview
 
