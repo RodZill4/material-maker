@@ -488,6 +488,7 @@ Scroll to zoom the 3D Preview."
 [connection signal="no_more_tabs" from="Projects" to="." method="_on_projects_no_more_tabs"]
 [connection signal="resized" from="Projects" to="Projects" method="_on_Projects_resized"]
 [connection signal="tab_changed" from="Projects" to="." method="_on_projects_tab_changed"]
+[connection signal="gui_input" from="Projects/TabBar" to="Projects" method="_on_tab_bar_gui_input"]
 [connection signal="tab_changed" from="Projects/TabBar" to="Projects" method="set_current_tab"]
 [connection signal="tab_close_pressed" from="Projects/TabBar" to="Projects" method="close_tab"]
 [connection signal="timeout" from="Projects/CrashRecoveryTimer" to="Projects" method="_on_CrashRecoveryTimer_timeout"]
