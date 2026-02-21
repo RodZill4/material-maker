@@ -457,6 +457,11 @@ region = Rect2(64, 192, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 16, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jwmb"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 64, 16, 16)
+metadata/scale = 2.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_oy0ko"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 0, 16, 16)
@@ -1241,6 +1246,7 @@ MM_Icons/icons/connection_direct = SubResource("AtlasTexture_pfiqs")
 MM_Icons/icons/connection_manhattan = SubResource("AtlasTexture_pfsii")
 MM_Icons/icons/connection_rounded = SubResource("AtlasTexture_1lfk8")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
+MM_Icons/icons/download = SubResource("AtlasTexture_0jwmb")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
