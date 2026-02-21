@@ -45,15 +45,16 @@ func _ready():
 	syntax_highlighter.add_color_region("/*", "*/", get_theme_color("multi_line_comment_color", "CodeEdit"), false)
 
 func _on_gui_input(event):
+	var replace_shortcut = (
+			"Command+R" if OS.get_name() == "macOS" else "Ctrl+H")
 	if event is InputEventKey:
-		if event.as_text_keycode() == "Ctrl+F":
-			accept_event()
+		if event.is_command_or_control_pressed() and event.keycode == KEY_F:
 			%Find.visible = true
 			%ReplaceControls.visible = false
 			if get_selected_text() != "":
 				%FindString.text = get_selected_text()
 			%FindString.grab_focus()
-		elif event.as_text_keycode() == "Ctrl+H":
+		elif event.as_text_keycode() == replace_shortcut:
 			accept_event()
 			%Find.visible = true
 			%ReplaceControls.visible = true

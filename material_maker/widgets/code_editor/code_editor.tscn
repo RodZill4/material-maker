@@ -1,13 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://ddgb7ul6fncx8"]
+[gd_scene load_steps=8 format=3 uid="uid://ddgb7ul6fncx8"]
 
 [ext_resource type="FontFile" uid="uid://c4vhxy5kgdp8s" path="res://material_maker/fonts/hack.ttf" id="1_o6uhb"]
 [ext_resource type="Script" uid="uid://d2ggou7kt4qxd" path="res://material_maker/widgets/code_editor/code_editor.gd" id="2_b3eoo"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="3_r6odv"]
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_cib74"]
 number_color = Color(1, 0.756863, 0, 1)
 symbol_color = Color(0.447059, 0.752941, 0.776471, 1)
 function_color = Color(0.74902, 0.435294, 1, 1)
 member_variable_color = Color(0.419608, 1, 0.4, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_inkv5"]
+atlas = ExtResource("3_r6odv")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6odv"]
+atlas = ExtResource("3_r6odv")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_usidv"]
+atlas = ExtResource("3_r6odv")
+region = Rect2(48, 0, 16, 16)
 
 [node name="Main Code" type="CodeEdit"]
 anchors_preset = 15
@@ -73,15 +86,17 @@ layout_mode = 2
 
 [node name="Previous" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
 layout_mode = 2
-text = "^"
+tooltip_text = "Previous match"
+icon = SubResource("AtlasTexture_inkv5")
 
 [node name="Next" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
 layout_mode = 2
-text = "v"
+tooltip_text = "Next match"
+icon = SubResource("AtlasTexture_r6odv")
 
 [node name="Close" type="Button" parent="Find/HBoxContainer/VBoxContainer/FindControls"]
 layout_mode = 2
-text = "x"
+icon = SubResource("AtlasTexture_usidv")
 
 [node name="ReplaceControls" type="HBoxContainer" parent="Find/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -95,10 +110,12 @@ placeholder_text = "Replace"
 
 [node name="ReplaceCurrent" type="Button" parent="Find/HBoxContainer/VBoxContainer/ReplaceControls"]
 layout_mode = 2
+tooltip_text = "Replace current"
 text = "RC"
 
 [node name="ReplaceAll" type="Button" parent="Find/HBoxContainer/VBoxContainer/ReplaceControls"]
 layout_mode = 2
+tooltip_text = "Replace all"
 text = "RA"
 
 [node name="UpdateFind" type="Timer" parent="."]
