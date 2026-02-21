@@ -28,15 +28,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="16"
-     inkscape:cx="113.5"
-     inkscape:cy="206.84375"
+     inkscape:zoom="32"
+     inkscape:cx="52.4375"
+     inkscape:cy="212.0625"
      inkscape:window-width="1152"
      inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g11-3"
+     inkscape:current-layer="g44"
      showguides="false">
     <inkscape:grid
        id="grid2"
@@ -2781,7 +2781,8 @@
       </g>
     </g>
     <g
-       id="g196">
+       id="g196"
+       inkscape:label="align_center">
       <g
          id="g182"
          inkscape:label="nodebottom"
@@ -2804,6 +2805,51 @@
          id="g184"
          inkscape:label="nodetop"
          transform="translate(16.507087)" />
+    </g>
+    <g
+       id="g36"
+       inkscape:label="shrink"
+       transform="translate(31.731417)">
+      <g
+         id="g113"
+         inkscape:label="arrow"
+         transform="translate(1,-1)">
+        <path
+           style="display:inline;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:1.88976;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+           d="m 24.268583,212 v 4"
+           id="path109"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="display:inline;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:1.88976;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+           d="m 28.268583,216 h -4"
+           id="path112"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="display:inline;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:1.88976;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+           d="m 29.268583,211 -5,5"
+           id="path113"
+           sodipodi:nodetypes="cc" />
+      </g>
+      <g
+         id="g116"
+         inkscape:label="arrow"
+         transform="rotate(180,23.768583,216.5)">
+        <path
+           style="display:inline;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:1.88976;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+           d="m 24.268583,212 v 4"
+           id="path114"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="display:inline;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:1.88976;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+           d="m 28.268583,216 h -4"
+           id="path115"
+           sodipodi:nodetypes="cc" />
+        <path
+           style="display:inline;fill:none;fill-opacity:1;stroke:#eeeeee;stroke-width:1.88976;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:stroke fill markers"
+           d="m 29.268583,211 -5,5"
+           id="path116"
+           sodipodi:nodetypes="cc" />
+      </g>
     </g>
   </g>
   <g

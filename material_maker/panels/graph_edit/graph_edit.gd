@@ -251,6 +251,8 @@ func _gui_input(event) -> void:
 					accept_event()
 				KEY_F:
 					color_comment_nodes()
+				KEY_D:
+					detach_selected_nodes()
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -900,13 +902,38 @@ func do_paste(data) -> void:
 	var node_position = scroll_offset+0.5*size
 	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
 		node_position = offset_from_global_position(get_global_mouse_position())
+
 	for c in get_children():
 		if c is GraphElement:
 			c.selected = false
+
 	var new_nodes = await create_nodes(data, node_position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true
+
+		# Attach duplicated nodes to frames
+		if data.has("nodes"):
+			var i := 0
+			var dupe_map : Dictionary[String, String]
+			for n in data.nodes.map(func(d): return d.name):
+				dupe_map["node_"+n] = ""
+
+			for c in new_nodes:
+				dupe_map[dupe_map.keys()[i]] = c.name
+				i += 1
+
+			# Attach duplicated nodes to frames
+			for old_node in dupe_map.keys():
+				if get_node(old_node) is MMGraphComment:
+					var new_frame = dupe_map[old_node]
+					get_node(new_frame).generator.attached.clear()
+					for attached_node in get_attached_nodes_of_frame(old_node):
+						if dupe_map.has(attached_node):
+							if dupe_map[attached_node] == "":
+								continue
+							attach_graph_element_to_frame(dupe_map[attached_node], new_frame)
+							get_node(new_frame).generator.attached.append(dupe_map[attached_node])
 
 func paste() -> void:
 	var data : String = DisplayServer.clipboard_get().strip_edges()
@@ -1038,13 +1065,7 @@ func highlight_connections() -> void:
 	highlighting_connections = false
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
-	if node is MMGraphComment:
-		#print("Selecting enclosed nodes...")
-		for c in get_children():
-			if (c is GraphNode or c is MMGraphCommentLine) and c != node:
-				if node.get_rect().encloses(c.get_rect()):
-					c.selected = true
-	elif node is MMGraphCommentLine:
+	if node is MMGraphCommentLine or node is MMGraphComment:
 		pass
 	else:
 		highlight_connections()
@@ -1272,6 +1293,17 @@ func undoredo_command(command : Dictionary) -> void:
 				if has_node("node_"+g.name):
 					var node = get_node("node_"+g.name)
 					node.update_node()
+		"comment_attach_node":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			if parent_generator == generator:
+				for node in command.nodes:
+					if command.frame:
+						do_attach_node(node, command.frame)
+		"comment_detach_node":
+			var parent_generator = get_node_from_hier_name(command.parent)
+			if parent_generator == generator:
+				for node in command.nodes:
+					do_detach_node(NodePath(node))
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
@@ -1758,3 +1790,36 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func _on_graph_elements_linked_to_frame_request(elements: Array, frame: StringName) -> void:
+	for el in elements:
+		do_attach_node(el, frame)
+	var undo_actions := { type="comment_detach_node", parent=generator.get_hier_name(), nodes=elements }
+	var redo_actions := { type="comment_attach_node", parent=generator.get_hier_name(), nodes=elements, frame=frame}
+	undoredo.add("Comment attached nodes", [undo_actions], [redo_actions])
+
+func detach_selected_nodes() -> void:
+	if get_selected_nodes().is_empty():
+		return
+	undoredo.start_group()
+	for node in get_selected_nodes():
+		var detached_from : MMGraphComment = get_element_frame(node.name)
+		if detached_from:
+			var undo_actions := [{ type="comment_attach_node", parent=generator.get_hier_name(), nodes=[node.name], frame=detached_from.name}]
+			var redo_actions := [{ type="comment_detach_node", parent=generator.get_hier_name(), nodes=[node.name] }]
+			undoredo.add("Comment detached nodes", undo_actions, redo_actions)
+		do_detach_node(node.name)
+	undoredo.end_group()
+
+func do_attach_node(element : String, frame: String) -> void:
+	attach_graph_element_to_frame(element, frame)
+	get_node(NodePath(frame)).generator.attached.append(element)
+
+func do_detach_node(element : String) -> void:
+	var frame : MMGraphComment = get_element_frame(element)
+	if frame != null:
+		frame.generator.attached.erase(element)
+		detach_graph_element_from_frame(element)
+
+func _on_frame_rect_changed(frame: GraphFrame, new_rect: Rect2) -> void:
+	frame.generator.size = new_rect.size

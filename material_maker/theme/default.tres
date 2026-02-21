@@ -156,6 +156,32 @@ corner_detail = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_en6gw"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_08mel"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(31.18, 176, 16, 16)
+margin = Rect2(-2, -2, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08mel"]
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_top = 38.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uenv"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_top = 38.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwck0"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -313,32 +339,6 @@ border_color = Color(0.359069, 0.359069, 0.359069, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agwde"]
 bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_08mel"]
-atlas = ExtResource("1_s43fy")
-region = Rect2(32, 176, 16, 16)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_asgc8"]
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.498039, 0.498039, 0.498039, 0)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_en6gw"]
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.485703, 0.485704, 0.485703, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
@@ -572,6 +572,10 @@ region = Rect2(80, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_33srw"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jwmb"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(48, 208, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e07v0"]
 atlas = ExtResource("1_s43fy")
@@ -1178,6 +1182,12 @@ GraphEdit/icons/zoom_reset = SubResource("AtlasTexture_cpts2")
 GraphEdit/styles/menu_panel = SubResource("StyleBoxFlat_pxlc8")
 GraphEdit/styles/panel = SubResource("StyleBoxEmpty_62l4s")
 GraphEdit/styles/panel_focus = SubResource("StyleBoxEmpty_en6gw")
+GraphFrame/colors/editor_placeholder_color = Color(1, 1, 1, 0.49019608)
+GraphFrame/colors/resizer_color = Color(1, 1, 1, 1)
+GraphFrame/fonts/title_font = ExtResource("2_5e0gw")
+GraphFrame/icons/resizer = SubResource("AtlasTexture_08mel")
+GraphFrame/styles/panel = SubResource("StyleBoxFlat_08mel")
+GraphFrame/styles/panel_selected = SubResource("StyleBoxFlat_8uenv")
 GraphNode/colors/portpreview_color = Color(0.89059, 0.89059, 0.89059, 1)
 GraphNode/colors/title_color = Color(0.87451, 0.878431, 0.886275, 1)
 GraphNode/constants/portpreview_radius = 6
@@ -1212,9 +1222,6 @@ MM_AddNodePanel/base_type = &"PanelContainer"
 MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
 MM_AddNodePanelList/styles/panel = SubResource("StyleBoxFlat_agwde")
-MM_CommentNode/icons/resizer = SubResource("AtlasTexture_08mel")
-MM_CommentNode/styles/default = SubResource("StyleBoxFlat_asgc8")
-MM_CommentNode/styles/selected = SubResource("StyleBoxFlat_en6gw")
 MM_FilterLineEdit/base_type = &"LineEdit"
 MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")
@@ -1268,6 +1275,7 @@ MM_Icons/icons/section_transform = SubResource("AtlasTexture_oea07")
 MM_Icons/icons/section_workflow = SubResource("AtlasTexture_a45we")
 MM_Icons/icons/select = SubResource("AtlasTexture_ck0hb")
 MM_Icons/icons/settings = SubResource("AtlasTexture_33srw")
+MM_Icons/icons/shrink = SubResource("AtlasTexture_0jwmb")
 MM_Icons/icons/snapping = SubResource("AtlasTexture_e07v0")
 MM_Icons/icons/spline_link = SubResource("AtlasTexture_fs6qc")
 MM_Icons/icons/spline_progressive = SubResource("AtlasTexture_70aex")
