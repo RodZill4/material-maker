@@ -9,7 +9,7 @@ func _ready() -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	if event.is_command_or_control_pressed() and event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton and event.is_command_or_control_pressed() and event.pressed:
 
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN or event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			roll(event.button_index == MOUSE_BUTTON_WHEEL_DOWN)

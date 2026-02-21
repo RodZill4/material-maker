@@ -30,6 +30,8 @@ func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color) -
 
 func on_connections_changed():
 	var graph_edit = get_parent()
+	if graph_edit == null:
+		return
 	var color : Color = Color(1.0, 1.0, 1.0)
 	var type : int = 42
 	var port_type : String = "any"
@@ -93,6 +95,8 @@ func on_parameter_changed(n : String, v):
 		position_offset -= (size-old_size)/2
 		disable_undoredo_for_offset = false
 	else:
+		if n == "__input_changed__" or n == "__output_changed__":
+			on_connections_changed.call_deferred()
 		update_preview()
 
 func set_preview(v : int):

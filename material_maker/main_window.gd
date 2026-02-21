@@ -1383,7 +1383,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		if file == null:
 			continue
 		f = file.get_path_absolute()
-		match f.get_extension():
+		match f.get_extension().to_lower():
 			"ptex":
 				var status : bool = await do_load_material(f)
 				if status:

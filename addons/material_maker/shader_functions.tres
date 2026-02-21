@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TextResource" load_steps=2 format=3 uid="uid://by8m5knpg5yqf"]
 
-[ext_resource type="Script" path="res://addons/material_maker/engine/text_resource.gd" id="1_o2e2t"]
+[ext_resource type="Script" uid="uid://bc3eljtuurjsd" path="res://addons/material_maker/engine/text_resource.gd" id="1_o2e2t"]
 
 [resource]
 script = ExtResource("1_o2e2t")
@@ -22,6 +22,15 @@ vec3 rand3(vec2 x) {
 							  dot(x, vec2(3.4562, 17.398)),
                               dot(x, vec2(13.254, 5.867))), vec3(3.14, 3.14, 3.14))) * 43758.5);
 }
+
+vec3 rand3_4d(vec4 x) {
+    return fract(cos(mod(vec3(
+        dot(x, vec4(13.9898, 8.141, 3.4562, 17.398)),
+        dot(x + 0.1234, vec4(3.4562, 17.398, 13.254, 5.867)),
+        dot(x + 0.5678, vec4(11.1357, 23.234, 95.346, 9.123))
+    ), vec3(3.14))) * 43758.5);
+}
+
 vec3 rgb2hsv(vec3 c) {
 	vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
 	vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
