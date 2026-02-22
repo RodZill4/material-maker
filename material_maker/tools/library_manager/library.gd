@@ -163,8 +163,12 @@ func add_item(item_name : String, image : Image, data : Dictionary) -> void:
 	if read_only:
 		return
 	data.tree_item = item_name
-	data.icon_data = Marshalls.raw_to_base64(image.save_png_to_buffer())
 	data.display_name = data.tree_item.get_slice('/', data.tree_item.get_slice_count('/') - 1)
+
+	var current_library_item = get_item(item_name)
+	if current_library_item and current_library_item.item.has("icon_data"):
+		data.icon_data = current_library_item.item.icon_data
+
 	var new_library_items = []
 	var inserted = false
 	for i in library_items:
@@ -177,9 +181,12 @@ func add_item(item_name : String, image : Image, data : Dictionary) -> void:
 		new_library_items.push_back(data)
 	library_items = new_library_items
 	library_items_by_name[item_name] = data
-	var texture : ImageTexture = ImageTexture.new()
-	texture.set_image(image)
-	library_icons[item_name] = texture
+
+	if image != null:
+		data.icon_data = Marshalls.raw_to_base64(image.save_png_to_buffer())
+		var texture : ImageTexture = ImageTexture.new()
+		texture.set_image(image)
+		library_icons[item_name] = texture
 	save_library()
 
 func remove_item(item_name : String) -> void:
