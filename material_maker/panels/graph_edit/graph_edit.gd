@@ -1,6 +1,8 @@
 extends GraphEdit
 class_name MMGraphEdit
 
+const ZOOM_MIN := 0.05
+const ZOOM_MAX := 4.0
 
 class Preview:
 	var generator
@@ -56,6 +58,8 @@ signal preview_changed
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
+	zoom_min = ZOOM_MIN
+	zoom_max = ZOOM_MAX
 	center_view()
 	for t in range(41):
 		add_valid_connection_type(t, 42)
