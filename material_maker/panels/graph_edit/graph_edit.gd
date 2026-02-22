@@ -751,8 +751,7 @@ func save_as() -> bool:
 		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		var main_window = mm_globals.main_window
-		if mm_globals.config.has_section_key("path", "project"):
-			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		dialog.current_dir = mm_globals.config.get_value("path", "project", mm_globals.get_home_directory())
 		var files = await dialog.select_files()
 		if files.size() == 1:
 			if save_file(files[0]):
