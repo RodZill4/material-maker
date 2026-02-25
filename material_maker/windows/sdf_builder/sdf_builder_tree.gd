@@ -29,8 +29,8 @@ func get_nearest_parent(item : TreeItem, type : String) -> TreeItem:
 		item = item.get_parent()
 	return item
 
-func _get_drag_data(position):
-	var item : TreeItem = get_item_at_position(position)
+func _get_drag_data(pos):
+	var item : TreeItem = get_item_at_position(pos)
 	if item == null:
 		return null
 	else:
@@ -62,10 +62,10 @@ func get_valid_children_types(parent : TreeItem):
 		valid_children_types.push_back(parent_type.item_category)
 	return valid_children_types
 
-func _can_drop_data(position, data):
+func _can_drop_data(_position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
-		var destination : TreeItem = get_item_at_position(position)
-		if destination != null and get_drop_section_at_position(position) != 0:
+		var destination : TreeItem = get_item_at_position(_position)
+		if destination != null and get_drop_section_at_position(_position) != 0:
 			destination = destination.get_parent()
 		if not mm_sdf_builder.scene_get_type(data.item.get_meta("scene")).item_category in get_valid_children_types(destination):
 			return false
@@ -82,10 +82,10 @@ func get_item_index(item : TreeItem) -> int:
 		index += 1
 	return -1
 
-func _drop_data(position, data):
+func _drop_data(_position, data):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
-		var item = get_item_at_position(position)
-		match get_drop_section_at_position(position):
+		var item = get_item_at_position(_position)
+		match get_drop_section_at_position(_position):
 			0:
 				emit_signal("drop_item", data.item, item, -1)
 			-1:

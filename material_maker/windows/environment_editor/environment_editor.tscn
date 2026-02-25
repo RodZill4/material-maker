@@ -188,7 +188,6 @@ text = "Close"
 [connection signal="item_selected" from="Main/HSplitContainer/Environments" to="." method="_on_Environments_item_selected"]
 [connection signal="id_pressed" from="Main/HSplitContainer/Environments/ContextMenu" to="." method="_on_ContextMenu_id_pressed"]
 [connection signal="gui_input" from="Main/HSplitContainer/SubViewportContainer" to="." method="_on_ViewportContainer_gui_input"]
-[connection signal="resized" from="Main/HSplitContainer/SubViewportContainer" to="." method="_on_ViewportContainer_resized"]
 [connection signal="pressed" from="Main/Buttons/Download" to="." method="_on_Download_pressed"]
 [connection signal="pressed" from="Main/Buttons/Share" to="." method="_on_Share_pressed"]
 [connection signal="pressed" from="Main/Buttons/Close" to="." method="queue_free"]
