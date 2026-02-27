@@ -140,6 +140,7 @@ limits/debugger/max_chars_per_second=204800000
 
 [rendering]
 
+textures/vram_compression/import_s3tc_bptc=true
 rendering_device/driver.macos="vulkan"
 textures/vram_compression/import_etc2_astc=true
 shading/overrides/force_lambert_over_burley.mobile=false
