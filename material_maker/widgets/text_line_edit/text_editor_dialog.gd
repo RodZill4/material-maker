@@ -6,18 +6,9 @@ var method : String
 @onready var editor = $MarginContainer/VBoxContainer/TextEdit
 
 func _on_ready() -> void:
-	var editor_context : PopupMenu = editor.get_menu()
-	editor_context.about_to_popup.connect(
-			_context_menu_about_to_popup.bind(editor_context))
-	
-	var csf = mm_globals.main_window.get_window().content_scale_factor
+	var csf = mm_globals.ui_scale_factor()
 	get_window().content_scale_factor = csf
 	get_window().min_size = size * csf
-
-
-func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
-	context_menu.position =  get_window().position + Vector2i(
-			get_mouse_position() * content_scale_factor)
 
 
 func edit_text(wt : String, value : String, o : Object, m : String):

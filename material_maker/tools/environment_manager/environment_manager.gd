@@ -190,7 +190,7 @@ func read_hdr(index : int, url : String) -> bool:
 		accept_dialog = AcceptDialog.new()
 		accept_dialog.title = "HDRI download error"
 		accept_dialog.dialog_text = "Failed to download %s" % url
-		accept_dialog.content_scale_factor = get_window().content_scale_factor
+		accept_dialog.content_scale_factor = mm_globals.ui_scale_factor()
 		accept_dialog.min_size = accept_dialog.get_contents_minimum_size() * accept_dialog.content_scale_factor
 		accept_dialog.min_size.y = 40
 		mm_globals.main_window.add_child(accept_dialog)

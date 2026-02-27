@@ -5,10 +5,10 @@
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="3_qvj7k"]
 [ext_resource type="Script" uid="uid://bl15iwn2k8qm" path="res://material_maker/widgets/tabs/tabs.gd" id="4_mpinq"]
 [ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="6_r5hxx"]
-[ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_zoom_menu.gd" id="7_lbgjg"]
+[ext_resource type="Script" uid="uid://jvurydhtpvc2" path="res://material_maker/panels/graph_edit/graph_zoom_menu.gd" id="7_lbgjg"]
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="7_qnupl"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="8_1w3oe"]
-[ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
+[ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
 [ext_resource type="Script" uid="uid://pqxjwlcff5ko" path="res://material_maker/panels/graph_edit/graph_align_menu.gd" id="8_r5hxx"]
 [ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
 

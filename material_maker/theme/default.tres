@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=166 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" load_steps=168 format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -1106,6 +1106,34 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_08mel"]
+bg_color = Color(0.21965832, 0.22426346, 0.2426776, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 4.0
+expand_margin_top = 35.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uenv"]
+bg_color = Color(0.1764706, 0.18039216, 0.19607843, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 4.0
+expand_margin_top = 35.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
+
 [resource]
 default_font = ExtResource("1_5tfb1")
 default_font_size = 16
@@ -1425,3 +1453,5 @@ VScrollBar/styles/grabber = SubResource("StyleBoxFlat_fs6qc")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_70aex")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_70aex")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_w0re2")
+Window/styles/embedded_border = SubResource("StyleBoxFlat_08mel")
+Window/styles/embedded_unfocused_border = SubResource("StyleBoxFlat_8uenv")

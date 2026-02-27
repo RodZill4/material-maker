@@ -20,13 +20,8 @@ const MENU_LOAD_LIBRARY : int =   1001
 
 const default_theme : Theme = preload("res://material_maker/theme/default.tres")
 
-func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
-	context_menu.position = get_window().position+ Vector2i(
-			get_global_mouse_position() * get_window().content_scale_factor)
 
 func _ready() -> void:
-	%Filter.get_menu().about_to_popup.connect(
-			_context_menu_about_to_popup.bind(%Filter.get_menu()))
 	# Setup tree
 	tree.set_column_expand(0, true)
 	tree.set_column_expand(1, false)
@@ -225,7 +220,7 @@ func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null)
 			var new_nodes = graph_edit.create_nodes(item.get_metadata(0))
 			await get_tree().create_timer(0.05).timeout
 			var image = get_viewport().get_texture().get_image()
-			var csf = mm_globals.main_window.get_window().content_scale_factor
+			var csf = mm_globals.ui_scale_factor()
 			image = image.get_region(Rect2(csf*(new_nodes[0].global_position-Vector2(6, 6)),csf*(new_nodes[0].size+Vector2(14, 12))))
 			print(get_icon_name(get_item_path(item)))
 			image.resize(image.get_size().x/csf, image.get_size().y/csf, Image.INTERPOLATE_LANCZOS)
@@ -387,7 +382,7 @@ func _on_PopupMenu_index_pressed(index):
 	match index:
 		0: # Rename
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			dialog.content_scale_factor = mm_globals.ui_scale_factor()
 			dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 			add_child(dialog)
 			var status = await dialog.enter_text("Rename item", "Enter the new name for this item", item_path)
@@ -407,7 +402,7 @@ func _on_PopupMenu_index_pressed(index):
 		5: # Define aliases
 			var aliases = library_manager.get_aliases(item_path)
 			var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-			dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+			dialog.content_scale_factor = mm_globals.ui_scale_factor()
 			dialog.min_size = Vector2(400, 90) * dialog.content_scale_factor
 			add_child(dialog)
 			var status = await dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)

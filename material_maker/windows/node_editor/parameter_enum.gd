@@ -47,7 +47,7 @@ func update_enum_list() -> void:
 
 func _on_EnumValues_item_selected(id) -> void:
 	id = $EnumValues.get_item_id(id)
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	if id >= 0 and id < enum_values.size():
 		enum_current = id
 	elif id == ENUM_EDIT:
