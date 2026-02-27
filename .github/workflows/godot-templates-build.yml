@@ -1,15 +1,13 @@
 name: Build Export Templates (Single Job)
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 env:
-      GODOT_VERSION: 4.5.1
-      GODOT_SUB: stable
-      GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
-      SCONSFLAGS: verbose=yes warnings=all use_lto=yes
+    GODOT_VERSION: 4.5.1
+    GODOT_SUB: stable
+    GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_SUB}
+    SCONSFLAGS: verbose=yes warnings=all use_lto=yes
 
 jobs:
   build_templates:
@@ -59,13 +57,13 @@ jobs:
       - name: Build export templates (Linux)
         run: |
           cd godot
-          scons platform=linuxbsd target=template_release tools=no
+          scons platform=linuxbsd target=template_release tools=no production=yes
           cd ..
 
       - name: Build export templates (Windows)
         run: |
           cd godot
-          scons platform=windows target=template_release arch=x86_64 tools=no
+          scons platform=windows target=template_release arch=x86_64 tools=no production=yes
           cd ..
 
       - name: Package Linux build
@@ -91,8 +89,8 @@ jobs:
         with:
           name: windows-templates
           path: export_templates_windows.zip
-  build_linux_aarch64_template:
-    runs-on: ubuntu-24.04-arm
+  build_templates_macos:
+    runs-on: macos-latest
 
     steps:
       - name: Checkout current repo
@@ -108,12 +106,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential scons pkg-config libx11-dev libxcursor-dev \
-            libxinerama-dev libgl1-mesa-dev libglu1-mesa-dev libasound2-dev \
-            libpulse-dev libudev-dev libxi-dev libxrandr-dev libwayland-dev \
+          brew install scons
+          ./godot/misc/scripts/install_vulkan_sdk_macos.sh
 
       - name: Cache SCons build artifacts
         uses: actions/cache@v3
@@ -125,20 +119,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-godot-
 
-      - name: Build export templates (Linux arm64)
+      - name: Build export templates (MacOS)
         run: |
           cd godot
-          scons platform=linuxbsd target=template_release tools=no
-          cd ..
+          scons platform=macos arch=x86_64 target=template_release tools=no production=yes
+          scons platform=macos arch=arm64 target=template_release tools=no production=yes generate_bundle=yes
+          cp ./bin/godot_macos.zip ../export_templates_macos.zip
 
-      - name: Package Linux(arm64) build
-        run: |
-          mkdir -p templates_linux_arm64
-          cp godot/bin/*linuxbsd* templates_linux_arm64/
-          (cd templates_linux_arm64 && zip -9 -r ../export_templates_linux_arm64.zip .)
-
-      - name: Upload Linux(arm64) artifact
+      - name: Upload MacOS artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linux-arm64-templates
-          path: export_templates_linux_arm64.zip
+          name: macos-templates
+          path: export_templates_macos.zip

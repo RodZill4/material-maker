@@ -69,6 +69,7 @@ _data = {
 [sub_resource type="AtlasTexture" id="8"]
 atlas = ExtResource("8")
 region = Rect2(96, 128, 16, 16)
+filter_clip = true
 
 [sub_resource type="GDScript" id="9"]
 script/source = "extends HBoxContainer
@@ -163,7 +164,7 @@ size_flags_horizontal = 3
 allow_undock = true
 
 [node name="Main" parent="VBoxContainer/Layout/FlexibleLayout" instance=ExtResource("7_ih0ps")]
-layout_mode = 2
+layout_mode = 0
 anchors_preset = 0
 offset_left = 18.0
 offset_top = 4.0

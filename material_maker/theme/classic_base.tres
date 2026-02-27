@@ -1060,6 +1060,7 @@ MM_PanelMenuBar/base_type = &"PanelContainer"
 MM_PanelMenuBar/constants/separation = 3
 MM_PanelMenuBar/styles/panel = SubResource("StyleBoxEmpty_meah8")
 MM_PanelMenuButton/font_sizes/font_size = 14
+MM_PanelMenuFloatEdit/base_type = &"MM_NodeFloatEdit"
 MM_PanelMenuSeparator/constants/separation = 2
 MM_PanelMenuSeparator/styles/separator = SubResource("StyleBoxFlat_5e0gw")
 MM_PanelMenuSubPanel/base_type = &"PanelContainer"

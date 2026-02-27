@@ -187,7 +187,11 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
-							"$fi"
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"flags_transparent = true",
+							"$fi",
+							""
 						],
 						"type": "template"
 					}
@@ -286,7 +290,11 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
-							"$fi"
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"transparency = 1",
+							"$fi",
+							""
 						],
 						"type": "template"
 					}
@@ -397,7 +405,11 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
-							"$fi"
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"transparency = 1",
+							"$fi",
+							""
 						],
 						"type": "template"
 					}
@@ -3168,7 +3180,7 @@
 			"shader_type spatial;",
 			"render_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx",
 			"$if $(connected:opacity_tex) and $(param:flags_transparent)",
-			",depth_draw_alpha_prepass",
+			",depth_prepass_alpha",
 			"$fi",
 			";",
 			"",

@@ -54,6 +54,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	graph_line_curvature = 0.5,
 	graph_line_style = 1,
 	ui_use_native_file_dialogs = true,
+	win_tablet_driver = 0,
 }
 
 
@@ -204,6 +205,8 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 	if not control.shortcut_context:
 		return
 	if not control.shortcut_context.get_global_rect().has_point(control.get_global_mouse_position()):
+		return
+	if not control.is_visible_in_tree():
 		return
 	do_propagate_shortcuts(control, event)
 

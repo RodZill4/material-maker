@@ -1039,7 +1039,7 @@ func highlight_connections() -> void:
 
 func _on_GraphEdit_node_selected(node : GraphElement) -> void:
 	if node is MMGraphComment:
-		print("Selecting enclosed nodes...")
+		#print("Selecting enclosed nodes...")
 		for c in get_children():
 			if (c is GraphNode or c is MMGraphCommentLine) and c != node:
 				if node.get_rect().encloses(c.get_rect()):
@@ -1254,7 +1254,8 @@ func undoredo_command(command : Dictionary) -> void:
 			var parent_generator = get_node_from_hier_name(command.parent)
 			for k in command.positions.keys():
 				if parent_generator == generator:
-					get_node("node_"+k).do_set_position(command.positions[k])
+					if has_node("node_"+k):
+						get_node("node_"+k).do_set_position(command.positions[k])
 				else:
 					parent_generator.get_node(k).set_position(command.positions[k])
 		"resize_comment":
@@ -1735,15 +1736,22 @@ func color_comment_nodes() -> void:
 			func(n): return (n is MMGraphComment and n.selected))
 	if not comments.is_empty():
 		undoredo.start_group()
-		var picker := preload(
-				"res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
+		var picker : PopupPanel = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
 		picker.hide()
 		add_child(picker)
-		var color_picker := picker.get_node("ColorPicker")
+		var color_picker : ColorPicker = picker.get_node("ColorPicker")
 		for node in comments:
 			color_picker.color_changed.connect(node.set_color)
 			color_picker.color = node.generator.color
 		var csf = get_window().content_scale_factor
+		picker.about_to_popup.connect(func():
+			if mm_globals.has_config("color_picker_color_mode"):
+				color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
+			if mm_globals.has_config("color_picker_shape"):
+				color_picker.picker_shape = mm_globals.get_config("color_picker_shape"))
+		picker.popup_hide.connect(func():
+			mm_globals.set_config("color_picker_color_mode", color_picker.color_mode)
+			mm_globals.set_config("color_picker_shape", color_picker.picker_shape))
 		picker.content_scale_factor = csf
 		picker.min_size = picker.get_contents_minimum_size() * csf
 		picker.position = get_screen_position() + get_local_mouse_position() * csf

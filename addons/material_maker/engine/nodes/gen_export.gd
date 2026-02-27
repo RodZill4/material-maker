@@ -62,7 +62,7 @@ func get_image_format() -> String:
 			return "exr"
 		_: return "png"
 
-func export_material(prefix : String, _profile : String, size : int = 0) -> void:
+func export_material(prefix : String, _profile : String, size : int = 0, command_line : bool = false) -> void:
 	if size == 0:
 		size = get_image_size()
 	var source = get_source(0)
@@ -71,4 +71,4 @@ func export_material(prefix : String, _profile : String, size : int = 0) -> void
 		if parameters.suffix != "":
 			await texture.save_to_file("%s_%s.%s" % [ prefix, parameters.suffix, get_image_format() ])
 		else:
-			await texture.result.save_to_file("%s.%s" % [ prefix, get_image_format() ])
+			await texture.save_to_file("%s.%s" % [ prefix, get_image_format() ])

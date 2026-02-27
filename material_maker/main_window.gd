@@ -121,6 +121,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Help/About", command="about" }
 ]
 
+enum WinTabletDriver { WININK, WINTAB, DISABLED }
 
 func _enter_tree() -> void:
 	mm_globals.main_window = self
@@ -317,6 +318,15 @@ func on_config_changed() -> void:
 
 	@warning_ignore("narrowing_conversion")
 	preview_tesselation_detail = clamp(mm_globals.get_config("ui_3d_preview_tesselation_detail"), 16, 1024)
+
+	if OS.get_name() == "Windows":
+		match mm_globals.get_config("win_tablet_driver"):
+			WinTabletDriver.WININK:
+				DisplayServer.tablet_set_current_driver("winink")
+			WinTabletDriver.WINTAB:
+				DisplayServer.tablet_set_current_driver("wintab")
+			WinTabletDriver.DISABLED:
+				DisplayServer.tablet_set_current_driver("dummy")
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -1039,13 +1049,15 @@ func create_subgraph() -> void:
 func frame_nodes() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	if graph_edit != null and get_selected_nodes().size():
+		graph_edit.undoredo.start_group()
 		var nodes : Array = await graph_edit.create_nodes(
-				{"type":"comment", "title":"Frame"}, Vector2())
+				{"type":"comment", "title":"Frame"})
 		if nodes.size():
 			# Avoid calling resize twice
 			if not mm_globals.get_config("auto_size_comment"):
 				nodes[0].resize_to_selection()
 			nodes[0].selected = true
+		graph_edit.undoredo.end_group()
 
 func make_selected_nodes_editable() -> void:
 	var selected_nodes = get_selected_nodes()
@@ -1370,7 +1382,7 @@ func on_files_dropped(files : PackedStringArray) -> void:
 		if file == null:
 			continue
 		f = file.get_path_absolute()
-		match f.get_extension():
+		match f.get_extension().to_lower():
 			"ptex":
 				var status : bool = await do_load_material(f)
 				if status:
