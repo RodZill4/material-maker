@@ -231,12 +231,6 @@ func _gui_input(event) -> void:
 					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
-				KEY_C:
-					if OS.get_name() == "macOS":
-						center_view()
-				KEY_MASK_ALT | KEY_S:
-					if OS.get_name() == "macOS":
-						swap_node_inputs()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -251,6 +245,26 @@ func _gui_input(event) -> void:
 					accept_event()
 				KEY_F:
 					color_comment_nodes()
+
+			# macOS global menu does not support single-key accelerators
+			# and they also require Cmd/Ctrl to be present in them to work
+			# see https://github.com/godotengine/godot/issues/108622
+			# As a workaround the menu items are invoked here
+			if OS.get_name() == "macOS":
+				match scancode_with_modifiers:
+					KEY_C:
+						center_view()
+					KEY_MASK_ALT | KEY_S:
+						swap_node_inputs()
+					KEY_Q:
+						straighten_connections()
+					KEY_MASK_SHIFT | KEY_W:
+						align_top()
+					KEY_MASK_SHIFT | KEY_A:
+						align_start()
+					KEY_MASK_SHIFT | KEY_D:
+						align_end()
+
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -1758,3 +1772,55 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func align_start() -> void:
+	var nodes : Array = get_selected_nodes()
+	var min_offset : float = INF
+
+	for node : GraphElement in nodes:
+		min_offset = min(min_offset, node.position_offset.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = min_offset
+
+func align_end() -> void:
+	var nodes : Array = get_selected_nodes()
+	var max_offset : float = -INF
+
+	for node : GraphElement in nodes:
+		max_offset = max(max_offset, node.position_offset.x + node.size.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = max_offset - node.size.x
+
+func align_top() -> void:
+	var nodes : Array = get_selected_nodes().filter(func(n): return n is GraphNode)
+	nodes.sort_custom(func(a: GraphNode, b: GraphNode):
+			return a.position_offset.x < b.position_offset.x)
+	for node in nodes:
+		node.position_offset.y = nodes[0].position_offset.y
+
+func straighten_connections() -> void:
+	# basic connection straightening
+	# this expects selected nodes to be connected along a line
+	# and connections are made from left to right(in/out port position)
+	# i.e. [] -> [] -> []
+	var nodes : Array = get_selected_nodes().filter(func(n): return n is GraphNode)
+	if nodes.size() < 2:
+		return
+	nodes.sort_custom(func(a, b) -> bool:
+			return a.position_offset.x < b.position_offset.x)
+	for i in nodes.size() - 1:
+		var from_node : GraphNode = nodes[i]
+		var to_node : GraphNode = nodes[i+1]
+		var conns : Array[Dictionary]
+		for c in connections:
+			if c.to_node == to_node.name:
+				conns.append(c)
+		if conns.is_empty():
+			return
+		conns.sort_custom(func(a,b): return a.from_port > b.from_port)
+		for conn in conns:
+			if conn.from_node == from_node.name:
+				var from_pos_y = from_node.get_output_port_position(conn.from_port).y + from_node.position_offset.y
+				var to_pos_y = to_node.get_input_port_position(conn.to_port).y + to_node.position_offset.y
+				var y_diff = to_pos_y - from_pos_y
+				to_node.position_offset.y -= y_diff

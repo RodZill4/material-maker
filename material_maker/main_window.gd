@@ -85,9 +85,10 @@ const MENU : Array[Dictionary] = [
 	{ menu="Edit/Select Sources", command="edit_select_sources", shortcut="Control+L" },
 	{ menu="Edit/Select Targets", command="edit_select_targets", shortcut="Control+Shift+L" },
 	{ menu="Edit/-" },
-	{ menu="Edit/Align Start", command="edit_align_start", shortcut="Control+BRACKETLEFT" },
-	{ menu="Edit/Align Center", command="edit_align_center", shortcut="Control+BACKSLASH" },
-	{ menu="Edit/Align End", command="edit_align_end", shortcut="Control+BRACKETRIGHT" },
+	{ menu="Edit/Align Top", command="edit_align_top", shortcut="Shift+W" },
+	{ menu="Edit/Align Start", command="edit_align_start", shortcut="Shift+A" },
+	{ menu="Edit/Align End", command="edit_align_end", shortcut="Shift+D" },
+	{ menu="Edit/Straighten Connections", command="edit_straighten_connections", shortcut="Q" },
 	{ menu="Edit/-" },
 	{ menu="Edit/Load Selection", command="edit_load_selection", not_in_ports=["HTML5"] },
 	{ menu="Edit/Save Selection", command="edit_save_selection", not_in_ports=["HTML5"] },
@@ -995,33 +996,24 @@ func edit_preferences() -> void:
 	dialog.edit_preferences(mm_globals.config)
 
 func edit_align_start() -> void:
-	var nodes : Array = get_current_graph_edit().get_selected_nodes()
-	var min_offset : float = INF
-
-	for node : GraphElement in nodes:
-		min_offset = min(min_offset, node.position_offset.x)
-	for node : GraphElement in nodes:
-		node.position_offset.x = min_offset
-
-func edit_align_center() -> void:
-	var nodes : Array = get_current_graph_edit().get_selected_nodes()
-	var min_offset : float = INF
-	var max_offset : float = -INF
-
-	for node : GraphElement in nodes:
-		max_offset = max(max_offset, node.position_offset.x + node.size.x)
-		min_offset = min(min_offset, node.position_offset.x)
-	for node : GraphElement in nodes:
-		node.position_offset.x = (max_offset + min_offset) * 0.5 - (node.size.x * 0.5)
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.align_start()
 
 func edit_align_end() -> void:
-	var nodes : Array = get_current_graph_edit().get_selected_nodes()
-	var max_offset : float = -INF
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.align_end()
 
-	for node : GraphElement in nodes:
-		max_offset = max(max_offset, node.position_offset.x + node.size.x)
-	for node : GraphElement in nodes:
-		node.position_offset.x = max_offset - node.size.x
+func edit_align_top() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.align_top()
+
+func edit_straighten_connections() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	if graph_edit != null:
+		graph_edit.straighten_connections()
 
 func view_center() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
