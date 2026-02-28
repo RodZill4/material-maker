@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://d24qj0s2ime0p"]
+[gd_scene load_steps=15 format=3 uid="uid://d24qj0s2ime0p"]
 
 [ext_resource type="Script" uid="uid://cms1wqfr4yeb5" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://bdba0wahju1ak" path="res://splash_screen/splash_title.png" id="2_ryhtq"]
@@ -11,6 +11,8 @@ size = Vector2(760, 430)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4lwu"]
 bg_color = Color(0.509804, 0.584314, 1, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_uba88"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dfnby"]
 shader = ExtResource("5_xhfa4")
@@ -51,8 +53,8 @@ expand_mode = 1
 [node name="TextureRect" type="TextureRect" parent="SplashScreen"]
 layout_mode = 0
 offset_top = 34.0
-offset_right = 435.0
-offset_bottom = 155.0
+offset_right = 500.0
+offset_bottom = 177.0
 texture = ExtResource("2_ryhtq")
 
 [node name="MM" type="Label" parent="SplashScreen/TextureRect"]
@@ -100,10 +102,38 @@ offset_top = 44.0
 offset_right = 437.0
 offset_bottom = 43.986
 
+[node name="SteamIcon" type="TextureRect" parent="SplashScreen/TextureRect"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 84.0
+offset_right = 70.0
+offset_bottom = 124.0
+texture = SubResource("PlaceholderTexture2D_uba88")
+expand_mode = 1
+
+[node name="SteamMessage1" type="Label" parent="SplashScreen/TextureRect/SteamIcon"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 1.0
+offset_right = 87.0
+offset_bottom = 24.0
+theme_override_font_sizes/font_size = 12
+
+[node name="SteamMessage2" type="Label" parent="SplashScreen/TextureRect/SteamIcon"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 20.0
+offset_right = 87.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 12
+
 [node name="DarkenBottom" type="ColorRect" parent="SplashScreen"]
 material = SubResource("ShaderMaterial_dfnby")
 custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 331.0
@@ -165,7 +195,7 @@ mouse_filter = 2
 
 [node name="Previous" type="TextureButton" parent="BackgroundSelect"]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 368.0
 offset_top = 65.0
 offset_right = 400.0
@@ -179,7 +209,7 @@ flip_h = true
 
 [node name="Next" type="TextureButton" parent="BackgroundSelect"]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 456.0
 offset_top = 67.0
 offset_right = 488.0

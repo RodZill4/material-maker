@@ -19,10 +19,10 @@ config/custom_user_dir_name="material_maker_2"
 config/features=PackedStringArray("4.5")
 boot_splash/bg_color=Color(0, 0, 0, 0)
 boot_splash/show_image=false
-boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
+boot_splash/stretch_mode=0
 config/release="1.5.0.0"
 config/actual_release="1.5pre"
 
@@ -33,6 +33,7 @@ driver="Dummy"
 [autoload]
 
 mm_logger="*res://addons/material_maker/engine/logger.gd"
+mm_steam="*res://material_maker/steam.gd"
 mm_globals="*res://material_maker/globals.tscn"
 mm_io_types="*res://addons/material_maker/engine/io_types.gd"
 mm_loader="*res://addons/material_maker/engine/loader.gd"
@@ -59,7 +60,6 @@ window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
 
-run/main_run_args="--no-splash"
 run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\suzanne.mmpp"
 run/main_run_args_nosplash="--no-splash"
 run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\nov25 --output-file %a_%n website:1179-1215"
@@ -148,3 +148,10 @@ quality/shadows/filter_mode=2
 shading/overrides/force_blinn_over_ggx.mobile=false
 quality/filters/anisotropic_filter_level=16
 quality/depth/hdr.mobile=true
+
+[steam]
+
+initialization/app_id=4110830
+initialization/initialize_on_startup=false
+initialization/embed_callbacks=false
+multiplayer_peer/max_channels=4

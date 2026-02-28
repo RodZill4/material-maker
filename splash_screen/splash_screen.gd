@@ -76,6 +76,29 @@ const BACKGROUNDS : Array[Dictionary] = [
 	] },
 ]
 
+const GREETING_MESSAGES : Array[String] = [
+	"Welcome back, %s.",
+	"Welcome, %s.",
+	"Good to see you, %s.",
+	"Hey there, %s.",
+	"Hi, %s.",
+	"Glad you’re here, %s.",
+	"Back again, %s?",
+	"Nice to see you, %s.",
+	"Ready, %s?",
+	"Hello, %s."
+]
+
+const ACTIVITY_MESSAGES : Array[String] = [
+	"Let’s create something unique.",
+	"Let’s make something beautiful.",
+	"Let’s build something new.",
+	"Time to create.",
+	"Let’s craft something great.",
+	"Your next material starts here.",
+	"Let’s bring an idea to life.",
+	"Let’s make something awesome."
+]
 
 func _enter_tree():
 	var date : Dictionary = Time.get_date_dict_from_system()
@@ -167,6 +190,19 @@ func _ready():
 		set_process(true)
 	else:
 		print("Error loading "+resource_path)
+	
+	if mm_steam.is_owned():
+		%SteamIcon.texture = await mm_steam.get_avatar_texture()
+		var greeting_message : String
+		var has_pandora_box : bool = mm_steam.is_achievement_unlocked("ACH_PANDORA_BOX")
+		if not has_pandora_box:
+			greeting_message = "Welcome, %s!" % mm_steam.get_user_name()
+			mm_steam.unlock_achievement("ACH_PANDORA_BOX")
+		else:
+			greeting_message = GREETING_MESSAGES[randi_range(0, GREETING_MESSAGES.size()-1)]
+		%SteamIcon/SteamMessage1.text = greeting_message % mm_steam.get_user_name()
+		%SteamIcon/SteamMessage2.text = ACTIVITY_MESSAGES[randi_range(0, ACTIVITY_MESSAGES.size()-1)]
+		%SteamIcon.visible = true
 
 func start_ui(scene : PackedScene):
 	if delay_start:
