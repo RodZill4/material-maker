@@ -14,19 +14,16 @@ func _ready() -> void:
 	on_connections_changed.call_deferred()
 	size = Vector2.ZERO
 
-
 func update_node() -> void:
 	# handle ctrl/cmd-w editing
 	if not is_editing and generator.editable:
 		setup_portal_edit()
-
 
 func draw_rounded_arc(center: Vector2, radius: float, start: float, end: float,
 		color: Color, width: float, aa: bool, point_count := 12) -> void:
 	draw_arc(center, radius, start, end, point_count, color, width, aa)
 	draw_circle(center + Vector2(cos(start), sin(start)) * radius, width * 0.5, color, true, -1.0, aa)
 	draw_circle(center + Vector2(cos(end), sin(end)) * radius, width * 0.5, color, true, -1.0, aa)
-
 
 func _draw() -> void:
 	const label_font_size = 16
@@ -51,7 +48,6 @@ func _draw() -> void:
 	%Dragger.position = label_draw_pos - Vector2(0.0, label_font_size)
 	%Dragger.size = label_size
 
-
 func set_generator(g: MMGenBase) -> void:
 	super.set_generator(g)
 	generator.parameter_changed.connect(on_parameter_changed)
@@ -59,10 +55,8 @@ func set_generator(g: MMGenBase) -> void:
 	sync_io_slots()
 	notify_redraw()
 
-
 func _draw_port(_slot_index: int, pos: Vector2i, _left: bool, color: Color) -> void:
 	draw_circle(pos, 5, color, true, -1, true)
-
 
 func _exit_tree() -> void:
 	var source_node := get_link_source(get_link(), get_parent())
@@ -72,11 +66,9 @@ func _exit_tree() -> void:
 				node.generator.notify_output_change(0)
 				node.reset_slot()
 
-
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.double_click:
 		setup_portal_edit()
-
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and selected and not is_editing:
@@ -89,14 +81,11 @@ func _input(event: InputEvent) -> void:
 		elif %Dragger.get_rect().has_point(get_local_mouse_position()):
 			mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB: Rename link"), 1.0, 2)
 
-
 func _on_node_selected() -> void:
 	notify_redraw()
 
-
 func _on_node_deselected() -> void:
 	notify_redraw()
-
 
 func _on_dragger_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -106,19 +95,15 @@ func _on_dragger_gui_input(event: InputEvent) -> void:
 		selected = true
 		accept_event()
 
-
 func is_portal_in() -> bool:
 	return generator.io == MMGenPortal.Portal.IN
-
 
 func is_portal_out() -> bool:
 	return not is_portal_in()
 
-
 func reset_slot() -> void:
 	generator.port_type = "any"
 	set_slot(0, is_portal_in(), 42, Color.WHITE, is_portal_out(), 42, Color.WHITE)
-
 
 func add_link_undoredo(old_link: String, new_link: String) -> void:
 	if old_link != new_link and get_parent().get("undoredo") != null:
@@ -127,17 +112,14 @@ func add_link_undoredo(old_link: String, new_link: String) -> void:
 		var redo_command = { type="setparams", node=node_hier_name, params={ link=new_link } }
 		get_parent().undoredo.add("Set link parameter", [ undo_command ], [ redo_command ], false)
 
-
 func get_link() -> String:
 	return generator.get_parameter("link")
-
 
 func on_parameter_changed(n: String, v) -> void:
 	if n == "link":
 		generator.set_parameter(n, v)
 		sync_io_slots()
 		notify_redraw()
-
 
 func sync_io_slots() -> void:
 	await get_tree().process_frame
@@ -168,7 +150,6 @@ func sync_io_slots() -> void:
 		set_slot(0, false, type, color, true, type, color)
 		generator.port_type = port_type
 
-
 func on_connections_changed() -> void:
 	await get_tree().process_frame
 	if is_portal_in():
@@ -186,7 +167,6 @@ func on_connections_changed() -> void:
 		set_slot(0, true, type, color, false, type, color)
 		generator.port_type = port_type
 	sync_io_slots()
-
 
 ## Returns first input portal node with matching [param link] name
 static func get_link_source(link: String, g: MMGraphEdit) -> MMGraphPortal:
@@ -206,7 +186,6 @@ func edit_box_set_position(edit: LineEdit) -> void:
 	edit.scale = Vector2.ONE * g.zoom
 	edit.position = mm_globals.graph_node_center(self, g)
 	edit.position -= Vector2(edit.size.x * 0.5 - 0.5, y_offset) * g.zoom
-
 
 func setup_portal_edit() -> void:
 	if is_editing:
@@ -260,7 +239,6 @@ func setup_portal_edit() -> void:
 
 func notify_redraw() -> void:
 	get_parent().queue_redraw()
-
 
 static func draw_links(g: MMGraphEdit) -> void:
 	const circle_r = 24
