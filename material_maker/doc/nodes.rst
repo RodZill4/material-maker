@@ -14,3 +14,4 @@ have parameters, inputs and outputs.
    remote_nodes
    subgraph_nodes
    reroute_nodes
+   aperture_nodes

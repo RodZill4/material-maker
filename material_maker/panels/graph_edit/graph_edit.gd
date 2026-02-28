@@ -308,7 +308,7 @@ func _draw() -> void:
 	if lasso_points.size() > 1:
 		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
 				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
-
+	MMGraphPortal.draw_links(self)
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -1421,7 +1421,7 @@ func undoredo_step_actions(parent_path : String, prev : Dictionary, next : Dicti
 				undo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=undo_add_nodes, connections=undo_add_connections })
 			if ! redo_add_nodes.is_empty() or ! redo_add_connections.is_empty():
 				redo_actions.push_back({ type="add_to_graph", parent=parent_path, generators=redo_add_nodes, connections=redo_add_connections })
-		"remote","ios":
+		"remote","ios","portal":
 			var generator_path = parent_path.left(parent_path.rfind("/"))
 			undo_actions.push_back({ type="update_generator", parent=generator_path, name=next.name, data=prev })
 			redo_actions.push_back({ type="update_generator", parent=generator_path, name=prev.name, data=next })
