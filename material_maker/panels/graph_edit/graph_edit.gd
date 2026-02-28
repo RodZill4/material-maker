@@ -273,12 +273,10 @@ func _gui_input(event) -> void:
 				else:
 					tooltip_text = ""
 					c.clear_connection_labels()
-
 		if !found_tip:
 			var rect = get_global_rect()
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
-
 
 		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
 			if event.ctrl_pressed:
