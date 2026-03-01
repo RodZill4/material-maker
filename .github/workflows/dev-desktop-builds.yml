@@ -99,6 +99,7 @@ jobs:
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows${PACKAGE_SUFFIX}.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux${PACKAGE_SUFFIX}.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
+          ls
       - name: Upload Documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: actions/upload-artifact@v4
