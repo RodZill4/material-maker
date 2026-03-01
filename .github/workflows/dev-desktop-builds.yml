@@ -99,7 +99,6 @@ jobs:
           cd build
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows${PACKAGE_SUFFIX}.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux${PACKAGE_SUFFIX}.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
-          ls
       - name: Upload Documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: actions/upload-artifact@v4
@@ -110,12 +109,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows_snapshot
-          path: build/${EXPORT_NAME}_${MM_RELEASE}_windows${PACKAGE_SUFFIX}.zip
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows${{ env.PACKAGE_SUFFIX }}.zip
       - name: Upload Linux Artifact 🚀
         uses: actions/upload-artifact@v4
         with:
           name: linux_snapshot
-          path: build/${EXPORT_NAME}_${MM_RELEASE}_linux${PACKAGE_SUFFIX}.tar.gz
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux${{ env.PACKAGE_SUFFIX }}.tar.gz
   export-mac:
     name: Mac Export 🍎
     needs: export_windows_linux
@@ -214,6 +213,7 @@ jobs:
           wget https://github.com/create-dmg/create-dmg/archive/refs/tags/v1.2.2.zip
           unzip v1.2.2.zip
           create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background ./bg.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg ./build/mac
+          ls
       - name: Notarizing ✍️
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         env:
@@ -227,4 +227,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: macos_snapshot
-          path: ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
+          path: ./build/mac/material_maker_${{ env.MM_RELEASE }}${{ env.PACKAGE_SUFFIX }}.dmg
