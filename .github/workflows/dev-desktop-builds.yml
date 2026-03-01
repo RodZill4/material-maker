@@ -17,6 +17,11 @@ on:
         type: boolean
         required: true
         default: "true"
+      steam:
+        description: "Generate Steam version"
+        type: boolean
+        required: true
+        default: "false"
 
 env:
   GODOT_VERSION: 4.5.1
@@ -24,6 +29,8 @@ env:
   GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.5.1-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_5pre
+  EXPORT_TARGET_SUFFIX: "${{ github.event.inputs.steam == 'true' && ' Steam' || '' }}"
+  PACKAGE_SUFFIX: "${{ github.event.inputs.steam == 'true' && '_steam' || '' }}"
 
 jobs:
   export_windows_linux:
@@ -65,12 +72,12 @@ jobs:
           docs-folder: "material_maker/doc"
       - name: Windows Build 🗔
         run: |
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows${EXPORT_TARGET_SUFFIX}" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows${EXPORT_TARGET_SUFFIX}" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
         run: |
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11${EXPORT_TARGET_SUFFIX}" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
+          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11${EXPORT_TARGET_SUFFIX}" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
           cp -R ./addons/material_maker/nodes ./build/${EXPORT_NAME}_${MM_RELEASE}_windows
@@ -90,8 +97,8 @@ jobs:
       - name: Create archives 📁
         run: |
           cd build
-          zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
-          tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
+          zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows${PACKAGE_SUFFIX}.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
+          tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux${PACKAGE_SUFFIX}.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Upload Documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: actions/upload-artifact@v4
@@ -102,12 +109,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows_snapshot
-          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
+          path: build/${EXPORT_NAME}_${MM_RELEASE}_windows${PACKAGE_SUFFIX}.zip
       - name: Upload Linux Artifact 🚀
         uses: actions/upload-artifact@v4
         with:
           name: linux_snapshot
-          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
+          path: build/${EXPORT_NAME}_${MM_RELEASE}_linux${PACKAGE_SUFFIX}.tar.gz
   export-mac:
     name: Mac Export 🍎
     needs: export_windows_linux
@@ -164,8 +171,8 @@ jobs:
           chown runner Godot.app/Contents/MacOS/Godot
           chmod +x Godot.app/Contents/MacOS/Godot
           mkdir -v -p ./build/mac
-          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
-          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
+          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX${EXPORT_TARGET_SUFFIX}" ./build/mac/material_maker.zip
+          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX${EXPORT_TARGET_SUFFIX}" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
@@ -202,10 +209,10 @@ jobs:
           cp ./.github/workflows/create-dmg-bg.sh .
           chmod +x create-dmg-bg.sh
           ./create-dmg-bg.sh ./splash_screen/backgrounds/pavel_oliva_vintage_luggage.png ./bg.png
-          #hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker material_maker_${{ env.MM_RELEASE }}.dmg
+          #hdiutil create -srcfolder ./build/mac -fs HFS+ -volname material_maker material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
           wget https://github.com/create-dmg/create-dmg/archive/refs/tags/v1.2.2.zip
           unzip v1.2.2.zip
-          create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background ./bg.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg ./build/mac
+          create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background ./bg.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg ./build/mac
       - name: Notarizing ✍️
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         env:
@@ -213,10 +220,10 @@ jobs:
           NOTARYTOOL_APP_PASSWORD: ${{ secrets.NOTARYTOOL_APP_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
-          xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
+          xcrun notarytool submit ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
+          xcrun stapler staple ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
       - name: Upload Mac OSX Artifact 🚀
         uses: actions/upload-artifact@v4
         with:
           name: macos_snapshot
-          path: ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
+          path: ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
