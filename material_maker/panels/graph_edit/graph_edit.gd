@@ -412,6 +412,7 @@ func on_connect_node(from : String, from_slot : int, to : String, to_slot : int)
 		for n in [ from_node, to_node ]:
 			if n.has_method("on_connections_changed"):
 				n.on_connections_changed()
+	mm_steam.increase_stat("stat_connections")
 
 func do_disconnect_node(from : String, from_slot : int, to : String, to_slot : int) -> bool:
 	var from_node : MMGraphNodeMinimal = get_node(from)

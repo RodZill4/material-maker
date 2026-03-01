@@ -19,7 +19,7 @@ func _ready():
 	#Steam.connect("leaderboard_find_result", self, "_on_leaderboard_find_result")
 	#Steam.connect("leaderboard_score_uploaded", self, "_on_leaderboard_score_uploaded")
 	#Steam.connect("leaderboard_scores_downloaded", self, "_on_leaderboard_scores_downloaded")
-	Steam.findLeaderboard("Node count")
+	#Steam.findLeaderboard("Node count")
 
 func is_owned() -> bool:
 	return is_subscribed
@@ -64,3 +64,10 @@ func unlock_achievement(achievement : String):
 	if not is_subscribed:
 		return
 	Steam.setAchievement(achievement)
+
+func increase_stat(stat : String):
+	if not is_subscribed:
+		return
+	var stat_value = Steam.getStatInt(stat)
+	print(stat_value)
+	Steam.setStatInt(stat, stat_value+1)
