@@ -1,0 +1,214 @@
+{
+	"name": "gabor",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amplitude": 1.0,
+		"angle": 45.0,
+		"anisotropy": 0.5,
+		"frequency": 0.15,
+		"impulses": 8.0,
+		"offset": 0.0,
+		"scale_x": 4.0,
+		"scale_y": 4.0
+	},
+	"seed_int": 4166261504,
+	"shader_model": {
+		"code": [
+			"float $(name_uv)_w = 1.0 / sqrt($impulses * 4.0);",
+			"vec2 $(name_uv)_complex = $(name)_ft($uv, vec2($scale_x, $scale_y));",
+			"float $(name_uv)_intensity = length($(name_uv)_complex);",
+			"float $(name_uv)_phasor = atan($(name_uv)_complex.x, $(name_uv)_complex.y);",
+			"float $(name_uv)_gabor = $(name_uv)_intensity * sin($(name_uv)_phasor);"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "5:",
+				"longdesc": "Map that controls the noise frequency",
+				"name": "map_frequency",
+				"shortdesc": "Frequency Map",
+				"type": "f"
+			},
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "6:",
+				"longdesc": "Map that controls the noise angle",
+				"name": "map_angle",
+				"shortdesc": "Angle Map",
+				"type": "f"
+			},
+			{
+				"default": "$offset",
+				"function": true,
+				"label": "8:",
+				"longdesc": "Optional map that controls the offset parameter",
+				"name": "map_offset",
+				"shortdesc": "Offset Map",
+				"type": "f"
+			}
+		],
+		"instance": [
+			"vec2 $(name)_ft(vec2 uv, vec2 scale) {",
+			"\t// Gabor Noise - CC0 License (matejlou)",
+			"\t// https://materialmaker.org/material?id=907",
+			"\tvec2 complex = vec2(0.0);",
+			"\tvec2 inverse = 1.0 / scale;",
+			"\tfloat angle = $angle / 360.0;",
+			"\tvec2 bandwidth = inverse * 2.0;",
+			"\tfloat frequency = $frequency * 100.0;",
+			"\tfloat isotropy = 1.0 - $anisotropy;",
+			"\tvec2 cell = floor(uv * scale);",
+			"\tfor (int x = -1; x <= 1; x++)",
+			"\t{",
+			"\t\tfor (int y = -1; y <= 1; y++)",
+			"\t\t{",
+			"\t\t\tvec2 current = cell + vec2(float(x), float(y));",
+			"\t\t\tvec2 centre = current + 0.5;",
+			"\t\t\tfor (int i = 0; i < int($impulses); i++)",
+			"\t\t\t{",
+			"\t\t\t\tvec2 seed = (mod(centre, scale) * vec2(0.13, 0.7) + float(i)) * $seed;",
+			"\t\t\t\tvec2 position = (current + rand2(seed)) * inverse;",
+			"\t\t\t\tvec2 difference = uv - position;",
+			"\t\t\t\tvec2 toroidal = fract(position);",
+			"\t\t\t\tfloat window = exp(-dot2(difference / bandwidth) * 29.5857988); // Sigma of 2*0.13^2 brings the Gaussian very close to 0.0 at the edges.",
+			"\t\t\t\tfloat f = frequency * $map_frequency(toroidal);",
+			"\t\t\t\tfloat theta = (angle + $map_angle(toroidal) + (rand(toroidal) - 0.5) * isotropy) * TAU; // Dither the angle",
+			"\t\t\t\tvec2 omega = vec2(cos(theta), sin(theta));",
+			"\t\t\t\tfloat phi = (f * dot(difference, omega) + $map_offset($uv)) * TAU;",
+			"\t\t\t\tcomplex += vec2(sin(phi), cos(phi)) * window * $amplitude;",
+			"\t\t\t}",
+			"\t\t}",
+			"\t}",
+			"\treturn complex;",
+			"}"
+		],
+		"longdesc": "Generates tileable gabor and phasor noise",
+		"name": "Gabor Noise",
+		"outputs": [
+			{
+				"f": "$(name_uv)_gabor * $(name_uv)_w * 0.5 + 0.5",
+				"longdesc": "Shows a grayscale image of the generated gabor noise",
+				"shortdesc": "Gabor",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv)_phasor / PI * 0.5 + 0.5",
+				"longdesc": "Shows the phasor component of the gabor noise",
+				"shortdesc": "Phasor",
+				"type": "f"
+			},
+			{
+				"f": "$(name_uv)_intensity * $(name_uv)_w",
+				"longdesc": "Shows the intensity component of the gabor noise",
+				"shortdesc": "Intensity",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4.0,
+				"label": "Scale X",
+				"longdesc": "Scale along the X axis",
+				"max": 32.0,
+				"min": 1.0,
+				"name": "scale_x",
+				"shortdesc": "Scale X",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4.0,
+				"label": "Scale Y",
+				"longdesc": "Scale along the Y axis",
+				"max": 32.0,
+				"min": 1.0,
+				"name": "scale_y",
+				"shortdesc": "Scale Y",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 8.0,
+				"label": "Impulses",
+				"longdesc": "Number of impulses per iteration, or the density of the noise. Increasing this value may also increase compute time",
+				"max": 16.0,
+				"min": 1.0,
+				"name": "impulses",
+				"shortdesc": "Impulses",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1.0,
+				"label": "Amplitude",
+				"longdesc": "Amplitude of the noise",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "amplitude",
+				"shortdesc": "Amplitude",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.r",
+				"default": 0.2,
+				"label": "Frequency",
+				"longdesc": "Frequency of the noise",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "frequency",
+				"shortdesc": "Frequency",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "Radius1.a",
+				"default": 0.0,
+				"label": "Angle",
+				"longdesc": "Directional angle of the noise",
+				"max": 180.0,
+				"min": -180.0,
+				"name": "angle",
+				"shortdesc": "Angle",
+				"step": 0.1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Anisotropy",
+				"longdesc": "Anisotropy or directional bias of the noise",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "anisotropy",
+				"shortdesc": "Anisotropy",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "Offset",
+				"longdesc": "Phase offset of the noise",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "offset",
+				"shortdesc": "Offset",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Gabor Noise"
+	},
+	"type": "shader"
+}

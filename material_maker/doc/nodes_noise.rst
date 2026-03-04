@@ -21,3 +21,4 @@ made from random patterns.
 	node_noise_dirt
 	node_noise_clouds
 	node_noise_directional_noise
+	node_noise_gabor
