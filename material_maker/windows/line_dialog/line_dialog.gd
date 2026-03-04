@@ -45,3 +45,7 @@ func _on_ready() -> void:
 	var line_edit_context : PopupMenu = $VBoxContainer/LineEdit.get_menu()
 	line_edit_context.about_to_popup.connect(
 			_context_menu_about_to_popup.bind(line_edit_context))
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()

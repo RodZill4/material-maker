@@ -41,3 +41,7 @@ func ask(status : Array) -> String:
 
 func _on_MarginContainer_minimum_size_changed():
 	size = $MarginContainer.get_minimum_size()+Vector2(4, 4)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
