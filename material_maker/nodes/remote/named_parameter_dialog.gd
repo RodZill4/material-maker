@@ -25,3 +25,7 @@ func configure_param(minimum : float = 0.0, maximum : float = 1.0, step : float 
 	var result = await self.return_values
 	queue_free()
 	return result
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
