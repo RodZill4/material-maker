@@ -204,6 +204,7 @@ jobs:
         run: |
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
+        if: ${{ github.event.inputs.steam == 'false' }}
         run: |
           brew update && brew install imagemagick
           cp ./.github/workflows/create-dmg-bg.sh .
@@ -215,7 +216,7 @@ jobs:
           create-dmg-1.2.2/create-dmg --volname "Material Maker" --icon-size 128 --background ./bg.png --window-size 540 330 --icon "Material Maker.app" 158 125 --app-drop-link 384 125 --hide-extension "Material Maker.app" ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg ./build/mac
           ls
       - name: Notarizing ✍️
-        if: ${{ github.event.inputs.sign_macos == 'true' }}
+        if: ${{ github.event.inputs.steam == 'false' && github.event.inputs.sign_macos == 'true' }}
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           NOTARYTOOL_APP_PASSWORD: ${{ secrets.NOTARYTOOL_APP_PASSWORD }}
@@ -224,7 +225,14 @@ jobs:
           xcrun notarytool submit ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
           xcrun stapler staple ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
       - name: Upload Mac OSX Artifact 🚀
+        if: ${{ github.event.inputs.steam == 'false' }}
         uses: actions/upload-artifact@v4
         with:
           name: macos_snapshot
           path: ./build/mac/material_maker_${{ env.MM_RELEASE }}${{ env.PACKAGE_SUFFIX }}.dmg
+      - name: Upload Mac OSX Artifact (Steam) 🚀
+        if: ${{ github.event.inputs.steam == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos_snapshot
+          path: ./build/mac/Material Maker.app
