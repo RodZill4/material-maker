@@ -216,4 +216,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: macos_snapshot
-          path: ./build/mac/Material Maker.app
+          path: ./build/mac
