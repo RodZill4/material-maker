@@ -369,3 +369,11 @@ func _on_OK_pressed() -> void:
 func _on_Cancel_pressed() -> void:
 	emit_signal("editor_window_closed")
 	queue_free()
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			if "dark" in mm_globals.main_window.theme.resource_path:
+				$BG.color = Color("0b0b0c")
+			else:
+				$BG.color = Color("eaeaea")
