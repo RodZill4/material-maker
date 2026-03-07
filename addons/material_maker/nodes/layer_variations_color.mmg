@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-		"randomize": true,
+		"randomize": false,
 		"step": 0.1,
 		"v1": 0.0,
 		"v2": 1.0,
@@ -62,7 +62,9 @@
 			{
 				"default": 0.0,
 				"label": "Variable",
+				"longdesc": "Variable name",
 				"name": "variable",
+				"shortdesc": "Variable",
 				"type": "enum",
 				"values": [
 					{
@@ -87,11 +89,11 @@
 				"control": "None",
 				"default": 0.0,
 				"label": "From",
-				"longdesc": "Seed modifier for output 1",
+				"longdesc": "Initial value of the variable",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "v1",
-				"shortdesc": "Seed modifier",
+				"shortdesc": "From",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -99,9 +101,11 @@
 				"control": "None",
 				"default": 1.0,
 				"label": "To",
+				"longdesc": "Maximum value of the variable",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "v2",
+				"shortdesc": "To",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -109,16 +113,20 @@
 				"control": "None",
 				"default": 0.1,
 				"label": "Step",
+				"longdesc": "Step value when iterating",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "step",
+				"shortdesc": "Step",
 				"step": 0.001,
 				"type": "float"
 			},
 			{
 				"default": true,
 				"label": "Randomize",
+				"longdesc": "Pick different seeds for different variations",
 				"name": "randomize",
+				"shortdesc": "Randomize",
 				"type": "boolean"
 			}
 		],

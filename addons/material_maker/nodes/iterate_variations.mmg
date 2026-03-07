@@ -5,14 +5,14 @@
 		"y": 0
 	},
 	"parameters": {
-		"combine": 0,
-		"randomize": true,
+		"combine": 1.0,
+		"randomize": false,
 		"step": 0.1,
 		"v1": 0.0,
 		"v2": 1.0,
 		"variable": 0.0
 	},
-	"seed_int": 285134496,
+	"seed_int": 0,
 	"shader_model": {
 		"code": "",
 		"global": "",
@@ -54,8 +54,8 @@
 		"outputs": [
 			{
 				"f": "iterate_variations_$(name)($uv, $v1, $v2, $step)",
-				"longdesc": "Shows a variation of the input",
-				"shortdesc": "Output1",
+				"longdesc": "The output image",
+				"shortdesc": "Output",
 				"type": "f"
 			}
 		],
@@ -63,7 +63,9 @@
 			{
 				"default": 0.0,
 				"label": "Variable",
+				"longdesc": "Variable name",
 				"name": "variable",
+				"shortdesc": "Variable",
 				"type": "enum",
 				"values": [
 					{
@@ -88,11 +90,11 @@
 				"control": "None",
 				"default": 0.0,
 				"label": "From",
-				"longdesc": "Seed modifier for output 1",
+				"longdesc": "Initial value of the variable",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "v1",
-				"shortdesc": "Seed modifier",
+				"shortdesc": "From",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -100,9 +102,11 @@
 				"control": "None",
 				"default": 1.0,
 				"label": "To",
+				"longdesc": "Maximum value of the variable",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "v2",
+				"shortdesc": "To",
 				"step": 0.01,
 				"type": "float"
 			},
@@ -110,16 +114,20 @@
 				"control": "None",
 				"default": 0.1,
 				"label": "Step",
+				"longdesc": "Step value when iterating",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "step",
+				"shortdesc": "Step",
 				"step": 0.001,
 				"type": "float"
 			},
 			{
 				"default": 0.0,
 				"label": "Combine",
+				"longdesc": "Operator used to combine iterations (Add, Min, Max or average)",
 				"name": "combine",
+				"shortdesc": "Combine",
 				"type": "enum",
 				"values": [
 					{
@@ -143,7 +151,9 @@
 			{
 				"default": true,
 				"label": "Randomize",
+				"longdesc": "Pick different seeds for different variations",
 				"name": "randomize",
+				"shortdesc": "Randomize",
 				"type": "boolean"
 			}
 		],

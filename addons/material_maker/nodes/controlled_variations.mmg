@@ -7,7 +7,7 @@
 	},
 	"parameters": {
 		"v1": 0.5,
-		"variable": 0
+		"variable": 0.0
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -45,18 +45,20 @@
 				"control": "None",
 				"default": 0.0,
 				"label": "",
-				"longdesc": "Seed modifier for output 1",
+				"longdesc": "Variable value",
 				"max": 1.0,
 				"min": 0.0,
 				"name": "v#",
-				"shortdesc": "Seed modifier",
+				"shortdesc": "Value",
 				"step": 0.01,
 				"type": "float"
 			},
 			{
-				"default": 0,
+				"default": 0.0,
 				"label": "Variable",
+				"longdesc": "Variable name",
 				"name": "variable",
+				"shortdesc": "Variable",
 				"type": "enum",
 				"values": [
 					{
