@@ -111,7 +111,6 @@ func _input(event: InputEvent) -> void:
 			set_link([from_point, get_local_mouse_position()])
 			show_node(LazyNode.FROM)
 
-
 func _set_colors(frame_color: Color, linked_frame_color: Color,
 		link_color: Color, node_color: Color) -> void:
 	frame.border_color = frame_color
@@ -119,10 +118,8 @@ func _set_colors(frame_color: Color, linked_frame_color: Color,
 	$Link.gradient.colors[LazyNode.FROM] = link_color
 	$NodeA.material.set_shader_parameter("node_color", node_color)
 
-
 func set_link(pts: PackedVector2Array) -> void:
 	$Link.points = pts
-
 
 func end_link(is_cancel: bool = false) -> void:
 	$NodeA.hide()
@@ -139,7 +136,6 @@ func end_link(is_cancel: bool = false) -> void:
 		invalidate_link()
 	queue_redraw()
 
-
 func invalidate_link() -> void:
 	source = null
 	target = null
@@ -148,14 +144,12 @@ func invalidate_link() -> void:
 	is_context_linking = false
 	has_context = false
 
-
 func show_node(node: LazyNode) -> void:
 	var color_rect := $NodeA if node else $NodeB
 	color_rect.show()
 	color_rect.position = get_local_mouse_position() - Vector2(16, 16) 
 	move_to_front()
 	queue_redraw()
-
 
 func port_attr(node: GraphNode, port_idx: int,
 		is_output: bool, key: String) -> String:
@@ -166,7 +160,6 @@ func port_attr(node: GraphNode, port_idx: int,
 			return defs[port_idx][key]
 	return ""
 
-
 func has_input_link(node: GraphNode, port_idx: int) -> bool:
 	var graph : GraphEdit = get_parent()
 	if graph:
@@ -174,7 +167,6 @@ func has_input_link(node: GraphNode, port_idx: int) -> bool:
 			if c.to_port == port_idx and c.to_node == node.name:
 				return true
 	return false
-
 
 func connect_port_type(types: Array, allow_any: bool = false) -> bool:
 	var graph : GraphEdit = get_parent()
@@ -190,7 +182,6 @@ func connect_port_type(types: Array, allow_any: bool = false) -> bool:
 					graph.on_connect_node(source.name, out_port, target.name, in_port)
 					return true
 	return false
-
 
 func create_context_menu(is_output: bool, source_output: int = -1) -> void:
 	var context_node : GraphNode = source if is_output else target
@@ -252,17 +243,14 @@ func create_context_menu(is_output: bool, source_output: int = -1) -> void:
 	popup.max_size.y = MAX_POPUP_HEIGHT * int(csf)
 	popup.show()
 
-
 func popup_window_input(event : InputEvent) -> void:
 	if event.is_action("ui_cancel"):
 		invalidate_link()
-
 
 func popup_hidden(popup: PopupMenu) -> void:
 	if not has_context:
 		invalidate_link()
 	popup.queue_free()
-
 
 func create_context_connection() -> void:
 	var graph : GraphEdit = get_parent()
@@ -270,7 +258,6 @@ func create_context_connection() -> void:
 			and source.get_output_port_count()
 			and target.get_input_port_count()):
 				create_context_menu(source.get_output_port_count() != 1)
-
 
 func do_context_link(to: int, from: int) -> void:
 	if from != -1:
@@ -281,7 +268,6 @@ func do_context_link(to: int, from: int) -> void:
 			invalidate_link()
 	else:
 		create_context_menu(Port.INPUT, to)
-
 
 # handle lazy connection (alt + rmb)
 func do_lazy_connection() -> void:
@@ -328,7 +314,7 @@ func do_lazy_connection() -> void:
 					graph.on_connect_node(source.name, out_port, target.name, in_port)
 					return
 
-	# force at least one connection(compatible slot type) even when all slots are used
+	# force at least one connection(compatible slot type) even if all slots are used
 	for in_port : int in target.get_input_port_count():
 		if (source.get_output_port_type(0) == target.get_input_port_type(in_port)
 			or source.get_output_port_type(0) == 42
