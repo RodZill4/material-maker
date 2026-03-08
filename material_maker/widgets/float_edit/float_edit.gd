@@ -213,7 +213,7 @@ func _gui_input(event: InputEvent) -> void:
 
 	if mode == Modes.EDITING or mode == Modes.IDLE:
 		if event is InputEventMouseButton:
-			if mm_globals.has_config("mmb_paste_selection") and get_parent().get_parent() is GraphElement:
+			if get_parent().get_parent() is GraphElement:
 				$Edit.middle_mouse_paste_enabled = mm_globals.get_config("mmb_paste_selection")
 
 			# Handle Right Click (Expression Editor)
