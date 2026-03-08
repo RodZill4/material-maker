@@ -308,10 +308,10 @@ func _gui_input(event) -> void:
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
 				KEY_C:
-					if OS.get_name() == "macOS":
+					if OS.get_name() == "macOS" and mm_globals.get_config("ui_prefer_global_menu"):
 						center_view()
 				KEY_MASK_ALT | KEY_S:
-					if OS.get_name() == "macOS":
+					if OS.get_name() == "macOS" and mm_globals.get_config("ui_prefer_global_menu"):
 						swap_node_inputs()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
