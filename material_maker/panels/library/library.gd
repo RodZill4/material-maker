@@ -13,6 +13,8 @@ var category_buttons = {}
 @onready var filter_line_edit : LineEdit = %Filter
 @onready var item_menu : PopupMenu = %ItemMenu
 
+var section_font = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
+
 const MINIMUM_ITEM_HEIGHT : int = 30
 
 const MENU_CREATE_LIBRARY : int = 1000
@@ -156,6 +158,9 @@ func update_tree() -> void:
 	for i in library_manager.get_items(filter):
 		var _item := add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
 
+	for section : TreeItem in tree.get_root().get_children():
+		if section.get_children().size():
+			section.set_custom_font(0, section_font)
 	tree.queue_redraw()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
