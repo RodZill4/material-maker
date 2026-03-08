@@ -15,6 +15,10 @@ Miscellaneous nodes
 	node_miscellaneous_export
 	node_miscellaneous_debug
 	node_miscellaneous_variations
+	node_miscellaneous_variations_controlled
+	node_miscellaneous_variations_iterate
+	node_miscellaneous_variations_layer
+	node_miscellaneous_variations_layer_color
 	node_miscellaneous_randomize
 	node_miscellaneous_mesh_map
 	node_miscellaneous_mesh_triplanar

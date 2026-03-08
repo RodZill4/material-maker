@@ -2,6 +2,7 @@ uniform float variation = 0.0;
 
 vec4 preview_2d(vec2 uv) {
 	float _seed_variation_ = variation;
+	vec4 _controlled_variation_ = vec4(0.0);
 	$(code)
 	float d = $(value);
 	vec3 col = vec3(clamp(6.0*cos(d*min((256), preview_size))-5.0, 0.0, 1.0));
