@@ -71,3 +71,4 @@ func _on_DownloadLanguage_closed():
 func _on_ready() -> void:
 	%WinTabletDriver.visible = OS.get_name() == "Windows"
 	%WinTabletDriverSpacer.visible = OS.get_name() == "Windows"
+	%PreferGlobalMenu.visible = OS.get_name() == "macOS"
