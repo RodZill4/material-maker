@@ -821,6 +821,10 @@ corner_detail = 4
 content_margin_top = 3.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rqlqa"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k0sx"]
 bg_color = Color(0.0941176, 0.0980392, 0.101961, 1)
