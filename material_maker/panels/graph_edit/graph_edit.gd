@@ -322,7 +322,7 @@ func _gui_input(event) -> void:
 
 		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
 				event.ctrl_pressed or event.meta_pressed):
-			mm_globals.handle_warped_drag_zoom(self,
+			mm_globals.handle_drag_zoom_gesture(self,
 					(func():
 						#force connection lines to redraw
 						set_connection_lines_curvature(connection_lines_curvature)
@@ -346,7 +346,7 @@ func _gui_input(event) -> void:
 
 		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
 				event.ctrl_pressed or event.meta_pressed):
-			mm_globals.handle_warped_drag_zoom(self,
+			mm_globals.handle_drag_zoom_gesture(self,
 				(func() -> void:
 					#force connection lines to redraw
 					set_connection_lines_curvature(connection_lines_curvature)

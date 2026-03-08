@@ -14,7 +14,7 @@ func _on_ready() -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		auto_tooltip = false
-		mm_globals.handle_warped_mmb_scroll(event, self, tree_scrollbar, 0, get_rect().size.y)
+		mm_globals.handle_vscroll_gesture(event, self, tree_scrollbar, 0, get_rect().size.y)
 	else:
 		auto_tooltip = true
 

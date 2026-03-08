@@ -29,7 +29,7 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 				if get_parent().name == "Preview3d":
 					var preview_3d : SubViewportContainer = get_parent().owner
 
-					mm_globals.handle_warped_drag_zoom(preview_3d,
+					mm_globals.handle_drag_zoom_gesture(preview_3d,
 					(func() -> void:
 						var amount : float = 1.0 + event.relative.y * 0.002
 						camera_position.position.z = clamp(

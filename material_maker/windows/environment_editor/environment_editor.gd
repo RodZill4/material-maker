@@ -140,7 +140,7 @@ func _on_Environments_item_selected(index):
 func _on_Environments_gui_input(event):
 	if event is InputEventMouseMotion:
 		var rect : Rect2 = environment_list.get_rect()
-		mm_globals.handle_warped_mmb_scroll(event, environment_list,
+		mm_globals.handle_vscroll_gesture(event, environment_list,
 				environment_list.get_v_scroll_bar(), rect.position.y, rect.size.y)
 
 	elif ! (event is InputEventMouseButton) or event.button_index != MOUSE_BUTTON_RIGHT:

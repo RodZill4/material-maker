@@ -63,7 +63,7 @@ func _on_gui_input(event):
 			else:
 				%FindString.grab_focus()
 	elif event is InputEventMouseMotion:
-		mm_globals.handle_warped_mmb_scroll(event, self, get_v_scroll_bar(), 0,
+		mm_globals.handle_vscroll_gesture(event, self, get_v_scroll_bar(), 0,
 				get_rect().size.y, 1.0 / get_line_height())
 
 
