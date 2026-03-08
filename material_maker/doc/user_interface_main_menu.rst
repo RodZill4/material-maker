@@ -151,6 +151,8 @@ Help menu
 
 * *User manual* opens an external web browser to show this manual
 
+* *Example projects* shows the example .ptex files included with Material Maker
+
 * *Show selected library item documentation* opens an external web browser to show
   documentation from the User Manual for the current library item
 
