@@ -842,6 +842,8 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 corner_detail = 4
+shadow_color = Color(0, 0, 0, 0.059000004)
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w0cma"]
 draw_center = false
