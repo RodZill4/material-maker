@@ -401,7 +401,7 @@ func _on_PopupMenu_index_pressed(index):
 			var image : Image = await current_node.generator.render_output(0, Vector2i(64, 64))
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
 		2: # Update item
-			mm_globals.main_window.add_selection_to_library(library_index, false)
+			mm_globals.main_window.add_selection_to_library(library_index, false, false)
 		3: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)
 		5: # Define aliases

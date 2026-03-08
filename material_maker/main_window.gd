@@ -1077,7 +1077,7 @@ func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function
 func create_menu_add_selection_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
-func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> void:
+func add_selection_to_library(index: int, should_ask_item_name: bool = true, update_thumbnail := true) -> void:
 	var selected_nodes = get_selected_nodes()
 	if selected_nodes.is_empty():
 		return
@@ -1101,9 +1101,11 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> 
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
 	# Create thumbnail
-	var result = await selected_nodes[0].generator.render(self, 0, 64, true)
-	var image : Image = result.get_image()
-	result.release(self)
+	var image : Image = null
+	if update_thumbnail:
+		var result = await selected_nodes[0].generator.render(self, 0, 64, true)
+		image = result.get_image()
+		result.release(self)
 	node_library_manager.add_item_to_library(index, current_item_name, image, data)
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
