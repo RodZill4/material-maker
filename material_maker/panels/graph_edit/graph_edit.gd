@@ -55,6 +55,7 @@ signal preview_changed
 
 
 func _ready() -> void:
+	$GraphUI.size.y = 0
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
