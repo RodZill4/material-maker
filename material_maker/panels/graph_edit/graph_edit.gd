@@ -564,6 +564,7 @@ func center_view() -> void:
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
 		generator.disconnect("connections_changed", Callable(self, "on_connections_changed"))
+		generator.set_deferred("scroll_offset", scroll_offset)
 	clear_view()
 	generator = g
 	if generator != null:
@@ -574,14 +575,16 @@ func update_view(g) -> void:
 	$GraphUI/SubGraphUI/Description.short_description = generator.shortdesc
 	$GraphUI/SubGraphUI/Description.long_description = generator.longdesc
 	$GraphUI/SubGraphUI/Description.update_tooltip()
-	center_view()
 	if generator.get_parent() is MMGenGraph:
 		button_transmits_seed.visible = true
 		button_transmits_seed.button_pressed = generator.transmits_seed
 	else:
 		button_transmits_seed.visible = false
+	if generator.scroll_offset:
+		set_deferred("scroll_offset", generator.scroll_offset)
+	else:
+		center_view()
 	emit_signal("view_updated", generator)
-
 
 func clear_material() -> void:
 	if top_generator != null:
@@ -987,6 +990,7 @@ func _drop_data(node_position, data) -> void:
 
 func on_ButtonUp_pressed() -> void:
 	if generator != top_generator and generator.get_parent() is MMGenGraph:
+		generator.scroll_offset = scroll_offset
 		call_deferred("update_view", generator.get_parent())
 
 func _on_Label_text_changed(new_text) -> void:
@@ -1017,6 +1021,7 @@ func _on_ButtonShowTree_pressed() -> void:
 func edit_subgraph(g : MMGenGraph) -> void:
 	if !g.is_editable():
 		g.toggle_editable()
+	generator.scroll_offset = scroll_offset
 	update_view(g)
 
 func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
