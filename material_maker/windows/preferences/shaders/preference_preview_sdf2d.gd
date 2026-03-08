@@ -14,7 +14,7 @@ func _on_ready() -> void:
 	material.set_shader_parameter("sha", %ShadowFac.value)
 
 static func get_shader_code(preview_code : String) -> String:
-	var vec3_str = "vec3(%s, %s, %s)"
+	const vec3_str = "vec3(%s, %s, %s)"
 	var bg : Color = mm_globals.get_config("ui_preview_sdf2d_background_color")
 	var fg1 : Color = mm_globals.get_config("ui_preview_sdf2d_foreground_color1")
 	var fg2 : Color = mm_globals.get_config("ui_preview_sdf2d_foreground_color2")
@@ -78,4 +78,9 @@ func _on_reset_button_pressed() -> void:
 	load_defaults()
 
 func _on_gui_input(event: InputEvent) -> void:
-	pass
+	if event is InputEventMouseMotion:
+		var f = lerp(0.0, 0.3, event.position.x / size.x)
+		material.set_shader_parameter("preview_sdf_radius", f)
+
+func _on_mouse_exited() -> void:
+	material.set_shader_parameter("preview_sdf_radius", 0.3)

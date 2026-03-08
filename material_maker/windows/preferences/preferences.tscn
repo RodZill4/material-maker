@@ -33,6 +33,7 @@ shader_parameter/io = 1.0
 shader_parameter/is = 0.1
 shader_parameter/_id = 0.5
 shader_parameter/sha = 1.0
+shader_parameter/preview_sdf_radius = 0.3
 
 [node name="Preferences" type="Window"]
 oversampling_override = 1.0
@@ -729,6 +730,7 @@ text = "Cancel"
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/HBoxContainer/ResetButton" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_reset_button_pressed"]
 [connection signal="gui_input" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_gui_input"]
+[connection signal="mouse_exited" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_mouse_exited"]
 [connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Bg/BgColor" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_bg_color_color_changed"]
 [connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors/FgColor1" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_fg_color_1_color_changed"]
 [connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors/FgColor2" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_fg_color_2_color_changed"]

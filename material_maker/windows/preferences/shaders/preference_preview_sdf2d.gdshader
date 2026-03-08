@@ -15,8 +15,10 @@ uniform float is = 0.1;						// isoline smoothness
 uniform float _id = 0.5;					// isoline density
 uniform float sha = 1.0;					// shadow opacity
 
+uniform float preview_sdf_radius = 0.3;
+
 void fragment() {
-	float d = length(UV - 0.5) - 0.3;
+	float d = length(UV - 0.5) - preview_sdf_radius;
     vec3 col = ( d > 0.0 ) ? bg : mix(fg1, fg2, smoothstep(0.0, 0.5, abs(d)));
 	float border = _border * 0.25;
 	float _is = max(is, 0.0001);
