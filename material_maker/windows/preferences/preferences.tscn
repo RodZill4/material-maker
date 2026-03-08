@@ -452,6 +452,9 @@ text = "Paste selection with middle mouse button"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
+tooltip_text = "Toggle pasting from clipboard using MMB (Linux only) on:
+- Value fields in nodes
+- Comment node text field"
 button_pressed = true
 text = "On"
 flat = false
