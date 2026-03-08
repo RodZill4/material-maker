@@ -23,6 +23,7 @@ function_color = Color(0.792157, 0, 0.796078, 1)
 member_variable_color = Color(0, 0.639216, 0.635294, 1)
 
 [node name="NodeEditor" type="Window"]
+oversampling_override = 1.0
 title = "Node Editor"
 initial_position = 2
 size = Vector2i(950, 450)
