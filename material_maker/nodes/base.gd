@@ -36,6 +36,9 @@ const TIME_BAD : int = 1000
 const TIME_AVG : int = 500
 const TIME_GOOD : int = 100
 
+## Emitted when nodes are being simplified as graph is zoomed out [br]
+## [param fac] denotes the current level of detail (i.e. controls' opacity)
+signal lod_updated(fac : float)
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -236,7 +239,10 @@ func _draw() -> void:
 	const start_fade := 0.5
 	var opacity : float = clamp(
 			inverse_lerp(0.3, start_fade, get_parent().zoom), 0.0, 1.0)
+	lod_updated.emit(opacity)
 	get_titlebar_hbox().modulate.a = opacity
+	if self is MMGraphTones:
+		return
 	for control in get_children():
 		if control.get("modulate"):
 			control.modulate.a = opacity

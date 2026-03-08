@@ -8,7 +8,7 @@ content_margin_right = 3.0
 
 [node name="FloatEdit" type="Control"]
 clip_children = 1
-custom_minimum_size = Vector2(60, 0)
+custom_minimum_size = Vector2(60, 20)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

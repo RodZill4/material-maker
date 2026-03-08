@@ -5,7 +5,6 @@ class_name MMGenExport
 
 # Can be used to export an additional texture
 
-
 var texture = null
 
 # The default texture size as a power-of-two exponent
@@ -39,12 +38,16 @@ func _serialize(data: Dictionary) -> Dictionary:
 	return data
 
 func get_parameter_defs() -> Array:
+	var tooltip := """
+		Filename for the exported texture.
+		$node, $project, $idx and $resolution can be used.
+		"""
 	return [
 			{ name="size", label="Size", type="size", first=4, last=13, default=10 },
 			{ name="format", label="Format", default=0, type="enum", values=[
 				{ name="PNG" }, { name="JPG" }, { name="WEBP" }, { name="EXR" },
 			]},
-			{ name="suffix", label="Suffix", type="string", default="suffix" }
+			{ name="suffix", label="Filename", type="string", default="$project", longdesc=tooltip }
 		]
 
 func get_input_defs() -> Array:
@@ -62,6 +65,21 @@ func get_image_format() -> String:
 			return "exr"
 		_: return "png"
 
+func interpret_file_name(file_name: String, path:="") -> String:
+	var additional_ids := { "$node":"unnamed" }
+
+	if "$node" in file_name:
+		var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
+		if graph != null:
+			for c in graph.connections:
+				if c.to_node == "node_" + name:
+					var node_title : String = graph.get_node(NodePath(c.from_node)).title
+					additional_ids["$node"] = node_title.to_snake_case()
+					break
+
+	var resolution := str(get_image_size())
+	return mm_globals.interpret_file_name(file_name, path, "."+get_image_format(), additional_ids, resolution)
+
 func export_material(prefix : String, _profile : String, size : int = 0, command_line : bool = false) -> void:
 	if size == 0:
 		size = get_image_size()
@@ -69,6 +87,7 @@ func export_material(prefix : String, _profile : String, size : int = 0, command
 	if source != null:
 		var texture : MMTexture = await source.generator.render_output_to_texture(source.output_index, Vector2i(size, size))
 		if parameters.suffix != "":
-			await texture.save_to_file("%s_%s.%s" % [ prefix, parameters.suffix, get_image_format() ])
+			var filename := interpret_file_name(parameters.suffix, prefix.get_base_dir())
+			await texture.save_to_file(prefix.get_base_dir().path_join(filename))
 		else:
-			await texture.result.save_to_file("%s.%s" % [ prefix, get_image_format() ])
+			await texture.save_to_file("%s.%s" % [ prefix, get_image_format() ])

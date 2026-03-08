@@ -1,3 +1,28 @@
+# Material Maker 1.5p1
+
+## Bug Fixes
+- Fixed problem when exporting materials on command line in Export node
+- Fixed folder picker not showing set path in 2D export (contributed by williamchange)
+- Fixed small FloatEdit sizes in pixel editor (contributed by williamchange)
+- Fixed Tones node minimization and LoD update (contributed by williamchange)
+- Fixed spacing in connection style buttons (contributed by williamchange)
+- Fixed preview2d center shortcut not activating (contributed by williamchange)
+- Fixed share asset dialog size on hidpi displays (contributed by williamchange)
+- Fixed status bar icons artifacts (contributed by williamchange)
+- Fixed tooltips (contributed by williamchange)
+- Fixed classic theme floatedit style in splines dialog (contributed by williamchange)
+- Fixed dropping files with extensions in caps (contributed by williamchange)
+- Fixed error when using export node without suffix (contributed by williamchange)
+- Fixed transparency preview/export (contributed by williamchange)
+- Fixed export expression index showing as a float (contributed by williamchange)
+- Fixed undo/redo for framing nodes (contributed by williamchange)
+- Fixed function icon in EasySDF editor (contributed by williamchange)
+- Fixed non-existent signal error when editing nodes (contributed by williamchange)
+- Fixed reroute not updating port type on connection undo/redo (contributed by williamchange)
+- Fixed controller input throwing an error on option edit (contributed by TechnicallyMay)
+- Fixed "Fill To Random Color" repeating colors on adjacent tiles (contributed by DevFika)
+- Fixed Tiler node offset for odd rows (contributed by DevFika)
+
 # Material Maker 1.5
 
 ## General

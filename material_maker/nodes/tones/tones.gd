@@ -1,11 +1,17 @@
 extends MMGraphNodeGeneric
 
+class_name MMGraphTones
+
 class Cursor:
 	extends Control
 
 	var color : Color
 	var top : bool = true
 	var pos : float
+	var opacity : float = 1.0:
+		set(v):
+			opacity = v
+			queue_redraw()
 
 	const WIDTH : int = 12
 	const HEIGHT : int = 12
@@ -27,10 +33,10 @@ class Cursor:
 		else:
 			polygon = PackedVector2Array([Vector2(0, HEIGHT), Vector2(WIDTH/2.0, 0), Vector2(WIDTH, HEIGHT), Vector2(0, HEIGHT)])
 		var c = color
-		c.a = 1.0
+		c.a = opacity
 		draw_colored_polygon(polygon, c)
 		var outline_color = 0.0 if pos > 0.5 else 1.0
-		draw_polyline(polygon, Color(outline_color, outline_color, outline_color), 1.0, true)
+		draw_polyline(polygon, Color(outline_color, outline_color, outline_color, opacity), 1.0, true)
 
 	func _gui_input(ev) -> void:
 		if ev is InputEventMouseMotion && (ev.button_mask & 1) != 0:
@@ -69,8 +75,23 @@ func _ready() -> void:
 	$Histogram.add_child(cursor_out_min)
 	cursor_out_max = Cursor.new(Color(1.0, 1.0, 1.0), 1.0, false)
 	$Histogram.add_child(cursor_out_max)
+	if not lod_updated.is_connected(update_lod):
+		lod_updated.connect(update_lod)
 
 func update_node() -> void:
+	# handle minimized mode
+	if generator.minimized:
+		$Bar.custom_minimum_size.y = get_theme_constant("minimum_line_height", "MM_Node")
+		$Bar.get_children().map(func(c): c.hide())
+		$Spacer1.hide()
+		$Spacer2.hide()
+		$Histogram.hide()
+		$Histogram.queue_redraw()
+	else:
+		$Bar.custom_minimum_size.y = 0
+		$Bar.get_children().map(func(c): c.show())
+		get_children().map(func(c): c.show())
+
 	_on_Mode_item_selected(0)
 	on_parameter_changed("__input_changed__", 0)
 	# Preview
@@ -188,3 +209,17 @@ func _on_reset_pressed() -> void:
 	cursor_out_min.update_value(0.0)
 	cursor_out_max.update_value(1.0)
 	get_parent().undoredo.end_group()
+
+func update_lod(f : float) -> void:
+	cursor_in_min.opacity = f
+	cursor_in_mid.opacity = f
+	cursor_in_max.opacity = f
+	cursor_out_min.opacity = f
+	cursor_out_max.opacity = f
+	$Bar.modulate.a = f
+	$Histogram/Darken.color.a = 1.0 - f
+
+func _notification(what : int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			$Histogram/Darken.color = get_theme_stylebox("panel").bg_color
