@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cmeh4ewlvp7vx"]
 
-[ext_resource type="Script" path="res://material_maker/darken.gd" id="1"]
+[ext_resource type="Script" uid="uid://du7vv67kc65qb" path="res://material_maker/darken.gd" id="1"]
 
 [node name="Darken" type="ColorRect"]
 anchor_right = 1.0
