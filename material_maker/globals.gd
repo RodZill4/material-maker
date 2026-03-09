@@ -250,3 +250,6 @@ func get_node_title_from_gen(generator : MMGenBase) -> String:
 				var gnode : GraphNode = graph.get_node(node_path)
 				return gnode.title.to_snake_case()
 	return "unnamed"
+
+func graph_node_center(n : GraphNode, g : MMGraphEdit) -> Vector2:
+	return (n.position_offset + n.size * 0.5) * g.zoom - g.scroll_offset
