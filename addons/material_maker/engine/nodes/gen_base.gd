@@ -508,6 +508,7 @@ static func generate_preview_shader_generic(src_code : ShaderCode, type, main_fc
 		var preview_code : String = mm_io_types.types[type].preview
 		preview_code = preview_code.replace("$(code)", src_code.code)
 		preview_code = preview_code.replace("$(value)", src_code.output_values[type])
+		preview_code = Sdf2DPreview.get_shader_code(preview_code)
 		shader_code += preview_code
 	#print("GENERATED SHADER:\n"+shader_code)
 	code += "\n"
@@ -566,6 +567,7 @@ func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 		preview_code = preview_code.replace("preview_size", "64")
 		preview_code = preview_code.replace("$(code)", source.code)
 		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])
+		preview_code = Sdf2DPreview.get_shader_code(preview_code)
 		source.defs += preview_code
 		source.code = ""
 		source.output_values.rgba = "preview_2d(uv)"
