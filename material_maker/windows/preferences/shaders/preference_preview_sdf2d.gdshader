@@ -19,14 +19,15 @@ uniform float preview_sdf_radius = 0.3;
 
 void fragment() {
 	float d = length(UV - 0.5) - preview_sdf_radius;
-    vec3 col = ( d > 0.0 ) ? bg : mix(fg1, fg2, smoothstep(0.0, 0.5, abs(d)));
-	float border = _border * 0.25;
 	float _is = max(is, 0.0001);
 	float id = _id * 250.0;
+	float border = _border * 0.25;
+
+	vec3 col = ( d > 0.0 ) ? bg : mix(fg1, fg2, smoothstep(0.0, 0.5, abs(d)));
 	float it = (_it * 2.0 - 1.0) * (1.0 + _is * 0.75);
 
 	col *= 1.2 - exp(-6.0 * abs(d)) * sha;
-	col *= 0.8 + 0.1 * io *smoothstep( it + 1.0 * _is ,it - 1.0 * _is, cos(id * d));
-	col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.008, border, abs(d)));
+	col *= 0.8 + 0.1 * io *smoothstep( it + _is ,it - _is, cos(id * d));
+	col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.007, border, abs(d)));
     COLOR = vec4(col, 1.0);
 }
