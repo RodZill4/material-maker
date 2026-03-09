@@ -1,6 +1,7 @@
 extends Node
 
 
+@onready var steam_api
 var is_subscribed : bool = false
 var avatar_texture : ImageTexture
 var got_avatar : bool = false
@@ -10,16 +11,19 @@ signal avatar_ready()
 
 
 func _ready():
-	var initialize_response: Dictionary = Steam.steamInitEx()
+	if not Engine.has_singleton("Steam"):
+		return
+	steam_api = Engine.get_singleton("Steam")
+	var initialize_response: Dictionary = steam_api.steamInitEx()
 	print("Did Steam initialize?: %s " % initialize_response)
-	Steam.initAuthentication()
-	is_subscribed = Steam.isSubscribed()
-	#Steam.avatar_loaded.connect(self._on_avatar_loaded)
-	#Steam.getPlayerAvatar()
-	#Steam.connect("leaderboard_find_result", self, "_on_leaderboard_find_result")
-	#Steam.connect("leaderboard_score_uploaded", self, "_on_leaderboard_score_uploaded")
-	#Steam.connect("leaderboard_scores_downloaded", self, "_on_leaderboard_scores_downloaded")
-	#Steam.findLeaderboard("Node count")
+	steam_api.initAuthentication()
+	is_subscribed = steam_api.isSubscribed()
+	#steam_api.avatar_loaded.connect(self._on_avatar_loaded)
+	#steam_api.getPlayerAvatar()
+	#steam_api.connect("leaderboard_find_result", self, "_on_leaderboard_find_result")
+	#steam_api.connect("leaderboard_score_uploaded", self, "_on_leaderboard_score_uploaded")
+	#steam_api.connect("leaderboard_scores_downloaded", self, "_on_leaderboard_scores_downloaded")
+	#steam_api.findLeaderboard("Node count")
 
 func is_owned() -> bool:
 	return is_subscribed
@@ -27,14 +31,14 @@ func is_owned() -> bool:
 func get_user_name() -> String:
 	if not is_subscribed:
 		return ""
-	return Steam.getPersonaName()
+	return steam_api.getPersonaName()
 
 func get_avatar_texture() -> ImageTexture:
 	if not is_subscribed:
 		return null
 	if not got_avatar:
-		Steam.avatar_loaded.connect(self._on_avatar_loaded)
-		Steam.getPlayerAvatar()
+		steam_api.avatar_loaded.connect(self._on_avatar_loaded)
+		steam_api.getPlayerAvatar()
 		await avatar_ready
 	return avatar_texture
 
@@ -54,20 +58,20 @@ func _on_avatar_loaded(user_id: int, avatar_size: int, avatar_buffer: PackedByte
 func is_achievement_unlocked(achievement : String) -> bool:
 	if not is_subscribed:
 		return false
-	var achievement_status : Dictionary = Steam.getAchievement(achievement)
+	var achievement_status : Dictionary = steam_api.getAchievement(achievement)
 	if not achievement_status.ret:
 		print("Achievement ", achievement, " does not exist.")
 		return false
-	return Steam.getAchievement(achievement).achieved
+	return steam_api.getAchievement(achievement).achieved
 
 func unlock_achievement(achievement : String):
 	if not is_subscribed:
 		return
-	Steam.setAchievement(achievement)
+	steam_api.setAchievement(achievement)
 
 func increase_stat(stat : String):
 	if not is_subscribed:
 		return
-	var stat_value = Steam.getStatInt(stat)
+	var stat_value = steam_api.getStatInt(stat)
 	print(stat_value)
-	Steam.setStatInt(stat, stat_value+1)
+	steam_api.setStatInt(stat, stat_value+1)

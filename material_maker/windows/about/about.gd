@@ -59,6 +59,10 @@ func _ready() -> void:
 	else:
 		application_name_label.text = ProjectSettings.get_setting("application/config/name")+" v"+ProjectSettings.get_setting("application/config/actual_release")
 	
+	if mm_steam.steam_api == null:
+		$HBoxContainer/MarginContainer/SocialNetworks/ItchIo.visible = true
+		$HBoxContainer/MarginContainer/SocialNetworks/Patreon.visible = true
+	
 	# Contributors list
 	var label : Label
 	for c in CONTRIBUTORS:

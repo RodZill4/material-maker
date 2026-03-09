@@ -33,6 +33,7 @@ shader_parameter/invert = false
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0an10"]
 
 [node name="About" type="Window"]
+oversampling_override = 1.0
 title = "About Material Maker"
 position = Vector2i(0, 36)
 size = Vector2i(600, 500)
@@ -187,6 +188,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Patreon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -198,6 +200,7 @@ ignore_texture_size = true
 stretch_mode = 4
 
 [node name="ItchIo" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
