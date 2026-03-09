@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://3rcb1a63iu8s" path="res://material_maker/windows/desc_dialog/desc_dialog.gd" id="1"]
 
 [node name="Window" type="Window"]
+oversampling_override = 1.0
 position = Vector2i(0, 36)
 size = Vector2i(300, 150)
 script = ExtResource("1")
