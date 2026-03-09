@@ -24,8 +24,9 @@ void fragment() {
 	float _is = max(is, 0.0001);
 	float id = _id * 250.0;
 	float it = (_it * 2.0 - 1.0) * (1.0 + _is * 0.75);
-    col *= 1.2 - exp(-6.0 * abs(d)) * sha;
-    col *= 0.8 + 0.1 * io *smoothstep( it + 1.0 * _is ,it - 1.0 * _is, cos(id * d));
-    col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.01, border, abs(d)));
+
+	col *= 1.2 - exp(-6.0 * abs(d)) * sha;
+	col *= 0.8 + 0.1 * io *smoothstep( it + 1.0 * _is ,it - 1.0 * _is, cos(id * d));
+	col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.008, border, abs(d)));
     COLOR = vec4(col, 1.0);
 }

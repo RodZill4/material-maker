@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="8_0na6q"]
 [ext_resource type="Shader" uid="uid://bu6i88vcd1voy" path="res://material_maker/windows/preferences/shaders/preference_preview_sdf2d.gdshader" id="8_btfio"]
-[ext_resource type="PackedScene" uid="uid://dvfyg14l14yp7" path="res://material_maker/windows/preferences/color_option.tscn" id="9_7kd1x"]
+[ext_resource type="PackedScene" path="res://material_maker/windows/preferences/color_option.tscn" id="9_7kd1x"]
 [ext_resource type="Script" uid="uid://bviuugmm7sgct" path="res://material_maker/windows/preferences/shaders/preference_preview_sdf2d.gd" id="9_lcx40"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vujdf"]
@@ -732,6 +732,7 @@ text = "Cancel"
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/HBoxContainer/ResetButton" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_reset_button_pressed"]
 [connection signal="gui_input" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_gui_input"]
 [connection signal="mouse_exited" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_mouse_exited"]
+[connection signal="ready" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_ready"]
 [connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Bg/BgColor" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_bg_color_color_changed"]
 [connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors/FgColor1" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_fg_color_1_color_changed"]
 [connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors/FgColor2" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_fg_color_2_color_changed"]
