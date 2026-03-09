@@ -55,6 +55,8 @@ const DEFAULT_CONFIG : Dictionary = {
 	graph_line_style = 1,
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
+	node_minimize_button = true,
+	node_close_button = false,
 }
 
 

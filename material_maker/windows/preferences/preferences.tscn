@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
 [ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-416.ttf" id="2_vp06c"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
-[ext_resource type="Script" uid="uid://b6irr1ykhui6l" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
+[ext_resource type="Script" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 [ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 
@@ -439,6 +439,39 @@ size_flags_horizontal = 10
 text = "On"
 flat = false
 config_variable = "auto_size_comment"
+
+[node name="NodeMinimizeButton" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelNodeMinBtn" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeMinimizeButton"]
+layout_mode = 2
+text = "Show minimize button on nodes"
+
+[node name="NodeMinimizeButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeMinimizeButton" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Display minimize button on nodes."
+button_pressed = true
+text = "On"
+flat = false
+config_variable = "node_minimize_button"
+
+[node name="NodeCloseButton" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelNodeCloseButton" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeCloseButton"]
+layout_mode = 2
+text = "Show close button on nodes"
+
+[node name="NodeCloseButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeCloseButton" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Display close button on nodes."
+text = "On"
+flat = false
+config_variable = "node_close_button"
 
 [node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
