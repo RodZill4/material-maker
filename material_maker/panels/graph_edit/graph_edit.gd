@@ -66,7 +66,6 @@ signal preview_changed
 
 
 func _ready() -> void:
-	$GraphUI.size.y = 0
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
@@ -1807,3 +1806,8 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func _on_resized() -> void:
+	$GraphUI.size = Vector2.ZERO
+	$GraphUI.position = global_position
+	$GraphUI.position += Vector2(size.x - $GraphUI.size.x, 11)
