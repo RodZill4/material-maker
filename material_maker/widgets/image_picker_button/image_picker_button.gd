@@ -27,7 +27,8 @@ func update_image() -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		# Open dialog on mouse button key up to allow drag to register
 		open_image_dialog()
 
 
@@ -91,3 +92,17 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	add_theme_stylebox_override("panel", get_theme_stylebox("normal"))
+
+
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+	return data is Dictionary and data.has("image_path")
+
+
+func _drop_data(_at_position: Vector2, data: Variant) -> void:
+	on_drop_image_file(data.image_path)
+
+
+func _get_drag_data(_at_position: Vector2) -> Variant:
+	var preview = %Image.duplicate(true)
+	set_drag_preview(preview)
+	return { "image_path": image_path }
