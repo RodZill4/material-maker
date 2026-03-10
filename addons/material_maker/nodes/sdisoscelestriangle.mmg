@@ -43,7 +43,7 @@
 		"parameters": [
 			{
 				"control": "Rect1.x",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "Width",
 				"longdesc": "Width of the isosceles triangle",
 				"max": 1,
@@ -55,7 +55,7 @@
 			},
 			{
 				"control": "Rect1.y",
-				"default": 0.5,
+				"default": 0.2,
 				"label": "Height",
 				"longdesc": "Height of the isosceles triangle",
 				"max": 1,
@@ -78,7 +78,7 @@
 			},
 			{
 				"control": "P1.y",
-				"default": 0,
+				"default": 0.2,
 				"label": "Center Y",
 				"longdesc": "The position of the center on the Y axis",
 				"max": 0.5,

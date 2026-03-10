@@ -28,7 +28,7 @@
 		"parameters": [
 			{
 				"control": "Radius1.r",
-				"default": 0.5,
+				"default": 0.4,
 				"label": "",
 				"longdesc": "The radius of the sphere",
 				"max": 1,
