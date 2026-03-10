@@ -22,7 +22,7 @@ func _init(v : MMSplines = null) -> void:
 func _ready() -> void:
 	if splines == null:
 		splines = MMSplines.new()
-	_on_resized()
+	_on_resized.call_deferred()
 
 func set_view_rect(do : Vector2, ds : Vector2):
 	draw_size = ds

@@ -417,6 +417,14 @@
 						{
 							"node": "buffer_3",
 							"widget": "size"
+						},
+						{
+							"node": "shape_4",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
 						}
 					],
 					"longdesc": "Resolution of the generated image",

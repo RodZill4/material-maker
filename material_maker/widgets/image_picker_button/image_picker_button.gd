@@ -15,15 +15,20 @@ func _ready() -> void:
 func update_image() -> void:
 	if %Image.texture == null:
 		%Image.texture = ImageTexture.new()
-	
+
 	if FileAccess.file_exists(image_path):
-		var image: Image = Image.load_from_file(image_path)
+		var image: Image = Image.new()
+		if image_path.get_extension() == "dds":
+			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(image_path))
+		else:
+			image = Image.load_from_file(image_path)
 		%Image.texture.set_image(image)
 		queue_redraw()
 
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		# Open dialog on mouse button key up to allow drag to register
 		open_image_dialog()
 
 
@@ -49,6 +54,10 @@ func get_filetime(file_path: String) -> int:
 
 func open_image_dialog() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+	if image_path:
+		dialog.current_dir = image_path.get_base_dir()
+		if FileAccess.file_exists(image_path):
+			dialog.current_file = image_path.get_file()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
@@ -60,6 +69,7 @@ func open_image_dialog() -> void:
 	dialog.add_filter("*.svg;SVG Image")
 	dialog.add_filter("*.tga;TGA Image")
 	dialog.add_filter("*.webp;WebP Image")
+	dialog.add_filter("*.dds;DirectDraw Surface Image")
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		set_image_path(files[0])
@@ -82,3 +92,17 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	add_theme_stylebox_override("panel", get_theme_stylebox("normal"))
+
+
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+	return data is Dictionary and data.has("image_path")
+
+
+func _drop_data(_at_position: Vector2, data: Variant) -> void:
+	on_drop_image_file(data.image_path)
+
+
+func _get_drag_data(_at_position: Vector2) -> Variant:
+	var preview = %Image.duplicate(true)
+	set_drag_preview(preview)
+	return { "image_path": image_path }

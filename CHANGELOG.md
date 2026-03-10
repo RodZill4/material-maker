@@ -1,3 +1,399 @@
+# Material Maker 1.6
+
+Mar 8, 2026, ~16h
+
+## General
+
+- Allowed closing named parameter dialog via window button (contributed by williamchange)
+- Updated graph navigation to retain subgraph offsets (contributed by williamchange)
+- Implemented vertical tabs in the Preferences dialog (contributed by williamchange)
+- Modified the "Update library item" action to keep the thumbnail (contributed by williamchange)
+- Implemented node grabbing via G key (contributed by williamchange)
+- Improved debug console link navigation (contributed by williamchange)
+- Show top-level section labels in the Library panel in bold (contributed by williamchange)
+- Added drag and drop support for image parameter (contributed by williamchange)
+- Improved export node to support $ variables (contributed by williamchange)
+- Enabled tab rearrangement for projects panel (contributed by williamchange)
+- Improved $node to use node title in 2D export (contributed by williamchange)
+- Updated icons to use SVG when possible (contributed by williamchange)
+- Configured default FileDialog path to user's home directory (contributed by williamchange)
+
+## Nodes
+
+- Added lacunarity for FBM noise node (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed crash when adjusting BPP in pixels node (contributed by williamchange)
+- Fixed Morphology node Y dilation to use resolution (contributed by DevFika)
+- Fixed SDF FBM node not displaying correctly (contributed by williamchange)
+- Fixed opaque background for tooltip/popup menu panels (contributed by williamchange)
+- Reintroduced AO export for Blender export target (contributed by williamchange)
+- Placed graph UI (hierarchy and subgraph controls) above nodes (contributed by williamchange)
+- Updated reroute/preview2d bg checker to match defaults (contributed by williamchange)
+
+# Material Maker 1.5p1
+
+## Bug Fixes
+- Fixed problem when exporting materials on command line in Export node
+- Fixed folder picker not showing set path in 2D export (contributed by williamchange)
+- Fixed small FloatEdit sizes in pixel editor (contributed by williamchange)
+- Fixed Tones node minimization and LoD update (contributed by williamchange)
+- Fixed spacing in connection style buttons (contributed by williamchange)
+- Fixed preview2d center shortcut not activating (contributed by williamchange)
+- Fixed share asset dialog size on hidpi displays (contributed by williamchange)
+- Fixed status bar icons artifacts (contributed by williamchange)
+- Fixed tooltips (contributed by williamchange)
+- Fixed classic theme floatedit style in splines dialog (contributed by williamchange)
+- Fixed dropping files with extensions in caps (contributed by williamchange)
+- Fixed error when using export node without suffix (contributed by williamchange)
+- Fixed transparency preview/export (contributed by williamchange)
+- Fixed export expression index showing as a float (contributed by williamchange)
+- Fixed undo/redo for framing nodes (contributed by williamchange)
+- Fixed function icon in EasySDF editor (contributed by williamchange)
+- Fixed non-existent signal error when editing nodes (contributed by williamchange)
+- Fixed reroute not updating port type on connection undo/redo (contributed by williamchange)
+- Fixed controller input throwing an error on option edit (contributed by TechnicallyMay)
+- Fixed "Fill To Random Color" repeating colors on adjacent tiles (contributed by DevFika)
+- Fixed Tiler node offset for odd rows (contributed by DevFika)
+
+# Material Maker 1.5
+
+## General
+- Added support for loading DDS images (contributed by williamchange)
+- Support FBX mesh loading (contributed by williamchange)
+- Reintroduced CLI to export materials on command line (including mass export materials from the website)
+- Updated the color picker to remember the selected color mode and picker shape (contributed by williamchange)
+- Eased start and ending flexible layout drag (contributed by williamchange)
+- Added pen tablet driver preference for Windows (contributed by williamchange)
+- Normalized mac icon size (contributed by williamchange)
+
+### Graph editor
+- Added lasso selection for nodes (contributed by williamchange)
+- Added node inputs swapping with the Alt+S shortcut (contributed by williamchange)
+- Implemented ctrl + rmb drag to cut connections (contributed by williamchange)
+- Added a node alignment toolbar for the graph panel (contributed by williamchange)
+- Added shortcuts to align nodes horizontally (contributed by williamchange)
+- Added a shortcut (Shift+RMB) to create reroutes anywhere on a connection (contributed by williamchange)
+- Added a shortcut (Control+Shift+F) to frame selected nodes (contributed by williamchange)
+- Added UI tooltips for menubar buttons (contributed by williamchange)
+
+### Library panel
+- Added library menu option to update library item (contributed by williamchange)
+- Improved menu text for adding item to library (contributed by williamchange)
+- Updated the Library panel to show library path (contributed by williamchange)
+- Keep popup open when toggling libraries (contributed by williamchange)
+
+### Reference panel
+- Added pasting clipboard image to reference panel (contributed by williamchange)
+- Added an item to clear recents in load recent menu (contributed by williamchange)
+- Improved progress window dialog (contributed by williamchange)
+- Added a preference to use system native file dialogs (contributed by williamchange)
+- Allowed creation of splines node from data drag to graph (contributed by williamchange)
+
+### 2D Preview panel
+- Added $resolution as a filepath variable for export file name (contributed by williamchange)
+- Snap transform gizmo to a specific axis for Preview2D (contributed by williamchange)
+- Made 2D Preview alpha checkers customizable (contrtibuted by williamchange)
+
+### 3D Preview panel
+- Updated the 3D preview panel to remember environment selection (contributed by williamchange)
+- Added an option to reset the object rotation in the 3D preview panel (contributed by williamchange)
+- Added post-processing options to the 3D Preview (contributed by williamchange)
+- Added Shift+RMB shortcut to rotate environment (contributed by williamchange)
+
+### Environment editor
+- Made environment editor labels casing consistent (contributed by williamchange)
+- Improved environment thumbnail generation (contributed by williamchange)
+
+### Themes
+- Improved Classic theme (contributed by williamchange)
+- Improved scrollbar theme consistency/legibility (contributed by williamchange)
+- Improved buffer timing legibility in light themes (contributed by williamchange)
+- Added outline for current pixel cell in the pixels parameter editor (contributed by williamchange)
+- Improved FloatEdit uneditable font color (contributed by williamchange)
+
+### About dialog
+- Implemented opening the About dialog from the app menu on macOS (contributed by williamchange)
+- Added link support for contributor names in about dialog (contributed by williamchange)
+
+### Performance
+- Updated the “Load From Website” dialog to load thumbnails based on the active filter
+- Optimized graph rendering by simplifying nodes when zoomed out (contributed by williamchange)
+- Improved Gradient parameter editor peformance (contributed by williamchange)
+- Improved floatedit performance (contributed by williamchange)
+
+## Nodes
+
+### New nodes
+- Added a Kite SDF node (contributed by williamchange)
+- Added Directional Warp node (contributed by williamchange)
+- Added Inverse Circle Map node (contributed by williamchange)
+- Added Symmetric Nearest Neighbor filter node (contributed by williamchange)
+- Added missing SDF nodes (ellipse, tunnel, stairs, pyramid, ellipsoid, octahedron) to the base library (contributed by williamchange)
+- Added the Mesh Triplanar node to the base library (contributed by williamchange)
+
+### Updated nodes
+- Exposed number as an input map for 7 Segment and Roman Number nodes (contributed by williamchange)
+- Added strength map input for warp node (contributed by williamchange)
+- Added 3D rotation for Vec3 Math node (contributed by williamchange)
+- Added support for multiple lines in text node (contributed by williamchange)
+- Added support for forground and background colors in text node (contributed by williamchange)
+- Added button to reset Tones node levels (contributed by williamchange)
+- Set file dialog path to image directory in image node (contributed by williamchange)
+- Made godot export target names more consistent (contributed by williamchange)
+- Added line tool for the pixels node (contributed by williamchange)
+- Enabled drag-and-drop to rearrange remote/ios params (contributed by williamchange)
+- Added icons for 3D primitives in the EasySDF editor (contributed by williamchange)
+- Shrinked nodes when possible (contributed by williamchange)
+- Improved the bevel preset in the curve editor (contributed by williamchange)
+- Updated node edit and node load/save buttons (contributed by williamchange)
+- Removed AO export for Blender export target (contributed by williamchange)
+- Improved the Export node (contributed by williamchange)
+- Updated comment node to show placeholder text only on selection (contributed by williamchange)
+- Improved remote link drawing (contributed by williamchange)
+- Improved the Curve and Polygon parameter editors (contributed by williamchange)
+- Added UV Mode for Custom UV node (contributed by williamchange)
+- Added option to mirror gradient in gradient nodes (contributed by williamchange)
+- Added a shortcut to color one or more comment nodes (contributed by williamchange)
+
+## Bug Fixes
+- Fixed texture leak in Preview2D
+- Fixed drag/drop focus style on floatedit in remote (contributed by williamchange)
+- Fixed RichTextLabel colors in light theme (contributed by williamchange)
+- Fixed align start toolbar button icon and library section buttons (contributed by williamchange)
+- Fixed star shape artifacts (contributed by williamchange)
+- Fixed error when editing color in gradient nodes (contributed by williamchange)
+- Fixed FileDialog context menu position (contributed by williamchange)
+- Fixed file dialog save button text (contributed by williamchange)
+- Fixed white pixels in graph panel (contributed by williamchange)
+- Fixed environment editor not loading config values (contributed by williamchange)
+- Fixed missing ORM texture in PBR Material Godot 4 export (contributed by williamchange)
+- Fixed the Dynamic PBR preview and Godot 4 export (contributed by williamchange)
+- Fixed classic reroute not draggable (contributed by williamchange)
+- Fixed export target condition not saving (contributed by williamchange)
+- Fixed reroute positions when added from in/output (contributed by williamchange)
+- Fixed add node popup size (contributed by williamchange)
+
+## Misc
+- Material Maker is now based on Godot 4.5.1
+
+# Material Maker 1.4
+
+## Bug Fixes
+
+- Fixed a problem when resizing the reroute node
+- Fixed a problem when saving textures for dynamic materials export
+- Fixed a missing icon in comment node in Classic theme
+- Fixed support for bevel and mortar inputs in Custom Tile node
+
+# Material Maker 1.4RC6
+
+## General
+
+- Updated X icon, added Bluesky and Mastodon in About dialog
+- Updated contributors and patreons lists in About dialog
+
+## Nodes
+
+- Added support for #count in variadic nodes
+
+## Bug Fixes
+
+- Fixed recents not updating when loading from menu (contributed by williamchange)
+- Fixed ExportMenu not shown on custom model drop (contributed by williamchange)
+- Fixed redundant extension when exporting mesh map (contributed by williamchange)
+- Fixed incorrect render index in counter (contributed by williamchange)
+- Fixed reroute showing previous linked node on undo (contributed by williamchange)
+- Fixed tooltip shown when mouse is away from slot (contributed by williamchange)
+- Fixed reroute rect by hiding titlebar_hbox label (contributed by williamchange)
+- Fixed hierarchy tree if MM started without panel (contributed by williamchange)
+- Fixed $idx not working in export (contributed by williamchange)
+- Fixed undo/redo for remote/ios nodes (contributed by williamchange)
+- Fixed theme icon loading in editor (contributed by williamchange)
+- Fixed 3D preview for dynamic materials
+- Fixed shader generation in Debug node for texture uniforms
+
+# Material Maker 1.4RC5
+
+## Bug Fixes
+
+- Fixed a bug that caused recents not to be added when a .ptex file is dropped (contributed by williamchange)
+- Fixed lattice grid not updating when the slice count is updated (contributed by williamchange)
+- Fixed SplinesView drawn area offset on start (contributed by williamchange)
+- Fixed splines handle lines not drawing (contributed by williamchange)
+- Fixed typo for transform node's mode tooltip (contributed by williamchange)
+- Updated mode doc for transform node (contributed by williamchange)
+- Fixed tones cursor outline not updating on undo (contributed by williamchange)
+- Missing check for comment line in quick connection (contributed by williamchange)
+- Fix reroute pos y offset when adding from port (contributed by williamchange)
+- Fix filepath format not updating in 3d map export (contributed by williamchange)
+- Fixed crash that occured when deleting an iterate buffer
+- Relaxed render status condition when exporting materials
+- Removed disable render option
+- Documentation fixes (contributed by williamchange)
+
+# Material Maker 1.4RC4
+
+## General
+
+- Don't show export menu for 3d preview on start (contributed by williamchange)
+
+## Nodes
+
+- Fixed dynamic pbr preview shader (contributed by williamchange)
+- Fixed dynamic materials export for Godot 4 (contributed by Paulo Poiati)
+
+## Bug Fixes
+
+- Fix global menu translation for macOS (contributed by williamchange)
+- Fix comment nodes not undoing position (contributed by williamchange)
+- Fixed environment preview not showing reflection (contributed by williamchange)
+- Fixed environment thumbnail generation (contributed by williamchange)
+- Fixed window jump when maximizing from splash (contributed by williamchange)
+- Fix connected signals errors when dragging panels (contributed by williamchange)
+- Add null check in set_current_environment (contributed by williamchange)
+- Fixed histogram with buffer inputs bug
+- Fixed problem that caused the iterate buffer to stop updating
+
+# Material Maker 1.4RC3
+
+## General
+
+- Improved idle FPS tooltip in preferences (contributed by williamchange)
+- Removed library tree tooltips (contributed by williamchange)
+- Removed www. from splashscreen URL (contributed by williamchange)
+- Added hint for unload submenu when no custom library is loaded (contributed by williamchange)
+- Made website spelling consistent in tooltips (contributed by williamchange)
+
+## Nodes
+
+- Added library icons for Decompose and Combine (contributed by williamchange)
+- Added missing short/long desc. for material nodes (contributed by williamchange)
+- Added icon for Mesh Map node (contributed by williamchange)
+- Added several aliases (contributed by williamchange)
+- Improved reroute ports drawing (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed duplicate with links shortcut (contributed by williamchange)
+- Fixed duplicated "Help" menu for macOS (contributed by williamchange)
+- Fixed comment node not dragging enclosed nodes (contributed by williamchange)
+- Fixed environment upload (contributed by williamchange)
+- Fixed saved preview mesh uv scale not applying (contributed by williamchange)
+- Fixed center view not accounting for zoom level (contributed by williamchange)
+- Fixed text/code edit white pixels corners when focused (contributed by williamchange)
+- Fixed comment node not dragging comment line node (contributed by williamchange)
+- Fixed create/web node not spawning at graph center (contributed by williamchange)
+- Fixed crash when adding website nodes from library (contributed by williamchange)
+- Fixed custom icon visibility on edited nodes (contributed by williamchange)
+- Fixed restoring animation export size (contributed by williamchange)
+- Fixed Preview3D material not updating (contributed by williamchange)
+- Fixed node title color unchanged when edited (contributed by williamchange)
+- Fixed for C key menu item shortcut for macOS (contributed by williamchange)
+- Fixed simplex noise seed offset (contributed by williamchange)
+- Fixed hidpi display panel undock position (contributed by williamchange)
+- Fixed various non-critical errors and warnings (contributed by williamchange)
+
+# Material Maker 1.4RC2
+
+## General
+
+- Preview3D mesh UV scale is now saved in settings (contributed by williamchange)
+- Removed RZLogo TextureRect in about.tscn (contributed by williamchange)
+
+## Nodes
+
+- Fixed noise node banding artifacts
+
+## Bug Fixes
+
+- Fixed connections shown in front of nodes (contributed by williamchange)
+- Fixed render counter context menu position (contributed by williamchange)
+- Fixed missing top-level label in hierarchy panel (contributed by williamchange)
+- Fixed small default window size on hidpi displays (contributed by williamchange)
+- Fixed unlit material doc on inputs (contributed by williamchange)
+- Fixed hierarchy panel previews (contributed by williamchange)
+- Fixed reroute context menu (contributed by williamchange)
+- Fixed a problem that caused buffers and materials not to updating correctly
+- Fixed add node filter context pos on hidpi displays (contributed by williamchange)
+- Fixed add node popup size not updating correctly (contributed by williamchange)
+- Fixed preview3d that did not immediately apply 3D scale (contributed by williamchange)
+- Fixed comment color popup scale and position on hidpi display (contributed by williamchange)
+- Fixed propagating node changes (contributed by williamchange)
+- Fixed CodeEditor errors (contributed by williamchange)
+- Fixed crash that occurred when hovering param linked to minimized nodes (contributed by williamchange)
+- Fixed ShowTree button size when entering subgraph (contributed by williamchange)
+- Added missing parameter types in shader nodes documentation (contributed by williamchange)
+- Added image check when exporting materials
+- Fixed Font problem on Text node
+- Fixed layout on multicolumn nodes
+- Fixed comment node documentation and images (contributed by williamchange)
+- Various code format and warning fixes (contributed by williamchange)
+- Fixed scale factor for flexible layout subwindows
+- Fixed growing export menu problem on Mac
+
+# Material Maker 1.4RC1
+
+## General
+
+- Fixed shader exports for Unity and Unreal engines (HLSL generation for array uniforms)
+
+## Nodes
+
+- Fixed FBM noise and kaleidoscope nodes compatibility (contributed by williamchange)
+- Fixed switch node input tooltips (contributed by williamchange)
+- Fixed classic reroute (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed a problem that caused the menu to update repeatedly when moving a node
+- Adjusted File Dialog minimum size (contributed by williamchange)
+- Made load from website dialog exclusive (contributed by williamchange)
+- Fixed comment line node min size not updating (contributed by williamchange)
+- Fixed hdri download error dialog scale on hidpi displays (contributed by williamchange)
+- Removed Ctrl+R shortcut for 2D/3D buttons (contributed by williamchange)
+- Fixed SDF builder param size not updating (contributed by williamchange)
+- Fixed and updated tip text mouse icons (contributed by williamchange)
+- Fixed float edit drag focus bug (contributed by DevFika)
+- Removed Show/Hide side panels menu item
+- Small fixes in Splines editor
+
+# Material Maker 1.4b3
+
+## General
+
+- Added Graph view preferences for connection styles (contributed by williamchange)
+- Updated graph zoom level UI
+- Added X shortcut to delete selected nodes (contributed by williamchange)
+- Added duplicate with inputs (Control+Shift+D) command (contributed by williamchange)
+
+## Nodes
+
+- Added Comment Line node (contributed by williamchange)
+- Made float edit control smaller (contributed by Jowan-Spooner)
+
+## Bug Fixes
+
+- Fixed comments behavior when moving through hierarchy
+- Show webpage when clicking website url on splashscreen
+- Fixed export node
+- Fixed SDF editor problem with polygon parameters
+- Fixed generated cylinder tangents
+- Fixed generic node layout
+- Many fixes in EasySDF editor (renaming, hide button, many 3D primitives)
+- Fixed dialog placement under Linux (contributed by williamchange)
+- Fixed scroll to item buttons in Library panel (contributed by williamchange)
+- Fixed 2D preview reset tooltip (contributed by williamchange)
+- Fixed environment list size (contributed by williamchange)
+- Fixed camera controller reset (contributed by williamchange)
+- Fixed crash that occurred when loading a mesh without UVs (contributed by williamchange)
+- Fixes in Add Node popup (contributed by williamchange)
+- Fixes in About dialog (contributed by williamchange)
+- Made tip text translatable (contributed by williamchange)
+- Fixes in light theme (contributed by williamchange)
+- Miscellaneous UI fixes (contributed by williamchange)
+
 # Material Maker 1.4b2
 
 ## General
@@ -198,7 +594,7 @@
   by williamchange)
 - The Spherize node has been improved (contributed by williamchange)
 - Updated documentation for many nodes (contributed by williamchange)
- 
+
 ## Bug Fixes
 
 - Small fixes in the GLSL parser
@@ -457,7 +853,7 @@
 - Normal maps can now be painted directly or generated from painted depth or both
 - A new a *Paint Project Settings* dialog has been added. It replaces the huge submenu in the Tools menu
 - A new *Stamp* tool has been added. To use it, press the mouse button to place the center of the stamp, then drag around to define the size and angle
-- An implicit mask has been added to painting and it can be configured from an ID map using the new *Mask Selector* tool 
+- An implicit mask has been added to painting and it can be configured from an ID map using the new *Mask Selector* tool
 - The brush parameters panel has been updated to show channel filter parameters in a more intuitive way
 - Parameters expressions can now use new *tilt* (stylus angle), and *stroke_seed* (a random number that is rerolled for each stroke) predefined variables
 - The base brush library has been reorganized, many brushes have been improved and a few brushes have been added

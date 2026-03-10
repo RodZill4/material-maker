@@ -6,6 +6,7 @@ const PREVIEW_SIZES : Array[int] = [ 0, 64, 128, 192]
 
 func _ready() -> void:
 	super._ready()
+	get_titlebar_hbox().get_child(0).hide()
 	close_button.visible = false
 	theme_type_variation = "MM_Reroute"
 	#set_theme_type("Reroute")
@@ -17,6 +18,8 @@ func set_generator(g : MMGenBase) -> void:
 	await set_preview(g.get_parameter("preview"))
 	update_node()
 
+func _draw_port(slot_index: int, position: Vector2i, left: bool, color: Color) -> void:
+	draw_circle(position, 5, color, true, -1, true)
 
 #func set_theme_type(type : StringName):
 	#var current_theme : Theme = mm_globals.main_window.theme
@@ -27,6 +30,8 @@ func set_generator(g : MMGenBase) -> void:
 
 func on_connections_changed():
 	var graph_edit = get_parent()
+	if graph_edit == null:
+		return
 	var color : Color = Color(1.0, 1.0, 1.0)
 	var type : int = 42
 	var port_type : String = "any"
@@ -61,7 +66,7 @@ func update_preview(preview : Control = null):
 func _input(event:InputEvent) -> void:
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT and is_visible_in_tree():
 		accept_event()
 		var menu : PopupMenu = PopupMenu.new()
 		menu.add_item("No preview")
@@ -89,6 +94,10 @@ func on_parameter_changed(n : String, v):
 		disable_undoredo_for_offset = true
 		position_offset -= (size-old_size)/2
 		disable_undoredo_for_offset = false
+	else:
+		if n == "__input_changed__" or n == "__output_changed__":
+			on_connections_changed.call_deferred()
+		update_preview()
 
 func set_preview(v : int):
 	var preview : Control = null
@@ -96,6 +105,8 @@ func set_preview(v : int):
 		preview = $Contents.get_child(0)
 	if v == 0:
 		if preview:
+			preview.custom_minimum_size = Vector2(0, 0)
+			preview.size = Vector2(0, 0)
 			preview.queue_free()
 		theme_type_variation = "MM_Reroute"
 		#set_theme_type("Reroute")

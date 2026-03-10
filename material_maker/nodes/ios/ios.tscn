@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d1j47uuqrti7e"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/ios/ios.gd" id="1"]
+[ext_resource type="Script" uid="uid://da5v0wx0fxv65" path="res://material_maker/nodes/ios/ios.gd" id="1"]
 
 [node name="IOs" type="GraphNode"]
 offset_right = 32.0

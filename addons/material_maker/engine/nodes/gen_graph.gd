@@ -13,6 +13,7 @@ var transmits_seed : bool = true
 
 var current_mesh : Mesh = null
 
+var scroll_offset = null
 
 signal graph_changed()
 signal connections_changed(removed_connections, added_connections)
@@ -426,7 +427,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	var right_bound = -65536
 	var upper_bound = 65536
 	var count = 0
-	# Filter group nodes and calculate boundin box
+	# Filter group nodes and calculate bounding box
 	for g in gens:
 		if g.name != "Material" and g.name != "Brush" and g.name != "gen_inputs" and g.name != "gen_outputs":
 			generators.push_back(g)
@@ -534,6 +535,8 @@ func _serialize(data: Dictionary) -> Dictionary:
 		data.nodes.append(c.serialize())
 	#data.connections = connections_to_compact(connections)
 	data.connections = connections
+	if scroll_offset:
+		data.scroll_offset = { x=scroll_offset.x, y=scroll_offset.y }
 	return data
 
 func _deserialize(data : Dictionary) -> void:
@@ -550,6 +553,8 @@ func _deserialize(data : Dictionary) -> void:
 			connection_array = data.connections
 		elif data.connections is Dictionary:
 			connection_array = connections_from_compact(data.connections)
+	if data.has("scroll_offset"):
+		scroll_offset = Vector2(data.scroll_offset.x, data.scroll_offset.y)
 	var new_stuff = await mm_loader.add_to_gen_graph(self, nodes, connection_array)
 
 #region Node Graph Diff
@@ -582,34 +587,34 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 			idx1 += 1
 			idx2 += 1
 		elif compare_name_and_type(child_names[idx1], other_child_names[idx2]):
-			remove_generator(get_node(child_names[idx1][0]))
+			remove_generator(get_node(NodePath(child_names[idx1][0])))
 			idx1 += 1
 		else:
-			var gen = graph.get_node(other_child_names[idx2][0]).serialize()
+			var gen = graph.get_node(NodePath(other_child_names[idx2][0])).serialize()
 			var generator = await mm_loader.create_gen(gen)
 			add_generator(generator)
 			idx2 += 1
 	
 	while idx1 < child_names.size():
-		remove_generator(get_node(child_names[idx1][0]))
+		remove_generator(get_node(NodePath(child_names[idx1][0])))
 		idx1 += 1
 	
 	while idx2 < other_child_names.size():
-		var gen = graph.get_node(other_child_names[idx2][0]).serialize()
+		var gen = graph.get_node(NodePath(other_child_names[idx2][0])).serialize()
 		var generator = await mm_loader.create_gen(gen)
 		add_generator(generator)
 		idx2 += 1
 		
 	for child in maybe_changed:
 		if child[1] == "graph":
-			var node = get_node(child[0])
-			var other_node = graph.get_node(child[0])
+			var node = get_node(NodePath(child[0]))
+			var other_node = graph.get_node(NodePath(child[0]))
 
 			node.apply_diff_from(other_node)
 			continue
 		
-		var node = get_node(child[0])
-		var other_node = graph.get_node(child[0])
+		var node = get_node(NodePath(child[0]))
+		var other_node = graph.get_node(NodePath(child[0]))
 		
 		node.position = other_node.position
 		if other_node.seed_locked:

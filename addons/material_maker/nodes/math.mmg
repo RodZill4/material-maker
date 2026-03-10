@@ -47,7 +47,7 @@
 		"outputs": [
 			{
 				"f": "$(name_uv)_clamp_$clamp",
-				"longdesc": "Shows a greyscale image of the result",
+				"longdesc": "Shows a grayscale image of the result",
 				"shortdesc": "Output",
 				"type": "f"
 			}
@@ -233,7 +233,7 @@
 			},
 			{
 				"default": false,
-				"label": "Clamp result",
+				"label": "Clamp",
 				"longdesc": "The result is clamped to [0, 1] if this option is checked",
 				"name": "clamp",
 				"shortdesc": "Clamp",

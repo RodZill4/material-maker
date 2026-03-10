@@ -126,7 +126,7 @@
 			}
 		],
 		"shortdesc": "Profile",
-		"longdesc": "Generates profile as a greyscale image from specified gradient"
+		"longdesc": "Generates profile as a grayscale image from specified gradient"
 	},
 	"type": "shader"
 }

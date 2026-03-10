@@ -1,0 +1,152 @@
+{
+	"name": "sdf3d_fbm2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"iterations": 5,
+		"mode": 0,
+		"scaling": 0,
+		"smoothness": 0.3
+	},
+	"seed_int": 3500930922,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// https://iquilezles.org/www/articles/fbmsdf/fbmsdf.htm",
+			"float fbm_sph( ivec3 i, vec3 f, ivec3 c, float seed )",
+			"{",
+			"\t// Line below randomizes the positions of each sphere, this can cause a bit of artifacting,",
+			"\t// but also makes for a much more natural effect. Disabled for now.",
+			"\t//f += rand3( vec2(i.xy + c.xy) - vec2( float(i.z + c.z) ) ) - vec3(0.5);",
+			"\t// random radius at grid vertex i+c",
+			"\tfloat rad = 0.5*rand31(vec3(i+c) + vec3(seed));",
+			"\t// distance to sphere at grid vertex i+c",
+			"\treturn length(f-vec3(c)) - rad; ",
+			"}",
+			"",
+			"float sdBase( vec3 p, float seed )",
+			"{",
+			"   ivec3 i = ivec3(floor(p));",
+			"\tvec3 f =\t   fract(p);",
+			"   // distance to the 8 corners spheres",
+			"   return min(min(min(fbm_sph(i,f,ivec3(0,0,0), seed),",
+			"\t\t\t\t\t  fbm_sph(i,f,ivec3(0,0,1), seed)),",
+			"\t\t\t\t  min(fbm_sph(i,f,ivec3(0,1,0), seed),",
+			"\t\t\t\t\t  fbm_sph(i,f,ivec3(0,1,1), seed))),",
+			"\t\t\t  min(min(fbm_sph(i,f,ivec3(1,0,0), seed),",
+			"\t\t\t\t\t  fbm_sph(i,f,ivec3(1,0,1), seed)),",
+			"\t\t\t\t  min(fbm_sph(i,f,ivec3(1,1,0), seed),",
+			"\t\t\t\t\t  fbm_sph(i,f,ivec3(1,1,1), seed))));",
+			"}",
+			"",
+			"float sdFbm( vec3 p, float d, int iterations, float smoothness, float seed, float scaling, int _mode)",
+			"{",
+			"\tfloat s = 1.0;",
+			"\tfor( int i=0; i<iterations; i++ )",
+			"\t{",
+			"\t\t// evaluate new octave",
+			"\t\tfloat n = s*sdBase(p, seed);",
+			"\t\t",
+			"\t\tif(_mode == 0) {",
+			"\t\t\t// add",
+			"\t\t\tn = smax(n,d - scaling * s,smoothness * s);",
+			"\t\t\td = smin(n,d\t\t\t ,smoothness * s);",
+			"\t\t} else {",
+			"\t\t\t// subtract",
+			"\t\t\td = smax(d - scaling * s, -n, smoothness * s );",
+			"\t\t}",
+			"\t\t",
+			"\t\t// prepare next octave",
+			"\t\tp = mat3(vec3(0.02, 1.60, 1.20),",
+			"\t\t\t\tvec3(-1.60, 0.72,-0.96),",
+			"\t\t\t\tvec3(-1.20,-0.96, 1.28))*p;",
+			"\t\ts = 0.5*s;",
+			"\t}",
+			"\treturn d;",
+			"}"
+		],
+		"includes": [
+			"smooth_minmax",
+			"tex3d_fbm"
+		],
+		"inputs": [
+			{
+				"default": "length($uv)-.45",
+				"label": "",
+				"longdesc": "Shape input which should have noise added, defined as a signed distance function",
+				"name": "distance",
+				"shortdesc": "Input",
+				"type": "sdf3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Adds FBM noise to a base 3D SDF shape",
+		"name": "SDF FBM",
+		"outputs": [
+			{
+				"sdf3d": "sdFbm($uv, $distance($uv), int($iterations), $smoothness, $seed, $scaling, $mode)",
+				"type": "sdf3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1,
+				"label": "",
+				"longdesc": "Option to either add the noise to the base shape or subtract it",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Add",
+						"value": "0"
+					},
+					{
+						"name": "Subtract",
+						"value": "1"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 5,
+				"label": "Iterations",
+				"longdesc": "The level of iterations performed",
+				"max": 10,
+				"min": 0,
+				"name": "iterations",
+				"shortdesc": "Iterations",
+				"step": 1,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.3,
+				"label": "Smoothness",
+				"longdesc": "The smoothness of the boolean operation",
+				"max": 1,
+				"min": 0,
+				"name": "smoothness",
+				"shortdesc": "Smoothness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Scaling",
+				"longdesc": "Allows you to adjust the scaling of the layers of spheres used for the noise",
+				"max": 1,
+				"min": -1,
+				"name": "scaling",
+				"shortdesc": "Scaling",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "SDF FBM"
+	},
+	"type": "shader"
+}

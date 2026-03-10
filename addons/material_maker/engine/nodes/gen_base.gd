@@ -498,14 +498,8 @@ static func remove_constant_declarations(s : String, constants : Array[String] =
 			s = s.replace(result.strings[0], "")
 	return s
 
-static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
-	var code
-	code = "shader_type canvas_item;\n"
-	code += "render_mode blend_disabled, unshaded;\n"
-	code += "uniform float preview_size = 64;\n"
-	code += "uniform sampler2D mesh_inv_uv_tex;\n"
-	code += "uniform vec3 mesh_aabb_position;\n"
-	code += "uniform vec3 mesh_aabb_size;\n"
+static func generate_preview_shader_generic(src_code : ShaderCode, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
+	var code : String = ""
 	code += mm_renderer.common_shader
 	code += "\n"
 	code += src_code.uniforms_as_strings("uniform", false, true)
@@ -522,6 +516,17 @@ static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "voi
 	code += shader_code
 	code += main_fct
 	code = remove_constant_declarations(code)
+	return code
+	
+static func generate_preview_shader(src_code : ShaderCode, type, main_fct = "void fragment() { COLOR = preview_2d(UV); }") -> String:
+	var code : String = ""
+	code += "shader_type canvas_item;\n"
+	code += "render_mode blend_disabled, unshaded;\n"
+	code += "uniform float preview_size = 64;\n"
+	code += "uniform sampler2D mesh_inv_uv_tex;\n"
+	code += "uniform vec3 mesh_aabb_position;\n"
+	code += "uniform vec3 mesh_aabb_size;\n"
+	code += generate_preview_shader_generic(src_code, type, main_fct)
 	return code
 
 func generate_output_shader(output_index : int, preview : bool = false):
@@ -557,6 +562,7 @@ func render_output_to_texture(output_index : int, size : Vector2i) -> MMTexture:
 	if not source.output_values.has("rgba"):
 		var preview_code : String = mm_io_types.types[source.output_type].preview
 		preview_code = preview_code.replace("uniform", "const")
+		preview_code = preview_code.replace("const sampler2D", "uniform sampler2D")
 		preview_code = preview_code.replace("preview_size", "64")
 		preview_code = preview_code.replace("$(code)", source.code)
 		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])

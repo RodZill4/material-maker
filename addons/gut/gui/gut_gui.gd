@@ -24,6 +24,7 @@ var _ctrls = {
 	time_label = null,
 	title = null,
 	title_bar = null,
+	tgl_word_wrap = null,		# optional
 }
 
 var _title_mouse = {
@@ -42,6 +43,8 @@ func _ready():
 	_ctrls.btn_continue.pressed.connect(_on_continue_pressed)
 	_ctrls.switch_modes.pressed.connect(_on_switch_modes_pressed)
 	_ctrls.title_bar.gui_input.connect(_on_title_bar_input)
+	if(_ctrls.tgl_word_wrap != null):
+		_ctrls.tgl_word_wrap.toggled.connect(_on_word_wrap_toggled)
 
 	_ctrls.prog_script.value = 0
 	_ctrls.prog_test.value = 0
@@ -79,6 +82,7 @@ func _populate_ctrls():
 	_ctrls.time_label = _get_first_child_named('TimeLabel', self)
 	_ctrls.title = _get_first_child_named("Title", self)
 	_ctrls.title_bar = _get_first_child_named("TitleBar", self)
+	_ctrls.tgl_word_wrap = _get_first_child_named("WordWrap", self)
 
 
 func _get_first_child_named(obj_name, parent_obj):
@@ -96,7 +100,7 @@ func _get_first_child_named(obj_name, parent_obj):
 			to_return = _get_first_child_named(obj_name, kids[index])
 			if(to_return == null):
 				index += 1
-
+	
 	return to_return
 
 
@@ -157,6 +161,9 @@ func _on_gut_end_pause():
 func _on_switch_modes_pressed():
 	switch_modes.emit()
 
+
+func _on_word_wrap_toggled(toggled):
+	_ctrls.rtl.autowrap_mode = toggled
 # ------------------
 # Public
 # ------------------

@@ -16,7 +16,7 @@
 			{
 				"default": "$uv.x",
 				"label": "",
-				"longdesc": "The input greyscale image",
+				"longdesc": "The input grayscale image",
 				"name": "input",
 				"shortdesc": "Input",
 				"type": "f"
@@ -31,7 +31,7 @@
 			}
 		],
 		"instance": "",
-		"longdesc": "Colorizes a greyscale image by sampling colors from a row or column in another image",
+		"longdesc": "Colorizes a grayscale image by sampling colors from a row or column in another image",
 		"name": "Colormap",
 		"outputs": [
 			{

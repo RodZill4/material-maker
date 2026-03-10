@@ -10,7 +10,7 @@ or pavement. It generates an uneven pattern by randomly offsetting brick interse
 Inputs
 ++++++
 
-The **Uneven Bricks 3** node accepts 3 optional greyscale input maps for the shape mortar,
+The **Uneven Bricks 3** node accepts 3 optional grayscale input maps for the shape mortar,
 bevel and round parameters (the corresponding parameter is multiplied by the map value).
 
 Outputs
@@ -18,7 +18,7 @@ Outputs
 
 The **Uneven Bricks 3** node provides the following textures:
 
-* The first is a greyscale image where bricks are shown in white and mortar in black.
+* The first is a grayscale image where bricks are shown in white and mortar in black.
 
 * The second is Fill information for each brick and must be connected to a Fill companion node.
 

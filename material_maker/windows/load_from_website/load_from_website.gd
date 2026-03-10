@@ -11,6 +11,9 @@ var only_return_index : bool = false
 
 signal return_asset(json : Dictionary)
 
+var missing_thumbnail_indexes : Array[int]
+var current_missing_thumbnail_index : int
+
 
 func _ready() -> void:
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
@@ -54,6 +57,7 @@ func fill_list(filter : String):
 	item_list.clear()
 	displayed_assets = []
 	var item_index : int = 0
+	var prioritized : Array[int] = []
 	for i in range(assets.size()):
 		var m = assets[i]
 		if filter == "" or m.name.to_lower().find(filter.to_lower()) != -1 or m.tags.to_lower().find(filter.to_lower()) != -1:
@@ -62,6 +66,12 @@ func fill_list(filter : String):
 			item_list.set_item_tooltip(item_index, "Name: %s\nAuthor: %s\nLicense: %s" % [ m.name, m.author, m.license ])
 			displayed_assets.push_back(m.id)
 			item_index += 1
+			if i in missing_thumbnail_indexes:
+				print("Moving ", i, " to front")
+				missing_thumbnail_indexes.erase(i)
+				prioritized.push_back(i)
+	prioritized.append_array(missing_thumbnail_indexes)
+	missing_thumbnail_indexes = prioritized
 
 func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 	# Hide the window until the asset list is loaded
@@ -92,11 +102,7 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 					m.texture.set_image(image)
 					assets.push_back(m)
 			fill_list("")
-			if true or OS.get_name() == "HTML5":
-				update_thumbnails()
-			else:
-				thumbnail_update_thread = Thread.new()
-				thumbnail_update_thread.start(self.update_thumbnails.bind(null))
+			update_thumbnails()
 			var result = await self.return_asset
 			queue_free()
 			return result
@@ -108,20 +114,36 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 	return {}
 
 func update_thumbnails() -> void:
+	missing_thumbnail_indexes = []
 	for i in range(assets.size()):
 		var m = assets[i]
 		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
-			var address : String = MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp"
-			var error = $ImageHTTPRequest.request(address)
-			if error == OK:
-				var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
-				image.load_webp_from_buffer(data)
-				image.save_png(cache_filename)
-			else:
-				continue
-		m.texture.set_image(image)
+			missing_thumbnail_indexes.append(i)
+		else:
+			m.texture.set_image(image)
+	download_thumbnail()
+
+func download_thumbnail() -> void:
+	while not missing_thumbnail_indexes.is_empty():
+		current_missing_thumbnail_index = missing_thumbnail_indexes.pop_front()
+		var m = assets[current_missing_thumbnail_index]
+		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
+		var address : String = MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp"
+		var error = $ImageHTTPRequest.request(address)
+		if error == OK:
+			var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
+			break
+
+func _on_image_http_request_request_completed(result, response_code, headers, body):
+	var m = assets[current_missing_thumbnail_index]
+	var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
+	var image : Image = Image.new()
+	image.load_webp_from_buffer(body)
+	image.save_png(cache_filename)
+	m.texture.set_image(image)
+	download_thumbnail()
 
 func _on_ItemList_item_selected(_index):
 	$VBoxContainer/Buttons/OK.disabled = false

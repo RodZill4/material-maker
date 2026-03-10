@@ -11,7 +11,7 @@ the rightmost color.
 Inputs
 ......
 
-The **Colorize** node inputs a 3D texture and implicitely converts it to greyscale.
+The **Colorize** node inputs a 3D texture and implicitely converts it to grayscale.
 
 Outputs
 .......

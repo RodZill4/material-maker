@@ -37,7 +37,7 @@ func string_to_bbcode(s : String) -> String:
 					match data.type:
 						"nodesection":
 							url_string = data.section+" section of node "+data.node
-				s = s.left(l)+"[url="+url+"]"+url_string+"[/url]"+s.right(-l2-2)
+				s = s.left(l)+"[color=\"#5884d6\"][url="+url+"]"+url_string+"[/url][/color]"+s.right(-l2-2)
 	return s
 
 func write(l: String, m : String):
@@ -55,7 +55,15 @@ func _on_rich_text_label_meta_clicked(meta):
 	match data.type:
 		"nodesection":
 			generator = instance_from_id(data.nodeid.right(-1).to_int())
-			generator.edit(self, data.section)
+			if generator == null:
+					return
+			if Input.is_key_pressed(KEY_ALT):
+				generator.edit(self, data.section)
+			else:
+				var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
+				graph.update_view(generator.get_parent())
+				var node : GraphNode = graph.get_node("node_" + generator.name)
+				graph.scroll_offset = (node.position_offset + 0.5*node.size) * graph.zoom - 0.5*graph.size
 
 func update_shader_generator(shader_model) -> void:
 	generator.set_shader_model(shader_model)
@@ -64,7 +72,6 @@ func toggle():
 	visible = not visible
 	%ConsoleResizer.visible = visible
 	mm_globals.set_config("ui_console_open", visible)
-		
 
 func _on_console_resizer_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
@@ -73,3 +80,9 @@ func _on_console_resizer_gui_input(event: InputEvent) -> void:
 			toggle()
 		custom_minimum_size.y = min(max(custom_minimum_size.y, 100),650)
 		mm_globals.set_config("ui_console_height", custom_minimum_size.y)
+
+func _on_rich_text_label_meta_hover_ended(_meta: Variant) -> void:
+	mm_globals.set_tip_text("")
+
+func _on_rich_text_label_meta_hover_started(_meta: Variant) -> void:
+	mm_globals.set_tip_text("#LMB: Show Node, Alt+#LMB: Edit Node")

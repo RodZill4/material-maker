@@ -14,7 +14,7 @@ The **Cairo** node does not accept any input.
 Outputs
 +++++++
 
-The **Cairo** generates a greyscale heightmap for the pattern as well as Fill information
+The **Cairo** generates a grayscale heightmap for the pattern as well as Fill information
 for each tile.
 
 Parameters

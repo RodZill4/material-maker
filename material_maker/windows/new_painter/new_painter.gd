@@ -33,6 +33,7 @@ func _on_ModelFile_pressed():
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.glb,*.gltf;GLTF file")
 	dialog.add_filter("*.obj;Wavefront OBJ file")
+	dialog.add_filter("*.fbx;FBX file")
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		set_mesh(files[0])
@@ -76,8 +77,7 @@ func _on_ProjectFile_pressed():
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mmpp;Material Maker paint project file")
-	#if mm_globals.config.has_section_key("path", "material"):
-	#	dialog.current_dir = mm_globals.config.get_value("path", "material")
+	#dialog.current_dir = mm_globals.config.get_value("path", "material", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		set_project(files[0])

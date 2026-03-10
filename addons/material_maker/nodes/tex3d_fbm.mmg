@@ -223,7 +223,7 @@
 		"name": "TEX3D FBM",
 		"outputs": [
 			{
-				"longdesc": "Shows a greyscale 3D texture of the generated noise",
+				"longdesc": "Shows a grayscale 3D texture of the generated noise",
 				"shortdesc": "Output",
 				"tex3d_gs": "fbm3d_$noise($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), float($(seed)))",
 				"type": "tex3d_gs"

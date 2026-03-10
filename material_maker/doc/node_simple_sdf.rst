@@ -5,7 +5,7 @@ The signed distance function nodes can be used to define complex geometry using 
 shapes.
 
 They are based on a very small set of basic shapes, that can be combined using operators,
-and finally output as a greyscale image using the **sdShow** node.
+and finally output as a grayscale image using the **sdShow** node.
 
 All output samples shown in this section are images generated through the **sdShow** node.
 
@@ -54,6 +54,10 @@ Shapes
 	node_simple_sdf_shapes_sdstar
 	node_simple_sdf_shapes_sdpie
 	node_simple_sdf_shapes_sdarrow
+	node_simple_sdf_shapes_sdellipse
+	node_simple_sdf_shapes_sdtunnel
+	node_simple_sdf_shapes_sdstairs
+	node_simple_sdf_shapes_sdkite
 
 Operators
 +++++++++

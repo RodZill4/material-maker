@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://4jb53yqktyfg"]
 
-[ext_resource type="Script" path="res://addons/gut/gui/GutControl.gd" id="1_eprql"]
+[ext_resource type="Script" uid="uid://cqlvpwidawld6" path="res://addons/gut/gui/GutControl.gd" id="1_eprql"]
 
 [node name="GutControl" type="Control"]
 layout_mode = 3

@@ -3,7 +3,7 @@ Hexagonal Prism node
 
 The **Link** node generates a 3d signed distance function for a hexagonal prism.
 
-.. image:: images/node_3d_sdf_shapes_hex_prism.png
+.. image:: images/node_3d_sdf_shapes_hexagonal_prism.png
 	:align: center
 
 Inputs

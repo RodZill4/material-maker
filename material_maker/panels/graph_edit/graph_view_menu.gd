@@ -81,7 +81,7 @@ func _on_line_thickness_value_changed(value: Variant) -> void:
 	update_view_settings()
 
 
-func _on_bezier_connection_toggled(toggled_on: bool) -> void:
+func _on_bezier_connection_toggled(_toggled_on: bool) -> void:
 	set_curvature_slot_enabled(true)
 	mm_globals.set_config(SETTING_GRAPH_LINE_STYLE,ConnectionStyle.BEZIER)
 	update_view_settings()
@@ -92,7 +92,7 @@ func _on_rounded_connection_toggled(toggled_on: bool) -> void:
 	%CurvatureLabel.text = "Corner" if toggled_on else "Curvature"
 	var conn_lines = "Connection lines %s"
 	%LineCurvature.tooltip_text = (
-			conn_lines % "corner radius" if toggled_on else "curvature")
+			conn_lines % ["corner radius" if toggled_on else "curvature"])
 	mm_globals.set_config(SETTING_GRAPH_LINE_STYLE, ConnectionStyle.ROUNDED)
 	update_view_settings()
 
@@ -118,7 +118,7 @@ func _on_diagonal_connection_toggled(toggled_on: bool) -> void:
 	update_view_settings()
 
 
-func _on_direct_connection_toggled(toggled_on: bool) -> void:
+func _on_direct_connection_toggled(_toggled_on: bool) -> void:
 	set_curvature_slot_enabled(false)
 	mm_globals.set_config(SETTING_GRAPH_LINE_STYLE, ConnectionStyle.DIRECT)
 	update_view_settings()

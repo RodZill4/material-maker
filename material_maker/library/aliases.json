@@ -21,9 +21,12 @@
 	"Filter/Swap Channels": "shuffle,change,bind",
 	"Filter/Tonality": "curves",
 	"Filter/Tones": "levels",
+	"Filter/Tones/Step": "threshold",
+	"Filter/Dilate": "distance",
 	"Miscellaneous/Buffer": "pause,wait,optimize",
 	"Miscellaneous/Variations/Color": "colour",
 	"Miscellaneous/Comment": "note,frame",
+	"Miscellaneous/Comment/Line": "note,label",
 	"Miscellaneous/Export": "save",
 	"Miscellaneous/Iterate Buffer": "pause,wait,optimize",
 	"Miscellaneous/Switch": "change,trigger,toggle,select",
@@ -61,6 +64,7 @@
 	"Simple/Shape/Curved Star": "basic",
 	"Simple/Shape/Rays": "basic",
 	"Simple/Shape/Star": "basic",
+	"Simple/Shape/Square": "basic,square,box,rectangle",
 	"Simple/Text": "label",
 	"Simple/Uniform": "color,colour,rgb,fill,solid",
 	"Simple/Uniform/Grayscale": "value,fill,solid,greyscale",
@@ -78,5 +82,8 @@
 	"Transform/Tiler/Color": "duplicate,copy,clone,repeat,grid,colour",
 	"Transform/Tiler/Advanced/Color": "colour",
 	"Transform/Translate": "move,scroll,shift,push",
-	"Transform/Warp": "distortion,deform,shift,push"
+	"Transform/Warp": "distortion,deform,shift,push",
+	"Transform/Circle Map": "polar",
+	"Transform/Inverse Circle Map": "cartesian",
+	"Filter/Quantize": "posterize"
 }

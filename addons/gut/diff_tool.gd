@@ -7,7 +7,6 @@ enum {
 
 var _strutils = GutUtils.Strutils.new()
 var _compare = GutUtils.Comparator.new()
-var DiffTool = load('res://addons/gut/diff_tool.gd')
 
 var _value_1 = null
 var _value_2 = null

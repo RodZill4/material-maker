@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctb1alr2h3jxi"]
+
+[ext_resource type="Script" uid="uid://bjwrxt2pvhupy" path="res://material_maker/widgets/text_line_edit/text_line_edit.gd" id="1_tiioq"]
+
+[node name="TextLineEdit" type="LineEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.7812
+offset_top = -15.0
+offset_right = 33.7812
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tiioq")
+
+[connection signal="ready" from="." to="." method="_on_ready"]

@@ -27,6 +27,8 @@
 	},
 	"seed_int": 0,
 	"shader_model": {
+		"shortdesc": "Static PBR Material Displacement",
+		"longdesc": "PBR material with maps generated as static images. Identical to Static PBR Material, but with depth previewed as displacement in the 3D Preview",
 		"code": "",
 		"custom": "",
 		"exports": {
@@ -83,7 +85,7 @@
 					}
 				]
 			},
-			"Godot/G3 Spatial": {
+			"Godot/Godot 3 Spatial": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -191,13 +193,17 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
-							"$fi"
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"flags_transparent = true",
+							"$fi",
+							""
 						],
 						"type": "template"
 					}
 				]
 			},
-			"Godot/G4 ORM": {
+			"Godot/Godot 4 ORM": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -263,7 +269,7 @@
 							"$if $(connected:albedo_tex)",
 							"albedo_texture = ExtResource( 1 )",
 							"$fi",
-							"$if $(connected:metallic_tex)",
+							"$if $(connected:ao_tex) or $(connected:roughness_tex) or $(connected:metallic_tex)",
 							"orm_texture = ExtResource( 2 )",
 							"$fi",
 							"$if $(connected:normal_tex)",
@@ -290,13 +296,17 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
-							"$fi"
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"transparency = 1",
+							"$fi",
+							""
 						],
 						"type": "template"
 					}
 				]
 			},
-			"Godot/G4 Standard": {
+			"Godot/Godot 4 Standard": {
 				"export_extension": "tres",
 				"files": [
 					{
@@ -401,7 +411,11 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
-							"$fi"
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"transparency = 1",
+							"$fi",
+							""
 						],
 						"type": "template"
 					}
@@ -3172,7 +3186,7 @@
 			"shader_type spatial;",
 			"render_mode blend_mix,cull_back,diffuse_burley,specular_schlick_ggx",
 			"$if $(connected:opacity_tex) and $(param:flags_transparent)",
-			",depth_draw_alpha_prepass",
+			",depth_prepass_alpha",
 			"$fi",
 			";",
 			"",

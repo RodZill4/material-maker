@@ -23,16 +23,20 @@ func _ready() -> void:
 	filter.connect("text_submitted", Callable(self, "filter_entered"))
 	%List.set_drag_forwarding(get_list_drag_data, Callable(), Callable())
 	update_list()
+	%Filter.get_menu().about_to_popup.connect(
+		_context_menu_about_to_popup.bind(%Filter.get_menu()))
 
+func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
+	context_menu.position = get_window().position + Vector2i(
+			get_mouse_position() * get_window().content_scale_factor)
 
 func filter_entered(_filter) -> void:
 	_on_list_item_activated(0)
 
-
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()
 	current_graph.undoredo.start_group()
-	var nodes : Array = current_graph.create_nodes(node_data, insert_position)
+	var nodes : Array = await current_graph.create_nodes(node_data, insert_position)
 	if not nodes.is_empty():
 		var node : GraphNode = nodes[0] as GraphNode
 		if node != null:
@@ -64,7 +68,12 @@ func todo_renamed_hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
-	get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	size = Vector2.ZERO
+	max_size = Vector2.ZERO
+	var csf : float = mm_globals.main_window.get_window().content_scale_factor
+	get_window().content_scale_factor = csf
+	size = get_contents_minimum_size()
+	max_size = size / csf
 	var current_graph = get_current_graph()
 	insert_position = current_graph.offset_from_global_position(current_graph.get_global_mouse_position())
 	popup()
@@ -92,7 +101,7 @@ func check_quick_connect(obj) -> bool:
 	if mm_loader.predefined_generators.has(obj.type):
 		ref_obj = mm_loader.predefined_generators[obj.type]
 	# comment and remote nodes have neither input nor output
-	if ! ref_obj.has("type") or ref_obj.type == "comment" or ref_obj.type == "remote":
+	if ! ref_obj.has("type") or ref_obj.type == "comment" or ref_obj.type == "comment_line" or ref_obj.type == "remote":
 		return false
 	if qc_is_output:
 		if ref_obj.has("shader_model"):

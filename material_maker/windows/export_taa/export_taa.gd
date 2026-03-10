@@ -25,6 +25,7 @@ func set_source(generator, output):
 	if not source.output_values.has("rgba"):
 		var preview_code : String = mm_io_types.types[source.output_type].preview
 		preview_code = preview_code.replace("uniform", "const")
+		preview_code = preview_code.replace("const sampler2D", "uniform sampler2D")
 		preview_code = preview_code.replace("preview_size", "64")
 		preview_code = preview_code.replace("$(code)", source.code)
 		preview_code = preview_code.replace("$(value)", source.output_values[source.output_type])
@@ -82,8 +83,7 @@ func _on_Export_pressed():
 	dialog.add_filter("*.jpg;JPG image file")
 	dialog.add_filter("*.png;PNG image file")
 	dialog.add_filter("*.webp;WEBP image file")
-	if mm_globals.config.has_section_key("path", "save_preview"):
-		dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
+	dialog.current_dir = mm_globals.config.get_value("path", "save_preview", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		await avg_texture.save_to_file(files[0])

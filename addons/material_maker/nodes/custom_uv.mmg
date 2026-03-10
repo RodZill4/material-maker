@@ -24,7 +24,7 @@
 			"\treturn clamp((uv+floor(rand2(vec2(seed))*count))/count, vec2(0.0), vec2(1.0));",
 			"}",
 			"",
-			"vec2 custom_uv_transform(vec2 uv, vec2 cst_scale, float rnd_rotate, float rnd_scale, vec2 seed) {",
+			"vec2 old_custom_uv_transform(vec2 uv, vec2 cst_scale, float rnd_rotate, float rnd_scale, vec2 seed) {",
 			"\tseed = rand2(seed);",
 			"\tuv -= vec2(0.5);",
 			"\tfloat angle = (seed.x * 2.0 - 1.0) * rnd_rotate;",
@@ -63,7 +63,7 @@
 		"outputs": [
 			{
 				"longdesc": "Shows the remapped image",
-				"rgba": "$in.variation(get_from_tileset($inputs, $(name_uv)_rnd, custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))), $variations ? $(name_uv)_rnd : 0.0)",
+				"rgba": "$in.variation(get_from_tileset($inputs, $(name_uv)_rnd, old_custom_uv_transform($(name_uv)_map.xy, vec2($sx, $sy), $rotate*0.01745329251, $scale, vec2($(name_uv)_map.z, float($seed)))), $variations ? $(name_uv)_rnd : 0.0)",
 				"shortdesc": "Output",
 				"type": "rgba"
 			}

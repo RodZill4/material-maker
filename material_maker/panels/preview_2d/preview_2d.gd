@@ -16,6 +16,9 @@ var last_export_size = 4
 signal generator_changed
 
 
+func _enter_tree():
+	set_generator(generator, output, true)
+
 func generate_preview_shader(source, template) -> String:
 	return MMGenBase.generate_preview_shader(source, source.output_type, template)
 
@@ -28,6 +31,10 @@ func do_update_material(source, target_material : ShaderMaterial, template : Str
 		print("Template has time") # This should not happen
 	var code = generate_preview_shader(source, template)
 	mm_deps.create_buffer("preview_"+str(get_instance_id()), self)
+	# Remove the Texture2D references, otherwise they will remain
+	for p in target_material.get_property_list():
+		if p.hint_string == "Texture2D" and p.name.begins_with("shader_parameter/"):
+			target_material.set_shader_parameter(p.name.right(-17), null)
 	await mm_deps.buffer_create_shader_material("preview_"+str(get_instance_id()), MMShaderMaterial.new(target_material), code)
 	for u in source.uniforms:
 		if u.value:
@@ -124,9 +131,9 @@ func export_taa() -> void:
 	window.popup_centered()
 
 
-func create_image(renderer_function : String, params : Array, image_size : Vector2i) -> void:
+func create_image(_renderer_function : String, _params : Array, image_size : Vector2i) -> void:
 	if generator != null:
-		var texture : MMTexture = await generator.render_output_to_texture(output, image_size)
+		var _texture : MMTexture = await generator.render_output_to_texture(output, image_size)
 
 
 func export_as_image_file(file_name : String, image_size : Vector2i) -> void:
