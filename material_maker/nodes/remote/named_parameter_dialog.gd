@@ -25,3 +25,6 @@ func configure_param(minimum : float = 0.0, maximum : float = 1.0, step : float 
 	var result = await self.return_values
 	queue_free()
 	return result
+
+func _on_close_requested() -> void:
+	_on_Cancel_pressed()

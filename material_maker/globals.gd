@@ -210,6 +210,8 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 		return
 	do_propagate_shortcuts(control, event)
 
+func get_home_directory() -> String:
+	return OS.get_environment("USERPROFILE" if OS.has_feature("windows") else "HOME")
 
 func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}, resolution="") -> String:
 	for i in additional_identifiers:
@@ -245,3 +247,14 @@ func is_theme_light() -> bool:
 ## Whether dark theme(i.e. Default Dark or Classic) is currently set.
 func is_theme_dark() -> bool:
 	return "light" not in main_window.theme.resource_path
+
+func get_node_title_from_gen(generator : MMGenBase) -> String:
+	# Get GraphNode title from generator (in current graph)
+	if generator != null:
+		var graph : MMGraphEdit = main_window.get_current_graph_edit()
+		if graph != null:
+			var node_path := NodePath("node_" + generator.name)
+			if graph.has_node(node_path):
+				var gnode : GraphNode = graph.get_node(node_path)
+				return gnode.title.to_snake_case()
+	return "unnamed"

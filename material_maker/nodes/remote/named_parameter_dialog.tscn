@@ -80,6 +80,7 @@ custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Cancel"
 
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="value_changed" from="VBoxContainer/float/Min" to="VBoxContainer/float" method="_on_Min_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/float/Max" to="VBoxContainer/float" method="_on_Max_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/float/Step" to="VBoxContainer/float" method="_on_Step_value_changed"]

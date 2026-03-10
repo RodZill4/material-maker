@@ -1,3 +1,37 @@
+# Material Maker 1.6
+
+Mar 8, 2026, ~16h
+
+## General
+
+- Allowed closing named parameter dialog via window button (contributed by williamchange)
+- Updated graph navigation to retain subgraph offsets (contributed by williamchange)
+- Implemented vertical tabs in the Preferences dialog (contributed by williamchange)
+- Modified the "Update library item" action to keep the thumbnail (contributed by williamchange)
+- Implemented node grabbing via G key (contributed by williamchange)
+- Improved debug console link navigation (contributed by williamchange)
+- Show top-level section labels in the Library panel in bold (contributed by williamchange)
+- Added drag and drop support for image parameter (contributed by williamchange)
+- Improved export node to support $ variables (contributed by williamchange)
+- Enabled tab rearrangement for projects panel (contributed by williamchange)
+- Improved $node to use node title in 2D export (contributed by williamchange)
+- Updated icons to use SVG when possible (contributed by williamchange)
+- Configured default FileDialog path to user's home directory (contributed by williamchange)
+
+## Nodes
+
+- Added lacunarity for FBM noise node (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed crash when adjusting BPP in pixels node (contributed by williamchange)
+- Fixed Morphology node Y dilation to use resolution (contributed by DevFika)
+- Fixed SDF FBM node not displaying correctly (contributed by williamchange)
+- Fixed opaque background for tooltip/popup menu panels (contributed by williamchange)
+- Reintroduced AO export for Blender export target (contributed by williamchange)
+- Placed graph UI (hierarchy and subgraph controls) above nodes (contributed by williamchange)
+- Updated reroute/preview2d bg checker to match defaults (contributed by williamchange)
+
 # Material Maker 1.5p1
 
 ## Bug Fixes

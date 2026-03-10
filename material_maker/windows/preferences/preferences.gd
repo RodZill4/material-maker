@@ -14,7 +14,7 @@ func edit_preferences(c : ConfigFile) -> void:
 	main_window.add_dialog(self)
 	config_changed.connect(main_window.on_config_changed)
 	update_controls(self)
-	size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
+	size *= content_scale_factor
 	hide()
 	popup_centered(size)
 
@@ -42,16 +42,6 @@ func _on_OK_pressed():
 func _on_Cancel_pressed():
 	queue_free()
 
-
-func _on_Preferences_about_to_show():
-	await get_tree().process_frame
-	_on_VBoxContainer_minimum_size_changed()
-
-func _on_VBoxContainer_minimum_size_changed():
-	min_size = $VBoxContainer.get_combined_minimum_size() * content_scale_factor
-	size = min_size
-	
-
 func _on_InstallLanguage_pressed():
 	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	dialog.min_size = Vector2(500, 500)
@@ -65,8 +55,8 @@ func _on_InstallLanguage_pressed():
 		update_language_list()
 
 func update_language_list():
-	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_locales()
-	$VBoxContainer/TabContainer/General/HBoxContainer/Language.init_from_config(config)
+	%Language.init_from_locales()
+	%Language.init_from_config(config)
 
 func _on_DownloadLanguage_pressed():
 	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
@@ -78,7 +68,6 @@ func _on_DownloadLanguage_closed():
 	locale.read_translations()
 	update_language_list()
 
-
 func _on_ready() -> void:
-	$VBoxContainer/TabContainer/General/WinTabletDriverSpacer.visible = OS.get_name() == "Windows"
-	$VBoxContainer/TabContainer/General/WinTabletDriver.visible = OS.get_name() == "Windows"
+	%WinTabletDriver.visible = OS.get_name() == "Windows"
+	%WinTabletDriverSpacer.visible = OS.get_name() == "Windows"

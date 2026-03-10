@@ -24,6 +24,17 @@ var need_save_crash_recovery : bool = false
 var top_generator = null
 var generator = null
 
+@onready var grab_icon := preload("res://material_maker/icons/grab.svg")
+var has_grab : bool = false:
+	set(v):
+		has_grab = v
+		if has_grab:
+			Input.set_custom_mouse_cursor(
+					grab_icon, Input.CURSOR_ARROW,
+					grab_icon.get_size() * 0.5)
+		else:
+			Input.set_custom_mouse_cursor(null)
+
 const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
 var locked_preview : Array = [ null, null ]
@@ -55,6 +66,7 @@ signal preview_changed
 
 
 func _ready() -> void:
+	$GraphUI.size.y = 0
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
@@ -117,6 +129,29 @@ func process_port_click(pressed : bool):
 							set_current_preview(1 if is_shift_pressed else 0, port_click_node, port_click_port_index, is_control_pressed)
 							port_click_port_index = -1
 						return
+
+
+func _input(event: InputEvent) -> void:
+	# Handle node grab
+	if has_grab:
+		var selected_nodes := get_selected_nodes()
+		if event is InputEventMouseMotion:
+			for node in selected_nodes:
+				if node is not MMGraphComment:
+					node.move_to_front()
+				node.position_offset += event.relative / zoom
+		elif (event is InputEventMouseButton
+				and event.button_index == MOUSE_BUTTON_LEFT):
+			accept_event()
+			has_grab = false
+			# Prevent unintended control activations on grab release
+			for node in selected_nodes:
+				if event.pressed:
+					node.grab_click_focus.call_deferred()
+					# keep node selection on release in an empty area
+					if get_nodes_under_mouse().is_empty():
+						node.set_deferred("selected", true)
+
 
 func _gui_input(event) -> void:
 	if (
@@ -217,6 +252,8 @@ func _gui_input(event) -> void:
 				node_popup.show_popup()
 		else:
 			if event.button_index == MOUSE_BUTTON_LEFT:
+				if event.pressed:
+					has_grab = false
 				if event.double_click:
 					if get_nodes_under_mouse().is_empty():
 						on_ButtonUp_pressed()
@@ -253,6 +290,11 @@ func _gui_input(event) -> void:
 					color_comment_nodes()
 				KEY_D:
 					detach_selected_nodes()
+				KEY_G:
+					if not get_selected_nodes().is_empty():
+						has_grab = true
+				KEY_ESCAPE:
+					has_grab = false
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -566,6 +608,7 @@ func center_view() -> void:
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
 		generator.disconnect("connections_changed", Callable(self, "on_connections_changed"))
+		generator.set_deferred("scroll_offset", scroll_offset)
 	clear_view()
 	generator = g
 	if generator != null:
@@ -576,14 +619,16 @@ func update_view(g) -> void:
 	$GraphUI/SubGraphUI/Description.short_description = generator.shortdesc
 	$GraphUI/SubGraphUI/Description.long_description = generator.longdesc
 	$GraphUI/SubGraphUI/Description.update_tooltip()
-	center_view()
 	if generator.get_parent() is MMGenGraph:
 		button_transmits_seed.visible = true
 		button_transmits_seed.button_pressed = generator.transmits_seed
 	else:
 		button_transmits_seed.visible = false
+	if generator.scroll_offset:
+		set_deferred("scroll_offset", generator.scroll_offset)
+	else:
+		center_view()
 	emit_signal("view_updated", generator)
-
 
 func clear_material() -> void:
 	if top_generator != null:
@@ -753,8 +798,7 @@ func save_as() -> bool:
 		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		var main_window = mm_globals.main_window
-		if mm_globals.config.has_section_key("path", "project"):
-			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		dialog.current_dir = mm_globals.config.get_value("path", "project", mm_globals.get_home_directory())
 		var files = await dialog.select_files()
 		if files.size() == 1:
 			if save_file(files[0]):
@@ -988,6 +1032,7 @@ func _can_drop_data(_position, data) -> bool:
 	return (
 		(typeof(data) == TYPE_OBJECT and data is MMCurve)
 		or (typeof(data) == TYPE_OBJECT and data is MMSplines)
+		or typeof(data) == TYPE_DICTIONARY and data.has("image_path")
 		or typeof(data) == TYPE_COLOR
 		or typeof(data) == TYPE_DICTIONARY
 		and (data.has('type')
@@ -1009,11 +1054,14 @@ func _drop_data(node_position, data) -> void:
 		do_paste({type="tonality", curve=data})
 	elif typeof(data) == TYPE_OBJECT and data is MMSplines:
 		do_paste({type="splines", splines=data})
+	elif typeof(data) == TYPE_DICTIONARY and data.has("image_path"):
+		do_paste({type="image", image=data.image_path})
 	else:
 		create_nodes(data, offset_from_global_position(get_global_transform() * node_position))
 
 func on_ButtonUp_pressed() -> void:
 	if generator != top_generator and generator.get_parent() is MMGenGraph:
+		generator.scroll_offset = scroll_offset
 		call_deferred("update_view", generator.get_parent())
 
 func _on_Label_text_changed(new_text) -> void:
@@ -1044,6 +1092,7 @@ func _on_ButtonShowTree_pressed() -> void:
 func edit_subgraph(g : MMGenGraph) -> void:
 	if !g.is_editable():
 		g.toggle_editable()
+	generator.scroll_offset = scroll_offset
 	update_view(g)
 
 func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:

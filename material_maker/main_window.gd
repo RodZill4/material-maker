@@ -596,8 +596,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 			dialog.current_path = last_export_path
 		else:
 			var config_key = export_profile_config_key(profile)
-			if mm_globals.config.has_section_key("path", config_key):
-				dialog.current_dir = mm_globals.config.get_value("path", config_key)
+			dialog.current_dir = mm_globals.config.get_value("path", config_key, mm_globals.get_home_directory())
 		add_child(dialog)
 		var files = await dialog.select_files()
 		if files.size() > 0:
@@ -623,7 +622,7 @@ func change_theme(theme_name) -> void:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
 	else:
 		RenderingServer.set_default_clear_color(
-				Color(0.48, 0.48, 0.48) if "light" in theme_name else Color(0.12, 0.12, 0.12))
+				Color("4d4d4d") if "light" in theme_name else Color("1f1f1f"))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -702,8 +701,7 @@ func load_project() -> void:
 		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		dialog.add_filter("*.mmpp;Model Painting File")
-		if mm_globals.config.has_section_key("path", "project"):
-			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		dialog.current_dir = mm_globals.config.get_value("path", "project", mm_globals.get_home_directory())
 		var files = await dialog.select_files()
 		if files.size() > 0:
 			do_load_projects(files)
@@ -958,8 +956,7 @@ func edit_load_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if mm_globals.config.has_section_key("path", "selection"):
-		dialog.current_dir = mm_globals.config.get_value("path", "selection")
+	dialog.current_dir = mm_globals.config.get_value("path", "selection", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
@@ -979,8 +976,7 @@ func edit_save_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if mm_globals.config.has_section_key("path", "selection"):
-		dialog.current_dir = mm_globals.config.get_value("path", "selection")
+	dialog.current_dir = mm_globals.config.get_value("path", "selection", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
@@ -1078,7 +1074,7 @@ func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function
 func create_menu_add_selection_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, node_library_manager, "add_selection_to_library")
 
-func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> void:
+func add_selection_to_library(index: int, should_ask_item_name: bool = true, update_thumbnail := true) -> void:
 	var selected_nodes = get_selected_nodes()
 	if selected_nodes.is_empty():
 		return
@@ -1102,9 +1098,11 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true) -> 
 	elif graph_edit != null:
 		data = graph_edit.serialize_selection()
 	# Create thumbnail
-	var result = await selected_nodes[0].generator.render(self, 0, 64, true)
-	var image : Image = result.get_image()
-	result.release(self)
+	var image : Image = null
+	if update_thumbnail:
+		var result = await selected_nodes[0].generator.render(self, 0, 64, true)
+		image = result.get_image()
+		result.release(self)
 	node_library_manager.add_item_to_library(index, current_item_name, image, data)
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:

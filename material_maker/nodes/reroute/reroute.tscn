@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dj08rlr43tqxj"]
 
-[ext_resource type="Script" path="res://material_maker/nodes/reroute/reroute.gd" id="1"]
+[ext_resource type="Script" uid="uid://bfkmqgx6bd2i4" path="res://material_maker/nodes/reroute/reroute.gd" id="1"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 corner_radius_top_left = 12
@@ -45,6 +45,7 @@ custom_minimum_size = Vector2(24, 24)
 offset_right = 24.0
 offset_bottom = 24.0
 theme = SubResource("3")
+title = "Reroute"
 slot/0/left_enabled = true
 slot/0/left_type = 42
 slot/0/left_color = Color(1, 1, 1, 1)
