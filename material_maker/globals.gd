@@ -240,6 +240,14 @@ func interpret_file_name(file_name: String, path:="", file_extension:="",additio
 
 	return file_name
 
+## Whether light theme (i.e. Default Light) is currently set.
+func is_theme_light() -> bool:
+	return "light" in main_window.theme.resource_path
+
+## Whether dark theme(i.e. Default Dark or Classic) is currently set.
+func is_theme_dark() -> bool:
+	return "light" not in main_window.theme.resource_path
+
 func get_node_title_from_gen(generator : MMGenBase) -> String:
 	# Get GraphNode title from generator (in current graph)
 	if generator != null:
