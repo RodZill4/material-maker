@@ -417,6 +417,9 @@ func export_profile_config_key(profile : String) -> String:
 	return key
 
 func quick_export() -> void:
+	# Prevent triggering quick export multiple times via shortcut
+	if get_node_or_null("FileDialog") or get_node_or_null("AcceptDialog"):
+		return
 	var project = get_current_project()
 	if project == null:
 		return
