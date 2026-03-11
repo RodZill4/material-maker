@@ -12,6 +12,10 @@ extends PanelContainer
 @onready var TonemapExposure := %TonemapExposure
 @onready var TonemapWhite := %TonemapWhite
 @onready var TonemapWhiteLabel := %TonemapWhiteLabel
+@onready var TonemapAgXContrast := %TonemapAgXContrast
+@onready var TonemapAgXContrastLabel := %TonemapAgXContrastLabel
+@onready var TonemapAgXWhite := %TonemapAgXWhite
+@onready var TonemapAgXWhiteLabel := %TonemapAgXWhiteLabel
 
 @onready var Glow := %Glow
 @onready var GlowBleed := %GlowBleed
@@ -44,6 +48,8 @@ extends PanelContainer
 const SETTING_PREVIEW_TONEMAP_ENABLED := "ui_3d_preview_tonemap_enabled"
 const SETTING_PREVIEW_TONEMAP := "ui_3d_preview_tonemap"
 const SETTING_PREVIEW_TONEMAP_WHITE := "ui_3d_preview_tonemap_white"
+const SETTING_PREVIEW_TONEMAP_AGX_WHITE := "ui_3d_preview_tonemap_agx_white"
+const SETTING_PREVIEW_TONEMAP_AGX_CONTRAST := "ui_3d_preview_tonemap_agx_contrast"
 const SETTING_PREVIEW_TONEMAP_EXPOSURE := "ui_3d_preview_tonemap_exposure"
 
 const SETTING_PREVIEW_GLOW_ENABLED := "ui_3d_preview_glow_enabled"
@@ -134,7 +140,7 @@ func _ready() -> void:
 	restore_dof_settings()
 
 
-func _on_glow_blending_item_selected(index: int) -> void:
+func _on_glow_blending_item_selected(index: Environment.GlowBlendMode) -> void:
 	environment.glow_blend_mode = index
 	mm_globals.set_config(SETTING_PREVIEW_GLOW_BLEND_MODE, index)
 	GlowBlendMix.visible = index == Environment.GLOW_BLEND_MODE_MIX
@@ -210,7 +216,7 @@ func restore_tonemap_settings(force_update: bool = false) -> void:
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP):
 			TonemapMode.selected = mm_globals.get_config(SETTING_PREVIEW_TONEMAP)
 			environment.tonemap_mode = TonemapMode.selected
-			show_hide_tonemap_white(TonemapMode.selected)
+			show_hide_tonemap_options(TonemapMode.selected)
 
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_EXPOSURE):
 			TonemapExposure.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_EXPOSURE)
@@ -219,6 +225,14 @@ func restore_tonemap_settings(force_update: bool = false) -> void:
 		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_WHITE):
 			TonemapWhite.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_WHITE)
 			environment.tonemap_white = TonemapWhite.value
+		
+		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_AGX_WHITE):
+			TonemapWhite.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_AGX_WHITE)
+			environment.tonemap_agx_white = TonemapAgXWhite.value
+		
+		if mm_globals.has_config(SETTING_PREVIEW_TONEMAP_AGX_CONTRAST):
+			TonemapWhite.value = mm_globals.get_config(SETTING_PREVIEW_TONEMAP_AGX_CONTRAST)
+			environment.tonemap_agx_contrast = TonemapAgXContrast.value
 
 
 func restore_glow_settings() -> void:
@@ -316,25 +330,47 @@ func _on_tonemap_toggled(toggled_on: bool) -> void:
 		restore_tonemap_settings()
 
 
-func show_hide_tonemap_white(tonemapper: int) -> void:
+func agx_white_contrast(should_show : bool) -> void:
+	for c : Control in TonemapSection.get_children():
+		if "agx" in c.name.to_lower():
+			c.visible = should_show
+
+
+func show_hide_tonemap_options(tonemapper: Environment.ToneMapper) -> void:
 	match tonemapper:
-		Environment.ToneMapper.TONE_MAPPER_LINEAR, Environment.ToneMapper.TONE_MAPPER_AGX:
+		Environment.ToneMapper.TONE_MAPPER_LINEAR:
+			agx_white_contrast(false)
+			TonemapWhiteLabel.hide()
+			TonemapWhite.hide()
+		Environment.ToneMapper.TONE_MAPPER_AGX:
+			agx_white_contrast(true)
 			TonemapWhiteLabel.hide()
 			TonemapWhite.hide()
 		_:
+			agx_white_contrast(false)
 			TonemapWhiteLabel.show()
 			TonemapWhite.show()
 
 
-func _on_tone_map_item_selected(tonemapper: int) -> void:
+func _on_tone_map_item_selected(tonemapper: Environment.ToneMapper) -> void:
 	environment.tonemap_mode = tonemapper
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP, tonemapper)
-	show_hide_tonemap_white(tonemapper)
+	show_hide_tonemap_options(tonemapper)
 
 
 func _on_tonemap_white_value_changed(value: Variant) -> void:
 	environment.tonemap_white = max(0.001, value)
 	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_WHITE, value)
+
+
+func _on_tonemap_agx_white_value_changed(value: Variant) -> void:
+	environment.tonemap_agx_white = max(0.001, value)
+	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_AGX_WHITE, value)
+
+
+func _on_tonemap_agx_contrast_value_changed(value: Variant) -> void:
+	environment.tonemap_agx_contrast = value
+	mm_globals.set_config(SETTING_PREVIEW_TONEMAP_AGX_CONTRAST, value)
 
 
 func _on_tonemap_exposure_value_changed(value: Variant) -> void:

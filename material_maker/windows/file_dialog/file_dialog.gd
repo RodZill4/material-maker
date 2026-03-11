@@ -2,18 +2,17 @@ extends FileDialog
 
 var _content_scale_factor: float = 1.0
 
-var left_panel = null
-var volume_option = null
-
-var dialog_hack : bool = true
-
 signal return_paths(path_list)
+
+var favorites_list : ItemList = null
+var recents_list : ItemList = null
 
 func _context_menu_about_to_popup(context_menu : PopupMenu):
 	context_menu.position =  get_window().position + Vector2i(
 			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
+	load_fav_recents()
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
 		ok_button_text = tr("Save")
 
@@ -33,43 +32,38 @@ func _ready() -> void:
 					context_menu.about_to_popup.connect(
 							_context_menu_about_to_popup.bind(context_menu))
 
-	dialog_hack = dialog_hack or not use_native_dialog
-
-	if dialog_hack:
-		var vbox = get_vbox()
-		var hbox = HSplitContainer.new()
-		add_child(hbox)
-		remove_child(vbox)
-		left_panel = preload("res://material_maker/windows/file_dialog/left_panel.tscn").instantiate()
-		hbox.add_child(left_panel)
-		left_panel.connect("open_directory",Callable(self,"set_current_dir"))
-		hbox.add_child(vbox)
-		# todo vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var fav_button = preload("res://material_maker/windows/file_dialog/fav_button.tscn").instantiate()
-		vbox.get_child(0).add_child(fav_button)
-		fav_button.connect("pressed",Callable(self,"add_favorite"))
-		if OS.get_name() == "Windows":
-			volume_option = vbox.get_child(0).get_child(3)
-			if ! volume_option is OptionButton:
-				volume_option = null
-		
 	min_size = _content_scale_factor * get_contents_minimum_size()
-	min_size.y = 500 * int(_content_scale_factor)
+	min_size = Vector2i(750, 500) * int(_content_scale_factor)
 
-func get_full_current_dir() -> String:
-	var prefix = ""
-	if volume_option != null and volume_option.visible:
-		prefix = volume_option.get_item_text(volume_option.selected)
-	return prefix+get_current_dir()
+	# setup left panel(fav/recents) gui input signals
+	for n in get_children(true):
+		if n is VBoxContainer:
+			var left_panel : VSplitContainer = n.get_child(1).get_children()[0]
+			favorites_list = left_panel.get_child(0).get_child(1)
+			recents_list = left_panel.get_child(1).get_child(1)
+			favorites_list.gui_input.connect(_on_favorites_list_gui_input)
+			recents_list.gui_input.connect(_on_recents_list_gui_input)
+
+func _on_favorites_list_gui_input(event : InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
+		if not favorites_list.get_selected_items().is_empty():
+			var fav = get_favorite_list()
+			fav.remove_at(favorites_list.get_selected_items()[0])
+			favorites_list.remove_item(favorites_list.get_selected_items()[0])
+			set_favorite_list(fav)
+
+func _on_recents_list_gui_input(event : InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
+		if not recents_list.get_selected_items().is_empty():
+			var recents = get_recent_list()
+			recents.remove_at(recents_list.get_selected_items()[0])
+			recents_list.remove_item(recents_list.get_selected_items()[0])
+			set_recent_list(recents)
 
 func _on_FileDialog_file_selected(path) -> void:
-	if dialog_hack:
-		left_panel.add_recent(get_full_current_dir())
 	emit_signal("return_paths", [ path ])
 
 func _on_FileDialog_files_selected(paths) -> void:
-	if dialog_hack:
-		left_panel.add_recent(get_full_current_dir())
 	emit_signal("return_paths", paths)
 
 func _on_FileDialog_dir_selected(dir) -> void:
@@ -86,10 +80,6 @@ func select_files() -> Array:
 	queue_free()
 	return result
 
-func add_favorite():
-	if dialog_hack:
-		left_panel.add_favorite(get_full_current_dir())
-
 func _on_child_entered_tree(node: Node) -> void:
 	if node is ConfirmationDialog or node is AcceptDialog:
 		node.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
@@ -102,3 +92,16 @@ func _on_child_entered_tree(node: Node) -> void:
 			"Please Confirm...":
 				min_size_scale = Vector2(430,100)
 		node.min_size = min_size_scale * node.content_scale_factor
+
+func _exit_tree() -> void:
+	mm_globals.config.set_value("file_dialog", "recents", JSON.stringify(get_recent_list()))
+	mm_globals.config.set_value("file_dialog", "favorites", JSON.stringify(get_favorite_list()))
+
+func load_fav_recents() -> void:
+	var json = JSON.new()
+	if mm_globals.config.has_section_key("file_dialog", "recents"):
+		if json.parse(mm_globals.config.get_value("file_dialog", "recents")) == OK:
+			set_recent_list(json.data)
+	if mm_globals.config.has_section_key("file_dialog", "favorites"):
+		if json.parse(mm_globals.config.get_value("file_dialog", "favorites")) == OK:
+			set_favorite_list(json.data)
