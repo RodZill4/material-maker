@@ -136,6 +136,23 @@ text = "On"
 flat = false
 config_variable = "confirm_close_project"
 
+[node name="PreferGlobalMenu" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/PreferGlobalMenu"]
+layout_mode = 2
+text = "Prefer global menu (requires restart)"
+
+[node name="PreferGlobalMenu" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/PreferGlobalMenu" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Prefer the use of global menu"
+text = "On"
+flat = false
+config_variable = "prefer_global_menu"
+
 [node name="Spacer2" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
