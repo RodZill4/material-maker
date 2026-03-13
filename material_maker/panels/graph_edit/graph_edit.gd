@@ -1807,3 +1807,7 @@ func color_comment_nodes() -> void:
 		picker.popup_hide.connect(picker.queue_free)
 		picker.popup_hide.connect(undoredo.end_group)
 		picker.popup()
+
+func _on_resized() -> void:
+	$GraphUI.position = global_position
+	$GraphUI.position += Vector2(size.x - $GraphUI.size.x, 11)
