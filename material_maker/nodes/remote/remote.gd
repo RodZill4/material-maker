@@ -188,6 +188,17 @@ func _on_descriptions_changed(shortdesc, longdesc, param_name) -> void:
 
 func link_parameter(widget_name : String, target_generator : MMGenBase, target_parameter : String) -> void:
 	generator.link_parameter(widget_name, target_generator, target_parameter)
+
+	for param in target_generator.get_parameter_defs():
+		if param.name == target_parameter:
+			
+			if param.has("label") and param.label != "":
+				on_label_changed(param.label, widget_name)
+
+			var shortdesc : String = param.shortdesc if param.has("shortdesc") else ""
+			var longdesc : String = param.longdesc if param.has("longdesc") else ""
+			_on_descriptions_changed(shortdesc, longdesc, widget_name)
+
 	undo_redo_register_change("Change parameter name", old_state)
 
 func _on_AddLink_pressed() -> void:
