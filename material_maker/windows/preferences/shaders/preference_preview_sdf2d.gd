@@ -57,31 +57,31 @@ func load_defaults() -> void:
 	%ShadowFac.value = mm_globals.DEFAULT_CONFIG[SETTING_SDF2D_SHADOW_OPACITY]
 	_on_ready()
 
-func _on_border_thickness_value_changed(value: Variant) -> void:
+func _on_border_thickness_value_changed(value : Variant) -> void:
 	material.set_shader_parameter("_border", value)
 
-func _on_isoline_density_value_changed(value: Variant) -> void:
+func _on_isoline_density_value_changed(value : Variant) -> void:
 	material.set_shader_parameter("_id", value)
 
-func _on_isoline_opacity_value_changed(value: Variant) -> void:
+func _on_isoline_opacity_value_changed(value : Variant) -> void:
 	material.set_shader_parameter("io", value)
 
-func _on_isoline_thickness_value_changed(value: Variant) -> void:
+func _on_isoline_thickness_value_changed(value : Variant) -> void:
 	material.set_shader_parameter("_it", value)
 
-func _on_isoline_smoothness_value_changed(value: Variant) -> void:
+func _on_isoline_smoothness_value_changed(value : Variant) -> void:
 	material.set_shader_parameter("is", value)
 
-func _on_shadow_fac_value_changed(value: Variant) -> void:
+func _on_shadow_fac_value_changed(value : Variant) -> void:
 	material.set_shader_parameter("sha", value)
 
-func _on_fg_color_1_color_changed(c: Color) -> void:
+func _on_fg_color_1_color_changed(c : Color) -> void:
 	material.set_shader_parameter("fg1", c)
 
-func _on_fg_color_2_color_changed(c: Color) -> void:
+func _on_fg_color_2_color_changed(c : Color) -> void:
 	material.set_shader_parameter("fg2", c)
 
-func _on_bg_color_color_changed(c: Color) -> void:
+func _on_bg_color_color_changed(c : Color) -> void:
 	material.set_shader_parameter("bg", c)
 
 func _on_reset_button_pressed() -> void:
