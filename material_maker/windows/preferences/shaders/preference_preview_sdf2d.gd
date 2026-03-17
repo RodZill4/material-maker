@@ -1,4 +1,4 @@
-class_name Sdf2DPreview
+class_name PreferencesSdf2dPreview
 extends ColorRect
 
 const SETTING_SDF2D_BG_COLOR := "ui_preview_sdf2d_background_color"
