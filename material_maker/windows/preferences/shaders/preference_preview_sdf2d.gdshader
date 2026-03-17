@@ -3,7 +3,6 @@
 // (adapated and modified)
 
 shader_type canvas_item;
-render_mode unshaded;
 
 uniform vec3 bg = vec3(0.51,0.55,0.62);		// background color
 uniform vec3 fg1 = vec3(0.8,0.57,1.0);		// foreground 1
@@ -14,6 +13,7 @@ uniform float io = 1.0;						// isoline opacity
 uniform float is = 0.1;						// isoline smoothness
 uniform float _id = 0.5;					// isoline density
 uniform float sha = 1.0;					// shadow opacity
+uniform bool solid = true;					// solid/isoline bg
 
 uniform float preview_sdf_radius = 0.3;
 
@@ -27,7 +27,10 @@ void fragment() {
 	float it = (_it * 2.0 - 1.0) * (1.0 + _is * 0.75);
 
 	col *= 1.2 - exp(-6.0 * abs(d)) * sha;
-	col *= 0.8 + 0.1 * io *smoothstep( it + _is ,it - _is, cos(id * d));
+	if (solid)
+		col *= 0.85 + 0.125 * io * smoothstep( it + _is ,it - _is, cos(id * d));
+	else
+		col *= smoothstep( it + _is ,it - _is, cos(id * d)) * io;
 	col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.007, border, abs(d)));
     COLOR = vec4(col, 1.0);
 }

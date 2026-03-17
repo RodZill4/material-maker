@@ -55,6 +55,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_preview_sdf2d_isoline_opacity = 1.0,
 	ui_preview_sdf2d_isoline_smoothness = 0.1,
 	ui_preview_sdf2d_shadow_opacity = 0.9,
+	ui_preview_sdf2d_solid_background = true,
 	bake_ray_count = 64,
 	bake_ao_ray_dist = 128.0,
 	bake_ao_ray_bias = 0.005,

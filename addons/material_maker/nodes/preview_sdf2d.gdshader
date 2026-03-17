@@ -11,12 +11,16 @@ vec4 preview_2d(vec2 uv) {
 	float _is = max($(isolines_smoothness), 0.0001);
 	float id = $(isolines_density) * 250.0;
 	float sha = $(shadow_opacity);
+	bool solid = $(solid_bg);
 
 	vec3 col = ( d >0.0 ) ? $(bg) : mix($(fg1), $(fg2), smoothstep(0.0,0.5,abs(d)));
 	it = (it * 2.0 - 1.0) * (1.0 + _is * 0.75);
 
 	col *= 1.2 - exp(-6.0 * abs(d)) * sha;
-	col *= 0.8 + 0.1 * io *smoothstep( it + _is ,it - _is, cos(id * d));
+	if (solid)
+		col *= 0.85 + 0.125 * io * smoothstep( it + _is ,it - _is, cos(id * d));
+	else
+		col *= smoothstep( it + _is ,it - _is, cos(id * d)) * io;
 	col = mix(col, vec3(1.0), 1.0 - smoothstep(border - 0.007, border, abs(d)));
 	return vec4(col, 1.0);
 }

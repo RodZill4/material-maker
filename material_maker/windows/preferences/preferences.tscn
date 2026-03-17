@@ -33,6 +33,7 @@ shader_parameter/io = 1.0
 shader_parameter/is = 0.1
 shader_parameter/_id = 0.5
 shader_parameter/sha = 1.0
+shader_parameter/solid = false
 shader_parameter/preview_sdf_radius = 0.3
 
 [node name="Preferences" type="Window"]
@@ -89,11 +90,12 @@ custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 3
 tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
 [node name="General" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 0
@@ -468,7 +470,6 @@ flat = false
 config_variable = "auto_size_comment"
 
 [node name="Preview" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 3
@@ -674,6 +675,23 @@ value = 0.1
 step = 0.01
 float_only = true
 
+[node name="SolidBg" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/SolidBg"]
+layout_mode = 2
+text = "Solid Background"
+
+[node name="SolidBg" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/SolidBg" instance=ExtResource("1")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
+config_variable = "ui_preview_sdf2d_solid_background"
+
 [node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
@@ -745,6 +763,7 @@ text = "Cancel"
 [connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineThickness/IsolineThickness" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_thickness_value_changed"]
 [connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineOpacity/IsolineOpacity" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_opacity_value_changed"]
 [connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineSmoothness/IsolineSmoothness" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_smoothness_value_changed"]
+[connection signal="toggled" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/SolidBg/SolidBg" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_solid_bg_toggled"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
