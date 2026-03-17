@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1j6a4jdggjm6"]
+[gd_scene load_steps=15 format=3 uid="uid://c1j6a4jdggjm6"]
 
 [ext_resource type="PackedScene" uid="uid://drg0s4lftblx3" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
@@ -6,7 +6,35 @@
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
 [ext_resource type="Script" uid="uid://b6irr1ykhui6l" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="8_0na6q"]
+[ext_resource type="Shader" uid="uid://bu6i88vcd1voy" path="res://material_maker/windows/preferences/shaders/preference_preview_sdf2d.gdshader" id="8_btfio"]
+[ext_resource type="PackedScene" path="res://material_maker/windows/preferences/color_option.tscn" id="9_7kd1x"]
+[ext_resource type="Script" uid="uid://bviuugmm7sgct" path="res://material_maker/windows/preferences/shaders/preference_preview_sdf2d.gd" id="9_lcx40"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vujdf"]
+atlas = ExtResource("8_0na6q")
+region = Rect2(96, 192, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btfio"]
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7kd1x"]
+shader = ExtResource("8_btfio")
+shader_parameter/bg = Vector3(0.51, 0.55, 0.62)
+shader_parameter/fg1 = Vector3(0.8, 0.57, 1)
+shader_parameter/fg2 = Vector3(0.5, 0.84, 1)
+shader_parameter/_border = 0.05
+shader_parameter/_it = 0.2
+shader_parameter/io = 1.0
+shader_parameter/is = 0.1
+shader_parameter/_id = 0.5
+shader_parameter/sha = 1.0
+shader_parameter/solid = false
+shader_parameter/preview_sdf_radius = 0.3
 
 [node name="Preferences" type="Window"]
 oversampling_override = 1.0
@@ -62,11 +90,12 @@ custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 3
 tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
 [node name="General" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 0
@@ -440,11 +469,234 @@ text = "On"
 flat = false
 config_variable = "auto_size_comment"
 
+[node name="Preview" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_type_variation = &"MM_PreferenceTab"
+metadata/_tab_index = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Label2DPreview" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vp06c")
+text = "2D Preview (SDF)"
+
+[node name="ResetButton" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+tooltip_text = "Reset to default values"
+icon = SubResource("AtlasTexture_vujdf")
+
+[node name="GuiSdf2DPreview" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer"]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview"]
+clip_children = 2
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_btfio")
+
+[node name="ColorRect" type="ColorRect" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel"]
+material = SubResource("ShaderMaterial_7kd1x")
+custom_minimum_size = Vector2(250, 250)
+layout_mode = 2
+script = ExtResource("9_lcx40")
+
+[node name="Spacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bg" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Bg"]
+layout_mode = 2
+text = "Background"
+
+[node name="BgColor" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Bg" instance=ExtResource("9_7kd1x")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+color = Color(0.74190533, 0.76737565, 0.80946815, 1)
+edit_intensity = false
+config_variable = "ui_preview_sdf2d_background_color"
+
+[node name="Fg" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg"]
+layout_mode = 2
+text = "Foreground"
+
+[node name="FgColors" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="FgColor1" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors" instance=ExtResource("9_7kd1x")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(73, 24)
+layout_mode = 2
+color = Color(0.8, 0.57, 1, 1)
+edit_intensity = false
+config_variable = "ui_preview_sdf2d_foreground_color1"
+
+[node name="FgColor2" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors" instance=ExtResource("9_7kd1x")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(73, 24)
+layout_mode = 2
+color = Color(0.53, 0.84, 1, 1)
+edit_intensity = false
+config_variable = "ui_preview_sdf2d_foreground_color2"
+
+[node name="ShadowFac" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/ShadowFac"]
+layout_mode = 2
+text = "Shadow Opacity"
+
+[node name="ShadowFac" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/ShadowFac" instance=ExtResource("3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_preview_sdf2d_shadow_opacity"
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="BorderThickness" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/BorderThickness"]
+layout_mode = 2
+text = "Border Thickness"
+
+[node name="BorderThickness" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/BorderThickness" instance=ExtResource("3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_preview_sdf2d_border_thickness"
+value = 0.05
+max_value = 0.5
+step = 0.01
+float_only = true
+
+[node name="IsolineDensity" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineDensity"]
+layout_mode = 2
+text = "Isoline Density"
+
+[node name="IsolineDensity" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineDensity" instance=ExtResource("3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_preview_sdf2d_isoline_density"
+min_value = 0.01
+max_value = 2.0
+step = 0.01
+float_only = true
+
+[node name="IsolineThickness" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineThickness"]
+layout_mode = 2
+text = "Isoline Thickness"
+
+[node name="IsolineThickness" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineThickness" instance=ExtResource("3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_preview_sdf2d_isoline_thickness"
+value = 0.2
+step = 0.01
+float_only = true
+
+[node name="IsolineOpacity" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineOpacity"]
+layout_mode = 2
+text = "Isoline Opacity"
+
+[node name="IsolineOpacity" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineOpacity" instance=ExtResource("3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_preview_sdf2d_isoline_opacity"
+value = 1.0
+step = 0.01
+float_only = true
+
+[node name="IsolineSmoothness" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineSmoothness"]
+layout_mode = 2
+text = "Isoline Smoothness"
+
+[node name="IsolineSmoothness" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineSmoothness" instance=ExtResource("3")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_preview_sdf2d_isoline_smoothness"
+value = 0.1
+step = 0.01
+float_only = true
+
+[node name="SolidBg" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/SolidBg"]
+layout_mode = 2
+text = "Solid Background"
+
+[node name="SolidBg" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/SolidBg" instance=ExtResource("1")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
+config_variable = "ui_preview_sdf2d_solid_background"
+
 [node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export"]
 layout_mode = 2
@@ -498,6 +750,20 @@ text = "Cancel"
 [connection signal="minimum_size_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/HBoxContainer/ResetButton" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_reset_button_pressed"]
+[connection signal="gui_input" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_gui_input"]
+[connection signal="mouse_exited" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_mouse_exited"]
+[connection signal="ready" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_ready"]
+[connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Bg/BgColor" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_bg_color_color_changed"]
+[connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors/FgColor1" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_fg_color_1_color_changed"]
+[connection signal="color_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors/FgColor2" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_fg_color_2_color_changed"]
+[connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/ShadowFac/ShadowFac" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_shadow_fac_value_changed"]
+[connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/BorderThickness/BorderThickness" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_border_thickness_value_changed"]
+[connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineDensity/IsolineDensity" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_density_value_changed"]
+[connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineThickness/IsolineThickness" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_thickness_value_changed"]
+[connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineOpacity/IsolineOpacity" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_opacity_value_changed"]
+[connection signal="value_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/IsolineSmoothness/IsolineSmoothness" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_isoline_smoothness_value_changed"]
+[connection signal="toggled" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/SolidBg/SolidBg" to="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/Panel/ColorRect" method="_on_solid_bg_toggled"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
