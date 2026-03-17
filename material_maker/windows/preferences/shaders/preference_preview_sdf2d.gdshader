@@ -1,6 +1,6 @@
 // The MIT License, Copyright © 2020 Inigo Quilez
 // https://www.shadertoy.com/view/3ltSW2
-// (adapated and modified from source)
+// (adapated and modified)
 
 shader_type canvas_item;
 render_mode unshaded;
