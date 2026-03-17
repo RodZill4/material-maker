@@ -89,12 +89,11 @@ custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-current_tab = 3
+current_tab = 0
 tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
 [node name="General" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 0
@@ -469,6 +468,7 @@ flat = false
 config_variable = "auto_size_comment"
 
 [node name="Preview" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 3
@@ -533,6 +533,7 @@ custom_minimum_size = Vector2(150, 24)
 layout_mode = 2
 size_flags_horizontal = 10
 color = Color(0.74190533, 0.76737565, 0.80946815, 1)
+edit_intensity = false
 config_variable = "ui_preview_sdf2d_background_color"
 
 [node name="Fg" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
@@ -552,6 +553,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(73, 24)
 layout_mode = 2
 color = Color(0.8, 0.57, 1, 1)
+edit_intensity = false
 config_variable = "ui_preview_sdf2d_foreground_color1"
 
 [node name="FgColor2" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer/Fg/FgColors" instance=ExtResource("9_7kd1x")]
@@ -559,6 +561,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(73, 24)
 layout_mode = 2
 color = Color(0.53, 0.84, 1, 1)
+edit_intensity = false
 config_variable = "ui_preview_sdf2d_foreground_color2"
 
 [node name="ShadowFac" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Preview/VBoxContainer/GuiSdf2DPreview/ScrollContainer/VBoxContainer"]
