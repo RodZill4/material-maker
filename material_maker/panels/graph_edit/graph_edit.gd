@@ -141,18 +141,18 @@ func _input(event: InputEvent) -> void:
 				if node is not MMGraphComment:
 					node.move_to_front()
 
-					if snapping_enabled != event.is_command_or_control_pressed():
-						if not grab_accum.has(node.name):
-							grab_accum[node.name] = Vector2.ZERO
-						grab_accum[node.name] += event.relative / zoom
+				if snapping_enabled != event.is_command_or_control_pressed():
+					if not grab_accum.has(node.name):
+						grab_accum[node.name] = Vector2.ZERO
+					grab_accum[node.name] += event.relative / zoom
 
-						var step := (grab_accum[node.name]/snapping_distance + Vector2(0.5, 0.5)).floor()
-						if not step.is_zero_approx():
-							node.position_offset = node.position_offset.snappedf(snapping_distance)
-							node.position_offset += step * snapping_distance
-							grab_accum[node.name] -= step * snapping_distance
-					else:
-						node.position_offset += event.relative / zoom
+					var step := (grab_accum[node.name]/snapping_distance + Vector2(0.5, 0.5)).floor()
+					if not step.is_zero_approx():
+						node.position_offset = node.position_offset.snappedf(snapping_distance)
+						node.position_offset += step * snapping_distance
+						grab_accum[node.name] -= step * snapping_distance
+				else:
+					node.position_offset += event.relative / zoom
 
 		elif (event is InputEventMouseButton
 				and event.button_index == MOUSE_BUTTON_LEFT):
