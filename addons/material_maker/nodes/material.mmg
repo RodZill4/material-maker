@@ -75,6 +75,12 @@
 						"file_name": "$(path_prefix)_emission.png",
 						"output": 2,
 						"type": "texture"
+					},
+					{
+						"conditions": "$(connected:ao_tex)",
+						"file_name": "$(path_prefix)_occlusion.exr",
+						"output": 9,
+						"type": "texture"
 					}
 				]
 			},
@@ -189,6 +195,9 @@
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
 							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"flags_transparent = true",
+							"$fi",
 							""
 						],
 						"type": "template"
@@ -291,6 +300,9 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"transparency = 1",
 							"$fi",
 							""
 						],
@@ -406,6 +418,9 @@
 							"subsurf_scatter_enabled = true",
 							"subsurf_scatter_strength = $(param:sss)",
 							"subsurf_scatter_texture = ExtResource( 6 )",
+							"$fi",
+							"$if $(connected:opacity_tex) and $(param:flags_transparent)",
+							"transparency = 1",
 							"$fi",
 							""
 						],
@@ -3344,7 +3359,6 @@
 			"\tAO_LIGHT_AFFECT = $ao;",
 			"$if $(connected:opacity_tex) and $(param:flags_transparent)",
 			"\tALPHA = albedo_tex.a;",
-			"\tALPHA_SCISSOR_THRESHOLD = 0.01;",
 			"$fi",
 			"$if $(connected:sss_tex)",
 			"\tfloat sss_tex = texture(texture_subsurface_scattering, base_uv).r;",

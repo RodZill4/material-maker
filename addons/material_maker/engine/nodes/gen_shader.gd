@@ -805,8 +805,7 @@ func do_edit(node, edit_window_scene : PackedScene, tab : String = "") -> void:
 		var edit_window = edit_window_scene.instantiate()
 		mm_globals.main_window.add_dialog(edit_window)
 		edit_window.set_model_data(get_shader_model_for_edit())
-		edit_window.connect("node_changed", Callable(node, "update_shader_generator"))
-		edit_window.connect("popup_hide", Callable(edit_window, "queue_free"))
+		edit_window.node_changed.connect(node.update_shader_generator)
 		edit_window.get_window().content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 		edit_window.get_window().min_size = Vector2(950, 450) * edit_window.get_window().content_scale_factor
 		edit_window.hide()

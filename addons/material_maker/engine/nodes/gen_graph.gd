@@ -14,7 +14,7 @@ var transmits_seed : bool = true
 var current_mesh : Mesh = null
 
 var bookmarks = null
-
+var scroll_offset = null
 
 signal graph_changed()
 signal connections_changed(removed_connections, added_connections)
@@ -431,7 +431,7 @@ func create_subgraph(gens : Array) -> MMGenGraph:
 	var right_bound = -65536
 	var upper_bound = 65536
 	var count = 0
-	# Filter group nodes and calculate boundin box
+	# Filter group nodes and calculate bounding box
 	for g in gens:
 		if g.name != "Material" and g.name != "Brush" and g.name != "gen_inputs" and g.name != "gen_outputs":
 			generators.push_back(g)
@@ -541,6 +541,8 @@ func _serialize(data: Dictionary) -> Dictionary:
 	data.connections = connections
 	if self == get_top() and bookmarks != null:
 		data.bookmarks = bookmarks
+	if scroll_offset:
+		data.scroll_offset = { x=scroll_offset.x, y=scroll_offset.y }
 	return data
 
 func _deserialize(data : Dictionary) -> void:
@@ -557,6 +559,8 @@ func _deserialize(data : Dictionary) -> void:
 			connection_array = data.connections
 		elif data.connections is Dictionary:
 			connection_array = connections_from_compact(data.connections)
+	if data.has("scroll_offset"):
+		scroll_offset = Vector2(data.scroll_offset.x, data.scroll_offset.y)
 	var new_stuff = await mm_loader.add_to_gen_graph(self, nodes, connection_array)
 	if self == get_top() and data.has("bookmarks"):
 		bookmarks = data.bookmarks
