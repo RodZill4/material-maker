@@ -192,7 +192,8 @@ func load_gen(filename: String) -> MMGenBase:
 		if data != null:
 			current_project_path = filename.get_base_dir()
 			var generator = await create_gen(data)
-			generator.set_meta("file_path", filename)
+			if generator:
+				generator.set_meta("file_path", filename)
 			current_project_path = ""
 			return generator
 	return null
