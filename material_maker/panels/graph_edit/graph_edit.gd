@@ -349,7 +349,7 @@ func _draw() -> void:
 	if lasso_points.size() > 1:
 		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
 				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
-
+	MMGraphPortal.draw_links(self)
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
