@@ -23,7 +23,7 @@ Parameters
 
 The FBM node accepts the following parameters:
 
-* **Noise** type: value, perlin, simplex, cellular types or voronoise noise
+* **Noise** type: value, perlin, simplex, cellular types, voronoise or gabor noise
 * **X** and **Y** scale of the first octave noise
 * Number of **Folds** (offsetting the noise negatively and taking the absolute value)
 * Number of **Iterations**
