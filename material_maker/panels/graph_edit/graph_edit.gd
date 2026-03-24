@@ -334,6 +334,9 @@ func _gui_input(event) -> void:
 			accept_event()
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
+	elif event is InputEventMagnifyGesture:
+		if OS.get_name() != "macOS":
+			do_zoom(event.factor)
 
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
