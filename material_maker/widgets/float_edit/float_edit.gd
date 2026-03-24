@@ -259,6 +259,9 @@ func _on_edit_text_submitted(new_text: String) -> void:
 
 	mode = Modes.IDLE
 
+	var self_reference := RegEx.new()
+	self_reference.compile("\\$\\b%s\\b" % name)
+
 	if new_text.is_valid_float():
 		var new_value: float = new_text.to_float()
 		if abs(float_value-new_value) > 0.00001:
@@ -266,7 +269,7 @@ func _on_edit_text_submitted(new_text: String) -> void:
 			set_value(float_value, true)
 		else:
 			set_value(float_value)
-	elif float_only or new_text == "":
+	elif float_only or new_text == "" or self_reference.search(new_text):
 		set_value(float_value, true)
 	else:
 		set_value(new_text, true)
