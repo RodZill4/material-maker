@@ -181,8 +181,13 @@ func update_position(value : Vector2) -> void:
 func _on_Point_gui_input(event : InputEvent):
 	var axes = get_parent().get_node("Axes")
 	axes.hide()
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-		init_pos = position + event.position
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.is_pressed():
+			init_pos = position + event.position
+		# hide gizmos during transform until LMB is released
+		for c in get_parent().get_children():
+			if c is TextureRect and c.visible:
+				c.self_modulate.a = float(not event.is_pressed())
 	elif event is InputEventMouseMotion and event.button_mask == MOUSE_BUTTON_MASK_LEFT:
 		var new_pos = position + event.position
 		var value = get_parent().pos_to_value(new_pos, true, apply_local_transform)
