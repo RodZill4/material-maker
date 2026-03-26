@@ -1,6 +1,5 @@
 extends PanelContainer
 
-
 @onready var tree := $Tree
 
 var bookmark_manager : BookmarkManager
@@ -15,7 +14,6 @@ enum ContextMenu {
 
 func _open() -> void:
 	update_bookmarks()
-
 
 func _ready() -> void:
 	if not mm_globals.main_window.is_node_ready():
@@ -34,7 +32,6 @@ func _ready() -> void:
 
 	%Projects.tab_changed.connect(projects_panel_tab_changed.unbind(1))
 
-
 func projects_panel_tab_changed() -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if not graph.view_updated.is_connected(update_bookmarks):
@@ -43,8 +40,7 @@ func projects_panel_tab_changed() -> void:
 		await get_tree().process_frame
 	update_bookmarks(graph.top_generator)
 
-
-func fix_tree_line_edit_size(p: Popup) -> void:
+func fix_tree_line_edit_size(p : Popup) -> void:
 	var vbox : VBoxContainer = p.get_child(0)
 	vbox.minimum_size_changed.connect(
 		func():
@@ -53,12 +49,10 @@ func fix_tree_line_edit_size(p: Popup) -> void:
 			@warning_ignore("narrowing_conversion")
 			vbox.get_window().max_size.y = contents_min_size + get_theme_constant("v_separation", "Tree"))
 
-
-func update_bookmarks(updated_view: MMGenGraph = null) -> void:
+func update_bookmarks(updated_view : MMGenGraph = null) -> void:
 	validate_bookmarks(updated_view)
 	save_bookmarks()
 	rebuild_bookmark_tree()
-
 
 func save_bookmarks() -> void:
 	var graph : MMGraphEdit = owner.current_graph_edit
@@ -66,8 +60,7 @@ func save_bookmarks() -> void:
 		var current_bookmarks = bookmark_manager.bookmarks.duplicate()
 		graph.top_generator.bookmarks = current_bookmarks
 
-
-func validate_bookmarks(updated_view: MMGenGraph = null) -> void:
+func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 	# Update and remove invalid references
 	var graph : MMGraphEdit = owner.current_graph_edit
 	if updated_view != null and updated_view == graph.top_generator:
@@ -115,7 +108,6 @@ func rebuild_bookmark_tree() -> void:
 	tree.visible = tree.get_root().get_child_count() != 0
 	$MarginContainer.visible = tree.get_root().get_child_count() == 0
 
-
 func _on_tree_item_lmb_selected() -> void:
 	var selected_item : TreeItem = tree.get_selected()
 	var path : String = selected_item.get_metadata(0)
@@ -146,7 +138,6 @@ func _on_tree_item_lmb_selected() -> void:
 		if graph.generator != target_gen.get_parent():
 			graph.update_view(target_gen.get_parent())
 
-
 	# Center view on bookmarked node
 	var bookmark_node_path : NodePath = "node_" + target_gen.name
 	if graph.has_node(bookmark_node_path):
@@ -160,12 +151,10 @@ func _on_tree_item_lmb_selected() -> void:
 			tween.tween_property(graph, "scroll_offset", target_offset, 0.5).set_ease(
 					Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 
-
-func _on_tree_item_rmb_selected(_mouse_position: Vector2i) -> void:
+func _on_tree_item_rmb_selected(_mouse_position : Vector2i) -> void:
 	mm_globals.popup_menu($ContextMenu, self)
 
-
-func _on_tree_gui_input(event: InputEvent) -> void:
+func _on_tree_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.double_click:
 			accept_event()
@@ -179,15 +168,13 @@ func _on_tree_gui_input(event: InputEvent) -> void:
 				KEY_X, KEY_DELETE:
 					_on_context_menu_id_pressed(ContextMenu.DELETE)
 
-
-func _on_tree_item_mouse_selected(mouse_position: Vector2, mouse_button_index: int) -> void:
+func _on_tree_item_mouse_selected(mouse_position : Vector2, mouse_button_index : int) -> void:
 	if mouse_button_index == MOUSE_BUTTON_RIGHT:
 		_on_tree_item_rmb_selected(mouse_position)
 	elif mouse_button_index == MOUSE_BUTTON_LEFT:
 		_on_tree_item_lmb_selected()
 
-
-func _on_context_menu_id_pressed(id: int) -> void:
+func _on_context_menu_id_pressed(id : int) -> void:
 	var item : TreeItem = tree.get_selected()
 	match id:
 		ContextMenu.RENAME:
@@ -197,7 +184,6 @@ func _on_context_menu_id_pressed(id: int) -> void:
 			if item != null:
 				bookmark_manager.remove_bookmark(item.get_metadata(0))
 				rebuild_bookmark_tree()
-
 
 func _on_tree_item_edited() -> void:
 	var item : TreeItem = tree.get_selected()
