@@ -334,6 +334,9 @@ func _gui_input(event) -> void:
 			accept_event()
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
+		elif (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.shift_pressed:
+			scroll_offset -= event.relative
+			accept_event()
 
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
