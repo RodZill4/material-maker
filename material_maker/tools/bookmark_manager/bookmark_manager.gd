@@ -1,10 +1,9 @@
 class_name BookmarkManager
 extends Node
 
-
 ## Graph bookmarks to revisit them later
 
-var bookmarks : Dictionary
+var bookmarks : Dictionary[String, String]
 
 signal bookmarks_added
 signal bookmarks_edit_removed
@@ -12,7 +11,7 @@ signal bookmarks_edit_removed
 @warning_ignore("unused_signal")
 signal updated_from_graph
 
-func set_bookmarks(new_bookmarks : Dictionary) -> void:
+func set_bookmarks(new_bookmarks : Dictionary[String, String]) -> void:
 	bookmarks = new_bookmarks
 
 static func is_default_bookmark_node(node : GraphElement) -> bool:
@@ -35,7 +34,7 @@ func add_bookmark(node : GraphElement, gen_path : String) -> void:
 	if not bookmarks.has(gen_path):
 		var label : String = get_label_from_node(node)
 		bookmarks[gen_path] = label
-		mm_globals.set_tip_text("Added bookmark for %s" % label, 1.0, 1)
+		mm_globals.set_tip_text("Added bookmark for \"%s\"" % label, 1.0, 1)
 	bookmarks_added.emit()
 
 func add_bookmark_from_path(path : String, label : String) -> void:

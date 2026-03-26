@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dpaxvlnn2u1f6" path="res://material_maker/panels/preview_3d/preview_3d.tscn" id="3_qvj7k"]
 [ext_resource type="Script" uid="uid://bl15iwn2k8qm" path="res://material_maker/widgets/tabs/tabs.gd" id="4_mpinq"]
 [ext_resource type="Script" uid="uid://c37lcka7r53wk" path="res://material_maker/panels/common/menu_bar_button_with_panel.gd" id="6_r5hxx"]
-[ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_zoom_menu.gd" id="7_lbgjg"]
+[ext_resource type="Script" uid="uid://jvurydhtpvc2" path="res://material_maker/panels/graph_edit/graph_zoom_menu.gd" id="7_lbgjg"]
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="7_qnupl"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="8_1w3oe"]
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
@@ -431,7 +431,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_constants/item_margin = 0
 allow_reselect = true
-allow_rmb_select = true
+allow_search = false
 hide_root = true
 auto_tooltip = false
 

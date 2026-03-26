@@ -91,7 +91,7 @@ func validate_bookmarks(updated_view : MMGenGraph = null) -> void:
 				if graph.has_node(node_path):
 					var gen : MMGenBase = graph.get_node(node_path).generator
 					var new_path : String = "./" + str(graph.top_generator.get_path_to(gen))
-					bookmark_manager.add_bookmark_from_path(new_path, target_node)
+					bookmark_manager.add_bookmark_from_path(new_path, item.get_text(0))
 
 func rebuild_bookmark_tree() -> void:
 	await get_tree().process_frame
@@ -121,6 +121,7 @@ func _on_tree_item_lmb_selected() -> void:
 		# Jump back to top if we are in a subgraph
 		if graph.generator != graph.top_generator:
 			graph.update_view(graph.top_generator)
+
 		# Get bookmarked node from current graph
 		var node_path := NodePath("node_" + path)
 		if graph.has_node(node_path):
