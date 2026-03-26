@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://btww87u0o4x7t"]
 
 [ext_resource type="Script" uid="uid://c80e0om4076tc" path="res://material_maker/windows/about/about.gd" id="1"]
-[ext_resource type="Shader" path="res://material_maker/windows/about/about_light_dark.gdshader" id="3_a5pf6"]
+[ext_resource type="Shader" uid="uid://clbm7f7vq3mgp" path="res://material_maker/windows/about/about_light_dark.gdshader" id="3_a5pf6"]
 [ext_resource type="Texture2D" uid="uid://e6bml33fn07p" path="res://material_maker/windows/about/itchio.svg" id="5_a5pf6"]
 [ext_resource type="Texture2D" uid="uid://deyqa1lpneeew" path="res://material_maker/windows/about/patreon.svg" id="5_wcmb3"]
 [ext_resource type="Texture2D" uid="uid://dntvnke4pcqqf" path="res://icon.png" id="6"]
