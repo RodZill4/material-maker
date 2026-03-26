@@ -427,10 +427,8 @@ func compare_connection_by_port_height(a : Dictionary, b : Dictionary) -> bool:
 		return false
 	var from_node : MMGraphNodeMinimal = get_node(NodePath(a.from_node))
 	var to_node : MMGraphNodeMinimal = get_node(NodePath(a.to_node))
-	var from_node_dist_to_target := (
-			target.position_offset.distance_squared_to(from_node.position_offset))
-	var to_node_dist_to_target := (
-			target.position_offset.distance_squared_to(to_node.position_offset))
+	var from_node_dist_to_target := target.position_offset.distance_squared_to(from_node.position_offset)
+	var to_node_dist_to_target := target.position_offset.distance_squared_to(to_node.position_offset)
 	if from_node_dist_to_target < to_node_dist_to_target:
 		var upper : MMGraphNodeMinimal = get_node(NodePath(a.from_node))
 		var lower : MMGraphNodeMinimal = get_node(NodePath(b.from_node))
@@ -447,24 +445,21 @@ func compare_connection_by_port_height(a : Dictionary, b : Dictionary) -> bool:
 func drop_node_on_connection(node : GraphNode, connection : Dictionary) -> void:
 	undoredo.start_group()
 	if node != null:
-		on_disconnect_node(
-			connection.from_node, connection.from_port,
-			connection.to_node, connection.to_port)
+		on_disconnect_node(connection.from_node, connection.from_port,
+				connection.to_node, connection.to_port)
 		for new_slot in node.get_input_port_count():
 			var slot_type : int = node.get_input_port_type(new_slot)
 			var from_node : MMGraphNodeMinimal = get_node(NodePath(connection.from_node))
 			var from_slot : int = from_node.get_output_port_type(connection.from_port)
 			if (from_slot == slot_type or slot_type == 42 or from_slot == 42):
-				on_connect_node(connection.from_node,
-						connection.from_port, node.name, new_slot)
+				on_connect_node(connection.from_node, connection.from_port, node.name, new_slot)
 				break
 		for new_slot in node.get_output_port_count():
 			var slot_type : int = node.get_output_port_type(new_slot)
 			var to_node : MMGraphNodeMinimal = get_node(NodePath(connection.to_node))
 			var to_slot : int = to_node.get_input_port_type(connection.to_port)
 			if (to_slot == slot_type or slot_type == 42 or to_slot == 42):
-				on_connect_node(node.name, new_slot,
-						connection.to_node, connection.to_port)
+				on_connect_node(node.name, new_slot, connection.to_node, connection.to_port)
 				break
 		undoredo.end_group()
 
