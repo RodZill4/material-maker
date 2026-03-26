@@ -61,7 +61,8 @@ func _on_rich_text_label_meta_clicked(meta):
 				generator.edit(self, data.section)
 			else:
 				var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
-				graph.update_view(generator.get_parent())
+				if graph.generator != generator.get_parent():
+					graph.update_view(generator.get_parent())
 				var node : GraphNode = graph.get_node("node_" + generator.name)
 				graph.scroll_offset = (node.position_offset + 0.5*node.size) * graph.zoom - 0.5*graph.size
 

@@ -66,7 +66,6 @@ signal preview_changed
 
 
 func _ready() -> void:
-	$GraphUI.size.y = 0
 	OS.low_processor_usage_mode = true
 	center_view()
 	for t in range(41):
@@ -352,7 +351,7 @@ func _draw() -> void:
 	if lasso_points.size() > 1:
 		draw_polyline(lasso_points + PackedVector2Array([lasso_points[0]]),
 				get_theme_color("lasso_stroke", "GraphEdit"), 1.0)
-
+	MMGraphPortal.draw_links(self)
 
 # Misc. useful functions
 func get_source(node, port) -> Dictionary:
@@ -1832,3 +1831,8 @@ func add_default_bookmark(node : GraphElement) -> void:
 		var bookmark_manager : BookmarkManager = mm_globals.main_window.bookmark_manager
 		if not bookmark_manager.bookmarks.has(node_path) and node.name == "node_Material":
 			bookmark_manager.add_bookmark_from_path(node_path, BookmarkManager.get_label_from_node(node))
+
+func _on_resized() -> void:
+	$GraphUI.size = Vector2.ZERO
+	$GraphUI.position = global_position
+	$GraphUI.position += Vector2(size.x - $GraphUI.size.x, 11)
