@@ -33,9 +33,18 @@ atlas = ExtResource("3_ko8a7")
 region = Rect2(32, 0, 16, 16)
 
 [node name="ExportEditor" type="Window"]
+oversampling_override = 1.0
 title = "Material Export Editor"
 position = Vector2i(0, 36)
 script = ExtResource("2")
+
+[node name="BG" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.043137256, 0.043137256, 0.047058824, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
