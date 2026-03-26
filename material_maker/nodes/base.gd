@@ -553,7 +553,7 @@ func _process(_delta: float) -> void:
 	for c in get_children():
 		if c is Container:
 			control_nodes.append_array(c.get_children())
-		elif c is not Label:
+		elif c is not Label and c is not Window:
 			control_nodes.append(c)
 	for control in control_nodes:
 		if control.get_script() != null or control is BaseButton:
