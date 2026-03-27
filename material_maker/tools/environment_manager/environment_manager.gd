@@ -188,7 +188,7 @@ func read_hdr(index : int, url : String) -> bool:
 			return true
 	if accept_dialog == null:
 		accept_dialog = AcceptDialog.new()
-		accept_dialog.title = "HDRI download error"
+		accept_dialog.title = "HDRI Download Error"
 		accept_dialog.dialog_text = "Failed to download %s" % url
 		accept_dialog.content_scale_factor = get_window().content_scale_factor
 		accept_dialog.min_size = accept_dialog.get_contents_minimum_size() * accept_dialog.content_scale_factor
