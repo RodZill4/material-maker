@@ -393,7 +393,7 @@ func handle_node_drop(event : InputEventMouseMotion) -> void:
 		and event.relative.length() > 0.0) or (has_grab and single_node_selected):
 		hint_node_drop_allowed(not Input.is_key_pressed(KEY_D))
 		var node : GraphElement = get_selected_nodes()[0]
-		if node is not GraphNode:
+		if node is not GraphNode or node is MMGraphPortal:
 			return
 		target_drop_node = node
 		for c in get_connection_list():
