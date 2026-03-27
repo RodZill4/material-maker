@@ -24,6 +24,7 @@ jobs:
           git clone --depth 1 --branch ${GODOT_VERSION}-${GODOT_SUB} https://github.com/godotengine/godot.git godot
           cd godot
           patch -p1 < ../material-maker/material_maker/misc/mm.patch
+          patch -p1 < ../material-maker/material_maker/misc/color-rounding-fix.patch
 
       - name: Install dependencies
         run: |
@@ -103,6 +104,7 @@ jobs:
           git clone --depth 1 --branch ${GODOT_VERSION}-${GODOT_SUB} https://github.com/godotengine/godot.git godot
           cd godot
           patch -p1 < ../material-maker/material_maker/misc/mm.patch
+          patch -p1 < ../material-maker/material_maker/misc/color-rounding-fix.patch
 
       - name: Install dependencies
         run: |
