@@ -226,6 +226,10 @@ legend,
     border: 1px solid var(--body-color);
 }
 
+section > img {
+	 padding-bottom: 16px;
+}
+
 p,
 article ul,
 article ol,

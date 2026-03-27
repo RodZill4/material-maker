@@ -1,4 +1,4 @@
-extends MMGraphNodeBase
+extends MMGraphNodeGeneric
 
 func _ready():
 	super._ready()
@@ -6,7 +6,6 @@ func _ready():
 
 func set_generator(g) -> void:
 	super.set_generator(g)
-	generator.connect("parameter_changed", Callable(self, "on_parameter_changed"))
 	update_node()
 
 func on_parameter_changed(p, _v) -> void:
@@ -14,6 +13,7 @@ func on_parameter_changed(p, _v) -> void:
 		update_node.call_deferred()
 
 func update_node() -> void:
+	save_preview_widget()
 	for c in get_children():
 		remove_child(c)
 		c.free()
@@ -33,12 +33,13 @@ func update_node() -> void:
 			group_size = 1
 		group_size = port.set_model_data(p, group_size)
 	PortGroupButton.update_groups(self)
-	var add_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instantiate()
-	add_child(add_button)
-	add_button.connect("pressed", Callable(generator, "add_port"))
+	var add_port_button : Button = preload("res://material_maker/nodes/ios/add.tscn").instantiate()
+	add_child(add_port_button)
+	add_port_button.pressed.connect(generator.add_port)
 	set_slot(get_child_count()-1, false, 0, color, false, 0, color)
+	restore_preview_widget()
 
-func command(command_name : String, command_parameters : Array, update_node : bool = false):
+func command(command_name : String, command_parameters : Array, _update_node : bool = false):
 	var parent_generator = generator.get_parent().get_parent()
 	var prev = null
 	if parent_generator is MMGenGraph:

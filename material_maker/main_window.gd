@@ -115,6 +115,7 @@ const MENU : Array[Dictionary] = [
 	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
+	{ menu="Help/Example projects", command="show_example_projects"},
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
 	{ menu="Help/Report a bug", command="bug_report" },
 	{ menu="Help/" },
@@ -1192,6 +1193,9 @@ func about() -> void:
 	about_box.hide()
 	about_box.popup_centered()
 
+func show_example_projects() -> void:
+	OS.shell_open(ProjectSettings.globalize_path("res://material_maker/examples"))
+
 # Preview
 
 func update_preview() -> void:
@@ -1424,9 +1428,10 @@ func _on_Tip_Timer_timeout():
 
 func add_dialog(dialog : Window):
 	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
-	add_child(background)
+	if mm_globals.get_config("dialog_dim_background"):
+		add_child(background)
+		dialog.tree_exited.connect(background.queue_free)
 	add_child(dialog)
-	dialog.connect("tree_exited", background.queue_free)
 
 # Accept dialog
 
