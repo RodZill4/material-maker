@@ -13,6 +13,7 @@ var transmits_seed : bool = true
 
 var current_mesh : Mesh = null
 
+var bookmarks = null
 var scroll_offset = null
 
 signal graph_changed()
@@ -23,11 +24,14 @@ signal hierarchy_changed()
 func _ready() -> void:
 	super._ready()
 
-func emit_hierarchy_changed():
+func get_top() -> MMGenGraph:
 	var top = self
 	while top.get_parent() != null and top.get_parent().get_script() == get_script():
 		top = top.get_parent()
-	top.emit_signal("hierarchy_changed")
+	return top
+
+func emit_hierarchy_changed():
+	get_top().emit_signal("hierarchy_changed")
 
 func fix_remotes() -> void:
 	for c in get_children():
@@ -535,6 +539,8 @@ func _serialize(data: Dictionary) -> Dictionary:
 		data.nodes.append(c.serialize())
 	#data.connections = connections_to_compact(connections)
 	data.connections = connections
+	if self == get_top() and bookmarks != null:
+		data.bookmarks = bookmarks
 	if scroll_offset:
 		data.scroll_offset = { x=scroll_offset.x, y=scroll_offset.y }
 	return data
@@ -556,6 +562,8 @@ func _deserialize(data : Dictionary) -> void:
 	if data.has("scroll_offset"):
 		scroll_offset = Vector2(data.scroll_offset.x, data.scroll_offset.y)
 	var new_stuff = await mm_loader.add_to_gen_graph(self, nodes, connection_array)
+	if self == get_top() and data.has("bookmarks"):
+		bookmarks = data.bookmarks
 
 #region Node Graph Diff
 func apply_diff_from(graph : MMGenGraph) -> void:

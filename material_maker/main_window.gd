@@ -22,7 +22,7 @@ var preview_tesselation_detail : int = 256
 
 @onready var node_library_manager = $NodeLibraryManager
 @onready var brush_library_manager = $BrushLibraryManager
-
+@onready var bookmark_manager = $BookmarkManager
 
 @onready var projects_panel = $VBoxContainer/Layout/FlexibleLayout/Main
 
