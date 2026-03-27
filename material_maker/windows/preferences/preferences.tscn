@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
 [ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-416.ttf" id="2_vp06c"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
-[ext_resource type="Script" uid="uid://b6irr1ykhui6l" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
+[ext_resource type="Script" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 [ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 
@@ -173,6 +173,27 @@ tooltip_text = "Prefer the use of native file dialogs"
 text = "On"
 flat = false
 config_variable = "ui_use_native_file_dialogs"
+
+[node name="DialogDimBackground" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/DialogDimBackground"]
+layout_mode = 2
+mouse_filter = 1
+text = "Dim background when showing dialogs"
+
+[node name="DialogDimBackground" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/DialogDimBackground" instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Toggle background dimming when a dialog is visible."
+text = "On"
+flat = false
+config_variable = "dialog_dim_background"
+
+[node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
 
 [node name="Gui3DPreviewResolution" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2

@@ -55,6 +55,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	graph_line_style = 1,
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
+	dialog_dim_background = true,
 }
 
 
@@ -210,6 +211,8 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 		return
 	do_propagate_shortcuts(control, event)
 
+func get_home_directory() -> String:
+	return OS.get_environment("USERPROFILE" if OS.has_feature("windows") else "HOME")
 
 func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}, resolution="") -> String:
 	for i in additional_identifiers:

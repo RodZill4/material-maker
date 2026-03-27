@@ -115,6 +115,7 @@ const MENU : Array[Dictionary] = [
 	#{ menu="Tools/Generate screenshots for the library nodes", command="generate_screenshots", mode="material" },
 
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
+	{ menu="Help/Example projects", command="show_example_projects"},
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
 	{ menu="Help/Report a bug", command="bug_report" },
 	{ menu="Help/" },
@@ -596,8 +597,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 			dialog.current_path = last_export_path
 		else:
 			var config_key = export_profile_config_key(profile)
-			if mm_globals.config.has_section_key("path", config_key):
-				dialog.current_dir = mm_globals.config.get_value("path", config_key)
+			dialog.current_dir = mm_globals.config.get_value("path", config_key, mm_globals.get_home_directory())
 		add_child(dialog)
 		var files = await dialog.select_files()
 		if files.size() > 0:
@@ -702,8 +702,7 @@ func load_project() -> void:
 		dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
 		dialog.add_filter("*.ptex;Procedural Textures File")
 		dialog.add_filter("*.mmpp;Model Painting File")
-		if mm_globals.config.has_section_key("path", "project"):
-			dialog.current_dir = mm_globals.config.get_value("path", "project")
+		dialog.current_dir = mm_globals.config.get_value("path", "project", mm_globals.get_home_directory())
 		var files = await dialog.select_files()
 		if files.size() > 0:
 			do_load_projects(files)
@@ -958,8 +957,7 @@ func edit_load_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if mm_globals.config.has_section_key("path", "selection"):
-		dialog.current_dir = mm_globals.config.get_value("path", "selection")
+	dialog.current_dir = mm_globals.config.get_value("path", "selection", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
@@ -979,8 +977,7 @@ func edit_save_selection() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mms;Material Maker Selection")
-	if mm_globals.config.has_section_key("path", "selection"):
-		dialog.current_dir = mm_globals.config.get_value("path", "selection")
+	dialog.current_dir = mm_globals.config.get_value("path", "selection", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		mm_globals.config.set_value("path", "selection", files[0].get_base_dir())
@@ -1195,6 +1192,9 @@ func about() -> void:
 	add_child(about_box)
 	about_box.hide()
 	about_box.popup_centered()
+
+func show_example_projects() -> void:
+	OS.shell_open(ProjectSettings.globalize_path("res://material_maker/examples"))
 
 # Preview
 
@@ -1428,9 +1428,10 @@ func _on_Tip_Timer_timeout():
 
 func add_dialog(dialog : Window):
 	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
-	add_child(background)
+	if mm_globals.get_config("dialog_dim_background"):
+		add_child(background)
+		dialog.tree_exited.connect(background.queue_free)
 	add_child(dialog)
-	dialog.connect("tree_exited", background.queue_free)
 
 # Accept dialog
 
