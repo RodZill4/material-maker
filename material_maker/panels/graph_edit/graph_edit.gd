@@ -400,10 +400,7 @@ func handle_node_drop(event : InputEventMouseMotion) -> void:
 			if node.name in c.values():
 				return
 		var active_conn : Dictionary
-		var node_rect : Rect2 = node.get_rect()
-		if node is MMGraphReroute:
-			node_rect.size.y = node_rect.size.x
-			node_rect.position.y += node_rect.size.y - 5.0
+		var node_rect := node.get_rect()
 		var conns := get_connections_intersecting_with_rect(node_rect)
 		if not conns.is_empty():
 			if conns.size() > 1:
