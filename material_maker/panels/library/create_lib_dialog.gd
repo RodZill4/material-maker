@@ -71,3 +71,8 @@ func enter_info(value : String = "") -> Dictionary:
 func _on_VBoxContainer_minimum_size_changed():
 	min_size = $MarginContainer.get_combined_minimum_size() * content_scale_factor
 	max_size = Vector2(max_size.x, $MarginContainer.get_minimum_size().y)
+
+
+func _on_window_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
