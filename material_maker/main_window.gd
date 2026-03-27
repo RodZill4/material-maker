@@ -97,6 +97,8 @@ const MENU : Array[Dictionary] = [
 
 	{ menu="View/Center view", command="view_center", shortcut="C" },
 	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
+	{ menu="View/Frame selected nodes", command="view_frame_all", shortcut="PERIOD"},
+	{ menu="View/Frame all", command="view_frame_all", shortcut="HOME"},
 	{ menu="View/-" },
 	# { menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
 	{ menu="View/Panels", submenu="show_panels" },
@@ -1035,6 +1037,14 @@ func view_center() -> void:
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
+
+func view_frame_selected() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.frame_nodes(true)
+
+func view_frame_all() -> void:
+	var graph_edit : MMGraphEdit = get_current_graph_edit()
+	graph_edit.frame_nodes()
 
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
