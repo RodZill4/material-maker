@@ -2488,7 +2488,7 @@
 				"stretch_y": 1.0
 			},
 			"tree_item": "Noise/Triangle Voronoi",
-			"type": "voronoi_triangle"
+			"type": "voronoi_triangle2"
 		},
 		{
 			"display_name": "Color",
