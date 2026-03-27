@@ -273,8 +273,7 @@ func _gui_input(event: InputEvent) -> void:
 							var clipboard = DisplayServer.clipboard_get()
 							if name in clipboard:
 								var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
-								dialog.dialog_text = TranslationServer.translate("Resulting paste will cause parameter to reference itself")
-								dialog.dialog_text += " ( $%s )" % [ name ]
+								dialog.dialog_text = TranslationServer.translate("Resulting paste will cause parameter to reference itself.")
 								add_child(dialog)
 								await dialog.ask()
 								return
