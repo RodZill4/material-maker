@@ -5,7 +5,7 @@ signal return_status(status)
 
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	await get_tree().process_frame
 	_on_MarginContainer_minimum_size_changed()
 

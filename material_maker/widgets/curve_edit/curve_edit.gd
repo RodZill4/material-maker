@@ -18,7 +18,7 @@ func set_value(v) -> void:
 
 func _on_CurveEdit_pressed():
 	var dialog = preload("res://material_maker/widgets/curve_edit/curve_dialog.tscn").instantiate()
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	dialog.content_scale_factor = content_scale_factor
 	dialog.min_size = Vector2(500, 500)*content_scale_factor
 	mm_globals.main_window.add_dialog(dialog)
