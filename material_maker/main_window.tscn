@@ -284,6 +284,11 @@ script = ExtResource("9")
 [node name="AddNodePopup" parent="." instance=ExtResource("7")]
 visible = false
 
+[node name="SplashFade" type="ColorRect" parent="."]
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
 [connection signal="gui_input" from="VBoxContainer/ConsoleResizer" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
 [connection signal="gui_input" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
