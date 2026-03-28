@@ -25,8 +25,7 @@ func set_closed(c : bool = true):
 func _ready() -> void:
 	if polygon == null:
 		polygon = MMPolygon.new()
-	connect("resized", Callable(self, "_on_resize"))
-	_on_resize()
+	_on_resized.call_deferred()
 
 func set_view_rect(do : Vector2, ds : Vector2):
 	draw_size = ds
@@ -58,7 +57,7 @@ func _draw():
 		draw_line(tp, tnp, curve_color, 0.5, true)
 		tp = tnp
 
-func _on_resize() -> void:
+func _on_resized() -> void:
 	if auto_rescale:
 		var ds : float = min(size.x, size.y)
 		set_view_rect(0.5*(size-draw_size), Vector2(ds, ds))
