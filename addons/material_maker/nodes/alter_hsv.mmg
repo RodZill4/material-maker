@@ -72,7 +72,7 @@
 		"parameters": [
 			{
 				"control": "None",
-				"default": 1,
+				"default": 0.2,
 				"label": "All",
 				"longdesc": "The alteration intensity for hue, value and saturation",
 				"max": 1,

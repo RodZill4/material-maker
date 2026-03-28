@@ -36,15 +36,15 @@
 		{
 			"name": "tones_step_3",
 			"node_position": {
-				"x": -411,
-				"y": -389
+				"x": -411.0,
+				"y": -389.0
 			},
 			"parameters": {
 				"invert": false,
 				"value": 0.5,
-				"width": 0
+				"width": 0.0
 			},
-			"seed": 1071,
+			"seed": 1071.0,
 			"shader_model": {
 				"code": [
 					"vec3 $(name_uv)_false = clamp(($in($uv).rgb-vec3( clamp($value, 0.0001, 0.9999)))/max(0.0001, $width)+vec3(0.5), vec3(0.0), vec3(1.0));",
@@ -78,8 +78,8 @@
 						"default": 0.5,
 						"label": "Value",
 						"longdesc": "The value of the input that separate dark and light zones of the result",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "value",
 						"shortdesc": "Value",
 						"step": 0.01,
@@ -87,11 +87,11 @@
 					},
 					{
 						"control": "None",
-						"default": 1,
+						"default": 0.0,
 						"label": "Width",
 						"longdesc": "The width (in tones space) of the transition area",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "width",
 						"shortdesc": "width",
 						"step": 0.01,
@@ -113,56 +113,56 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1400,
-				"y": -400
+				"x": -1400.0,
+				"y": -400.0
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"name": "Height",
 					"type": "f"
 				}
 			],
-			"seed": 31266,
+			"seed": 31266.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -120,
-				"y": -400
+				"x": -120.0,
+				"y": -400.0
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Shows the generate smoothed mask",
 					"name": "out",
 					"shortdesc": "Output",
 					"type": "f"
 				}
 			],
-			"seed": 35961,
+			"seed": 35961.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -800,
-				"y": -600
+				"x": -800.0,
+				"y": -600.0
 			},
 			"parameters": {
-				"bevel": 0,
+				"bevel": 0.0,
 				"offset": 0.5,
-				"size": 10,
-				"smooth": 60
+				"size": 10.0,
+				"smooth": 60.0
 			},
-			"seed": 18638,
+			"seed": 18638.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -220,24 +220,363 @@
 			]
 		},
 		{
+			"connections": [
+				{
+					"from": "buffer_2",
+					"from_port": 0,
+					"to": "fast_blur_shader",
+					"to_port": 0
+				},
+				{
+					"from": "fast_blur_shader",
+					"from_port": 0,
+					"to": "buffer_3",
+					"to_port": 0
+				},
+				{
+					"from": "buffer_3",
+					"from_port": 0,
+					"to": "gen_outputs",
+					"to_port": 0
+				},
+				{
+					"from": "fast_blur_shader",
+					"from_port": 1,
+					"to": "gen_outputs",
+					"to_port": 1
+				},
+				{
+					"from": "fast_blur_shader",
+					"from_port": 2,
+					"to": "gen_outputs",
+					"to_port": 2
+				},
+				{
+					"from": "gen_inputs",
+					"from_port": 0,
+					"to": "ensure_greyscale",
+					"to_port": 0
+				},
+				{
+					"from": "ensure_greyscale",
+					"from_port": 0,
+					"to": "buffer_2",
+					"to_port": 0
+				}
+			],
+			"label": "Fast Blur",
+			"longdesc": "Applies an approximated gaussian blur",
 			"name": "fast_blur",
 			"node_position": {
-				"x": -721,
-				"y": -401
+				"x": -721.0,
+				"y": -401.0
 			},
+			"nodes": [
+				{
+					"name": "fast_blur_shader",
+					"node_position": {
+						"x": -157.0,
+						"y": 127.0
+					},
+					"parameters": {
+						"quality": 2.0,
+						"sigma": 60.0,
+						"strength": 1.0
+					},
+					"seed": -27696.0,
+					"shader_model": {
+						"code": "vec4 $(name_uv)_blurred = $(name)_blur($uv, vec2(1.0)/$in.size, max(1.0, floor($sigma*$in.size/2048.0)), int($quality));",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec4(1.0)",
+								"function": true,
+								"label": "",
+								"name": "in",
+								"type": "rgba"
+							}
+						],
+						"instance": [
+							"vec4 $(name)_blur(vec2 uv, vec2 scale, float sigma, int quality) {",
+							"\tvec4 O = vec4(0.0);",
+							"\tfloat samples = sigma * 4.0; ",
+							"\tint LOD = max(0, int(log2(float(samples)))-quality-2);",
+							"\tint sLOD = 1 << LOD;",
+							"\tint s = max(1, int(samples/float(sLOD)));",
+							"\tfloat sum = 0.0;",
+							"\tfor (int i = 0; i < s*s; i++) {",
+							"\t\tvec2 d = vec2(float(i%s), float(i/s))*float(sLOD) - 0.5*float(samples);",
+							"\t\tvec2 dd = d / sigma;",
+							"\t\tfloat g = exp(-.5*dot(dd,dd))/(6.28*sigma*sigma);",
+							"\t\tO += g * textureLod($in.texture, uv + scale * d, float(LOD));",
+							"\t\tsum += g;",
+							"\t}",
+							"\t",
+							"\treturn O / sum;",
+							"}",
+							""
+						],
+						"name": "Fast Blur",
+						"outputs": [
+							{
+								"rgba": "$(name_uv)_blurred",
+								"shortdesc": "Low Pass",
+								"type": "rgba"
+							},
+							{
+								"rgba": "($in($uv) - $(name_uv)_blurred) * $strength",
+								"shortdesc": "High Pass",
+								"type": "rgba"
+							},
+							{
+								"rgba": "($in($uv) - $(name_uv)_blurred) * ($strength+1.0) + $(name_uv)_blurred",
+								"shortdesc": "Sharpened",
+								"type": "rgba"
+							}
+						],
+						"parameters": [
+							{
+								"control": "None",
+								"default": 60.0,
+								"label": "",
+								"max": 256.0,
+								"min": 1.0,
+								"name": "sigma",
+								"step": 1.0,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1.0,
+								"label": "",
+								"max": 3.0,
+								"min": 0.0,
+								"name": "quality",
+								"step": 1.0,
+								"type": "float"
+							},
+							{
+								"control": "None",
+								"default": 1.0,
+								"label": "",
+								"max": 10.0,
+								"min": 0.0,
+								"name": "strength",
+								"step": 0.1,
+								"type": "float"
+							}
+						]
+					},
+					"type": "shader"
+				},
+				{
+					"name": "buffer_2",
+					"node_position": {
+						"x": -183.0,
+						"y": 61.5
+					},
+					"parameters": {
+						"size": 10.0
+					},
+					"seed": -48026.0,
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "gen_inputs",
+					"node_position": {
+						"x": -602.0,
+						"y": 91.75
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0.0,
+							"longdesc": "The input image",
+							"name": "input",
+							"shortdesc": "Input",
+							"type": "rgba"
+						}
+					],
+					"seed": -11967.0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_outputs",
+					"node_position": {
+						"x": 88.0,
+						"y": 61.75
+					},
+					"parameters": {
+
+					},
+					"ports": [
+						{
+							"group_size": 0.0,
+							"longdesc": "The input image with high frequency details blurred away",
+							"name": "Blurred",
+							"shortdesc": "Blurred",
+							"type": "rgba"
+						},
+						{
+							"longdesc": "The input image with only high frequency details kept.\nNote that all channels including alpha will be centered at 0, so this will need to be connected to a SwapChannels node to be seen in previews.",
+							"name": "High Pass",
+							"shortdesc": "High Pass",
+							"type": "rgba"
+						},
+						{
+							"longdesc": "The input image with high frequency details strengthened",
+							"name": "Sharpened",
+							"shortdesc": "Sharpened",
+							"type": "rgba"
+						}
+					],
+					"seed": 45717.0,
+					"type": "ios"
+				},
+				{
+					"name": "gen_parameters",
+					"node_position": {
+						"x": -321.5,
+						"y": -230.5
+					},
+					"parameters": {
+						"param0": 10.0,
+						"param1": 60.0,
+						"param2": 2.0,
+						"param3": 1.0
+					},
+					"seed": 57528.0,
+					"type": "remote",
+					"widgets": [
+						{
+							"label": "Resolution",
+							"linked_widgets": [
+								{
+									"node": "buffer_2",
+									"widget": "size"
+								},
+								{
+									"node": "buffer_3",
+									"widget": "size"
+								}
+							],
+							"longdesc": "The resolution used to sample the input image",
+							"name": "param0",
+							"shortdesc": "Resolution",
+							"type": "linked_control"
+						},
+						{
+							"label": "Sigma",
+							"linked_widgets": [
+								{
+									"node": "fast_blur_shader",
+									"widget": "sigma"
+								}
+							],
+							"longdesc": "The standard deviation of the gaussian distribution",
+							"name": "param1",
+							"shortdesc": "Sigma",
+							"type": "linked_control"
+						},
+						{
+							"label": "Quality",
+							"linked_widgets": [
+								{
+									"node": "fast_blur_shader",
+									"widget": "quality"
+								}
+							],
+							"longdesc": "The quality of the effect (increasing quality increases compute time)",
+							"name": "param2",
+							"shortdesc": "Quality",
+							"type": "linked_control"
+						},
+						{
+							"label": "Strength",
+							"linked_widgets": [
+								{
+									"node": "fast_blur_shader",
+									"widget": "strength"
+								}
+							],
+							"longdesc": "High pass multiplier. Unused for low pass output.",
+							"name": "param3",
+							"shortdesc": "Strength",
+							"type": "linked_control"
+						}
+					]
+				},
+				{
+					"name": "buffer_3",
+					"node_position": {
+						"x": -186.700012207031,
+						"y": 252.5
+					},
+					"parameters": {
+						"size": 10.0
+					},
+					"seed": -48026.0,
+					"type": "buffer",
+					"version": 1
+				},
+				{
+					"name": "ensure_greyscale",
+					"node_position": {
+						"x": -170.533325195312,
+						"y": -20.25
+					},
+					"parameters": {
+
+					},
+					"seed_int": 0,
+					"shader_model": {
+						"code": "",
+						"global": "",
+						"inputs": [
+							{
+								"default": "vec4(0.0)",
+								"label": "",
+								"longdesc": "The input greyscale image",
+								"name": "input",
+								"shortdesc": "Input",
+								"type": "rgba"
+							}
+						],
+						"instance": "",
+						"longdesc": "Convert the input to RGBA",
+						"name": "EnsureRGBA",
+						"outputs": [
+							{
+								"longdesc": "The remapped greyscale image",
+								"rgba": "$input($uv)",
+								"shortdesc": "Output",
+								"type": "rgba"
+							}
+						],
+						"parameters": [],
+						"shortdesc": "EnsureRGBA"
+					},
+					"type": "shader"
+				}
+			],
 			"parameters": {
-				"param0": 10,
-				"param1": 60,
-				"param2": 2
+				"param0": 10.0,
+				"param1": 60.0,
+				"param2": 2.0,
+				"param3": 1.0
 			},
 			"seed_int": 0,
-			"type": "fast_blur"
+			"shortdesc": "Fast Blur",
+			"type": "graph"
 		},
 		{
 			"name": "1843",
 			"node_position": {
-				"x": -920,
-				"y": -400
+				"x": -920.0,
+				"y": -400.0
 			},
 			"parameters": {
 
@@ -262,18 +601,16 @@
 						"type": "f"
 					}
 				],
-				"parameters": [
-
-				]
+				"parameters": []
 			},
 			"type": "shader"
 		}
 	],
 	"parameters": {
-		"bevel": 0,
+		"bevel": 0.0,
 		"offset": 0.5,
-		"size": 10,
-		"smooth": 60
+		"size": 10.0,
+		"smooth": 60.0
 	},
 	"seed_int": 0,
 	"shortdesc": "Binary Smooth",

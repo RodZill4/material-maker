@@ -84,14 +84,14 @@
 		{
 			"name": "math",
 			"node_position": {
-				"x": -1260,
-				"y": 200
+				"x": -1260.0,
+				"y": 200.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 13
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 13.0
 			},
 			"seed_int": 0,
 			"type": "math"
@@ -99,14 +99,14 @@
 		{
 			"name": "math_2",
 			"node_position": {
-				"x": -1640,
-				"y": 200
+				"x": -1640.0,
+				"y": 200.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 19
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 19.0
 			},
 			"seed_int": 0,
 			"type": "math"
@@ -114,48 +114,360 @@
 		{
 			"name": "voronoi",
 			"node_position": {
-				"x": -2000,
-				"y": 200
+				"x": -2001.0,
+				"y": 200.0
 			},
 			"parameters": {
-				"intensity": 1,
-				"randomness": 1,
-				"scale_x": 16,
-				"scale_y": 16,
+				"intensity": 1.0,
+				"randomness": 1.0,
+				"scale_x": 16.0,
+				"scale_y": 16.0,
 				"stretch_x": 0.85,
 				"stretch_y": 0.85
 			},
 			"seed_int": 0,
-			"type": "voronoi"
+			"shader_model": {
+				"code": "vec4 $(name_uv)_xyzw = voronoi($uv, vec2($scale_x, $scale_y), vec2($stretch_y, $stretch_x), $intensity, $randomness, $seed);",
+				"global": [
+					"// Based on https://www.shadertoy.com/view/ldl3W8",
+					"// The MIT License",
+					"// Copyright © 2013 Inigo Quilez",
+					"vec3 iq_voronoi(vec2 x, vec2 size, vec2 stretch, float randomness, vec2 seed) {",
+					"\tvec2 n = floor(x);",
+					"\tvec2 f = fract(x);",
+					"",
+					"\tvec2 mg, mr, mc;",
+					"\tfloat md = 8.0;",
+					"\tfor (int j=-1; j<=1; j++)",
+					"\tfor (int i=-1; i<=1; i++) {",
+					"\t\tvec2 g = vec2(float(i),float(j));",
+					"\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));",
+					"\t\tvec2 c = g + o;",
+					"\t\tvec2 r = c - f;",
+					"\t\tvec2 rr = r*stretch;",
+					"\t\tfloat d = dot(rr,rr);",
+					"",
+					"\t\tif (d<md) {",
+					"\t\t\tmc = c;",
+					"\t\t\tmd = d;",
+					"\t\t\tmr = r;",
+					"\t\t\tmg = g;",
+					"\t\t}",
+					"\t}",
+					"",
+					"\tmd = 8.0;",
+					"\tfor (int j=-2; j<=2; j++)",
+					"\tfor (int i=-2; i<=2; i++) {",
+					"\t\tvec2 g = mg + vec2(float(i),float(j));",
+					"\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));",
+					"\t\tvec2 r = g + o - f;",
+					"\t\tvec2 rr = (mr-r)*stretch;",
+					"\t\tif (dot(rr,rr)>0.00001)",
+					"\t   \t\tmd = min(md, dot(0.5*(mr+r)*stretch, normalize((r-mr)*stretch)));",
+					"\t}",
+					"",
+					"\treturn vec3(md, mc+n);",
+					"}",
+					"",
+					"vec4 voronoi(vec2 uv, vec2 size, vec2 stretch, float intensity, float randomness, float seed) {",
+					"\tuv *= size;",
+					"\tvec3 v = iq_voronoi(uv, size, stretch, randomness, rand2(vec2(seed, 1.0-seed)));",
+					"\treturn vec4(v.yz, intensity*length((uv-v.yz)*stretch), v.x);",
+					"}",
+					""
+				],
+				"inputs": [],
+				"instance": "",
+				"longdesc": "Generates several images from a tileable voronoi noise",
+				"name": "Voronoi",
+				"outputs": [
+					{
+						"f": "$(name_uv)_xyzw.z",
+						"longdesc": "A greyscale pattern based on the distance to cell centers",
+						"shortdesc": "Nodes",
+						"type": "f"
+					},
+					{
+						"f": "$(name_uv)_xyzw.w",
+						"longdesc": "A greyscale pattern based on the distance to borders",
+						"shortdesc": "Borders",
+						"type": "f"
+					},
+					{
+						"longdesc": "A color pattern that assigns a random color to each cell",
+						"rgb": "rand3(fract(floor($(name_uv)_xyzw.xy)/vec2($scale_x, $scale_y)))",
+						"shortdesc": "Random color",
+						"type": "rgb"
+					},
+					{
+						"longdesc": "An output that should be plugged into a Fill companion node",
+						"rgba": "round( vec4(fract(($(name_uv)_xyzw.xy-1.0)/vec2($scale_x, $scale_y)), vec2(2.0)/vec2($scale_x, $scale_y)) * 4096.0 ) / 4096.0",
+						"shortdesc": "Fill",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 16.0,
+						"label": "Scale X",
+						"longdesc": "The scale along the X axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 16.0,
+						"label": "Scale Y",
+						"longdesc": "The scale along the Y axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Stretch X",
+						"longdesc": "The stretch factor along the X axis",
+						"max": 1.0,
+						"min": 0.01,
+						"name": "stretch_x",
+						"shortdesc": "Stretch.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Stretch Y",
+						"longdesc": "The stretch factor along the Y axis",
+						"max": 1.0,
+						"min": 0.01,
+						"name": "stretch_y",
+						"shortdesc": "Stretch.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.75,
+						"label": "Intensity",
+						"longdesc": "A value factor for greyscale outputs",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "intensity",
+						"shortdesc": "Intensity",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Randomness",
+						"longdesc": "The randomness of cell centers positions",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "randomness",
+						"shortdesc": "Randomness",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Voronoi Noise"
+			},
+			"type": "shader"
 		},
 		{
 			"name": "voronoi_2",
 			"node_position": {
-				"x": -2000,
-				"y": 520
+				"x": -2000.0,
+				"y": 520.0
 			},
 			"parameters": {
-				"intensity": 1,
-				"randomness": 1,
-				"scale_x": 16,
-				"scale_y": 16,
+				"intensity": 1.0,
+				"randomness": 1.0,
+				"scale_x": 16.0,
+				"scale_y": 16.0,
 				"stretch_x": 0.85,
 				"stretch_y": 0.85
 			},
 			"seed_int": 1998774700,
-			"type": "voronoi"
+			"shader_model": {
+				"code": "vec4 $(name_uv)_xyzw = voronoi($uv, vec2($scale_x, $scale_y), vec2($stretch_y, $stretch_x), $intensity, $randomness, $seed);",
+				"global": [
+					"// Based on https://www.shadertoy.com/view/ldl3W8",
+					"// The MIT License",
+					"// Copyright © 2013 Inigo Quilez",
+					"vec3 iq_voronoi(vec2 x, vec2 size, vec2 stretch, float randomness, vec2 seed) {",
+					"\tvec2 n = floor(x);",
+					"\tvec2 f = fract(x);",
+					"",
+					"\tvec2 mg, mr, mc;",
+					"\tfloat md = 8.0;",
+					"\tfor (int j=-1; j<=1; j++)",
+					"\tfor (int i=-1; i<=1; i++) {",
+					"\t\tvec2 g = vec2(float(i),float(j));",
+					"\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));",
+					"\t\tvec2 c = g + o;",
+					"\t\tvec2 r = c - f;",
+					"\t\tvec2 rr = r*stretch;",
+					"\t\tfloat d = dot(rr,rr);",
+					"",
+					"\t\tif (d<md) {",
+					"\t\t\tmc = c;",
+					"\t\t\tmd = d;",
+					"\t\t\tmr = r;",
+					"\t\t\tmg = g;",
+					"\t\t}",
+					"\t}",
+					"",
+					"\tmd = 8.0;",
+					"\tfor (int j=-2; j<=2; j++)",
+					"\tfor (int i=-2; i<=2; i++) {",
+					"\t\tvec2 g = mg + vec2(float(i),float(j));",
+					"\t\tvec2 o = randomness*rand2(seed + mod(n + g + size, size));",
+					"\t\tvec2 r = g + o - f;",
+					"\t\tvec2 rr = (mr-r)*stretch;",
+					"\t\tif (dot(rr,rr)>0.00001)",
+					"\t   \t\tmd = min(md, dot(0.5*(mr+r)*stretch, normalize((r-mr)*stretch)));",
+					"\t}",
+					"",
+					"\treturn vec3(md, mc+n);",
+					"}",
+					"",
+					"vec4 voronoi(vec2 uv, vec2 size, vec2 stretch, float intensity, float randomness, float seed) {",
+					"\tuv *= size;",
+					"\tvec3 v = iq_voronoi(uv, size, stretch, randomness, rand2(vec2(seed, 1.0-seed)));",
+					"\treturn vec4(v.yz, intensity*length((uv-v.yz)*stretch), v.x);",
+					"}",
+					""
+				],
+				"inputs": [],
+				"instance": "",
+				"longdesc": "Generates several images from a tileable voronoi noise",
+				"name": "Voronoi",
+				"outputs": [
+					{
+						"f": "$(name_uv)_xyzw.z",
+						"longdesc": "A greyscale pattern based on the distance to cell centers",
+						"shortdesc": "Nodes",
+						"type": "f"
+					},
+					{
+						"f": "$(name_uv)_xyzw.w",
+						"longdesc": "A greyscale pattern based on the distance to borders",
+						"shortdesc": "Borders",
+						"type": "f"
+					},
+					{
+						"longdesc": "A color pattern that assigns a random color to each cell",
+						"rgb": "rand3(fract(floor($(name_uv)_xyzw.xy)/vec2($scale_x, $scale_y)))",
+						"shortdesc": "Random color",
+						"type": "rgb"
+					},
+					{
+						"longdesc": "An output that should be plugged into a Fill companion node",
+						"rgba": "round( vec4(fract(($(name_uv)_xyzw.xy-1.0)/vec2($scale_x, $scale_y)), vec2(2.0)/vec2($scale_x, $scale_y)) * 4096.0 ) / 4096.0",
+						"shortdesc": "Fill",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"control": "None",
+						"default": 16.0,
+						"label": "Scale X",
+						"longdesc": "The scale along the X axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_x",
+						"shortdesc": "Scale.x",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 16.0,
+						"label": "Scale Y",
+						"longdesc": "The scale along the Y axis",
+						"max": 32.0,
+						"min": 1.0,
+						"name": "scale_y",
+						"shortdesc": "Scale.y",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Stretch X",
+						"longdesc": "The stretch factor along the X axis",
+						"max": 1.0,
+						"min": 0.01,
+						"name": "stretch_x",
+						"shortdesc": "Stretch.x",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Stretch Y",
+						"longdesc": "The stretch factor along the Y axis",
+						"max": 1.0,
+						"min": 0.01,
+						"name": "stretch_y",
+						"shortdesc": "Stretch.y",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 0.75,
+						"label": "Intensity",
+						"longdesc": "A value factor for greyscale outputs",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "intensity",
+						"shortdesc": "Intensity",
+						"step": 0.01,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Randomness",
+						"longdesc": "The randomness of cell centers positions",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "randomness",
+						"shortdesc": "Randomness",
+						"step": 0.01,
+						"type": "float"
+					}
+				],
+				"shortdesc": "Voronoi Noise"
+			},
+			"type": "shader"
 		},
 		{
 			"name": "math_3",
 			"node_position": {
-				"x": -1640,
-				"y": 520
+				"x": -1640.0,
+				"y": 520.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 19
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 19.0
 			},
 			"seed_int": 0,
 			"type": "math"
@@ -163,14 +475,14 @@
 		{
 			"name": "math_4",
 			"node_position": {
-				"x": -1260,
-				"y": 520
+				"x": -1260.0,
+				"y": 520.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 14
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 14.0
 			},
 			"seed_int": 0,
 			"type": "math"
@@ -178,14 +490,14 @@
 		{
 			"name": "math_5",
 			"node_position": {
-				"x": -920,
-				"y": 360
+				"x": -920.0,
+				"y": 360.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 1
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 1.0
 			},
 			"seed_int": 0,
 			"type": "math"
@@ -193,14 +505,14 @@
 		{
 			"name": "math_6",
 			"node_position": {
-				"x": -660,
-				"y": 360
+				"x": -660.0,
+				"y": 360.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
-				"default_in2": 0,
-				"op": 3
+				"default_in1": 0.0,
+				"default_in2": 0.0,
+				"op": 3.0
 			},
 			"seed_int": 0,
 			"type": "math"
@@ -208,30 +520,28 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -2200,
-				"y": 400
+				"x": -2200.0,
+				"y": 400.0
 			},
 			"parameters": {
 
 			},
-			"ports": [
-
-			],
+			"ports": [],
 			"seed_int": 0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -120,
-				"y": 360
+				"x": -120.0,
+				"y": 360.0
 			},
 			"parameters": {
 
 			},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "",
 					"name": "out",
 					"shortdesc": "Output",
@@ -244,12 +554,12 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -1560,
-				"y": -60
+				"x": -1560.0,
+				"y": -60.0
 			},
 			"parameters": {
-				"param0": 16,
-				"param1": 16
+				"param0": 16.0,
+				"param1": 16.0
 			},
 			"seed_int": 0,
 			"type": "remote",
@@ -293,24 +603,24 @@
 		{
 			"name": "math_7",
 			"node_position": {
-				"x": -400,
-				"y": 360
+				"x": -400.0,
+				"y": 360.0
 			},
 			"parameters": {
 				"clamp": false,
-				"default_in1": 0,
+				"default_in1": 0.0,
 				"default_in2": 1.45,
-				"op": 2
+				"op": 2.0
 			},
 			"seed_int": 0,
 			"type": "math"
 		}
 	],
 	"parameters": {
-		"param0": 16,
-		"param1": 16
+		"param0": 16.0,
+		"param1": 16.0
 	},
-	"seed_int": 61091615,
+	"seed_int": 0,
 	"shortdesc": "Crystal",
 	"type": "graph"
 }

@@ -1,4 +1,4 @@
-{
+	{
 	"connections": [
 		{
 			"from": "scale",
@@ -325,7 +325,7 @@
 			"type": "remote",
 			"widgets": [
 				{
-					"default": 0.5,
+					"default": 0.1,
 					"label": "Width",
 					"max": 1,
 					"min": 0,
