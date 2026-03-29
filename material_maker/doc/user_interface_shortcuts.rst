@@ -4,7 +4,7 @@ Shortcuts
 While not an exhuaustive list, this shows the most
 common shortcuts available in Material Maker.
 
-on macOS, :kbd:`Ctrl` commonly corresponds to :kbd:`Cmd`
+On macOS, :kbd:`Ctrl` commonly corresponds to :kbd:`Cmd`
 whereas equivalent of :kbd:`Alt` is :kbd:`Option`.
 
 General
