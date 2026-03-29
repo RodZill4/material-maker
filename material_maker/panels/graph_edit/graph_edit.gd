@@ -59,6 +59,11 @@ const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
 var lasso_points : PackedVector2Array
 
+var is_dragging_connection : bool = false:
+	set(v):
+		is_dragging_connection = v
+		set_process_if_necessary()
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -1884,3 +1889,37 @@ func create_portals() -> void:
 
 	var next : Dictionary = generator.serialize()
 	undoredo_create_step("Connection to portal links", generator.get_hier_name(), prev, next)
+
+func set_process_if_necessary():
+	set_process(is_dragging_connection)
+
+func _process(delta : float) -> void:
+	if is_dragging_connection:
+		# Edge scrolling when dragging connection line
+		const DRAG_MARGIN : float = 80.0 # distance from edge to start scrolling
+		const MIN_OFFSET : Vector2 = 2.0 * Vector2.ONE # min scroll speed at edge
+
+		var mouse_pos := get_local_mouse_position()
+		if Rect2(Vector2.ZERO, size).grow(-DRAG_MARGIN).has_point(mouse_pos):
+			return
+
+		var dist_from_edge : Vector2 = Vector2(
+			min(mouse_pos.x, size.x - mouse_pos.x) - DRAG_MARGIN,
+			min(mouse_pos.y, size.y - mouse_pos.y) - DRAG_MARGIN)
+		var offset : Vector2 = Vector2.ZERO
+		var offset_v : Vector2 = (mouse_pos - size * 0.5).sign() * (
+				500.0 * dist_from_edge.abs() / DRAG_MARGIN + MIN_OFFSET)
+
+		if dist_from_edge.x < 0.0:
+			offset.x = offset_v.x
+
+		if dist_from_edge.y < 0.0:
+			offset.y = offset_v.y
+
+		scroll_offset += offset * delta
+
+func _on_connection_drag_started(_from_node : StringName, _from_port : int, _is_output : bool) -> void:
+	is_dragging_connection = true
+
+func _on_connection_drag_ended() -> void:
+	is_dragging_connection = false

@@ -56,6 +56,8 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 	dialog_dim_background = true,
+	node_minimize_button = false,
+	node_close_button = false,
 }
 
 
@@ -213,33 +215,6 @@ func propagate_shortcuts(control : Control, event : InputEvent):
 
 func get_home_directory() -> String:
 	return OS.get_environment("USERPROFILE" if OS.has_feature("windows") else "HOME")
-
-func interpret_file_name(file_name: String, path:="", file_extension:="",additional_identifiers:={}, resolution="") -> String:
-	for i in additional_identifiers:
-		file_name = file_name.replace(i, additional_identifiers[i])
-
-	var current_graph: MMGraphEdit = get_node("/root/MainWindow").get_current_graph_edit()
-	if current_graph.save_path:
-		file_name = file_name.replace("$project", current_graph.save_path.get_file().trim_suffix("."+current_graph.save_path.get_extension()))
-	else:
-		file_name = file_name.replace("$project", "unnamed_project")
-
-	if file_extension != "" and not file_name.ends_with(file_extension):
-		file_name += file_extension
-
-	if resolution:
-		file_name = file_name.replace("$resolution", resolution)
-
-	if "$idx" in file_name:
-		if path:
-			var idx := 1
-			while FileAccess.file_exists(path.path_join(file_name).replace("$idx", str(idx).pad_zeros(2))):
-				idx += 1
-			file_name = file_name.replace("$idx", str(idx).pad_zeros(2))
-		else:
-			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
-
-	return file_name
 
 func get_node_title_from_gen(generator : MMGenBase) -> String:
 	# Get GraphNode title from generator (in current graph)
