@@ -1,5 +1,5 @@
-extends MMRenderingPipeline
 class_name MMMeshRenderingPipeline
+extends MMRenderingPipeline
 
 var mesh : Mesh
 

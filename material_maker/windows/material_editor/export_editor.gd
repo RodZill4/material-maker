@@ -108,7 +108,7 @@ func select_file(i : int) -> void:
 		match f.type:
 			"texture":
 				export_file_type.select(0)
-				export_file_expression.text = str(f.output) if f.has("output") else f.expression
+				export_file_expression.text = str(int(f.output)) if f.has("output") else f.expression
 			"template","buffer_templates":
 				export_file_type.select(1 if f.type == "template" else 3)
 				var file_export_context = {}
@@ -369,3 +369,14 @@ func _on_OK_pressed() -> void:
 func _on_Cancel_pressed() -> void:
 	emit_signal("editor_window_closed")
 	queue_free()
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			var theme_path : String = mm_globals.main_window.theme.resource_path
+			if "dark" in theme_path:
+				$BG.color = Color("0b0b0c")
+			elif "classic" in theme_path:
+				$BG.color = Color("1e2330")
+			else:
+				$BG.color = Color("eaeaea")

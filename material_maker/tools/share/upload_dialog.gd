@@ -63,7 +63,7 @@ func ask(data : Dictionary) -> Dictionary:
 	return {}
 
 func _on_MarginContainer_minimum_size_changed():
-	size = $MarginContainer.get_minimum_size()
+	size = $MarginContainer.get_minimum_size() * get_tree().root.content_scale_factor
 
 func validate_form():
 	var valid = true

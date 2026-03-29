@@ -48,8 +48,7 @@ func _on_generate_map_button_pressed() -> void:
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png; PNG image File")
 	dialog.add_filter("*.exr; EXR image File")
-	if mm_globals.config.has_section_key("path", "maps"):
-		dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps")
+	dialog.current_dir = get_node("/MainWindow").mm_globals.config.get_value("path", "maps", mm_globals.get_home_directory())
 
 	dialog.current_file = file_name.get_basename()+extension
 
@@ -86,16 +85,18 @@ func update_generate_map_file_label() -> void:
 
 
 func interpret_map_file_name(file_name: String, path:="") -> String:
-	var additional_ids := {"$type": MapType.get_item_text(MapType.selected).to_snake_case()}
+	var additional_ids : Dictionary[String, String] = {"$type": MapType.get_item_text(MapType.selected).to_snake_case()}
 
 	var extension := ""
 	match MapFileType.selected:
 		0: extension += ".png"
 		1: extension += ".exr"
 	
-	var resolution := str(256 << MapResolution.selected)
-
-	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids, resolution)
+	var resolution : String = str(256 << MapResolution.selected)
+	
+	var graph_node : MMGenBase = get_node("/root/MainWindow").get_current_graph_edit().generator
+	
+	return mm_globals.interpret_file_name(file_name, path, extension, graph_node, additional_ids, resolution)
 
 func _on_map_file_type_item_selected(_index: int) -> void:
 	update_generate_map_file_label()

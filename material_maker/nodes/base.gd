@@ -36,6 +36,9 @@ const TIME_BAD : int = 1000
 const TIME_AVG : int = 500
 const TIME_GOOD : int = 100
 
+## Emitted when nodes are being simplified as graph is zoomed out [br]
+## [param fac] denotes the current level of detail (i.e. controls' opacity)
+signal lod_updated(fac : float)
 
 static func wrap_string(s : String, l : int = 50) -> String:
 	var length = s.length()
@@ -236,7 +239,10 @@ func _draw() -> void:
 	const start_fade := 0.5
 	var opacity : float = clamp(
 			inverse_lerp(0.3, start_fade, get_parent().zoom), 0.0, 1.0)
+	lod_updated.emit(opacity)
 	get_titlebar_hbox().modulate.a = opacity
+	if self is MMGraphTones:
+		return
 	for control in get_children():
 		if control.get("modulate"):
 			control.modulate.a = opacity
@@ -538,3 +544,19 @@ func finalize_generator_update() -> void:
 		get_parent().undoredo_create_step("Edit node", generator.get_parent().get_hier_name(), edit_generator_prev_state, edit_generator_next_state)
 		edit_generator_prev_state = {}
 		edit_generator_next_state = {}
+
+func _process(_delta: float) -> void:
+	# Disable node controls when zoomed out
+	const simplified_zoom = 0.3
+	var is_simplified : bool = get_parent().zoom <= simplified_zoom
+	var control_nodes : Array[Node]
+	for c in get_children():
+		if c is Container:
+			control_nodes.append_array(c.get_children())
+		elif c is not Label and c is not Window:
+			control_nodes.append(c)
+	for control in control_nodes:
+		if control.get_script() != null or control is BaseButton:
+			control.mouse_filter = MOUSE_FILTER_IGNORE if is_simplified else MOUSE_FILTER_STOP
+			if control is GradientEdit:
+				control.get_child(0).visible = not is_simplified

@@ -1,3 +1,62 @@
+# Material Maker 1.6
+
+Mar 8, 2026, ~16h
+
+## General
+
+- Allowed closing named parameter dialog via window button (contributed by williamchange)
+- Updated graph navigation to retain subgraph offsets (contributed by williamchange)
+- Implemented vertical tabs in the Preferences dialog (contributed by williamchange)
+- Modified the "Update library item" action to keep the thumbnail (contributed by williamchange)
+- Implemented node grabbing via G key (contributed by williamchange)
+- Improved debug console link navigation (contributed by williamchange)
+- Show top-level section labels in the Library panel in bold (contributed by williamchange)
+- Added drag and drop support for image parameter (contributed by williamchange)
+- Improved export node to support $ variables (contributed by williamchange)
+- Enabled tab rearrangement for projects panel (contributed by williamchange)
+- Improved $node to use node title in 2D export (contributed by williamchange)
+- Updated icons to use SVG when possible (contributed by williamchange)
+- Configured default FileDialog path to user's home directory (contributed by williamchange)
+
+## Nodes
+
+- Added lacunarity for FBM noise node (contributed by williamchange)
+
+## Bug Fixes
+
+- Fixed crash when adjusting BPP in pixels node (contributed by williamchange)
+- Fixed Morphology node Y dilation to use resolution (contributed by DevFika)
+- Fixed SDF FBM node not displaying correctly (contributed by williamchange)
+- Fixed opaque background for tooltip/popup menu panels (contributed by williamchange)
+- Reintroduced AO export for Blender export target (contributed by williamchange)
+- Placed graph UI (hierarchy and subgraph controls) above nodes (contributed by williamchange)
+- Updated reroute/preview2d bg checker to match defaults (contributed by williamchange)
+
+# Material Maker 1.5p1
+
+## Bug Fixes
+- Fixed problem when exporting materials on command line in Export node
+- Fixed folder picker not showing set path in 2D export (contributed by williamchange)
+- Fixed small FloatEdit sizes in pixel editor (contributed by williamchange)
+- Fixed Tones node minimization and LoD update (contributed by williamchange)
+- Fixed spacing in connection style buttons (contributed by williamchange)
+- Fixed preview2d center shortcut not activating (contributed by williamchange)
+- Fixed share asset dialog size on hidpi displays (contributed by williamchange)
+- Fixed status bar icons artifacts (contributed by williamchange)
+- Fixed tooltips (contributed by williamchange)
+- Fixed classic theme floatedit style in splines dialog (contributed by williamchange)
+- Fixed dropping files with extensions in caps (contributed by williamchange)
+- Fixed error when using export node without suffix (contributed by williamchange)
+- Fixed transparency preview/export (contributed by williamchange)
+- Fixed export expression index showing as a float (contributed by williamchange)
+- Fixed undo/redo for framing nodes (contributed by williamchange)
+- Fixed function icon in EasySDF editor (contributed by williamchange)
+- Fixed non-existent signal error when editing nodes (contributed by williamchange)
+- Fixed reroute not updating port type on connection undo/redo (contributed by williamchange)
+- Fixed controller input throwing an error on option edit (contributed by TechnicallyMay)
+- Fixed "Fill To Random Color" repeating colors on adjacent tiles (contributed by DevFika)
+- Fixed Tiler node offset for odd rows (contributed by DevFika)
+
 # Material Maker 1.5
 
 ## General

@@ -1,5 +1,5 @@
-extends MMPipeline
 class_name MMRenderingPipeline
+extends MMPipeline
 
 
 var shader : RID = RID()

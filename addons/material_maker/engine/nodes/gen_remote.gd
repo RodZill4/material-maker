@@ -256,18 +256,21 @@ func link_parameter(widget_name : String, generator : MMGenBase, param : String)
 		match widget.type:
 			"linked_control":
 				parameters[widget_name] = generator.parameters[param]
+				# use linked floatedit value(instead of default) when linked
+				var param_def : Dictionary = generator.get_parameter_def(param)
+				if name == "gen_parameters" and param_def.has("type"):
+					if param_def.type == "float":
+						set_parameter(widget_name, parameters[widget_name])
 			"config_control":
 				parameters[widget_name] = 0
 	emit_signal("parameter_changed", "__update_all__", null)
 
-func move_parameter(widget_name : String, offset : int) -> void:
-	for i in range(widgets.size()):
-		if widgets[i].name == widget_name:
-			var widget = widgets[i]
-			var widget2 = widgets[i+offset]
-			widgets[i] = widget2
-			widgets[i+offset] = widget
-			break
+func rearrange_parameter(from : int, to : int, is_after : bool) -> void:
+	var arrange_widget = widgets[from]
+	widgets.remove_at(from)
+	if from < to:
+		to -= 1
+	widgets.insert(to + int(is_after), arrange_widget)
 	emit_signal("parameter_changed", "__update_all__", null)
 
 func remove_parameter(widget_name : String) -> void:
@@ -305,7 +308,6 @@ func remove_configuration(widget_name : String, config_name : String) -> void:
 	if widget.type == "config_control":
 		widget.configurations.erase(config_name)
 		emit_signal("parameter_changed", "__update_all__", null)
-
 
 func _serialize(data: Dictionary) -> Dictionary:
 	data.type = "remote"

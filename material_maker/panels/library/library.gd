@@ -13,6 +13,8 @@ var category_buttons = {}
 @onready var filter_line_edit : LineEdit = %Filter
 @onready var item_menu : PopupMenu = %ItemMenu
 
+var section_font = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
+
 const MINIMUM_ITEM_HEIGHT : int = 30
 
 const MENU_CREATE_LIBRARY : int = 1000
@@ -156,6 +158,9 @@ func update_tree() -> void:
 	for i in library_manager.get_items(filter):
 		var _item := add_item(i.item, i.library_index, i.name, i.icon, null, filter != "")
 
+	for section : TreeItem in tree.get_root().get_children():
+		if section.get_children().size():
+			section.set_custom_font(0, section_font)
 	tree.queue_redraw()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:
@@ -227,6 +232,18 @@ func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null)
 			var image = get_viewport().get_texture().get_image()
 			var csf = mm_globals.main_window.get_window().content_scale_factor
 			image = image.get_region(Rect2(csf*(new_nodes[0].global_position-Vector2(6, 6)),csf*(new_nodes[0].size+Vector2(14, 12))))
+			# Make background transparent
+			image.convert(Image.FORMAT_RGBA8)
+			var border_color : Color = image.get_pixel(0, 0)
+			for y : int in image.get_height():
+				for x : int in image.get_width():
+					if image.get_pixel(x, y) != border_color:
+						break
+					image.set_pixel(x, y, Color(0, 0, 0, 0))
+				for x : int in range(image.get_width()-1, 0, -1):
+					if image.get_pixel(x, y) != border_color:
+						break
+					image.set_pixel(x, y, Color(0, 0, 0, 0))
 			print(get_icon_name(get_item_path(item)))
 			image.resize(image.get_size().x/csf, image.get_size().y/csf, Image.INTERPOLATE_LANCZOS)
 			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
@@ -401,7 +418,7 @@ func _on_PopupMenu_index_pressed(index):
 			var image : Image = await current_node.generator.render_output(0, Vector2i(64, 64))
 			library_manager.update_item_icon_in_library(library_index, item_path, image)
 		2: # Update item
-			mm_globals.main_window.add_selection_to_library(library_index, false)
+			mm_globals.main_window.add_selection_to_library(library_index, false, false)
 		3: # Delete item
 			library_manager.remove_item_from_library(library_index, item_path)
 		5: # Define aliases
