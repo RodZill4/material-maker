@@ -2,7 +2,7 @@ extends RefCounted
 class_name MMLattice
 
 var size : Vector2i = Vector2i(1, 1)
-var points : PackedVector2Array = PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1)])
+var points : PackedVector2Array = PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(0, 1), Vector2(1, 1)])
 
 func to_string() -> String:
 	var rv = PackedStringArray()
