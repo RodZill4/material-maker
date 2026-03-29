@@ -12,7 +12,7 @@ resource_local_to_scene = true
 shader = SubResource("2")
 
 [node name="GeneratedShaderWindow" type="Window"]
-title = "Generated shader"
+title = "Generated Shader"
 size = Vector2i(500, 500)
 exclusive = true
 script = ExtResource("1")

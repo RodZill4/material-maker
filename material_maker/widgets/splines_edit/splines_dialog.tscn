@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://b08bcbwwosrrk" path="res://material_maker/widgets/splines_edit/splines_editor.tscn" id="2"]
 
 [node name="SplinesDialog" type="Window"]
+oversampling_override = 1.0
+title = "Edit Splines"
 position = Vector2i(0, 36)
 script = ExtResource("1_u3y6s")
 
