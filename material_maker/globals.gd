@@ -70,6 +70,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	custom_theme_contrast = 0.8,
 	ui_3d_preview_generated_mesh = true,
 	nearest_filter_reference = false,
+	sub_node_items = [],
 }
 
 
