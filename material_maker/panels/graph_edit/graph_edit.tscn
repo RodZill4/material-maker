@@ -92,6 +92,8 @@ script = ExtResource("3")
 [node name="LazyLink" parent="." instance=ExtResource("5_u5byk")]
 layout_mode = 1
 
+[connection signal="connection_drag_ended" from="." to="." method="_on_connection_drag_ended"]
+[connection signal="connection_drag_started" from="." to="." method="_on_connection_drag_started"]
 [connection signal="connection_from_empty" from="." to="." method="request_popup" binds= [true]]
 [connection signal="connection_request" from="." to="." method="on_connect_node"]
 [connection signal="connection_to_empty" from="." to="." method="request_popup" binds= [false]]

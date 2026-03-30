@@ -59,6 +59,11 @@ const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
 var lasso_points : PackedVector2Array
 
+var is_dragging_connection : bool = false:
+	set(v):
+		is_dragging_connection = v
+		set_process_if_necessary()
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -222,6 +227,8 @@ func _gui_input(event) -> void:
 			valid_drag_cut_entry = true
 			if event.shift_pressed:
 				add_reroute_under_mouse()
+			elif event.ctrl_pressed:
+				create_portals()
 
 			for c in get_children():
 				if ! c is GraphNode:
@@ -319,7 +326,8 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
-		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
+		if ((event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry
+				and event.relative.length() > 1.0):
 			if event.ctrl_pressed:
 				Input.set_custom_mouse_cursor(
 						drag_cut_cursor, Input.CURSOR_ARROW, CURSOR_HOT_SPOT)
@@ -1863,3 +1871,69 @@ func _on_resized() -> void:
 	$GraphUI.size = Vector2.ZERO
 	$GraphUI.position = global_position
 	$GraphUI.position += Vector2(size.x - $GraphUI.size.x, 11)
+
+func create_portals() -> void:
+	const tolerance_pixels : float = 2.0
+	var connection := get_closest_connection_at_point(
+			get_local_mouse_position(), connection_lines_thickness + tolerance_pixels)
+	if connection.is_empty():
+		return
+
+	var prev : Dictionary = generator.serialize()
+
+	var from_node : MMGraphNodeMinimal = get_node(NodePath(connection.from_node))
+	var to_node : MMGraphNodeMinimal = get_node(NodePath(connection.to_node))
+	var outpos := from_node.position_offset + from_node.get_output_port_position(connection.from_port)
+	var inpos := to_node.position_offset + to_node.get_input_port_position(connection.to_port)
+
+	outpos += Vector2(50, -12)
+	inpos += Vector2(-70, -12)
+
+	var portals : Array = await do_create_nodes(
+			{nodes=[{name="portal", type="portal", io=0, node_position={x=outpos.x, y=outpos.y}},
+					{name="portal", type="portal", io=1, node_position={x=inpos.x, y=inpos.y}}],
+					connections=[]})
+	var portal_in : MMGraphPortal = portals[0]
+	var portal_out : MMGraphPortal = portals[1]
+
+	portal_out.generator.set_parameter("link", portal_in.get_link())
+	do_disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
+	do_connect_node(connection.from_node, connection.from_port, portal_in.name, 0)
+	do_connect_node(portal_out.name, 0, connection.to_node, connection.to_port)
+
+	var next : Dictionary = generator.serialize()
+	undoredo_create_step("Connection to portal links", generator.get_hier_name(), prev, next)
+
+func set_process_if_necessary():
+	set_process(is_dragging_connection)
+
+func _process(delta : float) -> void:
+	if is_dragging_connection:
+		# Edge scrolling when dragging connection line
+		const DRAG_MARGIN : float = 80.0 # distance from edge to start scrolling
+		const MIN_OFFSET : Vector2 = 2.0 * Vector2.ONE # min scroll speed at edge
+
+		var mouse_pos := get_local_mouse_position()
+		if Rect2(Vector2.ZERO, size).grow(-DRAG_MARGIN).has_point(mouse_pos):
+			return
+
+		var dist_from_edge : Vector2 = Vector2(
+			min(mouse_pos.x, size.x - mouse_pos.x) - DRAG_MARGIN,
+			min(mouse_pos.y, size.y - mouse_pos.y) - DRAG_MARGIN)
+		var offset : Vector2 = Vector2.ZERO
+		var offset_v : Vector2 = (mouse_pos - size * 0.5).sign() * (
+				500.0 * dist_from_edge.abs() / DRAG_MARGIN + MIN_OFFSET)
+
+		if dist_from_edge.x < 0.0:
+			offset.x = offset_v.x
+
+		if dist_from_edge.y < 0.0:
+			offset.y = offset_v.y
+
+		scroll_offset += offset * delta
+
+func _on_connection_drag_started(_from_node : StringName, _from_port : int, _is_output : bool) -> void:
+	is_dragging_connection = true
+
+func _on_connection_drag_ended() -> void:
+	is_dragging_connection = false
