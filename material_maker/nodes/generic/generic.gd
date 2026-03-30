@@ -10,6 +10,7 @@ var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 var generic_button : TextureButton
 
+const SETTINGS_NODE_CLOSE_BUTTON := "node_close_button"
 
 const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic.tres")
 
@@ -433,7 +434,8 @@ func update_node() -> void:
 		remove_child(c)
 		c.free()
 	# Show or hide the close button
-	close_button.visible = generator.can_be_deleted()
+	close_button.visible = (generator.can_be_deleted()
+		if mm_globals.get_config(SETTINGS_NODE_CLOSE_BUTTON) else false)
 	# Rebuild node
 	update_title()
 	# Resize to minimum
@@ -631,8 +633,7 @@ func load_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
-	if mm_globals.config.has_section_key("path", "template"):
-		dialog.current_dir = mm_globals.config.get_value("path", "template")
+	dialog.current_dir = mm_globals.config.get_value("path", "template", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		do_load_generator(files[0])
@@ -665,8 +666,7 @@ func save_generator() -> void:
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.mmg;Material Maker Generator")
-	if mm_globals.config.has_section_key("path", "template"):
-		dialog.current_dir = mm_globals.config.get_value("path", "template")
+	dialog.current_dir = mm_globals.config.get_value("path", "template", mm_globals.get_home_directory())
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		MMGraphNodeGeneric.do_save_generator(files[0], generator)

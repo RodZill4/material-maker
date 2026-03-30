@@ -140,11 +140,11 @@ func undo_redo_register_change(action_name : String, previous_state : Dictionary
 	if new_state.hash() == previous_state.hash():
 		return
 	get_parent().undoredo_create_step(action_name, generator.get_hier_name(), previous_state, new_state)
-		
-func move_parameter(widget_name : String, offset : int) -> void:
+
+func rearrange_parameter(from : int, to : int, is_after : bool) -> void:
 	old_state = generator.serialize().duplicate(true)
-	generator.move_parameter(widget_name, offset)
-	undo_redo_register_change("Move parameter", old_state)
+	generator.rearrange_parameter(from, to, is_after)
+	undo_redo_register_change("Rearrange parameter", old_state)
 
 func remove_parameter(widget_name : String) -> void:
 	old_state = generator.serialize().duplicate(true)
@@ -269,11 +269,9 @@ func on_exit_widget(widget) -> void:
 			l.queue_free()
 		links.erase(widget)
 
-
 func modulate_row_controls(row_index: int, color: Color):
 	for i in range(grid.columns * row_index, grid.columns * row_index + grid.columns):
 		grid.get_child(i).modulate = color
-
 
 func row_get_data(_at_pos: Vector2, index: int, widget_name: String) -> Dictionary:
 	var preview_root := Control.new()
@@ -315,13 +313,13 @@ func row_get_data(_at_pos: Vector2, index: int, widget_name: String) -> Dictiona
 
 	return { "row_index": row_index, "widget_name": widget_name, "node_name": name }
 
-
 func row_can_drop(_at_pos: Vector2, data: Dictionary, index: int) -> bool:
 	return data.row_index != floor(index / grid.columns) and data.node_name == name
 
-
-func row_drop_data(_at_pos: Vector2, data: Dictionary, index: int) -> void:
-	move_parameter(data.widget_name, floor(index / grid.columns) - data.row_index)
+func row_drop_data(at_pos: Vector2, data: Dictionary, index: int) -> void:
+	var row_index := int(index / grid.columns)
+	var drop_pos_y : float = at_pos.y / grid.get_child(row_index).size.y
+	rearrange_parameter(data.row_index, row_index, drop_pos_y > 0.5)
 
 	# workaround FloatEdits' focused state when dropping rows
 	await get_tree().process_frame
@@ -331,7 +329,6 @@ func row_drop_data(_at_pos: Vector2, data: Dictionary, index: int) -> void:
 					"fill", get_theme_stylebox("fill_normal", "MM_NodeFloatEdit"))
 			float_edit.get_child(0).add_theme_stylebox_override(
 					"background", get_theme_stylebox("normal","MM_NodeFloatEdit"))
-
 
 func _notification(what: int) -> void:
 	match what:

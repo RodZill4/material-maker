@@ -27,6 +27,7 @@ code = "shader_type canvas_item;"
 shader = SubResource("Shader_786ke")
 
 [node name="GradientEdit" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 25)
 offset_right = 351.0
 offset_bottom = 42.0
 focus_mode = 2

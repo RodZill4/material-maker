@@ -10,6 +10,8 @@ var export_settings := {
 
 const RESOLUTION_CUSTOM := 8
 
+var additional_ids : Dictionary[String, String] = {"$node":"unnamed"}
+
 func _ready() -> void:
 	for val in export_settings.values():
 		val = val.replace("$SUFFIX", owner.config_var_suffix)
@@ -48,6 +50,8 @@ func _open() -> void:
 
 
 func update() -> void:
+	additional_ids["$node"] = mm_globals.get_node_title_from_gen(owner.generator)
+
 	if not is_visible_in_tree():
 		return
 
@@ -68,6 +72,8 @@ func _on_export_folder_button_pressed() -> void:
 	#file_dialog.add_filter("*.png; PNG image file")
 	#file_dialog.add_filter("*.exr; EXR image file")
 
+	file_dialog.current_dir = mm_globals.get_home_directory()
+	
 	if %ExportFolder.text:
 		file_dialog.current_dir = %ExportFolder.text
 
@@ -126,8 +132,7 @@ func _on_image_pressed() -> void:
 			file_dialog.add_filter("*.png; PNG image file")
 			file_dialog.add_filter("*.exr; EXR image file")
 
-		if mm_globals.config.has_section_key("path", "save_preview"):
-			file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview")
+		file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview", mm_globals.get_home_directory())
 
 		var files = await file_dialog.select_files()
 
@@ -167,10 +172,8 @@ func interpret_file_name(file_name: String, path:="") -> String:
 	if path.is_empty():
 		path = %ExportFolder.text
 
-	var additional_ids := {"$node":"unnamed"}
-
-	if owner.generator:
-		additional_ids["$node"] = owner.generator.name
+	if not owner.generator:
+		additional_ids["$name"] = "unnamed"
 
 	var extension := ""
 	match %FileType.selected:
@@ -182,8 +185,10 @@ func interpret_file_name(file_name: String, path:="") -> String:
 		resolution = "%sx%s" % [ int(%CustomResolutionX.value), int(%CustomResolutionY.value) ]
 	else:
 		resolution = str(64 << %Resolution.selected)
-
-	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids, resolution)
+	
+	var graph_node : MMGenBase = get_node("/root/MainWindow").get_current_graph_edit().generator
+	
+	return MMLoader.interpret_file_name(file_name, path, extension, graph_node, additional_ids, resolution)
 
 
 func _on_custom_resolution_x_value_changed(value: Variant) -> void:

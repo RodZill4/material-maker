@@ -20,7 +20,8 @@ func _ready():
 
 func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 	if event is InputEventMouseMotion:
-		if event.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0:
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE != 0
+			or (event.alt_pressed and (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0)):
 			if event.shift_pressed:
 				var factor = 0.0025*camera_position.position.z
 				camera_target_position.translate(-factor*event.relative.x*camera_position.global_transform.basis.x)

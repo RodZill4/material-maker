@@ -46,7 +46,7 @@ func set_size(w : int, h : int, b : int) -> void:
 	var old : MMPixels = duplicate()
 	size.x = w
 	size.y = h
-	bpp = b
+	bpp = maxi(b, 1)
 	update_data()
 	for x in range(w):
 		for y in range(h):

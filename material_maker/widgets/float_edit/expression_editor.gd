@@ -31,14 +31,30 @@ func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Ar
 	editor.set_caret_column(editor.text.length())
 	editor.grab_focus()
 
-func _on_Apply_pressed():
-	var value = editor.text.replace("\n", "").strip_edges()
+func check_self_reference_apply() -> bool:
+	var value : String = editor.text.replace("\n", "").strip_edges()
+	var self_reference := RegEx.new()
+	self_reference.compile("\\$\\b%s\\b" % object.name)
+	# warns if result expression causes variable to reference itself
+	if self_reference.search(value):
+		var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+		var error_text := tr("Expression creates a loop. Remove $%s then try again." % object.name)
+		dialog.dialog_text = TranslationServer.translate(error_text)
+		add_child(dialog)
+		await dialog.ask()
+		return false 
 	var parameters : Array = [ value ]
 	parameters.append_array(extra_parameters)
 	object.callv(method, parameters)
+	return true
+
+func _on_Apply_pressed():
+	if not await check_self_reference_apply():
+		return
 
 func _on_OK_pressed():
-	_on_Apply_pressed()
+	if not await check_self_reference_apply():
+		return
 	queue_free()
 
 func _on_Cancel_pressed():

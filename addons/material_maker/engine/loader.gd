@@ -1,4 +1,5 @@
 @tool
+class_name MMLoader
 extends Node
 
 var predefined_generators : Dictionary = {}
@@ -157,6 +158,33 @@ static func string_to_dict_tree(string_data : String) -> Dictionary:
 static func dict_tree_to_string(data : Dictionary) -> String:
 	return JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true)
 
+static func interpret_file_name(file_name : String, path : String = "", file_extension : String = "", node : MMGenBase = null, additional_identifiers : Dictionary[String, String] = {}, resolution : String = "") -> String:
+	for i in additional_identifiers:
+		file_name = file_name.replace(i, additional_identifiers[i])
+
+	if node and node.has_meta("file_path"):
+		var save_path : String = node.get_meta("file_path")
+		file_name = file_name.replace("$project", save_path.get_file().trim_suffix("."+save_path.get_extension()))
+	else:
+		file_name = file_name.replace("$project", "unnamed_project")
+
+	if file_extension != "" and not file_name.ends_with(file_extension):
+		file_name += file_extension
+
+	if resolution:
+		file_name = file_name.replace("$resolution", resolution)
+
+	if "$idx" in file_name:
+		if path:
+			var idx := 1
+			while FileAccess.file_exists(path.path_join(file_name).replace("$idx", str(idx).pad_zeros(2))):
+				idx += 1
+			file_name = file_name.replace("$idx", str(idx).pad_zeros(2))
+		else:
+			file_name = file_name.replace("$idx", str(1).pad_zeros(2))
+
+	return file_name
+
 func load_gen(filename: String) -> MMGenBase:
 	var file : FileAccess = FileAccess.open(filename, FileAccess.READ)
 	if file != null:
@@ -164,6 +192,8 @@ func load_gen(filename: String) -> MMGenBase:
 		if data != null:
 			current_project_path = filename.get_base_dir()
 			var generator = await create_gen(data)
+			if generator:
+				generator.set_meta("file_path", filename)
 			current_project_path = ""
 			return generator
 	return null
@@ -171,6 +201,7 @@ func load_gen(filename: String) -> MMGenBase:
 func save_gen(filename : String, generator : MMGenBase) -> void:
 	var file : FileAccess = FileAccess.open(filename, FileAccess.WRITE)
 	if file != null:
+		generator.set_meta("file_path", filename)
 		var data = generator.serialize()
 		data.name = filename.get_file().get_basename()
 		data.node_position = { x=0, y=0 }
@@ -246,6 +277,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 		debug = MMGenDebug,
 		reroute = MMGenReroute,
 		comment_line = MMGenCommentLine,
+		portal = MMGenPortal,
 	}
 	var generator = null
 	for g in guess:
