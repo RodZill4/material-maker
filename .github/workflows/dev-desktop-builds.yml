@@ -111,7 +111,7 @@ jobs:
   export-mac:
     name: Mac Export 🍎
     needs: export_windows_linux
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -171,8 +171,6 @@ jobs:
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
           chmod +x "./build/mac/Material Maker.app/Contents/MacOS/Material Maker"
           rm ./build/mac/material_maker.zip
-      - name: Fix application icon 🖼
-        run: sips -s format icns "./build/mac/Material Maker.app/Contents/Resources/icon.icns" --out "./build/mac/Material Maker.app/Contents/Resources/icon.icns"
       - name: Get documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
         uses: actions/download-artifact@v4
