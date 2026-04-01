@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cceel6sqaceu6"]
+[gd_scene format=3 uid="uid://cceel6sqaceu6"]
 
 [ext_resource type="Script" uid="uid://dedxcy7anysql" path="res://material_maker/widgets/pixels_edit/pixels_view.gd" id="1_2fiic"]
 
-[node name="PixelsView" type="Control"]
+[node name="PixelsView" type="Control" unique_id=524482883]
 clip_contents = true
 layout_mode = 3
 anchors_preset = 0
@@ -11,4 +11,4 @@ offset_bottom = 64.0
 mouse_filter = 2
 script = ExtResource("1_2fiic")
 
-[connection signal="resized" from="." to="." method="_on_resized"]
+[connection signal="resized" from="." to="." method="_on_resize"]
