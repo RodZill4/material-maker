@@ -69,7 +69,7 @@ func _on_LatticeEditor_gui_input(event : InputEvent):
 	unhandled_event.emit(event)
 
 func _on_resize() -> void:
-	super._on_resized()
+	super._on_resize()
 	update_controls()
 
 
