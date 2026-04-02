@@ -19,9 +19,9 @@ on:
         default: "true"
 
 env:
-  GODOT_VERSION: 4.6.1
+  GODOT_VERSION: 4.6.2
   GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.6.1-stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.6.2-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_6
 
