@@ -162,9 +162,9 @@ func set_color(c):
 	$Popup.hide()
 	if c == generator.color:
 		return
-	var undo_action = { type="comment_color_change", node=generator.get_hier_name(), color=generator.color }
-	var redo_action = { type="comment_color_change", node=generator.get_hier_name(), color=c }
-	get_parent().undoredo.add("Change comment color", [undo_action], [redo_action], true)
+	var _undo_action = { type="node_color_change", node=generator.get_hier_name(), color=generator.color }
+	var _redo_action = { type="node_color_change", node=generator.get_hier_name(), color=c }
+	get_parent().undoredo.add("Change comment color", [_undo_action], [_redo_action], false)
 	generator.color = c
 	update_stylebox()
 	get_parent().send_changed_signal()

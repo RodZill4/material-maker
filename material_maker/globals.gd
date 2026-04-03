@@ -22,6 +22,8 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_3d_preview_tonemap_enabled = false,
 	ui_3d_preview_tonemap = 0,
 	ui_3d_preview_tonemap_white = 1.0,
+	ui_3d_preview_tonemap_agx_white = 16.29,
+	ui_3d_preview_tonemap_agx_contrast = 1.25,
 	ui_3d_preview_tonemap_exposure = 1.0,
 	ui_3d_preview_glow_enabled = false,
 	ui_3d_preview_glow_bloom = 0.0,
@@ -56,6 +58,8 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 	dialog_dim_background = true,
+	node_minimize_button = false,
+	node_close_button = false,
 }
 
 

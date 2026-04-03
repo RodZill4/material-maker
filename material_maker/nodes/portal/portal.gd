@@ -30,13 +30,12 @@ func _draw() -> void:
 
 	# label
 	var label_pos := size * 0.5
-	var label_color := Color.WHITE
-	if "light" in mm_globals.main_window.theme.resource_path:
-		label_color = Color.BLACK
+	var label_color : Color = generator.color
 
 	var label_size = LABEL_FONT.get_string_size(get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
 	var label_draw_pos := label_pos - Vector2(label_size.x * 0.5, label_y_offset)
 	if not is_editing:
+		draw_string_outline(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
 		draw_string(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
 
 	# label dragger
@@ -89,7 +88,10 @@ func _input(event : InputEvent) -> void:
 		if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
 			mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB/F2/Enter: Rename link"), 1.0, 2)
 		elif %Dragger.get_rect().has_point(get_local_mouse_position()):
-			mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB: Rename link"), 1.0, 2)
+			if is_editing:
+				mm_globals.set_tip_text(tr("Enter: Rename link, Ctrl/Cmd+Enter: Batch rename links"), 1.0, 2)
+			else:
+				mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB: Rename link"), 1.0, 2)
 
 func _on_dragger_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -187,7 +189,7 @@ static func graph_node_center(n : GraphNode, g : MMGraphEdit) -> Vector2:
 	return (n.position_offset + n.size * 0.5) * g.zoom - g.scroll_offset
 
 ## Returns first input portal node with matching [param link] name.
-static func get_link_source(link: String, g: MMGraphEdit) -> MMGraphPortal:
+static func get_link_source(link : String, g : MMGraphEdit) -> MMGraphPortal:
 	for n in g.get_children():
 		if n is MMGraphPortal and n.is_portal_in() and n.get_link() == link:
 			return n
@@ -227,7 +229,32 @@ func set_link_from_selection() -> void:
 		if source_portal.is_portal_in():
 			generator.set_parameter("link", source_portal.get_link())
 
+func set_color(c : Color) -> void:
+	if c == generator.color:
+		return
+	var _undo_action = { type="node_color_change", node=generator.get_hier_name(), color=generator.color }
+	var _redo_action = { type="node_color_change", node=generator.get_hier_name(), color=c }
+	get_parent().undoredo.add("Change portal color", [_undo_action], [_redo_action], false)
+	generator.color = c
+	queue_redraw()
+	get_parent().send_changed_signal()
+
 #region portal link edit
+
+## Replaces all links from [param from_link] to [param new_link].
+## If an input link collision is found, only outputs will be updated.
+func replace_links(new_link : String, from_link : String) -> void:
+	var g : MMGraphEdit = get_parent()
+	if g == null:
+		return
+	var existing_input := get_link_source(new_link, g) != null
+	for p in g.get_children():
+		if p is MMGraphPortal and p != self and p.get_link() == from_link:
+			p.add_link_undoredo(p.get_link(), new_link)
+			if p.is_portal_in() and existing_input:
+				continue
+			else:
+				p.on_parameter_changed("link", new_link)
 
 func edit_box_set_position(edit : LineEdit) -> void:
 	const y_offset : int = 61
@@ -265,9 +292,13 @@ func setup_portal_edit() -> void:
 				return
 			var new_link := new_text.strip_edges()
 			if not new_link.is_empty():
-				if is_link_unique(new_text.strip_edges()):
+				if is_link_unique(new_link):
+					graph.undoredo.start_group()
 					on_parameter_changed("link", new_link)
 					add_link_undoredo(old_link, new_link)
+					if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
+						replace_links(new_link, old_link)
+					graph.undoredo.end_group()
 				else:
 					on_parameter_changed("link", old_link)
 			is_editing = false

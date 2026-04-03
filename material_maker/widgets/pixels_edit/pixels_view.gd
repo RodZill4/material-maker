@@ -19,8 +19,8 @@ func _init(v : MMPixels = null) -> void:
 func _ready() -> void:
 	if pixels == null:
 		pixels = MMPixels.new()
-	connect("resized", Callable(self, "_on_resize"))
-	_on_resize()
+	resized.connect(_on_resized)
+	_on_resized.call_deferred()
 
 func set_view_rect(do : Vector2, ds : Vector2):
 	draw_size = ds
@@ -48,7 +48,10 @@ func _draw():
 			color.a *= alpha
 			draw_rect(Rect2(draw_offset+draw_size*Vector2(x, y)/Vector2(pixels.size), pixel_size), color, true)
 
-func _on_resize() -> void:
+func _on_resized() -> void:
 	if auto_rescale:
 		var ds : float = min(size.x, size.y)
 		set_view_rect(0.5*(size-draw_size), Vector2(ds, ds))
+
+func _on_resize() -> void:
+	_on_resized()
