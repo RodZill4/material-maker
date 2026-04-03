@@ -358,6 +358,7 @@ void do_paint_111a(vec4 paint_value, float brush_value, vec4 old_stroke_value, v
 
 void main() {
 	const float _seed_variation_ = 0.0;
+	const vec4 _controlled_variation_ = vec4(0.0);
 	ivec2 pixel = ivec2(gl_GlobalInvocationID.xy)+ivec2(0, mm_chunk_y);
 	ivec2 image_size = imageSize(GENERATED_IMAGE);
 	vec2 UV = vec2(pixel)/image_size;
