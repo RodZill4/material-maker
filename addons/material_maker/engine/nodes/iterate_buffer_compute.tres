@@ -27,6 +27,7 @@ const float seed_variation = 0.0;
 
 void main() {
 	float _seed_variation_ = seed_variation;
+	vec4 _controlled_variation_ = vec4(0.0);
 	vec2 pixel = gl_GlobalInvocationID.xy+vec2(0.5, 0.5+mm_chunk_y);
 	vec2 image_size = imageSize(OUTPUT_TEXTURE);
 	vec2 uv = pixel/image_size;
