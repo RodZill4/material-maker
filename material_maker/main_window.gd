@@ -1197,7 +1197,7 @@ func bug_report() -> void:
 
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
-	add_child(about_box)
+	add_dialog(about_box)
 	about_box.hide()
 	about_box.popup_centered()
 
@@ -1439,6 +1439,10 @@ func add_dialog(dialog : Window):
 	if mm_globals.get_config("dialog_dim_background"):
 		add_child(background)
 		dialog.tree_exited.connect(background.queue_free)
+		dialog.tree_exited.connect(func():
+			var tween := get_tree().create_tween()
+			tween.tween_property(background, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_CUBIC)
+			tween.tween_callback(background.queue_free))
 	add_child(dialog)
 
 # Accept dialog
