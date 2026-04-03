@@ -546,7 +546,8 @@ func update_tab_title() -> void:
 	var title = "[unnamed]"
 	if not save_path.is_empty():
 		title = save_path.right(-(save_path.rfind("/")+1))
-		generator.set_meta("file_path", title)
+		if generator:
+			generator.set_meta("file_path", title)
 	if need_save:
 		title += " *"
 	if get_parent().has_method("set_tab_title"):
