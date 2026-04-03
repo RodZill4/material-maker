@@ -267,3 +267,11 @@ func _on_paste_image_button_pressed() -> void:
 
 func _on_check_clipboard_image_timeout() -> void:
 	$%PasteImageButton.disabled = not DisplayServer.clipboard_has_image()
+
+
+func _on_reset_view_button_pressed() -> void:
+	if not opened_images.is_empty():
+		opened_images[current_image_index].center = Vector2(0.5, 0.47)
+		%Image.material.set_shader_parameter("center", Vector2(0.5, 0.47))
+		opened_images[current_image_index].scale = 1.1
+		%Image.material.set_shader_parameter("scale", 1.1)
