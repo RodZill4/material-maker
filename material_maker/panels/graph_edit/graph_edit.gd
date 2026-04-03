@@ -225,10 +225,10 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			valid_drag_cut_entry = true
-			if event.shift_pressed:
-				add_reroute_under_mouse()
-			elif event.ctrl_pressed:
+			if event.is_command_or_control_pressed() and event.shift_pressed:
 				create_portals()
+			elif event.shift_pressed:
+				add_reroute_under_mouse()
 
 			for c in get_children():
 				if ! c is GraphNode:
