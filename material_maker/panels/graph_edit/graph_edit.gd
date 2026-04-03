@@ -293,7 +293,7 @@ func _gui_input(event) -> void:
 					scroll_offset.y += 0.5*size.y
 					accept_event()
 				KEY_F:
-					color_comment_nodes()
+					colorize_nodes()
 				KEY_G:
 					if not get_selected_nodes().is_empty():
 						has_grab = true
@@ -1326,13 +1326,16 @@ func undoredo_command(command : Dictionary) -> void:
 				if has_node("node_"+g.name):
 					var node = get_node("node_"+g.name)
 					node.update_node()
-		"comment_color_change":
+		"node_color_change":
 			var g = get_node_from_hier_name(command.node)
 			g.color = command.color
 			if g.get_parent() == generator:
 				if has_node("node_"+g.name):
 					var node = get_node("node_"+g.name)
-					node.update_node()
+					if node is MMGraphComment:
+						node.update_node()
+					elif node is MMGraphPortal:
+						node.queue_redraw()
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
@@ -1827,33 +1830,43 @@ func _get_connection_line(from : Vector2, to : Vector2) -> PackedVector2Array:
 		_:
 			return points
 
-func color_comment_nodes() -> void:
-	var comments := get_children().filter(
-			func(n): return (n is MMGraphComment and n.selected))
-	if not comments.is_empty():
-		undoredo.start_group()
-		var picker : PopupPanel = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
-		picker.hide()
-		add_child(picker)
-		var color_picker : ColorPicker = picker.get_node("ColorPicker")
-		for node in comments:
-			color_picker.color_changed.connect(node.set_color)
-			color_picker.color = node.generator.color
-		var csf = get_window().content_scale_factor
-		picker.about_to_popup.connect(func():
-			if mm_globals.has_config("color_picker_color_mode"):
-				color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
-			if mm_globals.has_config("color_picker_shape"):
-				color_picker.picker_shape = mm_globals.get_config("color_picker_shape"))
-		picker.popup_hide.connect(func():
-			mm_globals.set_config("color_picker_color_mode", color_picker.color_mode)
-			mm_globals.set_config("color_picker_shape", color_picker.picker_shape))
-		picker.content_scale_factor = csf
-		picker.min_size = picker.get_contents_minimum_size() * csf
-		picker.position = get_screen_position() + get_local_mouse_position() * csf
-		picker.popup_hide.connect(picker.queue_free)
-		picker.popup_hide.connect(undoredo.end_group)
-		picker.popup()
+func colorize_nodes() -> void:
+	var nodes : Array[GraphElement]
+	for n in get_children():
+		if (n is MMGraphPortal or n is MMGraphComment) and n.selected:
+			nodes.push_back(n)
+	if nodes.is_empty():
+		return
+	undoredo.start_group()
+
+	var picker = ColorPicker.new()
+	var popup : PopupPanel = PopupPanel.new()
+	popup.add_child(picker)
+	popup.hide()
+	add_child(popup)
+	picker.edit_alpha = false
+	picker.edit_intensity = false
+
+	var csf = get_window().content_scale_factor
+	popup.about_to_popup.connect(func() -> void:
+		if mm_globals.has_config("color_picker_color_mode"):
+			picker.color_mode = mm_globals.get_config("color_picker_color_mode")
+		if mm_globals.has_config("color_picker_shape"):
+			picker.picker_shape = mm_globals.get_config("color_picker_shape"))
+	popup.popup_hide.connect(func() -> void:
+		mm_globals.set_config("color_picker_color_mode", picker.color_mode)
+		mm_globals.set_config("color_picker_shape", picker.picker_shape))
+
+	popup.content_scale_factor = csf
+	popup.min_size = popup.get_contents_minimum_size() * csf
+	popup.position = get_screen_position() + get_local_mouse_position() * csf
+
+	picker.color = nodes[0].generator.color
+	for node in nodes:
+		picker.color_changed.connect(node.set_color)
+	popup.popup_hide.connect(undoredo.end_group)
+	popup.popup_hide.connect(popup.queue_free)
+	popup.popup()
 
 func _on_resized() -> void:
 	$GraphUI.size = Vector2.ZERO

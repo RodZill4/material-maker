@@ -30,13 +30,12 @@ func _draw() -> void:
 
 	# label
 	var label_pos := size * 0.5
-	var label_color := Color.WHITE
-	if "light" in mm_globals.main_window.theme.resource_path:
-		label_color = Color.BLACK
+	var label_color : Color = generator.color
 
 	var label_size = LABEL_FONT.get_string_size(get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
 	var label_draw_pos := label_pos - Vector2(label_size.x * 0.5, label_y_offset)
 	if not is_editing:
+		draw_string_outline(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
 		draw_string(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
 
 	# label dragger
@@ -229,6 +228,16 @@ func set_link_from_selection() -> void:
 		var source_portal : MMGraphPortal = selected_nodes[0]
 		if source_portal.is_portal_in():
 			generator.set_parameter("link", source_portal.get_link())
+
+func set_color(c : Color) -> void:
+	if c == generator.color:
+		return
+	var _undo_action = { type="node_color_change", node=generator.get_hier_name(), color=generator.color }
+	var _redo_action = { type="node_color_change", node=generator.get_hier_name(), color=c }
+	get_parent().undoredo.add("Change portal color", [_undo_action], [_redo_action], false)
+	generator.color = c
+	queue_redraw()
+	get_parent().send_changed_signal()
 
 #region portal link edit
 
