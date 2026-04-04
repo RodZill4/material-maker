@@ -34,7 +34,7 @@ func _on_zoom_reset_pressed() -> void:
 
 
 func update_zoom() -> void:
-	zoom_level = clamp(zoom_level, 0.25, 2)
+	zoom_level = clamp(zoom_level, MMGraphEdit.ZOOM_MIN, MMGraphEdit.ZOOM_MAX)
 	%ZoomLabel.text = str(zoom_level*100).pad_decimals(0)+"%"
 	var graph_edit : GraphEdit = mm_globals.main_window.get_current_graph_edit()
 	if graph_edit:
