@@ -42,3 +42,7 @@ func _on_ready() -> void:
 	for context_menu in context_menus:
 		context_menu.about_to_popup.connect(
 				_context_menu_about_to_popup.bind(context_menu))
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()

@@ -41,3 +41,7 @@ func _on_MarginContainer_minimum_size_changed():
 
 func _on_RegisterButton_pressed():
 	OS.shell_open(MMPaths.WEBSITE_ADDRESS+"/register")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()

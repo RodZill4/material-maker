@@ -107,3 +107,7 @@ func generate_godot_spatial() -> String:
 	code = code.replace("uniform", "const")
 	code = code.replace("const sampler2D", "uniform sampler2D")
 	return code
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
