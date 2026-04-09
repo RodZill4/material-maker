@@ -752,12 +752,11 @@ func load_file(filename) -> bool:
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
 		add_child(dialog)
-		var content_scale_factor = (mm_globals.main_window
-				.get_window().content_scale_factor)
+		var content_scale_factor = mm_globals.ui_scale_factor()
 		dialog.content_scale_factor = content_scale_factor
+		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
-		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false
@@ -1857,8 +1856,11 @@ func colorize_nodes() -> void:
 		mm_globals.set_config("color_picker_color_mode", picker.color_mode)
 		mm_globals.set_config("color_picker_shape", picker.picker_shape))
 
-	popup.content_scale_factor = csf
-	popup.min_size = popup.get_contents_minimum_size() * csf
+	if get_tree().root.gui_embed_subwindows:
+		csf = 1.0
+	else:
+		popup.content_scale_factor = csf
+		popup.min_size = popup.get_contents_minimum_size() * csf
 	popup.position = get_screen_position() + get_local_mouse_position() * csf
 
 	picker.color = nodes[0].generator.color

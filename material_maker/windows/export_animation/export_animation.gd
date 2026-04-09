@@ -27,7 +27,7 @@ const BUFFER_NAMES = [ "export_animation_buffer_begin", "export_animation_buffer
 
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = $VBox.get_combined_minimum_size() * content_scale_factor
 	for i in range(BUFFER_NAMES.size()):
 		mm_deps.create_buffer(BUFFER_NAMES[i], self)

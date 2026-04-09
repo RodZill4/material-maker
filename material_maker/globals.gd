@@ -60,6 +60,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	dialog_dim_background = true,
 	node_minimize_button = false,
 	node_close_button = false,
+	ui_single_window_mode = false,
 }
 
 
@@ -180,8 +181,7 @@ func popup_menu(menu : PopupMenu, parent : Control):
 	var zoom_fac = 1.0
 	if parent is GraphNode:
 		zoom_fac *= mm_globals.main_window.get_current_graph_edit().zoom
-	
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor = mm_globals.ui_scale_factor()
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
 
 func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
@@ -228,3 +228,8 @@ func get_node_title_from_gen(generator : MMGenBase) -> String:
 				var gnode : GraphNode = graph.get_node(node_path)
 				return gnode.title.to_snake_case()
 	return "unnamed"
+
+func ui_scale_factor() -> float:
+	if get_tree().root.gui_embed_subwindows:
+		return 1.0
+	return get_tree().root.content_scale_factor
