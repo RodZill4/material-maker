@@ -196,7 +196,7 @@ jobs:
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         run: |
-          brew update && brew install imagemagick
+          brew update && brew install imagemagick@6
           cp ./.github/workflows/create-dmg-bg.sh .
           chmod +x create-dmg-bg.sh
           ./create-dmg-bg.sh ./splash_screen/backgrounds/pavel_oliva_vintage_luggage.png ./bg.png
