@@ -3,11 +3,11 @@
 
 <svg
    width="128"
-   height="224"
-   viewBox="0 0 128 224"
+   height="240"
+   viewBox="0 0 128 240"
    version="1.1"
    id="svg1"
-   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    sodipodi:docname="default_theme_icons.svg"
    inkscape:export-filename="new_theme_icons.png"
    inkscape:export-xdpi="96"
@@ -28,15 +28,25 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="true"
+<<<<<<< HEAD
      inkscape:zoom="32"
      inkscape:cx="53.625"
      inkscape:cy="214.0625"
+=======
+     inkscape:zoom="8"
+     inkscape:cx="36.6875"
+     inkscape:cy="213.8125"
+>>>>>>> master
      inkscape:window-width="1152"
      inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="38"
      inkscape:window-maximized="0"
+<<<<<<< HEAD
      inkscape:current-layer="g34"
+=======
+     inkscape:current-layer="g46"
+>>>>>>> master
      showguides="false">
     <inkscape:grid
        id="grid2"
@@ -74,7 +84,7 @@
        x="0"
        y="0"
        width="128"
-       height="224"
+       height="240"
        id="page2"
        margin="0"
        bleed="0" />
@@ -2714,6 +2724,34 @@
   </defs>
   <g
      inkscape:groupmode="layer"
+     id="g46"
+     inkscape:label="fifthteen_row"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       id="shape5"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="1.97102"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="m 13.962516,238.01292 c -0.462776,-5.09051 -0.925549,-12.03213 -6.0160624,-12.03213 -5.0905138,0 -5.5578784,6.89273 -6.0160617,12.03213"
+       sodipodi:nodetypes="ccc"
+       inkscape:label="bounce"
+       style="display:inline;stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       id="shape6"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="2.03553"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="m 17.836663,238.07516 2.571223,-9.97576 9.642069,-2.23754"
+       inkscape:label="bevel"
+       style="stroke-linecap:round;stroke-linejoin:round" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
      id="g44"
      inkscape:label="fourteenth_row"
      style="display:inline">
@@ -2805,6 +2843,7 @@
          inkscape:label="nodetop"
          transform="translate(16.507087)" />
     </g>
+<<<<<<< HEAD
     <g
        id="g34"
        inkscape:label="bookmark"
@@ -2816,6 +2855,58 @@
          sodipodi:nodetypes="cccccc"
          transform="translate(-31.004724)" />
     </g>
+=======
+    <path
+       id="shape1"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="1.99409"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="m 66.219121,221.90426 c -0.117502,-7.28522 3.730702,-11.19217 11.544621,-11.72092"
+       inkscape:label="easeout"
+       style="stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       id="shape0"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="2.04101"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="M 50.046637,221.86313 61.953363,210.13687"
+       inkscape:label="linear"
+       style="display:inline;stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       id="shape2"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="2.03965"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="m 81.93951,221.75465 c 2.884496,-0.0901 6.039412,-2.79435 6.129554,-5.40843 0.09016,-2.61409 2.073228,-6.03938 5.949229,-6.12954"
+       inkscape:label="easeinout"
+       style="stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       id="shape3"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="1.91996"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="m 98.563559,221.69867 c 5.006281,-0.0851 10.606511,-4.24259 10.691371,-11.45502"
+       inkscape:label="easein"
+       style="stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       id="shape4"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="1.98138"
+       stroke-linecap="square"
+       stroke-linejoin="bevel"
+       d="m 114.21698,221.99471 5.77919,-11.99628 5.77929,11.99628"
+       inkscape:label="sawtooth"
+       style="stroke-linecap:round;stroke-linejoin:round" />
+>>>>>>> master
   </g>
   <g
      inkscape:groupmode="layer"

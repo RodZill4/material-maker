@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=174 format=3 uid="uid://b628lwfk6ig2c"]
+[gd_resource type="Theme" format=3 uid="uid://b628lwfk6ig2c"]
 
 [ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_5tfb1"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_s43fy"]
@@ -340,6 +340,41 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kkfue"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(16, 224, 16, 16)
+metadata/recolor = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skutf"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 224, 16, 16)
+metadata/recolor = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqdx4"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(96, 208, 16, 16)
+metadata/recolor = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1okio"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(80, 208, 16, 16)
+metadata/recolor = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a1e3v"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(64, 208, 16, 16)
+metadata/recolor = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xpdb"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(48, 208, 16, 16)
+metadata/recolor = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5aawx"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(112, 208, 16, 16)
+metadata/recolor = true
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dyhk7"]
 content_margin_left = 10.0
 content_margin_top = 2.0
@@ -390,7 +425,6 @@ metadata/scale = 1.0
 [sub_resource type="AtlasTexture" id="AtlasTexture_hht3q"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 128, 16, 16)
-metadata/scale = 1.0
 metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_86qok"]
@@ -1274,6 +1308,13 @@ MM_AddNodePanelList/styles/panel = SubResource("StyleBoxFlat_agwde")
 MM_CommentNode/icons/resizer = SubResource("AtlasTexture_08mel")
 MM_CommentNode/styles/default = SubResource("StyleBoxFlat_asgc8")
 MM_CommentNode/styles/selected = SubResource("StyleBoxFlat_en6gw")
+MM_CurveIcons/icons/bevel = SubResource("AtlasTexture_kkfue")
+MM_CurveIcons/icons/bounce = SubResource("AtlasTexture_skutf")
+MM_CurveIcons/icons/easein = SubResource("AtlasTexture_tqdx4")
+MM_CurveIcons/icons/easeinout = SubResource("AtlasTexture_1okio")
+MM_CurveIcons/icons/easeout = SubResource("AtlasTexture_a1e3v")
+MM_CurveIcons/icons/linear = SubResource("AtlasTexture_8xpdb")
+MM_CurveIcons/icons/sawtooth = SubResource("AtlasTexture_5aawx")
 MM_FilterLineEdit/base_type = &"LineEdit"
 MM_FilterLineEdit/styles/focus = SubResource("StyleBoxFlat_dyhk7")
 MM_FilterLineEdit/styles/normal = SubResource("StyleBoxFlat_mv8c7")

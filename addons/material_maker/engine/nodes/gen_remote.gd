@@ -256,11 +256,10 @@ func link_parameter(widget_name : String, generator : MMGenBase, param : String)
 		match widget.type:
 			"linked_control":
 				parameters[widget_name] = generator.parameters[param]
-				# use linked floatedit value(instead of default) when linked
+				# use linked value (instead of widget defaults)
 				var param_def : Dictionary = generator.get_parameter_def(param)
 				if name == "gen_parameters" and param_def.has("type"):
-					if param_def.type == "float":
-						set_parameter(widget_name, parameters[widget_name])
+					set_parameter(widget_name, parameters[widget_name])
 			"config_control":
 				parameters[widget_name] = 0
 	emit_signal("parameter_changed", "__update_all__", null)

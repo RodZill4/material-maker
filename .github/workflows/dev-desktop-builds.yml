@@ -19,9 +19,9 @@ on:
         default: "true"
 
 env:
-  GODOT_VERSION: 4.5.1
+  GODOT_VERSION: 4.6.2
   GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.5.1-stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.6.2-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_6
 
@@ -94,24 +94,24 @@ jobs:
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Upload Documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: documentation
           path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
       - name: Upload Linux Artifact 🚀
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux.tar.gz
   export-mac:
     name: Mac Export 🍎
     needs: export_windows_linux
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v1
@@ -171,11 +171,9 @@ jobs:
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
           chmod +x "./build/mac/Material Maker.app/Contents/MacOS/Material Maker"
           rm ./build/mac/material_maker.zip
-      - name: Fix application icon 🖼
-        run: sips -s format icns "./build/mac/Material Maker.app/Contents/Resources/icon.icns" --out "./build/mac/Material Maker.app/Contents/Resources/icon.icns"
       - name: Get documentation 🚀
         if: ${{ github.event.inputs.gen_doc == 'true' }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: documentation
           path: doc
@@ -198,7 +196,7 @@ jobs:
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         run: |
-          brew update && brew install imagemagick
+          brew update && brew install imagemagick@6
           cp ./.github/workflows/create-dmg-bg.sh .
           chmod +x create-dmg-bg.sh
           ./create-dmg-bg.sh ./splash_screen/backgrounds/pavel_oliva_vintage_luggage.png ./bg.png
@@ -216,7 +214,7 @@ jobs:
           xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
           xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos_snapshot
           path: ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg

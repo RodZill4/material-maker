@@ -72,6 +72,7 @@ func generate_shader(src_code : MMGenBase.ShaderCode) -> String:
 	shader_code += "\nuniform float variation = 0.0;\n"
 	shader_code += "\nvoid fragment() {\n"
 	shader_code += "float _seed_variation_ = variation;\n"
+	shader_code += "vec4 _controlled_variation_ = vec4(0.0);\n"
 	shader_code += "vec2 uv = mm_chunk_offset+mm_chunk_size*UV;\n"
 	if src_code.code != "":
 		shader_code += src_code.code

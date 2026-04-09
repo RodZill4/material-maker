@@ -162,9 +162,9 @@ func set_color(c):
 	$Popup.hide()
 	if c == generator.color:
 		return
-	var undo_action = { type="comment_color_change", node=generator.get_hier_name(), color=generator.color }
-	var redo_action = { type="comment_color_change", node=generator.get_hier_name(), color=c }
-	get_parent().undoredo.add("Change comment color", [undo_action], [redo_action], true)
+	var _undo_action = { type="node_color_change", node=generator.get_hier_name(), color=generator.color }
+	var _redo_action = { type="node_color_change", node=generator.get_hier_name(), color=c }
+	get_parent().undoredo.add("Change comment color", [_undo_action], [_redo_action], false)
 	generator.color = c
 	update_stylebox()
 	get_parent().send_changed_signal()
@@ -245,3 +245,13 @@ func _on_title_edit_ready() -> void:
 func _on_text_ready() -> void:
 	%Text.get_menu().about_to_popup.connect(
 			_context_menu_about_to_popup.bind(%Text.get_menu()))
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			if "classic" in mm_globals.main_window.theme.resource_path:
+				%Text.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+				%Text.add_theme_stylebox_override("read_only", StyleBoxEmpty.new())
+			else:
+				%Text.remove_theme_stylebox_override("normal")
+				%Text.remove_theme_stylebox_override("read_only")
