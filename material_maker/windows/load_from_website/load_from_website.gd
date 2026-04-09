@@ -3,7 +3,6 @@ extends Window
 
 var assets : Array = []
 var displayed_assets : Array = []
-var thumbnail_update_thread : Thread = null
 var only_return_index : bool = false
 
 @onready var item_list : ItemList = $VBoxContainer/ItemList
@@ -17,12 +16,6 @@ var current_missing_thumbnail_index : int
 
 func _ready() -> void:
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
-
-func _exit_tree():
-	print("Waiting for thread to finish")
-	if thumbnail_update_thread != null:
-		thumbnail_update_thread.wait_to_finish()
-	print("Finished")
 
 func _on_ItemList_item_activated(index) -> void:
 	if only_return_index:
