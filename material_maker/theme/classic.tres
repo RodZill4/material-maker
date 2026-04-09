@@ -1,6 +1,6 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=4 format=3 uid="uid://wuddtc1fglln"]
+[gd_resource type="Theme" script_class="EnhancedTheme" format=3 uid="uid://wuddtc1fglln"]
 
-[ext_resource type="Theme" uid="uid://w487nirev8y5" path="res://material_maker/theme/classic_base.tres" id="1_meah8"]
+[ext_resource type="Theme" path="res://material_maker/theme/classic_base.tres" id="1_meah8"]
 [ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="5_qpu3p"]
 [ext_resource type="Script" uid="uid://cvv2rdxv4oql6" path="res://material_maker/theme/enhanced_theme_system/enhanced_theme.gd" id="6_7d7ll"]
 

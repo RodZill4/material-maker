@@ -228,3 +228,11 @@ func get_node_title_from_gen(generator : MMGenBase) -> String:
 				var gnode : GraphNode = graph.get_node(node_path)
 				return gnode.title.to_snake_case()
 	return "unnamed"
+
+## Whether light theme (i.e. Default Light) is currently set.
+func is_theme_light() -> bool:
+	return "light" in main_window.theme.resource_path
+
+## Whether dark theme(i.e. Default Dark or Classic) is currently set.
+func is_theme_dark() -> bool:
+	return "light" not in main_window.theme.resource_path
