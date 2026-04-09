@@ -367,8 +367,7 @@ metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8xpdb"]
 atlas = ExtResource("1_s43fy")
-region = Rect2(48, 208, 16, 16)
-metadata/recolor = true
+region = Rect2(32, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5aawx"]
 atlas = ExtResource("1_s43fy")
@@ -458,10 +457,6 @@ region = Rect2(48, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ovvp6"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(112, 176, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8xpdb"]
-atlas = ExtResource("1_s43fy")
-region = Rect2(48, 208, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cscp3"]
 atlas = ExtResource("1_s43fy")
