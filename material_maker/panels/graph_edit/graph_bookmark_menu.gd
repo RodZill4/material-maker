@@ -19,12 +19,6 @@ func _ready() -> void:
 	if not mm_globals.main_window.is_node_ready():
 		await mm_globals.main_window.ready
 
-	# Workaround for godot issue #111756 (fixed in 4.6)
-	for p in tree.get_children(true):
-		if p is Popup:
-			p.about_to_popup.connect(fix_tree_line_edit_size.bind(p))
-			break
-
 	bookmark_manager = mm_globals.main_window.bookmark_manager
 	bookmark_manager.bookmarks_added.connect(update_bookmarks)
 	bookmark_manager.updated_from_graph.connect(update_bookmarks)
@@ -39,15 +33,6 @@ func projects_panel_tab_changed() -> void:
 	if graph.top_generator == null:
 		await get_tree().process_frame
 	update_bookmarks(graph.top_generator)
-
-func fix_tree_line_edit_size(p : Popup) -> void:
-	var vbox : VBoxContainer = p.get_child(0)
-	vbox.minimum_size_changed.connect(
-		func():
-			await get_tree().process_frame
-			var contents_min_size = vbox.get_window().get_contents_minimum_size().y
-			@warning_ignore("narrowing_conversion")
-			vbox.get_window().max_size.y = contents_min_size + get_theme_constant("v_separation", "Tree"))
 
 func update_bookmarks(updated_view : MMGenGraph = null) -> void:
 	validate_bookmarks(updated_view)
