@@ -169,16 +169,24 @@ func update_list(filter_text : String = "") -> void:
 
 	%List.clear()
 	var idx := 0
+
+	# Add sub-node items
+	idx = add_sub_node_items(idx, filter_text, "Filter/Math", "math.mmg")
+	idx = add_sub_node_items(idx, filter_text, "Filter/Math/Vec3", "math_v3.mmg")
+	idx = add_sub_node_items(idx, filter_text, "Filter/Blend", "blend2.mmg")
+	idx = add_sub_node_items(idx, filter_text, "Noise/FBM", "fbm4.mmg")
+	idx = add_sub_node_items(idx, filter_text, "3D/Texture/Blend", "tex3d_blend_v.mmg")
+
 	var items: Array = library_manager.get_items(filter_text, true)
 	items.sort_custom(func(a,b): return a.idx < b.idx if a.quality == b.quality else a.quality > b.quality)
 	for i in items:
-		var obj = i.item
+		var obj : Dictionary = i.item
 		if not obj.has("type"):
 			continue
 		if qc_slot_type != -1 and ! check_quick_connect(obj):
 			continue
 		var section = obj.tree_item.get_slice("/", 0)
-		var color : Color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
+		var color : Color = library_manager.get_section_color(section)
 		color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
 		#print(i)
 		var _name = obj.display_name
@@ -191,6 +199,7 @@ func update_list(filter_text : String = "") -> void:
 		%List.set_item_tooltip_enabled(idx, false)
 
 		idx += 1
+
 
 	%List.select(0)
 	%List.ensure_current_is_visible()
@@ -231,3 +240,43 @@ func _on_list_item_activated(index: int) -> void:
 	if not data == null:
 		add_node(data.item)
 		todo_renamed_hide()
+
+#region sub node item generation
+
+const BASE_NODE_PATH : String = "res://addons/material_maker/nodes/"
+
+func add_sub_node_items(idx : int, filter_text : String,
+		tree : String, mmg : String, parameter_id : int = 0) -> int:
+
+	filter_text = filter_text.strip_edges()
+	var base_item : Dictionary = library_manager.get_item(tree)
+
+	var f : FileAccess = FileAccess.open(BASE_NODE_PATH + mmg, FileAccess.READ)
+	var target_node : Dictionary = JSON.parse_string(f.get_as_text())
+	if target_node == null:
+		return idx
+
+	var node_params : Dictionary = target_node.shader_model.parameters[parameter_id]
+	var node_ops : Array = node_params.values
+	var op_str : String = node_params.name.replace("#", "1")
+
+	var color : Color = library_manager.get_section_color(tree.get_slice("/", 0))
+	color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
+
+	for op_id in node_ops.size():
+		var op : Dictionary = node_ops[op_id]
+		if (op.name.to_lower().begins_with(filter_text)
+				and not filter_text.is_empty()) or filter_text in op.name:
+
+			var node : Dictionary = base_item.duplicate()
+			node.item.parameters[op_str] = op_id
+
+			%List.add_item(tree + "/" + op.name, node.icon)
+			%List.set_item_metadata(idx, node)
+			%List.set_item_custom_fg_color(idx, color)
+			%List.set_item_tooltip_enabled(idx, false)
+			idx += 1
+
+	return idx
+
+#endregion
