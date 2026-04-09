@@ -367,8 +367,7 @@ metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8xpdb"]
 atlas = ExtResource("1_s43fy")
-region = Rect2(48, 208, 16, 16)
-metadata/recolor = true
+region = Rect2(32, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5aawx"]
 atlas = ExtResource("1_s43fy")
@@ -1329,6 +1328,7 @@ MM_Icons/icons/arrange_nodes = SubResource("AtlasTexture_60g77")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/arrow_updown = SubResource("AtlasTexture_ovvp6")
+MM_Icons/icons/bookmark = SubResource("AtlasTexture_8xpdb")
 MM_Icons/icons/camera = SubResource("AtlasTexture_cscp3")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
 MM_Icons/icons/connection_bezier = SubResource("AtlasTexture_rqjp3")
