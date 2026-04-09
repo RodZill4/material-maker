@@ -36,7 +36,7 @@ var generator : MMGenComment:
 		update_theme()
 		update_autoshrink_button_tooltip()
 
-var palette_colors := [
+var palette_colors : Array[Color] = [
 	Color("F8B8B3"),
 	Color("F7FDAF"),
 	Color("AAF3A2"),
@@ -74,7 +74,7 @@ func setup_titlebar_controls() -> void:
 	title_edit.text_submitted.connect(_on_title_edit_focus_exited.unbind(1))
 	title_edit.focus_exited.connect(_on_title_edit_focus_exited)
 
-	var change_color_button := TextureButton.new()
+	var change_color_button : TextureButton = TextureButton.new()
 	change_color_button.texture_normal = CHANGE_COLOR_ICON
 	change_color_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	change_color_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
@@ -92,7 +92,7 @@ func setup_titlebar_controls() -> void:
 	autoshrink_button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	autoshrink_button.gui_input.connect(_on_autoshrink_gui_input)
 
-	var hbox_spacer := Control.new()
+	var hbox_spacer : Control = Control.new()
 	hbox_spacer.custom_minimum_size.x = 0.5
 	hbox_spacer.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 
@@ -113,7 +113,8 @@ func do_set_position(o : Vector2) -> void:
 func resize_to_selection() -> void:
 	var graph : MMGraphEdit = get_parent()
 	var selected_nodes : PackedStringArray 
-	selected_nodes = graph.get_selected_nodes().map(func(n): return n.name)
+	for n in graph.get_selected_nodes():
+		selected_nodes.append(n.name)
 	if selected_nodes.is_empty():
 		return
 	graph._on_graph_elements_linked_to_frame_request(selected_nodes, name)
@@ -165,12 +166,12 @@ func _on_text_focus_exited() -> void:
 func _on_change_color_pressed() -> void:
 	var light_theme : bool = mm_globals.is_theme_light()
 	accept_event()
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	var content_scale_factor : float = get_tree().root.content_scale_factor
 	$Popup.get_window().content_scale_factor = content_scale_factor
 	$Popup.get_window().size = $Popup.get_window().get_contents_minimum_size() * content_scale_factor
 	$Popup.position = get_screen_transform() * get_local_mouse_position()
 	$Popup.popup()
-	var corrected_color = palette_colors.duplicate(true)
+	var corrected_color : Array[Color] = palette_colors.duplicate(true)
 	if !light_theme:
 		for i in corrected_color.size():
 			corrected_color[i] = corrected_color[i].darkened(0.5)
@@ -209,7 +210,7 @@ func _on_ColorChooser_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
 		$Popup.hide()
-		var csf := get_tree().root.content_scale_factor
+		var csf : float = get_tree().root.content_scale_factor
 		$PopupSelector.get_window().content_scale_factor = csf
 		$PopupSelector.get_window().min_size = $PopupSelector.get_window().get_contents_minimum_size() * csf
 		$PopupSelector.get_window().position = $Popup.position
