@@ -253,7 +253,7 @@ func add_sub_node_items(idx : int, filter_text : String,
 
 	var f : FileAccess = FileAccess.open(BASE_NODE_PATH + mmg, FileAccess.READ)
 	var target_node : Dictionary = JSON.parse_string(f.get_as_text())
-	if target_node == null:
+	if target_node == null or (qc_slot_type != -1 and not check_quick_connect(base_item.item)):
 		return idx
 
 	var node_params : Dictionary = target_node.shader_model.parameters[parameter_id]
@@ -261,21 +261,35 @@ func add_sub_node_items(idx : int, filter_text : String,
 	var op_str : String = node_params.name.replace("#", "1")
 
 	var color : Color = library_manager.get_section_color(tree.get_slice("/", 0))
-	color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
+	color = color.lerp(get_theme_color("font_color", "Label"), 0.6)
 
 	for op_id in node_ops.size():
 		var op : Dictionary = node_ops[op_id]
-		if (op.name.to_lower().begins_with(filter_text)
-				and not filter_text.is_empty()) or filter_text in op.name:
 
-			var node : Dictionary = base_item.duplicate()
-			node.item.parameters[op_str] = op_id
+		var include : bool = true
+		if filter_text:
+			include = (op.name.to_lower().begins_with(filter_text)
+					or filter_text in op.name.to_lower())
 
-			%List.add_item(tree + "/" + op.name, node.icon)
-			%List.set_item_metadata(idx, node)
-			%List.set_item_custom_fg_color(idx, color)
-			%List.set_item_tooltip_enabled(idx, false)
-			idx += 1
+			if not include:
+				var has_op : bool = false
+				var has_tree : bool = false
+				for word in filter_text.split(" "):
+					if word in op.name.to_lower():
+						has_op = true
+					if word in tree.split("/")[-1].to_lower():
+						has_tree = true
+				include = has_op and has_tree
+
+			if include:
+				var node : Dictionary = base_item.duplicate()
+				node.item.parameters[op_str] = op_id
+
+				%List.add_item(tree + "/" + op.name, node.icon)
+				%List.set_item_metadata(idx, node)
+				%List.set_item_custom_fg_color(idx, color)
+				%List.set_item_tooltip_enabled(idx, false)
+				idx += 1
 
 	return idx
 
