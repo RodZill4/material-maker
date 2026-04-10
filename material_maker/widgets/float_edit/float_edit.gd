@@ -172,6 +172,8 @@ func _gui_input(event: InputEvent) -> void:
 			if actually_dragging:
 				var current_step := step
 
+				delta *= mm_globals.get_config("ui_field_sensitivity")
+
 				if event.is_command_or_control_pressed():
 					if step == 1:
 						current_step *= 5
