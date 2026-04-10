@@ -112,7 +112,8 @@ func move_active_tab_to(idx_to) -> void:
 	current_tab = idx_to
 
 func set_tab_title(index, title) -> void:
-	$TabBar.set_tab_title(index, title)
+	if $TabBar.get_tab_count():
+		$TabBar.set_tab_title(index, title)
 
 func get_current_tab_control() -> Node:
 	if current_tab >= 0 and current_tab < $TabBar.get_tab_count():

@@ -50,9 +50,9 @@ var checker_brightness: int = 1:
 		if v == checker_brightness:
 			return
 		checker_brightness = v
-		var color = func(v) : return Color(v,v,v,1.0)
-		var color_a = color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][0])
-		var color_b = color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][1])
+		var col = func(f) : return Color(f,f,f,1.0)
+		var color_a = col.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][0])
+		var color_b = col.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][1])
 		material.set_shader_parameter("background_color_1", color_a)
 		material.set_shader_parameter("background_color_2", color_b)
 		mm_globals.set_config("preview"+config_var_suffix+"_checker_brightness", checker_brightness)
@@ -126,11 +126,11 @@ func update_material(source):
 	material.set_shader_parameter("mode", view_mode)
 	material.set_shader_parameter("background_color", get_theme_stylebox("panel", "MM_PanelBackground").bg_color)
 	
-	var color = func(v) : return Color(v,v,v,1.0)
+	var col = func(f) : return Color(f,f,f,1.0)
 	material.set_shader_parameter("background_color_1",
-			color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][0]))
+			col.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][0]))
 	material.set_shader_parameter("background_color_2",
-			color.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][1]))
+			col.call(CHECKER_BRIGHTNESS_OPTIONS[checker_brightness][1]))
 	
 	material.set_shader_parameter("checker_size", CHECKER_SIZE_OPTIONS[checker_size])
 

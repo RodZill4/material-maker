@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cgfeik04a5qqs"]
+[gd_scene format=3 uid="uid://cgfeik04a5qqs"]
 
 [ext_resource type="Script" uid="uid://cbfcjtm6e4t8h" path="res://material_maker/main_window.gd" id="1"]
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="1_2qcba"]
@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dnttargjmhjh8" path="res://material_maker/tools/share/share_button.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://dmyq6xxfx88m0" path="res://material_maker/tools/environment_manager/environment_manager.tscn" id="13"]
 [ext_resource type="Script" uid="uid://ds4jcblbferbu" path="res://material_maker/tools/library_manager/library_manager.gd" id="14"]
-[ext_resource type="Texture2D" path="res://material_maker/icons/paste_none.tres" id="15"]
+[ext_resource type="Texture2D" uid="uid://ub2r8hsxs6vt" path="res://material_maker/icons/paste_none.tres" id="15"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2cpsi"]
 bg_color = Color(0.294, 0.294, 0.294, 0.7)
@@ -100,7 +100,7 @@ func _on_Timer_timeout():
 	tooltip_text = hint
 "
 
-[node name="MainWindow" type="PanelContainer" groups=["preview"]]
+[node name="MainWindow" type="PanelContainer" unique_id=1187365016 groups=["preview"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -116,7 +116,7 @@ theme = ExtResource("1_2qcba")
 theme_type_variation = &"MM_MainBackground"
 script = ExtResource("1")
 
-[node name="NodeLibraryManager" type="Node" parent="."]
+[node name="NodeLibraryManager" type="Node" parent="." unique_id=1499626060]
 script = ExtResource("14")
 base_lib_name = "Base library"
 base_lib = "root://library/base.json"
@@ -130,7 +130,7 @@ alt_base_aliases_file_name = "res://material_maker/library/aliases.json"
 user_aliases_file_name = "user://library/aliases.json"
 item_usage_file = "user://library/item_usage.json"
 
-[node name="BrushLibraryManager" type="Node" parent="."]
+[node name="BrushLibraryManager" type="Node" parent="." unique_id=2036157636]
 script = ExtResource("14")
 base_lib_name = "Base library"
 base_lib = "root://library/base_brushes.json"
@@ -139,45 +139,49 @@ user_lib_name = "User library"
 user_lib = "user://library/user_brushes.json"
 config_section = "brush_lib"
 
-[node name="EnvironmentManager" parent="." instance=ExtResource("13")]
+[node name="EnvironmentManager" parent="." unique_id=2070456118 instance=ExtResource("13")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1027429356]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TopBar" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TopBar" type="HBoxContainer" parent="VBoxContainer" unique_id=2101450886]
 layout_mode = 2
 
-[node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar"]
+[node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar" unique_id=1114705764]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Layout" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Layout" type="HBoxContainer" parent="VBoxContainer" unique_id=1261048499]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("2")
 
-[node name="FlexibleLayout" parent="VBoxContainer/Layout" instance=ExtResource("6_ygla4")]
+[node name="FlexibleLayout" parent="VBoxContainer/Layout" unique_id=2016834147 instance=ExtResource("6_ygla4")]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_undock = true
 
-[node name="Main" parent="VBoxContainer/Layout/FlexibleLayout" instance=ExtResource("7_ih0ps")]
+[node name="Main" parent="VBoxContainer/Layout/FlexibleLayout" unique_id=1083581024 instance=ExtResource("7_ih0ps")]
 layout_mode = 0
 anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 18.0
 offset_top = 4.0
 offset_right = 263.0
 offset_bottom = 32.0
+grow_horizontal = 1
+grow_vertical = 1
 
-[node name="ConsoleResizer" type="Control" parent="VBoxContainer"]
+[node name="ConsoleResizer" type="Control" parent="VBoxContainer" unique_id=1584649114]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_default_cursor_shape = 9
 
-[node name="ResizerBar" type="PanelContainer" parent="VBoxContainer/ConsoleResizer"]
+[node name="ResizerBar" type="PanelContainer" parent="VBoxContainer/ConsoleResizer" unique_id=2034070974]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 1
 anchors_preset = 14
@@ -190,28 +194,28 @@ size_flags_horizontal = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2cpsi")
 
-[node name="Console" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Console" type="HBoxContainer" parent="VBoxContainer" unique_id=1220223005]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 script = ExtResource("8_1tb00")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Console"]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Console" unique_id=1767948460]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 bbcode_enabled = true
 scroll_following = true
 
-[node name="StatusBar" type="PanelContainer" parent="VBoxContainer"]
+[node name="StatusBar" type="PanelContainer" parent="VBoxContainer" unique_id=1935741266]
 layout_mode = 2
 theme_type_variation = &"MM_StatusBarBackground"
 
-[node name="HBox" type="HBoxContainer" parent="VBoxContainer/StatusBar"]
+[node name="HBox" type="HBoxContainer" parent="VBoxContainer/StatusBar" unique_id=788633255]
 layout_mode = 2
 
-[node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar/HBox"]
+[node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar/HBox" unique_id=284168473]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -219,9 +223,9 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/Tip"]
+[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/Tip" unique_id=1845920852]
 
-[node name="UndoRedoLabel" type="Label" parent="VBoxContainer/StatusBar/HBox"]
+[node name="UndoRedoLabel" type="Label" parent="VBoxContainer/StatusBar/HBox" unique_id=1890775916]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -229,59 +233,57 @@ size_flags_horizontal = 4
 text = "Undo/Redo action added"
 script = SubResource("6")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/StatusBar/HBox/UndoRedoLabel"]
-libraries = {
-&"": SubResource("AnimationLibrary_kxf7t")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/StatusBar/HBox/UndoRedoLabel" unique_id=900461803]
+libraries/ = SubResource("AnimationLibrary_kxf7t")
 
-[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox"]
+[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox" unique_id=500891127]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Show console"
 texture_normal = SubResource("8")
 
-[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
+[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar/HBox" unique_id=1843994566]
 layout_mode = 2
 
-[node name="Share" parent="VBoxContainer/StatusBar/HBox" instance=ExtResource("12")]
+[node name="Share" parent="VBoxContainer/StatusBar/HBox" unique_id=167736143 instance=ExtResource("12")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar/HBox" unique_id=114233690]
 layout_mode = 2
 
-[node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar/HBox"]
+[node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar/HBox" unique_id=544821917]
 layout_mode = 2
 script = SubResource("9")
 
-[node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer"]
+[node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=46328128]
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = SubResource("8")
 
-[node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer"]
+[node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=1908358084]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = ExtResource("15")
 
-[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer"]
+[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=77330463]
 wait_time = 0.5
 autostart = true
 
-[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/StatusBar/HBox"]
+[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/StatusBar/HBox" unique_id=550247105]
 layout_mode = 2
 
-[node name="RenderCounter" parent="VBoxContainer/StatusBar/HBox" instance=ExtResource("11")]
+[node name="RenderCounter" parent="VBoxContainer/StatusBar/HBox" unique_id=1784462659 instance=ExtResource("11")]
 layout_mode = 2
 
-[node name="NodeFactory" type="Node" parent="."]
+[node name="NodeFactory" type="Node" parent="." unique_id=1824949300]
 script = ExtResource("9")
 
-[node name="AddNodePopup" parent="." instance=ExtResource("7")]
+[node name="AddNodePopup" parent="." unique_id=2036246603 instance=ExtResource("7")]
 visible = false
 
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
