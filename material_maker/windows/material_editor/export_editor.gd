@@ -378,5 +378,8 @@ func _notification(what: int) -> void:
 				$BG.color = Color("0b0b0c")
 			elif "classic" in theme_path:
 				$BG.color = Color("1e2330")
-			else:
+			elif "light" in theme_path:
 				$BG.color = Color("eaeaea")
+
+			if mm_globals.is_custom_theme():
+				$BG.color = mm_globals.get_config("custom_theme_base_color").lightened(0.2)

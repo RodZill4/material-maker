@@ -48,7 +48,7 @@ const RECENT_FILES_COUNT = 15
 const MENU_QUICK_EXPORT : int = 1000
 const RECENTS_MENU_CLEAR = 1001
 
-const THEMES = ["Default Dark", "Default Light", "Classic"]
+const THEMES = ["Default Dark", "Default Light", "Custom", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -618,6 +618,10 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
 func change_theme(theme_name) -> void:
+	if theme_name == "custom":
+		change_theme_custom()
+		return
+
 	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
 		theme_name = "default dark"
 	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
@@ -631,7 +635,7 @@ func change_theme(theme_name) -> void:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
 	else:
 		RenderingServer.set_default_clear_color(
-				Color("4d4d4d") if "light" in theme_name else Color("1f1f1f"))
+				Color.WHITE if "light" in theme_name else Color("1f1f1f"))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -1478,6 +1482,117 @@ func draw_children(p, x):
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
 
-
 func _on_console_resizer_container_mouse_entered() -> void:
 	pass # Replace with function body.
+
+func change_theme_custom() -> void:
+	var base : Color = mm_globals.get_config("custom_theme_base_color")
+	const base_path : String = "res://material_maker/theme/"
+
+	var is_dark : bool = true
+	var _theme : EnhancedTheme = load(base_path + "default dark.tres")
+	if base.get_luminance() > 0.5:
+		is_dark = false
+		_theme = load(base_path + "default light.tres")
+
+	var custom_theme : EnhancedTheme = _theme.duplicate(true)
+
+	var base_col_f : Callable = func(i : ColorSwap) -> Color:
+		return Color.from_hsv(base.h, lerpf(base.s, i.target.s, 0.2), lerpf(base.v, i.target.v, 0.6), i.target.a)
+
+	for i : ColorSwap in custom_theme.theme_color_swaps:
+		var base_col : Color = base_col_f.call(i)
+		match i.name:
+			"Background":
+				i.target = base.darkened(0.3)
+			"OptionEditButtonPopup", "ScrollBarGrabber":
+				i.target = base_col.lightened(0.1)
+			"FloatFillHover":
+				if is_dark:
+					i.target = base_col.lightened(0.3)
+				else:
+					i.target = base_col.darkened(0.4)
+			"FloatFillNormal":
+				if is_dark:
+					i.target = base_col.lightened(0.1)
+				else:
+					i.target = base_col.darkened(0.2)
+			"Hover":
+				if is_dark:
+					i.target = base_col
+				else:
+					i.target = base_col
+			"AddNodePopup":
+				if is_dark:
+					i.target = base_col.darkened(0.3)
+				else:
+					i.target = base_col.lightened(0.2)
+			"PanelMenuBackgrounds":
+				if is_dark:
+					i.target = base_col.darkened(0.25)
+				else:
+					i.target = base_col.lightened(0.25)
+			"Port Preview Color":
+				pass
+			"Grid":
+				if is_dark:
+					i.target = base_col.lightened(0.25)
+				else:
+					i.target = base_col.darkened(0.4)
+			"ScrollBarGrabberHighlight":
+				i.target = base_col.lightened(0.2)
+			"ScrollBarBG":
+				i.target = base_col
+				i.target.a = 0.4
+			"Nodes":
+				if is_dark:
+					i.target = base_col.darkened(0.3)
+				else:
+					i.target = base_col.lightened(0.1)
+			"Elements":
+				if is_dark:
+					i.target = base_col.darkened(0.15)
+				else:
+					i.target = base_col.darkened(0.1)
+			"TreeHover":
+				i.target = base_col.lightened(0.2)
+				base_col.s *= 1.2
+			"TreeHoverSelected":
+				i.target = base_col.lightened(0.1)
+				base_col.s *= 1.2
+			"PopupMenuHover":
+				if is_dark:
+					i.target = base_col.lightened(0.1)
+				else:
+					i.target = base_col.darkened(0.2)
+			"ItemListHover":
+				if is_dark:
+					i.target = base_col.lightened(0.1)
+				else:
+					i.target = base_col
+			_ when "CodeEdit" in i.name:
+				pass
+			_:
+				i.target = base_col
+
+	for i : ColorSwap in custom_theme.icon_color_swaps:
+		var base_col : Color = base_col_f.call(i)
+		match i.name:
+			"Secondary":
+				if base.s > 0.0:
+					if is_dark:
+						i.target = Color.from_hsv(base.h, 0.4, 0.9)
+					else:
+						i.target = Color.from_hsv(base.h, 0.6, 0.3)
+			"Hover":
+				if is_dark:
+					i.target = base_col.darkened(0.2)
+				else:
+					i.target = base_col.darkened(0.4)
+
+	custom_theme.update()
+	await get_tree().process_frame
+
+	theme = custom_theme
+	RenderingServer.set_default_clear_color(base)
+	$NodeFactory.on_theme_changed()

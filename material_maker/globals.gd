@@ -60,6 +60,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	dialog_dim_background = true,
 	node_minimize_button = false,
 	node_close_button = false,
+	custom_theme_base_color = Color(0.741, 0.622, 0.864, 1.0),
 }
 
 
@@ -228,3 +229,6 @@ func get_node_title_from_gen(generator : MMGenBase) -> String:
 				var gnode : GraphNode = graph.get_node(node_path)
 				return gnode.title.to_snake_case()
 	return "unnamed"
+
+func is_custom_theme() -> bool:
+	return config.get_value("window", "theme") == "custom"

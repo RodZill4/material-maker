@@ -9,7 +9,7 @@ content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
 content_margin_bottom = 6.0
-bg_color = Color(0.0941176, 0.0980392, 0.101961, 1)
+bg_color = Color(0.15686275, 0.1764706, 0.19215687, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inl5r"]
 content_margin_left = 3.0
@@ -240,7 +240,7 @@ content_margin_left = 3.0
 content_margin_top = 3.0
 content_margin_right = 3.0
 content_margin_bottom = 3.0
-bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+bg_color = Color(0.16078432, 0.16862746, 0.18431373, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -995,7 +995,7 @@ content_margin_left = 3.0
 content_margin_top = 3.0
 content_margin_right = 3.0
 content_margin_bottom = 3.0
-bg_color = Color(0.168627, 0.176471, 0.192157, 1)
+bg_color = Color(0.15686275, 0.1764706, 0.19215687, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -1170,6 +1170,22 @@ shadow_size = 4
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iwtn1"]
 content_margin_left = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iyaen"]
+bg_color = Color(0.5882353, 0.6039216, 0.6039216, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k62t"]
+bg_color = Color(0.59607846, 0.6039216, 0.6039216, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yrroa"]
 content_margin_left = 4.0
@@ -1529,10 +1545,14 @@ TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_5rnro")
 Tree/colors/font_color = Color(0.7, 0.7, 0.7, 1)
 Tree/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Tree/colors/font_hovered_color = Color(1, 1, 1, 1)
+Tree/colors/font_hovered_selected_color = Color(1, 1, 1, 1)
 Tree/colors/font_selected_color = Color(1, 1, 1, 1)
 Tree/constants/draw_guides = 0
 Tree/constants/draw_relationship_lines = 0
 Tree/styles/focus = SubResource("StyleBoxEmpty_iwtn1")
+Tree/styles/hovered = SubResource("StyleBoxFlat_iyaen")
+Tree/styles/hovered_selected = SubResource("StyleBoxFlat_5k62t")
 Tree/styles/panel = SubResource("StyleBoxEmpty_yrroa")
 Tree/styles/selected = SubResource("StyleBoxFlat_x5l5s")
 Tree/styles/selected_focus = SubResource("StyleBoxFlat_x5l5s")

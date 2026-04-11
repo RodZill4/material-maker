@@ -1,4 +1,4 @@
-[gd_resource type="Theme" script_class="EnhancedTheme" load_steps=42 format=3 uid="uid://dhuhq2immquoh"]
+[gd_resource type="Theme" script_class="EnhancedTheme" format=3 uid="uid://dhuhq2immquoh"]
 
 [ext_resource type="Theme" uid="uid://b628lwfk6ig2c" path="res://material_maker/theme/default.tres" id="3_xjelh"]
 [ext_resource type="Script" uid="uid://3ga2k3abkk0d" path="res://material_maker/theme/enhanced_theme_system/color_swap.gd" id="4_0efyb"]
@@ -238,9 +238,58 @@ orig = Color(0.9882353, 1, 1, 1)
 target = Color(0.2509804, 0.26666668, 0.2901961, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
+[sub_resource type="Resource" id="Resource_m5moq"]
+script = ExtResource("4_0efyb")
+name = "FileDialogPanel"
+orig = Color(0.13333334, 0.14509805, 0.14509805, 1)
+target = Color(0.13333334, 0.14509805, 0.14509805, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_dcu6r"]
+script = ExtResource("4_0efyb")
+name = "PanelMenuBackgrounds"
+orig = Color(0.0666667, 0.0705882, 0.0784314, 1)
+target = Color(0.06666667, 0.07058824, 0.078431375, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_wxjhn"]
+script = ExtResource("4_0efyb")
+name = "TreeHover"
+orig = Color(0.5882353, 0.6039216, 0.6039216, 1)
+target = Color(0.2827941, 0.29489788, 0.31771314, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_5p331"]
+script = ExtResource("4_0efyb")
+name = "TreeHoverSelected"
+orig = Color(0.59607846, 0.6039216, 0.6039216, 1)
+target = Color(0.28235295, 0.29411766, 0.31764707, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_jfdia"]
+script = ExtResource("4_0efyb")
+name = "PopupMenuHover"
+orig = Color(0.15686275, 0.1764706, 0.19215687, 1)
+target = Color(0.16862746, 0.1764706, 0.19215687, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_4wnip"]
+script = ExtResource("4_0efyb")
+name = "ItemListHover"
+orig = Color(0.16078432, 0.16862746, 0.18431373, 1)
+target = Color(0.22795805, 0.23807225, 0.25829834, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
+[sub_resource type="Resource" id="Resource_xhoey"]
+script = ExtResource("4_0efyb")
+name = "CodeEditNormal"
+orig = Color(0.09803922, 0.09803922, 0.101960786, 1)
+target = Color(0.09803922, 0.09803922, 0.101960786, 1)
+metadata/_custom_type_script = "uid://3ga2k3abkk0d"
+
 [resource]
 script = ExtResource("5_yjidp")
 base_theme = ExtResource("3_xjelh")
 font_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_silay"), SubResource("Resource_eavso"), SubResource("Resource_1jhxl"), SubResource("Resource_qiwix"), SubResource("Resource_5yhcl"), SubResource("Resource_vdnfu"), SubResource("Resource_21aar"), SubResource("Resource_us4qf")])
 icon_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_cisvi"), SubResource("Resource_j2h7k"), SubResource("Resource_8dhbo"), SubResource("Resource_5oh4i")])
-theme_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_430ei"), SubResource("Resource_svk4l"), SubResource("Resource_i62a2"), SubResource("Resource_0m7hk"), SubResource("Resource_0s6l0"), SubResource("Resource_odamo"), SubResource("Resource_baiyy"), SubResource("Resource_tcqgv")])
+theme_color_swaps = Array[ExtResource("4_0efyb")]([SubResource("Resource_ub5ur"), SubResource("Resource_5rv7m"), SubResource("Resource_xqbwo"), SubResource("Resource_a2t6i"), SubResource("Resource_pekt7"), SubResource("Resource_vbpcr"), SubResource("Resource_qngft"), SubResource("Resource_5mixu"), SubResource("Resource_kxmra"), SubResource("Resource_siafh"), SubResource("Resource_s732t"), SubResource("Resource_j1t84"), SubResource("Resource_g7e3b"), SubResource("Resource_oirgf"), SubResource("Resource_1pump"), SubResource("Resource_fxm05"), SubResource("Resource_mfxjg"), SubResource("Resource_upxps"), SubResource("Resource_430ei"), SubResource("Resource_svk4l"), SubResource("Resource_i62a2"), SubResource("Resource_0m7hk"), SubResource("Resource_0s6l0"), SubResource("Resource_odamo"), SubResource("Resource_baiyy"), SubResource("Resource_tcqgv"), SubResource("Resource_m5moq"), SubResource("Resource_dcu6r"), SubResource("Resource_wxjhn"), SubResource("Resource_5p331"), SubResource("Resource_jfdia"), SubResource("Resource_4wnip"), SubResource("Resource_xhoey")])
