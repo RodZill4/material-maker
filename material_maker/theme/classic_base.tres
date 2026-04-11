@@ -398,9 +398,9 @@ region = Rect2(64, 128, 16, 16)
 metadata/scale = 1.0
 metadata/recolor = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dnklm"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_c5jyp"]
 atlas = ExtResource("1_fw8f4")
-region = Rect2(112, 176, 16, 16)
+region = Rect2(32, 96, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q32qs"]
 atlas = ExtResource("1_fw8f4")
@@ -409,6 +409,10 @@ region = Rect2(32, 48, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_r3xak"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dnklm"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ns35"]
 atlas = ExtResource("1_fw8f4")
@@ -438,9 +442,9 @@ region = Rect2(16, 0, 16, 16)
 atlas = ExtResource("1_fw8f4")
 region = Rect2(0, 32, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_64fc4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxpkm"]
 atlas = ExtResource("1_fw8f4")
-region = Rect2(112, 192, 16, 16)
+region = Rect2(112, 128, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c7xvc"]
 atlas = ExtResource("1_fw8f4")
@@ -457,6 +461,10 @@ region = Rect2(96, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dsr33"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(64, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_64fc4"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_du4od"]
 atlas = ExtResource("1_fw8f4")
@@ -1093,7 +1101,7 @@ MM_FlexibleTab/icons/undock = SubResource("AtlasTexture_gvlse")
 MM_Icons/icons/2D_preview = SubResource("AtlasTexture_1yu4y")
 MM_Icons/icons/3D_preview = SubResource("AtlasTexture_ao7ds")
 MM_Icons/icons/3D_preview_control = SubResource("AtlasTexture_hht3q")
-MM_Icons/icons/add_image = SubResource("AtlasTexture_dnklm")
+MM_Icons/icons/add_image = SubResource("AtlasTexture_c5jyp")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/arrow_updown = SubResource("AtlasTexture_dnklm")
@@ -1104,7 +1112,7 @@ MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
 MM_Icons/icons/export = SubResource("AtlasTexture_5e0gw")
 MM_Icons/icons/folder = SubResource("AtlasTexture_rqlqa")
-MM_Icons/icons/function = SubResource("AtlasTexture_64fc4")
+MM_Icons/icons/function = SubResource("AtlasTexture_jxpkm")
 MM_Icons/icons/link = SubResource("AtlasTexture_c7xvc")
 MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
 MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
