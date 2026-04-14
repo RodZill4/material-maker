@@ -52,10 +52,8 @@ jobs:
       - name: Windows Build 🗔
         run: |
           ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
         run: |
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
           ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
@@ -150,7 +148,6 @@ jobs:
           chown runner Godot.app/Contents/MacOS/Godot
           chmod +x Godot.app/Contents/MacOS/Godot
           mkdir -v -p ./build/mac
-          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
           Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
