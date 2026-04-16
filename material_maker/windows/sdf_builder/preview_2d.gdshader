@@ -65,7 +65,7 @@ void fragment() {
 	GENERATED_CODE
 	
 	float edgewidth = 0.0001;
-	float d = -DIST_FCT(uv, 0, _seed_variation_);
+	float d = -DIST_FCT(uv, 0, _seed_variation_, _controlled_variation_);
 	float d2 = -DIST_FCT(uv, int(round(INDEX_UNIFORM)), _seed_variation_, _controlled_variation_);
 	float d3 = -DIST_FCT(uv, -int(round(INDEX_UNIFORM)), _seed_variation_, _controlled_variation_);
 	float color = 0.5*sstep(0.0, d);
