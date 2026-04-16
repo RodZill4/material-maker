@@ -629,7 +629,6 @@ func change_theme(theme_name) -> void:
 		return
 	if _theme is EnhancedTheme:
 		_theme.update()
-	await get_tree().process_frame
 	theme = _theme
 	if "classic" in theme_name:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
@@ -1491,7 +1490,7 @@ func change_theme_custom() -> void:
 
 	var is_dark : bool = true
 	var _theme : EnhancedTheme = load(base_path + "default dark.tres")
-	if base.get_luminance() > 0.5:
+	if base.get_luminance() > 0.55:
 		is_dark = false
 		_theme = load(base_path + "default light.tres")
 
@@ -1570,6 +1569,11 @@ func change_theme_custom() -> void:
 					i.target = base_col.lightened(0.1)
 				else:
 					i.target = base_col
+			"RerouteSelected", "RerouteNormal":
+				if is_dark:
+					i.target = base_col.lightened(0.1)
+				else:
+					i.target = base_col.darkened(0.1)
 			_ when "CodeEdit" in i.name:
 				pass
 			_:
@@ -1591,8 +1595,6 @@ func change_theme_custom() -> void:
 					i.target = base_col.darkened(0.4)
 
 	custom_theme.update()
-	await get_tree().process_frame
-
 	theme = custom_theme
 	RenderingServer.set_default_clear_color(base)
 	$NodeFactory.on_theme_changed()
