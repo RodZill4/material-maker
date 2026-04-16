@@ -15,9 +15,7 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"AddNodePopupList": { "light": -0.25, "dark": -0.4 },
 	"PanelMenuBackgrounds": { "light": 0.25, "dark": -0.25 },
 	"Grid": { "light": -0.4, "dark": 0.25 },
-	"ScrollBarGrabberHighlight": { "light": 0.2, "dark": 0.2 },
 	"Nodes": { "light": 0.1, "dark": -0.5 },
-	"ScrollBarBG": { "light": 0.0, "dark": 0.0, "alpha": 0.4 },
 	"Elements": { "light": -0.1, "dark": -0.15 },
 	"TreeHover": { "light": 0.2, "dark": 0.2 },
 	"TreeHoverSelected": { "light": 0.1, "dark": 0.1 },
@@ -28,6 +26,9 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"Tab Selected": { "light": 0.1, "dark": -0.2 },
 	"Tab Unselected": { "light": -0.1, "dark": 0.2 },
 	"PortalLink": { "light": -0.1, "dark": -0.1 },
+	"ScrollBarGrabberHighlight": { "light": 0.4, "dark": 0.3 },
+	"ScrollBarBG": { "alpha": 0.4 },
+	"Hover": { "light": -0.1, "dark": 0.1 },
 }
 
 static func get_base_color(base : Color, target : Color) -> Color:
@@ -35,14 +36,21 @@ static func get_base_color(base : Color, target : Color) -> Color:
 		lerpf(base.s, target.s, 0.2), lerpf(base.v, target.v, 0.6), target.a)
 
 static func process_swap_rule(i : ColorSwap, base : Color, theme_type : String) -> void:
-	var swap : float = CUSTOM_RULES[i.name][theme_type]
-	if swap > 0.0:
-		i.target = base.lightened(abs(swap))
-	else:
-		i.target = base.darkened(abs(swap))
+	var rule : Dictionary = CUSTOM_RULES[i.name]
 
-	if CUSTOM_RULES[i.name].has("alpha"):
-		i.target.a = CUSTOM_RULES[i.name]["alpha"]
+	if rule.has("light") and rule.has("dark"):
+		var swap : float = rule[theme_type]
+		if swap > 0.0:
+			i.target = base.lightened(abs(swap))
+		else:
+			i.target = base.darkened(abs(swap))
+	elif rule.is_empty():
+		i.target = base
+
+	if rule.has("alpha"):
+		i.target.a = rule["alpha"]
+	elif rule.has("sat"):
+		i.target.s = rule[i.name]["sat"]
 
 static func get_editor_background() -> Color:
 	var theme_path : String = mm_globals.main_window.theme.resource_path
@@ -73,7 +81,15 @@ static func generate_custom_theme(base : Color) -> Theme:
 		if CUSTOM_RULES.has(i.name):
 			process_swap_rule(i, base_col, theme_type)
 		else:
-			if "CodeEdit" not in i.name and "PortGroup" not in i.name:
+			if i.name == "NodeTitleBarBG":
+				if base.s > 0.0:
+					i.target = Color.from_hsv(base_col.h, 0.1, base_col.v, base_col.a)
+			elif i.name in ["RichTextLabelDefaultColor", "PortGroup",
+					"Port Preview Color", "Node Title Color", "RichTextLabel"]:
+				pass
+			elif "CodeEdit" in i.name or "Comment" in i.name:
+				pass
+			else:
 				i.target = base_col
 
 	for i : ColorSwap in custom_theme.icon_color_swaps:
@@ -86,10 +102,7 @@ static func generate_custom_theme(base : Color) -> Theme:
 					else:
 						i.target = Color.from_hsv(base.h, 0.6, 0.3)
 			"Hover":
-				if is_dark:
-					i.target = base_col.darkened(0.2)
-				else:
-					i.target = base_col.darkened(0.4)
+				i.target = base_col.darkened(0.2 if is_dark else 0.4)
 
 	custom_theme.update()
 	return custom_theme
