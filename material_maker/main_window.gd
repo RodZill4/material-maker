@@ -1499,85 +1499,52 @@ func change_theme_custom() -> void:
 	var base_col_f : Callable = func(i : ColorSwap) -> Color:
 		return Color.from_hsv(base.h, lerpf(base.s, i.target.s, 0.2), lerpf(base.v, i.target.v, 0.6), i.target.a)
 
+	const rules : Dictionary[String, Dictionary] = {
+		"Main Background": { "light": -0.5, "dark": -0.5 },
+		"Background": { "light": -0.3, "dark": -0.3 },
+		"OptionEditButtonPopup": { "light": 0.1, "dark": -0.1 },
+		"FloatFillHover": { "light": -0.4, "dark": 0.3 },
+		"FloatFillNormal": { "light": -0.2, "dark": 0.1 },
+		"Hover": { "light": 0.0, "dark": 0.0 },
+		"AddNodePopup": { "light": 0.2, "dark": -0.3 },
+		"PanelMenuBackgrounds": { "light": 0.25, "dark": -0.25 },
+		"Grid": { "light": -0.4, "dark": 0.25 },
+		"ScrollBarGrabberHighlight": { "light": 0.2, "dark": 0.2 },
+		"Nodes": { "light": 0.1, "dark": -0.5 },
+		"ScrollBarBG": { "light": 0.0, "dark": 0.0, "alpha": 0.4 },
+		"Elements": { "light": -0.1, "dark": -0.15 },
+		"TreeHover": { "light": 0.2, "dark": 0.2 },
+		"TreeHoverSelected": { "light": 0.1, "dark": 0.1 },
+		"PopupMenuHover": { "light": -0.2, "dark": 0.1 },
+		"ItemListHover": { "light": 0.0, "dark": 0.1 },
+		"RerouteNormal": { "light": 0.1, "dark": 0.1 },
+		"RerouteSelected": { "light": 0.1, "dark": 0.1 },
+		"Tab Selected": { "light": 0.1, "dark": -0.2 },
+		"Tab Unselected": { "light": -0.1, "dark": 0.2 },
+	}
+
 	for i : ColorSwap in custom_theme.theme_color_swaps:
 		var base_col : Color = base_col_f.call(i)
-		match i.name:
-			"Background":
-				i.target = base.darkened(0.3)
-			"OptionEditButtonPopup", "ScrollBarGrabber":
-				i.target = base_col.lightened(0.1)
-			"FloatFillHover":
-				if is_dark:
-					i.target = base_col.lightened(0.3)
-				else:
-					i.target = base_col.darkened(0.4)
-			"FloatFillNormal":
-				if is_dark:
-					i.target = base_col.lightened(0.1)
-				else:
-					i.target = base_col.darkened(0.2)
-			"Hover":
-				if is_dark:
+		var theme_type : String = "light"
+		if is_dark:
+			theme_type = "dark"
+		if rules.has(i.name):
+			var swap : float = rules[i.name][theme_type]
+			if swap > 0.0:
+				i.target = base_col.lightened(abs(swap))
+			else:
+				i.target = base_col.darkened(abs(swap))
+
+			if rules[i.name].has("alpha"):
+				i.target.a = rules[i.name]["alpha"]
+		else:
+			match i.name:
+				_ when "CodeEdit" in i.name:
+					pass
+				"PortGroup":
+					pass
+				_:
 					i.target = base_col
-				else:
-					i.target = base_col
-			"AddNodePopup":
-				if is_dark:
-					i.target = base_col.darkened(0.3)
-				else:
-					i.target = base_col.lightened(0.2)
-			"PanelMenuBackgrounds":
-				if is_dark:
-					i.target = base_col.darkened(0.25)
-				else:
-					i.target = base_col.lightened(0.25)
-			"Port Preview Color":
-				pass
-			"Grid":
-				if is_dark:
-					i.target = base_col.lightened(0.25)
-				else:
-					i.target = base_col.darkened(0.4)
-			"ScrollBarGrabberHighlight":
-				i.target = base_col.lightened(0.2)
-			"ScrollBarBG":
-				i.target = base_col
-				i.target.a = 0.4
-			"Nodes":
-				if is_dark:
-					i.target = base_col.darkened(0.3)
-				else:
-					i.target = base_col.lightened(0.1)
-			"Elements":
-				if is_dark:
-					i.target = base_col.darkened(0.15)
-				else:
-					i.target = base_col.darkened(0.1)
-			"TreeHover":
-				i.target = base_col.lightened(0.2)
-				base_col.s *= 1.2
-			"TreeHoverSelected":
-				i.target = base_col.lightened(0.1)
-				base_col.s *= 1.2
-			"PopupMenuHover":
-				if is_dark:
-					i.target = base_col.lightened(0.1)
-				else:
-					i.target = base_col.darkened(0.2)
-			"ItemListHover":
-				if is_dark:
-					i.target = base_col.lightened(0.1)
-				else:
-					i.target = base_col
-			"RerouteSelected", "RerouteNormal":
-				if is_dark:
-					i.target = base_col.lightened(0.1)
-				else:
-					i.target = base_col.darkened(0.1)
-			_ when "CodeEdit" in i.name:
-				pass
-			_:
-				i.target = base_col
 
 	for i : ColorSwap in custom_theme.icon_color_swaps:
 		var base_col : Color = base_col_f.call(i)
@@ -1596,5 +1563,5 @@ func change_theme_custom() -> void:
 
 	custom_theme.update()
 	theme = custom_theme
-	RenderingServer.set_default_clear_color(base)
+	RenderingServer.set_default_clear_color(base.darkened(0.2))
 	$NodeFactory.on_theme_changed()
