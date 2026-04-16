@@ -38,14 +38,11 @@ static func get_base_color(base : Color, target : Color) -> Color:
 static func process_swap_rule(i : ColorSwap, base : Color, theme_type : String) -> void:
 	var rule : Dictionary = CUSTOM_RULES[i.name]
 
-	if rule.has("light") and rule.has("dark"):
-		var swap : float = rule[theme_type]
-		if swap > 0.0:
-			i.target = base.lightened(abs(swap))
-		else:
-			i.target = base.darkened(abs(swap))
-	elif rule.is_empty():
-		i.target = base
+	var swap : float = rule[theme_type]
+	if swap > 0.0:
+		i.target = base.lightened(abs(swap))
+	else:
+		i.target = base.darkened(abs(swap))
 
 	if rule.has("alpha"):
 		i.target.a = rule["alpha"]
