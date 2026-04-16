@@ -354,10 +354,12 @@ static func draw_links(g : MMGraphEdit) -> void:
 			var to : Vector2 = graph_node_center(wo, g)
 			if wo.selected or wi.selected:
 				# link / io highlight
-				g.draw_dashed_line(from, to, link_color, link_width, dash_length, true, true)
+				g.draw_dashed_line(from, to, Color.BLACK, link_width + 0.2, dash_length, true, true)
 				g.draw_circle(from, circle_r * zoom, Color.BLACK, false, (circle_outline_width + 1.0) * zoom, true)
-				g.draw_circle(from, circle_r * zoom, in_color, false, circle_outline_width * zoom, true)
 				g.draw_circle(to, circle_r * zoom, Color.BLACK, false, (circle_outline_width + 1.0) * zoom, true)
+
+				g.draw_dashed_line(from, to, link_color, link_width, dash_length, true, true)
+				g.draw_circle(from, circle_r * zoom, in_color, false, circle_outline_width * zoom, true)
 				g.draw_circle(to, circle_r * zoom, out_color, false, circle_outline_width * zoom, true)
 
 				# arrow
@@ -365,6 +367,10 @@ static func draw_links(g : MMGraphEdit) -> void:
 				var dir_a := (from - to).normalized().rotated(-PI * 0.25)
 				var dir_b := (from - to).normalized().rotated(PI * 0.25)
 				var aw := maxf(20.0 * zoom, 15.0)
+				g.draw_multiline(PackedVector2Array([
+					mid, mid + dir_a * aw,
+					mid, mid + dir_b * aw]), Color.BLACK, link_width * 0.8 + 0.25, true)
+
 				g.draw_multiline(PackedVector2Array([
 					mid, mid + dir_a * aw,
 					mid, mid + dir_b * aw]), link_color, link_width*0.8, true)
