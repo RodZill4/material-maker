@@ -22,8 +22,8 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"TreeHoverSelected": { "light": 0.1, "dark": 0.1 },
 	"PopupMenuHover": { "light": -0.2, "dark": 0.1 },
 	"ItemListHover": { "light": 0.0, "dark": 0.1 },
-	"RerouteNormal": { "light": 0.1, "dark": 0.1 },
-	"RerouteSelected": { "light": 0.1, "dark": 0.1 },
+	"RerouteNormal": { "light": -0.25, "dark": 0.1 },
+	"RerouteSelected": { "light": -0.35, "dark": -0.2 },
 	"Tab Selected": { "light": 0.1, "dark": -0.2 },
 	"Tab Unselected": { "light": -0.1, "dark": 0.2 },
 }
@@ -57,7 +57,7 @@ static func generate_custom_theme(base : Color) -> Theme:
 		if CUSTOM_RULES.has(i.name):
 			process_swap_rule(i, base_col, theme_type)
 		else:
-			if "CodeEdit" not in i.name:
+			if "CodeEdit" not in i.name or "PortGroup" not in i.name:
 				i.target = base_col
 
 	for i : ColorSwap in custom_theme.icon_color_swaps:

@@ -355,7 +355,9 @@ static func draw_links(g : MMGraphEdit) -> void:
 			if wo.selected or wi.selected:
 				# link / io highlight
 				g.draw_dashed_line(from, to, link_color, link_width, dash_length, true, true)
+				g.draw_circle(from, circle_r * zoom, Color.BLACK, false, (circle_outline_width + 1.0) * zoom, true)
 				g.draw_circle(from, circle_r * zoom, in_color, false, circle_outline_width * zoom, true)
+				g.draw_circle(to, circle_r * zoom, Color.BLACK, false, (circle_outline_width + 1.0) * zoom, true)
 				g.draw_circle(to, circle_r * zoom, out_color, false, circle_outline_width * zoom, true)
 
 				# arrow
