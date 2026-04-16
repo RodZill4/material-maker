@@ -103,7 +103,7 @@ metadata/recolor = false
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m27ao"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oy0ko"]
-bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
+bg_color = Color(0.08627451, 0.09803922, 0.101960786, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ck0hb"]
 content_margin_left = 4.0
@@ -312,7 +312,7 @@ border_width_bottom = 1
 border_color = Color(0.359069, 0.359069, 0.359069, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agwde"]
-bg_color = Color(0.0980392, 0.0980392, 0.101961, 1)
+bg_color = Color(0.11764706, 0.10980392, 0.10980392, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_08mel"]
 atlas = ExtResource("1_s43fy")

@@ -10,7 +10,8 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"FloatFillHover": { "light": -0.4, "dark": 0.3 },
 	"FloatFillNormal": { "light": -0.2, "dark": 0.1 },
 	"Hover": { "light": 0.0, "dark": 0.0 },
-	"AddNodePopup": { "light": 0.2, "dark": -0.3 },
+	"AddNodePopup": { "light": -0.1, "dark": -0.3 },
+	"AddNodePopupList": { "light": -0.25, "dark": -0.4 },
 	"PanelMenuBackgrounds": { "light": 0.25, "dark": -0.25 },
 	"Grid": { "light": -0.4, "dark": 0.25 },
 	"ScrollBarGrabberHighlight": { "light": 0.2, "dark": 0.2 },
@@ -40,7 +41,6 @@ static func process_swap_rule(i : ColorSwap, base : Color, theme_type : String) 
 
 	if CUSTOM_RULES[i.name].has("alpha"):
 		i.target.a = CUSTOM_RULES[i.name]["alpha"]
-	
 
 static func generate_custom_theme(base : Color) -> Theme:
 	var is_dark : bool = true
@@ -57,11 +57,8 @@ static func generate_custom_theme(base : Color) -> Theme:
 		if CUSTOM_RULES.has(i.name):
 			process_swap_rule(i, base_col, theme_type)
 		else:
-			match i.name:
-				_ when "CodeEdit" in i.name or "PortGroup" in i.name:
-					pass
-				_:
-					i.target = base_col
+			if "CodeEdit" not in i.name:
+				i.target = base_col
 
 	for i : ColorSwap in custom_theme.icon_color_swaps:
 		var base_col : Color = get_base_color(base, i.target)

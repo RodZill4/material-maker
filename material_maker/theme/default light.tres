@@ -221,7 +221,7 @@ metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 [sub_resource type="Resource" id="Resource_p6yfp"]
 script = ExtResource("4_rhf2q")
 name = "AddNodePopupList"
-orig = Color(0.0980392, 0.0980392, 0.101961, 1)
+orig = Color(0.11764706, 0.10980392, 0.10980392, 1)
 target = Color(0.821789, 0.821789, 0.821789, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
@@ -312,7 +312,7 @@ metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 [sub_resource type="Resource" id="Resource_5w06f"]
 script = ExtResource("4_rhf2q")
 name = "CodeEditNormal"
-orig = Color(0.0980392, 0.0980392, 0.101961, 1)
+orig = Color(0.08627451, 0.09803922, 0.101960786, 1)
 target = Color(0.804688, 0.804688, 0.804688, 1)
 metadata/_custom_type_script = "uid://3ga2k3abkk0d"
 
