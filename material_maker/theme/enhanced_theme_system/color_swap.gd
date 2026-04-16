@@ -3,11 +3,13 @@ extends Resource
 
 @export var name := ""
 
+## Original color to be replaced
 @export var orig := Color():
 	set(val):
 		orig = val
 		emit_changed()
 
+## Replacement color
 @export var target := Color():
 	set(val):
 		target = val

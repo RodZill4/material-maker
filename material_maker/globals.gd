@@ -60,7 +60,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	dialog_dim_background = true,
 	node_minimize_button = false,
 	node_close_button = false,
-	custom_theme_base_color = Color(0.741, 0.622, 0.864, 1.0),
+	custom_theme_base_color = Color(0.529, 0.467, 0.686),
 }
 
 

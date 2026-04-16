@@ -172,7 +172,7 @@ custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
 tooltip_text = "Base color used for the custom theme"
-color = Color(0.5281043, 0.46800947, 0.6880568, 1)
+color = Color(0.5294118, 0.46666667, 0.6862745, 1)
 edit_intensity = false
 config_variable = "custom_theme_base_color"
 
