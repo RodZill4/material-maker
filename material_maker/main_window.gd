@@ -617,6 +617,12 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 		menu.add_item(t)
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
+func change_theme_custom() -> void:
+	var base : Color = mm_globals.get_config("custom_theme_base_color")
+	theme = ThemeUtils.generate_custom_theme(base)
+	RenderingServer.set_default_clear_color(base.darkened(0.2))
+	$NodeFactory.on_theme_changed()
+
 func change_theme(theme_name) -> void:
 	if theme_name == "custom":
 		change_theme_custom()
@@ -1483,9 +1489,3 @@ func _draw_debug():
 
 func _on_console_resizer_container_mouse_entered() -> void:
 	pass # Replace with function body.
-
-func change_theme_custom() -> void:
-	var base : Color = mm_globals.get_config("custom_theme_base_color")
-	theme = ThemeUtils.generate_custom_theme(base)
-	RenderingServer.set_default_clear_color(base.darkened(0.2))
-	$NodeFactory.on_theme_changed()

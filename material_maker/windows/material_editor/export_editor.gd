@@ -373,13 +373,4 @@ func _on_Cancel_pressed() -> void:
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_THEME_CHANGED:
-			var theme_path : String = mm_globals.main_window.theme.resource_path
-			if "dark" in theme_path:
-				$BG.color = Color("0b0b0c")
-			elif "classic" in theme_path:
-				$BG.color = Color("1e2330")
-			elif "light" in theme_path:
-				$BG.color = Color("eaeaea")
-
-			if mm_globals.is_custom_theme():
-				$BG.color = mm_globals.get_config("custom_theme_base_color").lightened(0.2)
+			$BG.color = ThemeUtils.get_editor_background()
