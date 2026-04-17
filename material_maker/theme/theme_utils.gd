@@ -26,7 +26,7 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"ScrollBarGrabberHighlight": { "light": 0.4, "dark": 0.3 },
 	"ScrollBarBG": { "alpha": 0.4 },
 	"Hover": { "light": -0.15, "dark": 0.1 },
-	"OptionEditButtonPopup": { "light": 0.1, "dark": -0.2 },
+	"OptionEditButtonPopup": { "light": 0.25, "dark": -0.4 },
 }
 
 static func get_base_color(base : Color, target : Color) -> Color:
