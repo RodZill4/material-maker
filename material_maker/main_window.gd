@@ -337,6 +337,10 @@ func on_config_changed() -> void:
 			if c.has_method("update"):
 				c.update()
 
+	# set custom theme
+	if mm_globals.config.get_value("window", "theme") == "custom":
+		change_theme_custom.call_deferred()
+
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 

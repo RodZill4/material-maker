@@ -31,8 +31,6 @@ func update_config(p : Node) -> void:
 		update_config(c)
 
 func _on_Apply_pressed():
-	if mm_globals.config.get_value("window", "theme") == "custom":
-		get_node("/root/MainWindow").change_theme_custom.call_deferred()
 	update_config(self)
 	emit_signal("config_changed")
 
