@@ -620,7 +620,6 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 func change_theme_custom() -> void:
 	var base : Color = mm_globals.get_config("custom_theme_base_color")
 	theme = ThemeUtils.generate_custom_theme(base)
-	RenderingServer.set_default_clear_color(base.darkened(0.2))
 	$NodeFactory.on_theme_changed()
 
 func change_theme(theme_name) -> void:

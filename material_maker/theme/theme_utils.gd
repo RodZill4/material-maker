@@ -6,15 +6,14 @@ const DARK_THEME = preload("res://material_maker/theme/default dark.tres")
 const LIGHT_DARK_CUTOFF = 0.55
 
 const CUSTOM_RULES : Dictionary[String, Dictionary] = {
-	"Main Background": { "light": -0.5, "dark": -0.5 },
-	"Background": { "light": -0.3, "dark": -0.3 },
-	"OptionEditButtonPopup": { "light": 0.1, "dark": -0.1 },
-	"FloatFillHover": { "light": -0.4, "dark": 0.3 },
-	"FloatFillNormal": { "light": -0.2, "dark": 0.1 },
+	"Main Background": { "light": -0.1, "dark": -0.5 },
+	"Background": { "light": 0.3, "dark": -0.3 },
+	"FloatFillHover": { "light": -0.2, "dark": 0.25, "sat": 0.5},
+	"FloatFillNormal": { "light": 0.1, "dark": 0.1 },
 	"AddNodePopup": { "light": -0.1, "dark": -0.3 },
-	"AddNodePopupList": { "light": -0.25, "dark": -0.4 },
+	"AddNodePopupList": { "light": 0.25, "dark": -0.4 },
 	"PanelMenuBackgrounds": { "light": 0.25, "dark": -0.25 },
-	"Grid": { "light": -0.4, "dark": 0.25 },
+	"Grid": { "light": -0.2, "dark": 0.25 },
 	"Nodes": { "light": 0.1, "dark": -0.5 },
 	"Elements": { "light": -0.1, "dark": -0.15 },
 	"TreeHover": { "light": 0.2, "dark": 0.2 },
@@ -28,26 +27,30 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"PortalLink": { "light": -0.1, "dark": -0.1 },
 	"ScrollBarGrabberHighlight": { "light": 0.4, "dark": 0.3 },
 	"ScrollBarBG": { "alpha": 0.4 },
-	"Hover": { "light": -0.1, "dark": 0.1 },
+	"Hover": { "light": -0.15, "dark": 0.1 },
+	"OptionEditButtonPopup": { "light": 0.1, "dark": -0.2 },
 }
 
 static func get_base_color(base : Color, target : Color) -> Color:
 	return Color.from_hsv(base.h,
-		lerpf(base.s, target.s, 0.2), lerpf(base.v, target.v, 0.6), target.a)
+			lerpf(base.s, target.s, 0.2), lerpf(base.v, target.v, 0.6), target.a)
 
 static func process_swap_rule(i : ColorSwap, base : Color, theme_type : String) -> void:
 	var rule : Dictionary = CUSTOM_RULES[i.name]
 
-	var swap : float = rule[theme_type]
-	if swap > 0.0:
-		i.target = base.lightened(abs(swap))
-	else:
-		i.target = base.darkened(abs(swap))
+	if rule.has("light") and rule.has("dark"):
+		var swap : float = rule[theme_type]
+		if swap > 0.0:
+			i.target = base.lightened(abs(swap))
+		else:
+			i.target = base.darkened(abs(swap))
 
 	if rule.has("alpha"):
 		i.target.a = rule["alpha"]
 	elif rule.has("sat"):
-		i.target.s = rule[i.name]["sat"]
+		if base.s > 0.0:
+			i.target.s *= 1.0 + rule["sat"]
+	i.target = i.target.clamp()
 
 static func get_editor_background() -> Color:
 	var theme_path : String = mm_globals.main_window.theme.resource_path
@@ -81,8 +84,8 @@ static func generate_custom_theme(base : Color) -> Theme:
 			if i.name == "NodeTitleBarBG":
 				if base.s > 0.0:
 					i.target = Color.from_hsv(base_col.h, 0.1, base_col.v, base_col.a)
-			elif i.name in ["RichTextLabelDefaultColor", "PortGroup",
-					"Port Preview Color", "Node Title Color", "RichTextLabel"]:
+			elif i.name in ["RichTextLabel" ,"RichTextLabelDefaultColor", "PortGroup",
+					"Port Preview Color", "Node Title Color"]:
 				pass
 			elif "CodeEdit" in i.name or "Comment" in i.name:
 				pass
@@ -97,9 +100,14 @@ static func generate_custom_theme(base : Color) -> Theme:
 					if is_dark:
 						i.target = Color.from_hsv(base.h, 0.4, 0.9)
 					else:
-						i.target = Color.from_hsv(base.h, 0.6, 0.3)
+						i.target = Color.from_hsv(base.h, 0.6, 0.5)
 			"Hover":
 				i.target = base_col.darkened(0.2 if is_dark else 0.4)
+
+	if is_dark:
+		RenderingServer.set_default_clear_color(base.darkened(0.3))
+	else:
+		RenderingServer.set_default_clear_color(base.lightened(0.5))
 
 	custom_theme.update()
 	return custom_theme
