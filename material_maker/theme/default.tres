@@ -1033,6 +1033,22 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vqfa7"]
+bg_color = Color(0.043137256, 0.043137256, 0.047058824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ngrf6"]
+bg_color = Color(0.16862746, 0.1764706, 0.19215687, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 4
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8sgsn"]
 content_margin_left = 3.0
 content_margin_top = 3.0
@@ -1508,6 +1524,8 @@ PopupMenu/icons/unchecked_disabled = SubResource("AtlasTexture_ftwxj")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_rqlqa")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_vqfa7")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ngrf6")
 RichTextLabel/colors/default_color = Color(1, 1, 1, 1)
 SpinBox/colors/down_disabled_icon_modulate = Color(0.875, 0.875, 0.875, 0.5)
 SpinBox/colors/down_hover_icon_modulate = Color(1, 1, 1, 1)
