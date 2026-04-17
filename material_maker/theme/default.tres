@@ -311,6 +311,14 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.359069, 0.359069, 0.359069, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k62t"]
+bg_color = Color(0.59607846, 0.6039216, 0.6039216, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agwde"]
 bg_color = Color(0.11764706, 0.10980392, 0.10980392, 1)
 
@@ -1179,14 +1187,6 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5k62t"]
-bg_color = Color(0.59607846, 0.6039216, 0.6039216, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yrroa"]
 content_margin_left = 4.0
 
@@ -1316,6 +1316,7 @@ LineEdit/styles/read_only = SubResource("StyleBoxFlat_k7e83")
 MM_AddNodePanel/base_type = &"PanelContainer"
 MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
+MM_AddNodePanelList/styles/hovered_selected = SubResource("StyleBoxFlat_5k62t")
 MM_AddNodePanelList/styles/panel = SubResource("StyleBoxFlat_agwde")
 MM_CommentNode/icons/resizer = SubResource("AtlasTexture_08mel")
 MM_CommentNode/styles/default = SubResource("StyleBoxFlat_asgc8")

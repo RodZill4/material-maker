@@ -3,8 +3,6 @@ class_name ThemeUtils
 const LIGHT_THEME = preload("res://material_maker/theme/default light.tres")
 const DARK_THEME = preload("res://material_maker/theme/default dark.tres")
 
-const LIGHT_DARK_CUTOFF = 0.55
-
 const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 	"Main Background": { "light": -0.1, "dark": -0.5 },
 	"Background": { "light": 0.3, "dark": -0.3 },
@@ -62,14 +60,14 @@ static func get_editor_background() -> Color:
 		return Color("eaeaea")
 	else:
 		var custom_base : Color = mm_globals.get_config("custom_theme_base_color")
-		if custom_base.get_luminance() > LIGHT_DARK_CUTOFF:
+		if custom_base.get_luminance() > 0.5:
 			custom_base.darkened(0.2)
 		return custom_base.darkened(0.1)
 
 static func generate_custom_theme(base : Color) -> Theme:
 	var is_dark : bool = true
 	var theme : EnhancedTheme = DARK_THEME
-	if base.get_luminance() > LIGHT_DARK_CUTOFF:
+	if base.get_luminance() > 0.5:
 		is_dark = false
 		theme = LIGHT_THEME
 	var custom_theme : EnhancedTheme = theme.duplicate(true)
