@@ -35,23 +35,23 @@ const CONTRIBUTORS = [
 ]
 
 const PATRONS = [
-	"Andres Hernandez", "Ian Genskowsky Chang", "Hugo Locurcio", "Jose Ivan Lopez Romo",
-	"rustweaver", "Ryan Roden-Corrent", "ww123td",
-	"Thomas Schmall", "Valerio Marty", "Twerknificent", "Cam Kilgore",
-	"Schrottkatze", "3ookeeper", "Montey", "Nick", "Florian Bruehl",
-	"fisj", "Botan dragneel", "Deniz Ündan"
+	"Ian Genskowsky Chang", "Hugo Locurcio", "Jose Ivan Lopez Romo",
+	"rustweaver", "Thomas Schmall", "ww123td", "Twerknificent",
+	"Cam Kilgore", "Florian Bruehl", "fisj", "Botan dragneel",
+	"Gerard Laan", "Mark", "OhWow", "doomy"
 ]
 
 const PATRONS2 = [
-	"Valerian Bedin", "BasicIncomePlz", "AdamRatai", "Robert Dodd",
-	"Edward Herbert", "LitmusZest", "Interstice", "Harken",
-	"Vlad Erium", "MrDG", "Ap", "Trevor", "Mikael Nordenberg",
-	"Miouyouyou", "Preclude Interactive", "思羽 陳", "nargacu83",
-	"celestialmaze", "Andreas Ratchev", "Micha Grandel", "realkotob",
-	"Mischa", "Yumemocchi", "Shikher Pandey", "The5", "Zee Gomez",
-	"Richard Nespithal", "Giuseppe Modarelli", "Microplastics Farmer",
-	"Some Critter", "Green Bean", "Shanxxx Official", "Leon Krykhtin",
-	"Lusia Shinra", "Tom Wor"
+	"Andres Hernandez", "Valerian Bedin", "BasicIncomePlz", "AdamRatai",
+	"Robert Dodd", "Edward Herbert", "Ryan Roden-Corrent", "LitmusZest",
+	"Interstice ", "Harken", "Valerio Marty", "Vlad Erium", "MrDG",
+	"Ap", "Trevor", "Mikael Nordenberg", "Montey", "Miouyouyou ",
+	"Preclude Interactive", "思羽 陳", "3ookeeper", "Schrottkatze",
+	"nargacu83", "Nick", "celestialmaze", "Andreas Ratchev", "Micha Grandel",
+	"realkotob", "Mischa", "Deniz Ãœndan", "Yumemocchi", "Shikher Pandey",
+	"The5", "Zee Gomez", "Richard Nespithal", "Giuseppe Modarelli",
+	"Microplastics Farmer", "Some Critter", "Green Bean", "Shanxxx Official",
+	"Leon Krykhtin", "Lusia Shinra", "Tom Wor", "TATboy"
 ]
 
 func _ready() -> void:
