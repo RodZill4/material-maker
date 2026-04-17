@@ -94,3 +94,10 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 
 func _serialize(data: Dictionary) -> Dictionary:
 	return data
+
+func get_description() -> String:
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate("Switch"))
+	desc_list.push_back(TranslationServer.translate("Switches between multiple inputs.\n" +
+			"Command/Ctrl+W toggles edit mode which allows changing options such as in/output count."))
+	return "\n".join(desc_list)
