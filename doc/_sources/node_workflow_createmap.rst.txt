@@ -1,7 +1,7 @@
-CreateMap node
+Create Map node
 ~~~~~~~~~~~~~~
 
-The **CreateMap** node creates a map holding height, orientation and offset information
+The **Create Map** node creates a map holding height, orientation and offset information
 used to combine simple materials.
 
 .. image:: images/node_workflow_createmap.png
@@ -10,7 +10,7 @@ used to combine simple materials.
 Inputs
 ++++++
 
-The **CreateMap** node accepts two inputs:
+The **Create Map** node accepts two inputs:
 
 * the *height* component as a greyscale image.
 
@@ -19,7 +19,7 @@ The **CreateMap** node accepts two inputs:
 Outputs
 +++++++
 
-The **CreateMap** node outputs the map in an RGB image where:
+The **Create Map** node outputs the map in an RGB image where:
 
 * the red component holds the height information
 
@@ -30,7 +30,7 @@ The **CreateMap** node outputs the map in an RGB image where:
 Parameters
 ++++++++++
 
-The **CreateMap** node has two parameters:
+The **Create Map** node has two parameters:
 
 * *height* is the maximum height of the map
 

@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Common properties of nodes &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -64,6 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reroute_nodes.html">Reroute nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aperture_nodes.html">Aperture Nodes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
@@ -96,13 +97,13 @@
            <div itemprop="articleBody">
              
   <section id="common-properties-of-nodes">
-<h1>Common properties of nodes<a class="headerlink" href="#common-properties-of-nodes" title="Permalink to this heading"></a></h1>
+<h1>Common properties of nodes<a class="headerlink" href="#common-properties-of-nodes" title="Link to this heading"></a></h1>
 <p>The nodes will always have outputs that will be connected to the inputs of other
 nodes. They may also (and will probably) have parameters that can be modified
 in the user interface, and inputs to receive data from other nodes.</p>
 <img alt="_images/node_example.png" class="align-center" src="_images/node_example.png" />
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <p>Nodes can have several outputs that represent the data they provide. Each node output can be
 connected to several node inputs. Each node output (and input) can be:</p>
 <ul class="simple">
@@ -130,12 +131,12 @@ When a node has several outputs, only one of them can be previewed at a time. Th
 output slot will have a circle around it, and clicking it again will hide the preview.</p>
 </section>
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
 <p>Inputs (if any) can have the same types as outputs. An input is always connected to at most
 one output. Inputs generally have a default value that is used when it is not connected.</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <p>Parameters are used to configure nodes. The following types are supported:</p>
 <ul>
 <li><p><strong>float</strong> parameters are used whenever a real number is needed. Float parameters have
@@ -182,7 +183,8 @@ library to a gradient editor widget.</p>
 </li>
 <li><p><strong>curve</strong> parameters are edited using a dedicated dialog window that is shown when clicking on
 the parameter.</p>
-<a class="reference internal image-reference" href="_images/curve_editor.png"><img alt="_images/curve_editor.png" class="align-center" src="_images/curve_editor.png" style="width: 467.5px; height: 536.5px;" /></a>
+<a class="reference internal image-reference" href="_images/curve_editor.png"><img alt="_images/curve_editor.png" class="align-center" src="_images/curve_editor.png" style="width: 467.5px; height: 536.5px;" />
+</a>
 <p>The curve is defined by its control points that define their value and left and right slopes
 for given abscissas. Control points (as well as slope control points) can be grabbed and moved
 using the left mouse button.</p>
@@ -194,7 +196,8 @@ EaseOut, SawTooth, Bounce and Bevel.</p>
 </li>
 <li><p><strong>polygon</strong> parameters are edited using a dedicated dialog window that is shown when clicking on
 the parameter.</p>
-<a class="reference internal image-reference" href="_images/polygon_editor.png"><img alt="_images/polygon_editor.png" class="align-center" src="_images/polygon_editor.png" style="width: 233.5px; height: 262.5px;" /></a>
+<a class="reference internal image-reference" href="_images/polygon_editor.png"><img alt="_images/polygon_editor.png" class="align-center" src="_images/polygon_editor.png" style="width: 233.5px; height: 262.5px;" />
+</a>
 <p>The polygon parameter is defined by its vertices that can be grabbed and moved using the left
 mouse button.</p>
 <p>New vertices can be created by double-clicking in the editor (when created, a new vertex will
@@ -203,7 +206,7 @@ be used to split the closest edge), and deleted using the right mouse button.</p
 </ul>
 </section>
 <section id="randomness">
-<h2>Randomness<a class="headerlink" href="#randomness" title="Permalink to this heading"></a></h2>
+<h2>Randomness<a class="headerlink" href="#randomness" title="Link to this heading"></a></h2>
 <p>Nodes that provide random patterns have an implicit <strong>seed</strong> parameter. It is not possible
 to edit it directly, but clicking the small die button in the node’s title bar will change
 its value.
@@ -215,7 +218,7 @@ parents and will have the same seed in all variations.</p>
 do so, or the children’s seeds are frozen.</p>
 </section>
 <section id="variadic-nodes">
-<h2>Variadic nodes<a class="headerlink" href="#variadic-nodes" title="Permalink to this heading"></a></h2>
+<h2>Variadic nodes<a class="headerlink" href="#variadic-nodes" title="Link to this heading"></a></h2>
 <p>Nodes can have a variable number of inputs, parameters and outputs depending on the
 context.</p>
 <img alt="_images/variadic_node.png" class="align-center" src="_images/variadic_node.png" />
@@ -226,7 +229,7 @@ with the minimum size (depending on current connections) and a few other choices
 and ports.</p>
 </section>
 <section id="modifying-nodes">
-<h2>Modifying nodes<a class="headerlink" href="#modifying-nodes" title="Permalink to this heading"></a></h2>
+<h2>Modifying nodes<a class="headerlink" href="#modifying-nodes" title="Link to this heading"></a></h2>
 <p>Most nodes in Material Maker can be modified, but they first have to be made editable.
 To do this, select a node, and use the <strong>Tools -&gt; Make the selected nodes editable</strong>
 menu item or the <strong>Control+W</strong> keyboard shortcut.</p>

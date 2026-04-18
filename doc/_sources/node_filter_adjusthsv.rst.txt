@@ -1,7 +1,7 @@
-AdjustHSV node
+Adjust HSV node
 ~~~~~~~~~~~~~~
 
-The **AdjustHSV** node adjusts the hue, saturation and value of the input image.
+The **Adjust HSV** node adjusts the hue, saturation and value of the input image.
 
 .. image:: images/node_filter_adjusthsv.png
 	:align: center
@@ -9,17 +9,17 @@ The **AdjustHSV** node adjusts the hue, saturation and value of the input image.
 Inputs
 ++++++
 
-The **AdjustHSV** node requires a color input texture.
+The **Adjust HSV** node requires a color input texture.
 
 Outputs
 +++++++
 
-The **AdjustHSV** node provides a single color texture.
+The **Adjust HSV** node provides a single color texture.
 
 Parameters
 ++++++++++
 
-The **AdjustHSV** node has the following parameters:
+The **Adjust HSV** node has the following parameters:
 
 * *Hue* defines how hue is affected.
 

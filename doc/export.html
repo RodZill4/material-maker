@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Exporting Materials &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -92,25 +92,25 @@
            <div itemprop="articleBody">
              
   <section id="exporting-materials">
-<span id="export-section"></span><h1>Exporting Materials<a class="headerlink" href="#exporting-materials" title="Permalink to this heading"></a></h1>
+<span id="export-section"></span><h1>Exporting Materials<a class="headerlink" href="#exporting-materials" title="Link to this heading"></a></h1>
 <p>When exporting a material, using either the Export submenu or the command line arguments,
 Material Maker generates PNG image files for all elements of the material as well as
 specific files for the target game engine.</p>
 <p>In all cases, the generated PNG files (and especially the normal map) are generated in the
 correct format.</p>
 <section id="blender">
-<h2>Blender<a class="headerlink" href="#blender" title="Permalink to this heading"></a></h2>
+<h2>Blender<a class="headerlink" href="#blender" title="Link to this heading"></a></h2>
 <p>When exporting for Blender, Material Maker will only generate PNG/EXR images, thus the material must be built manually using the shader editor.</p>
 <p>The <a class="reference external" href="https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html#add-principled-texture-setup">Add Principled Texture Setup</a> feature from the <a class="reference external" href="https://docs.blender.org/manual/en/latest/addons/node/node_wrangler.html">Node Wrangler</a> add-on can be helpful to automate the material creation process down to several clicks:</p>
 <img alt="_images/blender_mat_demo.gif" class="align-center" src="_images/blender_mat_demo.gif" />
 </section>
 <section id="godot-game-engine">
-<h2>Godot game engine<a class="headerlink" href="#godot-game-engine" title="Permalink to this heading"></a></h2>
+<h2>Godot game engine<a class="headerlink" href="#godot-game-engine" title="Link to this heading"></a></h2>
 <p>When exporting for the Godot game engine, Material Maker will generate a .tres file that
 describes a fully configured SpatialMaterial.</p>
 </section>
 <section id="unity-game-engine">
-<h2>Unity game engine<a class="headerlink" href="#unity-game-engine" title="Permalink to this heading"></a></h2>
+<h2>Unity game engine<a class="headerlink" href="#unity-game-engine" title="Link to this heading"></a></h2>
 <p>When exporting for the Unity game engine, Material Maker will generate a .mat file that
 describes a fully configured material. It is thus possible to export materials directly
 into one of your project assets directory, and Unity will automatically detect the newly
@@ -118,9 +118,9 @@ exported materials.</p>
 <p>Depending on the Material node type, several Unity targets may be available.</p>
 </section>
 <section id="unreal-game-engine">
-<h2>Unreal game engine<a class="headerlink" href="#unreal-game-engine" title="Permalink to this heading"></a></h2>
+<h2>Unreal game engine<a class="headerlink" href="#unreal-game-engine" title="Link to this heading"></a></h2>
 <section id="unreal-engine-4">
-<h3>Unreal Engine 4<a class="headerlink" href="#unreal-engine-4" title="Permalink to this heading"></a></h3>
+<h3>Unreal Engine 4<a class="headerlink" href="#unreal-engine-4" title="Link to this heading"></a></h3>
 <p>When exporting for the Unreal game engine version 4.x, Material Maker will only
 generate PNG images and a .mm2ue file. The material must be built manually inside
 the Unreal Engine editor by following the instructions in this file.</p>
@@ -138,11 +138,11 @@ the Unreal Engine editor by following the instructions in this file.</p>
 <img alt="_images/unreal_export.png" class="align-center" src="_images/unreal_export.png" />
 </section>
 <section id="unreal-engine-5">
-<h3>Unreal Engine 5<a class="headerlink" href="#unreal-engine-5" title="Permalink to this heading"></a></h3>
+<h3>Unreal Engine 5<a class="headerlink" href="#unreal-engine-5" title="Link to this heading"></a></h3>
 <p>When exporting for the Unreal game engine version 5.x, Material Maker will generate a
 Python script that creates the material in Unreal.</p>
 <section id="initial-setup">
-<h4>Initial setup<a class="headerlink" href="#initial-setup" title="Permalink to this heading"></a></h4>
+<h4>Initial setup<a class="headerlink" href="#initial-setup" title="Link to this heading"></a></h4>
 <p>Before exporting a material, it is necessary to configure a python path in Unreal for
 Material Maker:</p>
 <ul class="simple">
@@ -154,7 +154,7 @@ Material Maker:</p>
 <img alt="_images/ue5_setup.png" class="align-center" src="_images/ue5_setup.png" />
 </section>
 <section id="id1">
-<h4>Exporting materials<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<h4>Exporting materials<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <p>When exporting a material for Unreal Engine 5, Material Maker will generate a python script,
 texture files and a shader file, and will store the full path of the script into the clipboard,
 so you just have to paste it into Unreal’s 5 Python prompt and execute it to create the material.</p>

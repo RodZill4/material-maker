@@ -1,7 +1,7 @@
-Greyscale node
+Grayscale node
 ~~~~~~~~~~~~~~
 
-The **Greyscale** node converts a color image into greyscale.
+The **Grayscale** node converts a color image into grayscale.
 
 .. image:: images/node_filter_greyscale.png
 	:align: center
@@ -9,17 +9,17 @@ The **Greyscale** node converts a color image into greyscale.
 Inputs
 ++++++
 
-The **Greyscale** node requires a color input texture.
+The **Grayscale** node requires a color input texture.
 
 Outputs
 +++++++
 
-The **Greyscale** node provides a single greyscale texture.
+The **Grayscale** node provides a single grayscale texture.
 
 Parameters
 ++++++++++
 
-The **Greyscale** node accepts the *conversion algorithm* (*lightness*, *average*,
+The **Grayscale** node accepts the *conversion algorithm* (*lightness*, *average*,
 *luminosity*, *min* or *max*) as parameter.
 
 Example images

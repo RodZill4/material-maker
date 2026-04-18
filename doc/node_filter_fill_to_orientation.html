@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Fill to Orientation node &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -73,6 +73,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_color_pick.html">Color Pick node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_swap_channels.html">Swap Channels node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_convert.html">Normal convert node</a></li>
@@ -161,26 +162,26 @@
            <div itemprop="articleBody">
              
   <section id="fill-to-orientation-node">
-<h1>Fill to Orientation node<a class="headerlink" href="#fill-to-orientation-node" title="Permalink to this heading"></a></h1>
+<h1>Fill to Orientation node<a class="headerlink" href="#fill-to-orientation-node" title="Link to this heading"></a></h1>
 <p>The <strong>Fill to Orientation</strong> node uses the output of the <strong>Fill</strong> node and fills
 all detected areas with a grayscale color that depends on their orientation.</p>
 <img alt="_images/node_filter_fill_to_orientation.png" class="align-center" src="_images/node_filter_fill_to_orientation.png" />
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
 <p>The <strong>Fill to Orientation</strong> node accepts the output of a <strong>Fill</strong> node (or a
 compatible output of another node) as input.</p>
 </section>
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <p>The <strong>Fill to Orientation</strong> node generates a single grayscale image map whose value
 is the orientation of the input (white: horizontal, black: vertical).</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <p>The <strong>Fill to Orientation</strong> has a single parameter to invert its output.</p>
 </section>
 <section id="example-images">
-<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this heading"></a></h2>
+<h2>Example images<a class="headerlink" href="#example-images" title="Link to this heading"></a></h2>
 <img alt="_images/node_fill_to_orientation_samples.png" class="align-center" src="_images/node_fill_to_orientation_samples.png" />
 </section>
 </section>

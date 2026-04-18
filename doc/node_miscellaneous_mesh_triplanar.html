@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Mesh Triplanar node &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -70,6 +70,10 @@
 <li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_export.html">Export node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_debug.html">Debug node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_variations.html">Variations node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_variations_controlled.html">Controlled Variations node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_variations_iterate.html">Iterate Variations node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_variations_layer.html">Layer Variations node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_variations_layer_color.html">Color Layer Variations node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_randomize.html">Randomize node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_miscellaneous_mesh_map.html">Mesh Map node</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Mesh Triplanar node</a><ul>
@@ -113,7 +117,7 @@
            <div itemprop="articleBody">
              
   <section id="mesh-triplanar-node">
-<h1>Mesh Triplanar node<a class="headerlink" href="#mesh-triplanar-node" title="Permalink to this heading"></a></h1>
+<h1>Mesh Triplanar node<a class="headerlink" href="#mesh-triplanar-node" title="Link to this heading"></a></h1>
 <p>The <strong>Mesh Triplanar</strong> node samples the input image three times and
 projects them onto a model from orthogonal axes using position map
 and blends them using surface normals generated from the Mesh Map node.</p>
@@ -121,19 +125,19 @@ and blends them using surface normals generated from the Mesh Map node.</p>
 but the model must first be unwrapped.</p>
 <img alt="_images/node_miscellaneous_mesh_triplanar.png" class="align-center" src="_images/node_miscellaneous_mesh_triplanar.png" />
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
 <p><strong>Mesh Triplanar</strong> node accepts an RGBA input.</p>
 </section>
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <p><strong>Mesh Triplanar</strong> outputs a triplanar-mapped texture map which can be used on a custom model.</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <p><strong>Mesh Triplanar</strong> node has a single parameter <em>K</em> which defines the blending strength of the texture samples.</p>
 </section>
 <section id="example-images">
-<h2>Example Images<a class="headerlink" href="#example-images" title="Permalink to this heading"></a></h2>
+<h2>Example Images<a class="headerlink" href="#example-images" title="Link to this heading"></a></h2>
 <img alt="_images/screenshot_triplanar.jpg" class="align-center" src="_images/screenshot_triplanar.jpg" />
 </section>
 </section>

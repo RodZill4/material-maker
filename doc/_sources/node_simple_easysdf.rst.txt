@@ -1,30 +1,30 @@
-EasySDF node
+Easy SDF node
 ~~~~~~~~~~~~
 
-The **EasySDF** node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.
+The **Easy SDF** node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.
 
 Inputs
 ++++++
 
-The EasySDF node does not have any input.
+The Easy SDF node does not have any input.
 
 Outputs
 +++++++
 
-The EasySDF node generates a Signed Distance Function output for a 2D or 3D shape,
+The Easy SDF node generates a Signed Distance Function output for a 2D or 3D shape,
 as well as Albedo, Metallic, Roughness and Emission maps.
 
 Parameters
 ++++++++++
 
-The **EasySDF** node has no parameter by default.
+The **Easy SDF** node has no parameter by default.
 
 Node parameters can be defined in the editor.
 
 Editor
 ++++++
 
-Double-clicking an EasySDF node will show the SDF Builder window.
+Double-clicking an Easy SDF node will show the SDF Builder window.
 
 .. image:: images/node_easysdf_editor.png
 	:align: center

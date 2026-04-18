@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Material nodes &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -65,6 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reroute_nodes.html">Reroute nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aperture_nodes.html">Aperture Nodes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
@@ -97,7 +98,7 @@
            <div itemprop="articleBody">
              
   <section id="material-nodes">
-<h1>Material nodes<a class="headerlink" href="#material-nodes" title="Permalink to this heading"></a></h1>
+<h1>Material nodes<a class="headerlink" href="#material-nodes" title="Link to this heading"></a></h1>
 <p>Material nodes are a specific type of shader nodes, with the following differences:</p>
 <ul class="simple">
 <li><p>their outputs cannot be connected in the material graph, but are used to generate
@@ -114,7 +115,7 @@ can also be copied and pasted using this menu.</p>
 This shows buttons to edit, load and save the node.</p>
 <p>Editing a material node will show the <strong>Material Editor</strong> window.</p>
 <section id="creating-and-modifying-material-nodes">
-<h2>Creating and modifying Material nodes<a class="headerlink" href="#creating-and-modifying-material-nodes" title="Permalink to this heading"></a></h2>
+<h2>Creating and modifying Material nodes<a class="headerlink" href="#creating-and-modifying-material-nodes" title="Link to this heading"></a></h2>
 <p>Material nodes have a node editor dialog similar to the shader node editor, with an
 additional <strong>Preview</strong> tab where a shader can be defined for the 3D preview of the
 material.</p>
@@ -137,7 +138,7 @@ etc.) necessary for all generated code.</p></li>
 </ul>
 </section>
 <section id="adding-and-modifying-export-targets">
-<h2>Adding and modifying export targets<a class="headerlink" href="#adding-and-modifying-export-targets" title="Permalink to this heading"></a></h2>
+<h2>Adding and modifying export targets<a class="headerlink" href="#adding-and-modifying-export-targets" title="Link to this heading"></a></h2>
 <p>Material nodes can be assigned export targets to generate materials for various
 game engines and tools. Those export targets can be defined using the <strong>Edit
 export targets</strong> entry of the node’s context menu, that will show the <strong>Material
@@ -152,7 +153,7 @@ files that must be generated</p></li>
 in the export templates</p></li>
 </ul>
 <section id="export-editor-toolbar">
-<h3>Export Editor Toolbar<a class="headerlink" href="#export-editor-toolbar" title="Permalink to this heading"></a></h3>
+<h3>Export Editor Toolbar<a class="headerlink" href="#export-editor-toolbar" title="Link to this heading"></a></h3>
 <p>The export editor toolbar has buttons and controls, from left to right, to:</p>
 <ul class="simple">
 <li><p>Create a new export target</p></li>
@@ -172,7 +173,7 @@ the Material Maker application window</p></li>
 </ul>
 </section>
 <section id="exports-tab">
-<h3>Exports tab<a class="headerlink" href="#exports-tab" title="Permalink to this heading"></a></h3>
+<h3>Exports tab<a class="headerlink" href="#exports-tab" title="Link to this heading"></a></h3>
 <p>The exports tab can be used to create export targets for the material.</p>
 <p>Export targets can be created, removed, duplicated, and their main file extension
 defined.</p>
@@ -211,7 +212,7 @@ buffer used in generated shaders. In the file name, <strong>$(file_prefix)</stro
 </ul>
 </section>
 <section id="custom">
-<h3>Custom<a class="headerlink" href="#custom" title="Permalink to this heading"></a></h3>
+<h3>Custom<a class="headerlink" href="#custom" title="Link to this heading"></a></h3>
 <p>The custom tab can be used to create custom text filters for <strong>$begin_generate</strong> /
 <strong>$end_generate</strong> and <strong>$definitions</strong> sections in GDScript.</p>
 </section>

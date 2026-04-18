@@ -1,7 +1,7 @@
-AlterHSV node
+Alter HSV node
 ~~~~~~~~~~~~~
 
-The **AlterHSV** node modifies the hue, saturation and value of the input image, according
+The **Alter HSV** node modifies the hue, saturation and value of the input image, according
 to dedicated input maps. It can be used to easily apply variations to its input.
 
 .. image:: images/node_filter_alterhsv.png
@@ -10,19 +10,19 @@ to dedicated input maps. It can be used to easily apply variations to its input.
 Inputs
 ++++++
 
-The **AlterHSV** node requires a color input texture. It also has 3 greyscale input maps,
+The **Alter HSV** node requires a color input texture. It also has 3 greyscale input maps,
 one for hue, one for value, and one for saturation. Values above 0.5 increase the associated
 channel, and values below 0.5 decrease it.
 
 Outputs
 +++++++
 
-The **AlterHSV** node provides a single color texture.
+The **Alter HSV** node provides a single color texture.
 
 Parameters
 ++++++++++
 
-The **AlterHSV** node has the following parameters:
+The **Alter HSV** node has the following parameters:
 
 * *All* is used as a multiplier for all input maps and can be used to modify the overall alteration
   intensity.

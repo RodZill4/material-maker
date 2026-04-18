@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Paint panel &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -49,6 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="user_interface.html">User interface</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="user_interface_overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_interface_shortcuts.html">Shortcuts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_first_steps.html">First steps with the user interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_interface_main_menu.html">Main menu</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="user_interface_panels.html">Panels</a><ul class="current">
@@ -108,9 +109,9 @@
            <div itemprop="articleBody">
              
   <section id="paint-panel">
-<h1>Paint panel<a class="headerlink" href="#paint-panel" title="Permalink to this heading"></a></h1>
+<h1>Paint panel<a class="headerlink" href="#paint-panel" title="Link to this heading"></a></h1>
 <section id="creating-a-paint-project">
-<h2>Creating a paint project<a class="headerlink" href="#creating-a-paint-project" title="Permalink to this heading"></a></h2>
+<h2>Creating a paint project<a class="headerlink" href="#creating-a-paint-project" title="Link to this heading"></a></h2>
 <p>To start painting in Material Maker, just use the <em>File -&gt; New paint project</em> menu.
 This will show a dialog where a model file and a texture size can be specified.</p>
 <p>The model must be provided in either Wavefront <code class="docutils literal notranslate"><span class="pre">.obj</span></code>, <code class="docutils literal notranslate"><span class="pre">.glb</span></code>, <code class="docutils literal notranslate"><span class="pre">.gltf</span></code> or <code class="docutils literal notranslate"><span class="pre">.fbx</span></code> format and
@@ -122,10 +123,11 @@ it before creating the paint project.</p>
 Paint panel, which consists of two sub panels. The top subpanel shows the model
 to be painted, and the bottom subpanel shows the graph where the current brush is
 described.</p>
-<a class="reference internal image-reference" href="_images/paint_panel.png"><img alt="_images/paint_panel.png" class="align-center" src="_images/paint_panel.png" style="width: 367.5px; height: 303.5px;" /></a>
+<a class="reference internal image-reference" href="_images/paint_panel.png"><img alt="_images/paint_panel.png" class="align-center" src="_images/paint_panel.png" style="width: 367.5px; height: 303.5px;" />
+</a>
 </section>
 <section id="painting-a-3d-model">
-<h2>Painting a 3D model<a class="headerlink" href="#painting-a-3d-model" title="Permalink to this heading"></a></h2>
+<h2>Painting a 3D model<a class="headerlink" href="#painting-a-3d-model" title="Link to this heading"></a></h2>
 <p>The paint subpanel is where the model is actually painted. It shows the model with its material
 in its current state, and a dynamic preview of the current brush.</p>
 <p>Note that for procedural layers, the layer brush is applied to the whole model, and consequently
@@ -178,7 +180,7 @@ can be modified.</p>
 Brushes panel) and a layer.</p>
 </section>
 <section id="creating-and-modifying-brushes">
-<h2>Creating and modifying brushes<a class="headerlink" href="#creating-and-modifying-brushes" title="Permalink to this heading"></a></h2>
+<h2>Creating and modifying brushes<a class="headerlink" href="#creating-and-modifying-brushes" title="Link to this heading"></a></h2>
 <p>The bottom subpanel is a graph that can be used to create brushes. This is very similar to
 creating materials, except the target node is the Brush node (instead of Material).</p>
 <img alt="_images/brush_subpanel.png" class="align-center" src="_images/brush_subpanel.png" />
@@ -213,7 +215,7 @@ corresponding component of the material will be painted.</p></li>
 library</strong> menu entry.</p>
 </section>
 <section id="selecting-a-painting-mask">
-<h2>Selecting a painting mask<a class="headerlink" href="#selecting-a-painting-mask" title="Permalink to this heading"></a></h2>
+<h2>Selecting a painting mask<a class="headerlink" href="#selecting-a-painting-mask" title="Link to this heading"></a></h2>
 <p>The mask selector button <img alt="button_mask_selector" src="_images/button_mask_selector.png" /> will show the mask selection dialog, that can be
 used to set the current painting mask. This mask will affect all painting operations.</p>
 <img alt="_images/mask_selector.png" class="align-center" src="_images/mask_selector.png" />

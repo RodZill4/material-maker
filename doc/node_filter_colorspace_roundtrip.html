@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Colorspace Roundtrip node &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -73,6 +73,7 @@
 <li class="toctree-l3"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_color_pick.html">Color Pick node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_swap_channels.html">Swap Channels node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_convert.html">Normal convert node</a></li>
@@ -162,7 +163,7 @@
            <div itemprop="articleBody">
              
   <section id="colorspace-roundtrip-node">
-<h1>Colorspace Roundtrip node<a class="headerlink" href="#colorspace-roundtrip-node" title="Permalink to this heading"></a></h1>
+<h1>Colorspace Roundtrip node<a class="headerlink" href="#colorspace-roundtrip-node" title="Link to this heading"></a></h1>
 <p>The <strong>Colorspace Roundtrip</strong> node converts its input to another colorspace,
 applies a “lambda subgraph” to individual channels in that colorspace,
 and converts it back to RGB.</p>
@@ -171,15 +172,15 @@ apply some transformations to it within that colorspace, and finally convert it 
 The <strong>Colorspace Roundtrip</strong> node streamlines this process by encapsulating it into a single node.</p>
 <img alt="_images/node_filter_colorspace_roundtrip.png" class="align-center" src="_images/node_filter_colorspace_roundtrip.png" />
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
 <p>The <strong>Colorspace Roundtrip</strong> node accepts an RGBA input.</p>
 </section>
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <p>The <strong>Colorspace Roundtrip</strong> node provides an RGBA output.</p>
 </section>
 <section id="lambda-i-o">
-<h2>Lambda I/O<a class="headerlink" href="#lambda-i-o" title="Permalink to this heading"></a></h2>
+<h2>Lambda I/O<a class="headerlink" href="#lambda-i-o" title="Link to this heading"></a></h2>
 <p>The bottom four outputs and inputs of the <strong>Colorspace Roundtrip</strong> node correspond to
 the three channels of the working colorspace along with the alpha channel.
 Outputs should be connected to a “lambda subgraph” that applies the desired transformation in the working colorspace,
@@ -188,7 +189,7 @@ which should then be connected back to the inputs for conversion back to RGB.</p
 This means that only the channels that require modification need to be connected.</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <p>The <strong>Colorspace Roundtrip</strong> node has a single parameter to choose the working colorspace.
 The alpha channel will be passed through unchanged in all cases.</p>
 <ul class="simple">
@@ -201,7 +202,7 @@ Consists of a linear Luma (brightness) channel and two Chroma (blueness and redn
 </ul>
 </section>
 <section id="example-usage">
-<h2>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h2>
+<h2>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Desaturate (replace Saturation channel of HSV with 0)</p></li>
 </ul>

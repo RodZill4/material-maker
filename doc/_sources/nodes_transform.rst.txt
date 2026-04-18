@@ -28,3 +28,4 @@ The transform nodes are nodes that affect the geometry of their input.
 	node_transform_swirl
 	node_transform_spherize
 	node_transform_inverse_circle_map
+	node_transform_directional_warp

@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Remote nodes &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -65,6 +65,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reroute_nodes.html">Reroute nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aperture_nodes.html">Aperture Nodes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
@@ -97,17 +98,17 @@
            <div itemprop="articleBody">
              
   <section id="remote-nodes">
-<h1>Remote nodes<a class="headerlink" href="#remote-nodes" title="Permalink to this heading"></a></h1>
+<h1>Remote nodes<a class="headerlink" href="#remote-nodes" title="Link to this heading"></a></h1>
 <p>Remote nodes have no input or output. They are only used to control (remotely) the
 parameters of other nodes. They can be used to either gather important parameters
 of a complex graph or define the parameters of a subgraph node.</p>
 <section id="creating-a-remote-node">
-<h2>Creating a remote node<a class="headerlink" href="#creating-a-remote-node" title="Permalink to this heading"></a></h2>
+<h2>Creating a remote node<a class="headerlink" href="#creating-a-remote-node" title="Link to this heading"></a></h2>
 <p>Remote nodes can be created by dragging a Miscellaneous/Remote node from the library
 panel to a graph panel.</p>
 </section>
 <section id="configuring-a-remote-node">
-<h2>Configuring a remote node<a class="headerlink" href="#configuring-a-remote-node" title="Permalink to this heading"></a></h2>
+<h2>Configuring a remote node<a class="headerlink" href="#configuring-a-remote-node" title="Link to this heading"></a></h2>
 <p>Remote nodes provide three kinds of controls:</p>
 <ul class="simple">
 <li><p>linked widgets, that are associated to parameters in the graph and whose values are copied
@@ -117,7 +118,7 @@ parameters</p></li>
 <li><p>named parameters, that can be used in expressions in all nodes of the subgraph</p></li>
 </ul>
 <section id="linked-widgets">
-<h3>Linked widgets<a class="headerlink" href="#linked-widgets" title="Permalink to this heading"></a></h3>
+<h3>Linked widgets<a class="headerlink" href="#linked-widgets" title="Link to this heading"></a></h3>
 <p>Linked widgets can be used to modify at the same time several parameters from several nodes.</p>
 <p>When hovering a linked widget, the user interface will show which parameters it controls.</p>
 <img alt="_images/remote_create_linked_widget.gif" class="align-center" src="_images/remote_create_linked_widget.gif" />
@@ -131,7 +132,7 @@ associating parameters to linked widgets, Material Maker will check compatibilit
 <p>The arrow buttons can be used to reorder widgets.</p>
 </section>
 <section id="configuration-widgets">
-<h3>Configuration widgets<a class="headerlink" href="#configuration-widgets" title="Permalink to this heading"></a></h3>
+<h3>Configuration widgets<a class="headerlink" href="#configuration-widgets" title="Link to this heading"></a></h3>
 <p>Configuration widgets are used to create named configurations for associated parameters
 in the graph.</p>
 <img alt="_images/remote_configuration_widget.gif" class="align-center" src="_images/remote_configuration_widget.gif" />
@@ -149,7 +150,7 @@ values.</p>
 <p>It is also possible to rename, update or delete a configuration using the drop down button.</p>
 </section>
 <section id="named-parameters">
-<h3>Named parameters<a class="headerlink" href="#named-parameters" title="Permalink to this heading"></a></h3>
+<h3>Named parameters<a class="headerlink" href="#named-parameters" title="Link to this heading"></a></h3>
 <p>Named parameters can be declared in Remote nodes, and used in parameter expressions of all nodes
 in the same subgraph.</p>
 <img alt="_images/named_parameter.png" class="align-center" src="_images/named_parameter.png" />

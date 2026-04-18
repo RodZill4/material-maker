@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,20 +9,20 @@
   <title>Nodes library &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Material nodes" href="nodes_material.html" />
-    <link rel="prev" title="Reroute nodes" href="reroute_nodes.html" /> 
+    <link rel="prev" title="Aperture Nodes" href="aperture_nodes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -89,7 +89,7 @@
            <div itemprop="articleBody">
              
   <section id="nodes-library">
-<h1>Nodes library<a class="headerlink" href="#nodes-library" title="Permalink to this heading"></a></h1>
+<h1>Nodes library<a class="headerlink" href="#nodes-library" title="Link to this heading"></a></h1>
 <p>This section describes all nodes that are provided in the base library
 to describe procedural materials.</p>
 <div class="toctree-wrapper compound">
@@ -188,6 +188,7 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_blend.html">Blend node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_filter_color_pick.html">Color Pick node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_swap_channels.html">Swap Channels node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_normal_map.html">Normal Map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_filter_normal_convert.html">Normal convert node</a></li>
@@ -258,6 +259,7 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_swirl.html">Swirl node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_spherize.html">Spherize node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_transform_inverse_circle_map.html">Inverse Circle Map node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_transform_directional_warp.html">Directional Warp node</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="nodes_workflow.html">Workflow nodes</a><ul>
@@ -280,6 +282,10 @@ to describe procedural materials.</p>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_export.html">Export node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_debug.html">Debug node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_variations.html">Variations node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_variations_controlled.html">Controlled Variations node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_variations_iterate.html">Iterate Variations node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_variations_layer.html">Layer Variations node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_variations_layer_color.html">Color Layer Variations node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_randomize.html">Randomize node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_mesh_map.html">Mesh Map node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node_miscellaneous_mesh_triplanar.html">Mesh Triplanar node</a></li>
@@ -293,7 +299,7 @@ to describe procedural materials.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="reroute_nodes.html" class="btn btn-neutral float-left" title="Reroute nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="aperture_nodes.html" class="btn btn-neutral float-left" title="Aperture Nodes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="nodes_material.html" class="btn btn-neutral float-right" title="Material nodes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

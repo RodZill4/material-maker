@@ -1,7 +1,7 @@
-MixMaps node
+Mix Maps node
 ~~~~~~~~~~~~
 
-The **MixMaps** node combines up to 4 maps holding height, orientation and offset information.
+The **Mix Maps** node combines up to 4 maps holding height, orientation and offset information.
 
 .. image:: images/node_workflow_mixmap.png
 	:align: center
@@ -9,14 +9,14 @@ The **MixMaps** node combines up to 4 maps holding height, orientation and offse
 Inputs
 ++++++
 
-The **MixMaps** node accepts four input maps. Unconnected inputs are ignored.
+The **Mix Maps** node accepts four input maps. Unconnected inputs are ignored.
 
 Outputs
 +++++++
 
-The **MixMaps** node outputs the combined map.
+The **Mix Maps** node outputs the combined map.
 
 Parameters
 ++++++++++
 
-The **MixMaps** node does not have any parameter.
+The **Mix Maps** node does not have any parameter.

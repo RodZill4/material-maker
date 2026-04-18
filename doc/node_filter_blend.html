@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Blend node &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -81,6 +81,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_combine.html">Combine node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_decompose.html">Decompose node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_filter_color_pick.html">Color Pick node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_swap_channels.html">Swap Channels node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_map.html">Normal Map node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_filter_normal_convert.html">Normal convert node</a></li>
@@ -163,13 +164,13 @@
            <div itemprop="articleBody">
              
   <section id="blend-node">
-<h1>Blend node<a class="headerlink" href="#blend-node" title="Permalink to this heading"></a></h1>
+<h1>Blend node<a class="headerlink" href="#blend-node" title="Link to this heading"></a></h1>
 <p>The <strong>Blend</strong> node blends two or more inputs using an optional opacity. It performs a blend operation
 defined by the blend mode between the inputs, and mixes the result with the background input
 using the opacity (defined by the <em>opacity</em> parameter multiplied by the grayscale input).</p>
 <img alt="_images/node_filter_blend.png" class="align-center" src="_images/node_filter_blend.png" />
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
 <p>The <strong>Blend</strong> node accepts three or more inputs:</p>
 <ul class="simple">
 <li><p>The first input is the background layer.</p></li>
@@ -180,11 +181,11 @@ opacity parameter for the first layer.</p></li>
 <p>This node is variadic, and more layers and associated masks can be added.</p>
 </section>
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <p>The <strong>Blend</strong> node outputs the result of the blend operation.</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <p>The <strong>Blend</strong> node has two or more parameters:</p>
 <ul class="simple">
 <li><p>The <em>blend mode</em>, that can be one of the following: <em>Normal</em>, <em>Dissolve</em>, <em>Multiply</em>, <em>Screen</em>,
@@ -198,7 +199,7 @@ multiplied with that parameter.</p></li>
 <p>Both parameters are repeated for each additional layer.</p>
 </section>
 <section id="blending-modes">
-<h2>Blending modes<a class="headerlink" href="#blending-modes" title="Permalink to this heading"></a></h2>
+<h2>Blending modes<a class="headerlink" href="#blending-modes" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Blend mode</p></th>
@@ -303,11 +304,11 @@ multiplied with that parameter.</p></li>
 </table>
 </section>
 <section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading"></a></h2>
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <p>The <em>opacity</em> input will be considered (and implicitly converted to) grayscale if it is a color texture.</p>
 </section>
 <section id="example-images">
-<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this heading"></a></h2>
+<h2>Example images<a class="headerlink" href="#example-images" title="Link to this heading"></a></h2>
 <img alt="_images/node_blend_samples.png" class="align-center" src="_images/node_blend_samples.png" />
 </section>
 </section>

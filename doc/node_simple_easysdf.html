@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>EasySDF node &mdash; Material Maker  documentation</title>
-  
+  <title>Easy SDF node &mdash; Material Maker  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/js/custom.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/js/custom.js?v=c682fb1d"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Seven segment display node" href="node_simple_seven_segment_display.html" />
-    <link rel="prev" title="PolyCurve node" href="node_simple_polycurve.html" /> 
+    <link rel="prev" title="PolyC urve node" href="node_simple_polycurve.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> Material Maker
           
-
-          
-            
-            <img src="_static/icon.png" class="logo" alt="Logo"/>
-          
+          <a href="index.html" class="icon icon-home">
+            Material Maker
+              <img src="_static/icon.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                1.3
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_interface.html">User interface</a></li>
@@ -112,8 +61,8 @@
 <li class="toctree-l3"><a class="reference internal" href="node_simple_sdf.html">2D Signed distance function geometry nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_curve.html">Curve node</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_simple_profile.html">Profile node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_simple_polycurve.html">PolyCurve node</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">EasySDF node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_simple_polycurve.html">PolyC urve node</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Easy SDF node</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#outputs">Outputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
@@ -139,97 +88,55 @@
 <li class="toctree-l1"><a class="reference internal" href="command_line.html">Command line arguments</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Material Maker</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="base_library.html">Nodes library</a> &raquo;</li>
-        
-          <li><a href="nodes_simple.html">Simple nodes</a> &raquo;</li>
-        
-      <li>EasySDF node</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="base_library.html">Nodes library</a></li>
+          <li class="breadcrumb-item"><a href="nodes_simple.html">Simple nodes</a></li>
+      <li class="breadcrumb-item active">Easy SDF node</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="easysdf-node">
-<h1>EasySDF node<a class="headerlink" href="#easysdf-node" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>EasySDF</strong> node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.</p>
-<div class="section" id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h2>
-<p>The EasySDF node does not have any input.</p>
-</div>
-<div class="section" id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
-<p>The EasySDF node generates a Signed Distance Function output for a 2D or 3D shape,
+             
+  <section id="easy-sdf-node">
+<h1>Easy SDF node<a class="headerlink" href="#easy-sdf-node" title="Link to this heading"></a></h1>
+<p>The <strong>Easy SDF</strong> node outputs a custom 2D or 3D SDF shape that can be defined using a simple editor.</p>
+<section id="inputs">
+<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
+<p>The Easy SDF node does not have any input.</p>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
+<p>The Easy SDF node generates a Signed Distance Function output for a 2D or 3D shape,
 as well as Albedo, Metallic, Roughness and Emission maps.</p>
-</div>
-<div class="section" id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>EasySDF</strong> node has no parameter by default.</p>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<p>The <strong>Easy SDF</strong> node has no parameter by default.</p>
 <p>Node parameters can be defined in the editor.</p>
-</div>
-<div class="section" id="editor">
-<h2>Editor<a class="headerlink" href="#editor" title="Permalink to this headline">¶</a></h2>
-<p>Double-clicking an EasySDF node will show the SDF Builder window.</p>
+</section>
+<section id="editor">
+<h2>Editor<a class="headerlink" href="#editor" title="Link to this heading"></a></h2>
+<p>Double-clicking an Easy SDF node will show the SDF Builder window.</p>
 <img alt="_images/node_easysdf_editor.png" class="align-center" src="_images/node_easysdf_editor.png" />
 <p>This window consists of (from left to right) a treeview of the SDF shape, a preview, and a parameter panel.</p>
-<div class="section" id="treeview">
-<h3>Treeview<a class="headerlink" href="#treeview" title="Permalink to this headline">¶</a></h3>
+<section id="treeview">
+<h3>Treeview<a class="headerlink" href="#treeview" title="Link to this heading"></a></h3>
 <p>The treeview shows all items of the SDF shape in a hierarchy. Items can be added, copied, pasted or deleted
 using the context menu.</p>
 <p>The available SDF item types are:</p>
@@ -305,9 +212,9 @@ its greyscale child texture</p></li>
 </ul>
 </li>
 </ul>
-</div>
-<div class="section" id="preview">
-<h3>Preview<a class="headerlink" href="#preview" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="preview">
+<h3>Preview<a class="headerlink" href="#preview" title="Link to this heading"></a></h3>
 <p>The 2D preview shows the generated shape for the whole tree in grey, and highlights the
 selected subtree in light grey and the selected item without alterations in light yellow.
 It has several view modes:</p>
@@ -322,9 +229,9 @@ It has several view modes:</p>
 <p>The 3D preview shows the generated shape for the whole tree.</p>
 <p>Controls for position, scale, rotation angle and item-specific parameters are shown in the
 preview and can be used to modify the selected item’s parameters.</p>
-</div>
-<div class="section" id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <p>The Parameters panel has 2 sections, Node Parameters, and Item Parameters.</p>
 <p>The Node Parameters must be declared and can be used in Item Parameters
 expressions. A new node parameter can be created by clicking the “+”
@@ -351,60 +258,43 @@ defined.
 This mode is useful to tweak expressions and default values for the Node
 Parameters.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="example-images">
-<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="example-images">
+<h2>Example images<a class="headerlink" href="#example-images" title="Link to this heading"></a></h2>
 <img alt="_images/node_easysdf_samples.png" class="align-center" src="_images/node_easysdf_samples.png" />
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="node_simple_polycurve.html" class="btn btn-neutral float-left" title="PolyC urve node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="node_simple_seven_segment_display.html" class="btn btn-neutral float-right" title="Seven segment display node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="node_simple_polycurve.html" class="btn btn-neutral float-left" title="PolyCurve node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2018-2023, Rodolphe Suescun.
-
-    </p>
+    <p>&#169; Copyright 2018-2023, Rodolphe Suescun.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

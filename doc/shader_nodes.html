@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -9,14 +9,14 @@
   <title>Shader nodes &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=ef8a6cdb" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -71,6 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="remote_nodes.html">Remote nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="subgraph_nodes.html">Subgraph nodes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reroute_nodes.html">Reroute nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aperture_nodes.html">Aperture Nodes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base_library.html">Nodes library</a></li>
@@ -103,7 +104,7 @@
            <div itemprop="articleBody">
              
   <section id="shader-nodes">
-<h1>Shader nodes<a class="headerlink" href="#shader-nodes" title="Permalink to this heading"></a></h1>
+<h1>Shader nodes<a class="headerlink" href="#shader-nodes" title="Link to this heading"></a></h1>
 <p>Most nodes in Material Maker are shader nodes. Their outputs are not defined as images,
 but as shader programs that calculate</p>
 <ul class="simple">
@@ -116,7 +117,7 @@ As a consequence, most shader nodes are resolution independant.</p>
 <p>Any shader node can be made editable using the <em>Control+W</em> keyboard shortcut.</p>
 <p>Editing a shader node will show the <strong>Node Editor</strong> window.</p>
 <section id="creating-and-editing-shader-nodes">
-<h2>Creating and editing shader nodes<a class="headerlink" href="#creating-and-editing-shader-nodes" title="Permalink to this heading"></a></h2>
+<h2>Creating and editing shader nodes<a class="headerlink" href="#creating-and-editing-shader-nodes" title="Link to this heading"></a></h2>
 <p>A shader node will always have outputs that will be connected to the inputs of other
 nodes. It may also (and probably will) have parameters that can be modified in the
 user interface, and inputs to receive data from other nodes.</p>
@@ -124,7 +125,7 @@ user interface, and inputs to receive data from other nodes.</p>
 <p>Inputs and parameters can be added in the <strong>General</strong> tab, but first, you may want to
 choose a nice name for your new node.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
 <p>To add a parameter, just click on the green “+” button in the Parameters section.
 A new parameter line will be created with a red “-” button on its left to delete
 the new parameter. On this line:</p>
@@ -148,7 +149,7 @@ the gradient on the x axis (<strong>$uv</strong> is an implicit variable used by
 UV coordinates).</p>
 </section>
 <section id="inputs">
-<h3>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h3>
+<h3>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h3>
 <p>Inputs can be added and removed, have a name and a label (but no label trick) just
 like parameters. they also have a type that can be <strong>Grayscale</strong>, <strong>Color</strong> or
 <strong>RGBA</strong>.
@@ -171,7 +172,7 @@ an impact on performance.</p>
 example <strong>$myinput(2.0*$uv+vec2(0.2, 0.3))</strong> refers to <strong>myinput</strong>, scaled and translated.</p>
 </section>
 <section id="outputs">
-<h3>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h3>
+<h3>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h3>
 <p>Outputs are defined in the <strong>Outputs</strong> tab and are very similar to inputs, but instead
 of a default value, the generated value of the output should be specified as a
 GLSL expression (<strong>float</strong> for <strong>Grayscale</strong>, a <strong>vec3</strong> for <strong>Color</strong> or a
@@ -185,11 +186,11 @@ remaining tabs.</p>
 </section>
 </section>
 <section id="adding-the-actual-glsl-code">
-<h2>Adding the actual GLSL code<a class="headerlink" href="#adding-the-actual-glsl-code" title="Permalink to this heading"></a></h2>
+<h2>Adding the actual GLSL code<a class="headerlink" href="#adding-the-actual-glsl-code" title="Link to this heading"></a></h2>
 <p>Now that parameters, inputs and outputs are defined, the code that will actually
 generate the texture will be in the 3 remaining tabs.</p>
 <section id="global-functions">
-<h3>Global functions<a class="headerlink" href="#global-functions" title="Permalink to this heading"></a></h3>
+<h3>Global functions<a class="headerlink" href="#global-functions" title="Link to this heading"></a></h3>
 <p>The Global functions tab is used to define the functions that are necessary to
 implement the texture generator. Those functions will be included only once (when
 the node is used of course) and cannot use parameters or inputs. This is
@@ -197,7 +198,7 @@ typically where you will paste the code you prepared in Shadertoy.</p>
 <img alt="_images/node_editor_global.png" class="align-center" src="_images/node_editor_global.png" />
 </section>
 <section id="instance-functions">
-<h3>Instance functions<a class="headerlink" href="#instance-functions" title="Permalink to this heading"></a></h3>
+<h3>Instance functions<a class="headerlink" href="#instance-functions" title="Link to this heading"></a></h3>
 <p>Instance functions are functions that are unique to an instance of the node.
 They will typically depend on parameters, and those could either be used as
 parameters when calling global functions, or to form global function names (as
@@ -209,7 +210,7 @@ with a unique name that depends on the node instance.</p>
 <img alt="_images/node_editor_instance.png" class="align-center" src="_images/node_editor_instance.png" />
 </section>
 <section id="main-code">
-<h3>Main code<a class="headerlink" href="#main-code" title="Permalink to this heading"></a></h3>
+<h3>Main code<a class="headerlink" href="#main-code" title="Link to this heading"></a></h3>
 <p>This tab contains code that will be inserted into the main combined shader and
 can be used to define variables that will be used in the outputs expressions.
 This can be useful either to simplify the outputs or to define variables that
@@ -223,7 +224,7 @@ Maker provides the name_uv implicit variable for this.</p>
 <img alt="_images/node_editor_main.png" class="align-center" src="_images/node_editor_main.png" />
 </section>
 <section id="variadic-shader-nodes">
-<h3>Variadic shader nodes<a class="headerlink" href="#variadic-shader-nodes" title="Permalink to this heading"></a></h3>
+<h3>Variadic shader nodes<a class="headerlink" href="#variadic-shader-nodes" title="Link to this heading"></a></h3>
 <p>When specifying an input, and output or a parameter, it is possible to add use a number sign (#) in their
 name. This makes the node variadic, and all such inputs, parameters and outputs can automatically be
 repeated (depending on the variadic size of the node instance).</p>
