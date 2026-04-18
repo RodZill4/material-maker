@@ -82,7 +82,6 @@ func _on_projects_tab_changed(tab : int):
 	_on_projects_panel_resized()
 
 
-
 func update_menu_position() -> void:
 	if not current_graph_edit:
 		%MenuBar.position = Vector2()

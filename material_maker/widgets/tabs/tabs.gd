@@ -31,7 +31,7 @@ func add_tab(control, legible_unique_name = false) -> void:
 	add_child(control, legible_unique_name)
 	assert(! control is TabBar)
 	move_child(control, $TabBar.get_tab_count())
-	$TabBar.add_tab(control.name)
+	$TabBar.add_tab("[unnamed]")
 	control.visible = false
 	_on_Projects_resized()
 
