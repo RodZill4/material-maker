@@ -2,6 +2,7 @@ extends Popup
 
 func _ready() -> void:
 	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	theme = mm_globals.main_window.theme
 	popup_centered()
 
 func set_text(t) -> void:
