@@ -309,7 +309,8 @@ func setup_portal_edit() -> void:
 		func(new_text : String) -> void:
 			var new_link := new_text.strip_edges()
 			if not new_link.is_empty():
-				on_parameter_changed("link", new_link)
+				if is_link_unique(new_link):
+					on_parameter_changed("link", new_link)
 				edit.modulate = link_collision_warning_color(new_link)
 			edit_box_set_position(edit))
 	edit.focus_exited.connect(func(): edit.text_submitted.emit(edit.text))
