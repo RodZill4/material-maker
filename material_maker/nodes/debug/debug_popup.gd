@@ -5,7 +5,7 @@ var src_code
 const GENFUNCTIONS : Array = [ "generate_shadertoy", "generate_godot_canvasitem", "generate_godot_spatial" ]
 
 func _on_ready() -> void:
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = Vector2(500 ,500) * content_scale_factor
 
 func show_code(s) -> void:

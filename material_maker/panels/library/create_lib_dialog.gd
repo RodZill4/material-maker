@@ -10,7 +10,7 @@ signal return_info(status)
 
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	%FilePickerButton.set_mode(FileDialog.FILE_MODE_OPEN_DIR)
 	%FilePickerButton.icon = get_parent().get_theme_icon("folder", "MM_Icons")
 	hide()
