@@ -58,8 +58,8 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 	dialog_dim_background = true,
-	node_minimize_button = false,
-	node_close_button = false,
+	node_minimize_button = true,
+	node_close_button = true,
 }
 
 
