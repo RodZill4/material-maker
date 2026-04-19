@@ -1875,7 +1875,7 @@ func _on_resized() -> void:
 
 func create_portals() -> void:
 	const tolerance_pixels : float = 2.0
-	var connection := get_closest_connection_at_point(
+	var connection : Dictionary = get_closest_connection_at_point(
 			get_local_mouse_position(), connection_lines_thickness + tolerance_pixels)
 	if connection.is_empty():
 		return
@@ -1884,8 +1884,8 @@ func create_portals() -> void:
 
 	var from_node : MMGraphNodeMinimal = get_node(NodePath(connection.from_node))
 	var to_node : MMGraphNodeMinimal = get_node(NodePath(connection.to_node))
-	var outpos := from_node.position_offset + from_node.get_output_port_position(connection.from_port)
-	var inpos := to_node.position_offset + to_node.get_input_port_position(connection.to_port)
+	var outpos : Vector2 = from_node.position_offset + from_node.get_output_port_position(connection.from_port)
+	var inpos : Vector2 = to_node.position_offset + to_node.get_input_port_position(connection.to_port)
 
 	outpos += Vector2(50, -12)
 	inpos += Vector2(-70, -12)
