@@ -15,7 +15,7 @@ enum Portal {
 var io : Portal
 var source : MMGenBase.OutputPort
 
-var editable := false
+var editable : bool = false
 var color : Color = Color.WHITE
 var horizontal_label : bool = mm_globals.get_config("aperture_label_position")
 
