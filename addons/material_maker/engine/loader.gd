@@ -169,7 +169,7 @@ static func dict_tree_to_string(data : Dictionary, compress : bool = false) -> S
 		var compressed : String = Marshalls.raw_to_base64(buffer.compress(FileAccess.COMPRESSION_ZSTD))
 		compressed = "MMC:"+str(buffer.size())+":"+compressed
 		if string.length() > compressed.length():
-			print(string.length(), "  ", compressed.length())
+			#print(string.length(), "  ", compressed.length())
 			string = compressed
 	else:
 		string = JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true, true)
