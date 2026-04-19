@@ -1648,29 +1648,29 @@ func add_reroute_to_output(node : MMGraphNodeMinimal, port_index : int) -> void:
 	undoredo_create_step("Reroute output", generator.get_hier_name(), prev, next)
 
 func _get_connection_line(from : Vector2, to : Vector2) -> PackedVector2Array:
-	var off := 15.0 * connection_lines_curvature * 0.5 * zoom
-	var points := PackedVector2Array()
-	var mid := (from + to) * 0.5
+	var off : float = 15.0 * connection_lines_curvature * 0.5 * zoom
+	var points : PackedVector2Array = PackedVector2Array()
+	var mid : Vector2 = (from + to) * 0.5
 	match connection_line_style:
 		ConnectionStyle.DIRECT:
 			if to.x > from.x:
 				off += (to.x - from.x) * 0.1
-			var ma := Vector2(maxf(mid.x, from.x + off), mid.y)
-			var mb := Vector2(minf(mid.x, to.x - off), mid.y)
-			var f1 := Vector2(from.x + off, from.y)
-			var t1 := Vector2(to.x - off, to.y)
+			var ma : Vector2 = Vector2(maxf(mid.x, from.x + off), mid.y)
+			var mb : Vector2 = Vector2(minf(mid.x, to.x - off), mid.y)
+			var f1 : Vector2 = Vector2(from.x + off, from.y)
+			var t1 : Vector2 = Vector2(to.x - off, to.y)
 			points.append_array([from, f1, (f1 + ma) * 0.5, (t1 + mb) * 0.5, t1, to])
 			return points
 
 		ConnectionStyle.BEZIER:
 		# default behavior, adapted from:
 		# github.com/godotengine/godot/blob/4.4/scene/gui/graph_edit.cpp#L1282
-			var x_diff := to.x - from.x
-			var cp_offset := x_diff * connection_lines_curvature
-			if x_diff < 0:
-				cp_offset *= -1
+			var x_diff : float = to.x - from.x
+			var cp_offset : float = x_diff * connection_lines_curvature
+			if x_diff < 0.0:
+				cp_offset *= -1.0
 
-			var curve := Curve2D.new()
+			var curve : Curve2D = Curve2D.new()
 			curve.add_point(from)
 			curve.set_point_out(0, Vector2(cp_offset, 0))
 			curve.add_point(to)
@@ -1682,118 +1682,118 @@ func _get_connection_line(from : Vector2, to : Vector2) -> PackedVector2Array:
 				return curve.tessellate(1)
 
 		ConnectionStyle.MANHATTAN:
-			if abs(from.x - to.x) < 0.5 or abs(from.y - to.y) < 0.5:
+			if absf(from.x - to.x) < 0.5 or absf(from.y - to.y) < 0.5:
 				return PackedVector2Array([from, to])
-			var ma := Vector2(maxf(mid.x, from.x + off), mid.y)
-			var mb := Vector2(minf(mid.x, to.x - off), mid.y)
-			var f1 := Vector2(maxf(mid.x, from.x + off), from.y)
-			var t1 := Vector2(mb.x, to.y)
+			var ma : Vector2 = Vector2(maxf(mid.x, from.x + off), mid.y)
+			var mb : Vector2 = Vector2(minf(mid.x, to.x - off), mid.y)
+			var f1 : Vector2 = Vector2(maxf(mid.x, from.x + off), from.y)
+			var t1 : Vector2 = Vector2(mb.x, to.y)
 			points.append_array([from, f1, ma, mb, t1, to])
 			return points
 
 		ConnectionStyle.ROUNDED:
-			if abs(from.x - to.x) < 0.5 or abs(from.y - to.y) < 0.5:
+			if absf(from.x - to.x) < 0.5 or absf(from.y - to.y) < 0.5:
 				return PackedVector2Array([from,to])
-			var mb := mid
+			var mb : Vector2 = mid
 			points.append(from)
 
-			const pts := 12.0 # corner arc resolution
-			var max_radius := 75.0 # max. arc radius when from < to
-			var inv_max_radius := 25.0 # max. arc radius when from > to
+			const pts : float = 12.0 # corner arc resolution
+			var max_radius : float = 75.0 # max. arc radius when from < to
+			var inv_max_radius : float = 25.0 # max. arc radius when from > to
 
-			var round_fac := clampf(connection_lines_curvature * 0.5, 0.0, 1.0)
+			var round_fac : float = clampf(connection_lines_curvature * 0.5, 0.0, 1.0)
 			max_radius = maxf(max_radius * round_fac, 4.0)
 			inv_max_radius = maxf(inv_max_radius * round_fac , 2.0)
 
-			var r := minf(minf(absf(to.y - from.y) * 0.25,
+			var r : float = minf(minf(absf(to.y - from.y) * 0.25,
 					absf(from.x - to.x) * 0.25), max_radius)
 
 			if from.x < to.x:
 				for i : float in range(pts):
-					var x := lerpf(mid.x - r, mid.x, i/pts)
-					var y := lerpf(from.y, from.y + r * signf(to.y - from.y), i/pts)
+					var x : float = lerpf(mid.x - r, mid.x, i/pts)
+					var y : float = lerpf(from.y, from.y + r * signf(to.y - from.y), i/pts)
 					points.append(Vector2(x, from.y).lerp(Vector2(mid.x, y), i/pts))
 
 				for i : float in range(pts):
-					var x := lerpf(mid.x, mid.x + r, i/pts)
-					var y := lerpf(to.y + r * sign(from.y - to.y), to.y, i/pts)
+					var x : float = lerpf(mid.x, mid.x + r, i/pts)
+					var y : float = lerpf(to.y + r * sign(from.y - to.y), to.y, i/pts)
 					points.append(Vector2(mid.x, y).lerp(Vector2(x , to.y), i/pts))
 			else:
 				r = minf(r, inv_max_radius)
 				for i : float in range(pts):
-					var x := lerpf(from.x, from.x + r, i/pts)
-					var y := lerpf(from.y, from.y + r * signf(to.y - from.y), i/pts)
+					var x : float = lerpf(from.x, from.x + r, i/pts)
+					var y : float = lerpf(from.y, from.y + r * signf(to.y - from.y), i/pts)
 					points.append(Vector2(x , from.y).lerp(Vector2(from.x + r, y), i/pts))
 
-				var last := points[points.size() - 1]
+				var last : Vector2 = points[points.size() - 1]
 				mb.x = last.x
-				var voff := last.y + 0.01 * signf(mid.y - last.y)
+				var voff : float = last.y + 0.01 * signf(mid.y - last.y)
 				mb.y = minf(mid.y + r, voff) if from.y > to.y else maxf(mid.y - r, voff)
 				points.append(mb)
 
 				if from.y < to.y:
 					var t1 := Vector2(points[points.size() - 1].x, mb.y)
 					for i : float in range(pts):
-						var x := lerpf(t1.x, t1.x - r, i/pts)
-						var y := lerpf(t1.y, t1.y + r, i/pts)
+						var x : float = lerpf(t1.x, t1.x - r, i/pts)
+						var y : float = lerpf(t1.y, t1.y + r, i/pts)
 						points.append(Vector2(t1.x, y).lerp(Vector2(x , t1.y + r), i/pts))
 
-					var t2 := Vector2(to.x, mb.y + r)
+					var t2 : Vector2 = Vector2(to.x, mb.y + r)
 					r = minf(absf(t2.y - to.y) * 0.5, r)
 					for i : float in range(1, pts):
-						var x := lerpf(t2.x, t2.x - r, i/pts)
-						var y := lerpf(t2.y, t2.y + r, i/pts)
+						var x : float = lerpf(t2.x, t2.x - r, i/pts)
+						var y : float = lerpf(t2.y, t2.y + r, i/pts)
 						points.append(Vector2(x, t2.y).lerp(Vector2(t2.x - r, y), i/pts))
 
-					var t3 := Vector2(to.x - r, to.y - r)
+					var t3 : Vector2 = Vector2(to.x - r, to.y - r)
 					for i : float in range(pts):
-						var x := lerpf(t3.x, t3.x + r, i/pts)
-						var y := lerpf(t3.y, t3.y + r, i/pts)
+						var x : float = lerpf(t3.x, t3.x + r, i/pts)
+						var y : float = lerpf(t3.y, t3.y + r, i/pts)
 						points.append(Vector2(t3.x, y).lerp(Vector2(x , t3.y + r), i/pts))
 				else:
-					var t4 := points[points.size() - 1]
+					var t4 : Vector2 = points[points.size() - 1]
 
 					r = minf(absf(t4.y - to.y) * 0.5, r)
 					for i : float in range(pts):
-						var x := lerpf(t4.x, t4.x - r, i/pts)
-						var y := lerpf(t4.y, t4.y - r, i/pts)
+						var x : float = lerpf(t4.x, t4.x - r, i/pts)
+						var y : float = lerpf(t4.y, t4.y - r, i/pts)
 						points.append(Vector2(t4.x, y).lerp(Vector2(x, t4.y - r),i/pts))
 
 					var t5 := Vector2(to.x, t4.y - r)
 					r = minf(absf(t5.y - to.y) * 0.5, r)
 					for i : float in range(pts):
-						var x := lerpf(t5.x, t5.x - r, i/pts)
-						var y := lerpf(t5.y, t5.y - r, i/pts)
+						var x : float = lerpf(t5.x, t5.x - r, i/pts)
+						var y : float = lerpf(t5.y, t5.y - r, i/pts)
 						points.append(Vector2(x, t5.y).lerp(Vector2(t5.x - r ,y), i/pts))
 
 					var t6 := Vector2(to.x - r, to.y + r)
 					for i : float in range(pts):
-						var x := lerpf(t6.x, t6.x + r, i/pts)
-						var y := lerpf(t6.y, t6.y - r, i/pts)
+						var x : float = lerpf(t6.x, t6.x + r, i/pts)
+						var y : float = lerpf(t6.y, t6.y - r, i/pts)
 						points.append(Vector2(t6.x, y).lerp(Vector2(x , t6.y - r), i/pts))
 			points.append(to)
 			return points
 
 		ConnectionStyle.DIAGONAL:
-			var start := from
-			var end := to
+			var start : Vector2 = from
+			var end : Vector2 = to
 			from.x += off
 			to.x -= off
 
-			if abs(from.x - to.x) < 0.5:
+			if absf(from.x - to.x) < 0.5:
 				return PackedVector2Array([start, from, to, end])
-			elif abs(from.y - to.y) < 0.5:
+			elif absf(from.y - to.y) < 0.5:
 				return PackedVector2Array([start, end])
 
-			var diff := mid - from
-			var from_a := mid - Vector2(diff.y, diff.y)
-			var mid_b := mid + Vector2(diff.x, diff.x)
-			var corner_from := Vector2(from.x, mid.y)
-			var corner_to := Vector2(to.x, mid.y)
+			var diff : Vector2 = mid - from
+			var from_a : Vector2 = mid - Vector2(diff.y, diff.y)
+			var mid_b : Vector2 = mid + Vector2(diff.x, diff.x)
+			var corner_from : Vector2 = Vector2(from.x, mid.y)
+			var corner_to : Vector2 = Vector2(to.x, mid.y)
 
-			var stack := (func(dir: float, diff_y: float) -> void:
-				var max_off := absf(diff_y) * 0.5
-				var h_offset = (corner_from.x - max_off) - (corner_to.x + max_off) >= 0.0
+			var stack : Callable = (func(dir : float, diff_y : float) -> void:
+				var max_off : float = absf(diff_y) * 0.5
+				var h_offset : bool = (corner_from.x - max_off) - (corner_to.x + max_off) >= 0.0
 				if not h_offset:
 					max_off = clampf(diff.x * 0.5, -diff.x, diff.y)
 				points.append(from)
