@@ -70,6 +70,8 @@ func _input(event : InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		var node := get_viewport().gui_get_hovered_control()
+		if node == null:
+			return
 		if node != self and not is_ancestor_of(node) and (not pinned or (node and node.script == self.script) and node.owner == owner):
 			button_pressed = false
 
