@@ -168,7 +168,7 @@ func update_list(filter_text : String = "") -> void:
 	filter_text = filter_text.to_lower()
 
 	%List.clear()
-	var idx := 0
+	var idx : int = 0
 
 	# Add sub-node items
 	idx = add_sub_node_items(idx, filter_text, "Filter/Math", "math.mmg")
