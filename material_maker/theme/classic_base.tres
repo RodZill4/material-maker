@@ -317,7 +317,7 @@ corner_radius_bottom_left = 4
 [sub_resource type="AtlasTexture" id="AtlasTexture_nmkov"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(16, 224, 16, 16)
-metadata/recolor = false
+metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ppdpb"]
 atlas = ExtResource("1_fw8f4")
@@ -327,7 +327,7 @@ metadata/recolor = true
 [sub_resource type="AtlasTexture" id="AtlasTexture_btb0w"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(96, 208, 16, 16)
-metadata/recolor = false
+metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1207d"]
 atlas = ExtResource("1_fw8f4")
@@ -341,7 +341,7 @@ metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a74kv"]
 atlas = ExtResource("1_fw8f4")
-region = Rect2(48, 208, 16, 16)
+region = Rect2(32, 224, 16, 16)
 metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wbe58"]
