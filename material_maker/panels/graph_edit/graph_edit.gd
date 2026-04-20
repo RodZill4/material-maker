@@ -818,8 +818,9 @@ func save_as() -> bool:
 				return true
 	return false
 
-func save_file(filename:String) -> bool:
+func save_file(filename : String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
+	top_generator.scroll_offset = scroll_offset
 	var data = top_generator.serialize()
 	mm_loader.current_project_path = ""
 	var e: Error
