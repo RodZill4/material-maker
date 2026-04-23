@@ -1,9 +1,9 @@
-[gd_scene load_steps=30 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=34 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="3"]
-[ext_resource type="Script" uid="uid://cjtefdp8oh215" path="res://material_maker/panels/preview_2d/axes.gd" id="3_r76ng"]
+[ext_resource type="Script" path="res://material_maker/panels/preview_2d/axes.gd" id="3_r76ng"]
 [ext_resource type="Script" uid="uid://cj476fi1ociuw" path="res://material_maker/panels/preview_2d/preview_2d_panel.gd" id="4"]
 [ext_resource type="PackedScene" uid="uid://djura7a50b2aq" path="res://material_maker/widgets/polygon_edit/polygon_editor.tscn" id="4_gd40d"]
 [ext_resource type="Script" uid="uid://p2topj3y4p63" path="res://material_maker/panels/preview_2d/lines.gd" id="5"]
@@ -75,13 +75,29 @@ code = "shader_type canvas_item;"
 resource_local_to_scene = true
 shader = SubResource("5")
 
-[sub_resource type="InputEventKey" id="InputEventKey_83edi"]
+[sub_resource type="InputEventKey" id="InputEventKey_63a3x"]
+device = -1
 command_or_control_autoremap = true
-pressed = true
 keycode = 82
 
-[sub_resource type="Shortcut" id="Shortcut_r76ng"]
-events = [SubResource("InputEventKey_83edi")]
+[sub_resource type="Shortcut" id="Shortcut_ddtyk"]
+events = [SubResource("InputEventKey_63a3x")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_r76ng"]
+device = -1
+keycode = 45
+unicode = 45
+
+[sub_resource type="Shortcut" id="Shortcut_083ld"]
+events = [SubResource("InputEventKey_r76ng")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_083ld"]
+device = -1
+keycode = 61
+unicode = 61
+
+[sub_resource type="Shortcut" id="Shortcut_63a3x"]
+events = [SubResource("InputEventKey_083ld")]
 
 [sub_resource type="FontVariation" id="FontVariation_wkuuo"]
 base_font = ExtResource("18_kn37y")
@@ -405,7 +421,48 @@ vertical_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" index="0"]
+[node name="ViewMenu" type="PanelContainer" parent="MenuBar/HBox" index="0"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/ViewMenu" index="0"]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/ViewMenu/HBox" index="0"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center View"
+tooltip_auto_translate_mode = 2
+shortcut = SubResource("Shortcut_ddtyk")
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("10_83edi")
+icon_name = "reset_view"
+
+[node name="ZoomOutButton" type="Button" parent="MenuBar/HBox/ViewMenu/HBox" index="1"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Zoom Out"
+tooltip_auto_translate_mode = 2
+shortcut = SubResource("Shortcut_083ld")
+icon_alignment = 1
+script = ExtResource("10_83edi")
+icon_name = "zoom_out"
+
+[node name="ZoomInButton" type="Button" parent="MenuBar/HBox/ViewMenu/HBox" index="2"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Zoom In"
+tooltip_auto_translate_mode = 2
+shortcut = SubResource("Shortcut_63a3x")
+icon_alignment = 1
+script = ExtResource("10_83edi")
+icon_name = "zoom_in"
+
+[node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" index="1"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
@@ -414,19 +471,7 @@ theme_type_variation = &"MM_PanelMenuBar"
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="ResetViewButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-tooltip_text = "Center View"
-tooltip_auto_translate_mode = 2
-shortcut = SubResource("Shortcut_r76ng")
-shortcut_in_tooltip = false
-icon_alignment = 1
-script = ExtResource("10_83edi")
-icon_name = "reset_view"
-
-[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1" node_paths=PackedStringArray("shortcut_context")]
+[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="0" node_paths=PackedStringArray("shortcut_context")]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "View"
@@ -566,7 +611,7 @@ popup/item_1/id = 1
 popup/item_2/text = "Large"
 popup/item_2/id = 2
 
-[node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2" node_paths=PackedStringArray("shortcut_context")]
+[node name="ExportMenu" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="1" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
@@ -767,7 +812,7 @@ theme_override_colors/font_color = Color(0.52, 0.52, 0.52, 1)
 theme_override_fonts/font = SubResource("FontVariation_wkuuo")
 autowrap_mode = 1
 
-[node name="PreviewLocked" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="3"]
+[node name="PreviewLocked" type="Button" parent="MenuBar/HBox/MainMenu/HBox" index="2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -778,7 +823,7 @@ script = ExtResource("17_07kc5")
 icon_normal_name = "lock_unlocked"
 icon_pressed_name = "lock_locked"
 
-[node name="ComplexParameters" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox" index="4"]
+[node name="ComplexParameters" type="OptionButton" parent="MenuBar/HBox/MainMenu/HBox" index="3"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -786,11 +831,15 @@ layout_mode = 2
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="unhandled_event" from="PolygonEditor" to="." method="_on_gui_input"]
-[connection signal="gui_input" from="PolygonEditor/@Control@42512" to="PolygonEditor/@Control@42512" method="_on_ControlPoint_gui_input"]
+[connection signal="gui_input" from="PolygonEditor/@Control@27846" to="PolygonEditor/@Control@27846" method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="PolygonEditor/@Control@27846" to="PolygonEditor/@Control@27846" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="PolygonEditor/@Control@27846" to="PolygonEditor/@Control@27846" method="_on_mouse_exited"]
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
-[connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/ResetViewButton" to="." method="reset_view"]
+[connection signal="pressed" from="MenuBar/HBox/ViewMenu/HBox/ResetViewButton" to="." method="reset_view"]
+[connection signal="pressed" from="MenuBar/HBox/ViewMenu/HBox/ZoomOutButton" to="." method="_on_zoom_out_button_pressed"]
+[connection signal="pressed" from="MenuBar/HBox/ViewMenu/HBox/ZoomInButton" to="." method="_on_zoom_in_button_pressed"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/ViewMode" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_view_mode_item_selected"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/PostProcessing" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_post_processing_item_selected"]
 [connection signal="item_selected" from="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel/VBox/BoxContainer/Guides" to="MenuBar/HBox/MainMenu/HBox/ViewMenu/ViewMenuPanel" method="_on_guides_item_selected"]
