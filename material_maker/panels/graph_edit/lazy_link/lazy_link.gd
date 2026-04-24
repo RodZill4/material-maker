@@ -53,6 +53,7 @@ const MIX_NODE : Dictionary[String, String] = {
 	"sdf2d": "sdboolean_v",
 	"sdf3d": "sdf3d_boolean_v",
 	"tex3d": "tex3d_blend_v",
+	"tex3d_gs": "tex3d_blend_v"
 }
 
 func _ready() -> void:
