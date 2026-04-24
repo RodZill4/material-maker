@@ -8,6 +8,7 @@ const LABEL_FONT = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf"
 var is_editing := false
 
 var syncing_io := false
+var drag_accumulation : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	super._ready()
@@ -97,9 +98,25 @@ func _on_dragger_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		set_deferred("selected", true)
 	elif event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_LEFT):
-		position_offset += event.relative
+		var graph : MMGraphEdit = get_parent()
+		if get_parent().snapping_enabled != event.is_command_or_control_pressed():
+			drag_accumulation += event.relative / graph.zoom
+
+			var step : Vector2 = (drag_accumulation / graph.snapping_distance
+					+ Vector2(0.5, 0.5)).floor()
+			if not step.is_zero_approx():
+				position_offset = position_offset.snappedf(graph.snapping_distance)
+				position_offset += step * graph.snapping_distance
+				drag_accumulation -= step * graph.snapping_distance
+		else:
+			position_offset += event.relative / graph.zoom
+
 		selected = true
 		accept_event()
+	else:
+		drag_accumulation = Vector2.ZERO
+
+
 
 func _on_node_selected() -> void:
 	notify_redraw()
