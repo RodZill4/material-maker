@@ -1,10 +1,8 @@
 @tool
-extends MMGenTexture
 class_name MMGenCommentLine
-
+extends MMGenBase
 
 # Comments to put in the graph
-
 
 var text : String = "Enter something.."
 
@@ -18,7 +16,7 @@ func get_type_name() -> String:
 	return "Comment Line"
 
 func get_parameter_defs() -> Array:
-	return []
+	return [{ name="label", type="enum", values=["small", "large", "huge"], default=0 }]
 
 func get_input_defs() -> Array:
 	return []
@@ -26,7 +24,7 @@ func get_input_defs() -> Array:
 func get_output_defs(_show_hidden : bool = false) -> Array:
 	return []
 
-func _serialize(data: Dictionary) -> Dictionary:
+func _serialize(data : Dictionary) -> Dictionary:
 	data.type = "comment_line"
 	data.text = text
 	return data

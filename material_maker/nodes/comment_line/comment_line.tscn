@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b04o8fwyfuaqx"]
+[gd_scene format=3 uid="uid://b04o8fwyfuaqx"]
 
 [ext_resource type="Script" uid="uid://b8htj1aou1m04" path="res://material_maker/nodes/comment_line/comment_line.gd" id="1_4xc6p"]
 
@@ -14,15 +14,16 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 shadow_color = Color(0, 0, 0, 0)
 
-[node name="CommentLineNode" type="GraphElement"]
+[node name="CommentLineNode" type="GraphElement" unique_id=1804843593]
 offset_right = 127.0
 offset_bottom = 23.0
 size_flags_horizontal = 2
 size_flags_vertical = 3
 mouse_filter = 0
+scaling_menus = true
 script = ExtResource("1_4xc6p")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=179944357]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 2
@@ -30,14 +31,14 @@ size_flags_vertical = 0
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_4xc6p")
 
-[node name="TextLabel" type="Label" parent="PanelContainer"]
+[node name="TextLabel" type="Label" parent="PanelContainer" unique_id=1861200683]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
 text = "Enter something..."
 structured_text_bidi_override = 4
 
-[node name="TextEditor" type="LineEdit" parent="PanelContainer"]
+[node name="TextEditor" type="LineEdit" parent="PanelContainer" unique_id=752725343]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -51,9 +52,6 @@ flat = true
 [connection signal="node_deselected" from="." to="." method="_on_node_deselected"]
 [connection signal="node_selected" from="." to="." method="_on_node_selected"]
 [connection signal="position_offset_changed" from="." to="." method="_on_position_offset_changed"]
-[connection signal="raise_request" from="." to="." method="_on_raise_request"]
-[connection signal="resize_request" from="." to="." method="_on_resize_request"]
-[connection signal="focus_exited" from="PanelContainer/TextLabel" to="." method="_on_text_label_focus_exited"]
 [connection signal="gui_input" from="PanelContainer/TextLabel" to="." method="_on_text_label_gui_input"]
 [connection signal="focus_exited" from="PanelContainer/TextEditor" to="." method="_on_text_focus_exited"]
 [connection signal="text_submitted" from="PanelContainer/TextEditor" to="." method="_on_text_text_submitted"]
