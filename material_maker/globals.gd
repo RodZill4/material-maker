@@ -62,7 +62,11 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_close_button = false,
 	ui_single_window_mode = false,
 	add_node_popup_sort = SortMenu.Sorting.QUALITY_DESCENDING,
-	aperture_label_position = 0
+	aperture_label_position = 0,
+	ui_use_system_font = false,
+	ui_font_size = 16,
+	ui_code_font_size = 12,
+	ui_font_enable_msdf = true
 }
 
 
@@ -235,3 +239,6 @@ func ui_scale_factor() -> float:
 	if get_tree().root.gui_embed_subwindows:
 		return 1.0
 	return get_tree().root.content_scale_factor
+
+func is_classic_theme() -> bool:
+	return "classic" in mm_globals.main_window.theme.resource_path
