@@ -24,6 +24,8 @@ func _notification(what: int) -> void:
 		%ExportFolderButton.icon = get_theme_icon("folder", "MM_Icons")
 		%ExportFileResultLabel.add_theme_color_override("font_color", get_theme_color("font_color", "Label").lerp(Color.ORANGE, 0.5))
 		%ExportNotificationLabel.add_theme_color_override("font_color", get_theme_color("font_color", "Label").lerp(get_theme_color("icon_pressed_color", "Button"), 0.5))
+		%ExportFileResultLabel.add_theme_font_override("font",
+			FontManager.create_italic_variation(FontManager.main_font))
 
 
 func _open() -> void:

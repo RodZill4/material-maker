@@ -60,6 +60,10 @@ const DEFAULT_CONFIG : Dictionary = {
 	dialog_dim_background = true,
 	node_minimize_button = false,
 	node_close_button = false,
+	ui_use_system_font = false,
+	ui_font_size = 16,
+	ui_code_font_size = 12,
+	ui_font_enable_msdf = true
 }
 
 
@@ -228,3 +232,6 @@ func get_node_title_from_gen(generator : MMGenBase) -> String:
 				var gnode : GraphNode = graph.get_node(node_path)
 				return gnode.title.to_snake_case()
 	return "unnamed"
+
+func is_classic_theme() -> bool:
+	return "classic" in mm_globals.main_window.theme.resource_path

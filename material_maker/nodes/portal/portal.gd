@@ -1,7 +1,7 @@
 extends MMGraphNodeMinimal
 class_name MMGraphPortal
 
-const LABEL_FONT = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
+var label_font : FontVariation = FontManager.medium_font
 
 ## Whether portal's link is being edited
 ## (i.e. its associated LineEdit is visible)
@@ -32,11 +32,11 @@ func _draw() -> void:
 	var label_pos := size * 0.5
 	var label_color : Color = generator.color
 
-	var label_size = LABEL_FONT.get_string_size(get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
+	var label_size = label_font.get_string_size(get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
 	var label_draw_pos := label_pos - Vector2(label_size.x * 0.5, label_y_offset)
 	if not is_editing:
-		draw_string_outline(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
-		draw_string(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
+		draw_string_outline(label_font, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
+		draw_string(label_font, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
 
 	# label dragger
 	%Dragger.mouse_filter = MOUSE_FILTER_IGNORE if is_editing else MOUSE_FILTER_PASS
@@ -274,7 +274,7 @@ func setup_portal_edit() -> void:
 	var old_link := get_link()
 	var graph : MMGraphEdit = get_parent()
 	var edit := LineEdit.new()
-	edit.add_theme_font_override("font", LABEL_FONT)
+	edit.add_theme_font_override("font", label_font)
 	edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	edit.max_length = 64
 	edit.expand_to_text_length = true

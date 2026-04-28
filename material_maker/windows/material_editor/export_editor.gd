@@ -373,6 +373,8 @@ func _on_Cancel_pressed() -> void:
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_THEME_CHANGED:
+			%"Custom Script".add_theme_font_override("font", FontManager.code_font)
+			%"Custom Script".add_theme_font_size_override("font_size", FontManager.ui_code_font_size)
 			var theme_path : String = mm_globals.main_window.theme.resource_path
 			if "dark" in theme_path:
 				$BG.color = Color("0b0b0c")
