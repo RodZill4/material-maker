@@ -203,6 +203,7 @@ size_flags_vertical = 3
 mouse_default_cursor_shape = 0
 
 [node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar"]
+unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 200)
 layout_mode = 2
