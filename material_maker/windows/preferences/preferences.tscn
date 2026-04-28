@@ -1,14 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1j6a4jdggjm6"]
+[gd_scene format=3 uid="uid://c1j6a4jdggjm6"]
 
 [ext_resource type="PackedScene" uid="uid://drg0s4lftblx3" path="res://material_maker/windows/preferences/bool_option.tscn" id="1"]
 [ext_resource type="Script" uid="uid://cwom8loyqsvf2" path="res://material_maker/windows/preferences/preferences.gd" id="2"]
 [ext_resource type="FontFile" uid="uid://bn648prik7soq" path="res://material_maker/theme/font_rubik/Rubik-416.ttf" id="2_vp06c"]
 [ext_resource type="PackedScene" uid="uid://3lo2jh781ten" path="res://material_maker/windows/preferences/float_option.tscn" id="3"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
+[ext_resource type="Script" uid="uid://b6irr1ykhui6l" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
-[ext_resource type="Script" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="PackedScene" uid="uid://b7ko0gpbs5mqa" path="res://material_maker/windows/preferences/file_option.tscn" id="7_btfio"]
 
-[node name="Preferences" type="Window"]
+[sub_resource type="LabelSettings" id="LabelSettings_btfio"]
+outline_size = 2
+shadow_size = 0
+
+[node name="Preferences" type="Window" unique_id=2145384253]
 oversampling_override = 1.0
 title = "Preferences"
 position = Vector2i(0, 36)
@@ -16,7 +21,7 @@ size = Vector2i(700, 450)
 exclusive = true
 script = ExtResource("2")
 
-[node name="HSplitContainer" type="HSplitContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=271938444]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -24,10 +29,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
-split_offset = 100
+split_offsets = PackedInt32Array(100)
 dragger_visibility = 2
+split_offset = 100
 
-[node name="PreferenceCategory" type="MarginContainer" parent="HSplitContainer"]
+[node name="PreferenceCategory" type="MarginContainer" parent="HSplitContainer" unique_id=928014825]
 custom_minimum_size = Vector2(86.8, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 4
@@ -35,7 +41,7 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="Tree" type="Tree" parent="HSplitContainer/PreferenceCategory" groups=["updated_from_locale"]]
+[node name="Tree" type="Tree" parent="HSplitContainer/PreferenceCategory" unique_id=904061228 groups=["updated_from_locale"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/item_margin = 2
@@ -44,19 +50,19 @@ theme_override_font_sizes/font_size = 18
 auto_tooltip = false
 script = ExtResource("3_mlqij")
 
-[node name="PreferencesPanel" type="MarginContainer" parent="HSplitContainer"]
+[node name="PreferencesPanel" type="MarginContainer" parent="HSplitContainer" unique_id=1998010908]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel" unique_id=1796643359]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TabContainer" type="TabContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=1848581355]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(289, 172)
 layout_mode = 2
@@ -66,54 +72,54 @@ current_tab = 0
 tabs_visible = false
 use_hidden_tabs_for_min_size = true
 
-[node name="General" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+[node name="General" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=1222059844]
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General" unique_id=1647018480]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Language" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Language" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1508090842]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language"]
+[node name="Label2" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language" unique_id=757622605]
 layout_mode = 2
 text = "Language"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language" unique_id=1209093332]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Language" type="OptionButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer"]
+[node name="Language" type="OptionButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer" unique_id=1949944455]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 script = ExtResource("4")
 config_variable = "locale"
 
-[node name="InstallLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer"]
+[node name="InstallLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer" unique_id=531409130]
 layout_mode = 2
 text = "Install"
 
-[node name="DownloadLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer"]
+[node name="DownloadLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer" unique_id=69884540]
 layout_mode = 2
 text = "Download"
 
-[node name="Spacer1" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Spacer1" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=508009642]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="ConfirmQuit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="ConfirmQuit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=497221492]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmQuit"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmQuit" unique_id=600851102]
 layout_mode = 2
 text = "Confirm when quitting the application"
 
-[node name="ConfirmQuit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmQuit" instance=ExtResource("1")]
+[node name="ConfirmQuit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmQuit" unique_id=1374209146 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -121,14 +127,14 @@ text = "On"
 flat = false
 config_variable = "confirm_quit"
 
-[node name="ConfirmCloseProject" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="ConfirmCloseProject" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=146020952]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmCloseProject"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmCloseProject" unique_id=286496676]
 layout_mode = 2
 text = "Confirm when closing a project"
 
-[node name="ConfirmCloseProject" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmCloseProject" instance=ExtResource("1")]
+[node name="ConfirmCloseProject" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/ConfirmCloseProject" unique_id=331253529 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -136,18 +142,18 @@ text = "On"
 flat = false
 config_variable = "confirm_close_project"
 
-[node name="Spacer2" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Spacer2" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1551965185]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="GuiScale" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="GuiScale" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1572521016]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiScale"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiScale" unique_id=938591164]
 layout_mode = 2
 text = "UI scale (0 = auto)"
 
-[node name="GuiScale" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiScale" instance=ExtResource("3")]
+[node name="GuiScale" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiScale" unique_id=2069505826 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -157,15 +163,15 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
-[node name="GuiUseNativeFileDialogs" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="GuiUseNativeFileDialogs" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2141940524]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiUseNativeFileDialogs"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiUseNativeFileDialogs" unique_id=282208627]
 layout_mode = 2
 mouse_filter = 1
 text = "Use native file dialogs"
 
-[node name="GuiUseNativeFileDialogs" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiUseNativeFileDialogs" instance=ExtResource("1")]
+[node name="GuiUseNativeFileDialogs" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiUseNativeFileDialogs" unique_id=1608517420 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -174,15 +180,15 @@ text = "On"
 flat = false
 config_variable = "ui_use_native_file_dialogs"
 
-[node name="DialogDimBackground" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="DialogDimBackground" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=748179978]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/DialogDimBackground"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/DialogDimBackground" unique_id=904711112]
 layout_mode = 2
 mouse_filter = 1
 text = "Dim background when showing dialogs"
 
-[node name="DialogDimBackground" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/DialogDimBackground" instance=ExtResource("1")]
+[node name="DialogDimBackground" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/DialogDimBackground" unique_id=487432186 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -191,19 +197,19 @@ text = "On"
 flat = false
 config_variable = "dialog_dim_background"
 
-[node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=696041464]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="Gui3DPreviewResolution" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Gui3DPreviewResolution" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1471091666]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewResolution"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewResolution" unique_id=507761280]
 layout_mode = 2
 mouse_filter = 1
 text = "3D preview resolution"
 
-[node name="Gui3DPreviewResolution" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewResolution" instance=ExtResource("3")]
+[node name="Gui3DPreviewResolution" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewResolution" unique_id=622862296 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -215,15 +221,15 @@ max_value = 2.5
 step = 0.1
 float_only = true
 
-[node name="Gui3DPreviewTesselationDetail" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Gui3DPreviewTesselationDetail" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2113738513]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewTesselationDetail"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewTesselationDetail" unique_id=1584924224]
 layout_mode = 2
 mouse_filter = 1
 text = "3D preview tesselation detail"
 
-[node name="Gui3DPreviewTesselationDetail" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewTesselationDetail" instance=ExtResource("3")]
+[node name="Gui3DPreviewTesselationDetail" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewTesselationDetail" unique_id=1334445641 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -237,14 +243,14 @@ max_value = 1024.0
 step = 1.0
 float_only = true
 
-[node name="Gui3DPreviewSunShadow" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Gui3DPreviewSunShadow" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=756989100]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewSunShadow"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewSunShadow" unique_id=2039077855]
 layout_mode = 2
 text = "3D preview sun shadow (requires restart)"
 
-[node name="Gui3DPreviewSunShadow" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewSunShadow" instance=ExtResource("1")]
+[node name="Gui3DPreviewSunShadow" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewSunShadow" unique_id=316901908 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -255,20 +261,20 @@ text = "On"
 flat = false
 config_variable = "ui_3d_preview_sun_shadow"
 
-[node name="WinTabletDriverSpacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="WinTabletDriverSpacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1126899447]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="WinTabletDriver" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="WinTabletDriver" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1498258950]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/WinTabletDriver"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/WinTabletDriver" unique_id=1072578582]
 layout_mode = 2
 text = "Tablet Driver"
 
-[node name="EnumOption" type="OptionButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/WinTabletDriver"]
+[node name="EnumOption" type="OptionButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/WinTabletDriver" unique_id=2006529568]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -288,18 +294,18 @@ popup/item_2/id = 2
 script = ExtResource("5_vp06c")
 config_variable = "win_tablet_driver"
 
-[node name="Spacer3" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Spacer3" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=851524727]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="EnableVSync" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="EnableVSync" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2005781101]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/EnableVSync"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/EnableVSync" unique_id=832733695]
 layout_mode = 2
 text = "VSync"
 
-[node name="EnableVSync" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/EnableVSync" instance=ExtResource("1")]
+[node name="EnableVSync" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/EnableVSync" unique_id=1853883433 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -307,14 +313,14 @@ text = "On"
 flat = false
 config_variable = "vsync"
 
-[node name="FPSLimit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="FPSLimit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1027775171]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit" unique_id=131787343]
 layout_mode = 2
 text = "FPS Limit"
 
-[node name="FPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit" instance=ExtResource("3")]
+[node name="FPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/FPSLimit" unique_id=1277298467 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -327,10 +333,10 @@ max_value = 200.0
 step = 1.0
 float_only = true
 
-[node name="IdleFPSLimit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="IdleFPSLimit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1368388051]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/IdleFPSLimit"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/IdleFPSLimit" unique_id=989465938]
 layout_mode = 2
 size_flags_horizontal = 0
 tooltip_text = "FPS limit to use when window isn't focused to save CPU/GPU resources.
@@ -338,7 +344,7 @@ Lower values may help reducing power usage, but could increase response time whe
 mouse_filter = 1
 text = "Idle FPS limit"
 
-[node name="IdleFPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/IdleFPSLimit" instance=ExtResource("3")]
+[node name="IdleFPSLimit" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/IdleFPSLimit" unique_id=2115510592 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -351,28 +357,177 @@ max_value = 20.0
 step = 1.0
 float_only = true
 
-[node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=847502777]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="Bake" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+[node name="Theme" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=1111133403]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
 metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme" unique_id=1231307394]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SectionDisplayFont" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=486879697]
+layout_mode = 2
+text = "Display Fonts (requires restart)"
+label_settings = SubResource("LabelSettings_btfio")
+
+[node name="GuiInterfaceMainFont" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=758900584]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceMainFont" unique_id=1822476730]
+layout_mode = 2
+text = "Main font"
+
+[node name="FileOption" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceMainFont" unique_id=1399365702 instance=ExtResource("7_btfio")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "main_font"
+file_picker_filters = PackedStringArray("*.ttf; TrueType Font file", "*.otf; OpenType Font file")
+
+[node name="GuiInterfaceMediumFont" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=34572927]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceMediumFont" unique_id=914702841]
+layout_mode = 2
+text = "Medium font"
+
+[node name="FileOption" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceMediumFont" unique_id=1544432129 instance=ExtResource("7_btfio")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "medium_font"
+file_picker_filters = PackedStringArray("*.ttf; TrueType Font file", "*.otf; OpenType Font file")
+
+[node name="GuiInterfaceBoldFont" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1462088612]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceBoldFont" unique_id=1490863117]
+layout_mode = 2
+text = "Bold font"
+
+[node name="FileOption" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceBoldFont" unique_id=945782835 instance=ExtResource("7_btfio")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "bold_font"
+file_picker_filters = PackedStringArray("*.ttf; TrueType Font file", "*.otf; OpenType Font file")
+
+[node name="GuiInterfaceCodeFont" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1481852751]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceCodeFont" unique_id=1662114990]
+layout_mode = 2
+text = "Code font"
+
+[node name="FileOption" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceCodeFont" unique_id=1735527225 instance=ExtResource("7_btfio")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+file_picker_filters = PackedStringArray("*.ttf; TrueType Font file", "*.otf; OpenType Font file")
+
+[node name="GuiInterfaceUseSystemFonts" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1096584127]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceUseSystemFonts" unique_id=817621155]
+layout_mode = 2
+text = "Use system fonts"
+
+[node name="UiUseSystemFonts" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceUseSystemFonts" unique_id=270406247 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, system fonts will be used instead of Material Maker's built-in fonts or custom fonts set in preferences."
+text = "On"
+flat = false
+config_variable = "ui_use_system_font"
+
+[node name="Spacer1" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1988482743]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="GuiInterfaceFontMSDF" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=2144824696]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceFontMSDF" unique_id=177195979]
+layout_mode = 2
+text = "MSDF Rendering"
+
+[node name="UiFontUseMSDF" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceFontMSDF" unique_id=609117319 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Enables MSDF for font rendering.
+
+This allows text to be crisp at any scale but is prone to artifacts if font glyphs have self-intersections."
+text = "On"
+flat = false
+config_variable = "ui_font_enable_msdf"
+
+[node name="Spacer2" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1657519221]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="GuiInterfaceFontSize" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=197296407]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceFontSize" unique_id=83511662]
+layout_mode = 2
+text = "UI font size"
+
+[node name="UiFontSize" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceFontSize" unique_id=2037581063 instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_font_size"
+value = 16.0
+min_value = 16.0
+max_value = 48.0
+step = 1.0
+float_only = true
+
+[node name="GuiInterfaceCodeFontSize" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1343680422]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceCodeFontSize" unique_id=1460436146]
+layout_mode = 2
+text = "Code font size"
+
+[node name="UiCodeFontSize" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiInterfaceCodeFontSize" unique_id=336987241 instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+config_variable = "ui_code_font_size"
+value = 16.0
+min_value = 16.0
+max_value = 48.0
+step = 1.0
+float_only = true
+
+[node name="Bake" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=289908114]
+visible = false
+layout_mode = 2
+theme_type_variation = &"MM_PreferenceTab"
+metadata/_tab_index = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake" unique_id=629545617]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RayCount" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer"]
+[node name="RayCount" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer" unique_id=488510891]
 layout_mode = 2
 
-[node name="LabelRayCount" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayCount"]
+[node name="LabelRayCount" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayCount" unique_id=449898473]
 layout_mode = 2
 text = "Ray Count"
 
-[node name="RayCount" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayCount" instance=ExtResource("3")]
+[node name="RayCount" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayCount" unique_id=1291018687 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -383,14 +538,14 @@ max_value = 256.0
 step = 1.0
 float_only = true
 
-[node name="RayLength" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer"]
+[node name="RayLength" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer" unique_id=1989642041]
 layout_mode = 2
 
-[node name="LabelRayLength" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayLength"]
+[node name="LabelRayLength" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayLength" unique_id=1723155113]
 layout_mode = 2
 text = "Ray Length"
 
-[node name="RayLength" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayLength" instance=ExtResource("3")]
+[node name="RayLength" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayLength" unique_id=1956594674 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -401,14 +556,14 @@ max_value = 1024.0
 step = 1.0
 float_only = true
 
-[node name="RayBias" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer"]
+[node name="RayBias" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer" unique_id=1122729862]
 layout_mode = 2
 
-[node name="LabelRayBias" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayBias"]
+[node name="LabelRayBias" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayBias" unique_id=1609515634]
 layout_mode = 2
 text = "Ray Bias"
 
-[node name="RayBias" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayBias" instance=ExtResource("3")]
+[node name="RayBias" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/RayBias" unique_id=508448016 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -418,14 +573,14 @@ max_value = 1024.0
 step = 0.001
 float_only = true
 
-[node name="DenoiseRadius" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer"]
+[node name="DenoiseRadius" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer" unique_id=375649414]
 layout_mode = 2
 
-[node name="LabelDenoiseRadius" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/DenoiseRadius"]
+[node name="LabelDenoiseRadius" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/DenoiseRadius" unique_id=1093689420]
 layout_mode = 2
 text = "Denoise Radius"
 
-[node name="DenoiseRadius" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/DenoiseRadius" instance=ExtResource("3")]
+[node name="DenoiseRadius" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Bake/VBoxContainer/DenoiseRadius" unique_id=682402701 instance=ExtResource("3")]
 custom_minimum_size = Vector2(200, 24)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -436,24 +591,24 @@ max_value = 10.0
 step = 1.0
 float_only = true
 
-[node name="Graph" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+[node name="Graph" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=1612915659]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
-metadata/_tab_index = 2
+metadata/_tab_index = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph" unique_id=1157689446]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AutoSizeComment" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer"]
+[node name="AutoSizeComment" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=990105751]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/AutoSizeComment"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/AutoSizeComment" unique_id=1561877089]
 layout_mode = 2
 text = "Auto size comment node to selection"
 
-[node name="AutoSizeComment" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/AutoSizeComment" instance=ExtResource("1")]
+[node name="AutoSizeComment" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/AutoSizeComment" unique_id=2005796697 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -461,14 +616,14 @@ text = "On"
 flat = false
 config_variable = "auto_size_comment"
 
-[node name="NodeMinimizeButton" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer"]
+[node name="NodeMinimizeButton" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=447849857]
 layout_mode = 2
 
-[node name="LabelNodeMinBtn" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeMinimizeButton"]
+[node name="LabelNodeMinBtn" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeMinimizeButton" unique_id=1791900897]
 layout_mode = 2
 text = "Show minimize button on nodes"
 
-[node name="NodeMinimizeButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeMinimizeButton" instance=ExtResource("1")]
+[node name="NodeMinimizeButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeMinimizeButton" unique_id=1933240223 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -478,14 +633,14 @@ text = "On"
 flat = false
 config_variable = "node_minimize_button"
 
-[node name="NodeCloseButton" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer"]
+[node name="NodeCloseButton" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=826938357]
 layout_mode = 2
 
-[node name="LabelNodeCloseButton" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeCloseButton"]
+[node name="LabelNodeCloseButton" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeCloseButton" unique_id=177286080]
 layout_mode = 2
 text = "Show close button on nodes"
 
-[node name="NodeCloseButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeCloseButton" instance=ExtResource("1")]
+[node name="NodeCloseButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/NodeCloseButton" unique_id=1094596744 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -494,24 +649,24 @@ text = "On"
 flat = false
 config_variable = "node_close_button"
 
-[node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
+[node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=2071321920]
 visible = false
 layout_mode = 2
 theme_type_variation = &"MM_PreferenceTab"
-metadata/_tab_index = 3
+metadata/_tab_index = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export" unique_id=1887967844]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RememberAnimExport" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/VBoxContainer"]
+[node name="RememberAnimExport" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/VBoxContainer" unique_id=236060632]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/VBoxContainer/RememberAnimExport"]
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/VBoxContainer/RememberAnimExport" unique_id=1951027809]
 layout_mode = 2
 text = "Remember last animation export settings"
 
-[node name="RememberAnimExport" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/VBoxContainer/RememberAnimExport" instance=ExtResource("1")]
+[node name="RememberAnimExport" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Export/VBoxContainer/RememberAnimExport" unique_id=1175684037 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -520,27 +675,27 @@ text = "On"
 flat = false
 config_variable = "remember_anim_export"
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=393568239]
 layout_mode = 2
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer" unique_id=1977401467]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=789496206]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1154681862]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=142579278]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Cancel"

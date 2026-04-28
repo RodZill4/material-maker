@@ -1,0 +1,13 @@
+[gd_resource type="FontVariation" format=3 uid="uid://bke5ujsr368cv"]
+
+[ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="1_dcm08"]
+[ext_resource type="FontFile" uid="uid://buwvapsuukd0n" path="res://material_maker/fonts/DroidSansJapanese.ttf" id="2_dulnh"]
+
+[sub_resource type="SystemFont" id="SystemFont_ouejq"]
+fallbacks = Array[Font]([ExtResource("1_dcm08"), ExtResource("2_dulnh")])
+font_names = PackedStringArray("Sans-Serif")
+multichannel_signed_distance_field = true
+msdf_pixel_range = 32
+
+[resource]
+base_font = SubResource("SystemFont_ouejq")

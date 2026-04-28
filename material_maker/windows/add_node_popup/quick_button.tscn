@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjcxjmoki7j0n"]
+[gd_scene format=3 uid="uid://cjcxjmoki7j0n"]
 
 [ext_resource type="Script" uid="uid://dgye466wiylhc" path="res://material_maker/windows/add_node_popup/quick_button.gd" id="1"]
 
@@ -26,7 +26,7 @@ shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_4pf3v")
 
-[node name="QuickButton" type="ColorRect"]
+[node name="QuickButton" type="ColorRect" unique_id=875710738]
 material = SubResource("12")
 custom_minimum_size = Vector2(24, 24)
 offset_right = 24.0

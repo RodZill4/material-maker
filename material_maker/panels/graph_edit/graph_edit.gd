@@ -69,7 +69,6 @@ signal graph_changed
 signal view_updated
 signal preview_changed
 
-
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
 	center_view()

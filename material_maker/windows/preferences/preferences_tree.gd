@@ -18,6 +18,7 @@ func update_tree() -> void:
 		var item: TreeItem = create_item()
 		item.set_text(0, " %s " % tr(child.name))
 		item.set_metadata(0, child.get_index())
+		item.set_custom_font(0, FontManager.medium_font)
 		sections.append(item)
 
 	set_selected(sections[selected_section_id], 0)

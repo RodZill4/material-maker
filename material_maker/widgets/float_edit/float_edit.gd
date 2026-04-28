@@ -300,6 +300,8 @@ func update() -> void:
 		$Edit.add_theme_color_override("font_uneditable_color", get_theme_color("font_color"))
 	else:
 		$Edit.remove_theme_color_override("font_uneditable_color")
+	$Edit.add_theme_font_size_override("font_size", FontManager.ui_font_size)
+	$Edit.add_theme_font_override("font", FontManager.main_font)
 	$Edit.queue_redraw()
 
 
