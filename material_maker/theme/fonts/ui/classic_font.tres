@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" format=3 uid="uid://cukrxt4w03iac"]
+
+[ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_em5my"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_em5my")])
+base_font = ExtResource("2_em5my")

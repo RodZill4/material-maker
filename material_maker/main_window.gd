@@ -133,6 +133,7 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	mm_globals.config_changed.connect(on_config_changed)
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
@@ -294,6 +295,11 @@ func _input(event: InputEvent) -> void:
 				get_window().mode = Window.MODE_MAXIMIZED
 
 func on_config_changed() -> void:
+	# Update fonts
+	FontUtils.rebuild_fonts()
+	theme.default_font = FontUtils.main_font
+	theme.default_font_size = FontUtils.ui_font_size
+
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
@@ -661,6 +667,7 @@ func change_theme(theme_name : String) -> void:
 	theme = _theme
 	ThemeUtils.setup_clear_color()
 	$NodeFactory.on_theme_changed()
+	FontUtils.setup_theme_fonts(theme, theme_name)
 
 func _on_SetTheme_id_pressed(id : int) -> void:
 	var theme_name : String = ThemeUtils.THEMES[id].to_lower()

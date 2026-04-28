@@ -2,8 +2,6 @@ extends Window
 
 var config : ConfigFile
 
-signal config_changed()
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		queue_free()
@@ -12,7 +10,6 @@ func edit_preferences(c : ConfigFile) -> void:
 	config = c
 	var main_window = mm_globals.main_window
 	main_window.add_dialog(self)
-	config_changed.connect(main_window.on_config_changed)
 	content_scale_factor = mm_globals.ui_scale_factor()
 	update_controls(self)
 	size *= content_scale_factor
@@ -33,11 +30,11 @@ func update_config(p : Node) -> void:
 
 func _on_Apply_pressed():
 	update_config(self)
-	emit_signal("config_changed")
+	mm_globals.config_changed.emit()
 
 func _on_OK_pressed():
 	update_config(self)
-	emit_signal("config_changed")
+	mm_globals.config_changed.emit()
 	queue_free()
 
 func _on_Cancel_pressed():

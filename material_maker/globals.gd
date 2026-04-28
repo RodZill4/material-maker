@@ -1,7 +1,9 @@
 extends Node
 
-
 @onready var menu_manager = $MenuManager
+
+@warning_ignore("unused_signal")
+signal config_changed
 
 var main_window
 
@@ -71,6 +73,10 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_3d_preview_generated_mesh = true,
 	nearest_filter_reference = false,
 	sub_node_items = [],
+	ui_use_system_font = false,
+	ui_font_size = 16,
+	ui_code_font_size = 12,
+	ui_font_enable_msdf = true,
 }
 
 
@@ -246,3 +252,6 @@ func ui_scale_factor() -> float:
 
 func is_custom_theme() -> bool:
 	return config.get_value("window", "theme") == "custom"
+
+func is_classic_theme() -> bool:
+	return "classic" in mm_globals.main_window.theme.resource_path
