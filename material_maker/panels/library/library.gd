@@ -13,8 +13,6 @@ var category_buttons = {}
 @onready var filter_line_edit : LineEdit = %Filter
 @onready var item_menu : PopupMenu = %ItemMenu
 
-var section_font = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
-
 const MINIMUM_ITEM_HEIGHT : int = 30
 
 const MENU_CREATE_LIBRARY : int = 1000
@@ -68,8 +66,9 @@ func _notification(what: int) -> void:
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
 
-	var is_theme_classic : bool = "classic" in mm_globals.main_window.theme.resource_path
+	var is_theme_classic : bool = mm_globals.is_classic_theme()
 	library_manager.update_section_colors(is_theme_classic)
+	update_tree()
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
@@ -160,7 +159,7 @@ func update_tree() -> void:
 
 	for section : TreeItem in tree.get_root().get_children():
 		if section.get_children().size():
-			section.set_custom_font(0, section_font)
+			section.set_custom_font(0, FontManager.medium_font)
 	tree.queue_redraw()
 
 func add_item(item, library_index : int, item_name : String, item_icon = null, item_parent = null, force_expand = false) -> TreeItem:

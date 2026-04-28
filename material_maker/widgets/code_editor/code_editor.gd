@@ -27,6 +27,10 @@ func _context_menu_about_to_popup() -> void:
 	get_menu().position = get_window().position + Vector2i(
 			get_global_mouse_position() * content_scale_factor)
 
+func _init() -> void:
+	add_theme_font_override("font", FontManager.code_font)
+	add_theme_font_size_override("font_size", FontManager.ui_code_font_size)
+
 func _ready():
 	if not get_menu().about_to_popup.is_connected(_context_menu_about_to_popup):
 		get_menu().about_to_popup.connect(_context_menu_about_to_popup)
