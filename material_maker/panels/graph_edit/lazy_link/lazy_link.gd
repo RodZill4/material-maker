@@ -52,6 +52,7 @@ const MIX_NODE : Dictionary[String, String] = {
 	"rgba": "blend2",
 	"sdf2d": "sdboolean_v",
 	"sdf3d": "sdf3d_boolean_v",
+	"sdf3dc": "sdf3d_boolean_v",
 	"tex3d": "tex3d_blend_v",
 	"tex3d_gs": "tex3d_blend_v"
 }
@@ -295,17 +296,14 @@ func do_lazy_mix() -> void:
 	if source_out_type == "any":
 		return
 
-	var node_type : String = MIX_NODE[source_out_type]
+	var node_type : String
 
 	var compatible_types : Array[String] = ["f", "rgb", "rgba"]
 	if (source_out_type in compatible_types and target_out_type in compatible_types):
 		node_type = MIX_NODE.rgba
-	elif source_out_type == target_out_type:
+	elif source_out_type == target_out_type and MIX_NODE.has(source_out_type):
 		node_type = MIX_NODE[source_out_type]
 	else:
-		return
-
-	if node_type.is_empty():
 		return
 
 	# result mix node position
