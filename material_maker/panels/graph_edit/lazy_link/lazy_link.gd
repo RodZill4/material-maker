@@ -320,7 +320,7 @@ func do_lazy_mix() -> void:
 	if source.name.begins_with("node_normal_map") and target.name.begins_with("node_normal_map"):
 		node_type = "normal_blend2"
 
-	# connect nodes + undoredo
+	# connect nodes and create undoredo
 	var prev : Dictionary = graph.generator.serialize()
 
 	var new_mix_node : MMGraphNodeMinimal = await create_node(node_type, mid_pt)
