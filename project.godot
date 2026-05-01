@@ -68,7 +68,7 @@ window/handheld/orientation.Android="sensor_landscape"
 run/main_run_args="--no-splash"
 run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\suzanne.mmpp"
 run/main_run_args_nosplash="--no-splash"
-run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\mar26 --output-file %a_%n website:1504-1544"
+run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\apr26 --output-file %a_%n website:1591-1606"
 
 [editor_plugins]
 
