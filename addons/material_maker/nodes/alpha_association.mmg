@@ -1,0 +1,59 @@
+{
+	"generic_size": 1,
+	"name": "alpha_association",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"mode": 1.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0, 0.0, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "The image to be converted",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Converts an input image from straight to premultiplied alpha and vice versa",
+		"name": "Alpha Association",
+		"outputs": [
+			{
+				"longdesc": "The converted image",
+				"rgba": "vec4($in#($uv).rgb $mode $in#($uv).a, $in#($uv).a)",
+				"shortdesc": "Output#",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"longdesc": "Controls whether the node converts from straight to premultiplied or from premultiplied to straight",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Straight to Premultiplied",
+						"value": "*"
+					},
+					{
+						"name": "Premultiplied to Straight",
+						"value": "/"
+					}
+				]
+			}
+		],
+		"shortdesc": "Alpha Association Conversion"
+	},
+	"type": "shader"
+}
