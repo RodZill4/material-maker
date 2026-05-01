@@ -936,6 +936,9 @@ func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name
 			connection.to = to.generator.name
+			connection.erase("from_node")
+			connection.erase("to_node")
+			connection.erase("keep_alive")
 			data.connections.append(connection)
 	return data
 
