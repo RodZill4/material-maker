@@ -1,0 +1,28 @@
+{
+	"name": "tln_check",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "",
+				"name": "in",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"name": "Check",
+		"outputs": [],
+		"parameters": []
+	},
+	"type": "shader"
+}

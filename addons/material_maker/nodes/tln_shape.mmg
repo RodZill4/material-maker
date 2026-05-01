@@ -1,0 +1,157 @@
+{
+	"name": "tln_shape",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edge": 0.1,
+		"radius": 0.85,
+		"shape": 1.0,
+		"sides": 6.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"float shape_circle(vec2 uv, float sides, float size, float edge) {",
+			"\tuv = 2.0*uv-1.0;",
+			"\tedge = max(edge, 1.0e-8);",
+			"\tfloat distance = length(uv);",
+			"\treturn clamp((1.0-distance/size)/edge, 0.0, 1.0);",
+			"}",
+			"",
+			"float shape_polygon(vec2 uv, float sides, float size, float edge) {",
+			"\tuv = 2.0*uv-1.0;",
+			"\tedge = max(edge, 1.0e-8);",
+			"\tfloat angle = atan(uv.x, uv.y)+3.14159265359;",
+			"\tfloat slice = 6.28318530718/sides;",
+			"\treturn clamp((1.0-(cos(floor(0.5+angle/slice)*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);",
+			"}",
+			"",
+			"float shape_star(vec2 uv, float sides, float size, float edge) {",
+			"\tuv = 2.0*uv-1.0;",
+			"\tedge = max(edge, 1.0e-8);",
+			"\tfloat angle = atan(uv.x, uv.y);",
+			"\tfloat slice = 6.28318530718/sides;",
+			"\treturn clamp((1.0-(cos(floor(angle*sides/6.28318530718-0.5+2.0*step(fract(angle*sides/6.28318530718), 0.5))*slice-angle)*length(uv))/size)/edge, 0.0, 1.0);",
+			"}",
+			"",
+			"float shape_curved_star(vec2 uv, float sides, float size, float edge) {",
+			"\tuv = 2.0*uv-1.0;",
+			"\tedge = max(edge, 1.0e-8);",
+			"\tfloat angle = 2.0*(atan(uv.x, uv.y)+3.14159265359);",
+			"\tfloat slice = 6.28318530718/sides;",
+			"\treturn clamp((1.0-cos(floor(0.5+0.5*angle/slice)*2.0*slice-angle)*length(uv)/size)/edge, 0.0, 1.0);",
+			"}",
+			"",
+			"float shape_rays(vec2 uv, float sides, float size, float edge) {",
+			"\tuv = 2.0*uv-1.0;",
+			"\tedge = 0.5*max(edge, 1.0e-8)*size;",
+			"\tfloat slice = 6.28318530718/sides;",
+			"\tfloat angle = mod(atan(uv.x, uv.y)+3.14159265359, slice)/slice;",
+			"\treturn clamp(min((size-angle)/edge, angle/edge), 0.0, 1.0);",
+			"}",
+			"",
+			""
+		],
+		"inputs": [
+			{
+				"default": "1.0",
+				"label": "3:",
+				"longdesc": "An input map that affects the shape size",
+				"name": "radius_map",
+				"shortdesc": "Size map",
+				"type": "f"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "An input map that affects the edge width",
+				"name": "edge_map",
+				"shortdesc": "Edge map",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Draws a white shape on a black background",
+		"name": "Shape",
+		"outputs": [
+			{
+				"f": "shape_$(shape)($(uv), $(sides)+1.0e-5, $(radius)*$radius_map($uv), $(edge)*$edge_map($uv))",
+				"longdesc": "Shows a white shape on a black background",
+				"shortdesc": "Output",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "Shape",
+				"longdesc": "The type of shape drawn by this node",
+				"name": "shape",
+				"shortdesc": "Shape",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Circle",
+						"value": "circle"
+					},
+					{
+						"name": "Polygon",
+						"value": "polygon"
+					},
+					{
+						"name": "Star",
+						"value": "star"
+					},
+					{
+						"name": "Curved Star",
+						"value": "curved_star"
+					},
+					{
+						"name": "Rays",
+						"value": "rays"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 3.0,
+				"label": "Sides",
+				"longdesc": "The number of sides of the generated shape (unused for Circle)",
+				"max": 32.0,
+				"min": 2.0,
+				"name": "sides",
+				"shortdesc": "Sides count",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1.0,
+				"label": "Size",
+				"longdesc": "The size of the generated shape",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "radius",
+				"shortdesc": "Shape size",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.2,
+				"label": "Slope",
+				"longdesc": "The edge width of the generated shape",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "edge",
+				"shortdesc": "Edge width",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

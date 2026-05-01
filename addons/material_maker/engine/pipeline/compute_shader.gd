@@ -165,7 +165,10 @@ func render_loop(rd : RenderingDevice, size : Vector2i, chunk_height : int, unif
 		y += h
 
 func render(texture : MMTexture, size : Vector2i, output_parameters_values = null) -> bool:
-	return await render_ext([texture], size, output_parameters_values)
+	var textures : Array[MMTexture] = []
+	if texture:
+		textures.append(texture)
+	return await render_ext(textures, size, output_parameters_values)
 
 func in_thread_render_ext(textures : Array[MMTexture], size : Vector2i, output_parameters_values = null) -> bool:
 	var rd : RenderingDevice = mm_renderer.rendering_device

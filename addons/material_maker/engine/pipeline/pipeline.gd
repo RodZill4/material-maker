@@ -72,18 +72,18 @@ const TEXTURE_TYPE : Array[Dictionary] = [
 ]
 
 
-var parameters : Dictionary
+var parameters : Dictionary[String, Parameter]
 var parameter_values : PackedByteArray
 
-var constants : Dictionary
+var constants : Dictionary[String, Parameter]
 
-var input_texture_indexes : Dictionary
+var input_texture_indexes : Dictionary[String, int]
 var input_textures : Array[InputTexture]
 
 var time_current_desc : String = ""
 var time_current_time : int = 0
 
-var output_parameters : Dictionary
+var output_parameters : Dictionary[String, Parameter]
 
 func time(desc : String = ""):
 	return
