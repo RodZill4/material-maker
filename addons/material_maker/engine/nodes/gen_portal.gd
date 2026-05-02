@@ -17,6 +17,7 @@ var source : MMGenBase.OutputPort
 
 var editable := false
 var color : Color = Color.WHITE
+var horizontal_label : bool = false
 
 func is_editable() -> bool:
 	return true
@@ -93,6 +94,7 @@ func _serialize(data : Dictionary) -> Dictionary:
 	data.io = io
 	data.port_type = port_type
 	data.color = MMType.serialize_value(color)
+	data.horizontal_label = horizontal_label
 
 	# remove unused field
 	data.erase("seed_int")
@@ -105,3 +107,5 @@ func _deserialize(data : Dictionary) -> void:
 		port_type = data.port_type
 	if data.has("color"):
 		color = MMType.deserialize_value(data.color)
+	if data.has("horizontal_label"):
+		horizontal_label = data.horizontal_label
