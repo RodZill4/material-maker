@@ -64,6 +64,8 @@ var is_dragging_connection : bool = false:
 		is_dragging_connection = v
 		set_process_if_necessary()
 
+const SETTINGS_SERIALIZE_COMPRESSED : String = "serialize_compressed"
+
 signal save_path_changed
 signal graph_changed
 signal view_updated
@@ -950,7 +952,7 @@ func cut() -> void:
 	remove_selection()
 
 func copy() -> void:
-	DisplayServer.clipboard_set(MMLoader.dict_tree_to_string(serialize_selection(), true))
+	DisplayServer.clipboard_set(MMLoader.dict_tree_to_string(serialize_selection(), false, mm_globals.get_config(SETTINGS_SERIALIZE_COMPRESSED)))
 
 func do_paste(data) -> void:
 	var node_position = scroll_offset+0.5*size

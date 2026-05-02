@@ -161,18 +161,16 @@ static func string_to_dict_tree(string_data : String) -> Dictionary:
 		return replace_arrays_with_multiline_strings(test_json_conv.data)
 	return {}
 
-static func dict_tree_to_string(data : Dictionary, compress : bool = false) -> String:
-	var string : String
+static func dict_tree_to_string(data : Dictionary, pretty_print : bool = true, compress : bool = false) -> String:
+	data = replace_multiline_strings_with_arrays(data.duplicate(true))
+	var string : String = JSON.stringify(data, "\t" if pretty_print else "", true, true)
 	if compress:
-		string = JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "", true, true)
 		var buffer : PackedByteArray = string.to_ascii_buffer()
 		var compressed : String = Marshalls.raw_to_base64(buffer.compress(FileAccess.COMPRESSION_ZSTD))
 		compressed = "MMC:"+str(buffer.size())+":"+compressed
 		if string.length() > compressed.length():
 			#print(string.length(), "  ", compressed.length())
 			string = compressed
-	else:
-		string = JSON.stringify(replace_multiline_strings_with_arrays(data.duplicate(true)), "\t", true, true)
 	return string
 
 static func interpret_file_name(file_name : String, path : String = "", file_extension : String = "", node : MMGenBase = null, additional_identifiers : Dictionary[String, String] = {}, resolution : String = "") -> String:
