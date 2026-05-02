@@ -511,6 +511,28 @@ text = "On"
 flat = false
 config_variable = "node_close_button"
 
+[node name="ApertureLabelPosition" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=459231391]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/ApertureLabelPosition" unique_id=1117413719]
+layout_mode = 2
+text = "Aperture node label position"
+
+[node name="EnumOption" type="OptionButton" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/ApertureLabelPosition" unique_id=1920152932]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Default label position used for aperture nodes.
+Can also be toggled manually by pressing R when a node is selected."
+selected = 0
+item_count = 2
+popup/item_0/text = "Top"
+popup/item_0/id = 0
+popup/item_1/text = "Side"
+popup/item_1/id = 1
+script = ExtResource("5_vp06c")
+config_variable = "aperture_label_position"
+
 [node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2

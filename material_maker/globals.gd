@@ -62,6 +62,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_close_button = false,
 	ui_single_window_mode = false,
 	add_node_popup_sort = SortMenu.Sorting.QUALITY_DESCENDING,
+	aperture_label_position = 0
 }
 
 
