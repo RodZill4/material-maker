@@ -1,7 +1,9 @@
 extends Node
 
-func show_error(message : String):
+func show_error(message : String, exit_on_error : bool = false):
 	print(message)
+	if exit_on_error:
+		get_tree().quit(1)
 
 static func name_to_lower(s : String) -> String:
 	s = s.strip_edges()
@@ -105,25 +107,38 @@ func _ready():
 			match OS.get_cmdline_args()[i]:
 				"-t", "--target":
 					i += 1
+					if i >= OS.get_cmdline_args().size():
+						show_error("ERROR: missing target for " + OS.get_cmdline_args()[i - 1], true)
+						return
 					target = OS.get_cmdline_args()[i]
 				"-o", "--output-dir":
 					i += 1
+					if i >= OS.get_cmdline_args().size():
+						show_error("ERROR: missing output dir for " + OS.get_cmdline_args()[i - 1], true)
+						return
 					output_dir = OS.get_cmdline_args()[i]
 				"--output-file":
 					i += 1
+					if i >= OS.get_cmdline_args().size():
+						show_error("ERROR: missing output file format for --output-file", true)
+						return
 					output_file = OS.get_cmdline_args()[i]
 				"--size":
 					i += 1
-					texture_size = int(OS.get_cmdline_args()[i])
-					if texture_size < 0:
-						#show_error("ERROR: incorrect size "+OS.get_cmdline_args()[i])
+					if i >= OS.get_cmdline_args().size():
+						show_error("ERROR: missing size for --size", true)
 						return
+					texture_size = int(OS.get_cmdline_args()[i])
+					if texture_size <= 0:
+						show_error("ERROR: incorrect size "+OS.get_cmdline_args()[i], true)
+						return
+					image_size = texture_size
 				_:
 					files.push_back(OS.get_cmdline_args()[i])
 			i += 1
 		print("Output dir: ", output_dir)
 		if ! dir.dir_exists(output_dir):
-			show_error("ERROR: Output directory '%s' does not exist" % output_dir)
+			show_error("ERROR: Output directory '%s' does not exist" % output_dir, true)
 			return
 		var expanded_files = []
 		for f : String in files:
