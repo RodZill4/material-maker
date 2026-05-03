@@ -12,6 +12,66 @@ static func name_to_lower(s : String) -> String:
 	s = s.remove_chars("()/\"")
 	return s
 
+func _expand_input_files(files : Array[String]) -> Array[String]:
+	var expanded_files : Array[String] = []
+	for f : String in files:
+		var basedir : String = f.get_base_dir()
+		if basedir == "":
+			basedir = "."
+		var basename : String = f.get_file()
+		if basename.find("*") != -1:
+			basename = basename.replace("*", ".*")
+			var dir : DirAccess = DirAccess.open(basedir)
+			if dir.is_open():
+				var regex : RegEx = RegEx.new()
+				regex.compile("^"+basename+"$")
+				dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+				var file_name = dir.get_next()
+				while file_name != "":
+					if regex.search(file_name) and file_name.get_extension() == "ptex":
+						expanded_files.push_back(basedir+"/"+file_name)
+					file_name = dir.get_next()
+		elif f.begins_with("website:"):
+			for m : String in f.right(-8).split(","):
+				var range : PackedStringArray = m.split("-")
+				match range.size():
+					1:
+						if m.is_valid_int():
+							expanded_files.push_back("website:"+m)
+					2:
+						if range[0].is_valid_int() and range[1].is_valid_int():
+							for mi in range(range[0].to_int(), range[1].to_int()+1):
+								expanded_files.push_back("website:"+str(mi))
+		else:
+			expanded_files.push_back(f)
+	return expanded_files
+
+func _list_export_profiles(files : Array[String]) -> bool:
+	var results : Array = []
+	var has_loaded_input : bool = false
+	var has_failure : bool = false
+	for f : String in files:
+		var gen = await mm_loader.load_gen(f)
+		if gen == null:
+			results.append({ "input": f, "material": null, "profiles": [] })
+			has_failure = true
+			continue
+		has_loaded_input = true
+		add_child(gen)
+		var has_material : bool = false
+		for c in gen.get_children():
+			if c.has_method("get_export_profiles") and c.has_method("export_material"):
+				has_material = true
+				var profiles : Array = c.get_export_profiles()
+				profiles.sort()
+				results.append({ "input": f, "material": c.name, "profiles": profiles })
+		if !has_material:
+			results.append({ "input": f, "material": null, "profiles": [] })
+			has_failure = true
+		gen.queue_free()
+	print(JSON.stringify(results))
+	return has_loaded_input and !has_failure
+
 func export_files(files, output_dir, target, target_file, image_size) -> void:
 	var website_materials : Array = []
 	var export_list : PackedStringArray = PackedStringArray()
@@ -90,87 +150,74 @@ func export_files(files, output_dir, target, target_file, image_size) -> void:
 func _ready():
 	RenderingServer.set_default_clear_color(Color.BLACK)
 	var args : PackedStringArray = OS.get_cmdline_args()
-	if ("--export" in args) or ("--export-material" in args):
-		print("Exporting...")
+	if ("--export" in args) or ("--export-material" in args) or ("--list-export-profiles" in args):
 		var image_size : int = 2048
 		var dir : DirAccess = DirAccess.open(".")
 		var output = []
-		print("Current dir: ", dir.get_current_dir())
 		var target : String = "Godot/Godot 4 Standard"
 		#TODO: fix this
 		var output_dir : String = dir.get_current_dir()
 		var output_file : String = "%f"
 		var texture_size : int = 0
 		var files : Array[String] = []
-		var i = 1
-		while i < OS.get_cmdline_args().size():
-			match OS.get_cmdline_args()[i]:
+		var list_export_profiles : bool = false
+		var i = 0
+		while i < args.size():
+			var arg : String = args[i]
+			match arg:
+				"--export", "--export-material":
+					pass
 				"-t", "--target":
 					i += 1
-					if i >= OS.get_cmdline_args().size():
-						show_error("ERROR: missing target for " + OS.get_cmdline_args()[i - 1], true)
+					if i >= args.size():
+						show_error("ERROR: missing target for " + arg, true)
 						return
-					target = OS.get_cmdline_args()[i]
+					target = args[i]
 				"-o", "--output-dir":
 					i += 1
-					if i >= OS.get_cmdline_args().size():
-						show_error("ERROR: missing output dir for " + OS.get_cmdline_args()[i - 1], true)
+					if i >= args.size():
+						show_error("ERROR: missing output dir for " + arg, true)
 						return
-					output_dir = OS.get_cmdline_args()[i]
+					output_dir = args[i]
 				"--output-file":
 					i += 1
-					if i >= OS.get_cmdline_args().size():
+					if i >= args.size():
 						show_error("ERROR: missing output file format for --output-file", true)
 						return
-					output_file = OS.get_cmdline_args()[i]
+					output_file = args[i]
 				"--size":
 					i += 1
-					if i >= OS.get_cmdline_args().size():
+					if i >= args.size():
 						show_error("ERROR: missing size for --size", true)
 						return
-					texture_size = int(OS.get_cmdline_args()[i])
+					texture_size = int(args[i])
 					if texture_size <= 0:
-						show_error("ERROR: incorrect size "+OS.get_cmdline_args()[i], true)
+						show_error("ERROR: incorrect size "+args[i], true)
 						return
 					image_size = texture_size
+				"--list-export-profiles":
+					list_export_profiles = true
 				_:
-					files.push_back(OS.get_cmdline_args()[i])
+					files.push_back(arg)
 			i += 1
+
+		var expanded_files : Array[String] = _expand_input_files(files)
+		if expanded_files.is_empty():
+			show_error("ERROR: No input files provided", true)
+			return
+
+		if list_export_profiles:
+			var list_success = await _list_export_profiles(expanded_files)
+			get_tree().quit(0 if list_success else 1)
+			return
+
+		print("Exporting...")
+		print("Current dir: ", dir.get_current_dir())
 		print("Output dir: ", output_dir)
 		if ! dir.dir_exists(output_dir):
 			show_error("ERROR: Output directory '%s' does not exist" % output_dir, true)
 			return
-		var expanded_files = []
-		for f : String in files:
-			var basedir : String = f.get_base_dir()
-			if basedir == "":
-				basedir = "."
-			var basename : String = f.get_file()
-			if basename.find("*") != -1:
-				basename = basename.replace("*", ".*")
-				dir = DirAccess.open(basedir)
-				if dir.is_open():
-					var regex : RegEx = RegEx.new()
-					regex.compile("^"+basename+"$")
-					dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
-					var file_name = dir.get_next()
-					while file_name != "":
-						if regex.search(file_name) and file_name.get_extension() == "ptex":
-							expanded_files.push_back(basedir+"/"+file_name)
-						file_name = dir.get_next()
-			elif f.begins_with("website:"):
-				for m : String in f.right(-8).split(","):
-					var range : PackedStringArray = m.split("-")
-					match range.size():
-						1:
-							if m.is_valid_int():
-								expanded_files.push_back("website:"+m)
-						2:
-							if range[0].is_valid_int() and range[1].is_valid_int():
-								for mi in range(range[0].to_int(), range[1].to_int()+1):
-									expanded_files.push_back("website:"+str(mi))
-			else:
-				expanded_files.push_back(f)
+
 		await export_files(expanded_files, output_dir, target, output_file, image_size)
 	else:
 		var no_logo : bool = ( args.find("--no-splash") != -1 )
