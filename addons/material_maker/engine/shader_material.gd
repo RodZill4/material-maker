@@ -16,6 +16,10 @@ func set_shader(shader_code : String) -> bool:
 	var shader : Shader = Shader.new()
 	shader.code = shader_code
 	material.shader = shader
+	if material.shader.get_shader_uniform_list().is_empty():
+		material.shader = preload("res://material_maker/panels/preview_2d/shader_error.gdshader")
+		material.set_shader_parameter("error_tex", preload("res://material_maker/panels/preview_2d/shader_error.png"))
+		return true
 	return true
 
 func get_parameters() -> Dictionary:
