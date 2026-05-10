@@ -6,6 +6,7 @@
 [sub_resource type="ImageTexture" id="ImageTexture_8pecb"]
 
 [node name="CreateLibDialog" type="Window"]
+oversampling_override = 1.0
 title = "Create Library"
 position = Vector2i(0, 36)
 size = Vector2i(400, 1)
@@ -83,6 +84,7 @@ layout_mode = 2
 text = "Cancel"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="window_input" from="." to="." method="_on_window_input"]
 [connection signal="minimum_size_changed" from="MarginContainer/VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/GridContainer/LibraryNameLineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="text_submitted" from="MarginContainer/VBoxContainer/GridContainer/LibraryNameLineEdit" to="." method="_on_LineEdit_text_entered"]
