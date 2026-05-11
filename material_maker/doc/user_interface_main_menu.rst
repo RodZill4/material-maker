@@ -97,6 +97,10 @@ View menu
 
 * *Reset zoom* Resets the zoom level of the current material graph view
 
+* *Frame selected nodes* Zoom in/out to selected nodes so that they fit the graph view
+
+* *Frame all nodes* Zoom in/out to all nodes to fit the graph view
+
 * *Show/Hide side panels* (or the *Control+SpaceBar* keyboard shortcut) can
   be used to hide the side panels so the space available for the main panel
   is maximized (which can be useful on smaller displays).

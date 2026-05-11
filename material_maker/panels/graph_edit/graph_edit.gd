@@ -280,6 +280,9 @@ func _gui_input(event) -> void:
 				KEY_MASK_ALT | KEY_S:
 					if OS.get_name() == "macOS":
 						swap_node_inputs()
+				KEY_PERIOD:
+					if OS.get_name() == "macOS":
+						frame_nodes(true)
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -614,6 +617,28 @@ func center_view() -> void:
 	if node_count > 0:
 		center /= node_count
 		scroll_offset = center * zoom - 0.5*size
+
+func frame_nodes(frame_selected : bool = false) -> void:
+	var nodes := get_children().filter(func(c): return c is GraphElement)
+	if frame_selected:
+		nodes = get_selected_nodes()
+	if nodes.is_empty():
+		return
+	var count := 0
+	var bbox : Rect2
+
+	for c in nodes:
+		count += 1
+		if count == 1:
+			bbox.position = c.position_offset + 0.5 * c.size
+		else:
+			bbox = bbox.expand(c.position_offset + 0.5 * c.size)
+	bbox = bbox.grow(160.0).grow_individual(0.0, 20.0, 0.0, 20.0)
+	var sc = size / bbox.size
+	var _zoom := minf(minf(sc.x, sc.y), 1.5)
+	var tween := get_tree().create_tween()
+	tween.parallel().tween_property(self, "zoom", _zoom, 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(self, "scroll_offset", bbox.get_center() * _zoom - 0.5 * size, 0.3).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 
 func update_view(g) -> void:
 	if generator != null and is_instance_valid(generator):
