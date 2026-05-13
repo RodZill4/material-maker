@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v1
+        uses: actions/checkout@v5
         with:
           submodules: true
       - name: Setup 💻
@@ -98,7 +98,7 @@ jobs:
     runs-on: macos-26
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v1
+        uses: actions/checkout@v5
         with:
           submodules: true
       - name: Setup environment 🔧
