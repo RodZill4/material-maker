@@ -1,12 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
+[gd_scene load_steps=7 format=3 uid="uid://drbpisn5f3h8y"]
 
 [ext_resource type="Script" uid="uid://byotadn432paf" path="res://material_maker/panels/library/library_tree.gd" id="1"]
 [ext_resource type="Script" uid="uid://cg0s65b0doku6" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="3"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="5_55s42"]
 
 [sub_resource type="AtlasTexture" id="1"]
 atlas = ExtResource("3")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xdn16"]
+atlas = ExtResource("5_55s42")
+region = Rect2(0, 64, 15, 16)
 
 [node name="Library" type="PanelContainer"]
 offset_right = 323.0
@@ -66,11 +71,36 @@ auto_tooltip = false
 script = ExtResource("1")
 
 [node name="GetFromWebsite" type="Button" parent="Library"]
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Get more nodes from website"
-text = "Browse Community Nodes"
 clip_text = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Library/GetFromWebsite"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -113.0
+offset_top = -11.5
+offset_right = 113.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 1
+
+[node name="Download" type="TextureRect" parent="Library/GetFromWebsite/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("AtlasTexture_xdn16")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Library/GetFromWebsite/HBoxContainer"]
+layout_mode = 2
+text = "Browse Community Nodes"
 
 [node name="ItemMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
