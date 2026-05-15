@@ -304,7 +304,9 @@ func setup_portal_edit() -> void:
 			is_editing = false
 			generator.editable = false
 			edit.reset_size()
-			edit.queue_free())
+			edit.queue_free()
+			graph.grab_focus()
+			queue_redraw())
 	edit.text_changed.connect(
 		func(new_text : String) -> void:
 			var new_link := new_text.strip_edges()
