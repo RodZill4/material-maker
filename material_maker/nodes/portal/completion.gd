@@ -87,7 +87,7 @@ func request_completion(filter : String, graph : MMGraphEdit) -> void:
 					$ItemList.set_item_text(index, link)
 					$ItemList.set_item_tooltip_enabled(index, false)
 
-	# approx height adjustment, min 2 items, max 7
+	# approx height adjustment
 	size.y = clampf(4 + $ItemList.item_count * 25, 50, HEIGHT_MAX_ITEMS * 25)
 	custom_minimum_size = size
 	if $ItemList.item_count == 0:
