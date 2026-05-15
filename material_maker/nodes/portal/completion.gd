@@ -2,15 +2,20 @@ class_name PortalCompletionPanel
 extends Panel
 
 var selected_item : int = -1
+const HEIGHT_MAX_ITEMS : int = 8
 
 @onready var portal_edit : LineEdit = get_parent()
 @export_multiline var slot_svg : String
+
+## Emitted when selected item changes(i.e. via up/down key presses)
+signal selection_updated
 
 func _ready() -> void:
 	theme = mm_globals.main_window.theme
 	hide_panel()
 	setup_scrollbar_theme()
-	position = Vector2(0, portal_edit.size.y + 10)
+	position = Vector2(portal_edit.size.x * 0.5 - size.x * 0.5,
+			portal_edit.size.y + 10)
 
 func _gui_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton
@@ -82,6 +87,9 @@ func request_completion(filter : String, graph : MMGraphEdit) -> void:
 					$ItemList.set_item_text(index, link)
 					$ItemList.set_item_tooltip_enabled(index, false)
 
+	# approx height adjustment, min 2 items, max 7
+	size.y = clampf(4 + $ItemList.item_count * 25, 50, HEIGHT_MAX_ITEMS * 25)
+	custom_minimum_size = size
 	if $ItemList.item_count == 0:
 		hide_panel()
 
@@ -92,6 +100,8 @@ func update_current_selection(input : Key) -> void:
 		$ItemList.select(selected_item)
 		$ItemList.ensure_current_is_visible()
 		set_portal_edit_text($ItemList.get_item_text(selected_item))
+		portal_edit.size.x = 0
+		selection_updated.emit()
 
 func handle_click_completion() -> void:
 	var item : int = $ItemList.get_item_at_position(get_local_mouse_position(), true)

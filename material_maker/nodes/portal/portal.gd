@@ -292,9 +292,10 @@ func setup_portal_edit() -> void:
 	position_offset_changed.connect(edit_box_set_position.bind(edit))
 	graph.draw.connect(edit_box_set_position.bind(edit))
 
-	var completion_panel : PortalCompletionPanel = preload(
-		"res://material_maker/nodes/portal/completion.tscn").instantiate()
+	var completion_panel : PortalCompletionPanel
 	if is_portal_out():
+		completion_panel =  preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
+		completion_panel.selection_updated.connect(edit_box_set_position.bind(edit))
 		completion_panel.visibility_changed.connect(
 			func() -> void: visible = not completion_panel.visible)
 		edit.add_child(completion_panel)
