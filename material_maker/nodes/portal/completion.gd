@@ -33,7 +33,6 @@ func _input(event : InputEvent) -> void:
 	elif event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT:
 			if not Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()) or not visible:
-				portal_edit.focus_exited.emit()
 				hide_panel()
 			else:
 				if visible:
