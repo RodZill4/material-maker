@@ -4,18 +4,33 @@ extends Panel
 var selected_item : int = -1
 const HEIGHT_MAX_ITEMS : int = 8
 
-@onready var portal_edit : LineEdit = get_parent()
 @export_multiline var slot_svg : String
+@onready var graph : MMGraphEdit = get_parent()
+
+var portal_edit : LineEdit = null
+
 
 ## Emitted when selected item changes(i.e. via up/down key presses)
 signal selection_updated
 
 func _ready() -> void:
-	theme = mm_globals.main_window.theme
 	hide_panel()
-	setup_scrollbar_theme()
-	position = Vector2(portal_edit.size.x * 0.5 - size.x * 0.5,
-			portal_edit.size.y + 10)
+	setup_theme()
+	update_position()
+	setup_signals()
+
+func setup_signals() -> void:
+	graph.draw.connect(update_position)
+	portal_edit.tree_exiting.connect(portal_edit_tree_exiting)
+
+func portal_edit_tree_exiting() -> void:
+	graph.draw.disconnect(update_position)
+	queue_free()
+
+func update_position() -> void:
+	scale = portal_edit.scale
+	position = Vector2((portal_edit.size.x - size.x) * 0.5,
+			portal_edit.size.y + 10) * graph.zoom + portal_edit.position
 
 func _gui_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton
@@ -44,7 +59,8 @@ func _input(event : InputEvent) -> void:
 					handle_click_completion()
 					accept_event()
 
-func setup_scrollbar_theme() -> void:
+func setup_theme() -> void:
+	theme = mm_globals.main_window.theme
 	$ItemList.add_theme_constant_override("scrollbar_h_separation", 1)
 
 	var vscroll : VScrollBar = $ItemList.get_v_scroll_bar()
@@ -66,7 +82,7 @@ func hide_panel() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hide()
 
-func request_completion(filter : String, graph : MMGraphEdit) -> void:
+func request_completion(filter : String) -> void:
 	if filter.is_empty():
 		hide_panel()
 		return

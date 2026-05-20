@@ -295,10 +295,11 @@ func setup_portal_edit() -> void:
 	var completion_panel : PortalCompletionPanel
 	if is_portal_out():
 		completion_panel =  preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
+		completion_panel.portal_edit = edit
 		completion_panel.selection_updated.connect(edit_box_set_position.bind(edit))
 		completion_panel.visibility_changed.connect(
 			func() -> void: visible = not completion_panel.visible)
-		edit.add_child(completion_panel)
+		graph.add_child(completion_panel)
 
 	edit.modulate = link_collision_warning_color(get_link())
 	edit.text_submitted.connect(
@@ -333,7 +334,7 @@ func setup_portal_edit() -> void:
 				on_parameter_changed("link", new_link)
 				edit.modulate = link_collision_warning_color(new_link)
 			if completion_panel:
-				completion_panel.request_completion(new_link, graph)
+				completion_panel.request_completion(new_link)
 			edit_box_set_position(edit))
 	edit.focus_exited.connect(func(): edit.text_submitted.emit(edit.text))
 	edit.tree_exiting.connect(
