@@ -57,6 +57,8 @@ var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
+const LASSO_CURSOR : DPITexture = preload("res://material_maker/icons/cross.svg")
+const LASSO_HOT_SPOT : Vector2 = Vector2(8.8, 8.8)
 var lasso_points : PackedVector2Array
 
 var is_dragging_connection : bool = false:
@@ -202,6 +204,7 @@ func _gui_input(event) -> void:
 				for point in node_points:
 					node.selected = node.selected or Geometry2D.is_point_in_polygon(point,  lasso_points)
 		lasso_points.clear()
+		Input.set_custom_mouse_cursor(null)
 		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
@@ -340,6 +343,7 @@ func _gui_input(event) -> void:
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
 			accept_event()
+			Input.set_custom_mouse_cursor(LASSO_CURSOR, Input.CURSOR_ARROW, LASSO_HOT_SPOT)
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
 		elif (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.shift_pressed:
