@@ -131,7 +131,6 @@ func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
-	get_window().gui_embed_subwindows = false
 
 	get_window().close_requested.connect(self.on_close_requested)
 
@@ -336,6 +335,9 @@ func on_config_changed() -> void:
 				c.update_node()
 			if c.has_method("update"):
 				c.update()
+
+	if not get_window().gui_embed_subwindows:
+		get_window().gui_embed_subwindows = mm_globals.get_config("ui_single_window_mode")
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -996,7 +998,7 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.content_scale_factor = mm_globals.ui_scale_factor()
 	dialog.edit_preferences(mm_globals.config)
 
 func edit_align_start() -> void:
@@ -1091,7 +1093,7 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true, upd
 		current_item_name = library.get_selected_item_name()
 	if should_ask_item_name:
 		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-		dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		dialog.content_scale_factor = mm_globals.ui_scale_factor()
 		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 		add_child(dialog)
 		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
@@ -1118,7 +1120,7 @@ func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 
 func add_brush_to_library(index) -> void:
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.content_scale_factor = mm_globals.ui_scale_factor()
 	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
@@ -1330,7 +1332,7 @@ func generate_graph_screenshot():
 	graph_edit.zoom = 1
 	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
-	var scale_factor : float = get_window().content_scale_factor
+	var scale_factor : float = mm_globals.ui_scale_factor()
 	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(25, 90))
 	graph_edit_rect = Rect2(scale_factor*graph_edit_rect.position, scale_factor*graph_edit_rect.size)
 	var graph_rect = null

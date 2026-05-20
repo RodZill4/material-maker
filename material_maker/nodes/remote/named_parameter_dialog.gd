@@ -3,7 +3,7 @@ extends Window
 signal return_values(values)
 
 func _ready():
-	content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = Vector2(450, 60) * content_scale_factor
 
 func _on_OK_pressed() -> void:
