@@ -103,6 +103,10 @@ View menu
 
 * the *Panels* submenu can be used to show or hide all side panels
 
+* the *Presets* submenu can be used to load/save/edit panels presets.
+
+* *Reset panels* Resets panels layout to factory settings.
+
 Tools menu
 ^^^^^^^^^^
 
