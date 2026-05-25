@@ -14,6 +14,11 @@ build:
 sphinx:
   configuration: material_maker/doc/conf.py
 
+# Build PDF & ePub
+formats:
+  - epub
+  - pdf
+
 # Optionally, but recommended,
 # declare the Python requirements required to build your documentation
 # See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
