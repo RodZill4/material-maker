@@ -785,10 +785,24 @@ func load_from_recovery(filename) -> bool:
 
 # Save
 
+func generate_project_thumbnail() -> String:
+	var preview_vp : SubViewport
+	if not has_node("PreviewViewport"):
+		preview_vp = load("res://material_maker/tools/share/preview_viewport.tscn").instantiate()
+		add_child(preview_vp)
+	else:
+		preview_vp = get_node("PreviewViewport")
+	await mm_globals.main_window.update_preview_3d([preview_vp])
+	var t : ImageTexture = await preview_vp.get_preview(0)
+	var img : Image = t.get_image()
+	@warning_ignore("integer_division")
+	img.resize(48, 48 * t.get_height() / t.get_width(), Image.INTERPOLATE_LANCZOS)
+	return Marshalls.raw_to_base64(img.save_webp_to_buffer(true, 0.75))
+
 func save() -> bool:
 	var status = false
 	if save_path != "":
-		status = save_file(save_path)
+		status = await save_file(save_path)
 	else:
 		status = await save_as()
 	return status
@@ -799,7 +813,7 @@ func save_as() -> bool:
 		add_child(dialog)
 		var status = await dialog.enter_text("Save", "Select a file name", save_path.get_file() if save_path != null else "")
 		if status.ok:
-			if save_file(status.text.get_file().get_basename()+".ptex"):
+			if await save_file(status.text.get_file().get_basename()+".ptex"):
 				top_generator.emit_signal("hierarchy_changed")
 	else:
 		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
@@ -811,16 +825,17 @@ func save_as() -> bool:
 		dialog.current_dir = mm_globals.config.get_value("path", "project", mm_globals.get_home_directory())
 		var files = await dialog.select_files()
 		if files.size() == 1:
-			if save_file(files[0]):
+			if await save_file(files[0]):
 				main_window.add_recent(save_path)
 				mm_globals.config.set_value("path", "project", save_path.get_base_dir())
 				top_generator.emit_signal("hierarchy_changed")
 				return true
 	return false
 
-func save_file(filename:String) -> bool:
+func save_file(filename : String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
+	data["project_thumbnail"] = await generate_project_thumbnail()
 	mm_loader.current_project_path = ""
 	var e: Error
 	if OS.get_name() == "HTML5":
