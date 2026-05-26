@@ -18,6 +18,9 @@ func _ready() -> void:
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
 		ok_button_text = tr("Save")
 
+	if mm_globals.config.has_section_key("file_dialog", "display_mode"):
+		display_mode = mm_globals.config.get_value("file_dialog", "display_mode")
+
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
 	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	content_scale_factor = _content_scale_factor
@@ -100,6 +103,7 @@ func _on_child_entered_tree(node: Node) -> void:
 func _exit_tree() -> void:
 	mm_globals.config.set_value("file_dialog", "recents", JSON.stringify(get_recent_list()))
 	mm_globals.config.set_value("file_dialog", "favorites", JSON.stringify(get_favorite_list()))
+	mm_globals.config.set_value("file_dialog", "display_mode", display_mode)
 
 func load_fav_recents() -> void:
 	var json = JSON.new()
