@@ -78,12 +78,19 @@ func _exit_tree() -> void:
 func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.double_click:
 		setup_portal_edit()
+		accept_event()
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventKey and event.pressed and selected and not is_editing:
+	if event is InputEventKey and event.pressed and selected:
 		match event.get_keycode_with_modifiers():
 			KEY_F2, KEY_ENTER:
-				setup_portal_edit()
+				if not is_editing:
+					setup_portal_edit()
+			KEY_UP, KEY_DOWN:
+				if is_editing:
+					accept_event()
+			KEY_ENTER:
+				accept_event()
 	elif event is InputEventMouseMotion:
 		if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
 			mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB/F2/Enter: Rename link"), 1.0, 2)
@@ -285,11 +292,21 @@ func setup_portal_edit() -> void:
 	position_offset_changed.connect(edit_box_set_position.bind(edit))
 	graph.draw.connect(edit_box_set_position.bind(edit))
 
+	var completion_panel : PortalCompletionPanel
+	if is_portal_out():
+		completion_panel =  preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
+		completion_panel.portal_edit = edit
+		completion_panel.selection_updated.connect(edit_box_set_position.bind(edit))
+		completion_panel.visibility_changed.connect(
+			func() -> void: visible = not completion_panel.visible)
+		graph.add_child(completion_panel)
+
 	edit.modulate = link_collision_warning_color(get_link())
 	edit.text_submitted.connect(
 		func(new_text : String) -> void:
 			if not is_editing:
 				return
+
 			var new_link := new_text.strip_edges()
 			if not new_link.is_empty():
 				if is_link_unique(new_link):
@@ -301,20 +318,28 @@ func setup_portal_edit() -> void:
 					graph.undoredo.end_group()
 				else:
 					on_parameter_changed("link", old_link)
+			else:
+				edit.text = old_link
 			is_editing = false
 			generator.editable = false
 			edit.reset_size()
-			edit.queue_free())
+			edit.queue_free()
+			graph.grab_focus()
+			selected = true
+			queue_redraw())
 	edit.text_changed.connect(
 		func(new_text : String) -> void:
 			var new_link := new_text.strip_edges()
 			if not new_link.is_empty():
 				on_parameter_changed("link", new_link)
 				edit.modulate = link_collision_warning_color(new_link)
+			if completion_panel:
+				completion_panel.request_completion(new_link)
 			edit_box_set_position(edit))
 	edit.focus_exited.connect(func(): edit.text_submitted.emit(edit.text))
 	edit.tree_exiting.connect(
 		func() -> void:
+			show()
 			position_offset_changed.disconnect(edit_box_set_position)
 			graph.draw.disconnect(edit_box_set_position))
 
