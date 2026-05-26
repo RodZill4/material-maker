@@ -64,3 +64,4 @@ func _on_menu_id_pressed(id : int) -> void:
 			generator.model = get_material_nodes()[id].name
 			generator.editable = false
 			update_shader_generator(mm_loader.predefined_generators[generator.model].shader_model)
+			get_node("/root/MainWindow").update_menus()
