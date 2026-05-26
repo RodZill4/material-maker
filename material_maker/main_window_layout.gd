@@ -40,12 +40,22 @@ var previous_width : float
 var current_mode : String = "material"
 var layout : Dictionary = {}
 
+var previous_layout : Dictionary
+
 
 func _ready() -> void:
 	previous_width = size.x
 
 func toggle_side_panels() -> void:
-	pass
+	if not previous_layout.is_empty():
+		$FlexibleLayout.init(previous_layout)
+		previous_layout.clear()
+	else:
+		var main_layout : Dictionary = {
+			&"main": { &"type": "FlexTop",&"w": 1073.0, &"h": 939.0,
+				&"children": [{ &"type": "FlexMain", &"w": 1073.0, &"h": 939.0, &"children": [] }] }, &"windows": [] }
+		previous_layout = $FlexibleLayout.serialize()
+		$FlexibleLayout.init(main_layout)
 
 func load_panels() -> void:
 	# Create panels
@@ -70,6 +80,8 @@ func load_panels() -> void:
 
 func save_config() -> void:
 	layout[current_mode] = $FlexibleLayout.serialize()
+	if not previous_layout.is_empty():
+		layout[current_mode] = previous_layout
 	for mode in [ "material", "paint" ]:
 		if layout.has(mode):
 			mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))
@@ -89,6 +101,7 @@ func is_panel_visible(panel_name : String) -> bool:
 	return $FlexibleLayout.flex_layout.is_panel_shown(panel_name)
 
 func set_panel_visible(panel_name : String, v : bool) -> void:
+	previous_layout.clear()
 	$FlexibleLayout.show_panel(panel_name, v)
 	$FlexibleLayout.layout()
 
