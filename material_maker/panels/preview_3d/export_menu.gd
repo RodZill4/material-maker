@@ -100,3 +100,10 @@ func interpret_map_file_name(file_name: String, path:="") -> String:
 
 func _on_map_file_type_item_selected(_index: int) -> void:
 	update_generate_map_file_label()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		if not is_node_ready():
+			await ready
+		MapExportFileResultLabel.add_theme_font_override("font",
+				FontManager.create_italic_variation(FontManager.main_font))

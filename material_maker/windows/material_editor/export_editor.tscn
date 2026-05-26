@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cwjtvrgb2al2x"]
+[gd_scene format=3 uid="uid://cwjtvrgb2al2x"]
 
 [ext_resource type="Script" uid="uid://bp8x8ej3d6k4e" path="res://material_maker/windows/material_editor/export_editor.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://lt2wnsnw4af6" path="res://material_maker/windows/material_editor/expression_line_edit.tscn" id="3"]
@@ -32,13 +32,13 @@ region = Rect2(48, 160, 16, 16)
 atlas = ExtResource("3_ko8a7")
 region = Rect2(32, 0, 16, 16)
 
-[node name="ExportEditor" type="Window"]
+[node name="ExportEditor" type="Window" unique_id=1248551394]
 oversampling_override = 1.0
 title = "Material Export Editor"
 position = Vector2i(0, 36)
 script = ExtResource("2")
 
-[node name="BG" type="ColorRect" parent="."]
+[node name="BG" type="ColorRect" parent="." unique_id=463054672]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -46,136 +46,136 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.043137256, 0.043137256, 0.047058824, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1792451751]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1938598126]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Export" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Export" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=829497445]
 layout_mode = 2
 
-[node name="Create" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Create" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=898845045]
 layout_mode = 2
 tooltip_text = "New export target"
 icon = SubResource("2")
 
-[node name="Load" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Load" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=1738925097]
 layout_mode = 2
 tooltip_text = "Load export target from file"
 icon = SubResource("9")
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Export" unique_id=1535933349]
 layout_mode = 2
 text = "Export target:"
 
-[node name="Option" type="OptionButton" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Option" type="OptionButton" parent="MarginContainer/VBoxContainer/Export" unique_id=66083129]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Rename" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Rename" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=1954936805]
 layout_mode = 2
 tooltip_text = "Rename export target"
 icon = SubResource("3")
 
-[node name="External" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="External" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=1952860554]
 layout_mode = 2
 tooltip_text = "Store as separate file"
 toggle_mode = true
 icon = SubResource("7")
 
-[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=1430866122]
 layout_mode = 2
 tooltip_text = "Save to file"
 icon = SubResource("8")
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Export"]
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/Export" unique_id=1982626021]
 layout_mode = 2
 
-[node name="Duplicate" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Duplicate" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=100619087]
 layout_mode = 2
 tooltip_text = "Duplicate export target"
 icon = SubResource("4")
 
-[node name="Delete" type="Button" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Delete" type="Button" parent="MarginContainer/VBoxContainer/Export" unique_id=1854831832]
 layout_mode = 2
 tooltip_text = "Delete export target"
 icon = SubResource("5")
 
-[node name="Space" type="Control" parent="MarginContainer/VBoxContainer/Export"]
+[node name="Space" type="Control" parent="MarginContainer/VBoxContainer/Export" unique_id=537854734]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="ExtensionLabel" type="Label" parent="MarginContainer/VBoxContainer/Export"]
+[node name="ExtensionLabel" type="Label" parent="MarginContainer/VBoxContainer/Export" unique_id=1160537666]
 layout_mode = 2
 text = "Main file extension:"
 
-[node name="ExtensionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Export"]
+[node name="ExtensionEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Export" unique_id=2042004532]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=324978479]
 layout_mode = 2
 
-[node name="TabBar" type="TabContainer" parent="MarginContainer/VBoxContainer"]
+[node name="TabBar" type="TabContainer" parent="MarginContainer/VBoxContainer" unique_id=166731076]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="Files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabBar"]
+[node name="Files" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabBar" unique_id=483588346]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_index = 0
 
-[node name="Files" type="ItemList" parent="MarginContainer/VBoxContainer/TabBar/Files"]
+[node name="Files" type="ItemList" parent="MarginContainer/VBoxContainer/TabBar/Files" unique_id=342963388]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="File" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabBar/Files"]
+[node name="File" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabBar/Files" unique_id=1233607205]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Common" type="GridContainer" parent="MarginContainer/VBoxContainer/TabBar/Files/File"]
+[node name="Common" type="GridContainer" parent="MarginContainer/VBoxContainer/TabBar/Files/File" unique_id=803965978]
 layout_mode = 2
 columns = 2
 
-[node name="LabelName" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="LabelName" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=322197631]
 layout_mode = 2
 text = "Name:"
 
-[node name="name" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="name" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=1833533613]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LabelPromptOverwrite" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="LabelPromptOverwrite" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=2000927412]
 layout_mode = 2
 text = "Prompt overwrite:"
 
-[node name="prompt_overwrite" type="CheckBox" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="prompt_overwrite" type="CheckBox" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=531782036]
 layout_mode = 2
 
-[node name="LabelCondition" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="LabelCondition" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=1004793950]
 layout_mode = 2
 text = "Condition:"
 
-[node name="conditions" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="conditions" type="LineEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=1269909520]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LabelType" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="LabelType" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=1428847088]
 layout_mode = 2
 text = "Type:"
 
-[node name="type" type="OptionButton" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="type" type="OptionButton" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=1906344066]
 layout_mode = 2
 size_flags_horizontal = 3
 item_count = 4
@@ -188,21 +188,22 @@ popup/item_2/id = 2
 popup/item_3/text = "Buffer templates"
 popup/item_3/id = 3
 
-[node name="LabelExpression" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common"]
+[node name="LabelExpression" type="Label" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=895010146]
 layout_mode = 2
 text = "Output:"
 
-[node name="expression" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" instance=ExtResource("3")]
+[node name="expression" parent="MarginContainer/VBoxContainer/TabBar/Files/File/Common" unique_id=1234300185 instance=ExtResource("3")]
 layout_mode = 2
 
-[node name="template" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File"]
+[node name="template" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar/Files/File" unique_id=130890460]
 custom_minimum_size = Vector2(100, 200)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_default_cursor_shape = 0
 
-[node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar"]
+[node name="Custom Script" type="TextEdit" parent="MarginContainer/VBoxContainer/TabBar" unique_id=528706883]
+unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 200)
 layout_mode = 2
@@ -211,21 +212,21 @@ size_flags_vertical = 3
 mouse_default_cursor_shape = 0
 metadata/_tab_index = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=874412941]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=651896979]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="OK" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=267351230]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1960377214]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "Cancel"
