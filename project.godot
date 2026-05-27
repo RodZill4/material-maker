@@ -26,8 +26,8 @@ boot_splash/show_image=false
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
-config/release="1.6.0.0"
-config/actual_release="1.6"
+config/release="1.7.0.0"
+config/actual_release="1.7"
 
 [audio]
 
