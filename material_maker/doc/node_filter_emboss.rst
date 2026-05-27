@@ -29,6 +29,10 @@ The **Emboss** node the following parameters:
 
 * the *width* of the emboss effect.
 
+* whether *32 bit* buffer is used to sample the input.
+Reduces banding artifacts but could result in higher video
+memory usage.
+
 Notes
 +++++
 

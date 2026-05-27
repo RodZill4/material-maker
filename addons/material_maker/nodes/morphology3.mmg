@@ -1,0 +1,650 @@
+{
+	"connections": [
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "invert",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "invert",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "shape_2",
+			"to_port": 0
+		},
+		{
+			"from": "shape_3",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "shape_2",
+			"from_port": 0,
+			"to": "uniform_greyscale",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "uniform_greyscale_2",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale_2",
+			"from_port": 0,
+			"to": "shape_3",
+			"to_port": 0
+		},
+		{
+			"from": "shape_4",
+			"from_port": 0,
+			"to": "uniform_greyscale_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "uniform_greyscale_4",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale_3",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "shape_4",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "shape_3",
+			"to_port": 2
+		},
+		{
+			"from": "uniform_greyscale_4",
+			"from_port": 0,
+			"to": "shape_3",
+			"to_port": 1
+		}
+	],
+	"label": "Morphology",
+	"longdesc": "Applies a morphology dilation or erosion on its input",
+	"name": "morphology3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -800.0,
+				"y": 60.0
+			},
+			"parameters": {
+				"f32": false,
+				"filter": false,
+				"mipmap": false,
+				"size": 10.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "invert",
+			"node_position": {
+				"x": -460.0,
+				"y": 60.0
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "invert"
+		},
+		{
+			"name": "shape_2",
+			"node_position": {
+				"x": -99.0,
+				"y": -45.0
+			},
+			"parameters": {
+				"d": 0.05,
+				"s": 10.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec2 $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat dx = floor($d/e)*e;",
+					"\tfloat v = 0.0;",
+					"\tfloat bestuv_x = uv.x;",
+					"\tfor (float x = 0.0; x < dx; x += e) {",
+					"\t\tfloat c = $in(uv+vec2(x, 0.0));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_x = uv.x+x;",
+					"\t\t}",
+					"\t\tc = $in(uv-vec2(x, 0.0));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_x = uv.x-x;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec2(v, bestuv_x);",
+					"}"
+				],
+				"name": "Morphology Dilation 1 X",
+				"outputs": [
+					{
+						"rgb": "vec3($(name)_dilate($uv), 0.0)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 6.0,
+						"label": "",
+						"last": 12.0,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.1,
+						"label": "",
+						"max": 0.3,
+						"min": 0.0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "shape_3",
+			"node_position": {
+				"x": 37.0,
+				"y": 280.0
+			},
+			"parameters": {
+				"d": 0.05,
+				"s": 10.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "inx",
+						"type": "rgb"
+					},
+					{
+						"default": "vec3(0.0)",
+						"function": true,
+						"label": "",
+						"name": "iny",
+						"type": "rgb"
+					},
+					{
+						"default": "vec4(0.0)",
+						"label": "",
+						"name": "in2",
+						"type": "rgba"
+					}
+				],
+				"instance": [
+					"vec3 $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat dx = floor($d/e)*e;",
+					"\tfloat v = 0.0;",
+					"\tvec2 bestuv = uv;",
+					"\tfor (float x = 0.0; x < dx; x += e) {",
+					"\t\tvec2 input_dist = $inx(uv+vec2(0.0, x)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.x, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(input_dist.y, uv.y+x);",
+					"\t\t}",
+					"\t\tinput_dist = $inx(uv-vec2(0.0, x)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.x, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(input_dist.y, uv.y-x);",
+					"\t\t}",
+					"\t\tinput_dist = $iny(uv+vec2(x, 0.0)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.y, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(uv.x+x, input_dist.y);",
+					"\t\t}",
+					"\t\tinput_dist = $iny(uv-vec2(x, 0.0)).xy;",
+					"\t\tif (v < input_dist.x && $d >= length(vec2(input_dist.y-uv.y, x))) {",
+					"\t\t\tv = input_dist.x;",
+					"\t\t\tbestuv = vec2(uv.x-x, input_dist.y);",
+					"\t\t}",
+					"\t}",
+					"\treturn vec3(v, bestuv);",
+					"}"
+				],
+				"name": "Morphology Dilation 2",
+				"outputs": [
+					{
+						"rgba": "$in2(fract($(name)_dilate($uv).yz))",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 6.0,
+						"label": "",
+						"last": 12.0,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.1,
+						"label": "",
+						"max": 0.3,
+						"min": 0.0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": -86.8777465820312,
+				"y": 39.6255493164062
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "pack_2x32_to_4x16"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -86.0,
+				"y": 98.0
+			},
+			"parameters": {
+				"f32": false,
+				"filter": false,
+				"mipmap": false,
+				"size": 10.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "uniform_greyscale_2",
+			"node_position": {
+				"x": -87.8777465820312,
+				"y": 212.625549316406
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "pack_4x16_to_2x32"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -300.0,
+				"y": -40.0
+			},
+			"parameters": {
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 0.0
+			},
+			"seed_int": 0,
+			"type": "switch"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -305.557006835938,
+				"y": -267.557006835938
+			},
+			"parameters": {
+				"distance": 0.05,
+				"f32": null,
+				"operation": 0.0,
+				"resolution": 10.0
+			},
+			"seed_int": 0,
+			"type": "remote",
+			"widgets": [
+				{
+					"configurations": {
+						"Dilation": [
+							{
+								"node": "switch",
+								"value": 0.0,
+								"widget": "source"
+							}
+						],
+						"Erosion": [
+							{
+								"node": "switch",
+								"value": 1.0,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						}
+					],
+					"longdesc": "Morphology operation",
+					"name": "operation",
+					"shortdesc": "Operation",
+					"type": "config_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "shape_2",
+							"widget": "s"
+						},
+						{
+							"node": "shape_3",
+							"widget": "s"
+						},
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
+						},
+						{
+							"node": "shape_4",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "Resolution of the generated image",
+					"name": "resolution",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "",
+					"linked_widgets": [
+						{
+							"node": "shape_2",
+							"widget": "d"
+						},
+						{
+							"node": "shape_3",
+							"widget": "d"
+						},
+						{
+							"node": "shape_4",
+							"widget": "d"
+						}
+					],
+					"longdesc": "Distance of the operation",
+					"name": "distance",
+					"shortdesc": "Distance",
+					"type": "linked_control"
+				},
+				{
+					"label": "32 Bits",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "f32"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "f32"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "f32"
+						}
+					],
+					"longdesc": "Enable 32-bit buffers when sampling inputs. Reduces banding artifacts but could result in higher video memory usage.",
+					"name": "f32",
+					"shortdesc": "32 Bits",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1221.203125,
+				"y": 65.2154541015625
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "",
+					"name": "Input",
+					"shortdesc": "",
+					"type": "rgb"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 427.0,
+				"y": 80.5834579467773
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"longdesc": "",
+					"name": "port0",
+					"shortdesc": "Output",
+					"type": "rgba"
+				}
+			],
+			"seed_int": 0,
+			"type": "ios"
+		},
+		{
+			"name": "uniform_greyscale_3",
+			"node_position": {
+				"x": 178.439910888672,
+				"y": 43.8627777099609
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "pack_2x32_to_4x16"
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": 179.317657470703,
+				"y": 102.237228393555
+			},
+			"parameters": {
+				"f32": false,
+				"filter": false,
+				"mipmap": false,
+				"size": 10.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "uniform_greyscale_4",
+			"node_position": {
+				"x": 178.439910888672,
+				"y": 215.862777709961
+			},
+			"parameters": {
+
+			},
+			"seed_int": 0,
+			"type": "pack_4x16_to_2x32"
+		},
+		{
+			"name": "shape_4",
+			"node_position": {
+				"x": 166.317657470703,
+				"y": -40.7627716064453
+			},
+			"parameters": {
+				"d": 0.05,
+				"s": 10.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec2 $(name)_dilate(vec2 uv) {",
+					"\tfloat e = 1.0/$s;",
+					"\tfloat dy = floor($d/e)*e;",
+					"\tfloat v = 0.0;",
+					"\tfloat bestuv_y = uv.y;",
+					"\tfor (float y = 0.0; y < dy; y += e) {",
+					"\t\tfloat c = $in(uv+vec2(0.0, y));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_y = uv.y+y;",
+					"\t\t}",
+					"\t\tc = $in(uv-vec2(0.0, y));",
+					"\t\tif (c > v) {",
+					"\t\t\tv = c;",
+					"\t\t\tbestuv_y = uv.y-y;",
+					"\t\t}",
+					"\t}",
+					"\treturn vec2(v, bestuv_y);",
+					"}"
+				],
+				"name": "Morphology Dilation 1 Y",
+				"outputs": [
+					{
+						"rgb": "vec3($(name)_dilate($uv), 0.0)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 6.0,
+						"label": "",
+						"last": 12.0,
+						"name": "s",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.1,
+						"label": "",
+						"max": 0.3,
+						"min": 0.0,
+						"name": "d",
+						"step": 0.01,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		}
+	],
+	"parameters": {
+		"distance": 0.05,
+		"f32": false,
+		"operation": 0.0,
+		"resolution": 10.0
+	},
+	"scroll_offset": {
+		"x": -314.431396484375,
+		"y": -458.824188232422
+	},
+	"seed_int": 0,
+	"shortdesc": "Morphology",
+	"type": "graph"
+}

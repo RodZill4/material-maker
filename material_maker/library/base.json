@@ -2940,14 +2940,14 @@
 			"display_name": "Emboss",
 			"icon": "filter_emboss",
 			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAABLlJREFUeJztm8tS6kAQhv+EwyWGKi8LFFyQ7ERFd+rb+XrqTlFxl7BQvFSpVBHDRcJZWMOJMclMT4LxlHxVLoS59Z+eSc9MoxwfH0/xi1GzHkDWLATIegBZsxBgro2rKkzTlK5v2zam0/mu0X/m1XASw/10Oh0AgGEYqbQXJHUBarUaisXip89KpRIGgwGpneFw+Ol/27ZRLBZRrVYTj9FPalNA13WYpvnFeABSg+52u18+Gw6HsG0bb29vUmMMIxUPSMvdRXl8fASQzrRIJMB3Gx7Etm0AyYSQmgKVSoVs/NramnDZl5cXUtu2bePp6YlUh0EWoNlsQtd1ckfLy8vCZXu9Hrl9x3FweXlJrkcSoNFoQNd1lMtlckfzpt/vo9/v4+bmhlSPJAB7ij9NBGY8ALy+vpLqCgtwdHT06X8ZETY3N7ll7u7uSG36jWecnJwI108UB1BFKBQK3DKj0Ui4vTDjqQgJEHz6fkRFmE6nsCyLW84wDCiKwi3HM17UC7hxwMrKCrcR9laIGpCI4X7q9TqAf+/5IKJPvtfrcd8+XA/Y2tridgSEe0K32yUb78cwjC9hNMXt2+02t0ysAPv7+0IdMZgIruvCsizyBiiMYrEIwzCgaZrUnL+4uIj9PlYATdNInQGA53m4v78n1+Oxvr4OVaWv2byNU2SLcQtfHFdXV1L1RNje3paqF7cghgogozQAqVCUSrPZlKoXdbIUaunBwYFUJ0nfySLI7EMA4PT0NPTzUAE0TYOmaaGHG1FQoq+kUKbnaDTCYDCIXJBj4wBVVT8thOPxGO/v78KdzxNFUULdejKZYDweC7dDmuz5fH7mHZqmIZfLAfjep884PDwE8PHWYU94MBiQjAcSngiJxPbzJI04Y3ExkvUAsmYhQNYDyJqFAFkPIGt+vQCJ4oDRaITJZJLWWMiUSiV4nkc6RwxC8oDxeAzXdWd/zHjZrXMS2OZGVVWUSqXZXz6fJ7UT6wGe5325pv4pRG1vc7ncLEQHPrzU87zIdkI9gD1hivHf6QWUvUehUJh5RxihApydnUkN7DtuixzHkarHNk9BQgWIc5k4dnd3pepRaLVaUvWi7hoiF0HZLe7Ozo5UPRGur6+l6sVNz9i3gOu65M5UVcXGxga5Ho+Hhwcpz1xaWor9PlaA8/NzUmeO46Df70PTNJimGbnwUGB5Qa7rolwuk9eZvb292O+5cYDofTsz3k+1Wk2cJxhMlqKI0Gg0uGW4kaDIfXuY8X5M08R0Oo286wvS6XRiEySZALxTaJGsFKFIMG5B5BnPUBRFyBtEs0N5niAalyTaDIkazxCJ2SnnjDJrQhBhAYJeQDUeAG5vb7llarUaqc0wEShRKckDWPaWjPHzxC+CSD6DH5IA7Xb7xxnPYCKI5jMwyGtAq9WSiscpuX+UnEKGrutSobjUgQjL1aW845+fn4XLrq6ukgRLkiqb6ESIpb9klTOcebI0w7Is6LqOSqWSRnNcKpUKN8YXJbVDUcdxYFlW6CFKWO4/j7DfGLB8obSMB+bwixGW6emfFjKXmMHchP/mJzMMy7Kgquos50+Wer0ulDgpy9wEAD5OlpLmCc6bX38xshAg6wFkza8X4C9NK+UsnObysAAAAABJRU5ErkJggg==",
-			"name": "emboss_2",
+			"name": "emboss2",
 			"parameters": {
 				"param0": 9.0,
 				"param1": 0.0,
 				"param2": 5.0
 			},
 			"tree_item": "Filter/Emboss",
-			"type": "emboss"
+			"type": "emboss2"
 		},
 		{
 			"display_name": "Occlusion",
@@ -7407,7 +7407,7 @@
 			"seed": 0.0,
 			"seed_locked": false,
 			"tree_item": "Transform/Morphology",
-			"type": "morphology2"
+			"type": "morphology3"
 		},
 		{
 			"display_name": "pack 1x32 to 2x16",
