@@ -161,6 +161,8 @@ func _on_Export_pressed():
 		image_anim.material.set_shader_parameter("end", end)
 		image_anim.material.set_shader_parameter("mm_chunk_size", 1.0)
 		image_anim.material.set_shader_parameter("mm_chunk_offset", Vector2(0.0, 0.0))
+		
+		mm_steam.unlock_achievement("ACH_IT_S_ALIVE")
 
 	if mm_globals.get_config("remember_anim_export"):
 		mm_globals.set_config("export_animation_size", value_size.selected)

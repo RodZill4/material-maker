@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://drbpisn5f3h8y"]
+[gd_scene format=3 uid="uid://drbpisn5f3h8y"]
 
 [ext_resource type="Script" uid="uid://byotadn432paf" path="res://material_maker/panels/library/library_tree.gd" id="1"]
 [ext_resource type="Script" uid="uid://cg0s65b0doku6" path="res://material_maker/panels/library/library.gd" id="1_748nq"]
@@ -8,35 +8,35 @@
 atlas = ExtResource("3")
 region = Rect2(0, 0, 16, 16)
 
-[node name="Library" type="PanelContainer"]
+[node name="Library" type="PanelContainer" unique_id=550918875]
 offset_right = 323.0
 offset_bottom = 391.0
 theme_type_variation = &"MM_PanelBackground"
 script = ExtResource("1_748nq")
 library_manager_name = "NodeLibraryManager"
 
-[node name="Library" type="VBoxContainer" parent="." groups=["updated_from_locale"]]
+[node name="Library" type="VBoxContainer" parent="." unique_id=654004743 groups=["updated_from_locale"]]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Library"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Library" unique_id=410142461]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="Library/HBoxContainer"]
+[node name="Control" type="Control" parent="Library/HBoxContainer" unique_id=559544398]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SectionButtons" type="HFlowContainer" parent="Library"]
+[node name="SectionButtons" type="HFlowContainer" parent="Library" unique_id=811476884]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Filter" type="HBoxContainer" parent="Library"]
+[node name="Filter" type="HBoxContainer" parent="Library" unique_id=447515725]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Filter" type="LineEdit" parent="Library/Filter"]
+[node name="Filter" type="LineEdit" parent="Library/Filter" unique_id=1735189286]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -44,14 +44,14 @@ theme_type_variation = &"MM_FilterLineEdit"
 placeholder_text = "Filter"
 clear_button_enabled = true
 
-[node name="Libraries" type="MenuButton" parent="Library/Filter"]
+[node name="Libraries" type="MenuButton" parent="Library/Filter" unique_id=1851500598]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 icon = SubResource("1")
 flat = false
 
-[node name="Tree" type="Tree" parent="Library"]
+[node name="Tree" type="Tree" parent="Library" unique_id=506332882]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
@@ -65,14 +65,14 @@ select_mode = 1
 auto_tooltip = false
 script = ExtResource("1")
 
-[node name="GetFromWebsite" type="Button" parent="Library"]
+[node name="GetFromWebsite" type="Button" parent="Library" unique_id=347620518]
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Get more nodes from website"
 text = "Browse Community Nodes"
 clip_text = true
 
-[node name="ItemMenu" type="PopupMenu" parent="."]
+[node name="ItemMenu" type="PopupMenu" parent="." unique_id=1510353451]
 unique_name_in_owner = true
 item_count = 6
 item_0/text = "Rename item"
