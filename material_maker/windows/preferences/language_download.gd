@@ -46,4 +46,5 @@ func download_language(l : String):
 	$HTTPRequest.download_file = locale.get_translations_dir().path_join(l+"."+ext)
 	var error = $HTTPRequest.request(languages[l].url)
 	if error == OK:
-		print("Downloading")
+		#print("Downloading")
+		mm_steam.unlock_achievement("ACH_POLYGLOT")

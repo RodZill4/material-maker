@@ -32,6 +32,8 @@ func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
 
 func filter_entered(_filter) -> void:
 	_on_list_item_activated(0)
+	mm_steam.unlock_achievement("ACH_TREASURE_HUNTER")
+
 
 func add_node(node_data) -> void:
 	var current_graph : GraphEdit = get_current_graph()

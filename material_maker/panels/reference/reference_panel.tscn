@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://drn8t5132w352"]
+[gd_scene format=3 uid="uid://drn8t5132w352"]
 
 [ext_resource type="Script" uid="uid://cll2emvic6l63" path="res://material_maker/panels/reference/reference_panel.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cqalnln5sq2ff" path="res://material_maker/panels/reference/color_slot.tscn" id="2"]
@@ -32,7 +32,7 @@ shader_parameter/bg_color = Color(0, 0, 0, 1)
 resource_local_to_scene = false
 allow_unpress = true
 
-[node name="ReferencePanel" type="Panel"]
+[node name="ReferencePanel" type="Panel" unique_id=329764457]
 clip_children = 2
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,7 +44,7 @@ grow_vertical = 2
 theme_type_variation = &"MM_PanelBackground"
 script = ExtResource("1")
 
-[node name="Empty" type="VBoxContainer" parent="."]
+[node name="Empty" type="VBoxContainer" parent="." unique_id=2076032461]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -54,7 +54,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="Empty"]
+[node name="Label" type="Label" parent="Empty" unique_id=1608564616]
 modulate = Color(1, 1, 1, 0.519)
 layout_mode = 2
 text = "Drag and drop reference image"
@@ -62,7 +62,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Image" type="ColorRect" parent="."]
+[node name="Image" type="ColorRect" parent="." unique_id=2069138437]
 unique_name_in_owner = true
 material = SubResource("3")
 layout_mode = 1
@@ -73,7 +73,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 
-[node name="MenuBar" type="ScrollContainer" parent="."]
+[node name="MenuBar" type="ScrollContainer" parent="." unique_id=1717723412]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 1
@@ -85,126 +85,126 @@ theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 
-[node name="HBox" type="HFlowContainer" parent="MenuBar"]
+[node name="HBox" type="HFlowContainer" parent="MenuBar" unique_id=756968873]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox"]
+[node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=265723881]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainMenu"]
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainMenu" unique_id=373924644]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="AddImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox"]
+[node name="AddImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox" unique_id=1809574053]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Add Image"
 icon_alignment = 1
 
-[node name="PasteImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox"]
+[node name="PasteImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox" unique_id=1491650480]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Paste Image"
 icon_alignment = 1
 
-[node name="RemoveImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox"]
+[node name="RemoveImageButton" type="Button" parent="MenuBar/HBox/MainMenu/HBox" unique_id=2036601936]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Remove Image"
 icon_alignment = 1
 
-[node name="CheckClipboardImage" type="Timer" parent="MenuBar/HBox/MainMenu/HBox"]
+[node name="CheckClipboardImage" type="Timer" parent="MenuBar/HBox/MainMenu/HBox" unique_id=2067403748]
 autostart = true
 
-[node name="NavigationMenu" type="PanelContainer" parent="MenuBar/HBox"]
+[node name="NavigationMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=1551415023]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/NavigationMenu"]
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/NavigationMenu" unique_id=670222536]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="PrevImageButton" type="Button" parent="MenuBar/HBox/NavigationMenu/HBox"]
+[node name="PrevImageButton" type="Button" parent="MenuBar/HBox/NavigationMenu/HBox" unique_id=1149353733]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Previous"
 icon_alignment = 1
 
-[node name="ImageIndexLabel" type="Label" parent="MenuBar/HBox/NavigationMenu/HBox"]
+[node name="ImageIndexLabel" type="Label" parent="MenuBar/HBox/NavigationMenu/HBox" unique_id=302463934]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_NodeFloatEdit"
 
-[node name="NextImageButton" type="Button" parent="MenuBar/HBox/NavigationMenu/HBox"]
+[node name="NextImageButton" type="Button" parent="MenuBar/HBox/NavigationMenu/HBox" unique_id=492066260]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Next"
 icon_alignment = 1
 
-[node name="PickerMenu" type="PanelContainer" parent="MenuBar/HBox"]
+[node name="PickerMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=1313397484]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/PickerMenu"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/PickerMenu" unique_id=990922366]
 layout_mode = 2
 
-[node name="ColorSlots" type="HBoxContainer" parent="MenuBar/HBox/PickerMenu/HBoxContainer"]
+[node name="ColorSlots" type="HBoxContainer" parent="MenuBar/HBox/PickerMenu/HBoxContainer" unique_id=699493280]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="ColorSlot1" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" instance=ExtResource("2")]
+[node name="ColorSlot1" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" unique_id=2136102984 instance=ExtResource("2")]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Pick Color"
 button_group = SubResource("ButtonGroup_82qg5")
 
-[node name="ColorSlot2" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" instance=ExtResource("2")]
+[node name="ColorSlot2" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" unique_id=37054963 instance=ExtResource("2")]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Pick Color"
 button_group = SubResource("ButtonGroup_82qg5")
 
-[node name="ColorSlot3" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" instance=ExtResource("2")]
+[node name="ColorSlot3" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" unique_id=953960840 instance=ExtResource("2")]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Pick Color"
 button_group = SubResource("ButtonGroup_82qg5")
 
-[node name="ColorSlot4" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" instance=ExtResource("2")]
+[node name="ColorSlot4" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" unique_id=351338548 instance=ExtResource("2")]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Pick Color"
 button_group = SubResource("ButtonGroup_82qg5")
 
-[node name="ColorSlot5" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" instance=ExtResource("2")]
+[node name="ColorSlot5" parent="MenuBar/HBox/PickerMenu/HBoxContainer/ColorSlots" unique_id=1585190002 instance=ExtResource("2")]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Pick Color"
 button_group = SubResource("ButtonGroup_82qg5")
 
-[node name="VSeparator" type="VSeparator" parent="MenuBar/HBox/PickerMenu/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="MenuBar/HBox/PickerMenu/HBoxContainer" unique_id=844887801]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuSeparator"
 
-[node name="GradientSlot" parent="MenuBar/HBox/PickerMenu/HBoxContainer" instance=ExtResource("3")]
+[node name="GradientSlot" parent="MenuBar/HBox/PickerMenu/HBoxContainer" unique_id=1295591736 instance=ExtResource("3")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(75, 25)
 layout_mode = 2

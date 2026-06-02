@@ -257,6 +257,7 @@ func _on_secret_button_gui_input(event):
 		else:
 			delay_start = true
 			$BackgroundSelect.visible = true
+			mm_steam.unlock_achievement("ACH_EAGLE_EYE")
 
 func _on_previous_pressed():
 	if BACKGROUNDS[background_index].has("entries") and background_subindex > 0:
