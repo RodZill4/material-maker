@@ -18,12 +18,6 @@ func _ready():
 	print("Did Steam initialize?: %s " % initialize_response)
 	steam_api.initAuthentication()
 	is_subscribed = steam_api.isSubscribed()
-	#steam_api.avatar_loaded.connect(self._on_avatar_loaded)
-	#steam_api.getPlayerAvatar()
-	#steam_api.connect("leaderboard_find_result", self, "_on_leaderboard_find_result")
-	#steam_api.connect("leaderboard_score_uploaded", self, "_on_leaderboard_score_uploaded")
-	#steam_api.connect("leaderboard_scores_downloaded", self, "_on_leaderboard_scores_downloaded")
-	#steam_api.findLeaderboard("Node count")
 
 func is_owned() -> bool:
 	return is_subscribed
@@ -60,18 +54,24 @@ func is_achievement_unlocked(achievement : String) -> bool:
 		return false
 	var achievement_status : Dictionary = steam_api.getAchievement(achievement)
 	if not achievement_status.ret:
-		print("Achievement ", achievement, " does not exist.")
+		print_debug("Achievement ", achievement, " does not exist.")
 		return false
 	return steam_api.getAchievement(achievement).achieved
 
 func unlock_achievement(achievement : String):
 	if not is_subscribed:
 		return
+	var achievement_status : Dictionary = steam_api.getAchievement(achievement)
+	if not achievement_status.ret:
+		print_debug("Achievement ", achievement, " does not exist.")
+		return
+	if steam_api.getAchievement(achievement).achieved:
+		return
 	steam_api.setAchievement(achievement)
+	steam_api.storeStats()
 
 func increase_stat(stat : String):
 	if not is_subscribed:
 		return
 	var stat_value = steam_api.getStatInt(stat)
-	print(stat_value)
 	steam_api.setStatInt(stat, stat_value+1)
