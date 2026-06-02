@@ -736,6 +736,11 @@ func do_create_nodes(data, nodes_position : Vector2 = Vector2(0, 0)) -> Array:
 	if data.has("nodes") and typeof(data.nodes) == TYPE_ARRAY and data.has("connections") and typeof(data.connections) == TYPE_ARRAY:
 		var new_stuff = await mm_loader.add_to_gen_graph(generator, data.nodes, data.connections, nodes_position)
 		var return_value = update_graph(new_stuff.generators, new_stuff.connections)
+		if new_stuff.generators.size() == 1:
+			if new_stuff.generators[0] is MMGenMeshMap:
+				mm_steam.unlock_achievement("ACH_BAKE_IT_TILL_YOU_MAKE_IT")
+			elif new_stuff.generators[0] is MMGenDebug:
+				mm_steam.unlock_achievement("ACH_UNDER_THE_HOOD")
 		return return_value
 	return []
 
@@ -1116,6 +1121,7 @@ func create_subgraph() -> void:
 	undoredo_create_step("Create subgraph", generator.get_hier_name(), prev, next)
 	if subgraph != null:
 		update_view(subgraph)
+		mm_steam.unlock_achievement("ACH_INCEPTION")
 
 
 func _on_ButtonShowTree_pressed() -> void:
@@ -1190,7 +1196,7 @@ func get_current_preview(slot : int = 0) -> Preview:
 	return current_preview[slot]
 
 
-func set_current_preview(slot: int, node: GraphNode, output_index: int = 0, locked := false, force_unlock := false) -> void:
+func set_current_preview(slot : int, node : GraphNode, output_index : int = 0, locked : bool = false, force_unlock := false) -> void:
 	var preview = null
 	var old_preview = null
 	var old_locked_preview = null
@@ -1203,6 +1209,8 @@ func set_current_preview(slot: int, node: GraphNode, output_index: int = 0, lock
 			locked_preview[slot] = null
 		else:
 			locked_preview[slot] = preview
+		if slot > 0:
+			mm_steam.unlock_achievement("ACH_DOUBLE_VISION")
 	else:
 		if is_instance_valid(node) and current_preview[slot] != null and current_preview[slot].generator != node.generator:
 			old_preview = current_preview[slot].generator
