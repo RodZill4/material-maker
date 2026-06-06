@@ -28,3 +28,7 @@ func configure_param(minimum : float = 0.0, maximum : float = 1.0, step : float 
 
 func _on_close_requested() -> void:
 	_on_Cancel_pressed()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		queue_free()
