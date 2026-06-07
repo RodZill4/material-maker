@@ -1,3 +1,4 @@
+class_name SimpleButton
 extends Button
 
 @export var icon_name := ""
