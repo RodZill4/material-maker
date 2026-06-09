@@ -7,7 +7,7 @@ static func name_to_lower(s : String) -> String:
 	s = s.strip_edges()
 	s = s.to_lower()
 	s = s.replace(" ", "_")
-	s = s.remove_chars("()/")
+	s = s.remove_chars("()/\"")
 	return s
 
 func export_files(files, output_dir, target, target_file, image_size) -> void:
