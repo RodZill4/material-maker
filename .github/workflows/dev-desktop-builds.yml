@@ -162,7 +162,7 @@ jobs:
           chmod +x "./build/mac/Material Maker.app/Contents/MacOS/Material Maker"
           rm ./build/mac/material_maker.zip
       - name: Get documentation 🚀
-        if: ${{ github.event.inputs.gen_doc == 'true' }}
+        if: ${{ github.event.inputs.gen_doc == 'true' && github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: documentation
