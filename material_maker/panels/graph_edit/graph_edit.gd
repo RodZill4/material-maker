@@ -337,6 +337,9 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		if get_closest_connection_at_point(get_local_mouse_position()):
+			mm_globals.set_tip_text("Ctrl + #RMB: Cut connections, Shift + #RMB: Create reroute, Ctrl/Cmd + Shift + #RMB: Create aperture pair")
+
 		if ((event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry
 				and event.relative.length() > 1.0):
 			if event.ctrl_pressed:
