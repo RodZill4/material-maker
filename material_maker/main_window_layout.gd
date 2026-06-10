@@ -40,6 +40,7 @@ var previous_width : float
 var current_mode : String = "material"
 var layout : Dictionary = {}
 
+var presets : Array[Dictionary]
 
 func _ready() -> void:
 	previous_width = size.x
@@ -67,12 +68,29 @@ func load_panels() -> void:
 			layout[mode] = default_paint_layout
 	$FlexibleLayout.init(layout[current_mode] if layout.has(current_mode) else null)
 
+	# Restore layout presets
+	var preset_keys : PackedStringArray
+	if mm_globals.config.has_section("layout_presets"):
+		preset_keys = mm_globals.config.get_section_keys("layout_presets")
+	for preset in preset_keys:
+		presets.push_back({
+			"name": preset,
+			"preset": JSON.parse_string(
+					mm_globals.config.get_value("layout_presets", preset))
+		})
 
 func save_config() -> void:
 	layout[current_mode] = $FlexibleLayout.serialize()
 	for mode in [ "material", "paint" ]:
 		if layout.has(mode):
 			mm_globals.config.set_value("layout", mode, JSON.stringify(layout[mode]))
+
+	# Save layout presets
+	if mm_globals.config.has_section("layout_presets"):
+		mm_globals.config.erase_section("layout_presets")
+	for preset in presets:
+		mm_globals.config.set_value("layout_presets",
+			preset.name, JSON.stringify(preset.preset))
 
 
 func get_panel(n) -> Control:
@@ -102,3 +120,10 @@ func change_mode(m : String) -> void:
 
 func _on_tab_changed(_tab):
 	pass
+
+func reset_panels() -> void:
+	if current_mode == "material":
+		$FlexibleLayout.init(default_material_layout)
+	elif current_mode == "paint":
+		$FlexibleLayout.init(default_paint_layout)
+	owner.view_center()
