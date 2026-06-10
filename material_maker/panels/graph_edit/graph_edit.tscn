@@ -18,11 +18,7 @@ region = Rect2(15.4016, 47.1451, 16.7512, 17.8319)
 atlas = ExtResource("2")
 region = Rect2(0, 48, 16, 16)
 
-<<<<<<< HEAD
-[node name="GraphEdit" type="GraphEdit" unique_id=40283213 groups=["mm_graphedit"]]
-=======
 [node name="GraphEdit" type="GraphEdit" unique_id=909518343 groups=["mm_graphedit"]]
->>>>>>> master
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
