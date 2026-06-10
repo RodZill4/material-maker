@@ -160,8 +160,11 @@ func _input(event : InputEvent) -> void:
 
 	# Grab graph focus for quick bar shortcuts to work properly
 	# (i.e. returning to graph after interacting with other panels)
-	if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
-		if event is InputEventKey and event.unicode >= KEY_0 and event.unicode <= KEY_9 and event.pressed:
+	if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()) and event is InputEventKey:
+		var focus_owner : Control = get_viewport().gui_get_focus_owner()
+		if focus_owner is LineEdit or focus_owner is TextEdit:
+			return
+		if event.unicode >= KEY_0 and event.unicode <= KEY_9 and event.pressed:
 			grab_focus()
 
 func _gui_input(event) -> void:
