@@ -7,6 +7,7 @@
 	"parameters": {
 		"cx": 0.5,
 		"cy": 0.5,
+		"normalized": false,
 		"r": 0.5
 	},
 	"seed_int": 0,
@@ -26,7 +27,7 @@
 		"name": "Sphere",
 		"outputs": [
 			{
-				"f": "sphere($uv, vec2($cx, $cy), $r)",
+				"f": "sphere($uv, vec2($cx, $cy), $r) / ($normalized ? ($r * 2.0) : 1.0)",
 				"longdesc": "A heightmap of the specified sphere",
 				"shortdesc": "Output",
 				"type": "f"
@@ -68,6 +69,14 @@
 				"shortdesc": "Radius",
 				"step": 0.01,
 				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Normalized",
+				"name": "normalized",
+				"shortdesc": "Normalized",
+				"longdesc": "Normalize output to 0.0 to 1.0 range",
+				"type": "boolean"
 			}
 		],
 		"shortdesc": "Sphere"
