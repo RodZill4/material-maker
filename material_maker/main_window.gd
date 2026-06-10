@@ -51,7 +51,7 @@ const RECENTS_MENU_CLEAR = 1001
 const MENU_SAVE_PRESET : int = 1002
 const MENU_MANAGE_PRESETS : int = 1003
 
-const THEMES = ["Default Dark", "Default Light", "Classic"]
+const THEMES = ["Default Dark", "Default Light", "Custom", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -342,6 +342,10 @@ func on_config_changed() -> void:
 			if c.has_method("update"):
 				c.update()
 
+	# set custom theme
+	if mm_globals.config.get_value("window", "theme") == "custom":
+		change_theme_custom.call_deferred()
+
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 
@@ -622,7 +626,16 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 		menu.add_item(t)
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
+func change_theme_custom() -> void:
+	var base : Color = mm_globals.get_config("custom_theme_base_color")
+	theme = ThemeUtils.generate_custom_theme(base)
+	$NodeFactory.on_theme_changed()
+
 func change_theme(theme_name) -> void:
+	if theme_name == "custom":
+		change_theme_custom()
+		return
+
 	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
 		theme_name = "default dark"
 	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
@@ -630,13 +643,12 @@ func change_theme(theme_name) -> void:
 		return
 	if _theme is EnhancedTheme:
 		_theme.update()
-	await get_tree().process_frame
 	theme = _theme
 	if "classic" in theme_name:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
 	else:
 		RenderingServer.set_default_clear_color(
-				Color("4d4d4d") if "light" in theme_name else Color("1f1f1f"))
+				Color.WHITE if "light" in theme_name else Color("1f1f1f"))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
@@ -1536,7 +1548,6 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
-
 
 func _on_console_resizer_container_mouse_entered() -> void:
 	pass # Replace with function body.

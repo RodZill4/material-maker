@@ -58,8 +58,9 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 	dialog_dim_background = true,
-	node_minimize_button = true,
-	node_close_button = true,
+	node_minimize_button = false,
+	node_close_button = false,
+	custom_theme_base_color = Color(0.529, 0.467, 0.686),
 }
 
 
@@ -228,3 +229,6 @@ func get_node_title_from_gen(generator : MMGenBase) -> String:
 				var gnode : GraphNode = graph.get_node(node_path)
 				return gnode.title.to_snake_case()
 	return "unnamed"
+
+func is_custom_theme() -> bool:
+	return config.get_value("window", "theme") == "custom"
