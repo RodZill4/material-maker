@@ -1,8 +1,10 @@
+class_name AddNodePopup
 extends Popup
 
 
-@onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
+@onready var filter : LineEdit = %Filter
 
+var item_sort_mode : SortMenu.Sorting = mm_globals.get_config("add_node_popup_sort")
 
 var insert_position : Vector2
 
@@ -12,7 +14,6 @@ var qc_slot_type : int
 var qc_is_output : bool
 
 @onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
-
 
 func get_current_graph():
 	return get_parent().get_current_graph_edit()
@@ -166,24 +167,21 @@ func check_quick_connect(obj) -> bool:
 
 func update_list(filter_text : String = "") -> void:
 	filter_text = filter_text.to_lower()
-
 	%List.clear()
-	var idx := 0
-	var items: Array = library_manager.get_items(filter_text, true)
-	items.sort_custom(func(a,b): return a.idx < b.idx if a.quality == b.quality else a.quality > b.quality)
+	var idx : int = 0
+	var items : Array = library_manager.get_items(filter_text, true)
+	items.sort_custom(SortMenu.sort_function(item_sort_mode, library_manager.item_usage))
 	for i in items:
-		var obj = i.item
+		var obj : Dictionary = i.item
 		if not obj.has("type"):
 			continue
 		if qc_slot_type != -1 and ! check_quick_connect(obj):
 			continue
-		var section = obj.tree_item.get_slice("/", 0)
+		var section : String = obj.tree_item.get_slice("/", 0)
 		var color : Color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
 		color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
-		#print(i)
-		var _name = obj.display_name
+		var _name : String = obj.display_name
 		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
-		#if obj.has("shortdesc")
 
 		%List.add_item(_name, i.icon)
 		%List.set_item_custom_fg_color(idx, color)
@@ -192,7 +190,8 @@ func update_list(filter_text : String = "") -> void:
 
 		idx += 1
 
-	%List.select(0)
+	if %List.item_count:
+		%List.select(0)
 	%List.ensure_current_is_visible()
 
 func _unhandled_input(event) -> void:
@@ -231,3 +230,11 @@ func _on_list_item_activated(index: int) -> void:
 	if not data == null:
 		add_node(data.item)
 		todo_renamed_hide()
+
+func _on_sort_menu_pressed() -> void:
+	var panel : SortMenu = preload("res://material_maker/windows/add_node_popup/sort_menu.tscn").instantiate()
+	panel.hide()
+	add_child(panel)
+	panel.sorting_changed.connect(update_list.bind(filter.text))
+	panel.popup_hide.connect(panel.queue_free)
+	panel.popup(Rect2(panel.get_mouse_position() * content_scale_factor, panel.size))
