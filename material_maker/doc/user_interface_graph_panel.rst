@@ -69,6 +69,9 @@ button. This menu has a filter field to quickly find the desired node.
 The buttons at the top of the node menu can be used to quickly create the most common
 nodes. They can be customized by dragging the nodes from the list below into the buttons.
 
+Number row keys(i.e. 1, 2...0) can also be used to activate the corresponding buttons
+without opening the node menu.
+
 .. image:: images/node_menu.png
   :align: center
 

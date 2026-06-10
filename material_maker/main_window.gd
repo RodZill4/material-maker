@@ -48,6 +48,9 @@ const RECENT_FILES_COUNT = 15
 const MENU_QUICK_EXPORT : int = 1000
 const RECENTS_MENU_CLEAR = 1001
 
+const MENU_SAVE_PRESET : int = 1002
+const MENU_MANAGE_PRESETS : int = 1003
+
 const THEMES = ["Default Dark", "Default Light", "Custom", "Classic"]
 
 const MENU : Array[Dictionary] = [
@@ -100,6 +103,8 @@ const MENU : Array[Dictionary] = [
 	{ menu="View/-" },
 	# { menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
 	{ menu="View/Panels", submenu="show_panels" },
+	{ menu="View/Presets", submenu="panels_preset" },
+	{ menu="View/Reset Panels", command="view_reset_panels" },
 
 	{ menu="Tools/Create", submenu="create" },
 	{ menu="Tools/Create group", command="create_subgraph", shortcut="Control+G" },
@@ -660,9 +665,60 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
 	menu.connect_id_pressed(self._on_ShowPanels_id_pressed)
 
+func create_menu_panels_preset(menu : MMMenuManager.MenuBase) -> void:
+	menu.clear()
+	menu.add_item("Save Preset", MENU_SAVE_PRESET)
+	menu.add_item("Manage Presets", MENU_MANAGE_PRESETS)
+	if not layout.presets.is_empty():
+		menu.add_separator()
+		for id in layout.presets.size():
+			menu.add_item(layout.presets[id].name, id)
+	menu.connect_id_pressed(self._on_PanelsPreset_id_pressed)
+
 func _on_ShowPanels_id_pressed(id) -> void:
 	var panel : String = layout.get_panel_list()[id]
 	layout.set_panel_visible(panel, not layout.is_panel_visible(panel))
+	update_menus()
+
+func _on_PanelsPreset_id_pressed(id : int) -> void:
+	match id:
+		MENU_MANAGE_PRESETS:
+			if get_node_or_null("PanelPresetsDialog"):
+				return
+			var dialog : Window = preload("res://material_maker/windows/panels_presets_dialog/panels_presets_dialog.tscn").instantiate()
+			add_child(dialog)
+			await dialog.edit_presets(layout.presets)
+		MENU_SAVE_PRESET:
+			var dialog : Window = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+			add_child(dialog)
+			var status : Dictionary = await dialog.enter_text("Save Preset",
+					"Enter a name for the new preset", "")
+			if status.ok:
+				var preset_name : String = status.text.strip_edges()
+				if preset_name.is_empty():
+					accept_dialog("Preset name cannot be empty.")
+				else:
+					var is_unique_preset : bool = true
+					var existing_preset : Dictionary
+					if not layout.presets.is_empty():
+						for preset in layout.presets:
+							if preset.name.to_lower() == preset_name.to_lower():
+								is_unique_preset = false
+								existing_preset = preset
+								break
+					if not is_unique_preset:
+						var replace_status : String = await accept_dialog(
+							"Preset \"%s\" already exists. Do you want to replace it?" % [preset_name], true)
+						if replace_status == "ok":
+							existing_preset.preset = $VBoxContainer/Layout/FlexibleLayout.serialize()
+					else:
+						var new_preset : Dictionary = {
+							"name": preset_name,
+							"preset": $VBoxContainer/Layout/FlexibleLayout.serialize()
+						}
+						layout.presets.push_back(new_preset)
+		_:
+			$VBoxContainer/Layout/FlexibleLayout.init(layout.presets[id].preset)
 	update_menus()
 
 func create_menu_create(menu : MMMenuManager.MenuBase) -> void:
@@ -1047,6 +1103,9 @@ func view_center() -> void:
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
+
+func view_reset_panels() -> void:
+	$VBoxContainer/Layout.reset_panels()
 
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()

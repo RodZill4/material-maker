@@ -285,31 +285,28 @@ func setup_portal_edit() -> void:
 	position_offset_changed.connect(edit_box_set_position.bind(edit))
 	graph.draw.connect(edit_box_set_position.bind(edit))
 
-	edit.modulate = link_collision_warning_color(get_link())
+	edit.modulate = link_collision_warning_color()
+
 	edit.text_submitted.connect(
 		func(new_text : String) -> void:
 			if not is_editing:
 				return
 			var new_link := new_text.strip_edges()
-			if not new_link.is_empty():
-				if is_link_unique(new_link):
-					graph.undoredo.start_group()
-					on_parameter_changed("link", new_link)
-					add_link_undoredo(old_link, new_link)
-					if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
-						replace_links(new_link, old_link)
-					graph.undoredo.end_group()
-				else:
-					on_parameter_changed("link", old_link)
+			if not new_link.is_empty() and is_link_unique(new_link):
+				graph.undoredo.start_group()
+				on_parameter_changed("link", new_link)
+				add_link_undoredo(old_link, new_link)
+				if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
+					replace_links(new_link, old_link)
+				graph.undoredo.end_group()
 			is_editing = false
 			generator.editable = false
 			edit.reset_size()
 			edit.queue_free())
 	edit.text_changed.connect(
 		func(new_text : String) -> void:
-			var new_link := new_text.strip_edges()
+			var new_link : String = new_text.strip_edges()
 			if not new_link.is_empty():
-				on_parameter_changed("link", new_link)
 				edit.modulate = link_collision_warning_color(new_link)
 			edit_box_set_position(edit))
 	edit.focus_exited.connect(func(): edit.text_submitted.emit(edit.text))
