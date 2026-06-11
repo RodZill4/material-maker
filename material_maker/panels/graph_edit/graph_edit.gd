@@ -1854,6 +1854,9 @@ func quick_bar_shortcuts(event : InputEventKey) -> void:
 	var key_num : int = event.unicode - KEY_0 - 1
 	key_num = 9 if key_num == -1 else key_num
 
+	if Input.is_key_pressed(KEY_META if OS.get_name() == "macOS" else KEY_CTRL):
+		key_num += 12
+	
 	var library_manager : Node = get_node("/root/MainWindow/NodeLibraryManager")
 	var quick_button_key : String = "quick_button_%d" % [key_num]
 
