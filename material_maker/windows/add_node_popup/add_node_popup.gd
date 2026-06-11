@@ -231,3 +231,15 @@ func _on_list_item_activated(index: int) -> void:
 	if not data == null:
 		add_node(data.item)
 		todo_renamed_hide()
+
+func _input(event : InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed:
+			if event.keycode == (KEY_META if OS.get_name() == "macOS" else KEY_CTRL):
+				%Buttons.get_children().map(func(n : ColorRect) -> void:
+					var ind = int(n.name.trim_prefix("Button"))
+					n.visible = ind > 12 and ind <= 24)
+		else:
+			%Buttons.get_children().map(func(n : ColorRect) -> void:
+					var ind = int(n.name.trim_prefix("Button"))
+					n.visible = ind >= 1 and ind <= 12)

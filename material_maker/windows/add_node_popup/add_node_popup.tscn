@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://clw8sb0p8webl"]
+[gd_scene format=3 uid="uid://clw8sb0p8webl"]
 
 [ext_resource type="Script" uid="uid://di33ywsh7i1mp" path="res://material_maker/windows/add_node_popup/add_node_popup.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://cjcxjmoki7j0n" path="res://material_maker/windows/add_node_popup/quick_button.tscn" id="2"]
@@ -20,7 +20,7 @@ void fragment() {
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_buqpn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_88qrb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7i7iy"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
@@ -29,7 +29,7 @@ shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_jt68i"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwply"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j7uv1"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
@@ -38,7 +38,7 @@ shader_parameter/tex = SubResource("PlaceholderTexture2D_jt68i")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_nfnnr"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h5yl4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c6ii2"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
@@ -47,77 +47,162 @@ shader_parameter/tex = SubResource("PlaceholderTexture2D_nfnnr")
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_gqmjk"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xysbp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycd3q"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_gqmjk")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2fcwt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6e0vi"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7flh"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vuu0v"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s5pxd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_301qr"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_irmk8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0flf1"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nyf2o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0v1a3"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7i7iy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7qcy"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j7uv1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_241uj"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c6ii2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e17e2"]
 resource_local_to_scene = true
 shader = SubResource("11")
 shader_parameter/disabled = false
 shader_parameter/brightness = 0.8
 shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
 
-[node name="AddNodePopup" type="Popup"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uvyxa"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pod5b"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_jt68i")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lhfp4"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_nfnnr")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t0tyq"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_gqmjk")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yxjwe"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7pcar"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f65nl"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hu5ce"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xh004"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1evxl"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yalln"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3k0i0"]
+resource_local_to_scene = true
+shader = SubResource("11")
+shader_parameter/disabled = false
+shader_parameter/brightness = 0.8
+shader_parameter/tex = SubResource("PlaceholderTexture2D_buqpn")
+
+[node name="AddNodePopup" type="Popup" unique_id=984144344]
 transparent_bg = true
-size = Vector2i(360, 400)
+oversampling_override = 1.0
+size = Vector2i(668, 400)
 visible = true
 transparent = true
 script = ExtResource("1")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1830906622]
 custom_minimum_size = Vector2(0, 400)
 anchors_preset = 15
 anchor_right = 1.0
@@ -125,90 +210,163 @@ anchor_bottom = 1.0
 mouse_filter = 2
 theme_type_variation = &"MM_AddNodePanel"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=435484704]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1210550540]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button1" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_88qrb")
+[node name="Button1" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1953699080 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_7i7iy")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Simple/Uniform/Greyscale"
 
-[node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_wwply")
+[node name="Button2" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1621874951 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_j7uv1")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Simple/Shape"
 
-[node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_h5yl4")
+[node name="Button3" parent="PanelContainer/VBoxContainer/Buttons" unique_id=40884552 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_c6ii2")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Noise/FBM"
 
-[node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_xysbp")
+[node name="Button4" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1158025235 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_ycd3q")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Colorize"
 
-[node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_2fcwt")
+[node name="Button5" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1698735816 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_6e0vi")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Transform"
 
-[node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_l7flh")
+[node name="Button6" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1861063044 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_vuu0v")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Transform/Tiler"
 
-[node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_s5pxd")
+[node name="Button7" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1515674569 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_301qr")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Blend"
 
-[node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_irmk8")
+[node name="Button8" parent="PanelContainer/VBoxContainer/Buttons" unique_id=569189612 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_0flf1")
 layout_mode = 2
 size_flags_horizontal = 6
 default_library_item = "Filter/Math"
 
-[node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_nyf2o")
+[node name="Button9" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1469030866 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_0v1a3")
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Button10" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_7i7iy")
+[node name="Button10" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1810060406 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_r7qcy")
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Button11" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_j7uv1")
+[node name="Button11" parent="PanelContainer/VBoxContainer/Buttons" unique_id=2004029727 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_241uj")
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Button12" parent="PanelContainer/VBoxContainer/Buttons" instance=ExtResource("2")]
-material = SubResource("ShaderMaterial_c6ii2")
+[node name="Button12" parent="PanelContainer/VBoxContainer/Buttons" unique_id=991815966 instance=ExtResource("2")]
+material = SubResource("ShaderMaterial_e17e2")
 layout_mode = 2
 size_flags_horizontal = 6
 
-[node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer"]
+[node name="Button13" parent="PanelContainer/VBoxContainer/Buttons" unique_id=16725285 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_uvyxa")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button14" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1972672072 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_pod5b")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button15" parent="PanelContainer/VBoxContainer/Buttons" unique_id=281470676 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_lhfp4")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button16" parent="PanelContainer/VBoxContainer/Buttons" unique_id=526725604 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_t0tyq")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button17" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1288331625 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_yxjwe")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button18" parent="PanelContainer/VBoxContainer/Buttons" unique_id=2144582273 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_7pcar")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button19" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1099771077 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_f65nl")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button20" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1526735755 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_hu5ce")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button21" parent="PanelContainer/VBoxContainer/Buttons" unique_id=1158099135 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_xh004")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button22" parent="PanelContainer/VBoxContainer/Buttons" unique_id=47789225 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_1evxl")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button23" parent="PanelContainer/VBoxContainer/Buttons" unique_id=449087440 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_yalln")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Button24" parent="PanelContainer/VBoxContainer/Buttons" unique_id=673111429 instance=ExtResource("2")]
+visible = false
+material = SubResource("ShaderMaterial_3k0i0")
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Filter" type="LineEdit" parent="PanelContainer/VBoxContainer" unique_id=1565392915]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 placeholder_text = "Filter"
 clear_button_enabled = true
 
-[node name="List" type="ItemList" parent="PanelContainer/VBoxContainer"]
+[node name="List" type="ItemList" parent="PanelContainer/VBoxContainer" unique_id=1151915496]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -228,6 +386,18 @@ fixed_icon_size = Vector2i(18, 18)
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button10" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button11" to="." method="add_node"]
 [connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button12" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button13" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button14" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button15" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button16" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button17" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button18" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button19" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button20" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button21" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button22" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button23" to="." method="add_node"]
+[connection signal="object_selected" from="PanelContainer/VBoxContainer/Buttons/Button24" to="." method="add_node"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/Filter" to="." method="_on_filter_gui_input"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_gui_input"]
 [connection signal="item_activated" from="PanelContainer/VBoxContainer/List" to="." method="_on_list_item_activated"]
