@@ -450,12 +450,15 @@ func quick_export() -> void:
 	var exports : Array
 	var has_unconnected_exports : bool = false
 
-	for g in graph_edit.top_generator.get_children():
-		if g.has_method("export_material") and !g.has_method("get_export_profiles"):
-			if g.get_source(0) != null:
-				exports.append(g)
+	var stack : Array[MMGenBase] = [graph_edit.top_generator]
+	while stack.size():
+		var node : MMGenBase = stack.pop_back()
+		if node.has_method("export_material") and not node.has_method("get_export_profiles"):
+			if node.get_source(0) != null:
+				exports.append(node)
 			else:
 				has_unconnected_exports = true
+		stack.append_array(node.get_children())
 
 	# No export nodes
 	if not exports.size():
