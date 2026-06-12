@@ -76,4 +76,4 @@ func _on_ready() -> void:
 func setup_scroll_gestures() -> void:
 	for tab : ScrollContainer in %TabContainer.get_children():
 		tab.gui_input.connect(func(e : InputEvent) -> void:
-				mm_globals.handle_vscroll_gesture(e, tab, tab.get_v_scroll_bar(),0, tab.get_rect().size.y))
+				mm_globals.handle_vscroll_gesture(e, tab, tab.get_v_scroll_bar(), 0.0, tab.get_rect().size.y))
