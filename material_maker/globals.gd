@@ -183,7 +183,7 @@ func warp_mouse(position : Vector2, node : Control) -> void:
 		node.warp_mouse(position)
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-func do_warp_mouse_y(node : Control, from_y : float, to_y : float, margin := 2) -> void:
+func do_warp_mouse_y(node : Control, from_y : float, to_y : float, margin : int = 2) -> void:
 	var mouse_pos : Vector2 = node.get_local_mouse_position()
 	var mouse_pos_y_warpped : float = wrapf(mouse_pos.y, from_y + margin, to_y - margin)
 	if mouse_pos.y != mouse_pos_y_warpped:
@@ -196,7 +196,7 @@ func handle_drag_zoom_gesture(node : Control, zoom_func : Callable,
 	do_warp_mouse_y(node, from_rect_y, to_rect_y)
 
 func handle_vscroll_gesture(event : InputEvent, node : Control, vscroll : VScrollBar,
-		from_rect_y : float, to_rect_y : float, relative_offset_mult := 1.0) -> void:
+		from_rect_y : float, to_rect_y : float, relative_offset_mult : float = 1.0) -> void:
 	if event is InputEventMouseMotion and (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0:
 		node.mouse_default_cursor_shape = Control.CURSOR_DRAG
 		vscroll.value -= event.relative.y * relative_offset_mult
