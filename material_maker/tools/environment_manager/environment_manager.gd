@@ -161,7 +161,10 @@ func read_hdr(index : int, url : String) -> bool:
 	while progress_window != null:
 		await get_tree().process_frame
 	environment_textures[index].erase("hdri")
-	if set_hdr(index, base_dir+"/environments/hdris/"+url.get_file()):
+	var _base_dir = base_dir
+	if OS.has_feature("editor"):
+		_base_dir = ProjectSettings.globalize_path("res://material_maker")
+	if set_hdr(index, _base_dir+"/environments/hdris/"+url.get_file()):
 		return true
 	if set_hdr(index, "res://material_maker/environments/hdris/"+url.get_file()):
 		return true
