@@ -60,6 +60,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	dialog_dim_background = true,
 	node_minimize_button = true,
 	node_close_button = true,
+	ui_field_sensitivity = 1.0,
 }
 
 
