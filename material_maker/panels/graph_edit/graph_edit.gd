@@ -337,6 +337,14 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
+				event.ctrl_pressed or event.meta_pressed):
+			mm_globals.handle_drag_zoom_gesture(self,
+					(func():
+						#force connection lines to redraw
+						set_connection_lines_curvature(connection_lines_curvature)
+						zoom -= event.relative.y / get_viewport_rect().size.y * 2.0),
+					get_viewport_rect().position.y, get_rect().size.y)
 		if ((event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry
 				and event.relative.length() > 1.0):
 			if event.ctrl_pressed:
@@ -361,6 +369,14 @@ func _gui_input(event) -> void:
 			lasso_points.clear()
 			queue_redraw()
 
+		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
+				event.ctrl_pressed or event.meta_pressed):
+			mm_globals.handle_drag_zoom_gesture(self,
+				(func() -> void:
+					#force connection lines to redraw
+					set_connection_lines_curvature(connection_lines_curvature)
+					zoom -= event.relative.y * 0.002),
+				get_viewport_rect().position.y,get_rect().size.y)
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
