@@ -49,7 +49,7 @@ GENERATED_GLOBALS
 GENERATED_INSTANCE
 
 float GetDist(vec3 uv) {
-	return DIST_FCT(uv, 0, 0.0);
+	return DIST_FCT(uv, 0, 0.0, vec4(0.0));
 }
 
 float RayMarch(vec3 ro, vec3 rd) {
@@ -92,6 +92,7 @@ void vertex() {
 
 void fragment() {
     float _seed_variation_ = 0.0;
+	vec4 _controlled_variation_ = vec4(0.0);
 	vec3 ro = world_camera;
 	vec3 rd =  normalize(world_position - world_camera);
 	
@@ -105,7 +106,7 @@ void fragment() {
 		float metallic;
 		float roughness;
 		vec3 emission;
-		COLOR_FCT(p, albedo, metallic, roughness, emission, _seed_variation_);
+		COLOR_FCT(p, albedo, metallic, roughness, emission, _seed_variation_, _controlled_variation_);
 		ALBEDO = albedo.rgb;
 		ROUGHNESS = roughness;
 		METALLIC = metallic;

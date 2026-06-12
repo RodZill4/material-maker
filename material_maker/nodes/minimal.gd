@@ -13,6 +13,7 @@ const CLOSE_ICON : Texture2D = preload("res://material_maker/icons/close.tres")
 
 
 func _ready() -> void:
+	scaling_menus = true
 	position_offset_changed.connect(self._on_offset_changed)
 	if buttons == null:
 		buttons = HBoxContainer.new()

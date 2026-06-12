@@ -26,10 +26,13 @@ func roll(roll_up:= false) -> void:
 
 
 func _on_about_to_popup() -> void:
+	# workaround for godot issue #116835
+	await get_tree().process_frame 
+	get_popup().size.x = 0
+
 	# This would look better I think,
 	# but doesn't make sense until gui_embed_subwindows is turned back on.
 	#get_popup().min_size.x = size.x
-	pass
 
 
 func _input(event:InputEvent) -> void:

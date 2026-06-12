@@ -11,8 +11,6 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = -1.0
 offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 0
 script = ExtResource("2_bpua1")
 draw_area = true
@@ -42,7 +40,7 @@ icon_name = "settings"
 [node name="SettingsPanel" type="PanelContainer" parent="PixelMenu/UI/PixelSettings" index="0"]
 unique_name_in_owner = true
 top_level = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 10.0
 offset_top = 39.0
 offset_right = 126.0

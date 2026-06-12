@@ -1,0 +1,116 @@
+{
+	"name": "fbm_variations",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"iterations": 10.0,
+		"persistance": 0.5,
+		"randomize": true,
+		"variable": 0.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "f"
+			}
+		],
+		"instance": [
+			"float fbm_variations_$(name)(vec2 uv, int iterations, float persistance) {",
+			"\tfloat v = 0.0;",
+			"\tfloat keep = 1.0;",
+			"\tfloat sum = 0.0;",
+			"\tfloat seedvar = _seed_variation_;",
+			"\tvec4 var = _controlled_variation_;",
+			"\tvar.$variable = 1.0;",
+			"\tfor (int i = 0; i < iterations; i++) {",
+			"\t\tfloat input_v = $in.variation(uv, seedvar, var);",
+			"\t\tv += input_v*keep;",
+			"\t\tif ($randomize) {",
+			"\t\t\tseedvar = rand(vec2(seedvar,sum));",
+			"\t\t}",
+			"\t\tsum += keep;",
+			"\t\tvar.$variable *= 2.0;",
+			"\t\tkeep *= persistance;",
+			"\t}",
+			"\treturn v/sum;",
+			"}"
+		],
+		"longdesc": "Combines the octaves of controlled variations for its input",
+		"name": "FBM Variations",
+		"outputs": [
+			{
+				"f": "fbm_variations_$(name)($uv, int($iterations), $persistance)",
+				"longdesc": "Shows a variation of the input",
+				"shortdesc": "Output1",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "Variable",
+				"name": "variable",
+				"type": "enum",
+				"values": [
+					{
+						"name": "$?1",
+						"value": "x"
+					},
+					{
+						"name": "$?2",
+						"value": "y"
+					},
+					{
+						"name": "$?3",
+						"value": "z"
+					},
+					{
+						"name": "$?4",
+						"value": "w"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 5.0,
+				"label": "Iterations",
+				"longdesc": "Seed modifier for output 1",
+				"max": 10.0,
+				"min": 1.0,
+				"name": "iterations",
+				"shortdesc": "Seed modifier",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Persistance",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "persistance",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": true,
+				"label": "Randomize",
+				"name": "randomize",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "FBM Variations"
+	},
+	"type": "shader"
+}

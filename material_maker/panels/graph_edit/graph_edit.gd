@@ -57,7 +57,14 @@ var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
+const LASSO_CURSOR : DPITexture = preload("res://material_maker/icons/cross.svg")
+const LASSO_HOT_SPOT : Vector2 = Vector2(8.8, 8.8)
 var lasso_points : PackedVector2Array
+
+var is_dragging_connection : bool = false:
+	set(v):
+		is_dragging_connection = v
+		set_process_if_necessary()
 
 signal save_path_changed
 signal graph_changed
@@ -130,7 +137,7 @@ func process_port_click(pressed : bool):
 						return
 
 
-func _input(event: InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	# Handle node grab
 	if has_grab:
 		var selected_nodes := get_selected_nodes()
@@ -151,6 +158,11 @@ func _input(event: InputEvent) -> void:
 					if get_nodes_under_mouse().is_empty():
 						node.set_deferred("selected", true)
 
+	# Grab graph focus for quick bar shortcuts to work properly
+	# (i.e. returning to graph after interacting with other panels)
+	if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
+		if event is InputEventKey and event.unicode >= KEY_0 and event.unicode <= KEY_9 and event.pressed:
+			grab_focus()
 
 func _gui_input(event) -> void:
 	if (
@@ -197,6 +209,7 @@ func _gui_input(event) -> void:
 				for point in node_points:
 					node.selected = node.selected or Geometry2D.is_point_in_polygon(point,  lasso_points)
 		lasso_points.clear()
+		Input.set_custom_mouse_cursor(null)
 		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
@@ -220,7 +233,9 @@ func _gui_input(event) -> void:
 				do_zoom(1.0/1.1)
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			valid_drag_cut_entry = true
-			if event.shift_pressed:
+			if event.is_command_or_control_pressed() and event.shift_pressed:
+				create_portals()
+			elif event.shift_pressed:
 				add_reroute_under_mouse()
 
 			for c in get_children():
@@ -286,12 +301,15 @@ func _gui_input(event) -> void:
 					scroll_offset.y += 0.5*size.y
 					accept_event()
 				KEY_F:
-					color_comment_nodes()
+					colorize_nodes()
 				KEY_G:
 					if not get_selected_nodes().is_empty():
 						has_grab = true
 				KEY_ESCAPE:
 					has_grab = false
+				_ when event.unicode >= KEY_0 and event.unicode <= KEY_9:
+					if get_nodes_under_mouse().is_empty():
+						quick_bar_shortcuts(event)
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -327,7 +345,8 @@ func _gui_input(event) -> void:
 						set_connection_lines_curvature(connection_lines_curvature)
 						zoom -= event.relative.y / get_viewport_rect().size.y * 2.0),
 					get_viewport_rect().position.y, get_rect().size.y)
-		if (event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry:
+		if ((event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry
+				and event.relative.length() > 1.0):
 			if event.ctrl_pressed:
 				Input.set_custom_mouse_cursor(
 						drag_cut_cursor, Input.CURSOR_ARROW, CURSOR_HOT_SPOT)
@@ -340,11 +359,15 @@ func _gui_input(event) -> void:
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
 			accept_event()
+			Input.set_custom_mouse_cursor(LASSO_CURSOR, Input.CURSOR_ARROW, LASSO_HOT_SPOT)
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
 		elif (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.shift_pressed:
 			scroll_offset -= event.relative
 			accept_event()
+		else:
+			lasso_points.clear()
+			queue_redraw()
 
 		if (event.button_mask & MOUSE_BUTTON_MASK_MIDDLE) != 0 and (
 				event.ctrl_pressed or event.meta_pressed):
@@ -554,6 +577,8 @@ func update_tab_title() -> void:
 	var title = "[unnamed]"
 	if not save_path.is_empty():
 		title = save_path.right(-(save_path.rfind("/")+1))
+		if generator:
+			generator.set_meta("file_path", title)
 	if need_save:
 		title += " *"
 	if get_parent().has_method("set_tab_title"):
@@ -942,6 +967,9 @@ func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name
 			connection.to = to.generator.name
+			connection.erase("from_node")
+			connection.erase("to_node")
+			connection.erase("keep_alive")
 			data.connections.append(connection)
 	return data
 
@@ -1332,13 +1360,16 @@ func undoredo_command(command : Dictionary) -> void:
 				if has_node("node_"+g.name):
 					var node = get_node("node_"+g.name)
 					node.update_node()
-		"comment_color_change":
+		"node_color_change":
 			var g = get_node_from_hier_name(command.node)
 			g.color = command.color
 			if g.get_parent() == generator:
 				if has_node("node_"+g.name):
 					var node = get_node("node_"+g.name)
-					node.update_node()
+					if node is MMGraphComment:
+						node.update_node()
+					elif node is MMGraphPortal:
+						node.queue_redraw()
 		_:
 			print("Unknown undo/redo command:")
 			print(command)
@@ -1833,35 +1864,127 @@ func _get_connection_line(from : Vector2, to : Vector2) -> PackedVector2Array:
 		_:
 			return points
 
-func color_comment_nodes() -> void:
-	var comments := get_children().filter(
-			func(n): return (n is MMGraphComment and n.selected))
-	if not comments.is_empty():
-		undoredo.start_group()
-		var picker : PopupPanel = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
-		picker.hide()
-		add_child(picker)
-		var color_picker : ColorPicker = picker.get_node("ColorPicker")
-		for node in comments:
-			color_picker.color_changed.connect(node.set_color)
-			color_picker.color = node.generator.color
-		var csf = get_window().content_scale_factor
-		picker.about_to_popup.connect(func():
-			if mm_globals.has_config("color_picker_color_mode"):
-				color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
-			if mm_globals.has_config("color_picker_shape"):
-				color_picker.picker_shape = mm_globals.get_config("color_picker_shape"))
-		picker.popup_hide.connect(func():
-			mm_globals.set_config("color_picker_color_mode", color_picker.color_mode)
-			mm_globals.set_config("color_picker_shape", color_picker.picker_shape))
-		picker.content_scale_factor = csf
-		picker.min_size = picker.get_contents_minimum_size() * csf
-		picker.position = get_screen_position() + get_local_mouse_position() * csf
-		picker.popup_hide.connect(picker.queue_free)
-		picker.popup_hide.connect(undoredo.end_group)
-		picker.popup()
+func quick_bar_shortcuts(event : InputEventKey) -> void:
+	if not Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
+		return
+	var key_num : int = event.unicode - KEY_0 - 1
+	key_num = 9 if key_num == -1 else key_num
+
+	var library_manager : Node = get_node("/root/MainWindow/NodeLibraryManager")
+	var quick_button_key : String = "quick_button_%d" % [key_num]
+
+	if mm_globals.config.has_section_key("library", quick_button_key):
+		var config : String = mm_globals.config.get_value("library", quick_button_key)
+		if config != "":
+			var library_item : Dictionary = library_manager.get_item(config)
+			if library_item != null:
+				do_paste(library_item.item)
+
+func colorize_nodes() -> void:
+	var nodes : Array[GraphElement]
+	for n in get_children():
+		if (n is MMGraphPortal or n is MMGraphComment) and n.selected:
+			nodes.push_back(n)
+	if nodes.is_empty():
+		return
+	undoredo.start_group()
+
+	var picker = ColorPicker.new()
+	var popup : PopupPanel = PopupPanel.new()
+	popup.add_child(picker)
+	popup.hide()
+	add_child(popup)
+	picker.edit_alpha = false
+	picker.edit_intensity = false
+
+	var csf = get_window().content_scale_factor
+	popup.about_to_popup.connect(func() -> void:
+		if mm_globals.has_config("color_picker_color_mode"):
+			picker.color_mode = mm_globals.get_config("color_picker_color_mode")
+		if mm_globals.has_config("color_picker_shape"):
+			picker.picker_shape = mm_globals.get_config("color_picker_shape"))
+	popup.popup_hide.connect(func() -> void:
+		mm_globals.set_config("color_picker_color_mode", picker.color_mode)
+		mm_globals.set_config("color_picker_shape", picker.picker_shape))
+
+	popup.content_scale_factor = csf
+	popup.min_size = popup.get_contents_minimum_size() * csf
+	popup.position = get_screen_position() + get_local_mouse_position() * csf
+
+	picker.color = nodes[0].generator.color
+	for node in nodes:
+		picker.color_changed.connect(node.set_color)
+	popup.popup_hide.connect(undoredo.end_group)
+	popup.popup_hide.connect(popup.queue_free)
+	popup.popup()
 
 func _on_resized() -> void:
 	$GraphUI.size = Vector2.ZERO
 	$GraphUI.position = global_position
 	$GraphUI.position += Vector2(size.x - $GraphUI.size.x, 11)
+
+func create_portals() -> void:
+	const tolerance_pixels : float = 2.0
+	var connection := get_closest_connection_at_point(
+			get_local_mouse_position(), connection_lines_thickness + tolerance_pixels)
+	if connection.is_empty():
+		return
+
+	var prev : Dictionary = generator.serialize()
+
+	var from_node : MMGraphNodeMinimal = get_node(NodePath(connection.from_node))
+	var to_node : MMGraphNodeMinimal = get_node(NodePath(connection.to_node))
+	var outpos := from_node.position_offset + from_node.get_output_port_position(connection.from_port)
+	var inpos := to_node.position_offset + to_node.get_input_port_position(connection.to_port)
+
+	outpos += Vector2(50, -12)
+	inpos += Vector2(-70, -12)
+
+	var portals : Array = await do_create_nodes(
+			{nodes=[{name="portal", type="portal", io=0, node_position={x=outpos.x, y=outpos.y}},
+					{name="portal", type="portal", io=1, node_position={x=inpos.x, y=inpos.y}}],
+					connections=[]})
+	var portal_in : MMGraphPortal = portals[0]
+	var portal_out : MMGraphPortal = portals[1]
+
+	portal_out.generator.set_parameter("link", portal_in.get_link())
+	do_disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
+	do_connect_node(connection.from_node, connection.from_port, portal_in.name, 0)
+	do_connect_node(portal_out.name, 0, connection.to_node, connection.to_port)
+
+	var next : Dictionary = generator.serialize()
+	undoredo_create_step("Connection to portal links", generator.get_hier_name(), prev, next)
+
+func set_process_if_necessary():
+	set_process(is_dragging_connection)
+
+func _process(delta : float) -> void:
+	if is_dragging_connection:
+		# Edge scrolling when dragging connection line
+		const DRAG_MARGIN : float = 80.0 # distance from edge to start scrolling
+		const MIN_OFFSET : Vector2 = 2.0 * Vector2.ONE # min scroll speed at edge
+
+		var mouse_pos := get_local_mouse_position()
+		if Rect2(Vector2.ZERO, size).grow(-DRAG_MARGIN).has_point(mouse_pos):
+			return
+
+		var dist_from_edge : Vector2 = Vector2(
+			min(mouse_pos.x, size.x - mouse_pos.x) - DRAG_MARGIN,
+			min(mouse_pos.y, size.y - mouse_pos.y) - DRAG_MARGIN)
+		var offset : Vector2 = Vector2.ZERO
+		var offset_v : Vector2 = (mouse_pos - size * 0.5).sign() * (
+				500.0 * dist_from_edge.abs() / DRAG_MARGIN + MIN_OFFSET)
+
+		if dist_from_edge.x < 0.0:
+			offset.x = offset_v.x
+
+		if dist_from_edge.y < 0.0:
+			offset.y = offset_v.y
+
+		scroll_offset += offset * delta
+
+func _on_connection_drag_started(_from_node : StringName, _from_port : int, _is_output : bool) -> void:
+	is_dragging_connection = true
+
+func _on_connection_drag_ended() -> void:
+	is_dragging_connection = false

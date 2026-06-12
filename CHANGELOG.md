@@ -1,26 +1,53 @@
 # Material Maker 1.6
 
-Mar 8, 2026, ~16h
-
 ## General
 
 - Allowed closing named parameter dialog via window button (contributed by williamchange)
-- Updated graph navigation to retain subgraph offsets (contributed by williamchange)
 - Implemented vertical tabs in the Preferences dialog (contributed by williamchange)
-- Modified the "Update library item" action to keep the thumbnail (contributed by williamchange)
-- Implemented node grabbing via G key (contributed by williamchange)
 - Improved debug console link navigation (contributed by williamchange)
-- Show top-level section labels in the Library panel in bold (contributed by williamchange)
-- Added drag and drop support for image parameter (contributed by williamchange)
-- Improved export node to support $ variables (contributed by williamchange)
 - Enabled tab rearrangement for projects panel (contributed by williamchange)
-- Improved $node to use node title in 2D export (contributed by williamchange)
+- Made tab styles more consistent (contributed by williamchange)
 - Updated icons to use SVG when possible (contributed by williamchange)
 - Configured default FileDialog path to user's home directory (contributed by williamchange)
+- Added documentation for user interface shortcuts (contributed by williamchange)
+- Added a menu item to show examples folder (contributed by williamchange)
+- Added documentation for user interface shortcuts (contributed by williamchange)
+
+### Graph view
+
+- Updated graph navigation to retain subgraph offsets (contributed by williamchange)
+- Added circuit/metro style (diagonal) connections (contributed by williamchange)
+- Implemented node grabbing via G key (contributed by williamchange)
+- Added drag and drop support for image parameter (contributed by williamchange)
+- Made the close/minimize node buttons optional (contributed by williamchange)
+- Improved node interaction when zoomed out (contributed by williamchange)
+- Added port previews for group input nodes (contributed by williamchange)
+- Improved remote parameters rearrangement (contributed by williamchange)
+- Added edge scrolling when dragging connection (contributed by williamchange)
+
+### Library
+
+- Show top-level section labels in the Library panel in bold (contributed by williamchange)
+- Modified the "Update library item" action to keep the thumbnail (contributed by williamchange)
+
+### 2D Preview
+
+- Improved $node to use node title in 2D export (contributed by williamchange)
+- Updated 2D preview to gizmos during transform until LMB is released (contributed by williamchange)
+
+### 3D Preview
+
+- Added alternative inputs for graph panning/camera orbiting (contributed by williamchange)
 
 ## Nodes
 
+- Added controlled variations and related nodes
+- Implemented portal nodes (contributed by williamchange)
+- Added a variadic Color Pick node (contributed by myaaaaaaaaa)
+- Added a basic glTF exporter for static PBR materials (contributed by myaaaaaaaaa)
 - Added lacunarity for FBM noise node (contributed by williamchange)
+- Added gabor noise for FBM noise node (contributed by williamchange)
+- Improved export node to support $ variables (contributed by williamchange)
 
 ## Bug Fixes
 
@@ -31,10 +58,19 @@ Mar 8, 2026, ~16h
 - Reintroduced AO export for Blender export target (contributed by williamchange)
 - Placed graph UI (hierarchy and subgraph controls) above nodes (contributed by williamchange)
 - Updated reroute/preview2d bg checker to match defaults (contributed by williamchange)
+- Fixed console meta navigation on multiple clicks (contributed by williamchange)
+- Fixed group parameters using default values from linked widgets (contributed by williamchange)
+- Fixed hierarchy/subgraph UI position (contributed by williamchange)
+- Fixed crash when opening named parameter editor (contributed by williamchange)
+- Fixed zoom in/out buttons conflicting with node align (contributed by williamchange)
+- Added check to prevent self-referencing in float parameter editor (contributed by williamchange)
+- Fixed lattice, pixels, polygon views not centering (contributed by williamchange)
+- Fixed default lattice point positions (contributed by williamchange)
 
 # Material Maker 1.5p1
 
 ## Bug Fixes
+
 - Fixed problem when exporting materials on command line in Export node
 - Fixed folder picker not showing set path in 2D export (contributed by williamchange)
 - Fixed small FloatEdit sizes in pixel editor (contributed by williamchange)

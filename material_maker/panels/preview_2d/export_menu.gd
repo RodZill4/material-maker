@@ -10,7 +10,7 @@ var export_settings := {
 
 const RESOLUTION_CUSTOM := 8
 
-var additional_ids := {"$node":"unnamed"}
+var additional_ids : Dictionary[String, String] = {"$node":"unnamed"}
 
 func _ready() -> void:
 	for val in export_settings.values():
@@ -185,8 +185,10 @@ func interpret_file_name(file_name: String, path:="") -> String:
 		resolution = "%sx%s" % [ int(%CustomResolutionX.value), int(%CustomResolutionY.value) ]
 	else:
 		resolution = str(64 << %Resolution.selected)
-
-	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids, resolution)
+	
+	var graph_node : MMGenBase = get_node("/root/MainWindow").get_current_graph_edit().generator
+	
+	return MMLoader.interpret_file_name(file_name, path, extension, graph_node, additional_ids, resolution)
 
 
 func _on_custom_resolution_x_value_changed(value: Variant) -> void:

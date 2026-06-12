@@ -1,0 +1,77 @@
+{
+	"name": "color_pick",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The input ID map",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgb"
+			}
+		],
+		"instance": "",
+		"longdesc": "Pick colors from an input ID map",
+		"name": "Color Pick",
+		"outputs": [
+			{
+				"f": "1.0 - clamp((dot(abs($in($uv) - $color#.rgb), vec3(1.0/3.0)) - $threshold) / max($falloff, 0.00001), 0.0, 1.0)",
+				"longdesc": "Output mask corresponding to the picked color",
+				"shortdesc": "Output #",
+				"type": "f"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1
+				},
+				"label": "",
+				"longdesc": "Color to pick from the ID map",
+				"name": "color#",
+				"shortdesc": "Color #",
+				"type": "color"
+			},
+			{
+				"control": "None",
+				"default": 0.01,
+				"label": "Threshold",
+				"longdesc": "Controls the sensitivity of color matching. Higher values will match more colors.",
+				"max": 1,
+				"min": 0,
+				"name": "threshold",
+				"shortdesc": "Threshold",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0,
+				"label": "Falloff",
+				"longdesc": "Controls the softness of the output mask. Set to 0 to output a binary black/white image.",
+				"max": 1,
+				"min": 0,
+				"name": "falloff",
+				"shortdesc": "Falloff",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Pick colors"
+	},
+	"type": "shader"
+}

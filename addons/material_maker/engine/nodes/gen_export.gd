@@ -65,20 +65,22 @@ func get_image_format() -> String:
 			return "exr"
 		_: return "png"
 
-func interpret_file_name(file_name: String, path:="") -> String:
-	var additional_ids := { "$node":"unnamed" }
+func interpret_file_name(file_name : String, path : String = "") -> String:
+	var additional_ids : Dictionary[String, String] = { "$node": "unnamed" }
 
 	if "$node" in file_name:
-		var graph : MMGraphEdit = mm_globals.main_window.get_current_graph_edit()
-		if graph != null:
-			for c in graph.connections:
-				if c.to_node == "node_" + name:
-					var node_title : String = graph.get_node(NodePath(c.from_node)).title
-					additional_ids["$node"] = node_title.to_snake_case()
-					break
-
-	var resolution := str(get_image_size())
-	return mm_globals.interpret_file_name(file_name, path, "."+get_image_format(), additional_ids, resolution)
+		var source_port : OutputPort = get_source(0)
+		if source_port != null:
+			var source_node : MMGenBase = source_port.generator
+			if source_node:
+				additional_ids["$node"] = source_node.get_type_name().to_snake_case()
+	
+	var graph_node : MMGenBase = self
+	while graph_node.get_parent() is MMGenBase:
+		graph_node = graph_node.get_parent()
+	
+	var resolution : String = str(get_image_size())
+	return MMLoader.interpret_file_name(file_name, path, "."+get_image_format(), graph_node, additional_ids, resolution)
 
 func export_material(prefix : String, _profile : String, size : int = 0, command_line : bool = false) -> void:
 	if size == 0:
@@ -87,7 +89,7 @@ func export_material(prefix : String, _profile : String, size : int = 0, command
 	if source != null:
 		var texture : MMTexture = await source.generator.render_output_to_texture(source.output_index, Vector2i(size, size))
 		if parameters.suffix != "":
-			var filename := interpret_file_name(parameters.suffix, prefix.get_base_dir())
+			var filename : String = interpret_file_name(parameters.suffix, prefix.get_base_dir())
 			await texture.save_to_file(prefix.get_base_dir().path_join(filename))
 		else:
 			await texture.save_to_file("%s.%s" % [ prefix, get_image_format() ])

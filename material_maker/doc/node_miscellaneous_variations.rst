@@ -2,6 +2,7 @@ Variations node
 ~~~~~~~~~~~~~~~
 
 The **Variations** node can be used to generate several variations of its input.
+Variations differ by the seeds used for all random aspects of the input. 
 
 .. image:: images/node_miscellaneous_variations.png
 	:align: center

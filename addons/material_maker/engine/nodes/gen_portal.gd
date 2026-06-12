@@ -16,6 +16,7 @@ var io : Portal
 var source : MMGenBase.OutputPort
 
 var editable := false
+var color : Color = Color.WHITE
 
 func is_editable() -> bool:
 	return true
@@ -91,6 +92,7 @@ func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -
 func _serialize(data : Dictionary) -> Dictionary:
 	data.io = io
 	data.port_type = port_type
+	data.color = MMType.serialize_value(color)
 
 	# remove unused field
 	data.erase("seed_int")
@@ -101,3 +103,5 @@ func _deserialize(data : Dictionary) -> void:
 		io = data.io
 	if data.has("port_type"):
 		port_type = data.port_type
+	if data.has("color"):
+		color = MMType.deserialize_value(data.color)

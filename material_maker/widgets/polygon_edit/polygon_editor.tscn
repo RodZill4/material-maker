@@ -14,4 +14,3 @@ draw_area = true
 auto_rescale = true
 
 [connection signal="gui_input" from="." to="." method="_on_PolygonEditor_gui_input"]
-[connection signal="gui_input" from="@Control@242306" to="@Control@242306" method="_on_ControlPoint_gui_input"]

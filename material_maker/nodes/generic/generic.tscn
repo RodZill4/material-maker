@@ -1,10 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://o548y7t5j5ii"]
+[gd_scene format=3 uid="uid://o548y7t5j5ii"]
 
 [ext_resource type="Script" uid="uid://b4jcud3prd0ol" path="res://material_maker/nodes/generic/generic.gd" id="1"]
 
-[node name="Generic" type="GraphNode"]
+[node name="Generic" type="GraphNode" unique_id=1189007728]
 offset_right = 95.0
 offset_bottom = 29.0
+scaling_menus = true
 title = "Generic"
 script = ExtResource("1")
 

@@ -13,21 +13,20 @@ var presets : Array[Dictionary] = [
 ] 
 
 func _enter_tree() -> void:
-	var popup : PopupMenu = get_popup()
-	popup.id_pressed.connect(self._menu_item_selected)
-	var current_theme : Theme = mm_globals.main_window.theme
-	var path = "res://material_maker/theme/"
-	if "light" in current_theme.resource_path:
-		path += "light/"
-	else:
-		path += "dark/"
-	popup.clear()
-	for p in presets:
-		var icon_name : String = p.name.to_lower()
-		popup.add_icon_item(load(path + "curve_preset_" + icon_name + ".tres"), p.name)
+	get_popup().id_pressed.connect(_menu_item_selected)
 
 func _exit_tree() -> void:
-	get_popup().disconnect("id_pressed", Callable(self, "_menu_item_selected"))
+	get_popup().id_pressed.disconnect(_menu_item_selected)
+
+func _notification(what : int) -> void:
+	match what:
+		NOTIFICATION_THEME_CHANGED:
+			var popup : PopupMenu = get_popup()
+			popup.clear()
+			for p in presets:
+				var icon_name : String = p.name.to_lower()
+				popup.add_icon_item(get_theme_icon(icon_name, "MM_CurveIcons"), p.name)
+			
 
 func _menu_item_selected(index : int) -> void:
 	var curve = MMCurve.new()

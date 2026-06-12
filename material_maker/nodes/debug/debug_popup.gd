@@ -47,6 +47,7 @@ func generate_shadertoy() -> String:
 	code += "void mainImage(out vec4 fragColor, in vec2 fragCoord) {\n"
 	code += "float minSize = min(iResolution.x, iResolution.y);\n"
 	code += "float _seed_variation_ = SEED_VARIATION;\n"
+	code += "vec4 _controlled_variation_ = vec4(0.0);\n"
 	code += "vec2 UV = vec2(0.0, 1.0) + vec2(1.0, -1.0) * (fragCoord-0.5*(iResolution.xy-vec2(minSize)))/minSize;\n"
 	code += src_code.code
 	if src_code.output_values.has("rgba"):
@@ -71,6 +72,7 @@ func generate_godot_canvasitem() -> String:
 	code += "\n"
 	code += "void fragment() {\n"
 	code += "float _seed_variation_ = seed_variation;\n"
+	code += "vec4 _controlled_variation_ = vec4(0.0);\n"
 	code += src_code.code
 	if src_code.output_values.has("rgba"):
 		code += "COLOR = "+src_code.output_values.rgba+";\n"
@@ -94,6 +96,7 @@ func generate_godot_spatial() -> String:
 	code += "\n"
 	code += "void fragment() {\n"
 	code += "float _seed_variation_ = seed_variation;\n"
+	code += "vec4 _controlled_variation_ = vec4(0.0);\n"
 	code += src_code.code
 	if src_code.output_values.has("rgb"):
 		code += "ALBEDO = "+src_code.output_values.rgb+";\n"

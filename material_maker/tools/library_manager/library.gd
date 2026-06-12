@@ -4,7 +4,7 @@ var library_path : String = ""
 var library_name : String = ""
 var library_items : Array = []
 var library_items_by_name : Dictionary = {}
-var library_icons : Dictionary = {}
+var library_icons : Dictionary[String, ImageTexture] = {}
 var read_only : bool = false
 
 func _ready():
@@ -216,5 +216,5 @@ func update_item_icon(item_name : String, icon : Image) -> void:
 		return
 	var data = library_items_by_name[item_name]
 	data.icon_data = Marshalls.raw_to_base64(icon.save_png_to_buffer())
-	library_icons[item_name].set_image(icon)
+	library_icons[item_name] = ImageTexture.create_from_image(icon)
 	save_library()

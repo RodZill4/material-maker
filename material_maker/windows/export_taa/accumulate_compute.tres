@@ -23,6 +23,7 @@ const float seed_variation = 0.0;
 
 vec4 mm_image(vec2 uv) {
 	float _seed_variation_ = seed_variation;
+	vec4 _controlled_variation_ = vec4(0.0);
 	@CODE
 	return @OUTPUT_VALUE;
 }

@@ -85,16 +85,18 @@ func update_generate_map_file_label() -> void:
 
 
 func interpret_map_file_name(file_name: String, path:="") -> String:
-	var additional_ids := {"$type": MapType.get_item_text(MapType.selected).to_snake_case()}
+	var additional_ids : Dictionary[String, String] = {"$type": MapType.get_item_text(MapType.selected).to_snake_case()}
 
 	var extension := ""
 	match MapFileType.selected:
 		0: extension += ".png"
 		1: extension += ".exr"
 	
-	var resolution := str(256 << MapResolution.selected)
-
-	return mm_globals.interpret_file_name(file_name, path, extension, additional_ids, resolution)
+	var resolution : String = str(256 << MapResolution.selected)
+	
+	var graph_node : MMGenBase = get_node("/root/MainWindow").get_current_graph_edit().generator
+	
+	return MMLoader.interpret_file_name(file_name, path, extension, graph_node, additional_ids, resolution)
 
 func _on_map_file_type_item_selected(_index: int) -> void:
 	update_generate_map_file_label()

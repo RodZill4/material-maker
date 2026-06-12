@@ -1,9 +1,10 @@
 uniform float variation = 0.0;
 
 vec4 mfield(vec4 uv) {
-    float _seed_variation_ = variation;
+	float _seed_variation_ = variation;
+	vec4 _controlled_variation_ = vec4(0.0);
 	$(code)
-    return $(value);
+	return $(value);
 }
 
 float raymarch(vec3 ro, vec3 rd) {

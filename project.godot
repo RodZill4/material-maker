@@ -8,6 +8,10 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Material Maker"
@@ -16,10 +20,10 @@ config/tags=PackedStringArray("material_maker")
 run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker_2"
-config/features=PackedStringArray("4.5")
+config/features=PackedStringArray("4.6")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
-boot_splash/fullsize=false
+boot_splash/stretch_mode=0
 boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
@@ -64,7 +68,7 @@ window/handheld/orientation.Android="sensor_landscape"
 run/main_run_args="--no-splash"
 run/main_run_args_paint="--no-splash D:\\Dev\\Godot\\material-maker-dev\\material_maker\\meshes\\suzanne.mmpp"
 run/main_run_args_nosplash="--no-splash"
-run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\mar26 --output-file %a_%n website:1504-1544"
+run/main_run_args_export="--export-material -o D:\\Dev\\Godot\\material-maker-showreel\\materials\\apr26 --output-file %a_%n website:1591-1606"
 
 [editor_plugins]
 
