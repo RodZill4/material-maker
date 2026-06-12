@@ -205,9 +205,9 @@ func handle_vscroll_gesture(event : InputEvent, node : Control, vscroll : VScrol
 		node.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 func popup_menu(menu : PopupMenu, parent : Control):
-	var zoom_fac = 1.0
+	var zoom_fac : float = 1.0
 	if parent is GraphNode:
-		zoom_fac *= mm_globals.main_window.get_current_graph_edit().zoom
+		zoom_fac *= main_window.get_current_graph_edit().zoom
 
 	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
 	menu.popup(Rect2(parent.get_local_mouse_position()*content_scale_factor*zoom_fac + parent.get_screen_position(), Vector2(0, 0)))
