@@ -57,6 +57,8 @@ var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
+const LASSO_CURSOR : DPITexture = preload("res://material_maker/icons/cross.svg")
+const LASSO_HOT_SPOT : Vector2 = Vector2(8.8, 8.8)
 var lasso_points : PackedVector2Array
 
 var is_dragging_connection : bool = false:
@@ -135,7 +137,7 @@ func process_port_click(pressed : bool):
 						return
 
 
-func _input(event: InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	# Handle node grab
 	if has_grab:
 		var selected_nodes := get_selected_nodes()
@@ -156,6 +158,11 @@ func _input(event: InputEvent) -> void:
 					if get_nodes_under_mouse().is_empty():
 						node.set_deferred("selected", true)
 
+	# Grab graph focus for quick bar shortcuts to work properly
+	# (i.e. returning to graph after interacting with other panels)
+	if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
+		if event is InputEventKey and event.unicode >= KEY_0 and event.unicode <= KEY_9 and event.pressed:
+			grab_focus()
 
 func _gui_input(event) -> void:
 	if (
@@ -202,6 +209,7 @@ func _gui_input(event) -> void:
 				for point in node_points:
 					node.selected = node.selected or Geometry2D.is_point_in_polygon(point,  lasso_points)
 		lasso_points.clear()
+		Input.set_custom_mouse_cursor(null)
 		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
@@ -299,6 +307,9 @@ func _gui_input(event) -> void:
 						has_grab = true
 				KEY_ESCAPE:
 					has_grab = false
+				_ when event.unicode >= KEY_0 and event.unicode <= KEY_9:
+					if get_nodes_under_mouse().is_empty():
+						quick_bar_shortcuts(event)
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -340,11 +351,15 @@ func _gui_input(event) -> void:
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
 			accept_event()
+			Input.set_custom_mouse_cursor(LASSO_CURSOR, Input.CURSOR_ARROW, LASSO_HOT_SPOT)
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
 		elif (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.shift_pressed:
 			scroll_offset -= event.relative
 			accept_event()
+		else:
+			lasso_points.clear()
+			queue_redraw()
 
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
@@ -936,6 +951,9 @@ func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
 			var connection = c.duplicate(true)
 			connection.from = from.generator.name
 			connection.to = to.generator.name
+			connection.erase("from_node")
+			connection.erase("to_node")
+			connection.erase("keep_alive")
 			data.connections.append(connection)
 	return data
 
@@ -1829,6 +1847,22 @@ func _get_connection_line(from : Vector2, to : Vector2) -> PackedVector2Array:
 			return points
 		_:
 			return points
+
+func quick_bar_shortcuts(event : InputEventKey) -> void:
+	if not Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
+		return
+	var key_num : int = event.unicode - KEY_0 - 1
+	key_num = 9 if key_num == -1 else key_num
+
+	var library_manager : Node = get_node("/root/MainWindow/NodeLibraryManager")
+	var quick_button_key : String = "quick_button_%d" % [key_num]
+
+	if mm_globals.config.has_section_key("library", quick_button_key):
+		var config : String = mm_globals.config.get_value("library", quick_button_key)
+		if config != "":
+			var library_item : Dictionary = library_manager.get_item(config)
+			if library_item != null:
+				do_paste(library_item.item)
 
 func colorize_nodes() -> void:
 	var nodes : Array[GraphElement]

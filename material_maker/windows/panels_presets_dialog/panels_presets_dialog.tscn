@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://l3a3x237y66n"]
+
+[ext_resource type="Script" uid="uid://cbelggpnaih8k" path="res://material_maker/windows/panels_presets_dialog/panels_presets_dialog.gd" id="1_p4t34"]
+
+[node name="PanelPresetsDialog" type="Window" unique_id=1375078152]
+oversampling_override = 1.0
+title = "Manage Presets"
+position = Vector2i(0, 36)
+size = Vector2i(350, 350)
+script = ExtResource("1_p4t34")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1323210345]
+custom_minimum_size = Vector2(350, 350)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1612899448]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1214955961]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemList" type="ItemList" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1960428380]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=339801386]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Buttons" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer" unique_id=808754394]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons" unique_id=1091220633]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Apply"
+
+[node name="Rename" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons" unique_id=1818598517]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rename"
+
+[node name="Remove" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons" unique_id=1180899143]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="Close" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons" unique_id=200813023]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 10
+text = "Close"
+
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons/Apply" to="." method="_on_apply_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons/Rename" to="." method="_on_rename_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/MarginContainer/Buttons/Remove" to="." method="_on_remove_pressed"]
