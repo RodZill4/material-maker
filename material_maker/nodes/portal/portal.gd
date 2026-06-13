@@ -9,6 +9,8 @@ var is_editing := false
 
 var syncing_io := false
 
+const label_y_offset : float = 35.0
+
 func _ready() -> void:
 	super._ready()
 	get_titlebar_hbox().get_children().map(func(n): n.hide())
@@ -22,7 +24,6 @@ func update_node() -> void:
 
 func _draw() -> void:
 	const label_font_size : int = 16
-	const label_y_offset : int = 40
 
 	# in/out arc decoration
 	var offset : float = PI if is_portal_out() else 0.0
@@ -31,10 +32,16 @@ func _draw() -> void:
 	# label
 	var label_pos := size * 0.5
 	var label_color : Color = generator.color
+	var label_draw_pos : Vector2 = label_pos
+	var label_size : Vector2 = LABEL_FONT.get_string_size(
+			get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
 
-	var label_size = LABEL_FONT.get_string_size(get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
-	var label_draw_pos := label_pos - Vector2(label_size.x * 0.5, label_y_offset)
 	if not is_editing:
+		if generator.horizontal_label:
+			label_draw_pos += Vector2(31.0 if is_portal_in() else (-label_size.x - 31.0), 5.0)
+		else:
+			label_draw_pos -= Vector2(label_size.x * 0.5, label_y_offset)
+
 		draw_string_outline(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
 		draw_string(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
 
@@ -78,20 +85,30 @@ func _exit_tree() -> void:
 func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.double_click:
 		setup_portal_edit()
+		accept_event()
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventKey and event.pressed and selected and not is_editing:
+	if event is InputEventKey and event.pressed and selected:
 		match event.get_keycode_with_modifiers():
 			KEY_F2, KEY_ENTER:
+				if not is_editing:
+					setup_portal_edit()
+			KEY_UP, KEY_DOWN:
+				if is_editing:
+					accept_event()
+			KEY_ENTER:
+				accept_event()
 				setup_portal_edit()
+			KEY_R:
+				generator.horizontal_label = !generator.horizontal_label
+				queue_redraw()
 	elif event is InputEventMouseMotion:
+		const tip : String = "#LMB: Select node, #LMB#LMB/F2/Enter: Rename link, R: Toggle label position"
 		if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
-			mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB/F2/Enter: Rename link"), 1.0, 2)
+			mm_globals.set_tip_text(tr(tip), 1.0, 2)
 		elif %Dragger.get_rect().has_point(get_local_mouse_position()):
-			if is_editing:
-				mm_globals.set_tip_text(tr("Enter: Rename link, Ctrl/Cmd+Enter: Batch rename links"), 1.0, 2)
-			else:
-				mm_globals.set_tip_text(tr("#LMB: Select node, #LMB#LMB: Rename link"), 1.0, 2)
+			mm_globals.set_tip_text(
+					tr("Enter: Rename link, Ctrl/Cmd+Enter: Batch rename links" if is_editing else tip))
 
 func _on_dragger_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -257,14 +274,19 @@ func replace_links(new_link : String, from_link : String) -> void:
 				p.on_parameter_changed("link", new_link)
 
 func edit_box_set_position(edit : LineEdit) -> void:
-	const y_offset : int = 61
+	var y_offset : float = label_y_offset + 21.0
 	var g : MMGraphEdit = get_parent()
 	if g == null:
 		edit.queue_free()
 		return
 	edit.scale = Vector2.ONE * g.zoom
 	edit.position = graph_node_center(self, g)
-	edit.position -= Vector2(edit.size.x * 0.5 - 0.5, y_offset) * g.zoom
+
+	if generator.horizontal_label:
+		edit.alignment = HORIZONTAL_ALIGNMENT_LEFT if is_portal_in() else HORIZONTAL_ALIGNMENT_RIGHT
+		edit.position -= Vector2(-21.0 if is_portal_in() else edit.size.x + 21.0, edit.size.y * 0.5) * g.zoom
+	else:
+		edit.position -= Vector2(edit.size.x * 0.5 - 0.5, y_offset) * g.zoom
 
 func setup_portal_edit() -> void:
 	if is_editing:
@@ -285,33 +307,56 @@ func setup_portal_edit() -> void:
 	position_offset_changed.connect(edit_box_set_position.bind(edit))
 	graph.draw.connect(edit_box_set_position.bind(edit))
 
-	edit.modulate = link_collision_warning_color()
+	var completion_panel : PortalCompletionPanel
+	if is_portal_out():
+		completion_panel = preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
+		completion_panel.portal_edit = edit
+		completion_panel.selection_updated.connect(edit_box_set_position.bind(edit))
+		completion_panel.visibility_changed.connect(
+			func() -> void:
+				if not generator.horizontal_label:
+					visible = not completion_panel.visible)
+		graph.add_child(completion_panel)
+
+	edit.modulate = link_collision_warning_color(get_link())
 
 	edit.text_submitted.connect(
 		func(new_text : String) -> void:
 			if not is_editing:
 				return
+
 			var new_link := new_text.strip_edges()
-			if not new_link.is_empty() and is_link_unique(new_link):
-				graph.undoredo.start_group()
-				on_parameter_changed("link", new_link)
-				add_link_undoredo(old_link, new_link)
-				if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
-					replace_links(new_link, old_link)
-				graph.undoredo.end_group()
+			if not new_link.is_empty():
+				if is_link_unique(new_link):
+					graph.undoredo.start_group()
+					on_parameter_changed("link", new_link)
+					add_link_undoredo(old_link, new_link)
+					if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
+						replace_links(new_link, old_link)
+					graph.undoredo.end_group()
+				else:
+					on_parameter_changed("link", old_link)
+			else:
+				edit.text = old_link
 			is_editing = false
 			generator.editable = false
 			edit.reset_size()
-			edit.queue_free())
+			edit.queue_free()
+			graph.grab_focus()
+			selected = true
+			queue_redraw())
 	edit.text_changed.connect(
 		func(new_text : String) -> void:
 			var new_link : String = new_text.strip_edges()
 			if not new_link.is_empty():
 				edit.modulate = link_collision_warning_color(new_link)
+			if completion_panel:
+				completion_panel.request_completion(new_link)
 			edit_box_set_position(edit))
 	edit.focus_exited.connect(func(): edit.text_submitted.emit(edit.text))
 	edit.tree_exiting.connect(
 		func() -> void:
+			show()
 			position_offset_changed.disconnect(edit_box_set_position)
 			graph.draw.disconnect(edit_box_set_position))
 
