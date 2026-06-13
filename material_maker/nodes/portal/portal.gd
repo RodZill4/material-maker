@@ -309,11 +309,13 @@ func setup_portal_edit() -> void:
 
 	var completion_panel : PortalCompletionPanel
 	if is_portal_out():
-		completion_panel =  preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
+		completion_panel = preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
 		completion_panel.portal_edit = edit
 		completion_panel.selection_updated.connect(edit_box_set_position.bind(edit))
 		completion_panel.visibility_changed.connect(
-			func() -> void: visible = not completion_panel.visible)
+			func() -> void:
+				if not generator.horizontal_label:
+					visible = not completion_panel.visible)
 		graph.add_child(completion_panel)
 
 	edit.modulate = link_collision_warning_color(get_link())
