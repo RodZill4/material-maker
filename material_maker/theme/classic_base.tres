@@ -95,6 +95,8 @@ region = Rect2(96, 112, 16, 16)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_meah8"]
 bg_color = Color(0.14902, 0.172549, 0.231373, 1)
 
+[sub_resource type="DPITexture" id="DPITexture_thibc"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7b2nb"]
 content_margin_left = 4.0
 content_margin_top = 4.0
@@ -1058,6 +1060,12 @@ CodeEdit/colors/single_line_comment_color = Color(0, 0.509804, 0, 1)
 CodeEdit/colors/symbol_color = Color(1, 1, 1, 1)
 CodeEdit/colors/type_color = Color(1, 1, 0.878431, 1)
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_meah8")
+FileDialog/icons/menu_copy_path = SubResource("DPITexture_thibc")
+FileDialog/icons/menu_delete = SubResource("DPITexture_thibc")
+FileDialog/icons/menu_new_folder = SubResource("DPITexture_thibc")
+FileDialog/icons/menu_open_bundle = SubResource("DPITexture_thibc")
+FileDialog/icons/menu_refresh = SubResource("DPITexture_thibc")
+FileDialog/icons/menu_show_in_file_manager = SubResource("DPITexture_thibc")
 FileDialog/styles/panel = SubResource("StyleBoxFlat_7b2nb")
 GraphEdit/colors/connection_knife = Color(1, 1, 1, 1)
 GraphEdit/colors/grid_major = Color(0.321569, 0.337255, 0.384314, 1)
