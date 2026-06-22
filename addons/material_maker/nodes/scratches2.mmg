@@ -16,14 +16,14 @@
 	"shader_model": {
 		"code": "",
 		"global": [
-			"float old_scratch(vec2 uv, vec2 size, float waviness, float angle, float randomness, vec2 seed) {",
+			"float scratch(vec2 uv, vec2 size, float waviness, float angle, float randomness, vec2 seed) {",
 			"\tfloat subdivide = floor(1.0/size.x);",
 			"\tfloat cut = size.x*subdivide;",
 			"\tuv *= subdivide;",
 			"\tvec2 r1 = rand2(floor(uv)+seed);",
 			"\tvec2 r2 = rand2(r1);",
 			"\tuv = fract(uv);",
-			"\tvec2 border = 10.0*min(fract(uv), 1.0-fract(uv));",
+			"\tvec2 border = min(fract(uv), 1.0-fract(uv));",
 			"\tuv = 2.0*uv-vec2(1.0);",
 			"\tfloat a = 6.28318530718*(angle+(r1.x-0.5)*randomness);",
 			"\tfloat c = cos(a);",
@@ -36,13 +36,13 @@
 			"\treturn min(border.x, border.y)*(1.0-uv.x*uv.x)*max(0.0, 1.0-1000.0*uv.y*uv.y);",
 			"}",
 			"",
-			"float old_scratches(vec2 uv, int layers, vec2 size, float waviness, float angle, float randomness, vec2 seed) {",
+			"float scratches(vec2 uv, int layers, vec2 size, float waviness, float angle, float randomness, vec2 seed) {",
 			"\tfloat v = 0.0;",
 			"\tfor (int i = 0; i < layers; ++i) {",
 			"\t\tseed = rand2(seed);",
-			"\t\tv = max(v, old_scratch(fract(uv+seed), size, waviness, angle/360.0, randomness, seed));",
+			"\t\tv = max(v, scratch(fract(uv+seed), size, waviness, angle/360.0, randomness, seed));",
 			"\t}",
-			"\treturn v;",
+			"\treturn v * 2.0;",
 			"}",
 			""
 		],
@@ -54,7 +54,7 @@
 		"name": "Scratches",
 		"outputs": [
 			{
-				"f": "old_scratches($uv, int($layers), vec2($length, $width), $waviness, $angle, $randomness, vec2(float($seed), 0.0))",
+				"f": "scratches($uv, int($layers), vec2($length, $width), $waviness, $angle, $randomness, vec2(float($seed), 0.0))",
 				"longdesc": "Shows white scratches on a black background",
 				"shortdesc": "Output",
 				"type": "f"
