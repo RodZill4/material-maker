@@ -3326,7 +3326,7 @@
 				"type": "rgb"
 			},
 			{
-				"default": "1.0",
+				"default": "$metallic",
 				"label": "",
 				"name": "metallic_tex",
 				"type": "f"
