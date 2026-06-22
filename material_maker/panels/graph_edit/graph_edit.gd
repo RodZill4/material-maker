@@ -535,17 +535,17 @@ func on_reroute_connections(target_connections : Array[Dictionary]) -> void:
 
 	# group connections by their source node/port
 	for link : Dictionary in target_connections:
-		var key := "%s_%d" % [link.from_node, link.from_port]
+		var key : String = "%s_%d" % [link.from_node, link.from_port]
 		if not grouped_connections.has(key):
 			grouped_connections[key] = []
 		grouped_connections[key].append(link)
 
 	for group : String in grouped_connections:
 		# find connection group center
-		var group_rect := Rect2(grouped_connections[group][0].position, Vector2.ZERO)
+		var group_rect : Rect2 = Rect2(grouped_connections[group][0].position, Vector2.ZERO)
 		for group_link : Dictionary in grouped_connections[group]:
 			group_rect = group_rect.expand(group_link.position)
-		var group_center := (group_rect.abs().get_center() + scroll_offset) / zoom
+		var group_center : Vector2 = (group_rect.abs().get_center() + scroll_offset) / zoom
 
 		# create reroute node
 		var reroute : Array = await do_create_nodes({nodes=[{name ="reroute", type="reroute",
