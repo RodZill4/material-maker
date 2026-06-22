@@ -7,6 +7,11 @@ on:
     branches: [master]
   workflow_dispatch:
     inputs:
+      artifacts:
+        description: "Generate artifacts"
+        type: boolean
+        required: true
+        default: "false"
       sign_macos:
         description: "Sign macOS version"
         type: boolean
@@ -19,9 +24,9 @@ on:
         default: "true"
 
 env:
-  GODOT_VERSION: 4.6.2
+  GODOT_VERSION: 4.6.3
   GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.6.2-stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.6.3-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_6
 
@@ -43,20 +48,6 @@ jobs:
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mkdir -v -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
           mv ./templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}
-          sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y wine-stable && sudo apt-get install -y wine32
-          #chown root:root -R ~
-          wget -q https://github.com/electron/rcedit/releases/download/v1.1.1/rcedit-x64.exe
-          mkdir -v -p ~/.local/share/rcedit
-          mv rcedit-x64.exe ~/.local/share/rcedit
-          #./Godot_v${GODOT_VERSION}-stable_linux.x86_64 --headless -q
-          mkdir -p ~/.config/godot
-          cd ~/.local/share/rcedit
-          RCEDIT_PATH=`pwd`
-          cd -
-          echo '[gd_resource type="EditorSettings" format=2]' >> ~/.config/godot/editor_settings-4.tres
-          echo '[resource]' >> ~/.config/godot/editor_settings-4.tres
-          echo 'export/windows/wine = "/usr/bin/wine"' >> ~/.config/godot/editor_settings-4.tres
-          echo 'export/windows/rcedit = "'$RCEDIT_PATH'/rcedit-x64.exe"' >> ~/.config/godot/editor_settings-4.tres
           mkdir -v -p build/${EXPORT_NAME}_${MM_RELEASE}_windows build/${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Generate Documentation
         if: ${{ github.event.inputs.gen_doc == 'true' }}
@@ -66,10 +57,8 @@ jobs:
       - name: Windows Build 🗔
         run: |
           ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Windows" ./build/${EXPORT_NAME}_${MM_RELEASE}_windows/$EXPORT_NAME.exe
       - name: Linux Build 🐧
         run: |
-          ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
           ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless -v --export-release "Linux/X11" ./build/${EXPORT_NAME}_${MM_RELEASE}_linux/$EXPORT_NAME.x86_64
       - name: Copy Material Maker data 📁
         run: |
@@ -93,17 +82,19 @@ jobs:
           zip -r ${EXPORT_NAME}_${MM_RELEASE}_windows.zip ${EXPORT_NAME}_${MM_RELEASE}_windows
           tar zcvf ${EXPORT_NAME}_${MM_RELEASE}_linux.tar.gz ${EXPORT_NAME}_${MM_RELEASE}_linux
       - name: Upload Documentation 🚀
-        if: ${{ github.event.inputs.gen_doc == 'true' }}
+        if: ${{ github.event.inputs.gen_doc == 'true' && github.event.inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v6
         with:
           name: documentation
           path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
+        if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v6
         with:
           name: windows_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows.zip
       - name: Upload Linux Artifact 🚀
+        if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v6
         with:
           name: linux_snapshot
@@ -165,14 +156,13 @@ jobs:
           chmod +x Godot.app/Contents/MacOS/Godot
           mkdir -v -p ./build/mac
           Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
-          Godot.app/Contents/MacOS/Godot --headless -v --export-release "Mac OSX" ./build/mac/material_maker.zip
       - name: Make application executable 🔧
         run: |
           unzip -a ./build/mac/material_maker.zip -d ./build/mac
           chmod +x "./build/mac/Material Maker.app/Contents/MacOS/Material Maker"
           rm ./build/mac/material_maker.zip
       - name: Get documentation 🚀
-        if: ${{ github.event.inputs.gen_doc == 'true' }}
+        if: ${{ github.event.inputs.gen_doc == 'true' && github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: documentation
@@ -196,7 +186,7 @@ jobs:
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         run: |
-          brew update && brew install imagemagick@6
+          brew install imagemagick
           cp ./.github/workflows/create-dmg-bg.sh .
           chmod +x create-dmg-bg.sh
           ./create-dmg-bg.sh ./splash_screen/backgrounds/pavel_oliva_vintage_luggage.png ./bg.png
@@ -214,6 +204,7 @@ jobs:
           xcrun notarytool submit ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
           xcrun stapler staple ./build/mac/material_maker_${{ env.MM_RELEASE }}.dmg
       - name: Upload Mac OSX Artifact 🚀
+        if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v6
         with:
           name: macos_snapshot
