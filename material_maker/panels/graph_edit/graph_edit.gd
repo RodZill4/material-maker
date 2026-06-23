@@ -197,13 +197,13 @@ func _gui_input(event) -> void:
 				queue_redraw()
 			DragLineGesture.REROUTE:
 				if drag_line.size() >= 2:
-					var drag_reroute_line := Curve2D.new()
+					var drag_reroute_line : Curve2D = Curve2D.new()
 					for p : Vector2 in drag_line:
 						drag_reroute_line.add_point(p)
-					var points := drag_reroute_line.tessellate_even_length(5, connection_lines_thickness)
+					var points : PackedVector2Array = drag_reroute_line.tessellate_even_length(5, connection_lines_thickness)
 					var target_connections : Array[Dictionary]
 					for p : Vector2 in points:
-						var link := get_closest_connection_at_point(p, connection_lines_thickness)
+						var link : Dictionary = get_closest_connection_at_point(p, connection_lines_thickness)
 						if not link.is_empty() and target_connections.find_custom(func(d):
 								return (d.from_node == link.from_node and d.from_port == link.from_port
 								and d.to_node == link.to_node and d.to_port == link.to_port)) == -1:
