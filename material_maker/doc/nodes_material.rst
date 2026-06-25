@@ -12,3 +12,4 @@ Each material has a single Material node that defines the material type.
 	node_material_3d
 	node_material_raymarching
 	node_material_unlit
+	node_material_dynamic_sky

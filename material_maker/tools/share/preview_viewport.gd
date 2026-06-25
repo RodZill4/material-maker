@@ -30,6 +30,7 @@ func get_preview(index : int) -> ImageTexture:
 			material.set_shader_parameter("uv1_scale", Vector3(4, 2, 1))
 			material.set_shader_parameter("uv1_offset", Vector3(0, 0.5, 0))
 			material.set_shader_parameter("depth_offset", 0.8)
+			material.set_shader_parameter("mesh_scale", 1.0)
 		1:
 			$PreviewScene/Pivot/Sphere.visible = false
 			$PreviewScene/Pivot/Cylinder.visible = true
@@ -39,6 +40,7 @@ func get_preview(index : int) -> ImageTexture:
 			material.set_shader_parameter("uv1_scale", Vector3(3, 1, 1))
 			material.set_shader_parameter("uv1_offset", Vector3(0.5, 0, 0))
 			material.set_shader_parameter("depth_offset", 0.8)
+			material.set_shader_parameter("mesh_scale", 1.0)
 		2:
 			$PreviewScene/Pivot/Sphere.visible = false
 			$PreviewScene/Pivot/Cylinder.visible = false
@@ -48,6 +50,7 @@ func get_preview(index : int) -> ImageTexture:
 			material.set_shader_parameter("uv1_scale", Vector3(3, 2, 1))
 			material.set_shader_parameter("uv1_offset", Vector3(0, 0, 0))
 			material.set_shader_parameter("depth_offset", 0.8)
+			material.set_shader_parameter("mesh_scale", 1.0)
 		3:
 			$PreviewScene/Pivot/Sphere.visible = false
 			$PreviewScene/Pivot/Cylinder.visible = false
@@ -66,6 +69,7 @@ func get_preview(index : int) -> ImageTexture:
 			material.set_shader_parameter("uv1_scale", Vector3(3, 2, 1))
 			material.set_shader_parameter("uv1_offset", Vector3(0, 0, 0))
 			material.set_shader_parameter("depth_offset", 0.8)
+			material.set_shader_parameter("mesh_scale", 1.0)
 		_:
 			return null
 	render_target_clear_mode = SubViewport.CLEAR_MODE_ALWAYS
