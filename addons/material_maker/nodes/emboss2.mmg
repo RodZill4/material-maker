@@ -1,0 +1,282 @@
+{
+	"connections": [
+		{
+			"from": "598",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "598",
+			"to_port": 0
+		}
+	],
+	"label": "Emboss",
+	"longdesc": "Creates highlights and shadows from an input heightmap",
+	"name": "emboss2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "598",
+			"node_position": {
+				"x": -72.5796051025391,
+				"y": -454.73828125
+			},
+			"parameters": {
+				"amount": 5.0,
+				"angle": 0.0,
+				"size": 9.0,
+				"width": 1.0
+			},
+			"seed": 24130.0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"includes": [
+					""
+				],
+				"inputs": [
+					{
+						"default": "0.0",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"float $(name)_fct(vec2 uv) {",
+					"\tfloat pixels = max(1.0, $width);",
+					"\tfloat e = 1.0/$size;",
+					"\tfloat rv = 0.0;",
+					"\tfor (float dx = -pixels; dx <= pixels; dx += 1.0) {",
+					"\t\tfor (float dy = -pixels; dy <= pixels; dy += 1.0) {",
+					"\t\t\tif (abs(dx) > 0.5 || abs(dy) > 0.5) {",
+					"\t\t\t\trv += $in(uv+e*vec2(dx, dy))*cos(atan(dy, dx)-$angle*3.14159265359/180.0)/length(vec2(dx, dy));",
+					"\t\t\t}",
+					"\t\t}",
+					"\t}",
+					"\treturn $amount*rv/pixels+0.5;",
+					"}"
+				],
+				"name": "Emboss",
+				"outputs": [
+					{
+						"f": "$(name)_fct($uv)",
+						"type": "f"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 6.0,
+						"label": "Size",
+						"last": 12.0,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.0,
+						"label": "Angle",
+						"max": 180.0,
+						"min": -180.0,
+						"name": "angle",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Amount",
+						"max": 10.0,
+						"min": 0.0,
+						"name": "amount",
+						"step": 0.1,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 1.0,
+						"label": "Width",
+						"max": 5.0,
+						"min": 1.0,
+						"name": "width",
+						"step": 1.0,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -461.57958984375,
+				"y": -574.119140625
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "The input height map",
+					"name": "port0",
+					"shortdesc": "Input",
+					"type": "f"
+				}
+			],
+			"seed": 2287.0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": 187.506225585938,
+				"y": -557.119140625
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "The generated image",
+					"name": "port0",
+					"shortdesc": "Output",
+					"type": "f"
+				}
+			],
+			"seed": -47498.0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -176.036682128906,
+				"y": -878.5
+			},
+			"parameters": {
+				"param0": 9.0,
+				"param1": 0.0,
+				"param2": 5.0,
+				"param3": 1.0,
+				"param4": null
+			},
+			"seed": 32120.0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Size",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the input image",
+					"name": "param0",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Angle",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "angle"
+						}
+					],
+					"longdesc": "The angle of the simulated light",
+					"name": "param1",
+					"shortdesc": "Angle",
+					"type": "linked_control"
+				},
+				{
+					"label": "Amount",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "amount"
+						}
+					],
+					"longdesc": "The strength of the emboss effect",
+					"name": "param2",
+					"shortdesc": "Strength",
+					"type": "linked_control"
+				},
+				{
+					"label": "Width",
+					"linked_widgets": [
+						{
+							"node": "598",
+							"widget": "width"
+						}
+					],
+					"longdesc": "The width (in pixels) of the area sampled for each pixel",
+					"name": "param3",
+					"shortdesc": "Width",
+					"type": "linked_control"
+				},
+				{
+					"label": "32 Bits",
+					"linked_widgets": [
+						{
+							"node": "buffer_2",
+							"widget": "f32"
+						}
+					],
+					"longdesc": "Use 32-bit buffer when sampling the input. Reduces banding artifacts but could result in higher video memory usage.",
+					"name": "param4",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -82.6366882324219,
+				"y": -637.0
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 9.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		}
+	],
+	"parameters": {
+		"param0": 9.0,
+		"param1": 0.0,
+		"param2": 5.0,
+		"param3": 1.0,
+		"param4": null
+	},
+	"scroll_offset": {
+		"x": -432.636688232422,
+		"y": -918.0
+	},
+	"seed_int": 0,
+	"shortdesc": "Emboss",
+	"type": "graph"
+}
