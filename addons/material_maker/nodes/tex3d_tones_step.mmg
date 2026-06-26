@@ -1,0 +1,77 @@
+{
+	"name": "tex3d_tones_step",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"invert": false,
+		"value": 0.5,
+		"width": 0.1
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec3 $(name_uv)_false = clamp(($in($uv).rgb-vec3($value))/max(0.0001, $width)+vec3(0.5), vec3(0.0), vec3(1.0));",
+			"vec3 $(name_uv)_true = vec3(1.0)-$(name_uv)_false;"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(0.5 ,0.5, 0.5)",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Emphasizes dark and light tones around a specified value",
+		"name": "TEX3D Tones Step",
+		"outputs": [
+			{
+				"longdesc": "Shows the generated high contrast 3D texture",
+				"shortdesc": "Output",
+				"tex3d": "$(name_uv)_$invert",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Value",
+				"longdesc": "The value of the input that separate dark and light zones of the result",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "value",
+				"shortdesc": "Value",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 1.0,
+				"label": "Width",
+				"longdesc": "The width (in tones space) of the transition area",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "width",
+				"shortdesc": "width",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Invert",
+				"longdesc": "Invert the generated image if set",
+				"name": "invert",
+				"shortdesc": "Invert",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "TEX3D Tones step"
+	},
+	"type": "shader"
+}

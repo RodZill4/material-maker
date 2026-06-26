@@ -1,0 +1,246 @@
+{
+	"name": "tex3d_math",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"clamp": false,
+		"default_in1": 0.0,
+		"default_in2": 0.0,
+		"op": 0.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"float $(name_uv)_clamp_false = $op;",
+			"float $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);",
+			""
+		],
+		"global": [
+			"float pingpong(float a, float b)",
+			"{",
+			"  return (b != 0.0) ? abs(fract((a - b) / (b * 2.0)) * b * 2.0 - b) : 0.0;",
+			"}"
+		],
+		"inputs": [
+			{
+				"default": "$default_in1",
+				"label": "2:",
+				"longdesc": "The A operand",
+				"name": "in1",
+				"shortdesc": "A",
+				"type": "tex3d_gs"
+			},
+			{
+				"default": "$default_in2",
+				"label": "",
+				"longdesc": "The B operand",
+				"name": "in2",
+				"shortdesc": "B",
+				"type": "tex3d_gs"
+			}
+		],
+		"instance": "",
+		"longdesc": "Performs a math operation using its inputs or parameter values",
+		"name": "TEX3D Math",
+		"outputs": [
+			{
+				"longdesc": "Shows a grayscale 3D texture of the result",
+				"shortdesc": "Output",
+				"tex3d_gs": "$(name_uv)_clamp_$clamp",
+				"type": "tex3d_gs"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The operation to be performed",
+				"name": "op",
+				"shortdesc": "Operation",
+				"type": "enum",
+				"values": [
+					{
+						"name": "A+B",
+						"value": "$in1($uv)+$in2($uv)"
+					},
+					{
+						"name": "A-B",
+						"value": "$in1($uv)-$in2($uv)"
+					},
+					{
+						"name": "A*B",
+						"value": "$in1($uv)*$in2($uv)"
+					},
+					{
+						"name": "A/B",
+						"value": "$in1($uv)/$in2($uv)"
+					},
+					{
+						"name": "log(A)",
+						"value": "log($in1($uv))"
+					},
+					{
+						"name": "log2(A)",
+						"value": "log2($in1($uv))"
+					},
+					{
+						"name": "pow(A, B)",
+						"value": "pow($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "abs(A)",
+						"value": "abs($in1($uv))"
+					},
+					{
+						"name": "round(A)",
+						"value": "round($in1($uv))"
+					},
+					{
+						"name": "floor(A)",
+						"value": "floor($in1($uv))"
+					},
+					{
+						"name": "ceil(A)",
+						"value": "ceil($in1($uv))"
+					},
+					{
+						"name": "trunc(A)",
+						"value": "trunc($in1($uv))"
+					},
+					{
+						"name": "fract(A)",
+						"value": "fract($in1($uv))"
+					},
+					{
+						"name": "min(A, B)",
+						"value": "min($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "max(A, B)",
+						"value": "max($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "A<B",
+						"value": "(1.0-step($in2($uv),$in1($uv)))"
+					},
+					{
+						"name": "cos(A*B)",
+						"value": "cos($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sin(A*B)",
+						"value": "sin($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "tan(A*B)",
+						"value": "tan($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sqrt(1-A²)",
+						"value": "sqrt(1.0-$in1($uv)*$in1($uv))"
+					},
+					{
+						"name": "smoothstep(0.0, 1.0, A)",
+						"value": "smoothstep(0.0, 1.0, $in1($uv))"
+					},
+					{
+						"name": "ping-pong(A, B)",
+						"value": "pingpong($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "sign(A)",
+						"value": "sign($in1($uv))"
+					},
+					{
+						"name": "mod(A, B)",
+						"value": "mod($in1($uv), $in2($uv))"
+					},
+					{
+						"name": "atan2(A, B)",
+						"value": "atan($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "asin(A)",
+						"value": "asin($in1($uv))"
+					},
+					{
+						"name": "acos(A)",
+						"value": "acos($in1($uv))"
+					},
+					{
+						"name": "atan(A)",
+						"value": "atan($in1($uv))"
+					},
+					{
+						"name": "sinh(A)",
+						"value": "sinh($in1($uv))"
+					},
+					{
+						"name": "cosh(A)",
+						"value": "cosh($in1($uv))"
+					},
+					{
+						"name": "tanh(A)",
+						"value": "tanh($in1($uv))"
+					},
+					{
+						"name": "exp(A)",
+						"value": "exp($in1($uv))"
+					},
+					{
+						"name": "snap(A, B)",
+						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
+					},
+					{
+						"name": "radians(A)",
+						"value": "radians($in1($uv))"
+					},
+					{
+						"name": "degrees(A)",
+						"value": "degrees($in1($uv))"
+					},
+					{
+						"name": "log(A, B)",
+						"value": "log($in1($uv))/log($in2($uv))"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The default value for A, used if the corresponding input is not connected",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "default_in1",
+				"shortdesc": "Default A",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The default value for B, used if the corresponding input is not connected",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "default_in2",
+				"shortdesc": "Default B",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Clamp",
+				"longdesc": "The result is clamped to [0, 1] if this option is checked",
+				"name": "clamp",
+				"shortdesc": "Clamp",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "TEX3D Math"
+	},
+	"type": "shader"
+}

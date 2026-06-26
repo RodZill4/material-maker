@@ -1,0 +1,81 @@
+{
+	"generic_size": 1,
+	"name": "tex3d_tonality",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"curve": {
+			"points": [
+				{
+					"ls": 0.0,
+					"rs": 1.0,
+					"x": 0.0,
+					"y": 0.0
+				},
+				{
+					"ls": 1.0,
+					"rs": 0.0,
+					"x": 1.0,
+					"y": 1.0
+				}
+			],
+			"type": "Curve"
+		}
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "$uv.x",
+				"label": "",
+				"longdesc": "The input grayscale 3D texture",
+				"name": "input#",
+				"shortdesc": "Input#",
+				"type": "tex3d_gs"
+			}
+		],
+		"instance": "",
+		"longdesc": "Remaps a grayscaale 3D texture's tonality using a curve",
+		"name": "TEX3D Tonality",
+		"outputs": [
+			{
+				"longdesc": "The remapped grayscale 3D texture",
+				"shortdesc": "Output#",
+				"tex3d_gs": "$curve($input#($uv))",
+				"type": "tex3d_gs"
+			}
+		],
+		"parameters": [
+			{
+				"default": {
+					"points": [
+						{
+							"ls": 0.0,
+							"rs": 1.0,
+							"x": 0.0,
+							"y": 0.0
+						},
+						{
+							"ls": 1.0,
+							"rs": 0.0,
+							"x": 1.0,
+							"y": 1.0
+						}
+					],
+					"type": "Curve"
+				},
+				"label": "",
+				"longdesc": "The tonality curve to which the input is remapped",
+				"name": "curve",
+				"shortdesc": "Curve",
+				"type": "curve"
+			}
+		],
+		"shortdesc": "Tonality"
+	},
+	"type": "shader"
+}

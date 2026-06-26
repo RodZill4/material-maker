@@ -83,7 +83,7 @@
 			"\treturn value / normalize_factor;",
 			"}",
 			"",
-			"float tex3d_fbm_perlin(vec3 coord, vec3 size, float seed) {",
+			"float tex3d_fbm_old_perlin(vec3 coord, vec3 size, float seed) {",
 			"\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;",
 			"\tvec3 f = fract(coord);",
 			"\tvec3 v000 = normalize(rand33(mod(o, size))-vec3(0.5));",
@@ -106,12 +106,12 @@
 			"\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);",
 			"}",
 			"",
-			"float fbm3d_perlin(vec3 coord, vec3 size, int octaves, float persistence, float seed) {",
+			"float fbm3d_old_perlin(vec3 coord, vec3 size, int octaves, float persistence, float seed) {",
 			"\tfloat normalize_factor = 0.0;",
 			"\tfloat value = 0.0;",
 			"\tfloat scale = 1.0;",
 			"\tfor (int i = 0; i < octaves; i++) {",
-			"\t\tvalue += tex3d_fbm_perlin(coord*size, size, seed) * scale;",
+			"\t\tvalue += tex3d_fbm_old_perlin(coord*size, size, seed) * scale;",
 			"\t\tnormalize_factor += scale;",
 			"\t\tsize *= 2.0;",
 			"\t\tscale *= persistence;",
@@ -119,7 +119,7 @@
 			"\treturn value / normalize_factor;",
 			"}",
 			"",
-			"float tex3d_fbm_perlin_nowrap(vec3 coord, vec3 size, float seed) {",
+			"float tex3d_fbm_old_perlin_nowrap(vec3 coord, vec3 size, float seed) {",
 			"\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;",
 			"\tvec3 f = fract(coord);",
 			"\tvec3 v000 = normalize(rand33(o)-vec3(0.5));",
@@ -142,12 +142,12 @@
 			"\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);",
 			"}",
 			"",
-			"float fbm3d_perlin_nowrap(vec3 coord, vec3 size, int octaves, float persistence, float seed) {",
+			"float fbm3d_old_perlin_nowrap(vec3 coord, vec3 size, int octaves, float persistence, float seed) {",
 			"\tfloat normalize_factor = 0.0;",
 			"\tfloat value = 0.0;",
 			"\tfloat scale = 1.0;",
 			"\tfor (int i = 0; i < octaves; i++) {",
-			"\t\tvalue += tex3d_fbm_perlin_nowrap(coord*size, size, seed) * scale;",
+			"\t\tvalue += tex3d_fbm_old_perlin_nowrap(coord*size, size, seed) * scale;",
 			"\t\tnormalize_factor += scale;",
 			"\t\tsize *= 2.0;",
 			"\t\tscale *= persistence;",
@@ -244,7 +244,7 @@
 					},
 					{
 						"name": "Perlin",
-						"value": "perlin"
+						"value": "old_perlin"
 					},
 					{
 						"name": "Cellular",
@@ -256,7 +256,7 @@
 					},
 					{
 						"name": "Perlin (no wrap)",
-						"value": "perlin_nowrap"
+						"value": "old_perlin_nowrap"
 					},
 					{
 						"name": "Cellular (no wrap)",
