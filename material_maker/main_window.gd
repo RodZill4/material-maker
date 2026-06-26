@@ -1367,7 +1367,10 @@ func dim_window() -> void:
 	modulate = Color(0.5, 0.5, 0.5)
 
 func generate_screenshots():
-	var result = await library.generate_screenshots(get_current_graph_edit())
+	var graph : MMGraphEdit = get_current_graph_edit()
+	graph.get_node("node_Material").position_offset = Vector2(-300, 0)
+	var result : int = await library.generate_node_screenshots(graph)
+	result += await library.generate_material_screenshots(graph)
 	print(result)
 
 func generate_graph_screenshot():
