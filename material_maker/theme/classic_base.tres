@@ -1243,6 +1243,7 @@ PopupMenu/icons/unchecked = SubResource("AtlasTexture_bxwwn")
 PopupMenu/icons/unchecked_disabled = SubResource("AtlasTexture_ftwxj")
 PopupMenu/styles/hover = SubResource("StyleBoxFlat_fq0uc")
 PopupMenu/styles/panel = SubResource("StyleBoxFlat_8p2hu")
+ScrollContainer/constants/scrollbar_h_separation = 8
 TabBar/constants/h_separation = 6
 TabBar/icons/close = SubResource("AtlasTexture_1wpt7")
 TabBar/styles/tab_focus = SubResource("StyleBoxFlat_7nmb2")
