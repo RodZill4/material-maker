@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://ccn6lirlng4mf"]
+
+[ext_resource type="Script" uid="uid://sy2sjsibdh33" path="res://material_maker/windows/add_node_popup/sort_menu.gd" id="1_a3m20"]
+[ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="1_uh4sk"]
+[ext_resource type="ButtonGroup" uid="uid://b2cktlktu8ghy" path="res://material_maker/windows/add_node_popup/sort_button_group.tres" id="2_eswfh"]
+
+[node name="SortMenuPanel" type="PopupPanel" unique_id=348406576]
+oversampling_override = 1.0
+size = Vector2i(56, 124)
+visible = true
+theme_type_variation = &"MM_PanelMenuSubPanelLabel"
+script = ExtResource("1_a3m20")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1059872005]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 52.0
+offset_bottom = 120.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1741003019]
+layout_mode = 2
+
+[node name="Quality" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1545685784]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+tooltip_text = "Sort items by relevancy"
+toggle_mode = true
+button_group = ExtResource("2_eswfh")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_uh4sk")
+icon_name = "zoom"
+
+[node name="Frequency" type="Button" parent="PanelContainer/VBoxContainer" unique_id=491345268]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+tooltip_text = "Sort items by usage frequency"
+toggle_mode = true
+button_group = ExtResource("2_eswfh")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_uh4sk")
+icon_name = "frequency_ascending"
+
+[node name="Alphabetical" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1776522408]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+tooltip_text = "Sort items by alphabetical order"
+toggle_mode = true
+button_group = ExtResource("2_eswfh")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_uh4sk")
+icon_name = "alphabetical_ascending"
+
+[node name="Category" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1436273603]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+tooltip_text = "Sort items by node category/section"
+toggle_mode = true
+button_group = ExtResource("2_eswfh")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("1_uh4sk")
+icon_name = "category_ascending"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Quality" to="." method="_on_quality_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Frequency" to="." method="_on_frequency_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Alphabetical" to="." method="_on_alphabetical_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Category" to="." method="_on_category_pressed"]
