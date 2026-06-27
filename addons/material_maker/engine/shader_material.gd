@@ -27,7 +27,7 @@ func get_parameters() -> Dictionary:
 		rv[parameter_name] = material.get_shader_parameter(parameter_name)
 	return rv
 
-func set_parameter(name : String, value):
+func set_parameter(name : String, value) -> void:
 	if value is MMTexture:
 		material.set_shader_parameter(name, await value.get_texture())
 	else:
