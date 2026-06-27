@@ -105,11 +105,11 @@ func jump_to_source() -> void:
 		graph.scroll_offset = (source_portal.position_offset
 			+ 0.5 * source_portal.size) * graph.zoom - 0.5 * graph.size
 
-	var tween : Tween = get_tree().create_tween()
-	tween.tween_property(source_portal, "modulate", Color(1.5, 1.5, 1.5, 1.0), 0.2).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(source_portal, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_CUBIC).set_delay(0.5)
-	source_portal.set_deferred("selected", true)
-	await tween.finished
+		var tween : Tween = get_tree().create_tween()
+		tween.tween_property(source_portal, "modulate", Color(1.5, 1.5, 1.5, 1.0), 0.2).set_trans(Tween.TRANS_CUBIC)
+		tween.tween_property(source_portal, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_CUBIC).set_delay(0.5)
+		source_portal.set_deferred("selected", true)
+		await tween.finished
 	is_navigating_source = false
 
 func set_portal_tip_text() -> void:
