@@ -1,7 +1,7 @@
 extends Node
 
 
-@onready var steam_api
+var steam_api
 var is_subscribed : bool = false
 var avatar_texture : ImageTexture
 var got_avatar : bool = false
@@ -70,8 +70,8 @@ func unlock_achievement(achievement : String):
 	steam_api.setAchievement(achievement)
 	steam_api.storeStats()
 
-func increase_stat(stat : String):
+func increase_stat(stat : String, increment : int = 1):
 	if not is_subscribed:
 		return
 	var stat_value = steam_api.getStatInt(stat)
-	steam_api.setStatInt(stat, stat_value+1)
+	steam_api.setStatInt(stat, stat_value+increment)

@@ -744,6 +744,7 @@ func do_create_nodes(data, nodes_position : Vector2 = Vector2(0, 0)) -> Array:
 				mm_steam.unlock_achievement("ACH_BAKE_IT_TILL_YOU_MAKE_IT")
 			elif new_stuff.generators[0] is MMGenDebug:
 				mm_steam.unlock_achievement("ACH_UNDER_THE_HOOD")
+		mm_steam.increase_stat("stat_nodes", new_stuff.generators.size())
 		return return_value
 	return []
 
