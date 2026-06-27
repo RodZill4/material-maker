@@ -1,0 +1,346 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "edge_detect_3_3_3",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "edge_detect_3_3_3",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect_3_3_3",
+			"from_port": 0,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Multi Warp",
+	"longdesc": "The Multi Warp node deforms an input image according to the derivative of the second input image. Unlike Warp node, the derivative of the second texture is sampled at each iteration producing more varied results at cost of the performance.",
+	"name": "multi_warp2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -464.666625976562,
+				"y": -493.666656494141
+			},
+			"parameters": {
+				"param0": 10.0,
+				"param1": 4.0,
+				"param2": 15.0,
+				"param3": 0.0,
+				"param4": null
+			},
+			"seed": 27075.0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Grid size:",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_3",
+							"widget": "size"
+						},
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the operation",
+					"name": "param0",
+					"shortdesc": "Grid size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Intensity",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_3",
+							"widget": "intensity"
+						}
+					],
+					"longdesc": "The intensity of the warp effect",
+					"name": "param1",
+					"shortdesc": "Intensity",
+					"type": "linked_control"
+				},
+				{
+					"label": "Quality",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_3",
+							"widget": "quality"
+						}
+					],
+					"longdesc": "The quality of the Multi warp calculation",
+					"name": "param2",
+					"shortdesc": "Quality",
+					"type": "linked_control"
+				},
+				{
+					"label": "Mode",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_3",
+							"widget": "mode"
+						}
+					],
+					"longdesc": "The blend mode, that can be one of the following: Min, Blur, Max",
+					"name": "param3",
+					"shortdesc": "Mode",
+					"type": "linked_control"
+				},
+				{
+					"label": "32 Bits",
+					"linked_widgets": [
+						{
+							"node": "buffer",
+							"widget": "f32"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "f32"
+						}
+					],
+					"longdesc": "Use 32-bit buffer(s) when storing input/outputs. Reduces banding artifacts but could result in higher video memory usage.",
+					"name": "param4",
+					"shortdesc": "32 Bits",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -872.666625976562,
+				"y": -243.392852783203
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "The input image",
+					"name": "in",
+					"shortdesc": "Input",
+					"type": "rgba"
+				},
+				{
+					"group_size": 0.0,
+					"longdesc": "The height map whose slopes are used to deform the input",
+					"name": "heightmap",
+					"shortdesc": "Height map",
+					"type": "f"
+				}
+			],
+			"seed": 91624.0,
+			"seed_locked": true,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -45.452392578125,
+				"y": -195.392852783203
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "Shows the generated blurred image",
+					"name": "port0",
+					"shortdesc": "Output",
+					"type": "rgba"
+				}
+			],
+			"seed": 30896.0,
+			"type": "ios"
+		},
+		{
+			"name": "edge_detect_3_3_3",
+			"node_position": {
+				"x": -358.368896484375,
+				"y": 3.1737060546875
+			},
+			"parameters": {
+				"intensity": 4.0,
+				"mode": 0.0,
+				"quality": 15.0,
+				"size": 10.0
+			},
+			"seed": -47470.0,
+			"seed_locked": true,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(1.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgb"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"name": "heightmap",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec3 $(name)_fct(vec2 uv) {",
+					"\tfloat dx = 1.0/$size;",
+					"\tfloat v = 0.0;",
+					"\tvec2 slope = vec2(0.0);",
+					"\tint iterations = int(ceil($intensity * $quality));",
+					"\titerations = max(1, iterations);",
+					"\tvec2 it_uv = uv;",
+					"\tvec3 pt_value = $in(uv);",
+					"\tvec3 rv = vec3(0.0);",
+					"\tfor(int i = 0;i<iterations;i++){",
+					"\t\tv = $heightmap(it_uv);",
+					"\t\tslope = vec2($heightmap(it_uv+vec2(dx, 0.0))-v, $heightmap(it_uv+vec2(0.0, dx))-v) * 2.0;",
+					"\t\tit_uv += slope * $intensity * $intensity / float(iterations);",
+					"\t\trv += $mode;",
+					"\t}",
+					"\treturn rv/float(iterations);",
+					"}"
+				],
+				"name": "Multi Warp",
+				"outputs": [
+					{
+						"rgb": "$(name)_fct($uv)",
+						"type": "rgb"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 4.0,
+						"label": "Size",
+						"last": 12.0,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Intensity",
+						"max": 16.0,
+						"min": 0.0,
+						"name": "intensity",
+						"step": 0.001,
+						"type": "float"
+					},
+					{
+						"control": "None",
+						"default": 50.0,
+						"label": "Quality",
+						"max": 50.0,
+						"min": 1.0,
+						"name": "quality",
+						"step": 1.0,
+						"type": "float"
+					},
+					{
+						"default": 2.0,
+						"label": "Mode",
+						"name": "mode",
+						"type": "enum",
+						"values": [
+							{
+								"name": "Min",
+								"value": "min($in(it_uv), pt_value)"
+							},
+							{
+								"name": "Blur",
+								"value": "$in(it_uv)"
+							},
+							{
+								"name": "Max",
+								"value": "max($in(it_uv), pt_value)"
+							}
+						]
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -411.345550537109,
+				"y": -177.885635375977
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 9.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -114.245552062988,
+				"y": -6.38561820983887
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 9.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		}
+	],
+	"parameters": {
+		"param0": 10.0,
+		"param1": 4.0,
+		"param2": 15.0,
+		"param3": 0.0,
+		"param4": null
+	},
+	"scroll_offset": {
+		"x": -818.950500488281,
+		"y": -500.714202880859
+	},
+	"seed_int": 0,
+	"shortdesc": "Multi Warp",
+	"type": "graph"
+}
