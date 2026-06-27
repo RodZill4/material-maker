@@ -19,7 +19,7 @@ func update_tooltip() -> void:
 
 func _on_Button_pressed() -> void:
 	var dialog = preload("res://material_maker/windows/desc_dialog/desc_dialog.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.content_scale_factor = mm_globals.ui_scale_factor()
 	dialog.min_size = Vector2(350, 150) * dialog.content_scale_factor
 	add_child(dialog)
 	var result = await dialog.edit_descriptions(description_type, short_description, long_description)

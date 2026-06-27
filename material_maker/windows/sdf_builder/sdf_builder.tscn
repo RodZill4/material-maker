@@ -25,6 +25,7 @@ atlas = ExtResource("6")
 region = Rect2(48, 0, 16, 16)
 
 [node name="Control" type="Window"]
+oversampling_override = 1.0
 position = Vector2i(0, 36)
 exclusive = true
 script = ExtResource("3")
