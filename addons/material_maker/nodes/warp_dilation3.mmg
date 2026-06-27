@@ -1,0 +1,429 @@
+{
+	"connections": [
+		{
+			"from": "switch",
+			"from_port": 2,
+			"to": "warp_dilation",
+			"to_port": 0
+		},
+		{
+			"from": "switch",
+			"from_port": 3,
+			"to": "warp_dilation",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 4
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 5
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 0
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 2
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "switch",
+			"to_port": 3
+		},
+		{
+			"from": "uniform_greyscale",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 0
+		},
+		{
+			"from": "warp_dilation",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 1
+		},
+		{
+			"from": "switch_2",
+			"from_port": 1,
+			"to": "gen_outputs",
+			"to_port": 0
+		},
+		{
+			"from": "warp_dilation",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 2
+		},
+		{
+			"from": "switch",
+			"from_port": 0,
+			"to": "buffer",
+			"to_port": 0
+		},
+		{
+			"from": "buffer",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 6
+		},
+		{
+			"from": "switch",
+			"from_port": 1,
+			"to": "buffer_2",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_2",
+			"from_port": 0,
+			"to": "switch",
+			"to_port": 7
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "switch_2",
+			"to_port": 3
+		},
+		{
+			"from": "switch_2",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		}
+	],
+	"label": "Warp Dilation",
+	"longdesc": "Warp its input following a heightmap, pointing a given angle from the slope.",
+	"name": "warp_dilation3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -1127.189453125,
+				"y": -144.69123840332
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"name": "port1",
+					"type": "f"
+				},
+				{
+					"group_size": 0.0,
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"seed": 503.0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -70.923583984375,
+				"y": -122.69123840332
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"name": "port0",
+					"type": "f"
+				}
+			],
+			"seed": 33280.0,
+			"type": "ios"
+		},
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -419.97509765625,
+				"y": -469.566589355469
+			},
+			"parameters": {
+				"a": 0.0,
+				"angle": 0.0,
+				"d": 0.5,
+				"param0": 1.0,
+				"param1": null,
+				"s": 10
+			},
+			"seed": 18589.0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Angle",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "angle"
+						}
+					],
+					"longdesc": "The angle from the slope to be followed",
+					"name": "angle",
+					"shortdesc": "Angle",
+					"type": "linked_control"
+				},
+				{
+					"label": "Resolution",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "s"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
+						},
+						{
+							"node": "buffer",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the output",
+					"name": "s",
+					"shortdesc": "Resolution",
+					"type": "linked_control"
+				},
+				{
+					"label": "Distance",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "d"
+						}
+					],
+					"longdesc": "The dilation distance",
+					"name": "d",
+					"shortdesc": "Distance",
+					"type": "linked_control"
+				},
+				{
+					"label": "Attenuation",
+					"linked_widgets": [
+						{
+							"node": "warp_dilation",
+							"widget": "a"
+						}
+					],
+					"longdesc": "the attenuation along the dilation",
+					"name": "a",
+					"shortdesc": "Attenuation",
+					"type": "linked_control"
+				},
+				{
+					"configurations": {
+						"False": [
+							{
+								"node": "switch",
+								"value": 0.0,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 0.0,
+								"widget": "source"
+							}
+						],
+						"True": [
+							{
+								"node": "switch",
+								"value": 1.0,
+								"widget": "source"
+							},
+							{
+								"node": "switch_2",
+								"value": 1.0,
+								"widget": "source"
+							}
+						]
+					},
+					"label": "Buffer",
+					"linked_widgets": [
+						{
+							"node": "switch",
+							"widget": "source"
+						},
+						{
+							"node": "switch_2",
+							"widget": "source"
+						}
+					],
+					"longdesc": "Use buffers to store inputs/outputs",
+					"name": "param0",
+					"shortdesc": "Buffer",
+					"type": "config_control"
+				},
+				{
+					"label": "32 Bits",
+					"linked_widgets": [
+						{
+							"node": "buffer_3",
+							"widget": "f32"
+						},
+						{
+							"node": "buffer_2",
+							"widget": "f32"
+						},
+						{
+							"node": "buffer",
+							"widget": "f32"
+						}
+					],
+					"longdesc": "Use 32-bit buffer(s) when storing input/outputs. Reduces banding artifacts but could result in higher video memory usage. This option is only effective if 'Buffer' is enabled.",
+					"name": "param1",
+					"shortdesc": "32 Bit",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "warp_dilation",
+			"node_position": {
+				"x": -432.389465332031,
+				"y": -209.200408935547
+			},
+			"parameters": {
+				"a": 0.0,
+				"angle": 0.0,
+				"d": 0.5,
+				"s": 10
+			},
+			"seed": 7232.0,
+			"type": "warp_dilation2_nobuf"
+		},
+		{
+			"name": "switch",
+			"node_position": {
+				"x": -689.180053710938,
+				"y": -345.012420654297
+			},
+			"parameters": {
+				"choices": 2.0,
+				"outputs": 4.0,
+				"source": 1.0
+			},
+			"seed_int": 0,
+			"type": "switch"
+		},
+		{
+			"name": "uniform_greyscale",
+			"node_position": {
+				"x": -988.973327636719,
+				"y": -258.096252441406
+			},
+			"parameters": {
+				"color": 0.0
+			},
+			"seed_int": 0,
+			"type": "uniform_greyscale"
+		},
+		{
+			"name": "switch_2",
+			"node_position": {
+				"x": -382.224670410156,
+				"y": 157.620254516602
+			},
+			"parameters": {
+				"choices": 2.0,
+				"outputs": 2.0,
+				"source": 1.0
+			},
+			"seed_int": 0,
+			"type": "switch"
+		},
+		{
+			"name": "buffer",
+			"node_position": {
+				"x": -749.063903808594,
+				"y": -95.5907516479492
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 10
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_2",
+			"node_position": {
+				"x": -750.609008789062,
+				"y": 121.139213562012
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 10
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -427.30908203125,
+				"y": -28.3607864379883
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 10
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		}
+	],
+	"parameters": {
+		"a": 0.0,
+		"angle": 0.0,
+		"d": 0.5,
+		"param0": 1.0,
+		"param1": null,
+		"s": 10
+	},
+	"scroll_offset": {
+		"x": -932.859130859375,
+		"y": -442.760803222656
+	},
+	"seed_int": 0,
+	"shortdesc": "Warp Dilation",
+	"type": "graph"
+}

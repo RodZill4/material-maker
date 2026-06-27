@@ -22,14 +22,7 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 									"smoothstep", "length", "distance", "dot", "cross",
 									"normalize" ]
 
-func _context_menu_about_to_popup() -> void:
-	var content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	get_menu().position = get_window().position + Vector2i(
-			get_global_mouse_position() * content_scale_factor)
-
 func _ready():
-	if not get_menu().about_to_popup.is_connected(_context_menu_about_to_popup):
-		get_menu().about_to_popup.connect(_context_menu_about_to_popup)
 	syntax_highlighter.clear_color_regions()
 	for t in KEYWORDS:
 		syntax_highlighter.add_keyword_color(t, get_theme_color("keyword_color", "CodeEdit"))

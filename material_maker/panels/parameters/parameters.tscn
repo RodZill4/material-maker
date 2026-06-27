@@ -3,17 +3,14 @@
 [ext_resource type="Script" uid="uid://chqn6bm8u2bjm" path="res://material_maker/panels/parameters/parameters.gd" id="1"]
 
 [node name="BrushParams" type="ScrollContainer"]
+custom_minimum_size = Vector2(200, 250)
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_minimum_size = Vector2(200, 250)
 size_flags_horizontal = 3
-scroll_horizontal_enabled = false
 script = ExtResource("1")
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Parameters" type="GridContainer" parent="."]
-offset_right = 1280.0
+layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
