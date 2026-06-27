@@ -1892,10 +1892,8 @@ func quick_bar_shortcuts(event : InputEventKey) -> void:
 
 	if mm_globals.config.has_section_key("library", quick_button_key):
 		var config : String = mm_globals.config.get_value("library", quick_button_key)
-		if config != "":
-			var library_item : Dictionary = library_manager.get_item(config)
-			if library_item != null:
-				do_paste(library_item.item)
+		if config != "" and library_manager.get_item(config):
+			do_paste(library_manager.get_item(config).item)
 
 func colorize_nodes() -> void:
 	var nodes : Array[GraphElement]
