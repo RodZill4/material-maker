@@ -135,6 +135,8 @@ func _input(event : InputEvent) -> void:
 		if event.alt_pressed and (mouse_in_node_rect() or mouse_in_label_rect()):
 			accept_event()
 			jump_to_source()
+	else:
+		set_link_hint(false)
 
 func _on_dragger_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
