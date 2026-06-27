@@ -86,8 +86,8 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 	filter.grab_focus()
 
 
-func check_quick_connect(obj) -> bool:
-	var ref_obj = obj
+func check_quick_connect(obj : Dictionary) -> bool:
+	var ref_obj : Dictionary = obj
 	if mm_loader.predefined_generators.has(obj.type):
 		ref_obj = mm_loader.predefined_generators[obj.type]
 	# comment and remote nodes have neither input nor output
@@ -100,7 +100,7 @@ func check_quick_connect(obj) -> bool:
 			else:
 				var found : bool = false
 				for outputs in ref_obj.shader_model.outputs.size():
-					if mm_io_types.types[ref_obj.shader_model.outputs[outputs].type].slot_type == qc_slot_type:
+					if qc_slot_type == 42 or mm_io_types.types[ref_obj.shader_model.outputs[outputs].type].slot_type == qc_slot_type:
 						found = true
 						break
 				if !found:
@@ -114,16 +114,16 @@ func check_quick_connect(obj) -> bool:
 					break
 			var found : bool = false
 			for outputs in output_ports.size():
-				if mm_io_types.types[output_ports[outputs].type].slot_type == qc_slot_type:
+				if qc_slot_type == 42 or mm_io_types.types[output_ports[outputs].type].slot_type == qc_slot_type:
 					found = true
 					break
 			if !found:
 				return false
-			if output_ports.is_empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
+			if output_ports.is_empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type and qc_slot_type != 42:
 				return false
-		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer") and qc_slot_type != 0:
+		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer") and qc_slot_type != 0 and qc_slot_type != 42:
 			return false
-		elif (ref_obj.type == "debug" or ref_obj.type == "export" or ref_obj.type == "sdf"):
+		elif (ref_obj.type == "debug" or ref_obj.type == "export" or ref_obj.type == "sdf") or (ref_obj.type == "portal" and ref_obj.io == MMGenPortal.Portal.IN):
 			return false
 	else:
 		if ref_obj.has("shader_model"):
@@ -132,7 +132,7 @@ func check_quick_connect(obj) -> bool:
 			else:
 				var found : bool = false
 				for input in ref_obj.shader_model.inputs.size():
-					if mm_io_types.types[ref_obj.shader_model.inputs[input].type].slot_type == qc_slot_type:
+					if qc_slot_type == 42 or mm_io_types.types[ref_obj.shader_model.inputs[input].type].slot_type == qc_slot_type:
 						found = true
 						break
 				if !found:
@@ -146,16 +146,16 @@ func check_quick_connect(obj) -> bool:
 					break
 			var found : bool = false
 			for input in input_ports.size():
-				if mm_io_types.types[input_ports[input].type].slot_type == qc_slot_type:
+				if qc_slot_type == 42 or mm_io_types.types[input_ports[input].type].slot_type == qc_slot_type:
 					found = true
 					break
 			if !found:
 				return false
-			if input_ports.is_empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
+			if input_ports.is_empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type and qc_slot_type != 42:
 				return false
-		elif ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "sdf":
+		elif ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "sdf" or ref_obj.type == "meshmap" or (ref_obj.type == "portal" and ref_obj.io == MMGenPortal.Portal.OUT):
 			return false
-		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer" or ref_obj.type == "export") and qc_slot_type != 0:
+		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer" or ref_obj.type == "export") and qc_slot_type != 0 and qc_slot_type != 42:
 			return false
 	return true
 
