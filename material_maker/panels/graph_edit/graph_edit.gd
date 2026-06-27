@@ -379,13 +379,16 @@ func _gui_input(event) -> void:
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
 			accept_event()
-			Input.set_custom_mouse_cursor(LASSO_CURSOR, Input.CURSOR_ARROW, LASSO_HOT_SPOT)
+			if event.relative.length() > 0.0:
+				Input.set_custom_mouse_cursor(LASSO_CURSOR, Input.CURSOR_ARROW, LASSO_HOT_SPOT)
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
 		elif (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.shift_pressed:
 			scroll_offset -= event.relative
 			accept_event()
 		else:
+			if not has_grab:
+				Input.set_custom_mouse_cursor(null)
 			lasso_points.clear()
 			queue_redraw()
 
