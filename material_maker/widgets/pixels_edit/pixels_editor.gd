@@ -12,6 +12,8 @@ var last_mouse_pos : Vector2
 signal value_changed(value : MMPixels)
 signal unhandled_event(event : InputEvent)
 
+var achievement_submitted : bool = false
+
 
 func _ready() -> void:
 	super()
@@ -84,6 +86,9 @@ func draw_pixel() -> void:
 	pixels.set_color_index(pixel_position.x, pixel_position.y, current_color)
 	queue_redraw()
 	self.value_changed.emit(pixels)
+	if not achievement_submitted:
+		mm_steam.unlock_achievement("ACH_MARGOTS_FAVORITE")
+		achievement_submitted = true
 
 func draw_pixel_line() -> void:
 	var from : Vector2 = reverse_transform_point(last_mouse_pos)
@@ -94,6 +99,9 @@ func draw_pixel_line() -> void:
 		pixels.set_color_index(pixel.x, pixel.y, current_color)
 	queue_redraw()
 	self.value_changed.emit(pixels)
+	if not achievement_submitted:
+		mm_steam.unlock_achievement("ACH_MARGOTS_FAVORITE")
+		achievement_submitted = true
 
 func _on_PixelsEditor_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:
