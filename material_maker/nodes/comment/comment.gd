@@ -184,7 +184,7 @@ func _on_ColorChooser_gui_input(event: InputEvent) -> void:
 		var content_scale_factor : float = mm_globals.ui_scale_factor()
 		$PopupSelector.get_window().content_scale_factor = content_scale_factor
 		$PopupSelector.get_window().min_size = $PopupSelector.get_window().get_contents_minimum_size() * content_scale_factor
-		$PopupSelector.get_window().position = get_global_mouse_position() * content_scale_factor
+		$PopupSelector.get_window().position = get_screen_transform() * get_local_mouse_position()
 		var color_picker : ColorPicker = $PopupSelector/PanelContainer/ColorPicker
 		$PopupSelector.about_to_popup.connect(func():
 			if mm_globals.has_config("color_picker_color_mode"):
