@@ -885,12 +885,18 @@ func get_material_node() -> MMGenMaterial:
 	return null
 
 func export_material(export_prefix, profile) -> void:
-	var exports : Array
-	for g in top_generator.get_children():
-		if g.has_method("get_export_profiles"):
-			await g.export_material(export_prefix, profile)
-		elif g.has_method("export_material"):
-			exports.append(g)
+	var exports : Array[MMGenBase]
+
+	var material_node : MMGenMaterial = get_material_node()
+	if material_node != null:
+		await material_node.export_material(export_prefix, profile)
+
+	var stack : Array[MMGenBase] = [top_generator]
+	while stack.size():
+		var node : MMGenBase = stack.pop_back()
+		if node.has_method("export_material"):
+			exports.append(node)
+		stack.append_array(node.get_children())
 
 	# Show progress for additional exports (export nodes)
 	var dim_color_rect = ColorRect.new()
