@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://d24qj0s2ime0p"]
+[gd_scene format=3 uid="uid://d24qj0s2ime0p"]
 
 [ext_resource type="Script" uid="uid://cms1wqfr4yeb5" path="res://splash_screen/splash_screen.gd" id="1_q7nii"]
 [ext_resource type="Texture2D" uid="uid://6b2hhcgw86n8" path="res://splash_screen/splash_title.svg" id="2_uba88"]
@@ -11,6 +11,8 @@ size = Vector2(760, 430)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k4lwu"]
 bg_color = Color(0.509804, 0.584314, 1, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_uba88"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dfnby"]
 shader = ExtResource("5_xhfa4")
@@ -35,27 +37,27 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("5_o00vo")
 region = Rect2(64, 32, 64, 32)
 
-[node name="Container" type="MarginContainer"]
+[node name="Container" type="MarginContainer" unique_id=1809827213]
 custom_minimum_size = Vector2(760, 430)
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_q7nii")
 
-[node name="SplashScreen" type="TextureRect" parent="."]
+[node name="SplashScreen" type="TextureRect" parent="." unique_id=1261927513]
 clip_contents = true
 custom_minimum_size = Vector2(760, 430)
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_jeaul")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="SplashScreen"]
+[node name="TextureRect" type="TextureRect" parent="SplashScreen" unique_id=547599219]
 layout_mode = 0
 offset_top = 34.0
-offset_right = 435.0
-offset_bottom = 155.0
+offset_right = 500.0
+offset_bottom = 177.0
 texture = ExtResource("2_uba88")
 
-[node name="MM" type="Label" parent="SplashScreen/TextureRect"]
+[node name="MM" type="Label" parent="SplashScreen/TextureRect" unique_id=1234938026]
 layout_mode = 0
 offset_left = 25.0
 offset_top = 21.0
@@ -66,7 +68,7 @@ theme_override_font_sizes/font_size = 54
 text = "Material Maker"
 horizontal_alignment = 2
 
-[node name="Version" type="Label" parent="SplashScreen/TextureRect/MM"]
+[node name="Version" type="Label" parent="SplashScreen/TextureRect/MM" unique_id=1348454670]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -83,7 +85,7 @@ theme_override_fonts/font = ExtResource("3_m0b76")
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="SplashScreen/TextureRect"]
+[node name="ProgressBar" type="ProgressBar" parent="SplashScreen/TextureRect" unique_id=938296942]
 layout_mode = 0
 offset_top = 128.0
 offset_right = 431.0
@@ -91,7 +93,7 @@ offset_bottom = 134.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_k4lwu")
 show_percentage = false
 
-[node name="SecretButton" type="Control" parent="SplashScreen/TextureRect"]
+[node name="SecretButton" type="Control" parent="SplashScreen/TextureRect" unique_id=778237641]
 layout_mode = 1
 anchor_right = 0.026
 anchor_bottom = 0.098
@@ -100,16 +102,44 @@ offset_top = 44.0
 offset_right = 437.0
 offset_bottom = 43.986
 
-[node name="DarkenBottom" type="ColorRect" parent="SplashScreen"]
+[node name="SteamIcon" type="TextureRect" parent="SplashScreen/TextureRect" unique_id=1334045159]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 84.0
+offset_right = 70.0
+offset_bottom = 124.0
+texture = SubResource("PlaceholderTexture2D_uba88")
+expand_mode = 1
+
+[node name="SteamMessage1" type="Label" parent="SplashScreen/TextureRect/SteamIcon" unique_id=416964983]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 1.0
+offset_right = 87.0
+offset_bottom = 24.0
+theme_override_font_sizes/font_size = 12
+
+[node name="SteamMessage2" type="Label" parent="SplashScreen/TextureRect/SteamIcon" unique_id=1514330044]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 20.0
+offset_right = 87.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 12
+
+[node name="DarkenBottom" type="ColorRect" parent="SplashScreen" unique_id=543602044]
 material = SubResource("ShaderMaterial_dfnby")
 custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 331.0
 offset_bottom = 1.0
 
-[node name="URL" type="Label" parent="SplashScreen"]
+[node name="URL" type="Label" parent="SplashScreen" unique_id=710870014]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
@@ -121,20 +151,20 @@ mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 11
 text = "materialmaker.org"
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=986076381]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=383891881]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 alignment = 2
 
-[node name="Title" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer" unique_id=736839233]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -143,11 +173,11 @@ theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 18
 text = "Title"
 
-[node name="Control" type="Control" parent="MarginContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer" unique_id=863954087]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
-[node name="Author" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Author" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1545161873]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 0
@@ -158,14 +188,14 @@ theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 18
 text = "Author"
 
-[node name="BackgroundSelect" type="Control" parent="."]
+[node name="BackgroundSelect" type="Control" parent="." unique_id=877124128]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Previous" type="TextureButton" parent="BackgroundSelect"]
+[node name="Previous" type="TextureButton" parent="BackgroundSelect" unique_id=1783935934]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 368.0
 offset_top = 65.0
 offset_right = 400.0
@@ -177,9 +207,9 @@ ignore_texture_size = true
 stretch_mode = 0
 flip_h = true
 
-[node name="Next" type="TextureButton" parent="BackgroundSelect"]
+[node name="Next" type="TextureButton" parent="BackgroundSelect" unique_id=248418241]
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
 offset_left = 456.0
 offset_top = 67.0
 offset_right = 488.0
@@ -190,7 +220,7 @@ texture_normal = SubResource("AtlasTexture_rho5p")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="RightEye" type="TextureRect" parent="BackgroundSelect"]
+[node name="RightEye" type="TextureRect" parent="BackgroundSelect" unique_id=71369791]
 layout_mode = 0
 offset_left = 410.0
 offset_top = 86.0
@@ -200,7 +230,7 @@ scale = Vector2(0.185, 0.185)
 mouse_filter = 2
 texture = SubResource("AtlasTexture_rcyda")
 
-[node name="LeftEye" type="TextureRect" parent="BackgroundSelect"]
+[node name="LeftEye" type="TextureRect" parent="BackgroundSelect" unique_id=2061488833]
 layout_mode = 0
 offset_left = 439.0
 offset_top = 83.0
@@ -210,7 +240,7 @@ scale = Vector2(0.185, 0.185)
 mouse_filter = 2
 texture = SubResource("AtlasTexture_uxt7b")
 
-[node name="Mouth" type="TextureRect" parent="BackgroundSelect"]
+[node name="Mouth" type="TextureRect" parent="BackgroundSelect" unique_id=1266715268]
 layout_mode = 0
 offset_left = 421.0
 offset_top = 99.0

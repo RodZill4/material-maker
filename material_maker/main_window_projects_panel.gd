@@ -49,6 +49,7 @@ func show_background_preview_2d(button_pressed):
 	preview_2d_background.visible = button_pressed
 	if button_pressed:
 		preview_3d_background_button.button_pressed = false
+		mm_steam.unlock_achievement("ACH_BACKGROUND_NOISE")
 
 
 func show_background_preview_3d(button_pressed):
@@ -57,6 +58,7 @@ func show_background_preview_3d(button_pressed):
 	%ControlView.visible = button_pressed
 	if button_pressed:
 		preview_2d_background_button.button_pressed = false
+		mm_steam.unlock_achievement("ACH_BACKGROUND_NOISE")
 
 
 func _on_projects_no_more_tabs():
