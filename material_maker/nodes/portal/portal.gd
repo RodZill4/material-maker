@@ -10,6 +10,7 @@ var is_editing := false
 var syncing_io := false
 
 var is_navigating_source : bool = false
+const label_y_offset : float = 35.0
 
 func _ready() -> void:
 	super._ready()
@@ -24,7 +25,6 @@ func update_node() -> void:
 
 func _draw() -> void:
 	const label_font_size : int = 16
-	const label_y_offset : int = 40
 
 	# in/out arc decoration
 	var offset : float = PI if is_portal_out() else 0.0
@@ -33,10 +33,16 @@ func _draw() -> void:
 	# label
 	var label_pos := size * 0.5
 	var label_color : Color = generator.color
+	var label_draw_pos : Vector2 = label_pos
+	var label_size : Vector2 = LABEL_FONT.get_string_size(
+			get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
 
-	var label_size = LABEL_FONT.get_string_size(get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size)
-	var label_draw_pos := label_pos - Vector2(label_size.x * 0.5, label_y_offset)
 	if not is_editing:
+		if generator.horizontal_label:
+			label_draw_pos += Vector2(31.0 if is_portal_in() else (-label_size.x - 31.0), 5.0)
+		else:
+			label_draw_pos -= Vector2(label_size.x * 0.5, label_y_offset)
+
 		draw_string_outline(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
 		draw_string(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
 
@@ -122,15 +128,24 @@ func set_portal_tip_text() -> void:
 		mm_globals.set_tip_text(tr(editing_tip if is_editing else normal_tip), 1.0, 2)
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventKey:
+	if event is InputEventKey and event.pressed:
 		match event.get_keycode_with_modifiers():
 			KEY_F2, KEY_ENTER:
-				if event.pressed and selected and not is_editing:
+				if selected and not is_editing:
 					setup_portal_edit()
 			KEY_ALT:
 				set_link_hint(event.pressed)
+			KEY_R:
+				if selected:
+					generator.horizontal_label = !generator.horizontal_label
+					queue_redraw()
 	elif event is InputEventMouseMotion:
-		set_portal_tip_text()
+		const tip : String = "#LMB: Select node, #LMB#LMB/F2/Enter: Rename link, R: Toggle label position"
+		if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
+			mm_globals.set_tip_text(tr(tip), 1.0, 2)
+		elif %Dragger.get_rect().has_point(get_local_mouse_position()):
+			mm_globals.set_tip_text(
+					tr("Enter: Rename link, Ctrl/Cmd+Enter: Batch rename links" if is_editing else tip))
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if event.alt_pressed and (mouse_in_node_rect() or mouse_in_label_rect()):
 			accept_event()
@@ -300,14 +315,19 @@ func replace_links(new_link : String, from_link : String) -> void:
 				p.on_parameter_changed("link", new_link)
 
 func edit_box_set_position(edit : LineEdit) -> void:
-	const y_offset : int = 61
+	var y_offset : float = label_y_offset + 21.0
 	var g : MMGraphEdit = get_parent()
 	if g == null:
 		edit.queue_free()
 		return
 	edit.scale = Vector2.ONE * g.zoom
 	edit.position = graph_node_center(self, g)
-	edit.position -= Vector2(edit.size.x * 0.5 - 0.5, y_offset) * g.zoom
+
+	if generator.horizontal_label:
+		edit.alignment = HORIZONTAL_ALIGNMENT_LEFT if is_portal_in() else HORIZONTAL_ALIGNMENT_RIGHT
+		edit.position -= Vector2(-21.0 if is_portal_in() else edit.size.x + 21.0, edit.size.y * 0.5) * g.zoom
+	else:
+		edit.position -= Vector2(edit.size.x * 0.5 - 0.5, y_offset) * g.zoom
 
 func setup_portal_edit() -> void:
 	if is_editing:
