@@ -111,11 +111,11 @@ func jump_to_source() -> void:
 		graph.scroll_offset = (source_portal.position_offset
 			+ 0.5 * source_portal.size) * graph.zoom - 0.5 * graph.size
 
-	var tween : Tween = get_tree().create_tween()
-	tween.tween_property(source_portal, "modulate", Color(1.5, 1.5, 1.5, 1.0), 0.2).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_property(source_portal, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_CUBIC).set_delay(0.5)
-	source_portal.set_deferred("selected", true)
-	await tween.finished
+		var tween : Tween = get_tree().create_tween()
+		tween.tween_property(source_portal, "modulate", Color(1.5, 1.5, 1.5, 1.0), 0.2).set_trans(Tween.TRANS_CUBIC)
+		tween.tween_property(source_portal, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_CUBIC).set_delay(0.5)
+		source_portal.set_deferred("selected", true)
+		await tween.finished
 	is_navigating_source = false
 
 func set_portal_tip_text() -> void:
@@ -150,6 +150,8 @@ func _input(event : InputEvent) -> void:
 		if event.alt_pressed and (mouse_in_node_rect() or mouse_in_label_rect()):
 			accept_event()
 			jump_to_source()
+	else:
+		set_link_hint(false)
 
 func _on_dragger_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
