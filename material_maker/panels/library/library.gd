@@ -240,6 +240,7 @@ func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null)
 						break
 					image.set_pixel(x, y, Color(0, 0, 0, 0))
 			print(get_icon_name(get_item_path(item)))
+			@warning_ignore("narrowing_conversion")
 			image.resize(image.get_size().x/csf, image.get_size().y/csf, Image.INTERPOLATE_LANCZOS)
 			image.save_png("res://material_maker/doc/images/node_"+get_icon_name(get_item_path(item))+".png")
 			for n in new_nodes:

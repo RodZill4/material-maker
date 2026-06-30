@@ -33,7 +33,7 @@ func add_node(node_data) -> void:
 	current_graph.undoredo.start_group()
 	var nodes : Array = await current_graph.create_nodes(node_data, insert_position)
 	if not nodes.is_empty():
-		var node : GraphNode = nodes[0] as GraphNode
+		var node : GraphNode = nodes[0]
 		if node != null:
 			if qc_node != "": # dragged from port
 				var port_position : Vector2
@@ -195,7 +195,7 @@ func _unhandled_input(event) -> void:
 
 
 func _on_filter_gui_input(event: InputEvent) -> void:
-	if event.is_action("ui_down"):
+	if event.is_action("ui_down") and %List.item_count:
 		%List.grab_focus()
 		%List.select(1)
 
