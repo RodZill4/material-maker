@@ -86,6 +86,7 @@ func _exit_tree() -> void:
 func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.double_click and not event.alt_pressed:
 		setup_portal_edit()
+		accept_event()
 
 func mouse_in_node_rect() -> bool:
 	return Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position())
@@ -128,17 +129,18 @@ func set_portal_tip_text() -> void:
 		mm_globals.set_tip_text(tr(editing_tip if is_editing else normal_tip), 1.0, 2)
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
+	if event is InputEventKey and event.pressed and selected:
 		match event.get_keycode_with_modifiers():
 			KEY_F2, KEY_ENTER:
-				if selected and not is_editing:
+				if not is_editing:
+					accept_event()
 					setup_portal_edit()
-			KEY_ALT:
-				set_link_hint(event.pressed)
+			KEY_UP, KEY_DOWN:
+				if is_editing:
+					accept_event()
 			KEY_R:
-				if selected:
-					generator.horizontal_label = !generator.horizontal_label
-					queue_redraw()
+				generator.horizontal_label = !generator.horizontal_label
+				queue_redraw()
 	elif event is InputEventMouseMotion:
 		const tip : String = "#LMB: Select node, #LMB#LMB/F2/Enter: Rename link, R: Toggle label position"
 		if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
@@ -350,33 +352,55 @@ func setup_portal_edit() -> void:
 	position_offset_changed.connect(edit_box_set_position.bind(edit))
 	graph.draw.connect(edit_box_set_position.bind(edit))
 
-	edit.modulate = link_collision_warning_color()
+	var completion_panel : PortalCompletionPanel
+	if is_portal_out():
+		completion_panel = preload("res://material_maker/nodes/portal/completion.tscn").instantiate()
+		completion_panel.portal_edit = edit
+		completion_panel.selection_updated.connect(edit_box_set_position.bind(edit))
+		completion_panel.visibility_changed.connect(
+			func() -> void:
+				if not generator.horizontal_label:
+					visible = not completion_panel.visible)
+		graph.add_child(completion_panel)
 
+	edit.modulate = link_collision_warning_color(get_link())
 	edit.text_submitted.connect(
 		func(new_text : String) -> void:
 			if not is_editing:
 				return
+
 			var new_link := new_text.strip_edges()
-			if not new_link.is_empty() and is_link_unique(new_link):
-				graph.undoredo.start_group()
-				on_parameter_changed("link", new_link)
-				add_link_undoredo(old_link, new_link)
-				if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
-					replace_links(new_link, old_link)
-				graph.undoredo.end_group()
+			if not new_link.is_empty():
+				if is_link_unique(new_link):
+					graph.undoredo.start_group()
+					on_parameter_changed("link", new_link)
+					add_link_undoredo(old_link, new_link)
+					if Input.is_key_pressed(KEY_CTRL) or Input.is_key_pressed(KEY_META):
+						replace_links(new_link, old_link)
+					graph.undoredo.end_group()
+				else:
+					on_parameter_changed("link", old_link)
+			else:
+				edit.text = old_link
 			is_editing = false
 			generator.editable = false
 			edit.reset_size()
-			edit.queue_free())
+			edit.queue_free()
+			graph.grab_focus()
+			selected = true
+			queue_redraw())
 	edit.text_changed.connect(
 		func(new_text : String) -> void:
 			var new_link : String = new_text.strip_edges()
 			if not new_link.is_empty():
 				edit.modulate = link_collision_warning_color(new_link)
+			if completion_panel:
+				completion_panel.request_completion(new_link)
 			edit_box_set_position(edit))
 	edit.focus_exited.connect(func(): edit.text_submitted.emit(edit.text))
 	edit.tree_exiting.connect(
 		func() -> void:
+			show()
 			position_offset_changed.disconnect(edit_box_set_position)
 			graph.draw.disconnect(edit_box_set_position))
 
