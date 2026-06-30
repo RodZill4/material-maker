@@ -1,17 +1,11 @@
 extends FileDialog
 
-var _content_scale_factor: float = 1.0
-
 signal return_paths(path_list)
 
 var favorites_list : ItemList = null
 var recents_list : ItemList = null
 
 var left_panel : VSplitContainer
-
-func _context_menu_about_to_popup(context_menu : PopupMenu):
-	context_menu.position =  get_window().position + Vector2i(
-			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
 	load_fav_recents()
@@ -24,8 +18,7 @@ func _ready() -> void:
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
 	content_scale_factor = mm_globals.ui_scale_factor()
 
-	min_size = _content_scale_factor * get_contents_minimum_size()
-	min_size = Vector2i(750, 500) * int(_content_scale_factor)
+	min_size = get_contents_minimum_size().max(Vector2i(750, 500)) * content_scale_factor
 
 	# setup left panel(fav/recents) gui input signals
 	for n in get_children(true):
