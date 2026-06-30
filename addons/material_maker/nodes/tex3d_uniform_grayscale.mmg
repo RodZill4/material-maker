@@ -1,0 +1,42 @@
+{
+	"name": "tex3d_uniform_grayscale",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"color": 0.5
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [],
+		"instance": "",
+		"longdesc": "Draws a uniform grayscale 3D texture",
+		"name": "Grayscale Uniform",
+		"outputs": [
+			{
+				"longdesc": "A uniform grayscale 3D texture of the selected value",
+				"shortdesc": "Output",
+				"tex3d_gs": "$(color)",
+				"type": "tex3d_gs"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "",
+				"longdesc": "The value of the uniform grayscale image",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "color",
+				"shortdesc": "Value",
+				"step": 0.01,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

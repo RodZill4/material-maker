@@ -1,0 +1,345 @@
+{
+	"generic_size": 1,
+	"name": "tex3d_blend_v2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount1": 0.5,
+		"blend_type1": 0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec3 $(name_uv)_b = $b($uv);",
+			"vec3 $(name_uv)_l;",
+			"vec3 $(name_uv)_a;",
+			"#for",
+			"$(name_uv)_l = $l#($uv);",
+			"$(name_uv)_a = $amount#*$a#($uv);",
+			"$(name_uv)_b = blend3d_$blend_type#($uv.xyz, $(name_uv)_l.rgb, $(name_uv)_b.rgb, $amount#*dot($a#($uv), vec3(1.0))/3.0 );",
+			"#end",
+			""
+		],
+		"global": [
+			"vec3 blend3d_normal(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*c1 + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_multiply(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*c1*c2 + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_screen(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*(1.0-(1.0-c1)*(1.0-c2)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend3d_overlay_f(float c1, float c2) {",
+			"\treturn (c1 < 0.5) ? (2.0*c1*c2) : (1.0-2.0*(1.0-c1)*(1.0-c2));",
+			"}",
+			"",
+			"vec3 blend3d_overlay(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend3d_overlay_f(c1.x, c2.x), blend3d_overlay_f(c1.y, c2.y), blend3d_overlay_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_hard_light(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*0.5*(c1*c2+blend3d_overlay(c1, c2, 1.0)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend3d_soft_light_f(float c1, float c2) {",
+			"\treturn (c2 < 0.5) ? (2.0*c1*c2+c1*c1*(1.0-2.0*c2)) : 2.0*c1*(1.0-c2)+sqrt(c1)*(2.0*c2-1.0);",
+			"}",
+			"",
+			"vec3 blend3d_soft_light(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend3d_soft_light_f(c1.x, c2.x), blend3d_soft_light_f(c1.y, c2.y), blend3d_soft_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend3d_burn_f(float c1, float c2) {",
+			"\treturn (c1==0.0)?c1:max((1.0-((1.0-c2)/c1)),0.0);",
+			"}",
+			"",
+			"vec3 blend3d_burn(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend3d_burn_f(c1.x, c2.x), blend3d_burn_f(c1.y, c2.y), blend3d_burn_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"float blend3d_dodge_f(float c1, float c2) {",
+			"\treturn (c1==1.0)?c1:min(c2/(1.0-c1),1.0);",
+			"}",
+			"",
+			"vec3 blend3d_dodge(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend3d_dodge_f(c1.x, c2.x), blend3d_dodge_f(c1.y, c2.y), blend3d_dodge_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_lighten(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*max(c1, c2) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_darken(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*min(c1, c2) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_difference(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*clamp(c2-c1, vec3(0.0), vec3(1.0)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_dissolve(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat h = fract(sin(dot(uv,vec3(127.1,311.7, 74.7)))*43758.5453123);",
+			"\tif (h < opacity) {",
+			"\t\treturn c1;",
+			"\t} else {",
+			"\t\treturn c2;",
+			"\t}",
+			"}",
+			"",
+			"vec3 blend3d_additive(vec3 uv, vec3 c1, vec3 c2, float oppacity) {",
+			"\treturn c2 + c1 * oppacity;",
+			"}",
+			"",
+			"vec3 blend3d_addsub(vec3 uv, vec3 c1, vec3 c2, float oppacity) {",
+			"\treturn c2 + (c1 - .5) * 2.0 * oppacity;",
+			"}",
+			"",
+			"vec3 blend3d_linear_light(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"return opacity*vec3(blend_linear_light_f(c1.x, c2.x), blend_linear_light_f(c1.y, c2.y), blend_linear_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_vivid_light(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend_vivid_light_f(c1.x, c2.x), blend_vivid_light_f(c1.y, c2.y), blend_vivid_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_pin_light(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend_pin_light_f(c1.x, c2.x), blend_pin_light_f(c1.y, c2.y), blend_pin_light_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_hard_mix(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\t\treturn opacity*vec3(blend_hard_mix_f(c1.x, c2.x), blend_hard_mix_f(c1.y, c2.y), blend_hard_mix_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_exclusion(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\treturn opacity*vec3(blend_exclusion_f(c1.x, c2.x), blend_exclusion_f(c1.y, c2.y), blend_exclusion_f(c1.z, c2.z)) + (1.0-opacity)*c2;",
+			"}",
+			"",
+			"vec3 blend3d_hue(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tvec3 outcol = c2;",
+			"",
+			"\tvec3 hsv, hsv2, tmp;",
+			"\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\tif (hsv2.y != 0.0) {",
+			"\t\thsv = rgb_to_hsv(outcol);",
+			"\t\thsv.x = hsv2.x;",
+			"\t\ttmp = hsv_to_rgb(hsv);",
+			"\t\toutcol = mix(outcol, tmp, opacity);",
+			"\t}",
+			"\treturn outcol;",
+			"}",
+			"",
+			"vec3 blend3d_saturation(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat facm = 1.0 - opacity;",
+			"",
+			"\tvec3 outcol = c2;",
+			"\tvec3 hsv, hsv2;",
+			"",
+			"\thsv = rgb_to_hsv(outcol);",
+			"",
+			"\tif (hsv.y != 0.0) {",
+			"\t\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\t\thsv.y = facm * hsv.y + opacity * hsv2.y;",
+			"\t\toutcol = hsv_to_rgb(hsv);",
+			"\t}",
+			"\treturn outcol;",
+			"}",
+			"",
+			"vec3 blend3d_color(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat facm = 1.0 - opacity;",
+			"",
+			"\tvec3 outcol = c2;",
+			"",
+			"\tvec3 hsv, hsv2, tmp;",
+			"\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\tif (hsv2.y != 0.0) {",
+			"\t\thsv = rgb_to_hsv(outcol);",
+			"\t\thsv.x = hsv2.x;",
+			"\t\thsv.y = hsv2.y;",
+			"\t\ttmp = hsv_to_rgb(hsv);",
+			"",
+			"\t\toutcol = mix(outcol, tmp, opacity);",
+			"\t}",
+			"\treturn outcol;",
+			"}",
+			"",
+			"vec3 blend3d_value(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
+			"\tfloat facm = 1.0 - opacity;",
+			"",
+			"\tvec3 hsv, hsv2;",
+			"\thsv = rgb_to_hsv(c2);",
+			"\thsv2 = rgb_to_hsv(c1);",
+			"",
+			"\thsv.z = facm * hsv.z + opacity * hsv2.z;",
+			"\treturn hsv_to_rgb(hsv);",
+			"}",
+			""
+		],
+		"includes": [
+			"blend2"
+		],
+		"inputs": [
+			{
+				"default": "vec3($uv.x, 1.0, 1.0)",
+				"label": "Background",
+				"longdesc": "The background input",
+				"name": "b",
+				"shortdesc": "Background",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(1.0, $uv.y, 1.0)",
+				"label": "Layer#",
+				"longdesc": "A layer input",
+				"name": "l#",
+				"shortdesc": "Layer#",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3(1.0)",
+				"label": "Opacity#",
+				"longdesc": "The optional opacity mask",
+				"name": "a#",
+				"shortdesc": "Mask#",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Blends its 3D texture inputs, using an optional mask",
+		"name": "TEX3D Blend",
+		"outputs": [
+			{
+				"longdesc": "The 3D texture generated by the blend operation",
+				"shortdesc": "Output",
+				"tex3d": "$(name_uv)_b",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 22,
+				"label": "2:",
+				"longdesc": "The algorithm used to blend the inputs",
+				"name": "blend_type#",
+				"shortdesc": "Blend mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Normal",
+						"value": "normal"
+					},
+					{
+						"name": "Dissolve",
+						"value": "dissolve"
+					},
+					{
+						"name": "Multiply",
+						"value": "multiply"
+					},
+					{
+						"name": "Screen",
+						"value": "screen"
+					},
+					{
+						"name": "Overlay",
+						"value": "overlay"
+					},
+					{
+						"name": "Hard Light",
+						"value": "hard_light"
+					},
+					{
+						"name": "Soft Light",
+						"value": "soft_light"
+					},
+					{
+						"name": "Burn",
+						"value": "burn"
+					},
+					{
+						"name": "Dodge",
+						"value": "dodge"
+					},
+					{
+						"name": "Lighten",
+						"value": "lighten"
+					},
+					{
+						"name": "Darken",
+						"value": "darken"
+					},
+					{
+						"name": "Difference",
+						"value": "difference"
+					},
+					{
+						"name": "Additive",
+						"value": "additive"
+					},
+					{
+						"name": "AddSub",
+						"value": "addsub"
+					},
+					{
+						"name": "Linear Light",
+						"value": "linear_light"
+					},
+					{
+						"name": "Vivid Light",
+						"value": "vivid_light"
+					},
+					{
+						"name": "Pin Light",
+						"value": "pin_light"
+					},
+					{
+						"name": "Hard Mix",
+						"value": "hard_mix"
+					},
+					{
+						"name": "Exclusion",
+						"value": "exclusion"
+					},
+					{
+						"name": "Hue",
+						"value": "hue"
+					},
+					{
+						"name": "Saturation",
+						"value": "saturation"
+					},
+					{
+						"name": "Color",
+						"value": "color"
+					},
+					{
+						"name": "Value",
+						"value": "value"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "3:",
+				"longdesc": "The opacity of the blend operation",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "amount#",
+				"shortdesc": "Opacity",
+				"step": 0.01,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tex3D Blend"
+	},
+	"type": "shader"
+}

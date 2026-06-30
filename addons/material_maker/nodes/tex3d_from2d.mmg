@@ -5,7 +5,7 @@
 		"y": 0
 	},
 	"parameters": {
-
+		"axis": 2
 	},
 	"seed_int": 0,
 	"shader_model": {
@@ -28,12 +28,33 @@
 			{
 				"longdesc": "The generated 3D texture",
 				"shortdesc": "Output",
-				"tex3d": "$in($uv.xy+vec2(0.5))",
+				"tex3d": "$in($uv$axis+vec2(0.5))",
 				"type": "tex3d"
 			}
 		],
 		"parameters": [
-
+			{
+				"default": 0,
+				"label": "Axis",
+				"longdesc": "Target axis to use when projecting the 2d texture",
+				"name": "axis",
+				"shortdesc": "Projection Axis",
+				"type": "enum",
+				"values": [
+					{
+						"name": "X",
+						"value": ".yz"
+					},
+					{
+						"name": "Y",
+						"value": ".xz"
+					},
+					{
+						"name": "Z",
+						"value": ".xy"
+					}
+				]
+			}
 		],
 		"shortdesc": "Tex3D From 2D"
 	},
