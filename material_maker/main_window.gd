@@ -48,6 +48,9 @@ const RECENT_FILES_COUNT = 15
 const MENU_QUICK_EXPORT : int = 1000
 const RECENTS_MENU_CLEAR = 1001
 
+const MENU_SAVE_PRESET : int = 1002
+const MENU_MANAGE_PRESETS : int = 1003
+
 const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
@@ -98,8 +101,10 @@ const MENU : Array[Dictionary] = [
 	{ menu="View/Center view", command="view_center", shortcut="C" },
 	{ menu="View/Reset zoom", command="view_reset_zoom", shortcut="Control+0" },
 	{ menu="View/-" },
-	# { menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Control+Space" },
+	 { menu="View/Show or Hide side panels", command="toggle_side_panels", shortcut="Alt+Control+Space" },
 	{ menu="View/Panels", submenu="show_panels" },
+	{ menu="View/Presets", submenu="panels_preset" },
+	{ menu="View/Reset Panels", command="view_reset_panels" },
 
 	{ menu="Tools/Create", submenu="create" },
 	{ menu="Tools/Create group", command="create_subgraph", shortcut="Control+G" },
@@ -131,7 +136,6 @@ func _ready() -> void:
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
-	get_window().gui_embed_subwindows = false
 
 	get_window().close_requested.connect(self.on_close_requested)
 
@@ -338,6 +342,9 @@ func on_config_changed() -> void:
 			if c.has_method("update"):
 				c.update()
 
+	if not get_window().gui_embed_subwindows:
+		get_window().gui_embed_subwindows = mm_globals.get_config("ui_single_window_mode")
+
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
 
@@ -446,12 +453,15 @@ func quick_export() -> void:
 	var exports : Array
 	var has_unconnected_exports : bool = false
 
-	for g in graph_edit.top_generator.get_children():
-		if g.has_method("export_material") and !g.has_method("get_export_profiles"):
-			if g.get_source(0) != null:
-				exports.append(g)
+	var stack : Array[MMGenBase] = [graph_edit.top_generator]
+	while stack.size():
+		var node : MMGenBase = stack.pop_back()
+		if node.has_method("export_material") and not node.has_method("get_export_profiles"):
+			if node.get_source(0) != null:
+				exports.append(node)
 			else:
 				has_unconnected_exports = true
+		stack.append_array(node.get_children())
 
 	# No export nodes
 	if not exports.size():
@@ -649,9 +659,60 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
 	menu.connect_id_pressed(self._on_ShowPanels_id_pressed)
 
+func create_menu_panels_preset(menu : MMMenuManager.MenuBase) -> void:
+	menu.clear()
+	menu.add_item("Save Preset", MENU_SAVE_PRESET)
+	menu.add_item("Manage Presets", MENU_MANAGE_PRESETS)
+	if not layout.presets.is_empty():
+		menu.add_separator()
+		for id in layout.presets.size():
+			menu.add_item(layout.presets[id].name, id)
+	menu.connect_id_pressed(self._on_PanelsPreset_id_pressed)
+
 func _on_ShowPanels_id_pressed(id) -> void:
 	var panel : String = layout.get_panel_list()[id]
 	layout.set_panel_visible(panel, not layout.is_panel_visible(panel))
+	update_menus()
+
+func _on_PanelsPreset_id_pressed(id : int) -> void:
+	match id:
+		MENU_MANAGE_PRESETS:
+			if get_node_or_null("PanelPresetsDialog"):
+				return
+			var dialog : Window = preload("res://material_maker/windows/panels_presets_dialog/panels_presets_dialog.tscn").instantiate()
+			add_child(dialog)
+			await dialog.edit_presets(layout.presets)
+		MENU_SAVE_PRESET:
+			var dialog : Window = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
+			add_child(dialog)
+			var status : Dictionary = await dialog.enter_text("Save Preset",
+					"Enter a name for the new preset", "")
+			if status.ok:
+				var preset_name : String = status.text.strip_edges()
+				if preset_name.is_empty():
+					accept_dialog("Preset name cannot be empty.")
+				else:
+					var is_unique_preset : bool = true
+					var existing_preset : Dictionary
+					if not layout.presets.is_empty():
+						for preset in layout.presets:
+							if preset.name.to_lower() == preset_name.to_lower():
+								is_unique_preset = false
+								existing_preset = preset
+								break
+					if not is_unique_preset:
+						var replace_status : String = await accept_dialog(
+							"Preset \"%s\" already exists. Do you want to replace it?" % [preset_name], true)
+						if replace_status == "ok":
+							existing_preset.preset = $VBoxContainer/Layout/FlexibleLayout.serialize()
+					else:
+						var new_preset : Dictionary = {
+							"name": preset_name,
+							"preset": $VBoxContainer/Layout/FlexibleLayout.serialize()
+						}
+						layout.presets.push_back(new_preset)
+		_:
+			$VBoxContainer/Layout/FlexibleLayout.init(layout.presets[id].preset)
 	update_menus()
 
 func create_menu_create(menu : MMMenuManager.MenuBase) -> void:
@@ -997,7 +1058,7 @@ func edit_save_selection() -> void:
 
 func edit_preferences() -> void:
 	var dialog = load("res://material_maker/windows/preferences/preferences.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.content_scale_factor = mm_globals.ui_scale_factor()
 	dialog.edit_preferences(mm_globals.config)
 
 func edit_align_start() -> void:
@@ -1036,6 +1097,9 @@ func view_center() -> void:
 func view_reset_zoom() -> void:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
 	graph_edit.zoom = 1
+
+func view_reset_panels() -> void:
+	$VBoxContainer/Layout.reset_panels()
 
 func toggle_side_panels() -> void:
 	$VBoxContainer/Layout.toggle_side_panels()
@@ -1092,7 +1156,7 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true, upd
 		current_item_name = library.get_selected_item_name()
 	if should_ask_item_name:
 		var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-		dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		dialog.content_scale_factor = mm_globals.ui_scale_factor()
 		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 		add_child(dialog)
 		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
@@ -1119,7 +1183,7 @@ func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 
 func add_brush_to_library(index) -> void:
 	var dialog = preload("res://material_maker/windows/line_dialog/line_dialog.tscn").instantiate()
-	dialog.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+	dialog.content_scale_factor = mm_globals.ui_scale_factor()
 	dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 	add_child(dialog)
 	var status = await dialog.enter_text("New library element", "Select a name for the new library element", brushes.get_selected_item_name())
@@ -1331,7 +1395,7 @@ func generate_graph_screenshot():
 	graph_edit.zoom = 1
 	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
-	var scale_factor : float = get_window().content_scale_factor
+	var scale_factor : float = mm_globals.ui_scale_factor()
 	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(25, 90))
 	graph_edit_rect = Rect2(scale_factor*graph_edit_rect.position, scale_factor*graph_edit_rect.size)
 	var graph_rect = null

@@ -24,9 +24,9 @@ on:
         default: "true"
 
 env:
-  GODOT_VERSION: 4.6.2
+  GODOT_VERSION: 4.7
   GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.6.2-stable
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.7-stable
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_6
 
@@ -186,7 +186,7 @@ jobs:
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         run: |
-          brew update && brew install imagemagick@6
+          brew install imagemagick
           cp ./.github/workflows/create-dmg-bg.sh .
           chmod +x create-dmg-bg.sh
           ./create-dmg-bg.sh ./splash_screen/backgrounds/pavel_oliva_vintage_luggage.png ./bg.png

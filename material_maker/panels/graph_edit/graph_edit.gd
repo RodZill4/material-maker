@@ -24,6 +24,7 @@ var need_save_crash_recovery : bool = false
 var top_generator = null
 var generator = null
 
+var grab_accumulation : Dictionary[String, Vector2]
 @onready var grab_icon := preload("res://material_maker/icons/grab.svg")
 var has_grab : bool = false:
 	set(v):
@@ -34,6 +35,7 @@ var has_grab : bool = false:
 					grab_icon.get_size() * 0.5)
 		else:
 			Input.set_custom_mouse_cursor(null)
+			grab_accumulation.clear()
 
 const PREVIEW_COUNT = 2
 var current_preview : Array = [ null, null ]
@@ -57,6 +59,8 @@ var drag_cut_line : PackedVector2Array
 var valid_drag_cut_entry: bool = false
 const CURSOR_HOT_SPOT : Vector2 = Vector2(1.02, 17.34)
 
+const LASSO_CURSOR : DPITexture = preload("res://material_maker/icons/cross.svg")
+const LASSO_HOT_SPOT : Vector2 = Vector2(8.8, 8.8)
 var lasso_points : PackedVector2Array
 
 var is_dragging_connection : bool = false:
@@ -77,6 +81,12 @@ func _ready() -> void:
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
 	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
+
+	# workaround for godot issue 120454
+	for node in get_children(true):
+		if "GraphEditFilter" in node.name:
+			node.get_child(0).use_parent_material = false
+			break
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -135,15 +145,29 @@ func process_port_click(pressed : bool):
 						return
 
 
-func _input(event: InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	# Handle node grab
 	if has_grab:
 		var selected_nodes := get_selected_nodes()
 		if event is InputEventMouseMotion:
-			for node in selected_nodes:
+			for node : GraphElement in selected_nodes:
 				if node is not MMGraphComment:
 					node.move_to_front()
-				node.position_offset += event.relative / zoom
+
+				if snapping_enabled != event.is_command_or_control_pressed():
+					if not grab_accumulation.has(node.name):
+						grab_accumulation[node.name] = Vector2.ZERO
+					grab_accumulation[node.name] += event.relative / zoom
+
+					var step : Vector2 = (grab_accumulation[node.name] / snapping_distance
+							+ Vector2(0.5, 0.5)).floor()
+					if not step.is_zero_approx():
+						node.position_offset = node.position_offset.snappedf(snapping_distance)
+						node.position_offset += step * snapping_distance
+						grab_accumulation[node.name] -= step * snapping_distance
+				else:
+					node.position_offset += event.relative / zoom
+
 		elif (event is InputEventMouseButton
 				and event.button_index == MOUSE_BUTTON_LEFT):
 			accept_event()
@@ -156,6 +180,14 @@ func _input(event: InputEvent) -> void:
 					if get_nodes_under_mouse().is_empty():
 						node.set_deferred("selected", true)
 
+	# Grab graph focus for quick bar shortcuts to work properly
+	# (i.e. returning to graph after interacting with other panels)
+	if Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()) and event is InputEventKey:
+		var focus_owner : Control = get_viewport().gui_get_focus_owner()
+		if focus_owner is LineEdit or focus_owner is TextEdit:
+			return
+		if event.unicode >= KEY_0 and event.unicode <= KEY_9 and event.pressed:
+			grab_focus()
 
 func _gui_input(event) -> void:
 	if (
@@ -202,6 +234,7 @@ func _gui_input(event) -> void:
 				for point in node_points:
 					node.selected = node.selected or Geometry2D.is_point_in_polygon(point,  lasso_points)
 		lasso_points.clear()
+		Input.set_custom_mouse_cursor(null)
 		queue_redraw()
 	elif event.is_action_pressed("ui_hierarchy_up"):
 		on_ButtonUp_pressed()
@@ -299,6 +332,9 @@ func _gui_input(event) -> void:
 						has_grab = true
 				KEY_ESCAPE:
 					has_grab = false
+				_ when event.unicode >= KEY_0 and event.unicode <= KEY_9:
+					if get_nodes_under_mouse().is_empty():
+						quick_bar_shortcuts(event)
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -326,6 +362,9 @@ func _gui_input(event) -> void:
 			if rect.has_point(get_global_mouse_position()):
 				mm_globals.set_tip_text("Space/#RMB: Nodes menu, Arrow keys: Pan, Mouse wheel: Zoom", 3)
 
+		if get_closest_connection_at_point(get_local_mouse_position()):
+			mm_globals.set_tip_text("Ctrl + #RMB: Cut connections, Shift + #RMB: Create reroute, Ctrl/Cmd + Shift + #RMB: Create aperture pair")
+
 		if ((event.button_mask & MOUSE_BUTTON_MASK_RIGHT) != 0 and valid_drag_cut_entry
 				and event.relative.length() > 1.0):
 			if event.ctrl_pressed:
@@ -340,11 +379,18 @@ func _gui_input(event) -> void:
 		# lasso selection
 		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.alt_pressed:
 			accept_event()
+			if event.relative.length() > 0.0:
+				Input.set_custom_mouse_cursor(LASSO_CURSOR, Input.CURSOR_ARROW, LASSO_HOT_SPOT)
 			lasso_points.append(get_local_mouse_position())
 			queue_redraw()
 		elif (event.button_mask & MOUSE_BUTTON_MASK_LEFT) != 0 and event.shift_pressed:
 			scroll_offset -= event.relative
 			accept_event()
+		else:
+			if not has_grab:
+				Input.set_custom_mouse_cursor(null)
+			lasso_points.clear()
+			queue_redraw()
 
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
@@ -752,12 +798,11 @@ func load_file(filename) -> bool:
 	else:
 		var dialog : AcceptDialog = AcceptDialog.new()
 		add_child(dialog)
-		var content_scale_factor = (mm_globals.main_window
-				.get_window().content_scale_factor)
+		var content_scale_factor : float = mm_globals.ui_scale_factor()
 		dialog.content_scale_factor = content_scale_factor
+		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.title = "Load failed!"
 		dialog.dialog_text = "Failed to load "+filename
-		dialog.min_size = dialog.get_contents_minimum_size() * content_scale_factor
 		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.popup_centered()
 		return false
@@ -852,12 +897,18 @@ func get_material_node() -> MMGenMaterial:
 	return null
 
 func export_material(export_prefix, profile) -> void:
-	var exports : Array
-	for g in top_generator.get_children():
-		if g.has_method("get_export_profiles"):
-			await g.export_material(export_prefix, profile)
-		elif g.has_method("export_material"):
-			exports.append(g)
+	var exports : Array[MMGenBase]
+
+	var material_node : MMGenMaterial = get_material_node()
+	if material_node != null:
+		await material_node.export_material(export_prefix, profile)
+
+	var stack : Array[MMGenBase] = [top_generator]
+	while stack.size():
+		var node : MMGenBase = stack.pop_back()
+		if node.has_method("export_material"):
+			exports.append(node)
+		stack.append_array(node.get_children())
 
 	# Show progress for additional exports (export nodes)
 	var dim_color_rect = ColorRect.new()
@@ -1833,6 +1884,20 @@ func _get_connection_line(from : Vector2, to : Vector2) -> PackedVector2Array:
 		_:
 			return points
 
+func quick_bar_shortcuts(event : InputEventKey) -> void:
+	if not Rect2(Vector2.ZERO, size).has_point(get_local_mouse_position()):
+		return
+	var key_num : int = event.unicode - KEY_0 - 1
+	key_num = 9 if key_num == -1 else key_num
+
+	var library_manager : Node = get_node("/root/MainWindow/NodeLibraryManager")
+	var quick_button_key : String = "quick_button_%d" % [key_num]
+
+	if mm_globals.config.has_section_key("library", quick_button_key):
+		var config : String = mm_globals.config.get_value("library", quick_button_key)
+		if config != "" and library_manager.get_item(config):
+			do_paste(library_manager.get_item(config).item)
+
 func colorize_nodes() -> void:
 	var nodes : Array[GraphElement]
 	for n in get_children():
@@ -1860,8 +1925,11 @@ func colorize_nodes() -> void:
 		mm_globals.set_config("color_picker_color_mode", picker.color_mode)
 		mm_globals.set_config("color_picker_shape", picker.picker_shape))
 
-	popup.content_scale_factor = csf
-	popup.min_size = popup.get_contents_minimum_size() * csf
+	if get_tree().root.gui_embed_subwindows:
+		csf = 1.0
+	else:
+		popup.content_scale_factor = csf
+		popup.min_size = popup.get_contents_minimum_size() * csf
 	popup.position = get_screen_position() + get_local_mouse_position() * csf
 
 	picker.color = nodes[0].generator.color

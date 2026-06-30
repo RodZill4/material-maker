@@ -1,0 +1,284 @@
+{
+	"connections": [
+		{
+			"from": "gen_inputs",
+			"from_port": 1,
+			"to": "edge_detect_3_3_2",
+			"to_port": 1
+		},
+		{
+			"from": "gen_inputs",
+			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
+			"to": "edge_detect_3_3_2",
+			"to_port": 0
+		},
+		{
+			"from": "edge_detect_3_3_2",
+			"from_port": 0,
+			"to": "buffer_4",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_4",
+			"from_port": 0,
+			"to": "gen_outputs",
+			"to_port": 0
+		}
+	],
+	"label": "Slope Blur",
+	"longdesc": "Applies a blur effect on its input, following slopes of an input height map",
+	"name": "slope_blur2",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"name": "gen_parameters",
+			"node_position": {
+				"x": -454.966644287109,
+				"y": -534.066650390625
+			},
+			"parameters": {
+				"param0": 9.0,
+				"param1": 20.0,
+				"param2": null
+			},
+			"seed": 10365.0,
+			"type": "remote",
+			"widgets": [
+				{
+					"label": "Grid size",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_2",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
+						},
+						{
+							"node": "buffer_4",
+							"widget": "size"
+						}
+					],
+					"longdesc": "The resolution of the input image",
+					"name": "param0",
+					"shortdesc": "Size",
+					"type": "linked_control"
+				},
+				{
+					"label": "Sigma",
+					"linked_widgets": [
+						{
+							"node": "edge_detect_3_3_2",
+							"widget": "sigma"
+						}
+					],
+					"longdesc": "The strength of the blur filter",
+					"name": "param1",
+					"shortdesc": "Sigma",
+					"type": "linked_control"
+				},
+				{
+					"label": "32 Bits",
+					"linked_widgets": [
+						{
+							"node": "buffer_3",
+							"widget": "f32"
+						},
+						{
+							"node": "buffer_4",
+							"widget": "f32"
+						}
+					],
+					"longdesc": "Use 32-bit buffer(s) when storing input/outputs. Reduces banding artifacts but could result in higher video memory usage.",
+					"name": "param2",
+					"shortdesc": "32 Bits",
+					"type": "linked_control"
+				}
+			]
+		},
+		{
+			"name": "gen_inputs",
+			"node_position": {
+				"x": -872.666625976562,
+				"y": -243.392852783203
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "The input image",
+					"name": "in",
+					"shortdesc": "Input",
+					"type": "rgba"
+				},
+				{
+					"group_size": 0.0,
+					"longdesc": "A height map whose slopes control the strength and direction of the blur filter",
+					"name": "heightmap",
+					"shortdesc": "Height map",
+					"type": "f"
+				}
+			],
+			"seed": 91624.0,
+			"seed_locked": true,
+			"type": "ios"
+		},
+		{
+			"name": "gen_outputs",
+			"node_position": {
+				"x": -137.852401733398,
+				"y": -188.792846679688
+			},
+			"parameters": {
+
+			},
+			"ports": [
+				{
+					"group_size": 0.0,
+					"longdesc": "Shows the generated blurred image",
+					"name": "port0",
+					"shortdesc": "Output",
+					"type": "rgba"
+				}
+			],
+			"seed": 30896.0,
+			"type": "ios"
+		},
+		{
+			"name": "edge_detect_3_3_2",
+			"node_position": {
+				"x": -401.725463867188,
+				"y": -199.178955078125
+			},
+			"parameters": {
+				"sigma": 20.0,
+				"size": 9.0
+			},
+			"seed": -47470.0,
+			"seed_locked": true,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec4(1.0)",
+						"function": true,
+						"label": "",
+						"name": "in",
+						"type": "rgba"
+					},
+					{
+						"default": "1.0",
+						"function": true,
+						"label": "",
+						"name": "heightmap",
+						"type": "f"
+					}
+				],
+				"instance": [
+					"vec4 $(name)_fct(vec2 uv) {",
+					"\tfloat dx = 1.0/$size;",
+					"\tfloat v = $heightmap(uv);",
+					"\tvec2 slope = vec2($heightmap(uv+vec2(dx, 0.0))-v, $heightmap(uv+vec2(0.0, dx))-v);",
+					"\tfloat slope_strength = length(slope)*$size;",
+					"\tvec2 norm_slope =  (slope_strength == 0.0) ? vec2(0.0, 1.0) : normalize(slope);",
+					"\tvec2 e = dx*norm_slope;",
+					"\tvec4 rv = vec4(0.0);",
+					"\tfloat sum = 0.0;",
+					"\tfloat sigma = max($sigma*slope_strength, 0.0001);",
+					"\tfor (float i = 0.0; i <= 50.0; i += 1.0) {",
+					"\t\tfloat coef = exp(-0.5*(pow(i/sigma, 2.0)))/(6.28318530718*sigma*sigma);",
+					"\t\trv += $in(uv+i*e)*coef;",
+					"\t\tsum += coef;",
+					"\t}",
+					"\treturn rv/sum;",
+					"}"
+				],
+				"name": "Slope Blur",
+				"outputs": [
+					{
+						"rgba": "$(name)_fct($uv)",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9.0,
+						"first": 4.0,
+						"label": "Size",
+						"last": 12.0,
+						"name": "size",
+						"type": "size"
+					},
+					{
+						"control": "None",
+						"default": 0.5,
+						"label": "Sigma",
+						"max": 50.0,
+						"min": 0.0,
+						"name": "sigma",
+						"step": 0.1,
+						"type": "float"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -440.418884277344,
+				"y": -377.92626953125
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 9.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		},
+		{
+			"name": "buffer_4",
+			"node_position": {
+				"x": -418.318908691406,
+				"y": -66.7262649536133
+			},
+			"parameters": {
+				"f32": false,
+				"filter": true,
+				"mipmap": true,
+				"size": 9.0
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 2
+		}
+	],
+	"parameters": {
+		"param0": 9.0,
+		"param1": 20.0,
+		"param2": null
+	},
+	"scroll_offset": {
+		"x": -824.380798339844,
+		"y": -594.5693359375
+	},
+	"seed_int": 0,
+	"shortdesc": "Slope blur",
+	"type": "graph"
+}

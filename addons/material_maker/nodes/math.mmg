@@ -204,6 +204,10 @@
 					{
 						"name": "log(A, B)",
 						"value": "log($in1($uv))/log($in2($uv))"
+					},
+					{
+						"name": "sqrt(A)",
+						"value": "sqrt($in1($uv))"
 					}
 				]
 			},
