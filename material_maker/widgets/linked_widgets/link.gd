@@ -47,15 +47,15 @@ func find_control(gp) -> Dictionary:
 func _draw() -> void:
 	if ! ( is_instance_valid(source) and is_instance_valid(self) ):
 		return
-	var start = source.get_global_transform() * 0.5*source.size * get_global_transform()
+	var start = source.get_global_transform() * (0.5*source.size * get_global_transform())
 	var color = Color(1, 0.5, 0.5, 1.0)
 	var rect
 	if target != null:
 		color = Color(0.5, 1, 0.5, 1.0)
-		rect = target.get_global_transform() * Rect2(Vector2(0, 0), target.size) * get_global_transform()
+		rect = target.get_global_transform() * (Rect2(Vector2(0, 0), target.size) * get_global_transform())
 		draw_rect(rect, color, false, 2, true)
 		end = closest(rect, start)
-	rect = source.get_global_transform() * Rect2(Vector2(0, 0), source.size) * get_global_transform()
+	rect = source.get_global_transform() * (Rect2(Vector2(0, 0), source.size) * get_global_transform())
 	draw_rect(rect, color, false, 2, true)
 	start = closest(rect, end)
 	draw_line(start, end, color, 1.5, true)
