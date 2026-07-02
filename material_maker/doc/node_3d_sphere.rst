@@ -20,8 +20,11 @@ selected 3D sphere.
 Parameters
 ++++++++++
 
-The **Sphere** node accepts the *sphere center position* as X and Y coordinates
-and its *radius* as parameters. 
+The **Sphere** node accepts the following parameters:
+
+* the *shere center position* as X and Y coordinates
+* the *radius* of the sphere
+* whether output is *normalized*
 
 Example images
 ++++++++++++++

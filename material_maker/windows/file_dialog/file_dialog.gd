@@ -18,21 +18,11 @@ func _ready() -> void:
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
 		ok_button_text = tr("Save")
 
+	if mm_globals.config.has_section_key("file_dialog", "display_mode"):
+		display_mode = mm_globals.config.get_value("file_dialog", "display_mode")
+
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
-	_content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-	content_scale_factor = _content_scale_factor
-	
-	for child in get_children(true):
-		if child is PopupMenu:
-			child.about_to_popup.connect(_context_menu_about_to_popup.bind(child))
-	
-	for hbox in get_vbox().get_children():
-		if hbox is HBoxContainer:
-			for line_edit in hbox.get_children():
-				if line_edit is LineEdit:
-					var context_menu : PopupMenu = line_edit.get_menu()
-					context_menu.about_to_popup.connect(
-							_context_menu_about_to_popup.bind(context_menu))
+	content_scale_factor = mm_globals.ui_scale_factor()
 
 	min_size = _content_scale_factor * get_contents_minimum_size()
 	min_size = Vector2i(750, 500) * int(_content_scale_factor)
@@ -86,7 +76,7 @@ func select_files() -> Array:
 
 func _on_child_entered_tree(node: Node) -> void:
 	if node is ConfirmationDialog or node is AcceptDialog:
-		node.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
+		node.content_scale_factor = mm_globals.ui_scale_factor()
 		var min_size_scale = Vector2(0,0)
 		match node.title:
 			"Alert!":
@@ -100,6 +90,7 @@ func _on_child_entered_tree(node: Node) -> void:
 func _exit_tree() -> void:
 	mm_globals.config.set_value("file_dialog", "recents", JSON.stringify(get_recent_list()))
 	mm_globals.config.set_value("file_dialog", "favorites", JSON.stringify(get_favorite_list()))
+	mm_globals.config.set_value("file_dialog", "display_mode", display_mode)
 
 func load_fav_recents() -> void:
 	var json = JSON.new()

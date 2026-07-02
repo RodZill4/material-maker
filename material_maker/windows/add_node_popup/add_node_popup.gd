@@ -1,8 +1,10 @@
+class_name AddNodePopup
 extends Popup
 
 
-@onready var filter : LineEdit = $PanelContainer/VBoxContainer/Filter
+@onready var filter : LineEdit = %Filter
 
+var item_sort_mode : SortMenu.Sorting = mm_globals.get_config("add_node_popup_sort")
 
 var insert_position : Vector2
 
@@ -13,7 +15,6 @@ var qc_is_output : bool
 
 @onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 
-
 func get_current_graph():
 	return get_parent().get_current_graph_edit()
 
@@ -23,12 +24,6 @@ func _ready() -> void:
 	filter.connect("text_submitted", Callable(self, "filter_entered"))
 	%List.set_drag_forwarding(get_list_drag_data, Callable(), Callable())
 	update_list()
-	%Filter.get_menu().about_to_popup.connect(
-		_context_menu_about_to_popup.bind(%Filter.get_menu()))
-
-func _context_menu_about_to_popup(context_menu : PopupMenu) -> void:
-	context_menu.position = get_window().position + Vector2i(
-			get_mouse_position() * get_window().content_scale_factor)
 
 func filter_entered(_filter) -> void:
 	_on_list_item_activated(0)
@@ -68,7 +63,8 @@ func todo_renamed_hide() -> void:
 
 
 func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, is_output : bool = false) -> void:
-	get_window().content_scale_factor = get_tree().root.content_scale_factor
+	if not get_tree().root.gui_embed_subwindows:
+		get_window().content_scale_factor = get_tree().root.content_scale_factor
 	var current_graph = get_current_graph()
 	insert_position = current_graph.offset_from_global_position(current_graph.get_global_mouse_position())
 	popup()
@@ -91,8 +87,8 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 	filter.grab_focus()
 
 
-func check_quick_connect(obj) -> bool:
-	var ref_obj = obj
+func check_quick_connect(obj : Dictionary) -> bool:
+	var ref_obj : Dictionary = obj
 	if mm_loader.predefined_generators.has(obj.type):
 		ref_obj = mm_loader.predefined_generators[obj.type]
 	# comment and remote nodes have neither input nor output
@@ -105,7 +101,7 @@ func check_quick_connect(obj) -> bool:
 			else:
 				var found : bool = false
 				for outputs in ref_obj.shader_model.outputs.size():
-					if mm_io_types.types[ref_obj.shader_model.outputs[outputs].type].slot_type == qc_slot_type:
+					if qc_slot_type == 42 or mm_io_types.types[ref_obj.shader_model.outputs[outputs].type].slot_type == qc_slot_type:
 						found = true
 						break
 				if !found:
@@ -119,16 +115,16 @@ func check_quick_connect(obj) -> bool:
 					break
 			var found : bool = false
 			for outputs in output_ports.size():
-				if mm_io_types.types[output_ports[outputs].type].slot_type == qc_slot_type:
+				if qc_slot_type == 42 or mm_io_types.types[output_ports[outputs].type].slot_type == qc_slot_type:
 					found = true
 					break
 			if !found:
 				return false
-			if output_ports.is_empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type:
+			if output_ports.is_empty() or mm_io_types.types[output_ports[0].type].slot_type != qc_slot_type and qc_slot_type != 42:
 				return false
-		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer") and qc_slot_type != 0:
+		elif (ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer") and qc_slot_type != 0 and qc_slot_type != 42:
 			return false
-		elif (ref_obj.type == "debug" or ref_obj.type == "export" or ref_obj.type == "sdf"):
+		elif (ref_obj.type == "debug" or ref_obj.type == "export" or ref_obj.type == "sdf") or (ref_obj.type == "portal" and ref_obj.io == MMGenPortal.Portal.IN):
 			return false
 	else:
 		if ref_obj.has("shader_model"):
@@ -137,7 +133,7 @@ func check_quick_connect(obj) -> bool:
 			else:
 				var found : bool = false
 				for input in ref_obj.shader_model.inputs.size():
-					if mm_io_types.types[ref_obj.shader_model.inputs[input].type].slot_type == qc_slot_type:
+					if qc_slot_type == 42 or mm_io_types.types[ref_obj.shader_model.inputs[input].type].slot_type == qc_slot_type:
 						found = true
 						break
 				if !found:
@@ -151,39 +147,36 @@ func check_quick_connect(obj) -> bool:
 					break
 			var found : bool = false
 			for input in input_ports.size():
-				if mm_io_types.types[input_ports[input].type].slot_type == qc_slot_type:
+				if qc_slot_type == 42 or mm_io_types.types[input_ports[input].type].slot_type == qc_slot_type:
 					found = true
 					break
 			if !found:
 				return false
-			if input_ports.is_empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type:
+			if input_ports.is_empty() or mm_io_types.types[input_ports[0].type].slot_type != qc_slot_type and qc_slot_type != 42:
 				return false
-		elif ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "sdf":
+		elif ref_obj.type == "image" or ref_obj.type == "text" or ref_obj.type == "sdf" or ref_obj.type == "meshmap" or (ref_obj.type == "portal" and ref_obj.io == MMGenPortal.Portal.OUT):
 			return false
-		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer" or ref_obj.type == "export") and qc_slot_type != 0:
+		elif (ref_obj.type == "debug" or ref_obj.type == "buffer" or ref_obj.type == "iterate_buffer" or ref_obj.type == "export") and qc_slot_type != 0 and qc_slot_type != 42:
 			return false
 	return true
 
 func update_list(filter_text : String = "") -> void:
 	filter_text = filter_text.to_lower()
-
 	%List.clear()
-	var idx := 0
-	var items: Array = library_manager.get_items(filter_text, true)
-	items.sort_custom(func(a,b): return a.idx < b.idx if a.quality == b.quality else a.quality > b.quality)
+	var idx : int = 0
+	var items : Array = library_manager.get_items(filter_text, true)
+	items.sort_custom(SortMenu.sort_function(item_sort_mode, library_manager.item_usage))
 	for i in items:
-		var obj = i.item
+		var obj : Dictionary = i.item
 		if not obj.has("type"):
 			continue
 		if qc_slot_type != -1 and ! check_quick_connect(obj):
 			continue
-		var section = obj.tree_item.get_slice("/", 0)
+		var section : String = obj.tree_item.get_slice("/", 0)
 		var color : Color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
 		color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
-		#print(i)
-		var _name = obj.display_name
+		var _name : String = obj.display_name
 		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
-		#if obj.has("shortdesc")
 
 		%List.add_item(_name, i.icon)
 		%List.set_item_custom_fg_color(idx, color)
@@ -192,7 +185,8 @@ func update_list(filter_text : String = "") -> void:
 
 		idx += 1
 
-	%List.select(0)
+	if %List.item_count:
+		%List.select(0)
 	%List.ensure_current_is_visible()
 
 func _unhandled_input(event) -> void:
@@ -231,3 +225,17 @@ func _on_list_item_activated(index: int) -> void:
 	if not data == null:
 		add_node(data.item)
 		todo_renamed_hide()
+
+func _on_sort_menu_pressed() -> void:
+	var panel : SortMenu = preload("res://material_maker/windows/add_node_popup/sort_menu.tscn").instantiate()
+	panel.hide()
+	add_child(panel)
+	panel.sorting_changed.connect(update_list.bind(filter.text))
+	panel.popup_hide.connect(panel.queue_free)
+	if get_tree().root.gui_embed_subwindows:
+		panel.content_scale_factor = 1.0
+		panel.position = Vector2i(get_mouse_position()) + position
+		panel.size = panel.get_contents_minimum_size()
+		panel.show()
+	else:
+		panel.popup(Rect2(panel.get_mouse_position() * content_scale_factor, panel.size))

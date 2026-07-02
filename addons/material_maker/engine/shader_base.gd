@@ -11,5 +11,5 @@ func set_shader(shader : String) -> bool:
 func get_parameters() -> Dictionary:
 	return {}
 
-func set_parameter(name : String, value) -> bool:
-	return false
+func set_parameter(name : String, value) -> void:
+	pass

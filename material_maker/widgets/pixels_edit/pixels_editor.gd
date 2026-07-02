@@ -53,8 +53,8 @@ func update_color_buttons() -> void:
 			var color_button : ColorPickerButton = ColorPickerButton.new()
 			color_button.ready.connect(func():
 				var popup = color_button.get_popup()
-				popup.content_scale_factor = mm_globals.main_window.get_window().content_scale_factor
-				popup.min_size =popup.get_contents_minimum_size() * popup.content_scale_factor)
+				popup.content_scale_factor = mm_globals.ui_scale_factor()
+				popup.min_size = popup.get_contents_minimum_size() * popup.content_scale_factor)
 			color_button.custom_minimum_size = Vector2i(25, 25)
 			color_button.theme_type_variation = "MM_PanelMenuButton"
 			color_button.tooltip_text = "Click to select; Right click to change color"

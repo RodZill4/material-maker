@@ -27,6 +27,9 @@ The **Slope Blur** node has three parameters:
 
 * The *sigma* parameter defines how blurred the output will be.
 
+* Whether *32-Bit* buffer(s) are used when storing input/outputs.
+Reduces banding artifacts but could result in higher video memory usage.
+
 Notes
 +++++
 
