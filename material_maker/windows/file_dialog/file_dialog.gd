@@ -9,17 +9,29 @@ var recents_list : ItemList = null
 
 var left_panel : VSplitContainer
 
+enum Thumbnail {
+	IMAGE,
+	PROJECT,
+}
+
 func _context_menu_about_to_popup(context_menu : PopupMenu):
 	context_menu.position =  get_window().position + Vector2i(
 			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
+	thumbnail_semaphore.post()
+
 	load_fav_recents()
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
 		ok_button_text = tr("Save")
 
 	if mm_globals.config.has_section_key("file_dialog", "display_mode"):
 		display_mode = mm_globals.config.get_value("file_dialog", "display_mode")
+
+	if display_mode == DisplayMode.DISPLAY_THUMBNAILS:
+		set_thumbnail_mode_callback()
+	else:
+		set_list_mode_callback()
 
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
 	content_scale_factor = mm_globals.ui_scale_factor()
@@ -35,6 +47,12 @@ func _ready() -> void:
 			recents_list = left_panel.get_child(1).get_child(1)
 			favorites_list.gui_input.connect(_on_favorites_list_gui_input)
 			recents_list.gui_input.connect(_on_recents_list_gui_input)
+
+			var thumb_list_btns = n.get_child(1).get_child(1).get_child(0).get_child(3)
+			var thumb : Button = thumb_list_btns.get_child(0)
+			var list : Button = thumb_list_btns.get_child(1)
+			thumb.pressed.connect(set_thumbnail_mode_callback)
+			list.pressed.connect(set_list_mode_callback)
 
 func _on_favorites_list_gui_input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
@@ -100,3 +118,55 @@ func load_fav_recents() -> void:
 	if mm_globals.config.has_section_key("file_dialog", "favorites"):
 		if json.parse(mm_globals.config.get_value("file_dialog", "favorites")) == OK:
 			set_favorite_list(json.data)
+
+#region thumbnail generation
+
+var default_file_thumbnail : DPITexture = get_theme_icon("file_thumbnail", "FileDialog")
+var thumbnail_semaphore : Semaphore = Semaphore.new()
+
+func thumbnail_callback(path : String) -> Texture2D:
+	var t : Thread = Thread.new()
+	var tex : Texture2D = default_file_thumbnail
+	match path.get_extension().to_lower():
+		"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
+			tex = ImageTexture.new()
+			t.start(thumbnail_generate.bind(t, path, tex, Thumbnail.IMAGE))
+		"ptex":
+			tex = ImageTexture.new()
+			t.start(thumbnail_generate.bind(t, path, tex, Thumbnail.PROJECT))
+	return tex
+
+func thumbnail_set(thread : Thread, image : Image, tex : Texture2D) -> void:
+	if tex and image and not image.is_invisible():
+		tex.set_image(image)
+
+	thumbnail_semaphore.post()
+	if thread.is_started():
+		thread.wait_to_finish()
+
+func thumbnail_generate(thread : Thread, path : String, tex : Texture2D, type : Thumbnail) -> void:
+	thumbnail_semaphore.wait()
+	var img : Image = default_file_thumbnail.get_image()
+	match type:
+		Thumbnail.IMAGE:
+			if path.get_extension().to_lower() == "dds":
+				img.load_dds_from_buffer(FileAccess.get_file_as_bytes(path))
+			else:
+				img = Image.load_from_file(path)
+		Thumbnail.PROJECT:
+			var f : FileAccess = FileAccess.open(path, FileAccess.READ)
+			if JSON.parse_string(f.get_as_text()):
+				var ptex : Dictionary = JSON.parse_string(f.get_as_text())
+				if ptex and ptex.has("project_thumbnail"):
+					img.load_webp_from_buffer(Marshalls.base64_to_raw(ptex.project_thumbnail))
+	thumbnail_set.call_deferred(thread, img, tex)
+
+#endregion
+
+func set_thumbnail_mode_callback() -> void:
+	# Don't show icon(top-left) during thumbnail mode
+	FileDialog.set_get_thumbnail_callback(thumbnail_callback)
+	FileDialog.set_get_icon_callback(Callable())
+
+func set_list_mode_callback() -> void:
+	FileDialog.set_get_icon_callback(thumbnail_callback)
