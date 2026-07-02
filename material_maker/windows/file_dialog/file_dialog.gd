@@ -114,7 +114,6 @@ func load_fav_recents() -> void:
 
 var default_file_thumbnail : DPITexture = get_theme_icon("file_thumbnail", "FileDialog")
 var thumbnail_semaphore : Semaphore = Semaphore.new()
-var count = 0
 
 func thumbnail_callback(path : String) -> Texture2D:
 	var t : Thread = Thread.new()
@@ -122,11 +121,9 @@ func thumbnail_callback(path : String) -> Texture2D:
 	match path.get_extension().to_lower():
 		"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
 			tex = ImageTexture.new()
-			count += 1
 			t.start(thumbnail_generate.bind(t, path, tex, Thumbnail.IMAGE))
 		"ptex":
 			tex = ImageTexture.new()
-			count += 1
 			t.start(thumbnail_generate.bind(t, path, tex, Thumbnail.PROJECT))
 	return tex
 
