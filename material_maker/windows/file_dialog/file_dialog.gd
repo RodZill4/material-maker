@@ -19,7 +19,7 @@ func _context_menu_about_to_popup(context_menu : PopupMenu):
 			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
-	thumbnail_semaphore.post(OS.get_processor_count())
+	thumbnail_semaphore.post()
 	FileDialog.set_get_thumbnail_callback(thumbnail_callback)
 	FileDialog.set_get_icon_callback(thumbnail_callback)
 
