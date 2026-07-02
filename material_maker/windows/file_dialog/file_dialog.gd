@@ -19,6 +19,7 @@ func _context_menu_about_to_popup(context_menu : PopupMenu):
 			get_mouse_position() * _content_scale_factor)
 
 func _ready() -> void:
+	thumbnail_semaphore.post(OS.get_processor_count())
 	FileDialog.set_get_thumbnail_callback(thumbnail_callback)
 	FileDialog.set_get_icon_callback(thumbnail_callback)
 
@@ -112,6 +113,8 @@ func load_fav_recents() -> void:
 #region thumbnail generation
 
 var default_file_thumbnail : DPITexture = get_theme_icon("file_thumbnail", "FileDialog")
+var thumbnail_semaphore : Semaphore = Semaphore.new()
+var count = 0
 
 func thumbnail_callback(path : String) -> Texture2D:
 	var t : Thread = Thread.new()
@@ -119,19 +122,24 @@ func thumbnail_callback(path : String) -> Texture2D:
 	match path.get_extension().to_lower():
 		"bmp", "exr", "hdr", "jpg", "jpeg", "png", "svg", "tga", "webp", "dds":
 			tex = ImageTexture.new()
+			count += 1
 			t.start(thumbnail_generate.bind(t, path, tex, Thumbnail.IMAGE))
 		"ptex":
 			tex = ImageTexture.new()
+			count += 1
 			t.start(thumbnail_generate.bind(t, path, tex, Thumbnail.PROJECT))
 	return tex
 
 func thumbnail_set(thread : Thread, image : Image, tex : Texture2D) -> void:
 	if tex and image and not image.is_invisible():
 		tex.set_image(image)
+
+	thumbnail_semaphore.post()
 	if thread.is_started():
-		await thread.wait_to_finish()
+		thread.wait_to_finish()
 
 func thumbnail_generate(thread : Thread, path : String, tex : Texture2D, type : Thumbnail) -> void:
+	thumbnail_semaphore.wait()
 	var img : Image = default_file_thumbnail.get_image()
 	match type:
 		Thumbnail.IMAGE:
@@ -141,9 +149,10 @@ func thumbnail_generate(thread : Thread, path : String, tex : Texture2D, type : 
 				img = Image.load_from_file(path)
 		Thumbnail.PROJECT:
 			var f : FileAccess = FileAccess.open(path, FileAccess.READ)
-			var ptex : Dictionary = JSON.parse_string(f.get_as_text())
-			if ptex and ptex.has("project_thumbnail"):
-				img.load_webp_from_buffer(Marshalls.base64_to_raw(ptex.project_thumbnail))
+			if JSON.parse_string(f.get_as_text()):
+				var ptex : Dictionary = JSON.parse_string(f.get_as_text())
+				if ptex and ptex.has("project_thumbnail"):
+					img.load_webp_from_buffer(Marshalls.base64_to_raw(ptex.project_thumbnail))
 	thumbnail_set.call_deferred(thread, img, tex)
 
 #endregion
