@@ -20,8 +20,6 @@ func _context_menu_about_to_popup(context_menu : PopupMenu):
 
 func _ready() -> void:
 	thumbnail_semaphore.post()
-	FileDialog.set_get_thumbnail_callback(thumbnail_callback)
-	FileDialog.set_get_icon_callback(thumbnail_callback)
 
 	load_fav_recents()
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
@@ -29,6 +27,11 @@ func _ready() -> void:
 
 	if mm_globals.config.has_section_key("file_dialog", "display_mode"):
 		display_mode = mm_globals.config.get_value("file_dialog", "display_mode")
+
+	if display_mode == DisplayMode.DISPLAY_THUMBNAILS:
+		set_thumbnail_mode_callback()
+	else:
+		set_list_mode_callback()
 
 	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
 	content_scale_factor = mm_globals.ui_scale_factor()
@@ -44,6 +47,12 @@ func _ready() -> void:
 			recents_list = left_panel.get_child(1).get_child(1)
 			favorites_list.gui_input.connect(_on_favorites_list_gui_input)
 			recents_list.gui_input.connect(_on_recents_list_gui_input)
+
+			var thumb_list_btns = n.get_child(1).get_child(1).get_child(0).get_child(3)
+			var thumb : Button = thumb_list_btns.get_child(0)
+			var list : Button = thumb_list_btns.get_child(1)
+			thumb.pressed.connect(set_thumbnail_mode_callback)
+			list.pressed.connect(set_list_mode_callback)
 
 func _on_favorites_list_gui_input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
@@ -153,3 +162,11 @@ func thumbnail_generate(thread : Thread, path : String, tex : Texture2D, type : 
 	thumbnail_set.call_deferred(thread, img, tex)
 
 #endregion
+
+func set_thumbnail_mode_callback() -> void:
+	# Don't show icon(top-left) during thumbnail mode
+	FileDialog.set_get_thumbnail_callback(thumbnail_callback)
+	FileDialog.set_get_icon_callback(Callable())
+
+func set_list_mode_callback() -> void:
+	FileDialog.set_get_icon_callback(thumbnail_callback)
