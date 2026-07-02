@@ -40,3 +40,7 @@ func update_zoom() -> void:
 	if graph_edit:
 		graph_edit.zoom = zoom_level
 	mm_globals.set_config(SETTING_GRAPH_ZOOM_LEVEL, zoom_level)
+
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		%ZoomLabel.add_theme_font_override("font", FontManager.main_font)

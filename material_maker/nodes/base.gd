@@ -229,7 +229,7 @@ func _draw() -> void:
 		draw_style_box(get_theme_stylebox("node_highlight"), Rect2(Vector2.ZERO, size))
 	if generator.rendering_time > 0:
 		var time_color : Color = get_rendering_time_color(generator.rendering_time)
-		var buffer_timing_font : Font = preload("res://material_maker/theme/font_rubik/Rubik-416.ttf")
+		var buffer_timing_font : FontVariation = FontManager.medium_font
 		@warning_ignore_start("narrowing_conversion")
 		draw_string_outline(buffer_timing_font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, 4, Color.BLACK)
 		draw_string(buffer_timing_font, Vector2i(0, size.y+12), str(generator.rendering_time)+"ms", HORIZONTAL_ALIGNMENT_CENTER, size.x, 12, time_color)
