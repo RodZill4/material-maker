@@ -126,13 +126,12 @@ func thumbnail_callback(path : String) -> Texture2D:
 	return tex
 
 func thumbnail_set(thread : Thread, image : Image, tex : Texture2D) -> void:
-	if thread.is_started():
-		tex = await thread.wait_to_finish()
 	if tex and image and not image.is_invisible():
 		tex.set_image(image)
+	if thread.is_started():
+		await thread.wait_to_finish()
 
-func thumbnail_generate(thread : Thread, path : String, tex : Texture2D,
-		type : Thumbnail) -> Texture2D:
+func thumbnail_generate(thread : Thread, path : String, tex : Texture2D, type : Thumbnail) -> void:
 	var img : Image = default_file_thumbnail.get_image()
 	match type:
 		Thumbnail.IMAGE:
@@ -146,6 +145,5 @@ func thumbnail_generate(thread : Thread, path : String, tex : Texture2D,
 			if ptex and ptex.has("project_thumbnail"):
 				img.load_webp_from_buffer(Marshalls.base64_to_raw(ptex.project_thumbnail))
 	thumbnail_set.call_deferred(thread, img, tex)
-	return tex
 
 #endregion
