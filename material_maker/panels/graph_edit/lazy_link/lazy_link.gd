@@ -60,7 +60,7 @@ const MIX_NODE : Dictionary[String, String] = {
 func _ready() -> void:
 	graph = get_parent()
 
-	content_scale_factor = get_window().content_scale_factor
+	content_scale_factor = mm_globals.ui_scale_factor()
 	popup_menu_item_height = (get_theme_constant("v_separation", "PopupMenu")
 		+ get_theme_font_size("font"))
 
