@@ -656,6 +656,8 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 	for i in range(panels.size()):
 		menu.add_check_item(panels[i], i)
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
+		if current_mode:
+			menu.set_item_disabled(i, panels[i] in layout.HIDE_PANELS[current_mode])
 	menu.connect_id_pressed(self._on_ShowPanels_id_pressed)
 
 func create_menu_panels_preset(menu : MMMenuManager.MenuBase) -> void:
