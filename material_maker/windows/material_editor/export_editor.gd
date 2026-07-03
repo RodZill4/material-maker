@@ -346,6 +346,7 @@ func _on_MarginContainer_minimum_size_changed():
 
 func _on_Apply_pressed() -> void:
 	emit_signal("node_changed", get_model_data().duplicate(true))
+	get_node("/root/MainWindow").update_menus()
 
 func _on_OK_pressed() -> void:
 	_on_Apply_pressed()
