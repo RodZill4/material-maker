@@ -387,7 +387,7 @@ func _gui_input(event) -> void:
 			scroll_offset -= event.relative
 			accept_event()
 		else:
-			if not has_grab:
+			if not (has_grab or drag_cut_line.size()):
 				Input.set_custom_mouse_cursor(null)
 			lasso_points.clear()
 			queue_redraw()
