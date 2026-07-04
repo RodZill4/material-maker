@@ -100,7 +100,7 @@ func update_node() -> void:
 					control.add_separator()
 					control.add_item("<update "+current+">")
 					control.add_item("<remove "+current+">")
-	size = Vector2(0, 0)
+	set_deferred("size", Vector2.ZERO)
 	initialize_properties()
 
 func _on_value_changed(new_value, variable : String) -> void:
