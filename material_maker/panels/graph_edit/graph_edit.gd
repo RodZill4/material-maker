@@ -2009,3 +2009,17 @@ func _on_connection_drag_started(_from_node : StringName, _from_port : int, _is_
 
 func _on_connection_drag_ended() -> void:
 	is_dragging_connection = false
+
+func _on_button_reroll_pressed() -> void:
+	undoredo.start_group()
+	for node in get_children():
+		if node is MMGraphNodeMinimal and node.has_method("on_randomness_pressed"):
+			if Input.is_key_pressed(KEY_SHIFT):
+				if node.selected:
+					node.on_randomness_pressed()
+			else:
+				node.on_randomness_pressed()
+	undoredo.end_group()
+
+func _on_button_reroll_mouse_entered() -> void:
+	mm_globals.set_tip_text("#LMB: Reroll all nodes, Shift+#LMB: Reroll selected nodes")
