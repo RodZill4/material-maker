@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bd3ummbwaq3i"]
+[gd_scene format=3 uid="uid://bd3ummbwaq3i"]
 
 [ext_resource type="Script" uid="uid://p7v3ka7aaxmu" path="res://material_maker/panels/graph_edit/lazy_link/lazy_link.gd" id="1_8la56"]
 
@@ -42,24 +42,24 @@ shader_parameter/node_color = Color(0.643, 0.514, 1, 1)
 shader_parameter/radius = 0.3
 shader_parameter/outline_radius = 0.1
 
-[node name="LazyLink" type="Control"]
+[node name="LazyLink" type="Control" unique_id=1729457038]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_8la56")
 
-[node name="Link" type="Line2D" parent="."]
+[node name="Link" type="Line2D" parent="." unique_id=1348377785]
 gradient = SubResource("Gradient_8la56")
 texture = SubResource("GradientTexture2D_qgxkp")
 texture_mode = 1
 
-[node name="NodeA" type="ColorRect" parent="."]
+[node name="NodeA" type="ColorRect" parent="." unique_id=60585431]
 visible = false
 material = SubResource("ShaderMaterial_f8ijn")
 layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 
-[node name="NodeB" type="ColorRect" parent="."]
+[node name="NodeB" type="ColorRect" parent="." unique_id=146905192]
 visible = false
 material = SubResource("ShaderMaterial_f8ijn")
 layout_mode = 0

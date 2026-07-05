@@ -67,7 +67,7 @@ func _ready() -> void:
 	_setup_colors()
 	frame = StyleBoxFlat.new()
 	frame.shadow_size = 4
-	frame.shadow_color = Color(0, 0, 0, 0.1)
+	frame.shadow_color = Color(0.0, 0.0, 0.0, 0.1)
 	frame.draw_center = false
 	frame.border_color = inactive_color
 	frame.corner_detail = get_theme_constant("corner_detail", "MM_LazyLink")
@@ -201,7 +201,7 @@ func has_input_link(node : MMGraphNodeMinimal, port_idx : int) -> bool:
 				return true
 	return false
 
-func connect_port_type(types : Array, allow_any : bool = false) -> bool:
+func connect_port_type(types : Array[String], allow_any : bool = false) -> bool:
 	for out_port : int in source.get_output_port_count():
 		for in_port : int in target.get_input_port_count():
 			if (source.get_output_port_type(out_port) == target.get_input_port_type(in_port)
