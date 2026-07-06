@@ -335,7 +335,7 @@ func _on_gui_input(event) -> void:
 				edit_generator()
 	elif event is InputEventMouseMotion:
 		var epos : Vector2 = event.position
-		if Rect2(0, 0, size.x-56, 16).has_point(epos):
+		if Rect2(0.0, 0.0, size.x - 56.0 , 16.0).abs().has_point(epos):
 			var description = generator.get_description()
 			if description != "":
 				tooltip_text = MMGraphNodeBase.wrap_string(description)
