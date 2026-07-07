@@ -83,6 +83,8 @@ func on_minimize_pressed():
 
 func on_randomness_pressed():
 	reroll_generator_seed()
+	mm_steam.unlock_achievement("ACH_SEED_OF_CHAOS")
+
 
 func randomness_button_create_popup():
 	var menu : PopupMenu = PopupMenu.new()

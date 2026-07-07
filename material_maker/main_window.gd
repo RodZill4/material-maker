@@ -521,6 +521,7 @@ func export_material(file_path : String, profile : String) -> void:
 	mm_globals.config.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
 	project.export_material(export_prefix, profile)
+	mm_steam.unlock_achievement("ACH_MATERIALIZED")
 
 func export_again_is_disabled() -> bool:
 	var project = get_current_project()
@@ -865,6 +866,8 @@ func load_material_from_website() -> void:
 	var new_generator = await mm_loader.create_gen(result)
 	graph_edit.set_new_generator(new_generator)
 	hierarchy.update_from_graph_edit(graph_edit)
+	mm_steam.unlock_achievement("ACH_COMMUNITY_CHEST")
+
 
 func save_project(project : Control = null) -> bool:
 	if project == null:
@@ -1008,6 +1011,7 @@ func edit_select_sources_is_disabled() -> bool:
 
 func edit_select_sources() -> void:
 	edit_select_connected("to_node", "from_node")
+	mm_steam.unlock_achievement("ACH_UPSTREAM_DOWNSTREAM")
 
 func edit_select_targets_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1015,6 +1019,7 @@ func edit_select_targets_is_disabled() -> bool:
 
 func edit_select_targets() -> void:
 	edit_select_connected("from_node", "to_node")
+	mm_steam.unlock_achievement("ACH_UPSTREAM_DOWNSTREAM")
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
@@ -1136,6 +1141,7 @@ func make_selected_nodes_editable() -> void:
 		for n in selected_nodes:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
+		mm_steam.unlock_achievement("ACH_TINKERER")
 
 func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function) -> void:
 	menu.clear()
@@ -1178,6 +1184,7 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true, upd
 		image = result.get_image()
 		result.release(self)
 	node_library_manager.add_item_to_library(index, current_item_name, image, data)
+	mm_steam.unlock_achievement("ACH_KITBASHER")
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
@@ -1240,6 +1247,8 @@ func show_doc() -> void:
 	var doc_dir = get_doc_dir()
 	if doc_dir != "":
 		OS.shell_open(doc_dir+"/index.html")
+		mm_steam.unlock_achievement("ACH_RTFM")
+
 
 func show_doc_is_disabled() -> bool:
 	return get_doc_dir() == ""
@@ -1423,6 +1432,7 @@ func generate_graph_screenshot():
 	graph_edit.zoom = save_zoom
 	image.save_png(files[0])
 	graph_edit.minimap_enabled = minimap_save
+	mm_steam.unlock_achievement("ACH_FAMILY_PORTRAIT")
 
 # Handle dropped files
 

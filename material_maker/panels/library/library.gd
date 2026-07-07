@@ -210,6 +210,7 @@ func get_icon_name(item_name : String) -> String:
 
 func _on_Filter_text_changed(_filter : String) -> void:
 	update_tree()
+	mm_steam.unlock_achievement("ACH_TREASURE_HUNTER")
 
 # Should be moved to library manager
 func generate_screenshots(graph_edit : GraphEdit, parent_item : TreeItem = null) -> int:
