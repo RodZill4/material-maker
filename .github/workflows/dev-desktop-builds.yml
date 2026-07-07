@@ -186,6 +186,7 @@ jobs:
           codesign -s "Rodolphe Suescun" --force --options runtime --timestamp --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         run: |
+          brew untap aws/tap || true
           brew install imagemagick
           cp ./.github/workflows/create-dmg-bg.sh .
           chmod +x create-dmg-bg.sh
