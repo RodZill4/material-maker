@@ -60,6 +60,18 @@ func _draw() -> void:
 	start = closest(rect, end)
 	draw_line(start, end, color, 1.5, true)
 
+	# arrow
+	const tri_size : float = 10.0
+	var mid_pt : Vector2 = (start + end) * 0.5
+	var dir : Vector2 = (end - start).normalized()
+	var tri_pts : PackedVector2Array = PackedVector2Array([
+			mid_pt + dir * tri_size,
+			mid_pt + dir.orthogonal() * tri_size * 0.7,
+			mid_pt - dir.orthogonal() * tri_size * 0.7,
+			mid_pt + dir * tri_size])
+	draw_polyline(tri_pts, color, 1.5, true) # aa outline
+	draw_polygon(tri_pts.slice(0, -1), PackedColorArray([color, color, color]))
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
 		set_process_input(false)

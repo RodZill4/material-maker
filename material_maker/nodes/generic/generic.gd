@@ -10,6 +10,9 @@ var preview : ColorRect
 var preview_timer : Timer = Timer.new()
 var generic_button : TextureButton
 
+## Metadata references for remote-annotated controls
+var remote_linked_meta : Dictionary[String, Dictionary]
+
 const SETTINGS_NODE_CLOSE_BUTTON := "node_close_button"
 
 const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic.tres")
@@ -289,7 +292,7 @@ static func get_parameter_tooltip(p : Dictionary, parameter_value = null) -> Str
 	return wrap_string(tooltip)
 
 static func create_parameter_control(p : Dictionary, accept_float_expressions : bool) -> Control:
-	var control = null
+	var control : Control = null
 	if !p.has("type"):
 		return null
 	if p.type == "float":
@@ -350,6 +353,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			for f in p.filters:
 				control.add_filter(f)
 	control.tooltip_text = get_parameter_tooltip(p)
+	MMGraphNodeRemote.setup_linked_control_callbacks(control, true)
 	return control
 
 func save_preview_widget() -> void:
@@ -429,6 +433,7 @@ func update_node() -> void:
 	var minimum_line_height = get_theme_constant("minimum_line_height", "MM_Node") if has_theme_constant("minimum_line_height", "MM_Node") else 25
 	# Clean node
 	clear_all_slots()
+	save_remote_metadata()
 	save_preview_widget()
 	for c in get_children():
 		remove_child(c)
@@ -511,6 +516,7 @@ func update_node() -> void:
 				var label : String = p.name
 				var first : bool = true
 				control.name = label
+				restore_remote_metadata(control)
 				controls[control.name] = control
 				if p.has("label"):
 					label = p.label
@@ -713,3 +719,18 @@ func update_from_locale() -> void:
 
 func _on_minimum_size_changed() -> void:
 	size = get_combined_minimum_size()
+
+## Save metadata references for remote-annotated controls
+func save_remote_metadata() -> void:
+	for c in controls:
+		if is_instance_valid(controls[c]) and controls[c].has_meta("linked_parameters"):
+			if not remote_linked_meta.has(c):
+				remote_linked_meta[c] = {}
+			remote_linked_meta[c].linked_parameters = controls[c].get_meta("linked_parameters")
+
+## Restore remote annotations
+func restore_remote_metadata(control : Control) -> void:
+	if remote_linked_meta.has(control.name):
+		control.set_meta("linked_parameters", remote_linked_meta[control.name].linked_parameters)
+	else:
+		MMGraphNodeRemote.setup_linked_control_callbacks(control, false)
