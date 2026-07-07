@@ -30,8 +30,8 @@ The **Morphology** node has 3 parameters:
 * the *distance* by which (light or dark) areas are dilated.
 
 * whether *32 Bits* buffer(s) are used to store input/outputs.
-Reduces banding artifacts but could result in higher video
-memory usage.
+	Reduces banding artifacts but could result in higher video
+	memory usage.
 
 Example images
 ++++++++++++++

@@ -31,8 +31,8 @@ The **Directional Blur** node has four parameters:
 * The *angle* specifies the angle of the blur algorithm.
 
 * Whether *32 Bit* buffer(s) are used to sample the input.
-Reduces banding artifacts but could result in higher video
-memory usage.
+	Reduces banding artifacts but could result in higher video
+	memory usage.
 
 Notes
 +++++
