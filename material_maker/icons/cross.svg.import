@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/cross.svg-1e1ed0f83009f7099e07bd965fe63d86.dp
 base_scale=0.8
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true
