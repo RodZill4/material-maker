@@ -1,0 +1,215 @@
+{
+	"name": "tex3d_fbm_3",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"iterations": 1.0,
+		"noise": 0.0,
+		"persistence": 0.5,
+		"scale_x": 8.0,
+		"scale_y": 8.0,
+		"scale_z": 8.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": [
+			"// The MIT License",
+			"// Copyright © 2014 David Hoskins",
+			"// https://www.shadertoy.com/view/4djSRW (hash33)",
+			"vec3 hash33(vec3 p3)",
+			"{",
+			"\tp3 = fract(p3 * vec3(.1031, .1030, .0973));",
+			"\tp3 += dot(p3, p3.yxz+33.33);",
+			"\treturn fract((p3.xxy + p3.yxx)*p3.zyx);",
+			"}",
+			"",
+			"float tex3d_fbm_perlin(vec3 coord, vec3 size, float seed) {",
+			"\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;",
+			"\tvec3 f = fract(coord);",
+			"\tvec3 v000 = normalize(hash33(mod(o, size))-vec3(0.5));",
+			"\tvec3 v001 = normalize(hash33(mod(o + vec3(0.0, 0.0, 1.0), size))-vec3(0.5));",
+			"\tvec3 v010 = normalize(hash33(mod(o + vec3(0.0, 1.0, 0.0), size))-vec3(0.5));",
+			"\tvec3 v011 = normalize(hash33(mod(o + vec3(0.0, 1.0, 1.0), size))-vec3(0.5));",
+			"\tvec3 v100 = normalize(hash33(mod(o + vec3(1.0, 0.0, 0.0), size))-vec3(0.5));",
+			"\tvec3 v101 = normalize(hash33(mod(o + vec3(1.0, 0.0, 1.0), size))-vec3(0.5));",
+			"\tvec3 v110 = normalize(hash33(mod(o + vec3(1.0, 1.0, 0.0), size))-vec3(0.5));",
+			"\tvec3 v111 = normalize(hash33(mod(o + vec3(1.0, 1.0, 1.0), size))-vec3(0.5));",
+			"\tfloat p000 = dot(v000, f);",
+			"\tfloat p001 = dot(v001, f - vec3(0.0, 0.0, 1.0));",
+			"\tfloat p010 = dot(v010, f - vec3(0.0, 1.0, 0.0));",
+			"\tfloat p011 = dot(v011, f - vec3(0.0, 1.0, 1.0));",
+			"\tfloat p100 = dot(v100, f - vec3(1.0, 0.0, 0.0));",
+			"\tfloat p101 = dot(v101, f - vec3(1.0, 0.0, 1.0));",
+			"\tfloat p110 = dot(v110, f - vec3(1.0, 1.0, 0.0));",
+			"\tfloat p111 = dot(v111, f - vec3(1.0, 1.0, 1.0));",
+			"\tvec3 t =  f * f * f * (f * (f * 6.0 - 15.0) + 10.0);",
+			"\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);",
+			"}",
+			"",
+			"float fbm3d_perlin(vec3 coord, vec3 size, int octaves, float persistence, float seed) {",
+			"\tfloat normalize_factor = 0.0;",
+			"\tfloat value = 0.0;",
+			"\tfloat scale = 1.0;",
+			"\tfor (int i = 0; i < octaves; i++) {",
+			"\t\tvalue += tex3d_fbm_perlin(coord*size, size, seed) * scale;",
+			"\t\tnormalize_factor += scale;",
+			"\t\tsize *= 2.0;",
+			"\t\tscale *= persistence;",
+			"\t}",
+			"\treturn value / normalize_factor;",
+			"}",
+			"",
+			"float tex3d_fbm_perlin_nowrap(vec3 coord, vec3 size, float seed) {",
+			"\tvec3 o = floor(coord)+rand3(vec2(seed, 1.0-seed))+size;",
+			"\tvec3 f = fract(coord);",
+			"\tvec3 v000 = normalize(hash33(o)-vec3(0.5));",
+			"\tvec3 v001 = normalize(hash33(o + vec3(0.0, 0.0, 1.0))-vec3(0.5));",
+			"\tvec3 v010 = normalize(hash33(o + vec3(0.0, 1.0, 0.0))-vec3(0.5));",
+			"\tvec3 v011 = normalize(hash33(o + vec3(0.0, 1.0, 1.0))-vec3(0.5));",
+			"\tvec3 v100 = normalize(hash33(o + vec3(1.0, 0.0, 0.0))-vec3(0.5));",
+			"\tvec3 v101 = normalize(hash33(o + vec3(1.0, 0.0, 1.0))-vec3(0.5));",
+			"\tvec3 v110 = normalize(hash33(o + vec3(1.0, 1.0, 0.0))-vec3(0.5));",
+			"\tvec3 v111 = normalize(hash33(o + vec3(1.0, 1.0, 1.0))-vec3(0.5));",
+			"\tfloat p000 = dot(v000, f);",
+			"\tfloat p001 = dot(v001, f - vec3(0.0, 0.0, 1.0));",
+			"\tfloat p010 = dot(v010, f - vec3(0.0, 1.0, 0.0));",
+			"\tfloat p011 = dot(v011, f - vec3(0.0, 1.0, 1.0));",
+			"\tfloat p100 = dot(v100, f - vec3(1.0, 0.0, 0.0));",
+			"\tfloat p101 = dot(v101, f - vec3(1.0, 0.0, 1.0));",
+			"\tfloat p110 = dot(v110, f - vec3(1.0, 1.0, 0.0));",
+			"\tfloat p111 = dot(v111, f - vec3(1.0, 1.0, 1.0));",
+			"\tvec3 t =  f * f * f * (f * (f * 6.0 - 15.0) + 10.0);",
+			"\treturn 0.5 + mix(mix(mix(p000, p100, t.x), mix(p010, p110, t.x), t.y), mix(mix(p001, p101, t.x), mix(p011, p111, t.x), t.y), t.z);",
+			"}",
+			"",
+			"float fbm3d_perlin_nowrap(vec3 coord, vec3 size, int octaves, float persistence, float seed) {",
+			"\tfloat normalize_factor = 0.0;",
+			"\tfloat value = 0.0;",
+			"\tfloat scale = 1.0;",
+			"\tfor (int i = 0; i < octaves; i++) {",
+			"\t\tvalue += tex3d_fbm_perlin_nowrap(coord*size, size, seed) * scale;",
+			"\t\tnormalize_factor += scale;",
+			"\t\tsize *= 2.0;",
+			"\t\tscale *= persistence;",
+			"\t}",
+			"\treturn value / normalize_factor;",
+			"}"
+		],
+		"includes": [
+			"tex3d_fbm_2"
+		],
+		"inputs": [],
+		"instance": "",
+		"longdesc": "Generates a 3D noise made of several octaves of a simple noise",
+		"name": "TEX3D FBM",
+		"outputs": [
+			{
+				"longdesc": "Shows a grayscale 3D texture of the generated noise",
+				"shortdesc": "Output",
+				"tex3d_gs": "fbm3d_$noise($(uv).xyz, vec3($(scale_x), $(scale_y), $(scale_z)), int($(iterations)), $(persistence), float($(seed)))",
+				"type": "tex3d_gs"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "Noise",
+				"longdesc": "The simple noise type",
+				"name": "noise",
+				"shortdesc": "Noise type",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Value",
+						"value": "value"
+					},
+					{
+						"name": "Perlin",
+						"value": "perlin"
+					},
+					{
+						"name": "Cellular",
+						"value": "cellular"
+					},
+					{
+						"name": "Value (no wrap)",
+						"value": "value_nowrap"
+					},
+					{
+						"name": "Perlin (no wrap)",
+						"value": "perlin_nowrap"
+					},
+					{
+						"name": "Cellular (no wrap)",
+						"value": "cellular_nowrap"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 4.0,
+				"label": "Scale X",
+				"longdesc": "The scale of the first octave along the X axis",
+				"max": 32.0,
+				"min": 1.0,
+				"name": "scale_x",
+				"shortdesc": "Scale.x",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4.0,
+				"label": "Scale Y",
+				"longdesc": "The scale of the first octave along the Y axis",
+				"max": 32.0,
+				"min": 1.0,
+				"name": "scale_y",
+				"shortdesc": "Scale.y",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 4.0,
+				"label": "Scale Z",
+				"longdesc": "The scale of the first octave along the Z axis",
+				"max": 32.0,
+				"min": 1.0,
+				"name": "scale_z",
+				"shortdesc": "Scale.z",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 3.0,
+				"label": "Iterations",
+				"longdesc": "The number of noise octaves",
+				"max": 10.0,
+				"min": 1.0,
+				"name": "iterations",
+				"shortdesc": "Octaves",
+				"step": 1.0,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Persistence",
+				"longdesc": "The persistence between two consecutive octaves",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "persistence",
+				"shortdesc": "Persistence",
+				"step": 0.05,
+				"type": "float"
+			}
+		],
+		"shortdesc": "Tex3D FBM"
+	},
+	"type": "shader"
+}
