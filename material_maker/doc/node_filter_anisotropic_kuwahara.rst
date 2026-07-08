@@ -37,7 +37,7 @@ The **Anisotropic Kuwahara** node accepts the following parameters:
 *  **Sharpness** of the edges of the image.
 
 *  **Eccentricity** affects directionality of the filter. Higher values preserve directional features better,
-whereas lower values produce a more isotropic result.
+	whereas lower values produce a more isotropic result.
 
 Example images
 ++++++++++++++
