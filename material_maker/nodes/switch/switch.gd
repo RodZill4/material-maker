@@ -7,6 +7,7 @@ func _ready() -> void:
 	update_node()
 
 func update_node() -> void:
+	close_button.visible = mm_globals.get_config(SETTINGS_NODE_CLOSE_BUTTON)
 	if generator == null or !generator.parameters.has("outputs") or !generator.parameters.has("choices"):
 		return
 	save_remote_metadata()
