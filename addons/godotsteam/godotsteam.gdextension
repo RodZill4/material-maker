@@ -13,6 +13,8 @@ linux.debug.x86_64 = "res://addons/godotsteam/linux64/libgodotsteam.linux.templa
 linux.debug.x86_32 = "res://addons/godotsteam/linux32/libgodotsteam.linux.template_debug.x86_32.so"
 linux.release.x86_64 = "res://addons/godotsteam/linux64/libgodotsteam.linux.template_release.x86_64.so"
 linux.release.x86_32 = "res://addons/godotsteam/linux32/libgodotsteam.linux.template_release.x86_32.so"
+linux.debug.arm64 = "res://addons/godotsteam/linuxarm64/libgodotsteam.linux.template_debug.arm64.so"
+linux.release.arm64 = "res://addons/godotsteam/linuxarm64/libgodotsteam.linux.template_release.arm64.so"
 
 [dependencies]
 macos.universal = { "res://addons/godotsteam/osx/libsteam_api.dylib": "" }
@@ -20,3 +22,4 @@ windows.x86_64 = { "res://addons/godotsteam/win64/steam_api64.dll": "" }
 windows.x86_32 = { "res://addons/godotsteam/win32/steam_api.dll": "" }
 linux.x86_64 = { "res://addons/godotsteam/linux64/libsteam_api.so": "" }
 linux.x86_32 = { "res://addons/godotsteam/linux32/libsteam_api.so": "" }
+linux.arm64 = { "res://addons/godotsteam/linuxarm64/libsteam_api.so": "" }
