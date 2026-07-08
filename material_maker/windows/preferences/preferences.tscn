@@ -100,6 +100,7 @@ layout_mode = 2
 text = "Install"
 
 [node name="DownloadLanguage" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer" unique_id=1946949754]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Download"
 

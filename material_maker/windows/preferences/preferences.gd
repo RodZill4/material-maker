@@ -60,9 +60,11 @@ func update_language_list() -> void:
 	%Language.init_from_config(config)
 
 func _on_DownloadLanguage_pressed() -> void:
+	%DownloadLanguage.disabled = true
 	var download_popup : Popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
 	mm_globals.main_window.add_child(download_popup)
 	download_popup.tree_exited.connect(_load_language_items)
+	download_popup.tree_exited.connect(func() -> void: %DownloadLanguage.disabled = false)
 
 func _load_language_items() -> void:
 	var locale = Locale.new()
