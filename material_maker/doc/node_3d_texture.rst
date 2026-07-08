@@ -33,8 +33,8 @@ index.
 	node_3d_texture_quantize
 	node_3d_texture_uv
 	node_3d_texture_invert
-  node_3d_texture_tonality
-  node_3d_texture_combine
-  node_3d_texture_decompose
-  node_3d_texture_smooth_minmax
-  node_3d_texture_warp
+	node_3d_texture_tonality
+	node_3d_texture_combine
+	node_3d_texture_decompose
+	node_3d_texture_smooth_minmax
+	node_3d_texture_warp
