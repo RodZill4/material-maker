@@ -2,7 +2,7 @@ Anisotropic Kuwahara node
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The **Anisotropic Kuwahara** node applies an edge-preserving smoothing filter to its input
-which better preserves directional features when compared to the classic and
+which better preserves directional features compared to the classic and
 generalized implementations of the kuwahara filter.
 
 This can be used to create stylized images with effects similar to painted brushstrokes.
@@ -36,7 +36,8 @@ The **Anisotropic Kuwahara** node accepts the following parameters:
 
 *  **Sharpness** of the edges of the image.
 
-*  **Eccentricity** affects the directionality of the filter.
+*  **Eccentricity** affects directionality of the filter. Higher values preserve directional features better,
+whereas lower values produce a more isotropic result.
 
 Example images
 ++++++++++++++

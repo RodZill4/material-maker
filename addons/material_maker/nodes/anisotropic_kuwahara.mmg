@@ -1,7 +1,7 @@
 {
 	"connections": [
 		{
-			"from": "_2",
+			"from": "shader_1",
 			"from_port": 0,
 			"to": "buffer_2",
 			"to_port": 0
@@ -13,27 +13,21 @@
 			"to_port": 0
 		},
 		{
-			"from": "shader_1",
+			"from": "shader_2",
 			"from_port": 0,
-			"to": "gaussian_blur",
+			"to": "gaussian_blur_2",
 			"to_port": 0
-		},
-		{
-			"from": "gaussian_blur",
-			"from_port": 0,
-			"to": "_2",
-			"to_port": 1
 		},
 		{
 			"from": "_3",
 			"from_port": 0,
-			"to": "gaussian_blur",
+			"to": "gaussian_blur_2",
 			"to_port": 1
 		},
 		{
 			"from": "gen_inputs",
 			"from_port": 0,
-			"to": "_2",
+			"to": "shader_2",
 			"to_port": 0
 		},
 		{
@@ -41,6 +35,12 @@
 			"from_port": 0,
 			"to": "shader_1",
 			"to_port": 0
+		},
+		{
+			"from": "gaussian_blur_2",
+			"from_port": 0,
+			"to": "shader_1",
+			"to_port": 1
 		}
 	],
 	"label": "Anisotropic Kuwahara",
@@ -52,199 +52,226 @@
 	},
 	"nodes": [
 		{
-			"name": "_2",
+			"name": "shader_2",
 			"node_position": {
-				"x": -417.600006,
-				"y": 54.384937
+				"x": -600.0,
+				"y": -160.0
 			},
 			"parameters": {
-				"eccentricity": 1,
-				"s": 9,
-				"sharpness": 1,
-				"size": 6
+				"s": 9
 			},
 			"seed_int": 0,
 			"shader_model": {
 				"code": "",
-				"global": [
-					"float square(float v) { return v * v; }",
-					"vec2 square2(vec2 v) { return v * v; }"
-				],
+				"global": "",
 				"inputs": [
 					{
-						"default": "vec4(vec3(0.0),1.0)",
+						"default": "vec4(0.0)",
 						"function": true,
 						"label": "",
 						"name": "in",
 						"type": "rgba"
-					},
+					}
+				],
+				"instance": [
+					"// The MIT License - Copyright (c) 2022 Garrett Gunnell",
+					"// Adapted from https://github.com/GarrettGunnell/Post-Processing/",
+					"// blob/871a7ffcc44174f237b4c0127db51026c438d7a4/Assets/Kuwahara%20Filter/AnisotropicKuwahara.shader",
+					"",
+					"vec4 $(name)_calc_eigenvectors(vec2 uv) {",
+					"\tvec2 d = 1.0/vec2($s);",
+					"\tvec3 Sx = (",
+					"\t\t 1.0 * $in(uv + vec2(-d.x, -d.y)).rgb +",
+					"\t\t 2.0 * $in(uv + vec2(-d.x,  0.0)).rgb +",
+					"\t\t 1.0 * $in(uv + vec2(-d.x,  d.y)).rgb +",
+					"\t\t-1.0 * $in(uv + vec2(d.x, -d.y)).rgb +",
+					"\t\t-2.0 * $in(uv + vec2(d.x,  0.0)).rgb +",
+					"\t\t-1.0 * $in(uv + vec2(d.x,  d.y)).rgb",
+					"\t) * 0.25;",
+					"",
+					"\tvec3 Sy = (",
+					"\t\t 1.0 * $in(uv + vec2(-d.x, -d.y)).rgb +",
+					"\t\t 2.0 * $in(uv + vec2( 0.0, -d.y)).rgb +",
+					"\t\t 1.0 * $in(uv + vec2( d.x, -d.y)).rgb +",
+					"\t\t-1.0 * $in(uv + vec2(-d.x, d.y)).rgb +",
+					"\t\t-2.0 * $in(uv + vec2( 0.0, d.y)).rgb +",
+					"\t\t-1.0 * $in(uv + vec2( d.x, d.y)).rgb",
+					"\t) * 0.25;",
+					"",
+					"\treturn vec4(dot(Sx, Sx), dot(Sy, Sy), dot(Sx, Sy), 1.0);",
+					"}"
+				],
+				"name": "calc_eigenvectors",
+				"outputs": [
 					{
-						"default": "vec4(1.0)",
+						"rgba": "$(name)_calc_eigenvectors($uv)",
+						"type": "rgba"
+					}
+				],
+				"parameters": [
+					{
+						"default": 9,
+						"first": 4,
+						"label": "",
+						"last": 13,
+						"name": "s",
+						"type": "size"
+					}
+				]
+			},
+			"type": "shader"
+		},
+		{
+			"name": "shader_1",
+			"node_position": {
+				"x": -360.0,
+				"y": -200.0
+			},
+			"parameters": {
+				"eccentricity": 1.0,
+				"s": 9,
+				"sharpness": 1.0,
+				"size": 6.0
+			},
+			"seed_int": 0,
+			"shader_model": {
+				"code": "",
+				"global": "",
+				"inputs": [
+					{
+						"default": "vec3(0.0)",
 						"function": true,
 						"label": "",
-						"name": "d",
+						"name": "in",
+						"type": "rgb"
+					},
+					{
+						"default": "vec4(0.0)",
+						"function": true,
+						"label": "",
+						"name": "b",
 						"type": "rgba"
 					}
 				],
 				"instance": [
-					"/*",
-					"\tLicense: GPL-2.0-or-later",
-					"\thttps://projects.blender.org/blender/blender/src/branch/main/source/blender/compositor/",
-					"\trealtime_compositor/compositor_kuwahara_anisotropic.glsl",
-					"*/",
+					"// The MIT License - Copyright (c) 2022 Garrett Gunnell",
+					"// Adapted from https://github.com/GarrettGunnell/Post-Processing/",
+					"// blob/871a7ffcc44174f237b4c0127db51026c438d7a4/Assets/Kuwahara%20Filter/AnisotropicKuwahara.shader",
 					"",
-					"vec4 $(name)_anisotropic_kuwahara(vec2 uv, float size, float eccentricity, float sharpness) {",
-					"\tfloat o = 1.0/$s;",
+					"vec3 $(name)_anisotropic_kuwahara(vec2 uv, int size, float _sharpness, float _ecc) {",
+					"\tfloat sharpness = mix(3.0, 18.0, clamp(_sharpness, 0.0, 1.0));",
+					"\tint _KernelSize = max(0, size * 2);",
+					"\tconst float alpha = 1.0; const float _Hardness = 8.0; const float _ZeroCrossing = 0.58;",
+					"\tfloat zeta = 1.0 / (float(_KernelSize) / 2.0);",
 					"",
-					"\tconst float M_PI = 3.14159265358979323846; ",
-					"\tconst float M_SQRT1_2 = 0.70710678118654752440;",
-					"\t",
-					"\tsharpness = clamp(sharpness, 0.0, 1.0);",
-					"\tsharpness = sharpness * sharpness * 16.0;",
-					"\teccentricity = 1.0/max(0.01, eccentricity);",
-					"\t",
-					"\tfloat dxdx =  $d(uv).x;",
-					"\tfloat dxdy =  $d(uv).y;",
-					"\tfloat dydy =  $d(uv).w;",
-					"\t",
-					"\tfloat eigenvalue_first_term = (dxdx + dydy) / 2.0;",
-					"\tfloat eigenvalue_square_root_term = sqrt(square(dxdx - dydy) + 4.0 * square(dxdy)) / 2.0;",
-					"\tfloat first_eigenvalue = eigenvalue_first_term + eigenvalue_square_root_term;",
-					"\tfloat second_eigenvalue = eigenvalue_first_term - eigenvalue_square_root_term;",
-					"\t",
-					"\tvec2 eigenvector = vec2(first_eigenvalue - dxdx, -dxdy);",
-					"\tfloat eigenvector_length = length(eigenvector);",
-					"\tvec2 unit_eigenvector = eigenvector_length != 0.0 ? eigenvector / eigenvector_length : vec2(1.0);",
-					"\t",
-					"\tfloat eigenvalue_sum = first_eigenvalue + second_eigenvalue;",
-					"\tfloat eigenvalue_difference = first_eigenvalue - second_eigenvalue;",
-					"\tfloat anisotropy = eigenvalue_sum > 0.0 ? eigenvalue_difference / eigenvalue_sum : 0.0;",
-					"\t",
-					"\tfloat radius = max(0.0, size);",
+					"\tfloat ecc = mix(0.7, 1.5, clamp(_ecc, 0.0, 1.0));",
 					"",
-					"\tfloat ellipse_width_factor = (eccentricity + anisotropy) / eccentricity;",
-					"\tfloat ellipse_width = ellipse_width_factor * radius;",
-					"\tfloat ellipse_height = radius / ellipse_width_factor;",
-					"\t",
-					"\tfloat cosine = unit_eigenvector.x;",
-					"  \tfloat sine = unit_eigenvector.y;",
-					"\t",
-					"\tmat2 inverse_ellipse_matrix = mat2(",
-					"\t\tvec2(cosine / ellipse_width, -sine / ellipse_height),",
-					"\t\tvec2(sine / ellipse_width, cosine / ellipse_height));",
-					"\t\t",
-					"\tvec2 ellipse_major_axis = ellipse_width * unit_eigenvector;",
-					"\tvec2 ellipse_minor_axis = ellipse_height * unit_eigenvector.yx * vec2(-1, 1);",
-					"\tivec2 ellipse_bounds = ivec2( ceil(sqrt(square2(ellipse_major_axis) + square2(ellipse_minor_axis))));",
-					"\t",
-					"\tconst int number_of_sectors = 8;",
-					"\tfloat sector_center_overlap_parameter = 2.0 / radius;",
-					"\tfloat sector_envelope_angle = ((3.0 / 2.0) * M_PI) / float(number_of_sectors);",
-					"\tfloat cross_sector_overlap_parameter = (sector_center_overlap_parameter +",
-					"\t\t\t\t\t\t\t\t\t\tcos(sector_envelope_angle)) /",
-					"\t\t\t\t\t\t\t\t square(sin(sector_envelope_angle));",
-					"\t",
-					"\tvec4 weighted_mean_of_squared_color_of_sectors[8];",
-					"\tvec4 weighted_mean_of_color_of_sectors[8];",
-					"\tfloat sum_of_weights_of_sectors[8];",
+					"\tvec4 g = $b(uv);",
+					"\tfloat lambda1 = 0.5 * (g.y + g.x + sqrt(g.y * g.y - 2.0 * g.x * g.y + g.x * g.x + 4.0 * g.z * g.z));",
+					"\tfloat lambda2 = 0.5 * (g.y + g.x - sqrt(g.y * g.y - 2.0 * g.x * g.y + g.x * g.x + 4.0 * g.z * g.z));",
 					"",
-					"\tvec4 center_color = $in(uv);",
+					"\tvec2 v = vec2(lambda1 - g.x, -g.z);",
+					"\tfloat A = (lambda1 + lambda2 > 0.0) ? (lambda1 - lambda2) / (lambda1 + lambda2) : 0.0;",
+					"\tvec4 t = vec4(length(v) > 0.0 ? normalize(v) : vec2(0.0, 1.0), 0.0, A);",
 					"",
-					"\tvec4 center_color_squared = center_color * center_color;",
-					"\tfloat center_weight = 1.0 / float(number_of_sectors);",
-					"\tvec4 weighted_center_color = center_color * center_weight;",
-					"\tvec4 weighted_center_color_squared = center_color_squared * center_weight;",
+					"\tint kernelRadius = _KernelSize / 2;",
+					"\tfloat a = float(kernelRadius) * clamp((alpha + t.w) / alpha, 0.1, 2.0);",
+					"\tfloat b = float(kernelRadius) * clamp(alpha / (alpha + t.w), 0.1, 2.0);",
 					"",
-					"\tfor (int i = 0; i < number_of_sectors; i++) {",
-					"\t  weighted_mean_of_squared_color_of_sectors[i] = weighted_center_color_squared;",
-					"\t  weighted_mean_of_color_of_sectors[i] = weighted_center_color;",
-					"\t  sum_of_weights_of_sectors[i] = center_weight;",
+					"\tfloat cos_phi = t.x;",
+					"\tfloat sin_phi = t.y;",
+					"",
+					"\tmat2 R = mat2(vec2(cos_phi, -sin_phi), vec2(sin_phi, cos_phi));",
+					"\tmat2 S = mat2(vec2(0.5 / a / ecc, 0.0), vec2(0.0, 0.5 / b * ecc));",
+					"",
+					"\tmat2 SR = S * R;",
+					"",
+					"\tint max_x = int(sqrt(a * a * cos_phi * cos_phi + b * b * sin_phi * sin_phi));",
+					"\tint max_y = int(sqrt(a * a * sin_phi * sin_phi + b * b * cos_phi * cos_phi));",
+					"",
+					"\tfloat zeroCross = _ZeroCrossing;",
+					"\tfloat sinZeroCross = sin(zeroCross);",
+					"\tfloat eta = (zeta + cos(zeroCross)) / (sinZeroCross * sinZeroCross);",
+					"",
+					"\tvec4 m[8];",
+					"\tvec3 s[8];",
+					"",
+					"\tfor (int k = 0; k < 8; ++k) {",
+					"\t\tm[k] = vec4(0.0);",
+					"\t\ts[k] = vec3(0.0);",
 					"\t}",
-					"\t",
-					"\tfor (int j = 0; j <= ellipse_bounds.y; j++) {",
-					"\tfor (int i = -ellipse_bounds.x; i <= ellipse_bounds.x; i++) {",
 					"",
-					"\t\tif (j == 0 && i <= 0) {",
-					"\t\t\tcontinue;",
-					"\t\t}",
+					"\tfor (int y = -max_y; y <= max_y; ++y) {",
+					"\t\tfor (int x = -max_x; x <= max_x; ++x) {",
+					"\t\t\tvec2 v = SR * vec2(float(x), float(y));",
+					"\t\t\tif (dot(v, v) <= 0.125) {",
+					"\t\t\t\tvec3 c = $in( uv + vec2(float(x), float(y)) * 1.0/vec2($s) ).rgb;",
+					"\t\t\t\tc = clamp(c, vec3(0.0), vec3(1.0));",
+					"\t\t\t\tfloat sum = 0.0;",
+					"\t\t\t\tfloat w[8];",
+					"\t\t\t\tfloat z, vxx, vyy;",
 					"",
-					"\t\tvec2 disk_point = inverse_ellipse_matrix * vec2(float(i), float(j));",
-					"\t\tfloat disk_point_length_squared = dot(disk_point, disk_point);",
-					"\t\tif (disk_point_length_squared > 1.0) {",
-					"\t\t\tcontinue;",
-					"\t\t}",
-					"",
-					"\t\tfloat sector_weights[8];",
-					"",
-					"\t\tvec2 polynomial = sector_center_overlap_parameter -",
-					"\t\t\t\t\t\tcross_sector_overlap_parameter * square2(disk_point);",
-					"",
-					"\t\tsector_weights[0] = square(max(0.0, disk_point.y + polynomial.x));",
-					"\t\tsector_weights[2] = square(max(0.0, -disk_point.x + polynomial.y));",
-					"\t\tsector_weights[4] = square(max(0.0, -disk_point.y + polynomial.x));",
-					"\t\tsector_weights[6] = square(max(0.0, disk_point.x + polynomial.y));",
-					"",
-					"\t\tvec2 rotated_disk_point = M_SQRT1_2 *",
-					"\t\t\t\t\t\t\t\tvec2(disk_point.x - disk_point.y, disk_point.x + disk_point.y);",
-					"",
-					"\t\tvec2 rotated_polynomial = sector_center_overlap_parameter -",
-					"\t\t\t\t\t\t\t\tcross_sector_overlap_parameter * square2(rotated_disk_point);",
-					"\t\tsector_weights[1] = square(max(0.0, rotated_disk_point.y + rotated_polynomial.x));",
-					"\t\tsector_weights[3] = square(max(0.0, -rotated_disk_point.x + rotated_polynomial.y));",
-					"\t\tsector_weights[5] = square(max(0.0, -rotated_disk_point.y + rotated_polynomial.x));",
-					"\t\tsector_weights[7] = square(max(0.0, rotated_disk_point.x + rotated_polynomial.y));",
-					"",
-					"\t\tfloat sector_weights_sum = sector_weights[0] + sector_weights[1] + sector_weights[2] +",
-					"\t\t\t\t\t\t\t\t\tsector_weights[3] + sector_weights[4] + sector_weights[5] +",
-					"\t\t\t\t\t\t\t\t\tsector_weights[6] + sector_weights[7];",
-					"\t\tfloat radial_gaussian_weight = exp(-M_PI * disk_point_length_squared) / sector_weights_sum;",
-					"",
-					"\t\tvec4 upper_color = $in(uv + vec2(float(i), float(j)) * o);",
-					"\t\tvec4 lower_color = $in(uv - vec2(float(i), float(j)) * o);",
-					"\t\tvec4 upper_color_squared = upper_color * upper_color;",
-					"\t\tvec4 lower_color_squared = lower_color * lower_color;",
-					"",
-					"\t\tfor (int k = 0; k < number_of_sectors; k++) {",
-					"\t\t\tfloat weight = sector_weights[k] * radial_gaussian_weight;",
-					"",
-					"\t\t\tint upper_index = k;",
-					"\t\t\tsum_of_weights_of_sectors[upper_index] += weight;",
-					"\t\t\tweighted_mean_of_color_of_sectors[upper_index] += upper_color * weight;",
-					"\t\t\tweighted_mean_of_squared_color_of_sectors[upper_index] += upper_color_squared * weight;",
-					"",
-					"\t\t\tint lower_index = (k + number_of_sectors / 2) % number_of_sectors;",
-					"\t\t\tsum_of_weights_of_sectors[lower_index] += weight;",
-					"\t\t\tweighted_mean_of_color_of_sectors[lower_index] += lower_color * weight;",
-					"\t\t\tweighted_mean_of_squared_color_of_sectors[lower_index] += lower_color_squared * weight;",
+					"\t\t\t\t // Calculate Polynomial Weights",
+					"\t\t\t\tvxx = zeta - eta * v.x * v.x;",
+					"\t\t\t\tvyy = zeta - eta * v.y * v.y;",
+					"\t\t\t\tz = max(0.0, v.y + vxx);",
+					"\t\t\t\tw[0] = z * z;",
+					"\t\t\t\tsum += w[0];",
+					"\t\t\t\tz = max(0, -v.x + vyy); ",
+					"\t\t\t\tw[2] = z * z;",
+					"\t\t\t\tsum += w[2];",
+					"\t\t\t\tz = max(0.0, -v.y + vxx); ",
+					"\t\t\t\tw[4] = z * z;",
+					"\t\t\t\tsum += w[4];",
+					"\t\t\t\tz = max(0.0, v.x + vyy); ",
+					"\t\t\t\tw[6] = z * z;",
+					"\t\t\t\tsum += w[6];",
+					"\t\t\t\t v = sqrt(2.0) / 2.0 * vec2(v.x - v.y, v.x + v.y);",
+					"\t\t\t\tvxx = zeta - eta * v.x * v.x;",
+					"\t\t\t\tvyy = zeta - eta * v.y * v.y;",
+					"\t\t\t\tz = max(0, v.y + vxx); ",
+					"\t\t\t\tw[1] = z * z;",
+					"\t\t\t\tsum += w[1];",
+					"\t\t\t\tz = max(0.0, -v.x + vyy); ",
+					"\t\t\t\tw[3] = z * z;",
+					"\t\t\t\tsum += w[3];",
+					"\t\t\t\tz = max(0.0, -v.y + vxx); ",
+					"\t\t\t\tw[5] = z * z;",
+					"\t\t\t\tsum += w[5];",
+					"\t\t\t\tz = max(0.0, v.x + vyy); ",
+					"\t\t\t\tw[7] = z * z;",
+					"\t\t\t\tsum += w[7];",
+					"\t\t\t\t",
+					"\t\t\t\tfloat g = exp(-3.125 * dot(v, v)) / sum;",
+					"\t\t\t\t",
+					"\t\t\t\tfor (int k = 0; k < 8; ++k) {",
+					"\t\t\t\t\tfloat wk = w[k] * g;",
+					"\t\t\t\t\tm[k] += vec4(c * wk, wk);",
+					"\t\t\t\t\ts[k] += c * c * wk;",
+					"\t\t\t\t}",
 					"\t\t\t}",
 					"\t\t}",
 					"\t}",
 					"",
-					"\tfloat sum_of_weights = 0.0;",
-					"\tvec4 weighted_sum = vec4(0.0);",
-					"\tfor (int i = 0; i < number_of_sectors; i++) {",
-					"\t\tweighted_mean_of_color_of_sectors[i] /= sum_of_weights_of_sectors[i];",
-					"\t\tweighted_mean_of_squared_color_of_sectors[i] /= sum_of_weights_of_sectors[i];",
+					"\tvec4 result = vec4(0.0);",
+					"\tfor (int k = 0; k < 8; ++k) {",
+					"\t\tm[k].rgb /= m[k].w;",
+					"\t\ts[k] = abs(s[k] / m[k].w - m[k].rgb * m[k].rgb);",
 					"",
-					"\t\tvec4 color_mean = weighted_mean_of_color_of_sectors[i];",
-					"\t\tvec4 squared_color_mean = weighted_mean_of_squared_color_of_sectors[i];",
-					"\t\tvec4 color_variance = abs(squared_color_mean - color_mean * color_mean);",
+					"\t\tfloat sigma2 = s[k].r + s[k].g + s[k].b;",
+					"\t\tfloat w = 1.0 / (1.0 + pow(_Hardness * 1000.0 * sigma2, 0.5 * sharpness));",
 					"",
-					"\t\tfloat standard_deviation = dot(sqrt(color_variance.rgb), vec3(1.0));",
-					"\t\tfloat weight = 1.0 / pow(max(0.02, standard_deviation), sharpness);",
-					"",
-					"\t\tsum_of_weights += weight;",
-					"\t\tweighted_sum += color_mean * weight;",
+					"\t\tresult += vec4(m[k].rgb * w, w);",
 					"\t}",
-					"\tweighted_sum /= sum_of_weights;",
-					"\treturn weighted_sum;",
+					"",
+					"\treturn clamp(result.rgb / result.w, vec3(0.0), vec3(1.0));",
 					"}"
 				],
 				"name": "anisotropic_kuwahara",
 				"outputs": [
 					{
-						"rgba": "$(name)_anisotropic_kuwahara($uv, $size, $eccentricity, $sharpness)",
-						"type": "rgba"
+						"rgb": "$(name)_anisotropic_kuwahara($uv, int($size), $sharpness, $eccentricity * 0.5)",
+						"type": "rgb"
 					}
 				],
 				"parameters": [
@@ -258,31 +285,32 @@
 					},
 					{
 						"control": "None",
-						"default": 6,
-						"label": "Size",
-						"max": 100,
-						"min": 0,
+						"default": 5.0,
+						"label": "size",
+						"max": 32.0,
+						"min": 1.0,
 						"name": "size",
-						"step": 1,
+						"shortdesc": "size",
+						"step": 1.0,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 0.5,
-						"label": "Eccentricity",
-						"max": 2,
-						"min": 0,
-						"name": "eccentricity",
+						"default": 1.0,
+						"label": "sharpness",
+						"max": 1.0,
+						"min": 0.0,
+						"name": "sharpness",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 1,
-						"label": "Sharpness",
-						"max": 1,
-						"min": 0,
-						"name": "sharpness",
+						"default": 1.0,
+						"label": "eccentricity",
+						"max": 2.0,
+						"min": 0.0,
+						"name": "eccentricity",
 						"step": 0.01,
 						"type": "float"
 					}
@@ -291,76 +319,37 @@
 			"type": "shader"
 		},
 		{
-			"name": "shader_1",
+			"name": "_3",
 			"node_position": {
-				"x": -655.199951,
-				"y": 58.506279
+				"x": -800.0,
+				"y": -40.0
 			},
 			"parameters": {
-				"size": 9
+				"val": 4.0
 			},
 			"seed_int": 0,
 			"shader_model": {
 				"code": "",
 				"global": "",
-				"inputs": [
-					{
-						"default": "vec3(1.0)",
-						"function": true,
-						"label": "",
-						"name": "in",
-						"type": "rgb"
-					}
-				],
-				"instance": [
-					"/*",
-					"\tLicense: GPL-2.0-or-later",
-					"\thttps://projects.blender.org/blender/blender/src/branch/main/source/blender",
-					"\t/compositor/realtime_compositor/shaders/compositor_kuwahara_anisotropic_compute_structure_tensor.glsl",
-					"*/",
-					"vec4 $(name)_structure_tensor(vec2 uv) {",
-					"",
-					"\tfloat o = 1.0/$size;",
-					"",
-					"\tconst float corner_weight = 0.182;",
-					"\tconst float center_weight = 1.0 - 2.0 * corner_weight;",
-					"",
-					"\tvec3 x_partial_derivative = $in(uv + vec2(-o, o)).rgb * -corner_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(-o, 0)).rgb * -center_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(-o, -o)).rgb * -corner_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(o, o)).rgb * corner_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(o, 0)).rgb * center_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(o, -o)).rgb * corner_weight;",
-					"",
-					"\tvec3 y_partial_derivative = $in(uv + vec2(-o, o)).rgb * corner_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(0, o)).rgb * center_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(o, o)).rgb * corner_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(-o, -o)).rgb * -corner_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(0, -o)).rgb * -center_weight +",
-					"\t\t\t\t\t\t\t\t$in(uv + vec2(o, -o)).rgb * -corner_weight;",
-					"",
-					"\tfloat dxdx = dot(x_partial_derivative, x_partial_derivative);",
-					"\tfloat dxdy = dot(x_partial_derivative, y_partial_derivative);",
-					"\tfloat dydy = dot(y_partial_derivative, y_partial_derivative);",
-					"",
-					"\treturn vec4(dxdx, dxdy, dxdy, dydy);",
-					"}"
-				],
-				"name": "structure_tensor",
+				"inputs": [],
+				"instance": "",
+				"name": "uniformity",
 				"outputs": [
 					{
-						"rgba": "$(name)_structure_tensor($uv)",
-						"type": "rgba"
+						"f": "$val",
+						"type": "f"
 					}
 				],
 				"parameters": [
 					{
-						"default": 10,
-						"first": 0,
+						"control": "None",
+						"default": 4.0,
 						"label": "",
-						"last": 13,
-						"name": "size",
-						"type": "size"
+						"max": 50.0,
+						"min": 0.0,
+						"name": "val",
+						"step": 1.0,
+						"type": "float"
 					}
 				]
 			},
@@ -369,8 +358,8 @@
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -912.160034,
-				"y": -42.826626
+				"x": -720.0,
+				"y": -280.0
 			},
 			"parameters": {
 
@@ -380,7 +369,7 @@
 					"longdesc": "Input Image",
 					"name": "port0",
 					"shortdesc": "Input",
-					"type": "rgba"
+					"type": "rgb"
 				}
 			],
 			"seed_int": 0,
@@ -389,8 +378,8 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -180,
-				"y": -40
+				"x": 11.1868200302124,
+				"y": -83.8302764892578
 			},
 			"parameters": {
 
@@ -400,7 +389,7 @@
 					"longdesc": "Filtered Image",
 					"name": "unnamed",
 					"shortdesc": "Output",
-					"type": "rgba"
+					"type": "rgb"
 				}
 			],
 			"seed_int": 0,
@@ -409,15 +398,15 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -690,
-				"y": -260
+				"x": -160.0,
+				"y": -480.0
 			},
 			"parameters": {
-				"eccentricity": 1,
+				"eccentricity": 1.0,
 				"resolution": 9,
-				"sharpness": 1,
-				"size": 6,
-				"uniformity": 4
+				"sharpness": 1.0,
+				"size": 6.0,
+				"uniformity": 4.0
 			},
 			"seed_int": 0,
 			"type": "remote",
@@ -426,19 +415,19 @@
 					"label": "Resolution",
 					"linked_widgets": [
 						{
-							"node": "_2",
+							"node": "shader_1",
 							"widget": "s"
 						},
 						{
-							"node": "shader_1",
-							"widget": "size"
+							"node": "shader_2",
+							"widget": "s"
 						},
 						{
 							"node": "buffer_2",
 							"widget": "size"
 						},
 						{
-							"node": "gaussian_blur",
+							"node": "gaussian_blur_2",
 							"widget": "param0"
 						}
 					],
@@ -451,11 +440,11 @@
 					"label": "Size",
 					"linked_widgets": [
 						{
-							"node": "_2",
+							"node": "shader_1",
 							"widget": "size"
 						}
 					],
-					"longdesc": "Size of the filter. Higher values produce more stylized results but also increases computation time.",
+					"longdesc": "Higher values produce more stylized results but also increases computation time.",
 					"name": "size",
 					"shortdesc": "Filter Size",
 					"type": "linked_control"
@@ -468,7 +457,7 @@
 							"widget": "val"
 						}
 					],
-					"longdesc": "Uniformity of the image edges' directions",
+					"longdesc": "Uniformity of the image edge directions",
 					"name": "uniformity",
 					"shortdesc": "Uniformity",
 					"type": "linked_control"
@@ -477,11 +466,11 @@
 					"label": "Sharpness",
 					"linked_widgets": [
 						{
-							"node": "_2",
+							"node": "shader_1",
 							"widget": "sharpness"
 						}
 					],
-					"longdesc": "Edges sharpness",
+					"longdesc": "Edge Sharpness",
 					"name": "sharpness",
 					"shortdesc": "Sharpness",
 					"type": "linked_control"
@@ -490,11 +479,11 @@
 					"label": "Eccentricity",
 					"linked_widgets": [
 						{
-							"node": "_2",
+							"node": "shader_1",
 							"widget": "eccentricity"
 						}
 					],
-					"longdesc": "Filter directionality. Higher values corresponds to thinner directional features over circular omnidirectional features",
+					"longdesc": "Affects directionality of the filter. Higher values preserve directional features more closely.",
 					"name": "eccentricity",
 					"shortdesc": "Eccentricity",
 					"type": "linked_control"
@@ -504,8 +493,8 @@
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -420,
-				"y": -40.799164
+				"x": -120.0,
+				"y": -200.0
 			},
 			"parameters": {
 				"size": 9
@@ -515,67 +504,33 @@
 			"version": 1
 		},
 		{
-			"name": "gaussian_blur",
+			"name": "gaussian_blur_2",
 			"node_position": {
-				"x": -662.080017,
-				"y": 131.919174
+				"x": -640.0,
+				"y": -40.0
 			},
 			"parameters": {
 				"param0": 9,
-				"param1": 1,
-				"param2": 0
+				"param1": 1.0,
+				"param2": 0.0,
+				"param3": false
 			},
 			"seed_int": 0,
 			"type": "gaussian_blur"
-		},
-		{
-			"name": "_3",
-			"node_position": {
-				"x": -846.400024,
-				"y": 155.288696
-			},
-			"parameters": {
-				"val": 4
-			},
-			"seed_int": 0,
-			"shader_model": {
-				"code": "",
-				"global": "",
-				"inputs": [
-
-				],
-				"instance": "",
-				"name": "value",
-				"outputs": [
-					{
-						"f": "$val",
-						"type": "f"
-					}
-				],
-				"parameters": [
-					{
-						"control": "None",
-						"default": 4,
-						"label": "",
-						"max": 50,
-						"min": 0,
-						"name": "val",
-						"step": 1,
-						"type": "float"
-					}
-				]
-			},
-			"type": "shader"
 		}
 	],
 	"parameters": {
-		"eccentricity": 1,
+		"eccentricity": 1.0,
 		"resolution": 9,
-		"sharpness": 1,
-		"size": 6,
-		"uniformity": 4
+		"sharpness": 1.0,
+		"size": 6.0,
+		"uniformity": 4.0
+	},
+	"scroll_offset": {
+		"x": -702.712585449219,
+		"y": -510.868774414062
 	},
 	"seed_int": 0,
-	"shortdesc": "Anisotropic Kuwahara Filter",
+	"shortdesc": "Anisotropic Kuwahara",
 	"type": "graph"
 }
