@@ -119,7 +119,7 @@ func update_thumbnails() -> void:
 	missing_thumbnail_indexes = []
 	for i in range(assets.size()):
 		var m = assets[i]
-		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
+		var cache_filename : String = "user://website_cache/thumbnail_%d.webp" % m.id
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
 			missing_thumbnail_indexes.append(i)
@@ -144,10 +144,10 @@ func download_thumbnail() -> void:
 						_headers : PackedStringArray, body : PackedByteArray,
 						index : int) -> void:
 					var material : Dictionary = assets[index]
-					var save_path : String = "user://website_cache/thumbnail_%d.png" % material.id
+					var save_path : String = "user://website_cache/thumbnail_%d.webp" % material.id
 					var image : Image = Image.new()
 					image.load_webp_from_buffer(body)
-					image.save_png(save_path)
+					image.save_webp(save_path)
 					material.texture.set_image(image)
 					download_thumbnail()).bind(missing_index), CONNECT_ONE_SHOT)
 			return
