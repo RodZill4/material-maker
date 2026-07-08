@@ -1,30 +1,39 @@
 extends Window
 
 
-var assets : Array = []
-var displayed_assets : Array = []
+var assets : Array[Dictionary] = []
+var displayed_assets : PackedInt32Array = []
 var only_return_index : bool = false
 
 @onready var item_list : ItemList = $VBoxContainer/ItemList
 
-
 signal return_asset(json : Dictionary)
 
 var missing_thumbnail_indexes : Array[int]
-var current_missing_thumbnail_index : int
 
+enum AssetID {
+	MATERIAL,
+	BRUSH,
+	ENVIRONMENT,
+	NODE,
+}
+
+const MAX_CONNECTIONS : int = 8
 
 func _ready() -> void:
+	for c in range(MAX_CONNECTIONS):
+		$ImageHTTPRequestPool.add_child(HTTPRequest.new())
+
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
 
 func _on_ItemList_item_activated(index) -> void:
 	if only_return_index:
 		emit_signal("return_asset", { index=displayed_assets[index] })
 	else:
-		var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(displayed_assets[index]))
+		var error : Error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(displayed_assets[index]))
 		if error != OK:
 			return
-		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
+		var data : String = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
 		var json : JSON = JSON.new()
 		if json.parse(data) != OK or ! json.data is Dictionary:
 			return
@@ -46,7 +55,7 @@ func _on_OK_pressed() -> void:
 func _on_Cancel_pressed() -> void:
 	emit_signal("return_asset", {})
 
-func fill_list(filter : String):
+func fill_list(filter : String) -> void:
 	item_list.clear()
 	displayed_assets = []
 	var item_index : int = 0
@@ -60,7 +69,7 @@ func fill_list(filter : String):
 			displayed_assets.push_back(m.id)
 			item_index += 1
 			if i in missing_thumbnail_indexes:
-				print("Moving ", i, " to front")
+				#print("Moving ", i, " to front")
 				missing_thumbnail_indexes.erase(i)
 				prioritized.push_back(i)
 	prioritized.append_array(missing_thumbnail_indexes)
@@ -79,20 +88,20 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 			only_return_index = return_index
 			var parse_result : Array = json.get_data()
 			visible = true
+			%Filter.grab_focus()
 			size = get_contents_minimum_size()
 			hide()
 			popup_centered()
-			var tmp_assets = parse_result
+			var tmp_assets : Array = parse_result
 			tmp_assets.reverse()
 			assets = []
-			var image : Image = Image.create(256, 256, false, Image.FORMAT_RGBA8)
 			for i in range(tmp_assets.size()):
 				var m = tmp_assets[i]
 				m.id = int(m.id)
 				m.type = int(m.type)
 				if m.type & 15 == type:
 					m.texture = ImageTexture.new()
-					m.texture.set_image(image)
+					m.texture.set_image(get_placeholder_icon(type))
 					assets.push_back(m)
 			fill_list("")
 			update_thumbnails()
@@ -100,7 +109,7 @@ func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
 			queue_free()
 			return result
 	queue_free()
-	var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
+	var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 	dialog.dialog_text = "Cannot get assets from the website"
 	mm_globals.main_window.add_child(dialog)
 	dialog.ask()
@@ -110,43 +119,61 @@ func update_thumbnails() -> void:
 	missing_thumbnail_indexes = []
 	for i in range(assets.size()):
 		var m = assets[i]
-		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
+		var cache_filename : String = "user://website_cache/thumbnail_%d.webp" % m.id
 		var image : Image = Image.new()
 		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
 			missing_thumbnail_indexes.append(i)
 		else:
 			m.texture.set_image(image)
-	download_thumbnail()
+
+	for connection in range(MAX_CONNECTIONS):
+		download_thumbnail()
 
 func download_thumbnail() -> void:
-	while not missing_thumbnail_indexes.is_empty():
-		current_missing_thumbnail_index = missing_thumbnail_indexes.pop_front()
-		var m = assets[current_missing_thumbnail_index]
-		var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
-		var address : String = MMPaths.WEBSITE_ADDRESS+"/data/materials/material_"+str(m.id)+".webp"
-		var error = $ImageHTTPRequest.request(address)
-		if error == OK:
-			var data : PackedByteArray = (await $ImageHTTPRequest.request_completed)[3]
-			break
+	if missing_thumbnail_indexes.is_empty():
+		return
+	var missing_index : int = missing_thumbnail_indexes.pop_front()
+	var m : Dictionary = assets[missing_index]
+	var address : String = MMPaths.WEBSITE_ADDRESS + "/data/materials/material_%d.webp" % m.id
 
-func _on_image_http_request_request_completed(result, response_code, headers, body):
-	var m = assets[current_missing_thumbnail_index]
-	var cache_filename : String = "user://website_cache/thumbnail_%d.png" % m.id
-	var image : Image = Image.new()
-	image.load_webp_from_buffer(body)
-	image.save_png(cache_filename)
-	m.texture.set_image(image)
-	download_thumbnail()
+	for http : HTTPRequest in $ImageHTTPRequestPool.get_children():
+		if http.get_http_client_status() == HTTPClient.Status.STATUS_DISCONNECTED:
+			var _error : Error = http.request(address)
+			http.request_completed.connect(
+				(func(_result : int, _response_code : int,
+						_headers : PackedStringArray, body : PackedByteArray,
+						index : int) -> void:
+					var material : Dictionary = assets[index]
+					var save_path : String = "user://website_cache/thumbnail_%d.webp" % material.id
+					var image : Image = Image.new()
+					image.load_webp_from_buffer(body)
+					image.save_webp(save_path)
+					material.texture.set_image(image)
+					download_thumbnail()).bind(missing_index), CONNECT_ONE_SHOT)
+			return
 
-func _on_ItemList_item_selected(_index):
+func _on_ItemList_item_selected(_index : int) -> void:
 	$VBoxContainer/Buttons/OK.disabled = false
 
-func _on_ItemList_nothing_selected():
+func _on_ItemList_nothing_selected() -> void:
 	$VBoxContainer/Buttons/OK.disabled = true
 
-func _on_VBoxContainer_minimum_size_changed():
+func _on_VBoxContainer_minimum_size_changed() -> void:
 	size = ($VBoxContainer.size+Vector2(4, 4))*content_scale_factor
 
-
-func _on_Filter_changed(new_text):
+func _on_Filter_changed(new_text : String) -> void:
 	fill_list(new_text)
+
+func get_placeholder_icon(type : AssetID) -> Image:
+	const icons : String = "res://material_maker/windows/load_from_website/icons/%s"
+	match type:
+		AssetID.MATERIAL:
+			return preload(icons % "material.svg").get_image()
+		AssetID.BRUSH:
+			return preload(icons % "brush.svg").get_image()
+		AssetID.NODE:
+			return preload(icons % "node.svg").get_image()
+		AssetID.ENVIRONMENT:
+			return preload(icons % "environment.svg").get_image()
+		_:
+			return Image.new()

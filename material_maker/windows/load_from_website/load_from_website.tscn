@@ -1,32 +1,41 @@
-[gd_scene load_steps=2 format=3 uid="uid://b13dighio76a7"]
+[gd_scene format=3 uid="uid://b13dighio76a7"]
 
 [ext_resource type="Script" uid="uid://cwdsenmji25k1" path="res://material_maker/windows/load_from_website/load_from_website.gd" id="1"]
 
-[node name="LoadFromWebsite" type="Window"]
+[node name="LoadFromWebsite" type="Window" unique_id=81371415]
 oversampling_override = 1.0
 title = "Load from website"
+position = Vector2i(0, -36)
 exclusive = true
 script = ExtResource("1")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-custom_minimum_size = Vector2(600, 500)
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=154992368]
+custom_minimum_size = Vector2(680, 500)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Filter" type="HBoxContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1826493563]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1520177545]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/Filter"]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=266870624]
 layout_mode = 2
 text = "Filter:"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Filter"]
+[node name="Filter" type="LineEdit" parent="VBoxContainer/MarginContainer/HBoxContainer" unique_id=1329492837]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+[node name="ItemList" type="ItemList" parent="VBoxContainer" unique_id=1838916827]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -35,33 +44,32 @@ fixed_column_width = 128
 icon_mode = 0
 icon_scale = 0.5
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1301122459]
 layout_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer" unique_id=971139098]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="OK" type="Button" parent="VBoxContainer/Buttons"]
+[node name="OK" type="Button" parent="VBoxContainer/Buttons" unique_id=625088865]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 disabled = true
 text = "OK"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/Buttons"]
+[node name="Cancel" type="Button" parent="VBoxContainer/Buttons" unique_id=298577359]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Cancel"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=673389565]
 
-[node name="ImageHTTPRequest" type="HTTPRequest" parent="."]
+[node name="ImageHTTPRequestPool" type="Node" parent="." unique_id=528309490]
 
 [connection signal="close_requested" from="." to="." method="_on_Cancel_pressed"]
 [connection signal="minimum_size_changed" from="VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
-[connection signal="text_changed" from="VBoxContainer/Filter/LineEdit" to="." method="_on_Filter_changed"]
+[connection signal="text_changed" from="VBoxContainer/MarginContainer/HBoxContainer/Filter" to="." method="_on_Filter_changed"]
 [connection signal="item_activated" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_activated"]
 [connection signal="item_selected" from="VBoxContainer/ItemList" to="." method="_on_ItemList_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Buttons/OK" to="." method="_on_OK_pressed"]
 [connection signal="pressed" from="VBoxContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]
-[connection signal="request_completed" from="ImageHTTPRequest" to="." method="_on_image_http_request_request_completed"]
