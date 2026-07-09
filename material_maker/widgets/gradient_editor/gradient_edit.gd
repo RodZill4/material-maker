@@ -108,19 +108,19 @@ func _gui_input(ev:InputEvent) -> void:
 	if preview_cursor:
 		preview_cursor.set_cursor_offset(position_to_offset(get_local_mouse_position()))
 
-
-func select_color(cursor:GradientEditCursor) -> void:
+func select_color(cursor : GradientEditCursor) -> void:
 	active_cursor = cursor.cursor_index
 	mode = Modes.SELECTING_COLOR
 
-	var color_picker_popup := preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
+	var color_picker_popup : PopupPanel = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
 	color_picker_popup.hide()
+	color_picker_popup.borderless = not mm_globals.get_config("color_picker_floating")
 	add_child(color_picker_popup)
 
-	var color_picker := color_picker_popup.get_node("ColorPicker")
+	var color_picker : ColorPicker = color_picker_popup.get_node("ColorPicker")
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
-		
+
 	if mm_globals.has_config("color_picker_color_mode"):
 		color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
 	if mm_globals.has_config("color_picker_shape"):
@@ -135,12 +135,14 @@ func select_color(cursor:GradientEditCursor) -> void:
 
 	var content_scale_factor : float = mm_globals.ui_scale_factor()
 	color_picker_popup.content_scale_factor = content_scale_factor
-	color_picker_popup.min_size = color_picker_popup.get_contents_minimum_size() * content_scale_factor
+	color_picker_popup.size = Vector2.ZERO
 
 	var _scale := get_global_transform().get_scale()
-
+	
+	@warning_ignore_start("narrowing_conversion")
 	color_picker_popup.position.x = (global_position.x + size.x*_scale.x) * content_scale_factor
 	color_picker_popup.position.y = global_position.y * content_scale_factor
+	@warning_ignore_restore("narrowing_conversion")
 
 	if not get_tree().root.gui_embed_subwindows:
 		color_picker_popup.position += get_window().position
