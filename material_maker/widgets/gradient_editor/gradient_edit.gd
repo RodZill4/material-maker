@@ -113,7 +113,7 @@ func select_color(cursor:GradientEditCursor) -> void:
 	active_cursor = cursor.cursor_index
 	mode = Modes.SELECTING_COLOR
 
-	var color_picker_popup := preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
+	var color_picker_popup : PopupPanel = preload("res://material_maker/widgets/color_picker_popup/color_picker_popup.tscn").instantiate()
 	color_picker_popup.hide()
 	add_child(color_picker_popup)
 
@@ -135,7 +135,7 @@ func select_color(cursor:GradientEditCursor) -> void:
 
 	var content_scale_factor : float = mm_globals.ui_scale_factor()
 	color_picker_popup.content_scale_factor = content_scale_factor
-	color_picker_popup.min_size = color_picker_popup.get_contents_minimum_size() * content_scale_factor
+	color_picker_popup.size = Vector2.ZERO
 
 	var _scale := get_global_transform().get_scale()
 
