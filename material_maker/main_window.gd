@@ -1556,7 +1556,3 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
-
-
-func _on_console_resizer_container_mouse_entered() -> void:
-	pass # Replace with function body.
