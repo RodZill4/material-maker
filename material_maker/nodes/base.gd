@@ -468,9 +468,9 @@ func _on_menu_id_pressed(id : int) -> void:
 			var node = generator.serialize()
 			var share_button = mm_globals.main_window.get_share_button()
 			var renderer = await generator.render(self, 0, 1024, true)
-			var preview_texture : ImageTexture = ImageTexture.create_from_image(renderer.get_image())
+			var preview_textures : Array[Texture2D] = [ImageTexture.create_from_image(renderer.get_image())]
 			renderer.release(self)
-			share_button.send_asset("node", node, preview_texture)
+			share_button.send_asset("node", node, preview_textures)
 
 var edit_generator_prev_state : Dictionary
 var edit_generator_next_state : Dictionary
