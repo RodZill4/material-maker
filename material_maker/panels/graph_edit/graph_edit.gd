@@ -886,6 +886,7 @@ func save_as() -> bool:
 
 func save_file(filename : String) -> bool:
 	mm_loader.current_project_path = filename.get_base_dir()
+	top_generator.scroll_offset = scroll_offset
 	var data = top_generator.serialize()
 	data["project_thumbnail"] = await generate_project_thumbnail()
 	mm_loader.current_project_path = ""
