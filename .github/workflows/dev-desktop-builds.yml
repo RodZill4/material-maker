@@ -231,8 +231,9 @@ jobs:
           name: macos_snapshot
           path: ./build/mac
   deploy_to_steam:
+    name: Steam deploy 🎮
     runs-on: ubuntu-latest
-    needs: export_windows_linux
+    needs: export_macos
     if: ${{ github.event.inputs.steam_deploy == 'true' }}
     steps:
       - name: Get Windows build 🚀
