@@ -27,6 +27,11 @@ on:
         type: boolean
         required: true
         default: "false"
+      steam_deploy:
+        description: "Upload Steam version"
+        type: boolean
+        required: true
+        default: "false"
 
 env:
   GODOT_VERSION: 4.7
@@ -225,3 +230,44 @@ jobs:
         with:
           name: macos_snapshot
           path: ./build/mac
+  deploy_to_steam:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.steam_deploy == 'true' }}
+    steps:
+      - name: Get Windows build 🚀
+        if: ${{ github.event.inputs.artifacts == 'true' }}
+        uses: actions/download-artifact@v8
+        with:
+          name: windows_snapshot
+          path: artifacts
+      - name: Get Linux build 🚀
+        if: ${{ github.event.inputs.artifacts == 'true' }}
+        uses: actions/download-artifact@v8
+        with:
+          name: linux_snapshot
+          path: artifacts
+      - name: Get Macos build 🚀
+        if: ${{ github.event.inputs.artifacts == 'true' }}
+        uses: actions/download-artifact@v8
+        with:
+          name: macos_snapshot
+          path: artifacts
+      - name: Prepare packages 🔧
+        run: |
+          find .
+      - uses: CyberAndrii/steam-totp@v1
+        name: Generate TOTP
+        id: steam-totp
+        with:
+          shared_secret: ${{ secrets.STEAM_SHARED_SECRET }}
+      - uses: game-ci/steam-deploy@v3
+        with:
+          username: ${{ secrets.STEAM_USERNAME }}
+          password: ${{ secrets.STEAM_PASSWORD }}
+          totp: ${{ steps.steam-totp.outputs.code }}
+          appId: 4110830
+          buildDescription: v1.7
+          rootPath: build
+          depot1Path: StandaloneWindows64
+          depot2Path: StandaloneLinux64
+          releaseBranch: prerelease
