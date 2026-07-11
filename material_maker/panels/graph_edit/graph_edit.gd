@@ -2038,7 +2038,8 @@ func _on_connection_drag_ended() -> void:
 func _on_button_reroll_pressed() -> void:
 	undoredo.start_group()
 	for node in get_children():
-		if node is MMGraphNodeMinimal and node.has_method("on_randomness_pressed"):
+		if (node is MMGraphNodeMinimal and node.has_method("on_randomness_pressed")
+				and node.randomness_button.visible):
 			if Input.is_key_pressed(KEY_SHIFT):
 				if node.selected:
 					node.on_randomness_pressed()
