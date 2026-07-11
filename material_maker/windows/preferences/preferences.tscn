@@ -273,6 +273,27 @@ text = "On"
 flat = false
 config_variable = "ui_3d_preview_sun_shadow"
 
+[node name="Spacer6" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1887764222]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="JoypadInput" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1395946192]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/JoypadInput" unique_id=167353790]
+layout_mode = 2
+text = "Enable controller input (requires restart)"
+
+[node name="JoypadInput" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/JoypadInput" unique_id=737154037 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Toggle controller/joypad input."
+text = "On"
+flat = false
+config_variable = "joypad_events"
+
 [node name="WinTabletDriverSpacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1614702595]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)

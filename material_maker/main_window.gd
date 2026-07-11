@@ -258,6 +258,13 @@ func _ready() -> void:
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 
+	# Remove Joypad events from action mappings
+	if not mm_globals.get_config("joypad_events"):
+		for x in InputMap.get_actions():
+			for event in InputMap.action_get_events(x):
+				if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+					InputMap.action_erase_event(x, event)
+
 
 var menu_update_requested : bool = false
 
