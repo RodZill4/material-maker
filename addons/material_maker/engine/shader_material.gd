@@ -13,6 +13,11 @@ func _init(m : ShaderMaterial = null):
 		material.shader = Shader.new()
 
 func set_shader(shader_code : String) -> bool:
+	# Remove the Texture2D references, otherwise they will remain
+	if material.shader != null and not material.shader.code.is_empty():
+		for p in material.get_property_list():
+			if p.hint_string == "Texture2D" and p.name.begins_with("shader_parameter/"):
+				material.set_shader_parameter(p.name.right(-17), null)
 	var shader : Shader = Shader.new()
 	shader.code = shader_code
 	material.shader = shader
