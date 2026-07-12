@@ -1,44 +1,485 @@
-[gd_scene load_steps=7 format=3 uid="uid://dnttargjmhjh8"]
+[gd_scene format=3 uid="uid://dnttargjmhjh8"]
 
-[ext_resource type="Texture2D" uid="uid://dirl7gcde30rx" path="res://material_maker/tools/share/broken_link.tres" id="1"]
 [ext_resource type="Script" uid="uid://kj7il6wl1325" path="res://material_maker/tools/share/share_button.gd" id="2"]
 [ext_resource type="Script" uid="uid://8x545jr4bcm3" path="res://material_maker/tools/share/share_http_request.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="4"]
 
-[sub_resource type="AtlasTexture" id="1"]
-atlas = ExtResource("4")
-region = Rect2(224, 0, 32, 16)
-filter_clip = true
+[sub_resource type="Shader" id="Shader_53or2"]
+code = "shader_type canvas_item;
 
-[sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("4")
-region = Rect2(224, 16, 32, 16)
-filter_clip = true
+uniform vec3 bg_color : source_color = vec3(0.4);
+uniform vec3 fg_color : source_color = vec3(1.0, 0.835, 0.29);
+uniform float opacity : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform bool solid = false;
 
-[node name="Share" type="HBoxContainer"]
-offset_right = 40.0
+float smax(float d1, float d2, float k) {
+	float h = clamp(0.5 - 0.5*(d2 - d1)/k, 0.0, 1.0);
+	return mix(d2, d1, h) + k*h*(1.0 - h); 
+}
+
+void fragment() {
+	const float radius = 0.03;
+	vec2 p = (UV - 0.5) * vec2(1.0, 0.5);
+	vec3 result = bg_color;
+
+	float dist = length(max(abs(p) - vec2(0.5, 0.0), vec2(0.0)));
+	dist -= smoothstep(0.0, 1.0, smax((abs(UV.x - 0.5) - 0.3) * 3.2, 0.0, 0.8)) * 0.1;
+	dist = smax(dist, 0.2 - distance(vec2(abs(p.x), p.y), vec2(0.63, 0.0)), 0.035);
+	float mask = smoothstep(radius + fwidth(dist), radius - fwidth(dist), dist);
+
+	float offset = (sin(TIME * PI) + 1.0) * 0.5;
+	float pulse = fract((UV.x * 0.8 - (TIME- 0.7) * 0.7) - 0.5);
+	pulse = smoothstep(0.3, 0.0, abs((UV.x * 2.0 - 1.0) * 0.3 - offset + 0.5)) * 0.8;
+
+	if (solid)
+		pulse = 1.0;
+
+	result = mix(result, fg_color, pulse * opacity);
+	COLOR = vec4(result, mask);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bp85t"]
+shader = SubResource("Shader_53or2")
+shader_parameter/bg_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/fg_color = Color(1, 0.835, 0.29, 1)
+shader_parameter/opacity = 0.0
+shader_parameter/solid = false
+
+[sub_resource type="Animation" id="Animation_53or2"]
+resource_name = "reset"
+length = 0.001
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ConnectButton:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SendButton:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Link:material:shader_parameter/bg_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Link:material:shader_parameter/fg_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.835, 0.29, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Link:material:shader_parameter/opacity")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Link:material:shader_parameter/solid")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_qn0pe"]
+resource_name = "connected"
+length = 1.2
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ConnectButton:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.19999999, 1.2),
+"transitions": PackedFloat32Array(1, 1, 2),
+"update": 0,
+"values": [Color(1, 0.835, 0.29, 1), Color(1, 0.8352941, 0.2901961, 1), Color(0.127, 0.645, 0.462, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SendButton:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.19999999, 1.2),
+"transitions": PackedFloat32Array(1, 1, 2),
+"update": 0,
+"values": [Color(1, 0.835, 0.29, 1), Color(1, 0.8352941, 0.2901961, 1), Color(0.127, 0.645, 0.462, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Link:material:shader_parameter/solid")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Link:material:shader_parameter/opacity")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.19999999, 1.2),
+"transitions": PackedFloat32Array(1, 1, 2),
+"update": 0,
+"values": [0.999999977648, 0.999999977648, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Link:material:shader_parameter/bg_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.127, 0.645, 0.462, 1), Color(0.127, 0.645, 0.462, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Link:material:shader_parameter/fg_color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0.835, 0.29, 1), Color(1, 0.835, 0.29, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5udca"]
+resource_name = "disconnected_error"
+length = 0.8
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Link:material:shader_parameter/bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.83, 0.38, 0.462, 1), Color(0.83, 0.38, 0.462, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Link:material:shader_parameter/solid")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Link:material:shader_parameter/fg_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1), Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Link:material:shader_parameter/opacity")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1.5),
+"update": 0,
+"values": [0.0, 0.999999977648]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ConnectButton:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.83137256, 0.38039216, 0.4627451, 1), Color(0.8313725, 0.38039216, 0.4627451, 1), Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SendButton:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.83137256, 0.38039216, 0.4627451, 1), Color(0.83137256, 0.38039216, 0.4627451, 1), Color(0.4, 0.4, 0.4, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_g0nxm"]
+resource_name = "disconnected_normal"
+length = 0.8
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Link:material:shader_parameter/bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.127, 0.645, 0.462, 1), Color(0.127, 0.645, 0.462, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Link:material:shader_parameter/solid")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Link:material:shader_parameter/fg_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1), Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Link:material:shader_parameter/opacity")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1.5),
+"update": 0,
+"values": [0.0, 0.999999977648]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SendButton:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.1254902, 0.6431373, 0.4627451, 1), Color(0.1254902, 0.6431373, 0.4627451, 1), Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ConnectButton:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.127, 0.645, 0.462, 1), Color(0.127, 0.645, 0.462, 1), Color(0.4, 0.4, 0.4, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_bp85t"]
+resource_name = "start_connection"
+length = 0.5
+step = 0.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Link:material:shader_parameter/opacity")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 0.28717452),
+"update": 0,
+"values": [0.0, 0.999999977648]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ConnectButton:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SendButton:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Link:material:shader_parameter/solid")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Link:material:shader_parameter/bg_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.4, 0.4, 0.4, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Link:material:shader_parameter/fg_color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.835, 0.29, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bp85t"]
+_data = {
+&"RESET": SubResource("Animation_53or2"),
+&"connected": SubResource("Animation_qn0pe"),
+&"disconnected_error": SubResource("Animation_5udca"),
+&"disconnected_normal": SubResource("Animation_g0nxm"),
+&"start_connection": SubResource("Animation_bp85t")
+}
+
+[node name="Share" type="HBoxContainer" unique_id=1061916264]
+offset_right = 96.0
 offset_bottom = 40.0
 tooltip_text = "Open Material Maker website"
+theme_override_constants/separation = 0
 script = ExtResource("2")
 
-[node name="ConnectButton" type="TextureButton" parent="."]
+[node name="ConnectButton" type="TextureButton" parent="." unique_id=2084663820]
+modulate = Color(0.4, 0.4, 0.4, 1)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Connect to website"
-texture_normal = ExtResource("1")
+mouse_default_cursor_shape = 2
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="SendButton" type="TextureButton" parent="."]
+[node name="Link" type="ColorRect" parent="." unique_id=417092533]
+material = SubResource("ShaderMaterial_bp85t")
+custom_minimum_size = Vector2(48, 24)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SendButton" type="TextureButton" parent="." unique_id=323917507]
+modulate = Color(0.4, 0.4, 0.4, 1)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "Send material to website"
 disabled = true
-texture_normal = SubResource("1")
-texture_disabled = SubResource("2")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=1237798835]
 max_redirects = 0
-timeout = 2.0
+timeout = 7.0
 script = ExtResource("3")
+metadata/_custom_type_script = "uid://8x545jr4bcm3"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1370449193]
+libraries/ = SubResource("AnimationLibrary_bp85t")
 
 [connection signal="pressed" from="ConnectButton" to="." method="_on_ConnectButton_pressed"]
 [connection signal="pressed" from="SendButton" to="." method="_on_SendButton_pressed"]

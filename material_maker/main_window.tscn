@@ -289,7 +289,6 @@ visible = false
 [connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
 [connection signal="gui_input" from="VBoxContainer/ConsoleResizer" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
 [connection signal="gui_input" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
-[connection signal="mouse_exited" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_mouse_exited"]
 [connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
 [connection signal="meta_hover_ended" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_hover_ended"]
 [connection signal="meta_hover_started" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_hover_started"]
