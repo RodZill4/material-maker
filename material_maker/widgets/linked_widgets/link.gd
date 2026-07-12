@@ -47,18 +47,30 @@ func find_control(gp) -> Dictionary:
 func _draw() -> void:
 	if ! ( is_instance_valid(source) and is_instance_valid(self) ):
 		return
-	var start = source.get_global_transform() * 0.5*source.size * get_global_transform()
+	var start =  get_global_transform().affine_inverse() * source.get_global_transform() * (0.5*source.size)
 	var color = Color(1, 0.5, 0.5, 1.0)
 	var rect
 	if target != null:
 		color = Color(0.5, 1, 0.5, 1.0)
-		rect = target.get_global_transform() * Rect2(Vector2(0, 0), target.size) * get_global_transform()
+		rect = get_global_transform().affine_inverse() * target.get_global_transform() * Rect2(Vector2.ZERO, target.size)
 		draw_rect(rect, color, false, 2, true)
 		end = closest(rect, start)
-	rect = source.get_global_transform() * Rect2(Vector2(0, 0), source.size) * get_global_transform()
+	rect = get_global_transform().affine_inverse() * source.get_global_transform() * Rect2(Vector2.ZERO, source.size)
 	draw_rect(rect, color, false, 2, true)
 	start = closest(rect, end)
 	draw_line(start, end, color, 1.5, true)
+
+	# arrow
+	const tri_size : float = 10.0
+	var mid_pt : Vector2 = (start + end) * 0.5
+	var dir : Vector2 = (end - start).normalized()
+	var tri_pts : PackedVector2Array = PackedVector2Array([
+			mid_pt + dir * tri_size,
+			mid_pt + dir.orthogonal() * tri_size * 0.7,
+			mid_pt - dir.orthogonal() * tri_size * 0.7,
+			mid_pt + dir * tri_size])
+	draw_polyline(tri_pts, color, 1.5, true) # aa outline
+	draw_polygon(tri_pts.slice(0, -1), PackedColorArray([color, color, color]))
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

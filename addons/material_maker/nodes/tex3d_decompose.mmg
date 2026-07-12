@@ -1,0 +1,51 @@
+{
+	"name": "tex3d_decompose",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "i",
+				"shortdesc": "Input",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Decomposes a 3D texture into 3 grayscale 3D textures",
+		"name": "TEX3D Decompose",
+		"outputs": [
+			{
+				"longdesc": "Shows the Red channel of the input",
+				"shortdesc": "Red",
+				"tex3d_gs": "$i($uv).r",
+				"type": "tex3d_gs"
+			},
+			{
+				"longdesc": "Shows the Green channel of the input",
+				"shortdesc": "Green",
+				"tex3d_gs": "$i($uv).g",
+				"type": "tex3d_gs"
+			},
+			{
+				"longdesc": "Shows the Blue channel of the input",
+				"shortdesc": "Blue",
+				"tex3d_gs": "$i($uv).b",
+				"type": "tex3d_gs"
+			}
+		],
+		"parameters": [],
+		"shortdesc": "TEX3D Decompose"
+	},
+	"type": "shader"
+}

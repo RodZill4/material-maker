@@ -1,0 +1,22 @@
+[remap]
+
+importer="svg"
+type="DPITexture"
+uid="uid://dogb0jebka4h5"
+path="res://.godot/imported/material.svg-14987e86cc4514b0f35987ecfef76553.dpitex"
+
+[deps]
+
+source_file="res://material_maker/windows/load_from_website/icons/material.svg"
+dest_files=["res://.godot/imported/material.svg-14987e86cc4514b0f35987ecfef76553.dpitex"]
+
+[params]
+
+base_scale=8.0
+saturation=1.0
+color_map={
+Color(1, 1, 1, 1): Color(0.65125984, 0.65125984, 0.65125984, 1)
+}
+fix_alpha_border=false
+premult_alpha=false
+compress=true

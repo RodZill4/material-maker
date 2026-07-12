@@ -1,0 +1,55 @@
+{
+	"name": "tex3d_combine",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "0.0",
+				"label": "R",
+				"longdesc": "The grayscale 3D texture for the red channel",
+				"name": "r",
+				"shortdesc": "Red",
+				"type": "tex3d_gs"
+			},
+			{
+				"default": "0.0",
+				"label": "G",
+				"longdesc": "The grayscale 3D texture for the green channel",
+				"name": "g",
+				"shortdesc": "Green",
+				"type": "tex3d_gs"
+			},
+			{
+				"default": "0.0",
+				"label": "B",
+				"longdesc": "The grayscale 3D texture for the blue channel",
+				"name": "b",
+				"shortdesc": "Blue",
+				"type": "tex3d_gs"
+			}
+		],
+		"instance": "",
+		"longdesc": "Combines 3 grayscale 3D textures into a 3D texture",
+		"name": "TEX3D Combine",
+		"outputs": [
+			{
+				"longdesc": "Shows the combined RGBA image",
+				"shortdesc": "Output",
+				"tex3d": "vec3($r($uv), $g($uv), $b($uv))",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [],
+		"shortdesc": "TEX3D Combine"
+	},
+	"type": "shader"
+}

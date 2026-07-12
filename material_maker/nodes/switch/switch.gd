@@ -7,8 +7,10 @@ func _ready() -> void:
 	update_node()
 
 func update_node() -> void:
+	close_button.visible = mm_globals.get_config(SETTINGS_NODE_CLOSE_BUTTON)
 	if generator == null or !generator.parameters.has("outputs") or !generator.parameters.has("choices"):
 		return
+	save_remote_metadata()
 	save_preview_widget()
 	var new_fixed_lines = 3 if generator.editable else 1
 	if new_fixed_lines != fixed_lines:
@@ -38,6 +40,8 @@ func update_node() -> void:
 			control.max_value = l.max
 			control.step = 1
 			control.custom_minimum_size.x = 75
+			MMGraphNodeRemote.setup_linked_control_callbacks(control, true)
+			restore_remote_metadata(control)
 			if l.has("tooltip"):
 				control.tooltip_text = l.tooltip
 			sizer.add_child(control)

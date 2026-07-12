@@ -55,7 +55,7 @@ const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
-	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
+	{ menu="File/New paint project (Experimental)", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
 	{ menu="File/Load", command="load_project", shortcut="Control+O" },
 	{ menu="File/Load material from website", command="load_material_from_website" },
 	{ menu="File/Load recent", submenu="load_recent", standalone_only=true, not_in_ports=["HTML5"] },
@@ -521,6 +521,7 @@ func export_material(file_path : String, profile : String) -> void:
 	mm_globals.config.set_value("path", export_profile_config_key(profile), file_path.get_base_dir())
 	var export_prefix = file_path.trim_suffix("."+file_path.get_extension())
 	project.export_material(export_prefix, profile)
+	mm_steam.unlock_achievement("ACH_MATERIALIZED")
 
 func export_again_is_disabled() -> bool:
 	var project = get_current_project()
@@ -656,6 +657,8 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 	for i in range(panels.size()):
 		menu.add_check_item(panels[i], i)
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
+		if current_mode:
+			menu.set_item_disabled(i, panels[i] in layout.HIDE_PANELS[current_mode])
 	menu.connect_id_pressed(self._on_ShowPanels_id_pressed)
 
 func create_menu_panels_preset(menu : MMMenuManager.MenuBase) -> void:
@@ -863,6 +866,8 @@ func load_material_from_website() -> void:
 	var new_generator = await mm_loader.create_gen(result)
 	graph_edit.set_new_generator(new_generator)
 	hierarchy.update_from_graph_edit(graph_edit)
+	mm_steam.unlock_achievement("ACH_COMMUNITY_CHEST")
+
 
 func save_project(project : Control = null) -> bool:
 	if project == null:
@@ -1006,6 +1011,7 @@ func edit_select_sources_is_disabled() -> bool:
 
 func edit_select_sources() -> void:
 	edit_select_connected("to_node", "from_node")
+	mm_steam.unlock_achievement("ACH_UPSTREAM_DOWNSTREAM")
 
 func edit_select_targets_is_disabled() -> bool:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1013,6 +1019,7 @@ func edit_select_targets_is_disabled() -> bool:
 
 func edit_select_targets() -> void:
 	edit_select_connected("from_node", "to_node")
+	mm_steam.unlock_achievement("ACH_UPSTREAM_DOWNSTREAM")
 
 func edit_duplicate_is_disabled() -> bool:
 	return edit_cut_is_disabled()
@@ -1134,6 +1141,7 @@ func make_selected_nodes_editable() -> void:
 		for n in selected_nodes:
 			if n.generator.toggle_editable() and n.has_method("update_node"):
 				n.update_node()
+		mm_steam.unlock_achievement("ACH_TINKERER")
 
 func create_menu_add_to_library(menu : MMMenuManager.MenuBase, manager, function) -> void:
 	menu.clear()
@@ -1176,6 +1184,7 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true, upd
 		image = result.get_image()
 		result.release(self)
 	node_library_manager.add_item_to_library(index, current_item_name, image, data)
+	mm_steam.unlock_achievement("ACH_KITBASHER")
 
 func create_menu_add_brush_to_library(menu : MMMenuManager.MenuBase) -> void:
 	create_menu_add_to_library(menu, brush_library_manager, "add_brush_to_library")
@@ -1238,6 +1247,8 @@ func show_doc() -> void:
 	var doc_dir = get_doc_dir()
 	if doc_dir != "":
 		OS.shell_open(doc_dir+"/index.html")
+		mm_steam.unlock_achievement("ACH_RTFM")
+
 
 func show_doc_is_disabled() -> bool:
 	return get_doc_dir() == ""
@@ -1266,7 +1277,13 @@ func about() -> void:
 	about_box.popup_centered()
 
 func show_example_projects() -> void:
-	OS.shell_open(ProjectSettings.globalize_path("res://material_maker/examples"))
+	var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
+	var release_examples_path : String = base_dir.path_join("examples")
+	var devel_examples_path : String = ProjectSettings.globalize_path("res://material_maker/examples")
+	for p in [ release_examples_path, devel_examples_path ]:
+		if DirAccess.dir_exists_absolute(p):
+			OS.shell_open(p)
+			return
 
 # Preview
 
@@ -1372,7 +1389,10 @@ func dim_window() -> void:
 	modulate = Color(0.5, 0.5, 0.5)
 
 func generate_screenshots():
-	var result = await library.generate_screenshots(get_current_graph_edit())
+	var graph : MMGraphEdit = get_current_graph_edit()
+	graph.get_node("node_Material").position_offset = Vector2(-300, 0)
+	var result : int = await library.generate_node_screenshots(graph)
+	result += await library.generate_material_screenshots(graph)
 	print(result)
 
 func generate_graph_screenshot():
@@ -1421,6 +1441,7 @@ func generate_graph_screenshot():
 	graph_edit.zoom = save_zoom
 	image.save_png(files[0])
 	graph_edit.minimap_enabled = minimap_save
+	mm_steam.unlock_achievement("ACH_FAMILY_PORTRAIT")
 
 # Handle dropped files
 
@@ -1541,7 +1562,3 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
-
-
-func _on_console_resizer_container_mouse_entered() -> void:
-	pass # Replace with function body.

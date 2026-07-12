@@ -25,3 +25,16 @@ index.
 	node_3d_texture_uniform
 	node_3d_texture_scale
 	node_3d_texture_translate
+	node_3d_texture_tones_step
+	node_3d_texture_math
+	node_3d_texture_tones_range
+	node_3d_texture_tones_map
+	node_3d_texture_v3_math
+	node_3d_texture_quantize
+	node_3d_texture_uv
+	node_3d_texture_invert
+	node_3d_texture_tonality
+	node_3d_texture_combine
+	node_3d_texture_decompose
+	node_3d_texture_smooth_minmax
+	node_3d_texture_warp

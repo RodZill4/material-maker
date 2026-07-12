@@ -81,6 +81,7 @@ func update_node() -> void:
 	for i in range(parameter_count):
 		var p = generator.get_parameter_defs()[i]
 		var control = create_parameter_control(p, false)
+		setup_linked_control_callbacks(control, false)
 		if control != null:
 			control.name = p.name
 			controls[control.name] = control
@@ -100,7 +101,7 @@ func update_node() -> void:
 					control.add_separator()
 					control.add_item("<update "+current+">")
 					control.add_item("<remove "+current+">")
-	size = Vector2(0, 0)
+	set_deferred("size", Vector2.ZERO)
 	initialize_properties()
 
 func _on_value_changed(new_value, variable : String) -> void:
@@ -149,6 +150,7 @@ func rearrange_parameter(from : int, to : int, is_after : bool) -> void:
 
 func remove_parameter(widget_name : String) -> void:
 	old_state = generator.serialize().duplicate(true)
+	annotate_linked_controls(widget_name, false)
 	generator.remove_parameter(widget_name)
 	undo_redo_register_change("Remove parameter", old_state)
 
@@ -245,6 +247,7 @@ func on_parameter_changed(p, v) -> void:
 		super.on_parameter_changed(p, v)
 		if generator.name == "gen_parameter" and generator.get_parent() is MMGenBase:
 			generator.get_parent().set_parameter(p, v)
+		annotate_linked_controls(p, true)
 
 func on_enter_widget(widget) -> void:
 	var w = generator.get_widget(widget.name)
@@ -335,3 +338,104 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_DRAG_END:
 			grid.get_children().map(func(c): c.modulate = Color.WHITE)
+
+## Annotate remotely-linked parameter controls for
+## ease of drawing links back to the remote.
+func annotate_linked_controls(p : String, is_setup : bool) -> void:
+	var cleanup_callback : Callable = func(c : Control) -> void:
+			c.remove_meta("linked_parameters")
+			setup_linked_control_callbacks(c, false)
+
+	var widget : Dictionary = generator.get_widget(p)
+	if not widget.is_empty() and widget.type == "linked_control":
+		for w in widget.linked_widgets:
+			var node : GraphNode = get_parent().get_node(NodePath("node_" + w.node))
+			var control : Control = node.controls[w.widget]
+			var linked_params : Array[Dictionary]
+
+			if is_setup:
+				if control.has_meta("linked_parameters"):
+					linked_params = control.get_meta("linked_parameters")
+				linked_params.append({ "remote": self, "param": widget.name })
+				control.set_meta("linked_parameters", linked_params)
+				setup_linked_control_callbacks(control, true)
+				if not tree_exiting.is_connected(cleanup_callback.bind(control)):
+					tree_exiting.connect(cleanup_callback.bind(control))
+			else:
+				control.remove_meta("linked_parameters")
+				setup_linked_control_callbacks(control, false)
+				if tree_exiting.is_connected(cleanup_callback.bind(control)):
+					tree_exiting.disconnect(cleanup_callback.bind(control))
+
+## Draw link(s) from [param linked_control] to linked remote parameter control(s).
+static func on_linked_control_entered(linked_control : Control) -> void:
+	if linked_control.has_meta("linked_parameters"):
+		mm_globals.set_tip_text("#MMB: Jump to source remote")
+		var linked_params : Array[Dictionary] = linked_control.get_meta("linked_parameters")
+		var new_links : Array[MMNodeLink]
+		for l in linked_params:
+			var remote : MMGraphNodeRemote = l.remote
+			if remote.controls.has(l.param) and remote.controls[l.param]:
+				var link : MMNodeLink = MMNodeLink.new(remote.get_parent())
+				link.show_link(remote.controls[l.param], linked_control)
+				new_links.append(link)
+		var _links : Dictionary[String, Array]
+		if linked_control.has_meta("links"):
+			_links = linked_control.get_meta("links")
+		_links[linked_control.name] = new_links
+		linked_control.set_meta("links", _links)
+
+## Hide link(s) from [param linked_control] to linked remote parameter control(s).
+static func on_linked_control_exited(linked_control : Control) -> void:
+	if linked_control.has_meta("links"):
+		var _links : Dictionary[String, Array] = linked_control.get_meta("links")
+		if _links.has(linked_control.name):
+			var control_links : Array[MMNodeLink] = _links[linked_control.name]
+			for l in control_links:
+				l.queue_free()
+		_links.erase(linked_control.name)
+
+## Handle jump to source remote node from [param linked_control].
+static func on_linked_control_gui_input(event : InputEvent, linked_control : Control) -> void:
+	if not linked_control.has_meta("linked_parameters"):
+		return
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed:
+		var link : Dictionary = linked_control.get_meta("linked_parameters")[0]
+		var graph : MMGraphEdit = link.remote.get_parent()
+		for l in graph.get_children():
+			if l is MMNodeLink:
+				l.hide()
+		jump_to_source(link.remote, link.param, graph)
+
+## Centers [param graph] view on [param remote] node and
+## highlight source remote [param param] control.
+static func jump_to_source(remote : MMGraphNodeRemote, param : String, graph : MMGraphEdit) -> void:
+	var remote_param : Control = remote.controls[param]
+	graph.scroll_offset = (remote.position_offset + 0.5 * remote.size) * graph.zoom - 0.5 * graph.size
+
+	const remote_blink : Color = Color(1.5, 1.5, 1.5, 1.0)
+	const control_blink : Color = Color(0.9, 1.5, 0.9, 1.0)
+	var tween : Tween = graph.get_tree().create_tween()
+	tween.tween_property(remote, "modulate", remote_blink, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(remote, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_CUBIC).set_delay(0.3)
+	tween.parallel().tween_property(remote_param, "modulate", control_blink, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(remote_param, "modulate", Color.WHITE, 0.8).set_trans(Tween.TRANS_CUBIC).set_delay(0.3)
+	remote.selected = true
+	await tween.finished
+
+## Helper function to map signals to callables.
+static func setup_linked_control_callbacks(c : Control, is_connect : bool) -> void:
+	var signal_map : Dictionary[Signal, Callable] = {
+		c.mouse_entered : on_linked_control_entered.bind(c),
+		c.mouse_exited : on_linked_control_exited.bind(c),
+		c.gui_input : on_linked_control_gui_input.bind(c)
+	}
+
+	for s : Signal in signal_map:
+		var callable : Callable = signal_map[s]
+		if is_connect:
+			if not s.is_connected(callable):
+				s.connect(callable)
+		else:
+			if s.is_connected(callable):
+				s.disconnect(callable)

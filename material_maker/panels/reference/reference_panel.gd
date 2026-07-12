@@ -242,6 +242,9 @@ func handle_picking(event: InputEvent) -> void:
 			selected_slot.button_pressed = false
 			color_count = 0
 			gradient = 0
+			if picking_color:
+				mm_steam.unlock_achievement("ACH_COLOR_THIEF")
+
 
 	elif event is InputEventMouseMotion:
 		if picking_color and color_count > 0:

@@ -542,6 +542,50 @@ popup/item_1/id = 1
 script = ExtResource("5_vp06c")
 config_variable = "aperture_label_position"
 
+[node name="Spacer3" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=429716171]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="FloatEditSensitivity" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=1393451760]
+layout_mode = 2
+
+[node name="LabelFloatEditSensitivity" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/FloatEditSensitivity" unique_id=363806448]
+layout_mode = 2
+text = "Float parameter editor sliding sensitivity"
+
+[node name="Sensitivity" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/FloatEditSensitivity" unique_id=1159103913 instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Adjusts sliding sensitivity for float parameter fields."
+config_variable = "ui_field_sensitivity"
+value = 1.0
+min_value = 0.1
+max_value = 2.0
+step = 0.01
+float_only = true
+
+[node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=888694524]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="ColorPickerFloating" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=717745548]
+layout_mode = 2
+
+[node name="LabelPickerFloating" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/ColorPickerFloating" unique_id=875464274]
+layout_mode = 2
+text = "Floating color picker"
+
+[node name="ColorPickerFloating" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/ColorPickerFloating" unique_id=92490270 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Make color picker popups floating windows, which allows them to be moved around."
+button_pressed = true
+text = "On"
+flat = false
+config_variable = "color_picker_floating"
+
 [node name="Export" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=848471352]
 visible = false
 layout_mode = 2

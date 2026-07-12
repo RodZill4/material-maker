@@ -1,0 +1,112 @@
+{
+	"generic_size": 1,
+	"name": "tex3d_warp",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"amount": 0.1,
+		"eps": 0.1,
+		"mode": 0.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec3 $(name_uv)_slope = $(name)_slope($uv.xyz, $eps);",
+			"vec3 $(name_uv)_warp = $mode;"
+		],
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(sin($uv.xyz*20.0)*0.5+0.5)",
+				"label": "",
+				"longdesc": "The input 3D texture to be warped",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "tex3d"
+			},
+			{
+				"default": "0.0",
+				"function": true,
+				"label": "",
+				"longdesc": "The height map whose slopes are used to deform the input",
+				"name": "d",
+				"shortdesc": "Height map",
+				"type": "tex3d_gs"
+			},
+			{
+				"default": "1.0",
+				"label": "",
+				"longdesc": "Map that affects the strength parameter",
+				"name": "strength_map",
+				"shortdesc": "Strength map",
+				"type": "tex3d_gs"
+			}
+		],
+		"instance": [
+			"vec3 $(name)_slope(vec3 uv, float epsilon) {",
+			"\treturn vec3(",
+			"\t\t$d(vec4(fract(uv+vec3(epsilon, 0.0, 0.0)), 0.0))-$d(vec4(fract(uv-vec3(epsilon, 0.0, 0.0)), 0.0)),",
+			"\t\t$d(vec4(fract(uv+vec3(0.0, epsilon, 0.0)), 0.0))-$d(vec4(fract(uv-vec3(0.0, epsilon, 0.0)), 0.0)),",
+			"\t\t$d(vec4(fract(uv+vec3(0.0, 0.0, epsilon)), 0.0))-$d(vec4(fract(uv-vec3(0.0, 0.0, epsilon)), 0.0)));",
+			"}"
+		],
+		"longdesc": "Warps its input according to a heightmap",
+		"name": "TEX3D Warp",
+		"outputs": [
+			{
+				"longdesc": "Shows the warped 3D texture",
+				"shortdesc": "Output#",
+				"tex3d": "$in#($uv.xyz+$amount*$strength_map($uv)*$(name_uv)_warp)",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "",
+				"longdesc": "Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.",
+				"name": "mode",
+				"shortdesc": "Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Slope",
+						"value": "$(name_uv)_slope"
+					},
+					{
+						"name": "Distance to top",
+						"value": "$(name_uv)_slope*(1.0-$d($uv))"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The strength of the warp effect",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "amount",
+				"shortdesc": "Strength",
+				"step": 0.005,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The offset used to measure slopes",
+				"max": 0.2,
+				"min": 0.005,
+				"name": "eps",
+				"shortdesc": "Epsilon",
+				"step": 0.005,
+				"type": "float"
+			}
+		],
+		"shortdesc": "TEX3D Warp"
+	},
+	"type": "shader"
+}

@@ -5,14 +5,19 @@
 [ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 [ext_resource type="PackedScene" uid="uid://bd3ummbwaq3i" path="res://material_maker/panels/graph_edit/lazy_link/lazy_link.tscn" id="5_u5byk"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="4_u5byk"]
 
 [sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("2")
-region = Rect2(64, 32, 16, 16)
+atlas = ExtResource("4_u5byk")
+region = Rect2(96, 64, 16, 16)
 
 [sub_resource type="AtlasTexture" id="4"]
 atlas = ExtResource("2")
 region = Rect2(15.4016, 47.1451, 16.7512, 17.8319)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5byk"]
+atlas = ExtResource("4_u5byk")
+region = Rect2(96, 64, 16, 16)
 
 [sub_resource type="AtlasTexture" id="5"]
 atlas = ExtResource("2")
@@ -77,12 +82,21 @@ size_flags_horizontal = 9
 tooltip_text = "Back to parent"
 icon = SubResource("4")
 
+[node name="Spacer" type="Control" parent="GraphUI/SubGraphUI" unique_id=1049559029]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+
+[node name="ButtonReroll" type="Button" parent="GraphUI" unique_id=1352135248]
+layout_mode = 2
+tooltip_text = "Reroll Seeds"
+icon = SubResource("AtlasTexture_u5byk")
+
 [node name="ButtonShowTree" type="Button" parent="GraphUI" unique_id=305280196]
 layout_mode = 2
 tooltip_text = "Show hierarchy"
 icon = SubResource("5")
 
-[node name="Control" type="Control" parent="GraphUI" unique_id=805364353]
+[node name="Spacer" type="Control" parent="GraphUI" unique_id=805364353]
 custom_minimum_size = Vector2(14, 0)
 layout_mode = 2
 
@@ -109,4 +123,6 @@ layout_mode = 1
 [connection signal="descriptions_changed" from="GraphUI/SubGraphUI/Description" to="." method="_on_Description_descriptions_changed"]
 [connection signal="toggled" from="GraphUI/SubGraphUI/ButtonTransmitsSeed" to="." method="_on_ButtonTransmitsSeed_toggled"]
 [connection signal="pressed" from="GraphUI/SubGraphUI/ButtonUp" to="." method="on_ButtonUp_pressed"]
+[connection signal="mouse_entered" from="GraphUI/ButtonReroll" to="." method="_on_button_reroll_mouse_entered"]
+[connection signal="pressed" from="GraphUI/ButtonReroll" to="." method="_on_button_reroll_pressed"]
 [connection signal="pressed" from="GraphUI/ButtonShowTree" to="." method="_on_ButtonShowTree_pressed"]

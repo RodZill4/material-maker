@@ -36,6 +36,8 @@ var from_lower_bound: bool = false
 var from_upper_bound: bool = false
 var actually_dragging: bool = false
 
+var should_receive_input : bool = true
+
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
 
@@ -126,6 +128,8 @@ func _input(event:InputEvent) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
+	if not should_receive_input:
+		return
 	if mode == Modes.IDLE:
 
 		# Handle Drag-Start
@@ -171,6 +175,8 @@ func _gui_input(event: InputEvent) -> void:
 				actually_dragging = true
 			if actually_dragging:
 				var current_step := step
+
+				delta *= mm_globals.get_config("ui_field_sensitivity")
 
 				if event.is_command_or_control_pressed():
 					if step == 1:
@@ -286,9 +292,9 @@ func _notification(what):
 				add_theme_stylebox_override("panel", get_theme_stylebox("clip"))
 			update()
 		NOTIFICATION_DRAG_BEGIN:
-			mouse_filter = Control.MOUSE_FILTER_IGNORE
+			should_receive_input = false
 		NOTIFICATION_DRAG_END:
-			mouse_filter = Control.MOUSE_FILTER_STOP
+			should_receive_input = true
 
 
 func update() -> void:

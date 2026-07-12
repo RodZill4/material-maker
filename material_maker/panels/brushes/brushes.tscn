@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://ce7ikwg72fkkc"]
+[gd_scene format=3 uid="uid://ce7ikwg72fkkc"]
 
 [ext_resource type="PackedScene" uid="uid://drbpisn5f3h8y" path="res://material_maker/panels/library/library.tscn" id="1"]
-[ext_resource type="Script" path="res://material_maker/panels/brushes/brushes.gd" id="2"]
+[ext_resource type="Script" uid="uid://kp6g6t1vlrpx" path="res://material_maker/panels/brushes/brushes.gd" id="2"]
 
-[node name="Library" instance=ExtResource("1")]
+[node name="Library" unique_id=299701611 instance=ExtResource("1")]
 script = ExtResource("2")
 library_manager_name = "BrushLibraryManager"
+
+[node name="GetFromWebsite" parent="Library" parent_id_path=PackedInt32Array(1965292934) index="4" unique_id=574166062]
+tooltip_text = "Get more brushes from website"
+text = "Browse Community Brushes"
 
 [connection signal="item_activated" from="Library/Tree" to="." method="_on_Tree_item_activated"]

@@ -1,0 +1,39 @@
+{
+	"name": "tex3d_invert",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(1.0)",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "A filter that inverts the R, G, and B channels of its input",
+		"name": "TEX3D Invert",
+		"outputs": [
+			{
+				"longdesc": "Shows the inverted 3D texture",
+				"shortdesc": "Output",
+				"tex3d": "vec3(1.0)-$in($uv).rgb",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [],
+		"shortdesc": "TEX3D Invert"
+	},
+	"type": "shader"
+}

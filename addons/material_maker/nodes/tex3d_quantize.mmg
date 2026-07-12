@@ -1,0 +1,53 @@
+{
+	"generic_size": 1,
+	"name": "tex3d_quantize",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"steps": 4.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec3(length($uv.x-vec2(0.5)))",
+				"label": "",
+				"longdesc": "The input 3D texture",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Quantizes the red, green and blue channels of its input",
+		"name": "TEX3D Quantize",
+		"outputs": [
+			{
+				"longdesc": "The quantized 3D texture",
+				"shortdesc": "Output#",
+				"tex3d": "floor($in#($uv).rgb*$steps)/$steps",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 4.0,
+				"label": "",
+				"longdesc": "The number of quantization steps",
+				"max": 32.0,
+				"min": 2.0,
+				"name": "steps",
+				"shortdesc": "Steps",
+				"step": 1.0,
+				"type": "float"
+			}
+		],
+		"shortdesc": "TEX3D Quantize"
+	},
+	"type": "shader"
+}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bnqq3vhwmudkw"]
+[gd_scene format=3 uid="uid://bnqq3vhwmudkw"]
 
 [ext_resource type="Script" uid="uid://cryayuomvuwbo" path="res://material_maker/main_window_projects_panel.gd" id="1_m3usq"]
 [ext_resource type="PackedScene" uid="uid://bb6iar0tbj2qt" path="res://material_maker/panels/preview_2d/preview_2d.tscn" id="2_oiaqi"]
@@ -9,16 +9,16 @@
 [ext_resource type="Script" uid="uid://bos2fu0tsood3" path="res://material_maker/panels/preview_2d/simple_button.gd" id="7_qnupl"]
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="8_1w3oe"]
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
-[ext_resource type="Script" path="res://material_maker/panels/graph_edit/graph_align_menu.gd" id="8_r5hxx"]
+[ext_resource type="Script" uid="uid://pqxjwlcff5ko" path="res://material_maker/panels/graph_edit/graph_align_menu.gd" id="8_r5hxx"]
 [ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
 
-[sub_resource type="Shader" id="1"]
+[sub_resource type="Shader" id="Shader_r5hxx"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8fw7q"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qnupl"]
 resource_local_to_scene = true
-shader = SubResource("1")
+shader = SubResource("Shader_r5hxx")
 
 [sub_resource type="InputEventKey" id="InputEventKey_r5hxx"]
 device = -1
@@ -44,7 +44,7 @@ keycode = 93
 [sub_resource type="Shortcut" id="Shortcut_7tisq"]
 events = [SubResource("InputEventKey_lbgjg")]
 
-[node name="ProjectsPanel" type="Control"]
+[node name="ProjectsPanel" type="Control" unique_id=235293066]
 clip_contents = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
@@ -59,12 +59,12 @@ size_flags_stretch_ratio = 3.0
 script = ExtResource("1_m3usq")
 metadata/_edit_vertical_guides_ = [-393.0]
 
-[node name="BackgroundPreviews" type="Control" parent="."]
+[node name="BackgroundPreviews" type="Control" parent="." unique_id=109433253]
 layout_mode = 1
 anchors_preset = 0
 offset_top = 28.0
 
-[node name="BackgroundPanel" type="Panel" parent="BackgroundPreviews"]
+[node name="BackgroundPanel" type="Panel" parent="BackgroundPreviews" unique_id=1919486170]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,9 +73,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"MM_ProjectsBackground"
 
-[node name="Preview2D" parent="BackgroundPreviews" instance=ExtResource("2_oiaqi")]
+[node name="Preview2D" parent="BackgroundPreviews" unique_id=1300413402 instance=ExtResource("2_oiaqi")]
 visible = false
-material = SubResource("ShaderMaterial_8fw7q")
+material = SubResource("ShaderMaterial_qnupl")
 layout_mode = 1
 offset_right = 64.0
 offset_bottom = 64.0
@@ -95,7 +95,7 @@ void fragment() {
 }
 "
 
-[node name="Preview3D" parent="BackgroundPreviews" instance=ExtResource("3_qvj7k")]
+[node name="Preview3D" parent="BackgroundPreviews" unique_id=772287010 instance=ExtResource("3_qvj7k")]
 visible = false
 layout_mode = 1
 offset_left = 0.0
@@ -105,7 +105,7 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Projects" type="Panel" parent="."]
+[node name="Projects" type="Panel" parent="." unique_id=482476893]
 unique_name_in_owner = true
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
@@ -120,7 +120,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_mpinq")
 
-[node name="TabBar" type="TabBar" parent="Projects"]
+[node name="TabBar" type="TabBar" parent="Projects" unique_id=1986217017]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -128,11 +128,11 @@ grow_horizontal = 2
 tab_close_display_policy = 2
 drag_to_rearrange_enabled = true
 
-[node name="CrashRecoveryTimer" type="Timer" parent="Projects"]
+[node name="CrashRecoveryTimer" type="Timer" parent="Projects" unique_id=2085979550]
 wait_time = 15.0
 autostart = true
 
-[node name="MenuBar" type="ScrollContainer" parent="."]
+[node name="MenuBar" type="ScrollContainer" parent="." unique_id=332893364]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 1
@@ -144,21 +144,21 @@ theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 
-[node name="HBox" type="HFlowContainer" parent="MenuBar"]
+[node name="HBox" type="HFlowContainer" parent="MenuBar" unique_id=1745648376]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="MainGraphMenuBar" type="PanelContainer" parent="MenuBar/HBox"]
+[node name="MainGraphMenuBar" type="PanelContainer" parent="MenuBar/HBox" unique_id=1975017102]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar"]
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar" unique_id=1612198798]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="ZoomMenu" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox"]
+[node name="ZoomMenu" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox" unique_id=940224064]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "Zoom"
@@ -168,7 +168,7 @@ button_mask = 3
 script = ExtResource("6_r5hxx")
 icon_name = "zoom"
 
-[node name="ZoomeMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu"]
+[node name="ZoomeMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu" unique_id=597538496]
 top_level = true
 layout_mode = 0
 offset_left = 283.0
@@ -178,10 +178,10 @@ offset_bottom = -32.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("7_lbgjg")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel"]
+[node name="VBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel" unique_id=904447694]
 layout_mode = 2
 
-[node name="ZoomOut" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomOut" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer" unique_id=1634117598]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -192,7 +192,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "zoom_out"
 
-[node name="ZoomIn" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomIn" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer" unique_id=692399315]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -203,7 +203,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "zoom_in"
 
-[node name="ZoomReset" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomReset" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer" unique_id=137595156]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -213,12 +213,12 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "zoom_reset"
 
-[node name="ZoomLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer"]
+[node name="ZoomLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ZoomMenu/ZoomeMenuPanel/VBoxContainer" unique_id=1679041083]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MM_NumberLabel"
 
-[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox"]
+[node name="ViewMenu" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox" unique_id=193144060]
 custom_minimum_size = Vector2(40, 25)
 layout_mode = 2
 tooltip_text = "View"
@@ -228,7 +228,7 @@ button_mask = 3
 script = ExtResource("6_r5hxx")
 icon_name = "view"
 
-[node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu"]
+[node name="ViewMenuPanel" type="PanelContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu" unique_id=1063164635]
 top_level = true
 layout_mode = 0
 offset_left = 282.0
@@ -238,13 +238,13 @@ offset_bottom = 219.0
 theme_type_variation = &"MM_PanelMenuSubPanel"
 script = ExtResource("8_nl2qi")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" unique_id=1145752631]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" unique_id=906184498]
 layout_mode = 2
 
-[node name="GridVisibility" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
+[node name="GridVisibility" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" unique_id=1517910422]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -256,7 +256,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "grid"
 
-[node name="GridSnapping" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
+[node name="GridSnapping" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" unique_id=1138462314]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -268,7 +268,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "snapping"
 
-[node name="GridSize" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" instance=ExtResource("8_1w3oe")]
+[node name="GridSize" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" unique_id=2132691985 instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Grid Size"
@@ -278,7 +278,7 @@ max_value = 40.0
 step = 1.0
 float_only = true
 
-[node name="Minimap" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer"]
+[node name="Minimap" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer" unique_id=1930373083]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -290,14 +290,14 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "minimap"
 
-[node name="HSeparator" type="HSeparator" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" unique_id=136343450]
 modulate = Color(1, 1, 1, 0.5)
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" unique_id=88181435]
 layout_mode = 2
 
-[node name="DirectConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2"]
+[node name="DirectConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2" unique_id=1847087790]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -311,7 +311,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "connection_direct"
 
-[node name="BezierConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2"]
+[node name="BezierConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2" unique_id=1034636025]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -326,7 +326,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "connection_bezier"
 
-[node name="RoundedConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2"]
+[node name="RoundedConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2" unique_id=243663871]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -340,7 +340,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "connection_rounded"
 
-[node name="ManhattanConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2"]
+[node name="ManhattanConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2" unique_id=1816351360]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -354,7 +354,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "connection_manhattan"
 
-[node name="DiagonalConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2"]
+[node name="DiagonalConnection" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/HBoxContainer2" unique_id=1375146451]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -368,17 +368,17 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "connection_diagonal"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer" unique_id=1646022119]
 layout_mode = 2
 
-[node name="Thickness" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2"]
+[node name="Thickness" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2" unique_id=54085519]
 layout_mode = 2
 
-[node name="ThicknessLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness"]
+[node name="ThicknessLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" unique_id=537020243]
 layout_mode = 2
 text = "Thickness"
 
-[node name="LineThickness" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" instance=ExtResource("8_1w3oe")]
+[node name="LineThickness" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" unique_id=688868721 instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -389,16 +389,16 @@ max_value = 12.0
 step = 0.01
 float_only = true
 
-[node name="Curvature" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2"]
+[node name="Curvature" type="HBoxContainer" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2" unique_id=1505528355]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CurvatureLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature"]
+[node name="CurvatureLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature" unique_id=1316641134]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Curvature"
 
-[node name="LineCurvature" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature" instance=ExtResource("8_1w3oe")]
+[node name="LineCurvature" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature" unique_id=1977695507 instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -407,7 +407,7 @@ max_value = 2.0
 step = 0.01
 float_only = true
 
-[node name="ArrangeNodes" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox"]
+[node name="ArrangeNodes" type="Button" parent="MenuBar/HBox/MainGraphMenuBar/HBox" unique_id=160621023]
 visible = false
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -419,17 +419,17 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "arrange_nodes"
 
-[node name="AlignMenu" type="PanelContainer" parent="MenuBar/HBox"]
+[node name="AlignMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=243111021]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 script = ExtResource("8_r5hxx")
 
-[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/AlignMenu"]
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/AlignMenu" unique_id=1761807902]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="AlignStart" type="Button" parent="MenuBar/HBox/AlignMenu/HBox"]
+[node name="AlignStart" type="Button" parent="MenuBar/HBox/AlignMenu/HBox" unique_id=880381229]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Align Start"
@@ -439,7 +439,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "align_start"
 
-[node name="AlignCenter" type="Button" parent="MenuBar/HBox/AlignMenu/HBox"]
+[node name="AlignCenter" type="Button" parent="MenuBar/HBox/AlignMenu/HBox" unique_id=1438300944]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Align Center"
@@ -449,7 +449,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "align_center"
 
-[node name="AlignEnd" type="Button" parent="MenuBar/HBox/AlignMenu/HBox"]
+[node name="AlignEnd" type="Button" parent="MenuBar/HBox/AlignMenu/HBox" unique_id=485807066]
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
 tooltip_text = "Align End"
@@ -459,17 +459,17 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "align_end"
 
-[node name="PreviewsMenu" type="PanelContainer" parent="MenuBar/HBox"]
+[node name="PreviewsMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=1858302922]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/PreviewsMenu"]
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/PreviewsMenu" unique_id=1978081934]
 layout_mode = 2
 theme_type_variation = &"MM_PanelMenuBar"
 
-[node name="2DPreview" type="Button" parent="MenuBar/HBox/PreviewsMenu/HBox"]
+[node name="2DPreview" type="Button" parent="MenuBar/HBox/PreviewsMenu/HBox" unique_id=1542508369]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -480,7 +480,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "2D_preview"
 
-[node name="3DPreview" type="Button" parent="MenuBar/HBox/PreviewsMenu/HBox"]
+[node name="3DPreview" type="Button" parent="MenuBar/HBox/PreviewsMenu/HBox" unique_id=1992877361]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(25, 25)
 layout_mode = 2
@@ -491,7 +491,7 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "3D_preview"
 
-[node name="ControlView" type="TextureRect" parent="MenuBar/HBox/PreviewsMenu/HBox"]
+[node name="ControlView" type="TextureRect" parent="MenuBar/HBox/PreviewsMenu/HBox" unique_id=1933136932]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2

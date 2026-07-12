@@ -210,6 +210,7 @@ layout_mode = 2
 
 [node name="Patreon" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
 material = SubResource("ShaderMaterial_y717h")
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -220,6 +221,7 @@ texture_normal = SubResource("PlaceholderTexture2D_71vq8")
 stretch_mode = 5
 
 [node name="ItchIo" type="TextureButton" parent="HBoxContainer/MarginContainer/SocialNetworks"]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -315,6 +317,6 @@ stretch_mode = 4
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Discord" to="." method="open_url" binds= ["https://discord.gg/PF5V3mFwFM"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/X" to="." method="open_url" binds= ["https://x.com/R0dZill4"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/BlueSky" to="." method="open_url" binds= ["https://bsky.app/profile/rodzlabs.bsky.social"]]
-[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Mastodon" to="." method="open_url" binds= ["https://twitter.com/R0dZill4"]]
+[connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Mastodon" to="." method="open_url" binds= ["https://mastodon.gamedev.place/@rodzilla"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Youtube" to="." method="open_url" binds= ["https://www.youtube.com/channel/UCTDByv9i3ul_qQ98zUYlNAQ"]]
 [connection signal="pressed" from="HBoxContainer/MarginContainer/SocialNetworks/Facebook" to="." method="open_url" binds= ["https://www.facebook.com/RodzLabs"]]

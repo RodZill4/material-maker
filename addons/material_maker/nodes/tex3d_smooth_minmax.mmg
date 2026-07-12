@@ -1,0 +1,120 @@
+{
+	"name": "tex3d_smooth_minmax",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"clamp": false,
+		"default_in1": 0.0,
+		"default_in2": 0.0,
+		"k": 0.0,
+		"op": 0.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"float $(name_uv)_clamp_false = $op($in1($uv), $in2($uv), $k);",
+			"float $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, 0.0, 1.0);"
+		],
+		"global": "",
+		"includes": [
+			"smooth_minmax"
+		],
+		"inputs": [
+			{
+				"default": "$default_in1",
+				"label": "2:A",
+				"longdesc": "The A operand",
+				"name": "in1",
+				"shortdesc": "A",
+				"type": "tex3d_gs"
+			},
+			{
+				"default": "$default_in2",
+				"label": "B",
+				"longdesc": "The B operand",
+				"name": "in2",
+				"shortdesc": "B",
+				"type": "tex3d_gs"
+			}
+		],
+		"instance": "",
+		"longdesc": "Performs a smooth minimum/maximum math operation between its inputs",
+		"name": "TEX3D Smooth MinMax",
+		"outputs": [
+			{
+				"longdesc": "Shows a grayscale 3D texture of the result",
+				"shortdesc": "Output",
+				"tex3d_gs": "$(name_uv)_clamp_$clamp",
+				"type": "tex3d_gs"
+			}
+		],
+		"parameters": [
+			{
+				"default": 1.0,
+				"label": "",
+				"longdesc": "The operation to be performed",
+				"name": "op",
+				"shortdesc": "Operation",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Min",
+						"value": "smin"
+					},
+					{
+						"name": "Max",
+						"value": "smax"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The default value for A, used if the corresponding input is not connected",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "default_in1",
+				"shortdesc": "A",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The default value for B, used if the corresponding input is not connected",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "default_in2",
+				"shortdesc": "B",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The smoothness of the operation",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "k",
+				"shortdesc": "Smoothness",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Clamp",
+				"longdesc": "The result is clamped to [0, 1] if this option is checked",
+				"name": "clamp",
+				"shortdesc": "Clamp",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "TEX3D Smooth MinMax"
+	},
+	"type": "shader"
+}

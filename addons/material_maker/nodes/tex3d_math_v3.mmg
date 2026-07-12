@@ -1,0 +1,276 @@
+{
+	"name": "tex3d_v3_math",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"clamp": false,
+		"d_in1_x": 0.0,
+		"d_in1_y": 0.0,
+		"d_in1_z": 0.0,
+		"d_in2_x": 0.0,
+		"d_in2_y": 0.0,
+		"d_in2_z": 0.0,
+		"op": 0.0
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec3 $(name_uv)_clamp_false = $op;",
+			"vec3 $(name_uv)_clamp_true = clamp($(name_uv)_clamp_false, vec3(0.0), vec3(1.0));",
+			""
+		],
+		"global": "",
+		"includes": [
+			"sdf3d_rotate"
+		],
+		"inputs": [
+			{
+				"default": "vec3($d_in1_x, $d_in1_y, $d_in1_z)",
+				"label": "2:",
+				"longdesc": "The A operand",
+				"name": "in1",
+				"shortdesc": "A",
+				"type": "tex3d"
+			},
+			{
+				"default": "vec3($d_in2_x, $d_in2_y, $d_in2_z)",
+				"label": "",
+				"longdesc": "The B operand",
+				"name": "in2",
+				"shortdesc": "B",
+				"type": "tex3d"
+			}
+		],
+		"instance": "",
+		"longdesc": "Performs a vec3 math operation using its inputs or parameter values",
+		"name": "TEX3D Vec3 Math",
+		"outputs": [
+			{
+				"longdesc": "Shows a 3D texture of the result",
+				"shortdesc": "Output",
+				"tex3d": "$(name_uv)_clamp_$clamp",
+				"type": "tex3d"
+			}
+		],
+		"parameters": [
+			{
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The operation to be performed",
+				"name": "op",
+				"shortdesc": "Operation",
+				"type": "enum",
+				"values": [
+					{
+						"name": "A+B",
+						"value": "$in1($uv)+$in2($uv)"
+					},
+					{
+						"name": "A-B",
+						"value": "$in1($uv)-$in2($uv)"
+					},
+					{
+						"name": "A*B",
+						"value": "$in1($uv)*$in2($uv)"
+					},
+					{
+						"name": "A/B",
+						"value": "$in1($uv)/$in2($uv)"
+					},
+					{
+						"name": "log(A)",
+						"value": "log($in1($uv))"
+					},
+					{
+						"name": "log2(A)",
+						"value": "log2($in1($uv))"
+					},
+					{
+						"name": "pow(A, B)",
+						"value": "pow($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "abs(A)",
+						"value": "abs($in1($uv))"
+					},
+					{
+						"name": "round(A)",
+						"value": "round($in1($uv))"
+					},
+					{
+						"name": "floor(A)",
+						"value": "floor($in1($uv))"
+					},
+					{
+						"name": "ceil(A)",
+						"value": "ceil($in1($uv))"
+					},
+					{
+						"name": "trunc(A)",
+						"value": "trunc($in1($uv))"
+					},
+					{
+						"name": "fract(A)",
+						"value": "fract($in1($uv))"
+					},
+					{
+						"name": "min(A, B)",
+						"value": "min($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "max(A, B)",
+						"value": "max($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "A<B",
+						"value": "step($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "cos(A*B)",
+						"value": "cos($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sin(A*B)",
+						"value": "sin($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "tan(A*B)",
+						"value": "tan($in1($uv)*$in2($uv))"
+					},
+					{
+						"name": "sqrt(1-A²)",
+						"value": "sqrt(vec3(1.0)-$in1($uv)*$in1($uv))"
+					},
+					{
+						"name": "length(A)",
+						"value": "vec3(length($in1($uv)))"
+					},
+					{
+						"name": "distance(A, B)",
+						"value": "vec3(distance($in1($uv),$in2($uv)))"
+					},
+					{
+						"name": "dot(A, B)",
+						"value": "vec3(dot($in1($uv),$in2($uv)))"
+					},
+					{
+						"name": "cross(A, B)",
+						"value": "cross($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "normalize(A)",
+						"value": "normalize($in1($uv))"
+					},
+					{
+						"name": "sign(A)",
+						"value": "sign($in1($uv))"
+					},
+					{
+						"name": "mod(A, B)",
+						"value": "mod($in1($uv),$in2($uv))"
+					},
+					{
+						"name": "snap(A, B)",
+						"value": "floor($in1($uv)/$in2($uv))*$in2($uv)"
+					},
+					{
+						"name": "sinh(A)",
+						"value": "sinh($in1($uv))"
+					},
+					{
+						"name": "cosh(A)",
+						"value": "cosh($in1($uv))"
+					},
+					{
+						"name": "tanh(A)",
+						"value": "tanh($in1($uv))"
+					},
+					{
+						"name": "log(A, B)",
+						"value": "log($in1($uv))/log($in2($uv))"
+					},
+					{
+						"name": "rotate(A, B)",
+						"value": "rotate3d($in1($uv),$in2($uv))"
+					}
+				]
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"longdesc": "The default value for A, used if the corresponding input is not connected",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d_in1_x",
+				"shortdesc": "Default A",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "2:",
+				"longdesc": "The default value for B, used if the corresponding input is not connected",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d_in1_y",
+				"shortdesc": "Default B",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "2:",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d_in1_z",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d_in2_x",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "3:",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d_in2_y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.0,
+				"label": "3:",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "d_in2_z",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": false,
+				"label": "Clamp",
+				"longdesc": "The result is clamped to [0, 1] if this option is checked",
+				"name": "clamp",
+				"shortdesc": "Clamp",
+				"type": "boolean"
+			}
+		],
+		"shortdesc": "TEX3D Vec3 Math"
+	},
+	"type": "shader"
+}

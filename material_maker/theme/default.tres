@@ -525,7 +525,7 @@ region = Rect2(112, 16, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(80, 64, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5e0gw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bn15y"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(16, 0, 16, 16)
 
@@ -551,9 +551,15 @@ region = Rect2(112, 128, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(0, 128, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_bp85t"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(16, 240, 16, 16)
+metadata/scale = 3.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_8uenv"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(80, 32, 16, 16)
+metadata/scale = 3.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m27ao"]
 atlas = ExtResource("1_s43fy")
@@ -562,6 +568,11 @@ region = Rect2(80, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_asgc8"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(96, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5e0gw"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(0, 240, 16, 16)
+metadata/scale = 3.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ld0tj"]
 atlas = ExtResource("1_s43fy")
@@ -1301,7 +1312,6 @@ CodeEdit/colors/type_color = Color(1, 1, 0.5, 1)
 CodeEdit/styles/focus = SubResource("StyleBoxEmpty_m27ao")
 CodeEdit/styles/normal = SubResource("StyleBoxFlat_oy0ko")
 FileDialog/colors/file_disabled_color = Color(0.301961, 0.305882, 0.309804, 1)
-FileDialog/colors/file_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
 FileDialog/colors/folder_icon_color = Color(0.698039, 0.698039, 0.698039, 1)
 FileDialog/icons/menu_copy_path = SubResource("DPITexture_u716c")
 FileDialog/icons/menu_delete = SubResource("DPITexture_u716c")
@@ -1402,15 +1412,17 @@ MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
 MM_Icons/icons/environment = SubResource("AtlasTexture_x8swe")
-MM_Icons/icons/export = SubResource("AtlasTexture_5e0gw")
+MM_Icons/icons/export = SubResource("AtlasTexture_bn15y")
 MM_Icons/icons/folder = SubResource("AtlasTexture_rqlqa")
 MM_Icons/icons/frequency_ascending = SubResource("AtlasTexture_xdmf6")
 MM_Icons/icons/frequency_descending = SubResource("AtlasTexture_5jxva")
 MM_Icons/icons/function = SubResource("AtlasTexture_0jwmb")
 MM_Icons/icons/grid = SubResource("AtlasTexture_pkv4t")
+MM_Icons/icons/internet = SubResource("AtlasTexture_bp85t")
 MM_Icons/icons/link = SubResource("AtlasTexture_8uenv")
 MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
 MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
+MM_Icons/icons/logo = SubResource("AtlasTexture_5e0gw")
 MM_Icons/icons/minimap = SubResource("AtlasTexture_ld0tj")
 MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
 MM_Icons/icons/paste_image = SubResource("AtlasTexture_dqlpm")

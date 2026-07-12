@@ -58,11 +58,13 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_use_native_file_dialogs = true,
 	win_tablet_driver = 0,
 	dialog_dim_background = true,
-	node_minimize_button = false,
-	node_close_button = false,
 	ui_single_window_mode = false,
 	add_node_popup_sort = SortMenu.Sorting.QUALITY_DESCENDING,
-	aperture_label_position = 0
+	aperture_label_position = 0,
+	node_minimize_button = true,
+	node_close_button = true,
+	ui_field_sensitivity = 1.0,
+	color_picker_floating = false
 }
 
 

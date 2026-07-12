@@ -36,7 +36,7 @@ The **Warp Dilation** node has three parameters:
 * *Attenuation*, that defines the value attenuation that is applied along the path
 
 * *32-Bits*, that defines whether 32-bit buffer(s) are used when storing input/outputs.
-Reduces banding artifacts but could result in higher video memory usage.
+	Reduces banding artifacts but could result in higher video memory usage.
 
 Example images
 ++++++++++++++

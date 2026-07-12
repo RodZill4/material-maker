@@ -18,16 +18,22 @@ var current_environment = -1
 func _ready():
 	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = Vector2(900, 600) * content_scale_factor
-	
+
 	for color_picker in $Main/HSplitContainer/UI.get_children():
 		if color_picker is ColorPickerButton:
 			var picker = color_picker.get_popup()
 			picker.content_scale_factor = content_scale_factor
 			picker.min_size = picker.get_contents_minimum_size() * content_scale_factor
-	
+
+	# scroll bar padding / style
+	var v : VScrollBar = environment_list.get_v_scroll_bar()
+	var grabber_sb : StyleBoxFlat = v.get_theme_stylebox("scroll")
+	grabber_sb.border_color.a = 0.0
+	v.add_theme_stylebox_override("scroll", grabber_sb)
+	v.add_theme_constant_override("padding_left", 8)
+
 	hide()
 	popup_centered()
-	_on_ViewportContainer_resized()
 	connect_controls()
 	environment_manager.environment_updated.connect(self.on_environment_updated)
 	environment_manager.name_updated.connect(self.on_name_updated)
@@ -78,9 +84,6 @@ func read_environment_list(select : int = 0):
 			select += environment_list.get_item_count()-1
 		environment_list.select(select)
 		set_current_environment(select)
-
-func _on_ViewportContainer_resized():
-	$Main/HSplitContainer/SubViewportContainer/SubViewport.size = $Main/HSplitContainer/SubViewportContainer.size
 
 func _on_name_text_entered(new_text : String):
 	environment_list.set_item_text(current_environment, new_text)

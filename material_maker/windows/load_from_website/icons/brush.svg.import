@@ -1,0 +1,22 @@
+[remap]
+
+importer="svg"
+type="DPITexture"
+uid="uid://0cdon2vq7ay0"
+path="res://.godot/imported/brush.svg-38aaa46d8802a9f9b3412d55e385ab4e.dpitex"
+
+[deps]
+
+source_file="res://material_maker/windows/load_from_website/icons/brush.svg"
+dest_files=["res://.godot/imported/brush.svg-38aaa46d8802a9f9b3412d55e385ab4e.dpitex"]
+
+[params]
+
+base_scale=8.0
+saturation=1.0
+color_map={
+Color(1, 1, 1, 1): Color(0.6509804, 0.6509804, 0.6509804, 1)
+}
+fix_alpha_border=false
+premult_alpha=false
+compress=true

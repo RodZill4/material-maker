@@ -4,7 +4,6 @@ var previous_color : Color
 
 signal color_changed_undo(c, previous)
 
-
 func _ready():
 	custom_minimum_size = Vector2(24, 24)
 	connect("color_changed",Callable(self,"on_color_changed"))
@@ -12,6 +11,7 @@ func _ready():
 	connect("popup_closed",Callable(self,"on_popup_closed"))
 	get_popup().content_scale_factor = mm_globals.ui_scale_factor()
 	get_popup().min_size = get_popup().get_contents_minimum_size() * get_popup().content_scale_factor
+	get_popup().borderless = not mm_globals.get_config("color_picker_floating")
 
 func set_color(c):
 	color = c
@@ -32,15 +32,12 @@ func _drop_data(_position, data) -> void:
 	emit_signal("color_changed", color)
 	emit_signal("color_changed_undo", color, old_color)
 
-
 func on_color_changed(c):
 	emit_signal("color_changed_undo", c, null)
-
 
 func on_picker_created():
 	get_popup().connect("about_to_popup", Callable(self, "on_about_to_show"))
 	previous_color = color
-
 
 func on_about_to_show():
 	previous_color = color
@@ -48,7 +45,6 @@ func on_about_to_show():
 		get_picker().color_mode = mm_globals.get_config("color_picker_color_mode")
 	if mm_globals.has_config("color_picker_shape"):
 		get_picker().picker_shape = mm_globals.get_config("color_picker_shape")
-
 
 func on_popup_closed():
 	emit_signal("color_changed_undo", color, previous_color)

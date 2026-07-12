@@ -478,6 +478,11 @@ metadata/scale = 2.0
 atlas = ExtResource("1_fw8f4")
 region = Rect2(112, 128, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbgus"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 240, 16, 16)
+metadata/scale = 3.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_c7xvc"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(80, 32, 16, 16)
@@ -489,6 +494,12 @@ region = Rect2(80, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_asgc8"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(96, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mnfe7"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(0, 240, 16, 16)
+filter_clip = true
+metadata/scale = 3.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dsr33"]
 atlas = ExtResource("1_fw8f4")
@@ -1185,9 +1196,11 @@ MM_Icons/icons/folder = SubResource("AtlasTexture_rqlqa")
 MM_Icons/icons/frequency_ascending = SubResource("AtlasTexture_6kl5u")
 MM_Icons/icons/frequency_descending = SubResource("AtlasTexture_ya45l")
 MM_Icons/icons/function = SubResource("AtlasTexture_jxpkm")
+MM_Icons/icons/internet = SubResource("AtlasTexture_pbgus")
 MM_Icons/icons/link = SubResource("AtlasTexture_c7xvc")
 MM_Icons/icons/lock_locked = SubResource("AtlasTexture_m27ao")
 MM_Icons/icons/lock_unlocked = SubResource("AtlasTexture_asgc8")
+MM_Icons/icons/logo = SubResource("AtlasTexture_mnfe7")
 MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
 MM_Icons/icons/paste_image = SubResource("AtlasTexture_64fc4")
 MM_Icons/icons/pin_pinned = SubResource("AtlasTexture_du4od")
