@@ -24,11 +24,14 @@ func export_files(files, output_dir, target, target_file, image_size) -> void:
 			basename = "website_"+str(asset_index)
 			var http_request : HTTPRequest = HTTPRequest.new()
 			add_child(http_request)
+			var error : Error
+			var data : String
+			var json : JSON
 			if website_materials.is_empty():
-				var error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
+				error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
 				if error == OK:
-					var data = ( await http_request.request_completed )[3].get_string_from_utf8()
-					var json = JSON.new()
+					data = ( await http_request.request_completed )[3].get_string_from_utf8()
+					json = JSON.new()
 					if json.parse(data) == OK and json.get_data() is Array:
 						website_materials = json.get_data()
 			for m in website_materials:
@@ -36,11 +39,11 @@ func export_files(files, output_dir, target, target_file, image_size) -> void:
 					mat_name = m.name
 					mat_author = m.author
 					break
-			var error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(asset_index))
+			error = http_request.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterial?id="+str(asset_index))
 			if error != OK:
 				continue
-			var data = ( await http_request.request_completed )[3].get_string_from_utf8()
-			var json : JSON = JSON.new()
+			data = ( await http_request.request_completed )[3].get_string_from_utf8()
+			json = JSON.new()
 			if json.parse(data) != OK or ! json.data is Dictionary:
 				continue
 			var parse_result : Dictionary = json.data
@@ -99,7 +102,6 @@ func _ready():
 		print("Exporting...")
 		var image_size : int = 2048
 		var dir : DirAccess = DirAccess.open(".")
-		var output = []
 		print("Current dir: ", dir.get_current_dir())
 		var target : String = "Godot/Godot 4 Standard"
 		#TODO: fix this
@@ -152,14 +154,14 @@ func _ready():
 						file_name = dir.get_next()
 			elif f.begins_with("website:"):
 				for m : String in f.right(-8).split(","):
-					var range : PackedStringArray = m.split("-")
-					match range.size():
+					var index_range : PackedStringArray = m.split("-")
+					match index_range.size():
 						1:
 							if m.is_valid_int():
 								expanded_files.push_back("website:"+m)
 						2:
-							if range[0].is_valid_int() and range[1].is_valid_int():
-								for mi in range(range[0].to_int(), range[1].to_int()+1):
+							if index_range[0].is_valid_int() and index_range[1].is_valid_int():
+								for mi in range(index_range[0].to_int(), index_range[1].to_int()+1):
 									expanded_files.push_back("website:"+str(mi))
 			else:
 				expanded_files.push_back(f)
