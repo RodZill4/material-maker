@@ -234,7 +234,7 @@ jobs:
     name: Steam deploy 🎮
     runs-on: ubuntu-latest
     needs: export_macos
-    if: ${{ github.event.inputs.steam_deploy == 'true' }}
+    if: ${{ github.event.inputs.steam_deploy == 'true' && github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Get Windows build 🚀
         if: ${{ github.event.inputs.artifacts == 'true' }}
