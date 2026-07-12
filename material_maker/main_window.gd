@@ -55,7 +55,7 @@ const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
-	{ menu="File/New paint project", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
+	{ menu="File/New paint project (Experimental)", command="new_paint_project", shortcut="Control+Shift+N", not_in_ports=["HTML5"] },
 	{ menu="File/Load", command="load_project", shortcut="Control+O" },
 	{ menu="File/Load material from website", command="load_material_from_website" },
 	{ menu="File/Load recent", submenu="load_recent", standalone_only=true, not_in_ports=["HTML5"] },
