@@ -100,17 +100,29 @@ jobs:
           name: documentation
           path: ./material_maker/doc/_build/html
       - name: Upload Windows Artifact 🚀
-        if: ${{ github.event.inputs.artifacts == 'true' }}
+        if: ${{ github.event.inputs.steam == 'false' && github.event.inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v6
         with:
           name: windows_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows${{ env.PACKAGE_SUFFIX }}.zip
+      - name: Upload Windows Artifact (Steam) 🚀
+        if: ${{ github.event.inputs.steam == 'true' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: windows_snapshot
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_windows
       - name: Upload Linux Artifact 🚀
-        if: ${{ github.event.inputs.artifacts == 'true' }}
+        if: ${{ github.event.inputs.steam == 'false' && github.event.inputs.artifacts == 'true' }}
         uses: actions/upload-artifact@v6
         with:
           name: linux_snapshot
           path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux${{ env.PACKAGE_SUFFIX }}.tar.gz
+      - name: Upload Linux Artifact (Steam) 🚀
+        if: ${{ github.event.inputs.steam == 'true' }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: linux_snapshot
+          path: build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_linux
   export_macos:
     name: Mac Export 🍎
     needs: export_windows_linux
@@ -241,35 +253,30 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: windows_snapshot
-          path: artifacts
+          path: build/windows
       - name: Get Linux build 🚀
         if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: linux_snapshot
-          path: artifacts
+          path: build/linux
       - name: Get Macos build 🚀
         if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: macos_snapshot
-          path: artifacts
+          path: build/macos
       - name: Prepare packages 🔧
         run: |
           find .
-      - uses: CyberAndrii/steam-totp@v1
-        name: Generate TOTP
-        id: steam-totp
-        with:
-          shared_secret: ${{ secrets.STEAM_SHARED_SECRET }}
       - uses: game-ci/steam-deploy@v3
         with:
           username: ${{ secrets.STEAM_USERNAME }}
-          password: ${{ secrets.STEAM_PASSWORD }}
-          totp: ${{ steps.steam-totp.outputs.code }}
+          configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
           appId: 4110830
           buildDescription: v1.7
           rootPath: build
-          depot1Path: StandaloneWindows64
-          depot2Path: StandaloneLinux64
+          depot1Path: windows
+          depot2Path: macos
+          depot3Path: linux
           releaseBranch: prerelease
