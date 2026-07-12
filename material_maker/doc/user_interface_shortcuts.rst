@@ -148,6 +148,9 @@ Nodes
 |                                                       | with a pop-up list of options, this cycles between |
 |                                                       | the menu items.                                    |
 +-------------------------------------------------------+----------------------------------------------------+
+| :kbd:`MMB`                                            | Jump to the source remote node which this          |
+|                                                       | parameter (linked control) is influenced by.       |
++-------------------------------------------------------+----------------------------------------------------+
 
 Reference
 +++++++++

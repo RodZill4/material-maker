@@ -370,6 +370,7 @@ func annotate_linked_controls(p : String, is_setup : bool) -> void:
 ## Draw link(s) from [param linked_control] to linked remote parameter control(s).
 static func on_linked_control_entered(linked_control : Control) -> void:
 	if linked_control.has_meta("linked_parameters"):
+		mm_globals.set_tip_text("#MMB: Jump to source remote")
 		var linked_params : Array[Dictionary] = linked_control.get_meta("linked_parameters")
 		var new_links : Array[MMNodeLink]
 		for l in linked_params:
@@ -394,19 +395,47 @@ static func on_linked_control_exited(linked_control : Control) -> void:
 				l.queue_free()
 		_links.erase(linked_control.name)
 
-## Helper function to setup [signal mouse_entered] and [signal mouse_exited]
-## signals for [param linked_control] to draw remote links.
-static func setup_linked_control_callbacks(c : Control, is_connect : bool) -> void:
-	var enter_f : Callable = on_linked_control_entered.bind(c)
-	var exit_f : Callable = on_linked_control_exited.bind(c)
+## Handle jump to source remote node from [param linked_control].
+static func on_linked_control_gui_input(event : InputEvent, linked_control : Control) -> void:
+	if not linked_control.has_meta("linked_parameters"):
+		return
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_MIDDLE and event.pressed:
+		var link : Dictionary = linked_control.get_meta("linked_parameters")[0]
+		var graph : MMGraphEdit = link.remote.get_parent()
+		for l in graph.get_children():
+			if l is MMNodeLink:
+				l.hide()
+		jump_to_source(link.remote, link.param, graph)
 
-	if is_connect:
-		if not c.mouse_entered.is_connected(enter_f):
-			c.mouse_entered.connect(enter_f)
-		if not c.mouse_exited.is_connected(exit_f):
-			c.mouse_exited.connect(exit_f)
-	else:
-		if c.mouse_entered.is_connected(enter_f):
-			c.mouse_entered.disconnect(enter_f)
-		if c.mouse_exited.is_connected(exit_f):
-			c.mouse_exited.disconnect(exit_f)
+## Centers [param graph] view on [param remote] node and
+## highlight source remote [param param] control.
+static func jump_to_source(remote : MMGraphNodeRemote, param : String, graph : MMGraphEdit) -> void:
+	var remote_param : Control = remote.controls[param]
+	graph.scroll_offset = (remote.position_offset + 0.5 * remote.size) * graph.zoom - 0.5 * graph.size
+
+	const remote_blink : Color = Color(1.5, 1.5, 1.5, 1.0)
+	const control_blink : Color = Color(0.9, 1.5, 0.9, 1.0)
+	var tween : Tween = graph.get_tree().create_tween()
+	tween.tween_property(remote, "modulate", remote_blink, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(remote, "modulate", Color.WHITE, 0.6).set_trans(Tween.TRANS_CUBIC).set_delay(0.3)
+	tween.parallel().tween_property(remote_param, "modulate", control_blink, 0.2).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(remote_param, "modulate", Color.WHITE, 0.8).set_trans(Tween.TRANS_CUBIC).set_delay(0.3)
+	remote.selected = true
+	await tween.finished
+
+## Helper function to map signals to callables.
+static func setup_linked_control_callbacks(c : Control, is_connect : bool) -> void:
+	var signal_map : Dictionary[Signal, Callable] = {
+		c.mouse_entered : on_linked_control_entered.bind(c),
+		c.mouse_exited : on_linked_control_exited.bind(c),
+		c.gui_input : on_linked_control_gui_input.bind(c)
+	}
+
+	for s : Signal in signal_map:
+		var callable : Callable = signal_map[s]
+		if is_connect:
+			if not s.is_connected(callable):
+				s.connect(callable)
+		else:
+			if s.is_connected(callable):
+				s.disconnect(callable)
