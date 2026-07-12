@@ -1932,8 +1932,9 @@ func colorize_nodes() -> void:
 		return
 	undoredo.start_group()
 
-	var picker = ColorPicker.new()
+	var picker : ColorPicker = ColorPicker.new()
 	var popup : PopupPanel = PopupPanel.new()
+	popup.borderless = not mm_globals.get_config("color_picker_floating")
 	popup.add_child(picker)
 	popup.hide()
 	add_child(popup)
