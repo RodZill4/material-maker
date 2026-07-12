@@ -86,14 +86,14 @@ func _on_ConnectButton_pressed() -> void:
 			if !status.connected:
 				set_logged_out("Failed to connect to the website")
 				return
-			set_logged_in(status.displayed_name)
 			if licenses.is_empty():
 				request_status = await http_request.do_request("/api/getLicenses")
 				if ! request_status.has("error"):
 					if json.parse(request_status.body) == OK:
 						licenses = json.data
 			if my_assets.is_empty():
-				update_my_assets()
+				await update_my_assets()
+			set_logged_in(status.displayed_name)
 	connect_button.disabled = false
 
 func get_preview_texture():
