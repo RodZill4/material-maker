@@ -249,19 +249,16 @@ jobs:
     if: ${{ github.event.inputs.steam_deploy == 'true' }}
     steps:
       - name: Get Windows build 🚀
-        if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: windows_snapshot
           path: build/windows
       - name: Get Linux build 🚀
-        if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: linux_snapshot
           path: build/linux
       - name: Get Macos build 🚀
-        if: ${{ github.event.inputs.artifacts == 'true' }}
         uses: actions/download-artifact@v8
         with:
           name: macos_snapshot
