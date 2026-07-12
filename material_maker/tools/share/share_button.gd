@@ -205,7 +205,6 @@ func animate_connection_start() -> void:
 
 func animate_disconnected(is_error : bool = false) -> void:
 	$AnimationPlayer.play("disconnected_%s" % ["error" if is_error else "normal"] )
-	reset_animation()
 
 func animate_connected() -> void:
 	$AnimationPlayer.play("connected")
