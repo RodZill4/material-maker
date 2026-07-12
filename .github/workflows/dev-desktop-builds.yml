@@ -232,9 +232,9 @@ jobs:
           path: ./build/mac
   deploy_to_steam:
     name: Steam deploy 🎮
+    if: ${{ github.event.inputs.steam_deploy == 'true' && github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     needs: export_macos
-    if: ${{ github.event.inputs.steam_deploy == 'true' && github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Get Windows build 🚀
         if: ${{ github.event.inputs.artifacts == 'true' }}
