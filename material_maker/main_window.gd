@@ -1277,7 +1277,13 @@ func about() -> void:
 	about_box.popup_centered()
 
 func show_example_projects() -> void:
-	OS.shell_open(ProjectSettings.globalize_path("res://material_maker/examples"))
+	var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
+	var release_examples_path : String = base_dir.path_join("examples")
+	var devel_examples_path : String = ProjectSettings.globalize_path("res://material_maker/examples")
+	for p in [ release_examples_path, devel_examples_path ]:
+		if DirAccess.dir_exists_absolute(p):
+			OS.shell_open(p)
+			return
 
 # Preview
 
