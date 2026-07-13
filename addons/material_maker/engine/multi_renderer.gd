@@ -158,6 +158,7 @@ func thread_run(c : Callable, p : Array = [], stop_thread = false):
 			rv = rendering_return_value
 			rendering_mutex.unlock()
 		rendering_thread_working = false
+		await get_tree().process_frame
 		return rv
 	else:
 		return await c.callv(p)
