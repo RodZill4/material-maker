@@ -90,7 +90,7 @@ Graph Editor
 +-------------------------------------------------------+----------------------------------------------------+
 | :kbd:`Ctrl/Cmd-Shift-F`                               | Frame selected node(s)                             |
 +-------------------------------------------------------+----------------------------------------------------+
-| :kbd:`Alt-LMB`                                        | Centers graph view to input aperture node           |
+| :kbd:`Alt-LMB`                                        | Centers graph view to input aperture node          |
 |                                                       | (from output aperture nodes)                       |
 +-------------------------------------------------------+----------------------------------------------------+
 | :kbd:`F`                                              | Color selected comment/aperture node(s)            |
