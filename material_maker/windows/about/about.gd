@@ -31,8 +31,8 @@ const CONTRIBUTORS = [
 	{ name="paddy-exe", contribution="New modes in the Blend node", url="https://github.com/RodZill4/material-maker/commits/master/?author=paddy-exe" },
 	{ name="Variable", contribution="UI fixes", url="https://github.com/RodZill4/material-maker/commits/master/?author=Variable-ind" },
 	{ name="jeremybeier", contribution="Unity export fixes", url="https://github.com/RodZill4/material-maker/commits/master/?author=jeremybeier" },
-	{ name="Caroline Tilly", contribution="Steam trailer and all showreel musics", url="https://tilcamusic.com/" },
-	{ name="Margot Rindone", contribution="Steam achievement icons", url="https://www.artstation.com/margot_rindone" },
+	{ name="Caroline Tilly", contribution="Steam trailer production and music for all showreels", url="https://tilcamusic.com/" },
+	{ name="Margot Rindone", contribution="Steam achievements icons", url="https://www.artstation.com/margot_rindone" },
 	{ name="Maybe you?", contribution="If I forgot anyone here, or if you wish to contribute to this project, please don't hesitate to join our Discord channel and/or contact me directly", url="https://discord.gg/PF5V3mFwFM" },
 ]
 
