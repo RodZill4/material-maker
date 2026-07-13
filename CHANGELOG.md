@@ -1,3 +1,72 @@
+# Material Maker 1.7
+
+## General
+
+- Added menu options to load/save/reset panels layout (contributed by williamchange)
+- Implemented side panels toggling (contributed by williamchange)
+- Added keyboard shortcuts for the quickbar (contributed by williamchange)
+- Added sorting options for add node popup (contributed by williamchange)
+- Updated graph view to show links to remote parameter from linked controls (contributed by williamchange)
+- Added a shortcut (MMB) to jump to source remote from linked parameter (contributed by williamchange)
+- Implemented file thumbnails in file dialog (contributed by williamchange)
+- Made node minimize and close buttons enabled by default (contributed by williamchange)
+- Added a custom cursor icon for the lasso tool (contributed by williamchange)
+- Added padding for preferences scrollbar (contributed by williamchange)
+- Added snapping to node grab offset (contributed by williamchange)
+- Added hints on connection line hover (contributed by williamchange)
+- Remember display mode for built-in file dialog (contributed by williamchange)
+- Added support for single-window mode (contributed by williamchange)
+- Improved window title for EasySDF, Material and Export editors (contributed by williamchange)
+- Added button in graph panel to reroll node seeds (contributed by williamchange)
+- Added padding for environment editor list scrollbar (contributed by williamchange)
+- Added a preference to adjust float parameter sliding sensitivity (contributed by williamchange)
+- Added an option to make color picker popups floating windows (contributed by williamchange)
+- Improved load from website dialog performance (contributed by williamchange)
+- Improved website connection (contributed by williamchange)
+
+## Nodes
+
+- Added Dynamic Sky Material (contributed by williamchange)
+- Added 32 bit option for various nodes (contributed by williamchange)
+- Improved TEX3D Nodes (contributed by williamchange)
+- Added shortcut (Alt + LMB) for jumping to input Aperture node (contributed by williamchange)
+- Improved Aperture link editing performance (contributed by williamchange)
+- Added shortcut (R) to toggle horizontal/vertical label for Aperture nodes (contributed by williamchange)
+- Added support for using export nodes within subgraphs (contributed by williamchange)
+- Added normalized option for Sphere node (contributed by williamchange)
+- Updated PBR material metallic input to use parameter as default value (contributed by williamchange)
+- Added sqrt function for math node (contributed by williamchange)
+- Added label sizes for comment line node (contributed by williamchange)
+
+## Bug fixes
+
+### General
+
+- Fixed persistent lasso stroke when holding shift/ctrl (contributed by williamchange)
+- Fixed menu not updating when switching material type (contributed by williamchange)
+- Display all connectable nodes when quick connecting from "any" port type (contributed by williamchange)
+- Fixed comment node color popup position (contributed by williamchange)
+- Fixed error on invalid quick bar slot activation (contributed by williamchange)
+- Fixed FloatEdit receiving input when dragging items over (contributed by williamchange)
+- Disabled irrelevant options from show panels menu (contributed by williamchange)
+- Fixed knife tool not showing icon (contributed by williamchange)
+- Fixed 2D preview export to reference (contributed by williamchange)
+- Fixed texture leak in Histogram (contributed by DevFika)
+
+### Nodes
+
+- Updated Directional Blur node to not output black when sigma is zero (contributed by williamchange)
+- Fixed missing _controlled_variation_ variable for 3D PBR material (contributed by williamchange)
+- Fixed extra spacing in remote node when adding configuration (contributed by williamchange)
+- Added missing short and long desriptions for the Switch node (contributed by williamchange)
+- Fixes close button visibility for Switch node (contributed by williamchange)
+- Fixed preview briefly shown outside of node bounds (contributed by williamchange)
+
+## Misc
+
+- Upgraded Godot to 4.7 stable (contributed by williamchange)
+
+
 # Material Maker 1.6
 
 ## General
