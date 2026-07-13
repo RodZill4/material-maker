@@ -710,6 +710,8 @@ func _input(_event:InputEvent) -> void:
 			# control that has been created recently
 			if preview_parent:
 				preview_parent.move_child(preview, preview_parent.get_child_count()-1)
+			if not preview_timer.is_stopped():
+				await preview_timer.timeout
 			preview.visible = true
 
 
