@@ -38,7 +38,7 @@ env:
   GODOT_SUB: stable
   GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.7-stable
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_6
+  MM_RELEASE: 1_7
   EXPORT_TARGET_SUFFIX: "${{ github.event.inputs.steam == 'true' && ' Steam' || '' }}"
   PACKAGE_SUFFIX: "${{ github.event.inputs.steam == 'true' && '_steam' || '' }}"
 
