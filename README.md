@@ -10,7 +10,8 @@ described as interconnected nodes.
 
 ## Download
 
-- **[Download on itch.io](https://rodzilla.itch.io/material-maker)**
+- **[itch.io](https://rodzilla.itch.io/material-maker)**
+- **[Steam](https://store.steampowered.com/app/4110830/Material_Maker/)**
 
 On Windows, you can also install Material Maker using [Scoop](https://scoop.sh):
 
@@ -26,10 +27,10 @@ choco install material-maker
 choco install material-maker.portable
 ```
 
-on MacOS, you can install Material Maker using [Homebrew](https://brew.sh/):
+on macOS, you can also install Material Maker using [Homebrew](https://brew.sh/):
 
 ```text
-brew install --cask material-maker
+brew install material-maker
 ```
 
 Can't wait for next release? Automated builds from master branch are available (use at your own risk):
