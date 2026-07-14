@@ -203,11 +203,11 @@ jobs:
       - name: Ad-hoc signing ✍️
         if: ${{ github.event.inputs.sign_macos != 'true' }}
         run: |
-          codesign -s - --force --options runtime "./build/mac/Material Maker.app"
+          codesign -s - --force --deep "./build/mac/Material Maker.app"
       - name: Signing ✍️
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         run: |
-          codesign -s "Rodolphe Suescun" --force --timestamp --deep "./build/mac/Material Maker.app"
+          codesign -s "Rodolphe Suescun" --force --timestamp --options runtime --deep "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         if: ${{ github.event.inputs.steam == 'false' }}
         run: |
