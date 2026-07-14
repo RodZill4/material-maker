@@ -228,9 +228,7 @@ jobs:
           NOTARYTOOL_APP_PASSWORD: ${{ secrets.NOTARYTOOL_APP_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          submission=$(xcrun notarytool submit ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait)
-          id=$(echo "$submission" | jq -r .id)
-          xcrun notarytool log "$id" --apple-id "$APPLE_ID" --password "$NOTARYTOOL_APP_PASSWORD" --team-id "$APPLE_TEAM_ID"
+          xcrun notarytool submit ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
           xcrun stapler staple -v ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
       - name: Upload Mac OSX Artifact 🚀
         if: ${{ github.event.inputs.steam == 'false' && github.event.inputs.artifacts == 'true' }}
