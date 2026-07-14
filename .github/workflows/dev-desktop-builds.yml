@@ -208,6 +208,8 @@ jobs:
         if: ${{ github.event.inputs.sign_macos == 'true' }}
         run: |
           codesign -s "Rodolphe Suescun" --force --timestamp --options runtime --deep "./build/mac/Material Maker.app"
+          codesign --verify --deep --strict --verbose=2 "./build/mac/Material Maker.app"
+          spctl --assess --type execute --verbose "./build/mac/Material Maker.app"
       - name: Create DMG archive 🔧
         if: ${{ github.event.inputs.steam == 'false' }}
         run: |
@@ -228,7 +230,9 @@ jobs:
           NOTARYTOOL_APP_PASSWORD: ${{ secrets.NOTARYTOOL_APP_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          xcrun notarytool submit ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait
+          submission=$(xcrun notarytool submit ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg --apple-id $APPLE_ID --password $NOTARYTOOL_APP_PASSWORD --team-id $APPLE_TEAM_ID --wait)
+          id=$(echo "$submission" | jq -r .id)
+          xcrun notarytool log "$id" --apple-id "$APPLE_ID" --password "$NOTARYTOOL_APP_PASSWORD" --team-id "$APPLE_TEAM_ID"
           xcrun stapler staple -v ./build/mac/material_maker_${MM_RELEASE}${PACKAGE_SUFFIX}.dmg
       - name: Upload Mac OSX Artifact 🚀
         if: ${{ github.event.inputs.steam == 'false' && github.event.inputs.artifacts == 'true' }}
