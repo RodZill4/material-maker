@@ -344,3 +344,11 @@ func _on_preview_locked_toggled(toggled_on: bool) -> void:
 	if not prev:
 		return
 	current_graph.set_current_preview(preview_mode-1, prev.node, prev.output_index, toggled_on, not toggled_on)
+
+func _on_zoom_in_button_pressed() -> void:
+	view_scale = max(view_scale*0.9, 0.005)
+	on_resized()
+
+func _on_zoom_out_button_pressed() -> void:
+	view_scale = min(view_scale*1.1, 5.0)
+	on_resized()
