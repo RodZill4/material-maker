@@ -1,18 +1,22 @@
 {
-  "ja" : {
-    "author" : "mekogma",
-    "url" : "https://gist.githubusercontent.com/meko3/2a3f8504fb9a087518c71c27ef579681/raw/8bbe398ae7f8427fbf5dbf7fd265f6299abb263f/material-maker-ja-v1.0.1.csv"
+  "ja": {
+    "author": "mekogma",
+    "url": "https://gist.githubusercontent.com/meko3/2a3f8504fb9a087518c71c27ef579681/raw/8bbe398ae7f8427fbf5dbf7fd265f6299abb263f/material-maker-ja-v1.0.1.csv"
   },
-  "zh" : {
-    "author" : "free_king",
-    "url" : "https://raw.githubusercontent.com/RodZill4/material-maker/f1be50b21a0f4991ac39e12a5362f5c5eb4c83a0/material_maker/locale/translations/zh.csv"
+  "zh": {
+    "author": "free_king",
+    "url": "https://raw.githubusercontent.com/RodZill4/material-maker/f1be50b21a0f4991ac39e12a5362f5c5eb4c83a0/material_maker/locale/translations/zh.csv"
   },
-  "ru" : {
-    "author" : "Lydex",
-    "url" : "https://raw.githubusercontent.com/lydex256/material-maker-russian/refs/heads/main/russian-translation/translation/ru.po"
+  "zh_CN": {
+    "author": "williamchange",
+    "url": "https://raw.githubusercontent.com/williamchange/material-maker-zh-cn/refs/heads/master/zh_CN.po"
   },
-  "pt" : {
-    "author" : "Ruyeex",
-    "url" : "https://raw.githubusercontent.com/Ruyeex/Material-Maker-Translation-pt-pt/refs/heads/main/pt-pt.csv"
+  "ru": {
+    "author": "Lydex",
+    "url": "https://raw.githubusercontent.com/lydex256/material-maker-russian/refs/heads/main/russian-translation/translation/ru.po"
+  },
+  "pt": {
+    "author": "Ruyeex",
+    "url": "https://raw.githubusercontent.com/Ruyeex/Material-Maker-Translation-pt-pt/refs/heads/main/pt-pt.csv"
   }
 }
