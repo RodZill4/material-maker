@@ -1,22 +1,22 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pattern node &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -70,6 +70,19 @@
 <li class="toctree-l4"><a class="reference internal" href="node_3d_texture_uniform.html">Uniform node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_texture_scale.html">Scale node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_texture_translate.html">Translate node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tones_step.html">Tones Step node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_math.html">Math node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tones_range.html">Tones Range node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tones_map.html">Tones Map node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_v3_math.html">Vec3 Math node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_quantize.html">Quantize node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_uv.html">UV node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_invert.html">Invert node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tonality.html">Tonality node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_combine.html">Combine node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_decompose.html">Decompose node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_smooth_minmax.html">Smooth MinMax node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_warp.html">Warp node</a></li>
 </ul>
 </li>
 </ul>
@@ -113,20 +126,20 @@
            <div itemprop="articleBody">
              
   <section id="pattern-node">
-<h1>Pattern node<a class="headerlink" href="#pattern-node" title="Link to this heading"></a></h1>
+<h1>Pattern node<a class="headerlink" href="#pattern-node" title="Permalink to this heading"></a></h1>
 <p>The <strong>Pattern</strong> node outputs a 3D pattern texture generated from common waveform shapes.</p>
 <img alt="_images/node_3d_texture_pattern.png" class="align-center" src="_images/node_3d_texture_pattern.png" />
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
 <p>The <strong>Pattern</strong> node does not accept any input.</p>
 </section>
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
 <p>The <strong>Pattern</strong> node provides a grayscale 3D texture obtained by mixing a pattern on each X, Y and Z axes.</p>
 <p>Many different patterns can be created using this node, do not hesitate to experiment.</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <p>The Pattern node accepts the following parameters:</p>
 <ul class="simple">
 <li><p>the <em>X</em>, <em>Y</em> and <em>Z</em> parameters define the pattern and their number of repetitions
@@ -146,7 +159,7 @@ functions are <em>multiply</em>, <em>add</em>, <em>max</em>, <em>min</em>, <em>x
 </ul>
 </section>
 <section id="example-images">
-<h2>Example images<a class="headerlink" href="#example-images" title="Link to this heading"></a></h2>
+<h2>Example images<a class="headerlink" href="#example-images" title="Permalink to this heading"></a></h2>
 <img alt="_images/node_3d_texture_pattern_sample.png" class="align-center" src="_images/node_3d_texture_pattern_sample.png" />
 </section>
 </section>
@@ -162,7 +175,7 @@ functions are <em>multiply</em>, <em>add</em>, <em>max</em>, <em>min</em>, <em>x
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

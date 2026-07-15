@@ -1,22 +1,22 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Select node &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -70,6 +70,19 @@
 <li class="toctree-l4"><a class="reference internal" href="node_3d_texture_uniform.html">Uniform node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_texture_scale.html">Scale node</a></li>
 <li class="toctree-l4"><a class="reference internal" href="node_3d_texture_translate.html">Translate node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tones_step.html">Tones Step node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_math.html">Math node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tones_range.html">Tones Range node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tones_map.html">Tones Map node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_v3_math.html">Vec3 Math node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_quantize.html">Quantize node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_uv.html">UV node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_invert.html">Invert node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_tonality.html">Tonality node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_combine.html">Combine node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_decompose.html">Decompose node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_smooth_minmax.html">Smooth MinMax node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_warp.html">Warp node</a></li>
 </ul>
 </li>
 </ul>
@@ -113,12 +126,12 @@
            <div itemprop="articleBody">
              
   <section id="select-node">
-<h1>Select node<a class="headerlink" href="#select-node" title="Link to this heading"></a></h1>
+<h1>Select node<a class="headerlink" href="#select-node" title="Permalink to this heading"></a></h1>
 <p>The <strong>Select</strong> node assigns one or more 3D textures based on
 samples whose color index match the color parameter.</p>
 <img alt="_images/node_3d_texture_select.png" class="align-center" src="_images/node_3d_texture_select.png" />
 <section id="inputs">
-<h2>Inputs<a class="headerlink" href="#inputs" title="Link to this heading"></a></h2>
+<h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
 <p>The <strong>Select</strong> node accepts two or more 3D texture inputs:</p>
 <ul class="simple">
 <li><p>The default texture, used for all samples that don’t match the color parameter.</p></li>
@@ -127,11 +140,11 @@ samples whose color index match the color parameter.</p>
 <p>This node is variadic, and more inputs with associated color indicies can be added.</p>
 </section>
 <section id="outputs">
-<h2>Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this heading"></a></h2>
 <p>The <strong>Select</strong> node generates a merged 3D texture.</p>
 </section>
 <section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
 <p>The <strong>Select</strong> node accepts 2 parameters:</p>
 <ul class="simple">
 <li><p>A color index that is compared with the color index of each sample</p></li>
@@ -151,7 +164,7 @@ samples whose color index match the color parameter.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

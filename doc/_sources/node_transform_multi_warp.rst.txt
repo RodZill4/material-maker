@@ -36,6 +36,9 @@ The **Multi Warp** node has the following parameters:
 
 * the blend *mode*, that can be one of the following: Min, Blur, Max
 
+* whethe *32-Bit* buffer(s) are used when storing input/outputs.
+	Reduces banding artifacts but could result in higher video memory usage.
+
 Example images
 ::::::::::::::
 

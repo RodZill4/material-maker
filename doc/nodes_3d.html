@@ -1,22 +1,22 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3D nodes &mdash; Material Maker  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=6d7905d8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
       <script src="_static/js/custom.js?v=c682fb1d"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -96,7 +96,7 @@
            <div itemprop="articleBody">
              
   <section id="d-nodes">
-<h1>3D nodes<a class="headerlink" href="#d-nodes" title="Link to this heading"></a></h1>
+<h1>3D nodes<a class="headerlink" href="#d-nodes" title="Permalink to this heading"></a></h1>
 <p>The simple nodes are nodes that do not accept any input and generate one or several simple shapes.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -386,7 +386,10 @@
 <li class="toctree-l2"><a class="reference internal" href="node_3d_texture_blend.html">Blend node</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#inputs">Inputs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#outputs">Outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#parameters">Parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="node_3d_texture_blend.html#blending-modes">Blending modes</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="node_3d_texture_blend.html#example-images">Example images</a></li>
 </ul>
 </li>
@@ -431,6 +434,88 @@
 <li class="toctree-l3"><a class="reference internal" href="node_3d_texture_translate.html#example-images">Example images</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_tones_step.html">Tones Step node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_step.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_step.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_step.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_math.html">Math node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_math.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_math.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_math.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_tones_range.html">Tones Range node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_range.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_range.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_range.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_tones_map.html">Tones Map node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_map.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_map.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tones_map.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_v3_math.html">Vec3 Math node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_v3_math.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_v3_math.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_v3_math.html#parameters">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_quantize.html">Quantize node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_quantize.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_quantize.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_quantize.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_quantize.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_uv.html">UV node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_uv.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_uv.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_uv.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_uv.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_invert.html">Invert node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_invert.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_invert.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_invert.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_invert.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_tonality.html">Tonality node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tonality.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tonality.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tonality.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_tonality.html#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_combine.html">Combine node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_combine.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_combine.html#outputs">Outputs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_decompose.html">Decompose node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_decompose.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_decompose.html#outputs">Outputs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_smooth_minmax.html">Smooth MinMax node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_smooth_minmax.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_smooth_minmax.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_smooth_minmax.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_smooth_minmax.html#example-images">Example images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="node_3d_texture_warp.html">Warp node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_warp.html#inputs">Inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_warp.html#outputs">Outputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_warp.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="node_3d_texture_warp.html#example-images">Example images</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -448,7 +533,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Rodolphe Suescun.</p>
+    <p>&#169; Copyright 2018-present, Rodolphe Suescun and contributors.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
