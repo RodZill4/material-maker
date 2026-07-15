@@ -45,8 +45,8 @@ keycode = 93
 events = [SubResource("InputEventKey_lbgjg")]
 
 [node name="ProjectsPanel" type="Control" unique_id=235293066]
-clip_contents = true
 custom_minimum_size = Vector2(100, 100)
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -376,7 +376,7 @@ layout_mode = 2
 
 [node name="ThicknessLabel" type="Label" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" unique_id=537020243]
 layout_mode = 2
-text = "Thickness"
+text = "Line Radius"
 
 [node name="LineThickness" parent="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness" unique_id=688868721 instance=ExtResource("8_1w3oe")]
 unique_name_in_owner = true
