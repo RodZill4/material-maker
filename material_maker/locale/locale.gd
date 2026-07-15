@@ -1,3 +1,4 @@
+class_name Locale
 extends Object
 
 const LOCALE_DIR : String = "user://locale"
@@ -23,6 +24,9 @@ func add_translations(dest : Translation, src : Translation):
 		dest.add_message(m, src.get_message(m))
 
 func read_translations():
+	for translation in TranslationServer.get_translations():
+		TranslationServer.remove_translation(translation)
+
 	var translations : Dictionary = {}
 	var dir : DirAccess = DirAccess.open(LOCALE_DIR)
 	if dir != null:
