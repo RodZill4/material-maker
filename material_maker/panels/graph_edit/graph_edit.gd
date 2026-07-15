@@ -82,12 +82,6 @@ func _ready() -> void:
 		add_valid_connection_type(42, t)
 	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
 
-	# workaround for godot issue 120454
-	for node in get_children(true):
-		if "GraphEditFilter" in node.name:
-			node.get_child(0).use_parent_material = false
-			break
-
 func _exit_tree():
 	remove_crash_recovery_file()
 
