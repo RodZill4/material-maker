@@ -31,44 +31,47 @@ func update_config(p : Node) -> void:
 			c.update_config(config)
 		update_config(c)
 
-func _on_Apply_pressed():
+func _on_Apply_pressed() -> void:
 	update_config(self)
 	emit_signal("config_changed")
 
-func _on_OK_pressed():
+func _on_OK_pressed() -> void:
 	update_config(self)
 	emit_signal("config_changed")
 	queue_free()
 
-func _on_Cancel_pressed():
+func _on_Cancel_pressed() -> void:
 	queue_free()
 
-func _on_InstallLanguage_pressed():
-	var dialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+func _on_InstallLanguage_pressed() -> void:
+	var dialog : FileDialog = load("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	dialog.add_filter("*.po,*.position,*.csv;Translation file")
-	var files = await dialog.select_files()
+	var files : Array = await dialog.select_files()
 	if files.size() > 0:
-		var locale = load("res://material_maker/locale/locale.gd").new()
+		var locale : Locale = Locale.new()
 		locale.install_translation(files[0])
 		update_language_list()
 
-func update_language_list():
+func update_language_list() -> void:
 	%Language.init_from_locales()
 	%Language.init_from_config(config)
 
-func _on_DownloadLanguage_pressed():
-	var download_popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
+func _on_DownloadLanguage_pressed() -> void:
+	%DownloadLanguage.disabled = true
+	var download_popup : Popup = load("res://material_maker/windows/preferences/language_download.tscn").instantiate()
 	mm_globals.main_window.add_child(download_popup)
-	download_popup.connect("tree_exited", Callable(self, "_on_DownloadLanguage_closed"))
+	download_popup.tree_exited.connect(_load_language_items)
+	download_popup.tree_exited.connect(func() -> void: %DownloadLanguage.disabled = false)
 
-func _on_DownloadLanguage_closed():
-	var locale = load("res://material_maker/locale/locale.gd").new()
+func _load_language_items() -> void:
+	var locale = Locale.new()
 	locale.read_translations()
 	update_language_list()
 
 func _on_ready() -> void:
+	_load_language_items()
 	%WinTabletDriver.visible = OS.get_name() == "Windows"
 	%WinTabletDriverSpacer.visible = OS.get_name() == "Windows"
