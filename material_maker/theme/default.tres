@@ -559,7 +559,6 @@ metadata/scale = 3.0
 [sub_resource type="AtlasTexture" id="AtlasTexture_8uenv"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(80, 32, 16, 16)
-metadata/scale = 3.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m27ao"]
 atlas = ExtResource("1_s43fy")
