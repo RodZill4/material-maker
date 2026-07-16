@@ -180,13 +180,7 @@ func update_list(filter_text : String = "") -> void:
 		var _name : String = obj.display_name
 		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
 
-		# Translate path items
-		var path_items : PackedStringArray = _name.split("/")
-		for n in path_items.size():
-			path_items[n] = tr(path_items[n])
-		var translated_path = "/".join(path_items)
-
-		%List.add_item(translated_path, i.icon)
+		%List.add_item(Library.translate_item_path(_name), i.icon)
 		%List.set_item_custom_fg_color(idx, color)
 		%List.set_item_metadata(idx, i)
 		%List.set_item_tooltip_enabled(idx, false)
