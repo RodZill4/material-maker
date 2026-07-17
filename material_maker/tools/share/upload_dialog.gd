@@ -25,6 +25,7 @@ func _on_UploadDialog_popup_hide() -> void:
 
 func ask(data : Dictionary) -> Dictionary:
 	size = $MarginContainer.get_combined_minimum_size()
+	content_scale_factor = mm_globals.ui_scale_factor()
 	mm_globals.main_window.add_dialog(self)
 	if data.type == "node":
 		asset_target.visible = false
