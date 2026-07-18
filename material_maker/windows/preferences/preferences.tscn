@@ -209,6 +209,24 @@ text = "On"
 flat = false
 config_variable = "ui_single_window_mode"
 
+[node name="PreferGlobalMenu" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=777881648]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/PreferGlobalMenu" unique_id=1948109170]
+layout_mode = 2
+mouse_filter = 1
+text = "Prefer global menu (requires restart)"
+
+[node name="GuiPreferGlobalMenu" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/PreferGlobalMenu" unique_id=1488046250 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Prefer the use of global menu."
+text = "On"
+flat = false
+config_variable = "ui_prefer_global_menu"
+
 [node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1191755573]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
