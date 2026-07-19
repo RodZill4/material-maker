@@ -290,6 +290,9 @@ border_color = Color(1, 0.560784, 0.560784, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p6o2d"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ooua1"]
+bg_color = Color(0.24959998, 0.28937998, 0.39, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_r3dd5"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(32, 176, 16, 16)
@@ -1158,6 +1161,8 @@ MM_AddNodePanel/styles/panel = SubResource("StyleBoxFlat_f0kci")
 MM_AddNodePanelList/base_type = &"ItemList"
 MM_AddNodePanelList/font_sizes/font_size = 14
 MM_AddNodePanelList/styles/focus = SubResource("StyleBoxEmpty_p6o2d")
+MM_AddNodePanelList/styles/selected = SubResource("StyleBoxFlat_ooua1")
+MM_AddNodePanelList/styles/selected_focus = SubResource("StyleBoxFlat_ooua1")
 MM_CommentNode/icons/resizer = SubResource("AtlasTexture_r3dd5")
 MM_CommentNode/styles/default = SubResource("StyleBoxFlat_asgc8")
 MM_CommentNode/styles/selected = SubResource("StyleBoxFlat_en6gw")
