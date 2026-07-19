@@ -8261,6 +8261,29 @@
 			},
 			"tree_item": "3D/Texture/Warp",
 			"type": "tex3d_warp"
+		},
+		{
+			"display_name": "Crop",
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAQKADAAQAAAABAAAAQAAAAABGUUKwAAAAUVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////8IN+deAAAAGnRSTlMAAwQICQoLEhMXGUd5epGns7W/z9Hf9Pb4/s4VnowAAACfSURBVHja7dGFEQRBCETRXnd38g/0Sla7zilfXgB/BgDzI6hk45JDoxWZHSh0IhJawAK3DGRtdzIdgbJ7okpB/FHIFqjlmQokXn4LdGDFrAzADU/6I+CFLOHAr1cILWABC1jgjgELJCELjkAfnrjPAs8MW4DMhTIgSwxS/RYYfZC06p5ojsDUnbQZnlJc4RYBC1jAnUVaaOTLmEEl8kEem4tAOMFllkEAAAAASUVORK5CYII=",
+			"name": "crop",
+			"type": "crop",
+			"parameters": {
+				"edge": 3.0,
+				"edge_color": {
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0,
+					"type": "Color"
+				},
+				"keep_aspect": false,
+				"pa": 0.5,
+				"x1": -0.5,
+				"x2": 0.5,
+				"y1": -0.5,
+				"y2": 0.5
+			},
+			"tree_item": "Transform/Crop"
 		}
 	],
 	"name": "Base library"

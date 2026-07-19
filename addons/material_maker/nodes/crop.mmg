@@ -1,0 +1,208 @@
+{
+	"name": "crop",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"edge": 3,
+		"edge_color": {
+			"a": 1.0,
+			"b": 0.0,
+			"g": 0.0,
+			"r": 0.0,
+			"type": "Color"
+		},
+		"keep_aspect": false,
+		"pa": 0.5,
+		"x1": -0.5,
+		"x2": 0.5,
+		"y1": -0.5,
+		"y2": 0.5
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0, 0.0, 0.0, 1.0)",
+				"function": true,
+				"label": "",
+				"longdesc": "Input image to be cropped",
+				"name": "in",
+				"shortdesc": "Input image",
+				"type": "rgba"
+			}
+		],
+		"instance": [
+			"vec4 $(name)_crop(vec2 uv) {",
+			"\tvec2 new_uv = uv * vec2( $x2 - $x1, $y2 - $y1) + vec2($x1 + 0.5, $y1 + 0.5);",
+			"\tfloat mask = float(floor(uv) == vec2(0.0));",
+			"\tif ($edge == 0) {",
+			"\t\tvec4 col = $in(new_uv);",
+			"\t\treturn col * mask;",
+			"\t} else if ($edge == 1) {",
+			"\t\tnew_uv = fract(uv) * vec2( $x2 - $x1, $y2 - $y1) + vec2($x1 + 0.5, $y1 + 0.5);",
+			"\t\treturn $in(new_uv);",
+			"\t} else if ($edge == 2){",
+			"\t\treturn $in(new_uv);",
+			"\t} else {",
+			"\t\tvec4 col = $in(new_uv);",
+			"\t\treturn mix($edge_color, col, mask);",
+			"\t}",
+			"}",
+			"",
+			"vec2 $(name)_sca_fac(vec2 uv) {",
+			"\tvec2 sca = abs(vec2($x2 - $x1, $y2 - $y1));",
+			"\treturn sca / max(sca.x, sca.y) * 0.5 + 0.5;",
+			"}",
+			"",
+			"vec4 $(name)_crop2(vec2 uv) {",
+			"\tuv -= vec2($x1 + 0.5, $y1 + 0.5);",
+			"\tvec2 new_uv = mod(uv, vec2( $x2 - $x1, $y2 - $y1) ) + vec2($x1 + 0.5, $y1 + 0.5);",
+			"\treturn $in(new_uv);",
+			"}",
+			"",
+			"vec4 $(name)_crop_preview(vec2 uv) {",
+			"\tfloat mask = uv.x - 0.5 > $x1 && uv.x - 0.5 < $x2 && uv.y - 0.5 > $y1 && uv.y - 0.5 < $y2 ? 1.0 : $pa;",
+			"\treturn $in(uv) * mask;",
+			"}",
+			"",
+			"float $(name)_fade_mask(vec2 uv, float fade_width) {",
+			"\tuv -= vec2($x1 + 0.5, $y1 + 0.5);",
+			"\tfloat vertical_mask = clamp(uv.x / fade_width + 0.5, 0.0, 1.0);",
+			"\tuv -= vec2( $x2 - $x1, $y2 - $y1);",
+			"\tvertical_mask *= clamp(-uv.x / fade_width + 0.5, 0.0, 1.0);",
+			"\treturn vertical_mask;",
+			"} "
+		],
+		"longdesc": "Crops an image",
+		"name": "Crop",
+		"outputs": [
+			{
+				"longdesc": "Image cropping preview",
+				"rgba": "$(name)_crop_preview($uv)",
+				"shortdesc": "Preview",
+				"type": "rgba"
+			},
+			{
+				"longdesc": "Result of the crop operation",
+				"rgba": "$keep_aspect ? $(name)_crop(($uv - 0.5) / (2.0*$(name)_sca_fac($uv)-1.0) + 0.5) : $(name)_crop($uv)",
+				"shortdesc": "Cropped image",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 3.0,
+				"label": "Edge",
+				"longdesc": "Specifies filling mode beyond the crop area.",
+				"name": "edge",
+				"shortdesc": "Edge Mode",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Alpha",
+						"value": "0"
+					},
+					{
+						"name": "Repeat",
+						"value": "1"
+					},
+					{
+						"name": "Continous",
+						"value": "2"
+					},
+					{
+						"name": "Color",
+						"value": "3"
+					}
+				]
+			},
+			{
+				"default": false,
+				"label": "Keep Aspect",
+				"longdesc": "When set, cropped output is scaled to fit the unit square, centered with aspect ratio(based on the crop area) kept.",
+				"name": "keep_aspect",
+				"shortdesc": "Keep Aspect",
+				"type": "boolean"
+			},
+			{
+				"control": "P1.x",
+				"default": -0.5,
+				"label": "Corner 1",
+				"longdesc": "Position for the first crop handle on the X axis.",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "x1",
+				"shortdesc": "First Corner X",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P1.y",
+				"default": -0.5,
+				"label": "3:",
+				"longdesc": "Position for the first crop handle on the Y axis.",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "y1",
+				"shortdesc": "First Corner Y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P2.x",
+				"default": 0.5,
+				"label": "Corner 2",
+				"longdesc": "Position for the second crop handle on the X axis",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "x2",
+				"shortdesc": "Second Corner X",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "P2.y",
+				"default": 0.5,
+				"label": "4:",
+				"longdesc": "Position for the second crop handle on the Y axis.",
+				"max": 0.5,
+				"min": -0.5,
+				"name": "y2",
+				"shortdesc": "Second Corner Y",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Preview",
+				"longdesc": "Background opacity in preview output.",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "pa",
+				"shortdesc": "Preview Alpha",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"default": {
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0
+				},
+				"label": "1:",
+				"longdesc": "Custom color to use beyond the cropped content. Only effective if 'Edge' is set to 'Color'.",
+				"name": "edge_color",
+				"shortdesc": "Edge Color",
+				"type": "color"
+			}
+		],
+		"shortdesc": "Crop"
+	},
+	"type": "shader"
+}
