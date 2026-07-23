@@ -38,6 +38,10 @@ var actually_dragging: bool = false
 
 var should_receive_input : bool = true
 
+var adjusting_sensitivity : bool = false
+var adjust_increment : float = 0.1
+static var sensitivity : float = mm_globals.get_config("ui_field_sensitivity")
+
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
 
@@ -68,7 +72,6 @@ var editable := true:
 	get:
 		return mode != Modes.UNEDITABLE
 
-
 func get_value() -> Variant:
 	if $Edit.text.is_valid_float():
 		return float($Edit.text)
@@ -76,7 +79,6 @@ func get_value() -> Variant:
 		return 0
 	else:
 		return $Edit.text
-
 
 func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 	if v is int or (v is String and v.is_valid_float()):
@@ -106,18 +108,19 @@ func set_value(v: Variant, notify := false, merge_undos := false) -> void:
 			emit_signal("value_changed", v)
 			emit_signal("value_changed_undo", v, merge_undos)
 
-
 func set_value_from_expression_editor(v: String) -> void:
 	if v.is_valid_float():
 		set_value(float(v), true)
 	else:
 		set_value(v, true)
 
+func _input(event : InputEvent) -> void:
+	_handle_sensitivity_adjustment(event)
 
-func _input(event:InputEvent) -> void:
 	if not Rect2(Vector2(), size).has_point(get_local_mouse_position()):
 		return
 	if mode == Modes.IDLE:
+		adjusting_sensitivity = false
 		if event is InputEventKey and event.is_command_or_control_pressed() and event.pressed:
 			if event.keycode == KEY_C:
 				DisplayServer.clipboard_set(str(float_value))
@@ -126,12 +129,10 @@ func _input(event:InputEvent) -> void:
 				set_value(DisplayServer.clipboard_get(), true)
 				accept_event()
 
-
-func _gui_input(event: InputEvent) -> void:
+func _gui_input(event : InputEvent) -> void:
 	if not should_receive_input:
 		return
 	if mode == Modes.IDLE:
-
 		# Handle Drag-Start
 		if event is InputEventMouseMotion and event.relative.length() > 0.0 and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 			if $Edit.text.is_valid_float():
@@ -176,8 +177,6 @@ func _gui_input(event: InputEvent) -> void:
 			if actually_dragging:
 				var current_step := step
 
-				delta *= mm_globals.get_config("ui_field_sensitivity")
-
 				if event.is_command_or_control_pressed():
 					if step == 1:
 						current_step *= 5
@@ -193,7 +192,8 @@ func _gui_input(event: InputEvent) -> void:
 				elif event.alt_pressed:
 					current_step *= 0.01
 					delta *= 0.1
-
+				else:
+					delta *= lerpf(0.1, 1.5, sensitivity)
 
 				var v: float = start_value + delta / (size.x / abs(max_value - min_value))
 
@@ -245,19 +245,15 @@ func _gui_input(event: InputEvent) -> void:
 					set_value(min(float($Edit.text)+amount, max_value), true, true)
 					accept_event()
 
-
-
 func _on_edit_focus_entered() -> void:
 	$Edit.queue_redraw()
 	if mode == Modes.IDLE:
 		mode = Modes.EDITING
 
-
 func _on_edit_focus_exited() -> void:
 	$Edit.queue_redraw()
 	if mode == Modes.EDITING:
 		_on_edit_text_submitted($Edit.text)
-
 
 func _on_edit_text_submitted(new_text: String) -> void:
 	if not mode == Modes.EDITING:
@@ -280,12 +276,10 @@ func _on_edit_text_submitted(new_text: String) -> void:
 	else:
 		set_value(new_text, true)
 
-
 func get_decimal_places(v: float) -> int:
 	return (str(v)+".").split(".")[1].length()
 
-
-func _notification(what):
+func _notification(what) -> void:
 	match what:
 		NOTIFICATION_THEME_CHANGED:
 			if get_theme_stylebox("clip") != get_theme_stylebox("panel"):
@@ -295,7 +289,6 @@ func _notification(what):
 			should_receive_input = false
 		NOTIFICATION_DRAG_END:
 			should_receive_input = true
-
 
 func update() -> void:
 	var is_hovered := Rect2(Vector2(), size).has_point(get_local_mouse_position()) or mode == Modes.SLIDING
@@ -308,20 +301,17 @@ func update() -> void:
 		$Edit.remove_theme_color_override("font_uneditable_color")
 	$Edit.queue_redraw()
 
-
 func _ready() -> void:
 	update()
 	min_value = min_value
 	max_value = max_value
 
-
-
 func _on_mouse_entered() -> void:
 	update()
+	_show_sensitivity_tip()
 
 func _on_mouse_exited() -> void:
 	update()
-
 
 func _on_edit_draw() -> void:
 	var is_focused = get_viewport().gui_get_focus_owner() == self or get_viewport().gui_get_focus_owner() == $Edit
@@ -329,3 +319,53 @@ func _on_edit_draw() -> void:
 
 	if is_focused or is_dragging:
 		$Edit.draw_style_box(get_theme_stylebox("focus"), Rect2(Vector2(), size))
+
+	if adjusting_sensitivity:
+		_draw_sensitive_bar()
+
+func _draw_sensitive_bar() -> void:
+	var accent : Color = get_theme_color("icon_pressed_color", "Button").darkened(0.2)
+	const line_width : float = 3.0
+	const bg_white : Color = Color.WHITE
+	var end : float = size.x * sensitivity
+	var height : float = size.y - 2.0
+	var from : Vector2 = Vector2(0.0, height)
+
+	# outline
+	$Edit.draw_circle(from, (line_width + 1.0) * 0.5, bg_white)
+	$Edit.draw_circle(Vector2(end, height), (line_width + 1.0) * 0.5, bg_white)
+	$Edit.draw_line(from, Vector2(end , height), bg_white, line_width+1.0)
+
+	# fill
+	$Edit.draw_circle(from, line_width * 0.5, accent)
+	$Edit.draw_circle(Vector2(end, height), line_width * 0.5, accent)
+	$Edit.draw_line(from, Vector2(end , height), accent, line_width)
+
+func _show_sensitivity_tip() -> void:
+	const s : String = "#LEFT#LMB#RIGHT + Mouse Wheel: Adjust sliding sensitivity ( %d%s )"
+	mm_globals.set_tip_text(s % [ lerpf(1.0, 150.0, (sensitivity - 0.01) / 0.99), "%"], 2.0, 1)
+
+func _update_sensitivity(direction : float) -> void:
+	adjusting_sensitivity = true
+	if sensitivity == 0.01 and direction == 1.0:
+		sensitivity = adjust_increment
+	else:
+		sensitivity = clampf(sensitivity + adjust_increment * direction, 0.01, 1.0)
+	$Edit.queue_redraw()
+	_show_sensitivity_tip()
+	accept_event()
+
+func _handle_sensitivity_adjustment(event : InputEvent) -> void:
+	if mode == Modes.SLIDING:
+		adjust_increment = 0.05 if event.alt_pressed else 0.1
+		if event is InputEventMouseButton and event.pressed:
+			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_update_sensitivity(-1.0)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_update_sensitivity(1.0)
+		elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			adjusting_sensitivity = false
+			$Edit.queue_redraw()
+
+func _exit_tree() -> void:
+	mm_globals.set_config("ui_field_sensitivity", sensitivity)
