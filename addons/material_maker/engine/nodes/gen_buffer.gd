@@ -139,9 +139,13 @@ func on_dep_update_buffer(buffer_name : String) -> bool:
 		self.rendering_time_updated.emit(rendering_time)
 		mm_deps.dependency_update(buffer_name, texture, true)
 		mm_deps.update()
+		on_buffer_updated()
 	else:
 		print("Failed to update buffer")
 	return status
+
+func on_buffer_updated():
+	pass
 
 func get_adjusted_uv(uv : String) -> String:
 	if version == VERSION_COMPLEX and not get_parameter("filter"):
@@ -163,7 +167,7 @@ func get_output_attributes(output_index : int) -> Dictionary:
 	return attributes
 
 func _serialize(data: Dictionary) -> Dictionary:
-	data.type = "buffer"
+	data.type = get_type()
 	if version != VERSION_OLD:
 		data.version = version
 	return data
