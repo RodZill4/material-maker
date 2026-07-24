@@ -14,7 +14,7 @@ func _ready():
 
 func set_closed(c : bool = true):
 	closed = c
-	title = "Edit splines" if closed else "Edit polyline"
+	title = "Edit Splines" if closed else "Edit Polyline"
 	$VBoxContainer/EditorContainer/SplinesEditor.set_closed(closed)
 
 func _on_CurveDialog_popup_hide():

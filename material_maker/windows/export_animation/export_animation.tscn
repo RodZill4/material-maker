@@ -79,9 +79,9 @@ _data = {
 render_priority = 0
 shader = SubResource("10")
 
-[node name="ExportAnimation" type="Window" unique_id=2007371789]
+[node name="ExportAnimation" type="Window"]
 oversampling_override = 1.0
-title = "Export animation"
+title = "Export Animation"
 position = Vector2i(0, 36)
 size = Vector2i(750, 300)
 script = ExtResource("1")

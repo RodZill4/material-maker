@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://material_maker/panels/paint/paint_project_settings.gd" id="3"]
 
 [node name="PaintProjectSettings" type="Window"]
-title = "Paint project settings"
+title = "Paint Project Settings"
 exclusive = true
 always_on_top = true
 extend_to_title = true
