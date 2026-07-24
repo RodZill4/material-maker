@@ -16,14 +16,25 @@ func get_parameter_defs() -> Array:
 	]
 	return parameter_defs
 
+func set_parameter(n : String, v) -> void:
+	if n == "filename":
+		parameters[n] = v
+	super.set_parameter(n, v)
+
+var timer : SceneTreeTimer
+
 func on_buffer_updated():
+	if timer:
+		timer.timeout.disconnect(export)
+	timer = get_tree().create_timer(0.25)
+	timer.timeout.connect(export)
+
+func export():
 	var file_name : String = get_parameter("filename")
-	
 	var graph_node : MMGenBase = self
 	while graph_node.get_parent() is MMGenBase:
 		graph_node = graph_node.get_parent()
 	if graph_node and graph_node.has_meta("file_path"):
 		var project_file_path : String = graph_node.get_meta("file_path")
 		file_name = project_file_path.get_base_dir().path_join(file_name)
-	
 	texture.save_to_file(file_name)
