@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="2"]
 [ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://bd3ummbwaq3i" path="res://material_maker/panels/graph_edit/lazy_link/lazy_link.tscn" id="5_u5byk"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="4_u5byk"]
 
 [sub_resource type="AtlasTexture" id="3"]
@@ -101,6 +102,9 @@ layout_mode = 2
 
 [node name="UndoRedo" type="Node" parent="." unique_id=118784873]
 script = ExtResource("3")
+
+[node name="LazyLink" parent="." unique_id=1711863233 instance=ExtResource("5_u5byk")]
+layout_mode = 1
 
 [connection signal="connection_drag_ended" from="." to="." method="_on_connection_drag_ended"]
 [connection signal="connection_drag_started" from="." to="." method="_on_connection_drag_started"]
