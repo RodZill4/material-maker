@@ -1503,6 +1503,8 @@ func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
+	tip = tip.replace("#LEFT", "[img]res://material_maker/icons/left_arrow.tres[/img]")
+	tip = tip.replace("#RIGHT", "[img]res://material_maker/icons/right_arrow.tres[/img]")
 	if priority >= tip_priority:
 		tip_priority = priority
 		$VBoxContainer/StatusBar/HBox/Tip.text = tip

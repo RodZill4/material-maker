@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://xjh5irxomgp"]
+
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="1_oc5cg"]
+
+[resource]
+atlas = ExtResource("1_oc5cg")
+region = Rect2(32, 48, 16, 16)
+filter_clip = true
