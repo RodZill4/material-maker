@@ -811,7 +811,6 @@ border_width_bottom = 1
 border_color = Color(0.207843, 0.215686, 0.235294, 1)
 corner_detail = 4
 shadow_color = Color(0, 0, 0, 0.0588235)
-shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k2ns1"]
 bg_color = Color(0.8, 0.8, 0.8, 1)
