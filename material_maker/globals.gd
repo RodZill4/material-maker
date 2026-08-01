@@ -64,7 +64,8 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_minimize_button = true,
 	node_close_button = true,
 	ui_field_sensitivity = 1.0,
-	color_picker_floating = false
+	color_picker_floating = false,
+	auto_node_insertion = true,
 }
 
 
