@@ -485,6 +485,13 @@ atlas = ExtResource("1_s43fy")
 region = Rect2(112, 224, 16, 16)
 metadata/scale = 2.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_888jp"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(32, 240, 16, 16)
+filter_clip = true
+metadata/scale = 2.0
+metadata/recolor = true
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_j13i3"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 160, 16, 16)
@@ -508,6 +515,13 @@ region = Rect2(32, 192, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_1lfk8"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(64, 192, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npn74"]
+atlas = ExtResource("1_s43fy")
+region = Rect2(112, 48, 16, 16)
+filter_clip = true
+metadata/scale = 2.0
+metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
 atlas = ExtResource("1_s43fy")
@@ -1402,12 +1416,14 @@ MM_Icons/icons/arrow_updown = SubResource("AtlasTexture_ovvp6")
 MM_Icons/icons/camera = SubResource("AtlasTexture_cscp3")
 MM_Icons/icons/category_ascending = SubResource("AtlasTexture_ha0qk")
 MM_Icons/icons/category_descending = SubResource("AtlasTexture_4tel2")
+MM_Icons/icons/clean = SubResource("AtlasTexture_888jp")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_j13i3")
 MM_Icons/icons/connection_bezier = SubResource("AtlasTexture_rqjp3")
 MM_Icons/icons/connection_diagonal = SubResource("AtlasTexture_8tn7x")
 MM_Icons/icons/connection_direct = SubResource("AtlasTexture_pfiqs")
 MM_Icons/icons/connection_manhattan = SubResource("AtlasTexture_pfsii")
 MM_Icons/icons/connection_rounded = SubResource("AtlasTexture_1lfk8")
+MM_Icons/icons/console = SubResource("AtlasTexture_npn74")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")

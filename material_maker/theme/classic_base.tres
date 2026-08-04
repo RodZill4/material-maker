@@ -436,9 +436,23 @@ atlas = ExtResource("1_fw8f4")
 region = Rect2(112, 224, 16, 16)
 metadata/scale = 2.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_rgi6n"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(32, 240, 16, 16)
+filter_clip = true
+metadata/scale = 2.0
+metadata/recolor = true
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ns35"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(64, 160, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v3cv"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(112, 48, 16, 16)
+filter_clip = true
+metadata/scale = 2.0
+metadata/recolor = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_agwde"]
 atlas = ExtResource("1_fw8f4")
@@ -1186,7 +1200,9 @@ MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/arrow_updown = SubResource("AtlasTexture_dnklm")
 MM_Icons/icons/category_ascending = SubResource("AtlasTexture_50kh2")
 MM_Icons/icons/category_descending = SubResource("AtlasTexture_ivx1c")
+MM_Icons/icons/clean = SubResource("AtlasTexture_rgi6n")
 MM_Icons/icons/color_picker = SubResource("AtlasTexture_7ns35")
+MM_Icons/icons/console = SubResource("AtlasTexture_0v3cv")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/dropdown = SubResource("AtlasTexture_2gawd")
