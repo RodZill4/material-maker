@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvv8rhglg3jlm"]
+[gd_scene format=3 uid="uid://cvv8rhglg3jlm"]
 
 [ext_resource type="Script" uid="uid://cd0ugv3swm5os" path="res://material_maker/widgets/curve_edit/curve_edit.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://yeaj0tj7b08i" path="res://material_maker/widgets/curve_edit/curve_view.tscn" id="2"]
 
-[node name="CurveEdit" type="Button"]
+[node name="CurveEdit" type="Button" unique_id=1863414995]
 custom_minimum_size = Vector2(60, 20)
 anchors_preset = 11
 anchor_left = 1.0
@@ -15,7 +15,7 @@ offset_bottom = -700.0
 focus_mode = 1
 script = ExtResource("1")
 
-[node name="CurveView" parent="." instance=ExtResource("2")]
+[node name="CurveView" parent="." unique_id=611358315 instance=ExtResource("2")]
 layout_mode = 1
 offset_left = 0.0
 offset_top = 0.0
