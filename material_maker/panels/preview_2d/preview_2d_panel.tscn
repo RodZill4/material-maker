@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b7x7yqgsurxhv"]
+[gd_scene load_steps=32 format=3 uid="uid://b7x7yqgsurxhv"]
 
 [ext_resource type="Texture2D" uid="uid://c0j4px4n72di5" path="res://material_maker/icons/icons.tres" id="1"]
 [ext_resource type="PackedScene" uid="uid://est6pi7xbptp" path="res://material_maker/panels/preview_2d/control_point.tscn" id="2"]
@@ -87,13 +87,23 @@ events = [SubResource("InputEventKey_83edi")]
 base_font = ExtResource("18_kn37y")
 variation_transform = Transform2D(1, 0.22, 0, 1, 0, 0)
 
-[sub_resource type="InputEventKey" id="InputEventKey_rhw4u"]
+[sub_resource type="InputEventKey" id="InputEventKey_r76ng"]
 device = -1
-command_or_control_autoremap = true
+shift_pressed = true
 keycode = 69
+unicode = 69
 
 [sub_resource type="Shortcut" id="Shortcut_llf02"]
-events = [SubResource("InputEventKey_rhw4u")]
+events = [SubResource("InputEventKey_r76ng")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_63a3x"]
+device = -1
+shift_pressed = true
+keycode = 65
+unicode = 65
+
+[sub_resource type="Shortcut" id="Shortcut_083ld"]
+events = [SubResource("InputEventKey_63a3x")]
 
 [node name="Preview2D" node_paths=PackedStringArray("shortcut_context") instance=ExtResource("3")]
 material = SubResource("2")
@@ -750,6 +760,7 @@ text = "To Reference"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+shortcut = SubResource("Shortcut_083ld")
 text = "Animation"
 
 [node name="TAA_Render" type="Button" parent="MenuBar/HBox/MainMenu/HBox/ExportMenu/ExportMenuPanel/VBox/Grid/BoxContainer" index="3"]
@@ -786,7 +797,9 @@ layout_mode = 2
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_Preview2D_mouse_entered"]
 [connection signal="unhandled_event" from="PolygonEditor" to="." method="_on_gui_input"]
-[connection signal="gui_input" from="PolygonEditor/@Control@42512" to="PolygonEditor/@Control@42512" method="_on_ControlPoint_gui_input"]
+[connection signal="gui_input" from="PolygonEditor/@Control@24494" to="PolygonEditor/@Control@24494" method="_on_ControlPoint_gui_input"]
+[connection signal="mouse_entered" from="PolygonEditor/@Control@24494" to="PolygonEditor/@Control@24494" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="PolygonEditor/@Control@24494" to="PolygonEditor/@Control@24494" method="_on_mouse_exited"]
 [connection signal="unhandled_event" from="SplinesEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="PixelsEditor" to="." method="_on_gui_input"]
 [connection signal="unhandled_event" from="LatticeEditor" to="." method="_on_gui_input"]
