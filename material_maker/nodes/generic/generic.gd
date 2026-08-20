@@ -330,6 +330,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 80
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
+		control.custom_minimum_size.y = 22
 	elif p.type == "polygon":
 		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instantiate()
 	elif p.type == "polyline":
@@ -343,12 +344,12 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
 		control = TextLineEdit.new()
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size = Vector2(80, 22)
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()
 	elif p.type == "file":
 		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instantiate()
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size = Vector2(80, 22)
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)

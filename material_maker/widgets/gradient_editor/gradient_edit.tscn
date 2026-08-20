@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp6ft7qbucfam"]
+[gd_scene format=3 uid="uid://cp6ft7qbucfam"]
 
 [ext_resource type="Script" uid="uid://b12ou6mx2bt2m" path="res://material_maker/widgets/gradient_editor/gradient_edit.gd" id="1_51wqf"]
 
@@ -26,26 +26,26 @@ code = "shader_type canvas_item;"
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1yahc"]
 shader = SubResource("Shader_786ke")
 
-[node name="GradientEdit" type="PanelContainer"]
-custom_minimum_size = Vector2(0, 25)
+[node name="GradientEdit" type="PanelContainer" unique_id=1523633676]
+custom_minimum_size = Vector2(0, 22)
 offset_right = 351.0
-offset_bottom = 42.0
+offset_bottom = 14.0
 focus_mode = 2
 theme_type_variation = &"MM_NodeGradientEdit"
 theme_override_styles/panel = SubResource("StyleBoxFlat_j7yhr")
 script = ExtResource("1_51wqf")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1176024547]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="PanelContainer" type="Panel" parent="HBoxContainer"]
+[node name="PanelContainer" type="Panel" parent="HBoxContainer" unique_id=1275934486]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_e7ak6")
 
-[node name="Gradient" type="ColorRect" parent="HBoxContainer/PanelContainer"]
+[node name="Gradient" type="ColorRect" parent="HBoxContainer/PanelContainer" unique_id=1039771332]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_1yahc")
 layout_mode = 1
@@ -57,9 +57,11 @@ grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="PopupButton" type="Button" parent="HBoxContainer"]
+[node name="PopupButton" type="Button" parent="HBoxContainer" unique_id=461355319]
 unique_name_in_owner = true
+custom_maximum_size = Vector2(-1, 16)
 layout_mode = 2
+size_flags_vertical = 4
 toggle_mode = true
 flat = true
 
