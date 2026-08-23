@@ -94,6 +94,11 @@ func _on_child_entered_tree(node: Node) -> void:
 				min_size_scale = Vector2(430,100)
 		node.min_size = min_size_scale * node.content_scale_factor
 
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED and ThemeUtils.theme_name == "custom":
+		if get_theme_color("folder_icon_color") != get_theme_color("icon_pressed_color", "Button"):
+			add_theme_color_override("folder_icon_color", get_theme_color("icon_pressed_color", "Button"))
+
 func _exit_tree() -> void:
 	mm_globals.config.set_value("file_dialog", "recents", JSON.stringify(get_recent_list()))
 	mm_globals.config.set_value("file_dialog", "favorites", JSON.stringify(get_favorite_list()))

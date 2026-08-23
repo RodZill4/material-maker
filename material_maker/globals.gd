@@ -64,7 +64,10 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_minimize_button = true,
 	node_close_button = true,
 	ui_field_sensitivity = 1.0,
-	color_picker_floating = false
+	color_picker_floating = false,
+	custom_theme_base_color = Color(0.22, 0.243, 0.294),
+	custom_theme_accent = Color(0.341, 0.62, 1.0, 1.0),
+	custom_theme_contrast = 0.8,
 }
 
 
@@ -237,3 +240,6 @@ func ui_scale_factor() -> float:
 	if get_tree().root.gui_embed_subwindows:
 		return 1.0
 	return get_tree().root.content_scale_factor
+
+func is_custom_theme() -> bool:
+	return config.get_value("window", "theme") == "custom"
