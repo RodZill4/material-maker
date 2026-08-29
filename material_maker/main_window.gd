@@ -1166,6 +1166,7 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true, upd
 		dialog.content_scale_factor = mm_globals.ui_scale_factor()
 		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 		add_child(dialog)
+		current_item_name = selected_nodes[0].title
 		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 		if ! status.ok:
 			return
