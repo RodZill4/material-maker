@@ -10,6 +10,8 @@ var custom_button : TextureButton
 var show_inputs : bool = false
 var show_outputs : bool = false
 
+static var port_tex : DPITexture
+
 const SETTINGS_NODE_MINIMIZE_BUTTON := "node_minimize_button"
 
 const MINIMIZE_ICON : Texture2D = preload("res://material_maker/icons/minimize.tres")
@@ -37,6 +39,11 @@ const TIME_BAD : int = 1000
 const TIME_AVG : int = 500
 const TIME_GOOD : int = 100
 
+const PORT_SVG : String = """
+	<svg width="10" height="10">
+	<circle r="5" cx="5" cy="5" fill="white"/></svg>
+	"""
+
 ## Emitted when nodes are being simplified as graph is zoomed out [br]
 ## [param fac] denotes the current level of detail (i.e. controls' opacity)
 signal lod_updated(fac : float)
@@ -61,6 +68,8 @@ func _ready() -> void:
 	_notification(NOTIFICATION_THEME_CHANGED)
 	gui_input.connect(self._on_gui_input)
 	update.call_deferred()
+	if not port_tex:
+		port_tex = DPITexture.create_from_string(PORT_SVG)
 
 func init_buttons():
 	super.init_buttons()
@@ -171,7 +180,7 @@ func on_theme_changed() -> void:
 	portpreview_width = get_theme_constant("portpreview_width", "GraphNode")
 
 
-func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
+func _draw_port(slot_index : int, pos : Vector2i, left : bool, color : Color) -> void:
 	if left:
 		var inputs = generator.get_input_defs()
 		if slot_index < inputs.size() and inputs[slot_index].has("group_size") and inputs[slot_index].group_size > 1:
@@ -186,7 +195,7 @@ func _draw_port(slot_index: int, pos: Vector2i, left: bool, color: Color):
 			var conn_pos1 = get_output_port_position(slot_index)
 			var conn_pos2 = get_output_port_position(min(slot_index+outputs[slot_index].group_size-1, outputs.size()-1))
 			draw_portgroup_stylebox(conn_pos1, conn_pos2)
-	draw_circle(pos, 5, color, true, -1, true)
+	draw_texture(port_tex, pos - Vector2i(5, 5), color)
 
 
 func _draw() -> void:
