@@ -123,11 +123,6 @@ func _on_Tabs_tab_changed(tab) -> void:
 	current_tab = tab
 
 func _on_Projects_resized() -> void:
-	$TabBar.anchor_left = 0
-	$TabBar.anchor_right = 0
-	$TabBar.anchor_top = 0
-	$TabBar.anchor_bottom = 0
-	$TabBar.size.x = size.x
 	if current_tab >= 0:
 		var node = get_child(current_tab)
 		node.position = Vector2(0, $TabBar.size.y)
