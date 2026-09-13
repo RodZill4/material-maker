@@ -133,6 +133,10 @@ left_click={
 ]
 }
 
+[internationalization]
+
+rendering/root_node_layout_direction=1
+
 [locale]
 
 translations=PackedStringArray()
