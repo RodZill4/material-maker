@@ -270,12 +270,12 @@ Blend mode|Modalità di miscelazione
 The algorithm used to blend the inputs|L'algoritmo utilizzato per miscelare gli input
 Dissolve|Dissolvi
 Multiply|Moltiplica
-Screen|Scolora
+Screen|Scherma
 Overlay|Sovrapponi
 Hard Light|Luce intensa
 Soft Light|Luce soffusa
 Burn|Brucia
-Dodge|Scherma
+Dodge|Scherma colore
 Lighten|Schiarisci
 Darken|Scurisci
 Difference|Differenza
@@ -494,7 +494,7 @@ param2|param2
 kSigma|kSigma
 K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times  more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma|Coefficiente sigma del fattore K.\nkSigma = 1*sigma copre il 68% dei dati\nkSigma = 2*sigma copre il 95% dei dati - ma ci sono oltre 3 volte più punti da calcolare\nkSigma = 3*sigma copre il 99.7% dei dati - ma richiede più del doppio dei calcoli di 2*sigma
 param3|param3
-Sharpening|Contrasto (Sharpening)
+Sharpening|Nitidezza (Sharpening)
 Edge sharpening threshold|Soglia di nitidezza dei bordi
 Dilate|Dilata
 Dilates the white areas of a mask, using the colors of an optional input|Dilata le aree bianche di una maschera, utilizzando i colori di un input opzionale
@@ -656,7 +656,7 @@ A greyscale image showing random I Ching hexagrams.|Un'immagine in scala di grig
 Invert filter|Filtro inverti
 A filter that inverts the R, G, and B channels of its input while keeping the A channel unchanged|Un filtro che inverte i canali R, G e B del suo input mantenendo invariato il canale A
 Shows the inverted image|Mostra l'immagine invertita
-Kaleidoscope|Calidroscopio
+Kaleidoscope|Caleidoscopio
 Replicated an angle of the input image several times around the center.|Replica un angolo dell'immagine di input diverse volte attorno al centro.
 The number of replications of an angle of the input|Il numero di repliche di un angolo dell'input
 The angular offset of the replicated angle of the input|L'offset angolare dell'angolo replicato dell'input
@@ -680,7 +680,7 @@ A tileable version of the input image|Una versione ripetibile dell'immagine di i
 Static PBR Material|Materiale PBR statico
 Ambient occlusion|Occlusione ambientale
 Transparency|Trasparenza
-Subsurf. scatter.|Scostamento superficie (SSS)
+Subsurf. scatter.|Diffusione sottosuperficie (SSS)
 albedo_tex|albedo_tex
 metallic_tex|metallic_tex
 roughness_tex|roughness_tex
@@ -711,10 +711,10 @@ log(A)|log(A)
 log2(A)|log2(A)
 pow(A, B)|pow(A, B)
 abs(A)|abs(A)
-round(A)|arrotonda(A)
+round(A)|round(A)
 floor(A)|floor(A)
 ceil(A)|ceil(A)
-trunc(A)|tronca(A)
+trunc(A)|trunc(A)
 fract(A)|fract(A)
 min(A, B)|min(A, B)
 max(A, B)|max(A, B)
@@ -1194,7 +1194,7 @@ An input map that affects the shape size|Una mappa di input che influenza la dim
 Edge map|Mappa bordo
 An input map that affects the edge width|Una mappa di input che influenza la larghezza del bordo
 Shows a white shape on a black background|Mostra una forma bianca su uno sfondo nero
-Sharpen|Contrasto (Sharpen)
+Sharpen|Nitidezza (Sharpen)
 Sharpens it input image|Aumenta la nitidezza dell'immagine di input
 Shows the generated sharpened image|Mostra l'immagine nitida generata
 Shear|Inclinazione (Shear)
@@ -1276,9 +1276,9 @@ Tex3D Colorize|Colora Tex3D
 Remaps a greyscale 3D texture to a custom gradient|Rimappa una texture 3D in scala di grigi su un gradiente personalizzato
 The input greyscale 3D texture|La texture 3D in scala di grigi di input
 The remapped color 3D texture |La texture 3D a colori rimappata
-TEX3D Distort|Dizorci TEX3D
+TEX3D Distort|Distorci TEX3D
 Tex3D Distort|Distorci Tex3D
-Distorts its input 3D texture using another 3D texture|Distoce la sua texture 3D di input utilizzando un'altra texture 3D
+Distorts its input 3D texture using another 3D texture|Distorce la sua texture 3D di input utilizzando un'altra texture 3D
 Distort|Distorci
 The strength of the distort effect|L'intensità dell'effetto di distorsione
 The 3D texture to be distorted|La texture 3D da distorcere
@@ -1465,7 +1465,7 @@ Output5|Output5
 Voronoi|Voronoi
 Voronoi Noise|Rumore Voronoi
 Generates several images from a tileable voronoi noise|Genera diverse immagini da un rumore Voronoi ripetibile (tileable)
-Stretch X|Dilaatzione X (Stretch X)
+Stretch X|Dilatazione X (Stretch X)
 Stretch.x|Stretch.x
 The stretch factor along the X axis|Il fattore di dilatazione lungo l'asse X
 Stretch Y|Dilatazione Y (Stretch Y)
@@ -1480,7 +1480,7 @@ A greyscale pattern based on the distance to borders|Un pattern in scala di grig
 A color pattern that assigns a random color to each cell|Un pattern di colore che assegna un colore casuale a ciascuna cella
 An output that should be plugged into a Fill companion node|Un output che dovrebbe essere collegato a un nodo correlato Fill
 Warp|Distorsione (Warp)
-Warps its input according to a heightmap|Dinstorce il suo input in base a una mappa delle altezze (heightmap)
+Warps its input according to a heightmap|Distorce il suo input in base a una mappa delle altezze (heightmap)
 Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.|Entrambe le modalità di distorsione (warp) ricavano la loro direzione dalle pendenze della mappa delle altezze:\n- L'intensità di Slope warp dipende solo dalla pendenza\n- L'intensità di Distance to top warp dipende dalla pendenza e dalla distanza dalla cima, e può essere utilizzata per creare pattern simili a mosaici\n\nUn nodo Transform con mappe di traslazione può produrre effetti simili a Slope Warp ed è generalmente più veloce.
 Slope|Pendenza (Slope)
 Distance to top|Distanza dalla cima (Distance to top)
@@ -1517,7 +1517,7 @@ The length of each stitch|La lunghezza di ciascun punto
 Horizontal mask|Maschera orizzontale
 Mask for horizontal stripes|Maschera per le strisce orizzontali
 Vertical mask|Maschera verticale
-Mask for vertical stripes|Maschera per le strisce竖 verticali
+Mask for vertical stripes|Maschera per le strisce verticali
 Base library|Libreria di base
 Simple|Semplice
 Curved Star|Stella curva
