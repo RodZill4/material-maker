@@ -60,6 +60,7 @@ window/size/borderless=true
 window/size/transparent=true
 window/size/window_width_override=1
 window/size/window_height_override=1
+window/per_pixel_transparency/allowed=true
 window/subwindows/embed_subwindows=false
 window/handheld/orientation.Android="sensor_landscape"
 
@@ -131,6 +132,10 @@ left_click={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(80, 13),"global_position":Vector2(89, 61),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+
+[internationalization]
+
+rendering/root_node_layout_direction=1
 
 [locale]
 

@@ -9,12 +9,13 @@ var node = null
 var param_name : String = ""
 var creating : bool = false
 
-func _init(parent) -> void:
+func _init(parent : MMGraphEdit) -> void:
 	size_flags_horizontal = SIZE_EXPAND_FILL
 	size_flags_vertical = SIZE_EXPAND_FILL
 	size = parent.size
 	clip_contents = true
 	parent.add_child(self)
+	parent.draw.connect(queue_redraw)
 
 func pick(s, n, pn : String, c : bool = false) -> void:
 	source = s
