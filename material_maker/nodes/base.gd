@@ -249,6 +249,8 @@ func _draw() -> void:
 	if self is MMGraphTones:
 		return
 	for control in get_children():
+		if control.name == "PreviewParent":
+			continue
 		if control.get("modulate"):
 			control.modulate.a = opacity
 
