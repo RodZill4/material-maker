@@ -133,6 +133,9 @@ func _enter_tree() -> void:
 	mm_globals.main_window = self
 
 func _ready() -> void:
+	if OS.get_name() == "iOS":
+		DirAccess.make_dir_absolute("user://Documents")
+
 	get_window().borderless = false
 	get_window().transparent = false
 	get_window().grab_focus()
