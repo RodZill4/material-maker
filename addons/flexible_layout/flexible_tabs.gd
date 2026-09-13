@@ -33,7 +33,11 @@ func erase(ft : Control):
 	var index : int = get_control_index(ft)
 	if ft.get_parent() != null:
 		ft.get_parent().remove_child(ft)
-	$Tabs.remove_child($Tabs.get_child(index))
+
+	var tab_node = $Tabs.get_child(index)
+	$Tabs.remove_child(tab_node)
+	tab_node.queue_free()
+
 	if index == current:
 		if $Tabs.get_child_count() > 0:
 			set_current(0)
