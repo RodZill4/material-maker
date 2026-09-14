@@ -1268,7 +1268,7 @@ func check_previews() -> void:
 		emit_signal("preview_changed", self)
 
 func on_drop_image_file(file_name : String) -> void:
-	do_paste({type="image", image=file_name})
+	do_paste({type="image", image=file_name, filter=true})
 
 
 func _on_Description_descriptions_changed(short_description, long_description):

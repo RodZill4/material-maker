@@ -19,12 +19,16 @@ The image node provides a single color texture.
 Parameters
 ++++++++++
 
-The **Image** node has three parameters:
+The **Image** node has four parameters:
 
 * The first parameter defines the image file the node provides.
   It can be modified by clicking the thumbnail and selecting a new image file.
+
 * **Fix Aspect Ratio** will scale the height of non-square images to maintain the correct aspect ratio.
+
 * **Clamp** will disable the default tiling behavior.
   Useful when dealing with non-square images as they cannot easily be clamped further down the graph.
+
+* **Filter** toggles between linear or nearest filtering.
 
 The supported formats are BMP, EXR, HDR, JPEG, PNG, SVG, TGA, WebP and DDS.
