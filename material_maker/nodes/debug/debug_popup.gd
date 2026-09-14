@@ -11,8 +11,6 @@ func _on_ready() -> void:
 func show_code(s) -> void:
 	src_code = s
 	_on_ShaderType_item_selected(0)
-	if ! is_connected("popup_hide", Callable(self, "queue_free")):
-		connect("popup_hide", Callable(self, "queue_free"))
 	hide()
 	popup_centered()
 

@@ -59,7 +59,6 @@ func _on_EnumValues_item_selected(id) -> void:
 		dialog.set_value(v.name, v.value)
 		dialog.connect("ok", Callable(self, "update_enum_value").bind(enum_current))
 		dialog.close_requested.connect(dialog.queue_free)
-		dialog.connect("popup_hide", Callable(dialog, "queue_free"))
 		dialog.hide()
 		dialog.popup_centered()
 	elif id == ENUM_ADD:
