@@ -1,0 +1,1603 @@
+id|it
+Material Maker|Material Maker
+Powered by|Sviluppato con
+File|File
+New material|Nuovo materiale
+New paint project|Nuovo progetto di pittura
+Load|Carica
+Load material from website|Carica materiale dal sito web
+Load recent|Carica recenti
+Save|Salva
+Save as...|Salva con nome...
+Save all...|Salva tutto...
+Export material|Esporta materiale
+Close|Chiudi
+Quit|Esci
+Edit|Modifica
+Undo|Annulla
+Redo|Ripristina
+Cut|Taglia
+Copy|Copia
+Paste|Incolla
+Duplicate|Duplica
+Select All|Seleziona tutto
+Select None|Deseleziona tutto
+Invert Selection|Inverti selezione
+Load Selection|Carica selezione
+Save Selection|Salva selezione
+Set theme|Imposta tema
+Preferences|Preferenze
+View|Visualizza
+Center view|Centra vista
+Reset zoom|Ripristina zoom
+Show/Hide side panels|Mostra/Nascondi pannelli laterali
+Panels|Pannelli
+Tools|Strumenti
+Create|Crea
+Create group|Crea gruppo
+Make selected nodes editable|Rendi modificabili i nodi selezionati
+Add selected node to library|Aggiungi il nodo selezionato alla libreria
+Add current brush to library|Aggiungi il pennello corrente alla libreria
+Create a screenshot of the current graph|Crea uno screenshot del grafo corrente
+Painting|Pittura
+Emission|Emissione
+Normal|Normale
+Depth|Profondità
+Texture Size|Dimensione texture
+Set environment|Imposta ambiente
+Environment editor|Editor dell'ambiente
+Generate screenshots for the library nodes|Genera screenshot per i nodi della libreria
+Help|Aiuto
+User manual|Manuale utente
+Show selected library item documentation|Mostra la documentazione dell'elemento della libreria selezionato
+Report a bug|Segnala un bug
+Material Maker on reddit|Material Maker su Reddit
+About|Informazioni
+Library|Libreria
+Preview2D|Anteprima 2D
+Preview3D|Anteprima 3D
+Preview2D (2)|Anteprima 2D (2)
+Histogram|Istogramma
+Hierarchy|Gerarchia
+Reference|Riferimento
+Brushes|Pennelli
+Layers|Livelli
+Parameters|Parametri
+Output|Output
+Unlock seed|Sblocca seed
+Lock seed|Blocca seed
+Copy seed|Copia seed
+Paste seed|Incolla seed
+Propagate changes|Propaga modifiche
+Change seed (left mouse button) / Show seed menu (right mouse button)|Cambia seed (tasto sinistro del mouse) / Mostra menu seed (tasto destro del mouse)
+Double-click to write a comment|Doppio clic per scrivere un commento
+Show shader|Mostra shader
+Shadertoy|Shadertoy
+Copy to clipboard|Copia negli appunti
+Greyscale|Scala di grigi
+Min:|Min:
+Max:|Max:
+Step:|Passo:
+Default:|Predefinito:
+OK|OK
+Cancel|Annulla
+ab|ab
+Luminance|Luminanza
+Albedo alpha:|Alfa albedo:
+Metallic alpha:|Alfa metallico:
+Roughness alpha:|Alfa rugosità:
+Emission alpha:|Alfa emissione:
+Normal map alpha:|Alfa mappa normali:
+Depth alpha:|Alfa profondità:
+Occlusion alpha:|Alfa occlusione:
+Layer name|Nome livello
+albedo|albedo
+Library name:|Nome libreria:
+Library file:|File della libreria:
+Click to enter a path|Fai clic per inserire un percorso
+Manage Libraries|Gestisci librerie
+Filter:|Filtro:
+Brush size|Dimensione pennello
+Brush hardness|Durezza pennello
+Brush opacity|Opacità pennello
+Brush spacing|Spaziatura pennello
+None|Nessuno
+Albedo|Albedo
+Metallic|Metallico
+Roughness|Rugosità
+Normal map|Mappa normali
+Occlusion|Occlusione
+Mesh configuration|Configurazione mesh
+UV Scale:|Scala UV:
+Tesselated|Tassellato
+Model|Modello
+Select|Seleziona
+Configure|Configura
+Rotate|Ruota
+Off|Disattivato
+Slow|Lento
+Medium|Medio
+Fast|Veloce
+Generate map|Genera mappa
+Mesh normal|Normale mesh
+Inverse UV|UV inverso
+Curvature|Curvatura
+Ambient Occlusion|Occlusione ambientale
+Thickness|Spessore
+Environment|Ambiente
+Custom|Personalizzato
+View to texture|Da vista a texture
+Texture to view|Da texture a vista
+Seams|Cuciture
+Albedo (current layer)|Albedo (livello corrente)
+Metallic/Roughness (current layer)|Metallico/Rugosità (livello corrente)
+Emission (current layer)|Emissione (livello corrente)
+Normal (current layer)|Normale (livello corrente)
+Depth/Occlusion (current layer)|Profondità/Occlusione (livello corrente)
+Mask (current layer)|Maschera (livello corrente)
+Presets|Preimpostazioni
+Invert|Inverti
+Default|Predefinito
+Apply|Applica
+© 2018-2021 Rodolphe Suescun and contributors|© 2018-2021 Rodolphe Suescun e collaboratori
+Authors|Autori
+ Godot Engine| Godot Engine
+99% of Material Maker's code is the awesome Godot Engine|Il 99% del codice di Material Maker è il fantastico Godot Engine
+License|Licenza
+Node|Nodo
+path/to/node|percorso/del/nodo
+Short Description:|Descrizione breve:
+Name:|Nome:
+HDRI URL:|URL HDRI:
+Color:|Colore:
+Sky Energy:|Energia cielo:
+Ambient color:|Colore d'ambiente:
+Ambient Energy:|Energia d'ambiente:
+Sky contribution:|Contributo cielo:
+Sun color:|Colore sole:
+Sun Energy:|Energia sole:
+Sun Direction:|Direzione sole:
+Sun Angle:|Angolo sole:
+Size:|Dimensione:
+Begin:|Inizio:
+End:|Fine:
+Images:|Immagini:
+PNG files|File PNG
+Export|Esporta
+Recent|Recenti
+Favorite|Preferiti
+blah|blah
+Export target:|Destinazione esportazione:
+Extension:|Estensione:
+Condition:|Condizione:
+Type:|Tipo:
+Texture|Texture
+Output:|Output:
+Model:|Modello:
+Model file|File del modello
+Resolution:|Risoluzione:
+Project:|Progetto:
+Project file|File del progetto
+Value:|Valore:
+name|nome
+Label|Etichetta
+General|Generale
+Parameters:|Parametri:
+Inputs:|Input:
+Outputs|Output
+Outputs:|Output:
+Main Code|Codice principale
+Instance Functions|Funzioni d'istanza
+Global Functions|Funzioni globali
+Includes:|Inclusioni:
+float|float
+Control:|Controllo:
+Confirm when quitting the application|Conferma all'uscita dall'applicazione
+Language:|Lingua:
+Install|Installa
+Confirm when closing a project|Conferma alla chiusura di un progetto
+UI scale (0 = auto):|Scala interfaccia (0 = auto):
+3D preview resolution:|Risoluzione anteprima 3D:
+3D preview tesselation detail:|Dettaglio tassellatura anteprima 3D:
+3D preview sun shadow (requires restart)|Ombra sole anteprima 3D (richiede riavvio)
+Enable VSync|Attiva VSync
+FPS limit:|Limite FPS:
+Idle FPS limit:|Limite FPS inattivo:
+Bake|Bake
+Ray count:|Numero raggi:
+Ray length:|Lunghezza raggi:
+Denoise radius:|Raggio di riduzione rumore:
+Doing this, doing that|Facendo questo, facendo quello
+AdjustHSV|RegolaHSV
+Adjust HSV|Regola HSV
+Adjusts the Hue, Saturation and Value of its input|Regola la tonalità, la saturazione e il valore del suo input
+Hue|Tonalità
+The Hue adjustment|La regolazione della tonalità
+Saturation|Saturazione
+The Saturation adjustment|La regolazione della saturazione
+Value|Valore
+The Value adjustment|La regolazione del valore
+Input|Input
+The input image|L'immagine di input
+Shows the image with adjusted Hue, Saturation and Value|Mostra l'immagine con tonalità, saturazione e valore regolati
+Arc pavement|Pavimentazione ad arco
+Draws a white shape on a black background|Disegna una forma bianca su uno sfondo nero
+Repeat:|Ripeti:
+Repeat|Ripeti
+The number of repetitions of the whole pattern|Il numero di ripetizioni dell'intero pattern
+Rows:|Righe:
+Rows|Righe
+The number of rows|Il numero di righe
+Bricks:|Mattoni:
+Bricks|Mattoni
+The number of bricks per row|Il numero di mattoni per riga
+Mortar:|Malta:
+Mortar|Malta
+The width of the space between bricks|La larghezza dello spazio tra i mattoni
+Bevel:|Smussatura:
+Bevel|Smussatura
+The width of the edge of each brick|La larghezza del bordo di ogni mattone
+Bricks pattern|Pattern mattoni
+A greyscale image that shows the bricks pattern|Un'immagine in scala di grigi che mostra il pattern dei mattoni
+Random color|Colore casuale
+A random color for each brick|Un colore casuale per ogni mattone
+Brick UV|UV mattone
+An UV map output for each brick, to be connected to the Map input of a CustomUV node|Un output della mappa UV per ogni mattone, da collegare all'input Map di un nodo CustomUV
+Auto Tones|Tonalità automatiche
+Finds the minimum and maximum values in the input texture and tone maps it to the full 0.0 - 1.0 range.|Trova i valori minimi e massimi nella texture di input e ne mappa i toni sull'intero intervallo 0.0 - 1.0.
+in|in
+out|out
+Shows the generated remapped image|Mostra l'immagine rimappata generata
+param0|param0
+Size|Dimensione
+Buffers are used to find the mininum and maximum values for the input image. If the input has small details a higher resolution buffer might be needed to capture precise min and max values.\n\nNote: The output itself will not be buffered.|I buffer vengono utilizzati per trovare i valori minimi e massimi per l'immagine di input. Se l'input presenta piccoli dettagli, potrebbe essere necessario un buffer a risoluzione più elevata per catturare valori minimi e massimi precisi.\n\nNota: l'output stesso non verrà inserito nel buffer.
+Beehive|Alveare
+Hexagonal tiles pattern|Pattern a piastrelle esagonali
+Draws a greyscale hexagonal tiles pattern|Disegna un pattern a piastrelle esagonali in scala di grigi
+Size X|Dimensione X
+Size.x|Dimensione.x
+The number of columns of the pattern|Il numero di colonne del pattern
+Size Y|Dimensione Y
+Size.y|Dimensione.y
+The number of rows of the pattern|Il numero di righe del pattern
+Shows the greyscale pattern|Mostra il pattern in scala di grigi
+Shows a random color for each hexagonal tile|Mostra un colore casuale per ogni piastrella esagonale
+UV map|Mappa UV
+Shows an UV map to be connected to the UV map port of the Custom UV node|Mostra una mappa UV da collegare alla porta della mappa UV del nodo Custom UV
+Blend|Miscela
+Blends its input, using an optional mask|Miscela i suoi input, utilizzando una maschera opzionale
+Blend mode|Modalità di miscelazione
+The algorithm used to blend the inputs|L'algoritmo utilizzato per miscelare gli input
+Dissolve|Dissolvi
+Multiply|Moltiplica
+Screen|Scherma
+Overlay|Sovrapponi
+Hard Light|Luce intensa
+Soft Light|Luce soffusa
+Burn|Brucia
+Dodge|Scherma colore
+Lighten|Schiarisci
+Darken|Scurisci
+Difference|Differenza
+Opacity|Opacità
+The opacity of the blend operation|L'opacità dell'operazione di miscelazione
+Source1|Sorgente1
+Foreground|Primo piano
+The foreground input|L'input in primo piano
+Source2|Sorgente2
+Background|Sfondo
+The background input|L'input di sfondo
+Mask|Maschera
+The optional opacity mask|La maschera di opacità opzionale
+Shows the result of the blend operation|Mostra il risultato dell'operazione di miscelazione
+Box|Scatola
+Center X|Centro X
+Center.x|Centro.x
+X coordinate of the center of the box|Coordinata X del centro della scatola
+Center Y|Centro Y
+Center.y|Centro.y
+Y coordinate of the center of the box|Coordinata Y del centro della scatola
+Center Z|Centro Z
+Center.z|Centro.z
+Z coordinate of the center of the box|Coordinata Z del centro della scatola
+Size along X axis|Dimensione lungo l'asse X
+Size along Y axis|Dimensione lungo l'asse Y
+Size Z|Dimensione Z
+Size.z|Dimensione.z
+Size along Z axis|Dimensione lungo l'asse Z
+Rot X|Rot X
+Rot.x|Rot.x
+Rotation angle around X axis|Angolo di rotazione attorno all'asse X
+Rot Y|Rot Y
+Rot.y|Rot.y
+Rotation angle around Y axis|Angolo di rotazione attorno all'asse Y
+Rot Z|Rot Z
+Rot.z|Rot.z
+A heightmap of the specified box|Una mappa delle altezze (heightmap) della scatola specificata
+Simple bricks patterns|Pattern di mattoni semplici
+Generates different bricks patterns, with many useful outputs.|Genera diversi pattern di mattoni, con molti output utili.
+Pattern|Pattern
+The type of brick pattern|Il tipo di pattern di mattoni
+Running bond|A cortina (sfalsato)
+Running bond (2)|A cortina (sfalsato 2)
+HerringBone|A spina di pesce
+Basket weave|A intreccio di cesto
+Spanish bond|A blocchi (spagnolo)
+The number of rows of a pattern|Il numero di righe di un pattern
+Columns|Colonne
+The number of columns of a pattern|Il numero di colonne di un pattern
+Offset|Offset
+The offset of the pattern (not useful for all patterns)|L'offset del pattern (non utile per tutti i pattern)
+Round|Arrotondamento
+The radius of the round corners of bricks|Il raggio degli angoli arrotondati dei mattoni
+Corner|Angolo
+The size of the corner part of each brick (only used by the Corner UV output)|La dimensione della parte d'angolo di ciascun mattone (usata solo dall'output Corner UV)
+Mortar map|Mappa malta
+A map that affects the Mortar parameter|Una mappa che influenza il parametro Malta
+Bevel map|Mappa smussatura
+A map that affects the Bevel parameter|Una mappa che influenza il parametro Smussatura
+Round map|Mappa arrotondamento
+A map that affects the Round parameter|Una mappa che influenza il parametro Arrotondamento
+Position.x|Posizione.x
+The position of each brick along the X axis|La posizione di ciascun mattone lungo l'asse X
+Position.y|Posizione.y
+The position of each brick along the Y axis|La posizione di ciascun mattone lungo l'asse Y
+Corner UV|UV angolo
+An UV map output for each brick corner, to be connected to the Map input of a CustomUV node|Un output della mappa UV per ogni angolo del mattone, da collegare all'input Map di un nodo CustomUV
+Direction|Direzione
+The direction of each brick (white: horizontal, black: vertical)|La direzione di ciascun mattone (bianco: orizzontale, nero: verticale)
+Bricks NonTileable|Mattoni non ripetibili
+mortar_map|mappa_malta
+bevel_map|mappa_smussatura
+round_map|mappa_arrotondamento
+Uneven Bricks|Mattoni irregolari
+Uneven bricks|Mattoni irregolari
+Generates an uneven bricks pattern.|Genera un pattern di mattoni irregolari.
+Iterations|Iterazioni
+The number of iterations of the brick split operation|Il numero di iterazioni dell'operazione di divisione dei mattoni
+Min size|Dimensione min
+Minimum size|Dimensione minima
+The minimum size of a brick|La dimensione minima di un mattone
+Randomness|Casualità
+The randomness of the pattern|La casualità del pattern
+Brightness/Contrast|Luminosità/Contrasto
+Adjusts the Brightness and Contrast of its input|Regola la luminosità e il contrasto del suo input
+Brightness|Luminosità
+The Brightness adjustment|La regolazione della luminosità
+Contrast|Contrasto
+The Contrast adjustment|La regolazione del contrasto
+Shows the image with modified Brightness and Contrast|Mostra l'immagine con luminosità e contrasto modificati
+Select From ID|Seleziona da ID
+ids|id
+CircleMap|Mappa cerchio
+Maps its input into a circle|Mappa il suo input in un cerchio
+Radius|Raggio
+The radius of the circle where the input is mapped|Il raggio del cerchio in cui viene mappato l'input
+The number of repetitions of the input image around the circle|Il numero di ripetizioni dell'immagine di input attorno al cerchio
+The input image to be remapped|L'immagine di input da rimappare
+Shows the remapped image|Mostra l'immagine rimappata generata
+Circle Splatter|Spargimento circolare
+Spreads several occurences of an input image in a circle or spiral pattern.|Distribuisce diverse istanze di un'immagine di input secondo un pattern circolare o a spirale.
+Count|Conteggio
+The number of occurences of the input image|Il numero di istanze dell'immagine di input
+Rings|Anelli
+The number of rings of the circle pattern|Il numero di anelli del pattern circolare
+Inputs|Input
+The input type of the node:\n- 1: single image\n- 4: atlas of 4 images\n- 16: atlas of 16 images\nAtlases can be created using the Tile2x2 node.|Il tipo di input del nodo:\n- 1: immagine singola\n- 4: atlante di 4 immagini\n- 16: atlante di 16 immagini\nGli atlanti possono essere creati usando il nodo Tile2x2.
+Scale X|Scala X
+Scale.x|Scala.x
+The scale of input images on the X axis|La scala delle immagini di input sull'asse X
+Scale Y|Scala Y
+Scale.y|Scala.y
+The scale of input images on the Y axis|La scala delle immagini di input sull'asse Y
+The radius of the outer circle pattern|Il raggio del pattern circolare esterno
+Spiral|Spirale
+The type of pattern:\n- 0: circles\n- 1: spiral|Il tipo di pattern:\n- 0: cerchi\n- 1: spirale
+Inc Rotate|Incremento rotazione
+IncRotate|IncRotazione
+The rotate increment along the pattern|L'incremento di rotazione lungo il pattern
+Inc Scale|Incremento scala
+IncScale|IncScala
+The scale increment of the pattern|L'incremento di scala del pattern
+Rnd Rotate|Rotazione casuale
+RndRotate|RotCasuale
+The random rotation applied to each image instance|La rotazione casuale applicata a ciascuna istanza dell'immagine
+Rnd Scale|Scala casuale
+RndScale|ScalaCasuale
+The random scale applied to each image instance|La scala casuale applicata a ciascuna istanza dell'immagine
+Rnd Value|Valore casuale
+RndValue|ValoreCasuale
+The random greyscale value applied to each image instance|Il valore casuale in scala di grigi applicato a ciascuna istanza dell'immagine
+The input image or atlas of 4 or 16 input images|L'immagine di input o l'atlante di 4 o 16 immagini di input
+mask|maschera
+The mask applied to the pattern|La maschera applicata al pattern
+Shows the generated pattern|Mostra il pattern generato
+Instance map|Mappa delle istanze
+Shows a random color for each instance of the input image|Mostra un colore casuale per ciascuna istanza dell'immagine di input
+Color Circle Splatter|Spargimento circolare a colori
+Rnd Opacity|Opacità casuale
+RndOpacity|OpacitàCasuale
+The random opacity applied to each image instance|L'opacità casuale applicata a ciascuna istanza dell'immagine
+Circular Gradient|Gradiente circolare
+Number of repetitions of the gradient|Numero di ripetizioni del gradiente
+Gradient|Gradiente
+Gradient to be spread on the image|Gradiente da distribuire sull'immagine
+Color Noise|Rumore colore
+Generates a grid made of random color squares|Genera una griglia composta da quadrati di colore casuale
+Grid Size|Dimensione griglia
+Shows the noise pattern|Mostra il pattern del rumore
+Colorize|Colora
+Remaps a greyscale image to a custom gradient|Rimappa un'immagine in scala di grigi su un gradiente personalizzato
+The gradient to which the input is remapped|Il gradiente su cui viene rimappato l'input
+input|input
+The input greyscale image|L'immagine in scala di grigi di input
+The remapped RGBA image|L'immagine RGBA rimappata
+Combine|Combina
+Combines 4 greyscale inputs into an RGBA image|Combina 4 input in scala di grigi in un'immagine RGBA
+Red|Rosso
+The greyscale input for the red channel|L'input in scala di grigi per il canale rosso
+Green|Verde
+The greyscale input for the green channel|L'input in scala di grigi per il canale verde
+Blue|Blu
+The greyscale input for the blue channel|L'input in scala di grigi per il canale blu
+Alpha|Alfa
+The greyscale input for the alpha channel|L'input in scala di grigi per il canale alfa
+Shows the combined RGBA image|Mostra l'immagine RGBA combinata
+Compare|Confronta
+in1|in1
+in2|in2
+Curve|Curva
+AX|AX
+Position on X axis of the first control point|Posizione sull'asse X del primo punto di controllo
+AY|AY
+Position on Y axis of the first control point|Posizione sull'asse Y del primo punto di controllo
+BX|BX
+Position on X axis of the second control point|Posizione sull'asse X del secondo punto di controllo
+BY|BY
+Position on Y axis of the second control point|Posizione sull'asse Y del secondo punto di controllo
+CX|CX
+Position on X axis of the third control point|Posizione sull'asse X del terzo punto di controllo
+CY|CY
+Position on Y axis of the third control point|Posizione sull'asse Y del terzo punto di controllo
+Width|Larghezza
+Width of the curve pattern|Larghezza del pattern della curva
+Number of repetitions of the input pattern|Numero di ripetizioni del pattern di input
+Input pattern to be drawn along the curve|Pattern di input da disegnare lungo la curva
+An image showing the specified curve|Un'immagine che mostra la curva specificata
+Custom UV|UV personalizzati
+Custom UV remapper|Rimappatore UV personalizzato
+Remaps an Input image using a custom UV map.|Rimappa un'immagine di Input usando una mappa UV personalizzata.
+The scale of the input image along the X axis.|La scala dell'immagine di input lungo l'asse X.
+The scale of the input image along the Y axis.|La scala dell'immagine di input lungo l'asse Y.
+The random rotation applied to each remapped instance.|La rotazione casuale applicata a ciascuna istanza rimappata.
+The random scale applied to each remapped instance.|La scala casuale applicata a ciascuna istanza rimappata.
+The image or atlas of images to be remapped.|L'immagine o l'atlante di immagini da rimappare.
+UV|UV
+Map|Mappa
+The custom UV map to be used for remapping.|La mappa UV personalizzata da utilizzare per la rimappatura.
+Decompose|Decomponi
+Decomposes an RGBA input into 4 greyscale images|Decompone un input RGBA in 4 immagini in scala di grigi
+The RGBA input image|L'immagine di input RGBA
+Shows the Red channel of the input|Mostra il canale Rosso dell'input
+Shows the Green channel of the input|Mostra il canale Verde dell'input
+Shows the Blue channel of the input|Mostra il canale Blu dell'input
+Shows the Alpha channel of the input|Mostra il canale Alfa dell'input
+Default color|Colore predefinito
+Denoiser|Riduttore di rumore
+Fast  spatial deNoise filter, with circular gaussian kernel.|Filtro spaziale rapido di riduzione del rumore, con kernel gaussiano circolare.
+The input image to be denoised|L'immagine di input da ripulire dal rumore
+The resolution of the denoiser|La risoluzione del riduttore di rumore
+param1|param1
+Sigma|Sigma
+Standard Deviation sigma radius|Raggio sigma della deviazione standard
+param2|param2
+kSigma|kSigma
+K factor sigma coefficient.\nkSigma = 1*sigma cover 68% of data\nkSigma = 2*sigma cover 95% of data - but there are over 3 times  more points to compute\nkSigma = 3*sigma cover 99.7% of data - but needs more than double the calculations of 2*sigma|Coefficiente sigma del fattore K.\nkSigma = 1*sigma copre il 68% dei dati\nkSigma = 2*sigma copre il 95% dei dati - ma ci sono oltre 3 volte più punti da calcolare\nkSigma = 3*sigma copre il 99.7% dei dati - ma richiede più del doppio dei calcoli di 2*sigma
+param3|param3
+Sharpening|Nitidezza (Sharpening)
+Edge sharpening threshold|Soglia di nitidezza dei bordi
+Dilate|Dilata
+Dilates the white areas of a mask, using the colors of an optional input|Dilata le aree bianche di una maschera, utilizzando i colori di un input opzionale
+The resolution of the input images|La risoluzione delle immagini di input
+Length|Lunghezza
+The length of the dilate effect|La lunghezza dell'effetto di dilatazione
+Fill|Riempi
+0 to generate a gradient to black while dilating, 1 to fill with input color|0 per generare un gradiente verso il nero durante la dilatazione, 1 per riempire con il colore di input
+Distance function|Funzione distanza
+The input mask whose white areas will be dilated|La maschera di input le cui aree bianche verranno dilatate
+source|sorgente
+Source|Sorgente
+The optional source for colors|La sorgente opzionale per i colori
+Shows the dilated image|Mostra l'immagine dilatata
+Distance pass 1|Passaggio distanza 1
+Distance pass 2|Passaggio distanza 2
+Euclidian|Euclideo
+Manhattan|Manhattan
+Chebyshev|Chebyshev
+Distance pass 3|Passaggio distanza 3
+distance|distanza
+Directional Blur|Sfocatura direzionale
+Directional blur|Sfocatura direzionale
+Applies a directional gaussian blur to its input|Applica una sfocatura gaussiana direzionale al suo input
+The resolution of the input|La risoluzione dell'input
+The strength of the blur filter|L'intensità del filtro di sfocatura
+Angle|Angolo
+The angle of the directional blur effect|L'angolo dell'effetto di sfocatura direzionale
+amount|quantità
+Strength map|Mappa intensità
+A map that controls the strength of the blur filter|Una mappa che controlla l'intensità del filtro di sfocatura
+port0|port0
+Shows the generated blurred image|Mostra l'immagine sfocata generata
+Edge detect|Rilevamento bordi
+An edge detect filter that detects edges along all directions and draws them in white on a black background|Un filtro di rilevamento bordi che individua i margini in tutte le direzioni e li disegna in bianco su sfondo nero
+The resolution of the input image|La risoluzione dell'immagine di input
+Threshold|Soglia
+Shows the generated outlines|Mostra i contorni generati
+Edge detect 1|Rilevamento bordi 1
+Edge detect 2|Rilevamento bordi 2
+An edge detect filter that detects edges horizontally and vertically and draws them in white on a black background|Un filtro di rilevamento bordi che individua i margini in orizzontale e in verticale e li disegna in bianco su sfondo nero
+Edge detect 3|Rilevamento bordi 3
+An edge detect filter that detects edges along diagonals and draws them in white on a black background|Un filtro di rilevamento bordi che individua i margini lungo le diagonali e li disegna in bianco su sfondo nero
+Emboss|Rilievo (Emboss)
+Creates highlights and shadows from an input heightmap|Crea luci e ombre da una mappa delle altezze (heightmap) di input
+The input height map|La mappa delle altezze di input
+The generated image|L'immagine generata
+The angle of the simulated light|L'angolo della luce simulata
+Strength|Intensità
+The strength of the emboss effect|L'intensità dell'effetto di rilievo
+The width (in pixels) of the area sampled for each pixel|La larghezza (in pixel) dell'area campionata per ciascun pixel
+Fast Blur|Sfocatura rapida
+output|output
+The generated blurred image|L'immagine sfocata generata
+Resolution|Risoluzione
+The resolution used to sample the input image|La risoluzione utilizzata per campionare l'immagine di input
+The standard deviation of the gaussian distribution|La deviazione standard della distribuzione gaussiana
+Quality|Qualità
+The quality of the effect (increasing quality increases compute time)|La qualità dell'effetto (aumentare la qualità aumenta il tempo di calcolo)
+FBM|FBM
+Fractional Brownian Motion Noise|Rumore Fractional Brownian Motion
+Generates a noise made of several octaves of a simple noise|Genera un rumore composto da diverse ottave di un rumore semplice
+Noise|Rumore
+Noise type|Tipo di rumore
+The simple noise type|Il tipo di rumore semplice
+Perlin|Perlin
+Cellular|Cellulare
+Cellular2|Cellulare2
+Cellular3|Cellulare3
+Cellular4|Cellulare4
+Cellular5|Cellulare5
+Cellular6|Cellulare6
+The scale of the first octave along the X axis|La scala della prima ottava lungo l'asse X
+The scale of the first octave along the Y axis|La scala della prima ottava lungo l'asse Y
+Folds|Pieghe
+The number of times the basic noise is folded|Il numero di volte in cui il rumore di base viene piegato
+Octaves|Ottave
+The number of noise octaves|Il numero di ottave del rumore
+Persistence|Persistenza
+The persistence between two consecutive octaves|La persistenza tra due ottave consecutive
+Shows a greyscale image of the generated noise|Mostra un'immagine in scala di grigi del rumore generato
+FBM Noise|Rumore FBM
+Simplex|Simplex
+Fills areas defined by white outlines of its input|Riempie le aree definite dai contorni bianchi del suo input
+The input image whose white outlines must be filled|L'immagine di input i cui contorni bianchi devono essere riempiti
+Generates fill data, to be connected to a fill companion node|Genera dati di riempimento, da collegare a un nodo di riempimento correlato
+The resolution of the inptu image|La risoluzione dell'immagine di input
+The number of iterations of the algorithm. The optimal value depends a lot on the input image.|Il numero di iterazioni dell'algoritmo. Il valore ottimale dipende molto dall'immagine di input.
+Fill iterate|Iterazione riempimento
+Fill preprocess|Pre-elaborazione riempimento
+Fill to Color|Riempimento a colore
+Fill to color|Riempimento a colore
+A fill companion node that fills each area with a color taken from a color map image|Un nodo di riempimento correlato che riempie ciascuna area con un colore preso da un'immagine di mappa colore
+Edge Color|Colore bordo
+Outline color|Colore contorno
+The color used to draw outlines|Il colore utilizzato per disegnare i contorni
+The input fill data, to be connected to the output of a Fill node|I dati di riempimento in input, da collegare all'output di un nodo Fill
+Color map|Mappa colore
+The image from which colors are taken|L'immagine da cui vengono presi i colori
+The generated output image|L'immagine di output generata
+Fill to Position|Riempimento a posizione
+Fill to position|Riempimento a posizione
+A fill companion node that fills each area with a greyscale value that depends on its position|Un nodo di riempimento correlato che riempie ciascuna area con un valore in scala di grigi che dipende dalla sua posizione
+Position|Posizione
+The position value to be used:\n- X for horizontal axis\n- Y for vertical axis\n- Radial for distance to center|Il valore di posizione da utilizzare:\n- X per l'asse orizzontale\n- Y per l'asse verticale\n- Radiale per la distanza dal centro
+Radial|Radiale
+Fill to Random Color|Riempimento a colore casuale
+Fill to random color|Riempimento a colore casuale
+A fill companion node that fills each area with a random color|Un nodo di riempimento correlato che riempie ciascuna area con un colore casuale
+The color used for outlines|Il colore utilizzato per i contorni
+Fill to Random Grey|Riempimento a grigio casuale
+Fill to random grey|Riempimento a grigio casuale
+A fill companion node that fills each area with a random greyscale value|Un nodo di riempimento correlato che riempie ciascuna area con un valore casuale in scala di grigi
+Edge color|Colore bordo
+The value used for the outlines|Il valore utilizzato per i contorni
+Fill to Size|Riempimento a dimensione
+Fill to size|Riempimento a dimensione
+A fill companion node that fills each area with a greyscale value that depends on its size|Un nodo di riempimento correlato che riempie ciascuna area con un valore in scala di grigi che dipende dalla sua dimensione
+The size value to be used (area, width, height or maximum between width and height)|Il valore di dimensione da utilizzare (area, larghezza, altezza o il massimo tra larghezza e altezza)
+Area|Area
+Height|Altezza
+max(W, H)|max(L, A)
+Fill to UV      |Riempimento a UV
+Fill to UV|Riempimento a UV
+A fill companion node that generated an UV map that follows each filled area|Un nodo di riempimento correlato che genera una mappa UV che segue ciascuna area riempita
+Mode|Modalità
+The mode decides how the UVs are layed out on each bounding box:\n- Stretch mode where the UV layout is stretched to the bounding box. \n- Square mode where the UV layout is even and centerered based on the longest axis of the bounding box.|La modalità determina come gli UV sono disposti su ciascun riquadro di delimitazione (bounding box):\n- Modalità Stretch: il layout UV viene teso per adattarsi al riquadro di delimitazione.\n- Modalità Square: il layout UV è uniforme e centrato in base all'asse più lungo del riquadro di delimitazione.
+Stretch|Adatta (Stretch)
+Square|Quadrato (Square)
+The generated output UV map, to be connected to a Custom UV node|La mappa UV di output generata, da collegare a un nodo Custom UV
+Gaussian Blur|Sfocatura gaussiana
+Gaussian blur|Sfocatura gaussiana
+Applies a gaussian blur on its input|Applica una sfocatura gaussiana al suo input
+Apply the blur filter horizontally, vertically of in both directions|Applica il filtro di sfocatura in orizzontale, in verticale o in entrambe le direzioni
+Gaussian blur X|Sfocatura gaussiana X
+Gaussian blur Y|Sfocatura gaussiana Y
+Angle of the gradient pattern|Angolo del pattern del gradiente
+An image showing the gradient|Un'immagine che mostra il gradiente
+Converts its input into greyscale|Converte il suo input in scala di grigi
+The algorithm used to convert the input into greyscale|L'algoritmo utilizzato per convertire l'input in scala di grigi
+Lightness|Chiarezza (Lightness)
+Average|Media (Average)
+Luminosity|Luminosità (Luminosity)
+Min|Min
+Max|Max
+Shows the image converted to greyscale|Mostra l'immagine convertita in scala di grigi
+Height To Angle|Da altezza ad angolo
+Height to angle|Da altezza ad angolo
+Generates an angle map to be used by Advances Tiler nodes from a heightmap|Genera una mappa degli angoli da una mappa delle altezze (heightmap) per essere utilizzata dai nodi Advanced Tiler
+The offset angle applied to the generated map|L'angolo di offset applicato alla mappa generata
+The input heightmap|La mappa delle altezze (heightmap) di input
+The generated angle map. Values are between -1 and 1 and the corresponding Advanced Tiler parameter (Rotate) must be set to 180.|La mappa degli angoli generata. I valori sono compresi tra -1 e 1 e il parametro corrispondente di Advanced Tiler (Ruota) deve essere impostato su 180.
+I Ching|I Ching
+I Ching hexagrams generator|Generatore di esagrammi I Ching
+This node generates a grid of random I Ching hexagrams.|Questo nodo genera una griglia di esagrammi casuali degli I Ching.
+The number of columns of the grid|Il numero di colonne della griglia
+The number of rows of the grid|Il numero di righe della griglia
+A greyscale image showing random I Ching hexagrams.|Un'immagine in scala di grigi che mostra gli esagrammi casuali degli I Ching.
+Invert filter|Filtro inverti
+A filter that inverts the R, G, and B channels of its input while keeping the A channel unchanged|Un filtro che inverte i canali R, G e B del suo input mantenendo invariato il canale A
+Shows the inverted image|Mostra l'immagine invertita
+Kaleidoscope|Caleidoscopio
+Replicated an angle of the input image several times around the center.|Replica un angolo dell'immagine di input diverse volte attorno al centro.
+The number of replications of an angle of the input|Il numero di repliche di un angolo dell'input
+The angular offset of the replicated angle of the input|L'offset angolare dell'angolo replicato dell'input
+Shows the transformed image|Mostra l'immagine trasformata
+Magnify|Ingrandimento
+Magnifying glass effect|Effetto lente d'ingrandimento
+center.x|centro.x
+X coordinate of the magnifying glass center|Coordinata X del centro della lente d'ingrandimento
+center.y|centro.y
+Y coordinate of the magnifying glass center|Coordinata Y del centro della lente d'ingrandimento
+Scale|Scala
+The maximum scaling factor for the magnifying glass|Il fattore di scala massimo per la lente d'ingrandimento
+The input image to be transformed|L'immagine di input da trasformare
+Shape|Forma
+The magnifying glass shape|La forma della lente d'ingrandimento
+Make Tileable|Rendi ripetibile (Tileable)
+Creates a tileable version of its input image by moving different parts around to hide seams.|Crea una versione ripetibile (tileable) dell'immagine di input spostando diverse parti per nascondere le giunzioni (seams).
+Width of the transition areas between parts of the input image|Larghezza delle aree di transizione tra le parti dell'immagine di input
+The image to be made tileable|L'immagine da rendere ripetibile
+A tileable version of the input image|Una versione ripetibile dell'immagine di input
+Static PBR Material|Materiale PBR statico
+Ambient occlusion|Occlusione ambientale
+Transparency|Trasparenza
+Subsurf. scatter.|Diffusione sottosuperficie (SSS)
+albedo_tex|albedo_tex
+metallic_tex|metallic_tex
+roughness_tex|roughness_tex
+emission_tex|emission_tex
+normal_tex|normal_tex
+ao_tex|ao_tex
+depth_tex|depth_tex
+opacity_tex|opacity_tex
+sss_tex|sss_tex
+3D PBR Material|Materiale PBR 3D
+World|Mondo
+Dynamic PBR Material|Materiale PBR dinamico
+Raymarching Material|Materiale Raymarching
+Distance|Distanza
+metallic|metallico
+roughness|rugosità
+Dynamic Unlit Material|Materiale non illuminato dinamico
+Add|Aggiungi
+Mix|Miscela
+Mul|Moltiplica
+Sub|Sottrai
+color_tex|color_tex
+Math|Matematica
+Performs a math operation using its inputs or parameter values|Esegue un'operazione matematica utilizzando i suoi input o i valori dei parametri
+Operation|Operazione
+The operation to be performed|L'operazione da eseguire
+log(A)|log(A)
+log2(A)|log2(A)
+pow(A, B)|pow(A, B)
+abs(A)|abs(A)
+round(A)|round(A)
+floor(A)|floor(A)
+ceil(A)|ceil(A)
+trunc(A)|trunc(A)
+fract(A)|fract(A)
+min(A, B)|min(A, B)
+max(A, B)|max(A, B)
+cos(A*B)|cos(A*B)
+sin(A*B)|sin(A*B)
+tan(A*B)|tan(A*B)
+sqrt(1-A²)|sqrt(1-A²)
+Default A|A predefinito
+The default value for A, used if the corresponding input is not connected|Il valore predefinito per A, utilizzato se il relativo input non è collegato
+Default B|B predefinito
+The default value for B, used if the corresponding input is not connected|Il valore predefinito per B, utilizzato se il relativo input non è collegato
+Clamp result|Limita risultato (Clamp)
+Clamp|Limita (Clamp)
+The result is clamped to [0, 1] if this option is checked|Il risultato viene limitato all'intervallo [0, 1] se questa opzione è selezionata
+The A operand|L'operando A
+The B operand|L'operando B
+Shows a greyscale image of the result|Mostra un'immagine in scala di grigi del risultato
+Vec3 Math|Matematica Vec3
+Mirror|Specchio
+Mirrors its input while applying an offset from the center|Specchia il suo input applicando un offset dal centro
+The mirror direction (horizontal or vertical)|La direzione dello specchio (orizzontale o verticale)
+Horizontal|Orizzontale
+Vertical|Verticale
+The offset from the center|L'offset dal centro
+Shows the mirrored image|Mostra l'immagine specchiata
+Morphology Dilation|Dilatazione morfologica
+MulDetect|RilevamentoMoltiplicazione (MulDetect)
+Tolerance|Tolleranza
+mul|molt
+Multi Warp|Multi Warp
+The Multi Warp  node deforms an input image according to the derivative of the second input image. Unlike Warp  node, the derivative of the second texture is sampled at each iteration  producing more varied results at cost of the performance.|Il nodo Multi Warp deforma un'immagine di input in base alla derivata della seconda immagine di input. A differenza del nodo Warp, la derivata della seconda texture viene campionata a ogni iterazione, producendo risultati più vari a scapito delle prestazioni.
+Grid size|Dimensione griglia
+The resolution of the operation|La risoluzione dell'operazione
+Intensity|Intensità
+The intensity of the warp effect|L'intensità dell'effetto warp
+The quality of the Multi warp calculation|La qualità del calcolo del Multi warp
+The blend mode, that can be one of the following: Min, Blur, Max|La modalità di miscelazione, che può essere una delle seguenti: Min, Blur, Max
+heightmap|mappa_altezze
+Height map|Mappa delle altezze
+The height map whose slopes are used to deform the input|La mappa delle altezze le cui pendenze sono utilizzate per deformare l'input
+MultiGradient|Gradiente multiplo
+Create Map|Crea mappa
+Create map|Crea mappa
+Creates a workflow map using a heightmap and an optional seed map. The workflow map contains height information as well as orientation and a seed for random offset for the material it will be applied to.|Crea una mappa del flusso di lavoro (workflow map) utilizzando una mappa delle altezze e una mappa seed opzionale. La mappa del flusso di lavoro contiene informazioni sull'altezza, sull'orientamento e un seed per l'offset casuale del materiale a cui verrà applicata.
+The maximum height of the workflow map, used as multiplier for the input height map|L'altezza massima della mappa del flusso di lavoro, utilizzata come moltiplicatore per la mappa delle altezze di input
+The angle stored in the workflow map|L'angolo memorizzato nella mappa del flusso di lavoro
+The input offset seed map|La mappa del seed di offset di input
+The generated workflow map, to be connected to a MixMap or an ApplyMap node|La mappa del flusso di lavoro generata, da collegare a un nodo MixMap o ApplyMap
+Apply Map|Applica mappa
+Applies a workflow map to a base material, and generates height information as well as PBR channels for the result.\nThe height input must be connected to a Create Map or Mix Maps node. The other inputs must be connected to a base material.\nThe outputs must be connected to the Mix or the Output node, or a workflow filter node.|Applica una mappa del flusso di lavoro a un materiale di base e genera informazioni sull'altezza nonché i canali PBR per il risultato.\nL'input dell'altezza deve essere collegato a un nodo Create Map o Mix Maps. Gli altri input devono essere collegati a un materiale di base.\nGli output devono essere collegati al nodo Mix o Output, oppure a un nodo filtro del flusso di lavoro.
+map|mappa
+The input workflow map|La mappa del flusso di lavoro di input
+mat1|mat1
+The Albedo channel of the input base material|Il canale Albedo del materiale di base di input
+ORM|ORM
+mat2|mat2
+The ambient occlusion, roughness and metallic channels of the input material|I canali di occlusione ambientale, rugosità e metallico del materiale di input
+mat3|mat3
+The emission channel of the input material|Il canale di emissione del materiale di input
+mat4|mat4
+The normal map of the input material|La mappa delle normali del materiale di input
+The height map of the result|La mappa delle altezze del risultato
+The albedo channel of the result|Il canale albedo del risultato
+The ambient occlusion, roughness and metallic channels of the result|I canali di occlusione ambientale, rugosità e metallico del risultato
+The emission channel of the result|Il canale di emissione del risultato
+The normal map of the result|La mappa delle normali del risultato
+Combines the outputs of 2 mapped base materials (keeping the "highest" material).|Combina gli output di 2 materiali di base mappati (mantenendo il materiale "più alto").
+Height 1|Altezza 1
+Height1|Altezza1
+The height map of the first input|La mappa delle altezze del primo input
+Albedo 1|Albedo 1
+Albedo1|Albedo1
+The albedo channel of the first input|Il canale albedo del primo input
+ORM 1|ORM 1
+ORM1|ORM1
+The ambient occlusion, roughness and metallic channels of the first input|I canali di occlusione ambientale, rugosità e metallico del primo input
+Emission 1|Emissione 1
+Emission1|Emissione1
+The emission channel of the first input|Il canale di emissione del primo input
+Normal 1|Normale 1
+Normal1|Normal1
+The normal map of the first input|La mappa delle normali del primo input
+Height 2|Altezza 2
+Height2|Altezza2
+The height map of the second input|La mappa delle altezze del secondo input
+Albedo 2|Albedo 2
+Albedo2|Albedo2
+The albedo channel of the second input|Il canale albedo del secondo input
+ORM 2|ORM 2
+ORM2|ORM2
+The ambient occlusion, roughness and metallic channels of the second input|I canali di occlusione ambientale, rugosità e metallico del secondo input
+Emission 2|Emissione 2
+Emission2|Emissione2
+The emission channel of the second input|Il canale di emissione del secondo input
+Normal 2|Normale 2
+Normal2|Normal2
+The normal map of the second input|La mappa delle normali del secondo input
+Generates the height of the result|Genera l'altezza del risultato
+Shows the output albedo channel|Mostra il canale albedo di output
+Shows the output ambient occlusion, roughness and metallic channels|Mostra i canali di occlusione ambientale, rugosità e metallico di output
+Shows the output emission channel|Mostra il canale di emissione di output
+Shows the output normal map|Mostra la mappa delle normali di output
+Mix maps|Miscela mappe
+Mixes up to 4 workflow maps, to be used with the same base material|Miscela fino a 4 mappe del flusso di lavoro, da utilizzare con lo stesso materiale di base
+Input1|Input1
+The first workflow map|La prima mappa del flusso di lavoro
+Input2|Input2
+The second workflow map|La seconda mappa del flusso di lavoro
+Input3|Input3
+The third input map|La terza mappa di input
+Input4|Input4
+The fourth input map|La quarta mappa di input
+Generates a merged workflow map|Genera una mappa del flusso di lavoro unita
+Converts a workflow mapped material (from an Apply Map or a Mix node) for a Material node|Converte un materiale mappato dal flusso di lavoro (da un nodo Apply Map o Mix) per un nodo Materiale
+The strength of the calculated occlusion effect|L'intensità dell'effetto di occlusione calcolato
+MatNormal|MatNormal
+The strength of  normals from the base materials (compared to the normal generated from height information))|L'intensità delle normali dai materiali di base (rispetto alla normale generata dalle informazioni sull'altezza)
+Noise pattern|Pattern di rumore
+Generates a grid made of black and white squares|Genera una griglia composta da quadrati bianchi e neri
+Density|Densità
+The density of white squares|La densità dei quadrati bianchi
+Anisotropic Noise|Rumore anisotropico
+Generates x-axis interpolated value noise|Genera un rumore di valore interpolato lungo l'asse x
+The scale along the X axis|La scala lungo l'asse X
+The scale along the Y axis|La scala lungo l'asse Y
+Smoothness|Morbidezza (Smoothness)
+Controls how much the noise is blurred along the x-axis|Controlla quanto il rumore viene sfocato lungo l'asse x
+Interpolation|Interpolazione
+Controls the type of interpolation used for the smoothing. 0 is linear interpolation, 1 is smooth interpolation|Controlla il tipo di interpolazione utilizzata per l'attenuazione. 0 indica l'interpolazione lineare, 1 indica l'interpolazione fluida (smooth)
+Shows a greyscale value noise|Mostra un rumore di valore in scala di grigi
+Normal Blend|Miscela normali
+Normal Map|Mappa normali
+Generates a normal map from a height map|Genera una mappa delle normali da una mappa delle altezze (heightmap)
+Format|Formato
+The format of the generated normal map\nIn most cases this should be set to default|Il formato della mappa delle normali generata\nNella maggior parte dei casi dovrebbe essere impostato su quello predefinito
+The resolution of the generated normal map|La risoluzione della mappa delle normali generata
+The strength of the normal map filter|L'intensità del filtro della mappa delle normali
+param4|param4
+Buffer|Buffer
+When set, a buffer is used to sample the input before the normal map filter|Quando selezionato, viene utilizzato un buffer per campionare l'input prima del filtro della mappa delle normali
+Shows the generated normal map|Mostra la mappa delle normali generata
+Bump|Mappa rilievo (Bump)
+Algorithm|Algoritmo
+The algorithm used to generate the normal map|L'algoritmo utilizzato per generare la mappa delle normali
+size|dimensione
+strength|intensità
+buffer|buffer
+Convert Normal Map|Converti mappa normali
+Convert a normal map between OpenGL (default) and DirectX formats|Converte una mappa delle normali tra i formati OpenGL (predefinito) e DirectX
+Conversion|Conversione
+The conversion that should be performed|La conversione che deve essere eseguita
+From/To OpenGL|Da/A OpenGL
+From/To DirectX|Da/A DirectX
+Generates an ambient occlusion map from a height map|Genera una mappa di occlusione ambientale da una mappa delle altezze (heightmap)
+The resolution of the input height map|La risoluzione della mappa delle altezze di input
+The strength of the occlusion map effect|L'intensità dell'effetto della mappa di occlusione
+The generated occlusion map|La mappa di occlusione generata
+The radius of the blur used for the occlusion effect|Il raggio della sfocatura utilizzata per l'effetto di occlusione
+The quality of the blur operation used for the occlusion effect|La qualità dell'operazione di sfocatura utilizzata per l'effetto di occlusione
+Optional|Opzionale
+Combiner|Combinatore
+The operation used to combine the horizontal and the vertical patterns|L'operazione utilizzata per combinare i pattern orizzontali e verticali
+Xor|Xor
+Pow|Pow
+X Pattern|Pattern X
+Pattern generated along the X axis|Pattern generato lungo l'asse X
+Sine|Seno
+Triangle|Triangolo
+Sawtooth|Dente di sega
+Constant|Costante
+Bounce|Rimbalzo
+X Repeat|Ripetizione X
+Repetitions of the pattern along X axis|Ripetizioni del pattern lungo l'asse X
+Y Pattern|Pattern Y
+Pattern generated along the Y axis|Pattern generato lungo l'asse Y
+Y Repeat|Ripetizione Y
+Repetitions of the pattern along Y axis|Ripetizioni del pattern lungo l'asse Y
+A greyscale image that combines the horizontal and vertical patterns|Un'immagine in scala di grigi che combina i pattern orizzontali e verticali
+Value Noise|Rumore di valore (Value Noise)
+Generates several octaves of greyscale value noise|Genera diverse ottave di rumore di valore in scala di grigi
+The number of octaves (higher values might affect performance)|Il numero di ottave (valori più elevati potrebbero influire sulle prestazioni)
+Color Value Noise|Rumore di valore a colori
+Generates several octaves of color value noise|Genera diverse ottave di rumore di valore a colori
+Shows a color value noise|Mostra un rumore di valore a colori
+Pixelize|Pixelizza
+Creates a pixelated image from its input, and also quantifies the colors with optional dithering.|Crea un'immagine pixelata dal suo input e quantizza anche i colori con un dithering opzionale.
+Number of pixel columns of the output|Numero di colonne di pixel dell'output
+Number of pixel rows of the output|Numero di righe di pixel dell'output
+Levels|Livelli
+Number of color levels for each channel|Numero di livelli di colore per ciascun canale
+Dither|Dithering
+Dithering|Dithering
+Amount of dithering in the output image|Quantità di dithering nell'immagine di output
+The image to be pixelated|L'immagine da pixelare
+A pixelated version of the input image|Una versione pixelata dell'immagine di input
+PolyCurve|PolyCurve
+Ends|Estremi
+If unset, end vertices of the curve are used only for orientation|Se deselezionato, i vertici finali della curva vengono utilizzati solo per l'orientamento
+Width map|Mappa larghezza
+A map that describes the width along the curve (use a Tonality node)|Una mappa che descrive la larghezza lungo la curva (usa un nodo Tonality)
+Profile|Profilo
+Style|Stile
+Style of the output image (fill or curve)|Stile dell'immagine di output (riempimento o curva)
+Gradient that defines the profile to be shown|Gradiente che definisce il profilo da mostrare
+Width of the curve|Larghezza della curva
+An image showing the profile defined by the gradient|Un'immagine che mostra il profilo definito dal gradiente
+Quantize|Quantizza
+Quantizes the red, green and blue channels of its input|Quantizza i canali rosso, verde e blu del suo input
+Steps|Passi
+The number of quantization steps|Il numero di passi di quantizzazione
+The quantized image|L'immagine quantizzata
+Radial Gradient|Gradiente radiale
+Render|Renderizza
+Raymarches a 3D object (described as signed distance function with optional color index) to render a heightmap, a normal map and a color index map.|Esegue il raymarching di un oggetto 3D (descritto come signed distance function con indice colore opzionale) per renderizzare una mappa delle altezze (heightmap), una mappa delle normali e una mappa degli indici di colore.
+sdf|sdf
+The input object, described as 3D signed distance function with color index|L'oggetto di input, descritto come signed distance function 3D con indice colore
+HeightMap|MappaAltezze (HeightMap)
+The generated height map|La mappa delle altezze generata
+NormalMap|MappaNormali (NormalMap)
+The generated normal map|La mappa delle normali generata
+ColorMap|MappaColori (ColorMap)
+The generated color index map|La mappa degli indici di colore generata
+Preview|Anteprima
+Refract|Rifrangi
+Remap|Rimappa
+Remaps a greyscale image for use as an input map for Advanced Tiler nodes|Rimappa un'immagine in scala di grigi per utilizzarla come mappa di input per i nodi Advanced Tiler
+The value generated for black areas of the input|Il valore generato per le aree nere dell'input
+The value generated for white areas of the input|Il valore generato per le aree bianche dell'input
+Step|Passo
+The step between generated values|Il passo tra i valori generati
+The greyscale input map|La mappa di input in scala di grigi
+The remapped image map|La mappa dell'immagine rimappata
+Translates, rotates and scales its input|Trasla, ruota e scala il suo input
+Rotates its input|Ruota il suo input
+The position of the rotation center|La posizione del centro di rotazione
+The angle of the rotation|L'angolo della rotazione
+Shows the rotated image|Mostra l'immagine ruotata
+Runes|Rune
+Simple runes|Rune semplici
+Generates a grid filled with random runes|Genera una griglia riempita con rune casuali
+A greyscale image showing random runes.|Un'immagine in scala di grigi che mostra rune casuali.
+Scales its input|Scala il suo input
+The position of the scale center|La posizione del centro di scala
+The poisition of the scale center|La posizione del centro di scala
+The scale amount along the X axis|La quantità di scala lungo l'asse X
+The scale amount along the Y axis|La quantità di scala lungo l'asse Y
+Shows the scaled image|Mostra l'immagine scalata
+Scratches|Graffi
+Draws white scratches on a black background|Disegna graffi bianchi su uno sfondo nero
+The length of scratches (the shorter the scratches,the more they will be)|La lunghezza dei graffi (più sono corti, maggiore sarà il loro numero)
+The width of scratches|La larghezza dei graffi
+The number of scratches layers|Il numero di livelli di graffi
+Waviness|Ondulazione (Waviness)
+The waviness of scratches|L'ondulazione dei graffi
+The average angle of the scratches (0 generates horizontal scratches)|L'angolo medio dei graffi (0 genera graffi orizzontali)
+The randomness of the scratches angles|La casualità degli angoli dei graffi
+Shows white scratches on a black background|Mostra graffi bianchi su uno sfondo nero
+Mask to SDF|Da maschera a SDF
+The greyscale mask to be converted|La maschera in scala di grigi da convertire
+The genrated distance field|Il campo di distanza generato
+The resolution used for the operation|La risoluzione utilizzata per l'operazione
+The number of iterations the jump flood algorithm performs to calculate the distances|Il numero di iterazioni eseguite dall'algoritmo jump flood per calcolare le distanze
+Tiled|Ripetuto (Tiled)
+Controls whether the resulting ditance field will be tiled. Useful for patterns that extend over the texture bounds|Controlla se il campo di distanza risultante sarà ripetuto (tiled). Utile per i pattern che si estendono oltre i limiti della texture
+sdAnnularShape|sdAnnularShape
+Creates an annular shape from a shape described as a signed distance function|Crea una forma anulare da una forma descritta come signed distance function
+The width of each generated ripple|La larghezza di ciascuna increspatura (ripple) generata
+Ripples|Increspature (Ripples)
+The number of generated ripples|Il numero di increspature generate
+The input shape, defined as a signed distance function|La forma di input, definita come signed distance function
+The generated layered shape|La forma stratificata generata
+sdArc|sdArc
+An arc as a signed distance function|Un arco come signed distance function
+Angle 1|Angolo 1
+Angle1|Angolo1
+The first angle of the arc|Il primo angolo dell'arco
+Angle 2|Angolo 2
+Angle2|Angolo2
+The second angle of the arc|Il secondo angolo dell'arco
+The radius of the arc|Il raggio dell'arco
+The width of the shape around the arc|La larghezza della forma attorno all'arco
+The arc as a signed distance function|L'arco come signed distance function
+sdBoolean|sdBoolean
+Performs a boolean operation (union, intersection or difference) between two shapes|Esegue un'operazione booleana (unione, intersezione o differenza) tra due forme
+The operation performed by this node|L'operazione eseguita da questo nodo
+Union|Unione
+Subtraction|Sottrazione
+Intersection|Intersezione
+The first shape, defined as a signed distance function|La prima forma, definita come signed distance function
+The second shape, defined as a signed distance function|La seconda forma, definita come signed distance function
+The shape generated by the boolean operation|La forma generata dall'operazione booleana
+sdBox|sdBox
+A rectangle described as a signed distance function|Un rettangolo descritto come signed distance function
+The width of the box|La larghezza della scatola
+The height of the box|L'altezza della scatola
+The position of the center of the box on the X axis|La posizione del centro della scatola sull'asse X
+The position of the center of the box on the Y axis|La posizione del centro della scatola sull'asse Y
+The generated signed distance function|La signed distance function generata
+sdCircle|sdCircle
+A circle described as a signed distance function|Un cerchio descritto come signed distance function
+The radius of the circle|Il raggio del cerchio
+The position of the center on the X axis|La posizione del centro sull'asse X
+The position of the center on the Y axis|La posizione del centro sull'asse Y
+Circle Repeat|Ripetizione cerchio
+Repeats its input shape around a circle|Ripete la sua forma di input attorno a un cerchio
+The number of repetitions of the input shape around the circle|Il numero di ripetizioni della forma di input attorno al cerchio
+The shape generated by the repeat operation|La forma generata dall'operazione di ripetizione
+sdElongation|sdElongation
+Generates an angle formed by 2 planes that can be used to cut other shapes|Genera un angolo formato da 2 piani che può essere utilizzato per tagliare altre forme
+Axis|Asse
+The axis of the angle|L'asse dell'angolo
+The angle of the shape|L'angolo della forma
+Shows the angle|Mostra l'angolo
+Boolean|Booleano
+Generates a rounded box as a signed distance function|Genera una scatola arrotondata come signed distance function
+The size of the box along the X axis|La dimensione della scatola lungo l'asse X
+The size of the box along the Y axis|La dimensione della scatola lungo l'asse Y
+The size of the box along the Z axis|La dimensione della scatola lungo l'asse Z
+The radius of the rounded box|Il raggio della scatola arrotondata
+Shows the rounded box|Mostra la scatola arrotondata
+Capsule|Capsula
+capsule|capsula
+Generates a capsule as a signed distance functioni|Genera una capsula come signed distance function
+The axis of the capsule|L'asse della capsula
+The length of the capsule|La lunghezza della capsula
+The radius of the capsule|Il raggio della capsula
+Shows the capsule|Mostra la capsula
+profile|profilo
+An input gradient (generated, for example by a Tonality node) that defines a profile for the shape|Un gradiente di input (generato, ad esempio, da un nodo Tonality) che definisce un profilo per la forma
+Color|Colore
+Assigns a color index to a 3D object|Assegna un indice di colore a un oggetto 3D
+The color index to be assigned|L'indice di colore da assegnare
+The input 3D object|L'oggetto 3D di input
+The colored 3D object|L'oggetto 3D colorato
+Cone|Cono
+Cylinder|Cilindro
+Generates a cylinder as a signed distance function|Genera un cilindro come signed distance function
+The axis of the cylinder|L'asse del cilindro
+The length of the cylinder|La lunghezza del cilindro
+The radius of the cylinder|Il raggio del cilindro
+Shows the cylinder|Mostra il cilindro
+Elongation|Allungamento (Elongation)
+Elongates its input|Allunga il suo input
+Length.x|Lunghezza.x
+The elongation along the X axis|L'allungamento lungo l'asse X
+Length.y|Lunghezza.y
+The elongation along the Y axis|L'allungamento lungo l'asse Y
+Length.z|Lunghezza.z
+The elongation along the Z axis|L'allungamento lungo l'asse Z
+The input object to be elongated|L'oggetto di input da allungare
+The shape generated by the operation|La forma generata dall'operazione
+Extrusion|Estrusione
+Extrudes its 2D input shape along the Y axis|Estrude la sua forma 2D di input lungo l'asse Y
+The length of the extrusion operation|La lunghezza dell'operazione di estrusione
+The input 2D shape as a signed distance function|La forma 2D di input come signed distance function
+The extruded shape|La forma estrusa
+Morph|Metamorfosi (Morph)
+Morphs between 2 input shapes|Esegue una metamorfosi (morph) tra 2 forme di input
+Amount|Quantità
+The amount of the second input in the result|La quantità del secondo input nel risultato
+The generated hybrid shape|La forma ibrida generata
+Plane|Piano
+Generates a plane that can be used to cut other shapes|Genera un piano che può essere utilizzato per tagliare altre forme
+The axis of the plane|L'asse del piano
+Shows the plane|Mostra il piano
+Repeats its input shape on a grid.\nThis node does not support overlapping between instances.|Ripete la forma di input su una griglia.\nQuesto nodo non supporta la sovrapposizione tra le istanze.
+The number of columns in the grid|Il numero di colonne nella griglia
+Lines|Linee
+The number of lines in the grid|Il numero di linee nella griglia
+Rotation|Rotazione
+The amount of random rotation on each instance of the input shape|La quantità di rotazione casuale su ciascuna istanza della forma di input
+Revolution|Rivoluzione (Revolution)
+Revolves its input 2D shape around the Z axis|Fa ruotare (rivoluzione) la sua forma 2D di input attorno all'asse Z
+The offset applied to the input shape during the revolution operation|L'offset applicato alla forma di input durante l'operazione di rivoluzione
+The input shape|La forma di input
+The generated 3D object|L'oggetto 3D generato
+Rotates its input 3D object described as a signed distance function.|Ruota il suo oggetto 3D di input descritto come signed distance function.
+Rotate.x|Ruota.x
+The rotation around the X axis|La rotazione attorno all'asse X
+Rotate.y|Ruota.y
+The rotation around the Y axis|La rotazione attorno all'asse Y
+Rotate.z|Ruota.z
+The rotation around the Z axis|La rotazione attorno all'asse Z
+The input object as signed distance function|L'oggetto di input come signed distance function
+The rotated object|L'oggetto ruotato
+Rounded|Arrotondato
+RoundedShape|FormaArrotondata (RoundedShape)
+Dilates an input shape into a rounded shape|Dilata una forma di input in una forma arrotondata
+The length of the dilate operation|La lunghezza dell'operazione di dilatazione
+Scales its input 3D object described as a signed distance function.|Scala il suo oggetto 3D di input descritto come signed distance function.
+The scale factor|Il fattore di scala
+The input object as a signed distance function|L'oggetto di input come signed distance function
+The scaled object|L'oggetto scalato
+SmoothBoolean|BooleanoSmussato (SmoothBoolean)
+Performs a smooth boolean operation (union, intersection or difference) between two shapes|Esegue un'operazione booleana smussata (unione, intersezione o differenza) tra due forme
+The smoothness of the boolean operation|La fluidità (smoothness) dell'operazione booleana
+Sphere|Sfera
+Generates a sphere as a signed distance function|Genera una sfera come signed distance function
+The radius of the sphere|Il raggio della sfera
+Shows the sphere|Mostra la sfera
+Torus|Toro (Torus)
+Generates a torus as a signed distance function|Genera un toro come signed distance function
+The axis of the torus|L'asse del toro
+Radius1|Raggio1
+The major radius of the torus|Il raggio maggiore del toro
+Radius2|Raggio2
+The minor radius of the torus|Il raggio minore del toro
+Shows the torus|Mostra il toro
+Translate|Trasla
+Translates its input 3D object described as a signed distance function.|Trasla il suo oggetto 3D di input descritto come signed distance function.
+Translate.x|Trasla.x
+The translation along the X axis|La traslazione lungo l'asse X
+Translate.y|Trasla.y
+The translation along the Y axis|La traslazione lungo l'asse Y
+Translate.z|Trasla.z
+The translation along the Z axis|La traslazione lungo l'asse Z
+The translated object|L'oggetto traslato
+sdLine|sdLine
+A line or a capsule shape described as a signed distance function|Una linea o una forma a capsula descritta come signed distance function
+The position on the X axis of the first point of the line|La posizione sull'asse X del primo punto della linea
+The position on the Y axis of the first point of the line|La posizione sull'asse Y del primo punto della linea
+The position on the X axis of the second point of the line|La posizione sull'asse X del secondo punto della linea
+The position on the Y axis of the second point of the line|La posizione sull'asse Y del secondo punto della linea
+The width of the capsule shape around the line|La larghezza della forma a capsula attorno alla linea
+The shape as signed distance function|La forma come signed distance function
+A profile for the shape, generated (for example) by a Tonality node.|Un profilo per la forma, generato (ad esempio) da un nodo Tonality.
+sdMorph|sdMorph
+sdNgon|sdNgon
+An n-gon described as a signed distance function|Un n-gono descritto come signed distance function
+The number of sides of the n-gon|Il numero di lati dell'n-gono
+The radius of the n-gon|Il raggio dell'n-gono
+The rotation of the n-gon|La rotazione dell'n-gono
+The n-gon as a signed distance function|L'n-gono come signed distance function
+sdPolygon|sdPolygon
+A polygon as a signed distance function|Un poligono come signed distance function
+Polygon|Poligono
+The polygon to be drawn|Il poligono da disegnare
+The polygon as a signed distance function|Il poligono come signed distance function
+sdRepeat|sdRepeat
+sdRhombus|sdRhombus
+A rhombus described as a signed distance function|Un rombo descritto come signed distance function
+The width of the rhombus|La larghezza del rombo
+The height of the rhombus|L'altezza del rombo
+The rhombus as a signed distance function|Il rombo come signed distance function
+sdRotate|sdRotate
+Rotates its input shape described as a signed distance function|Ruota la sua forma di input descritta come signed distance function
+The rotation angle|L'angolo di rotazione
+The rotated shape|La forma ruotata
+sdRoundedShape|sdRoundedShape
+sdScale|sdScale
+Scales its input shape described as a signed distance function|Scala la sua forma di input descritta come signed distance function
+The scale of the transform|La scala della trasformazione
+The generated scaled shape|La forma scalata generata
+sdShow|sdShow
+Creates a greyscale image from a shape described as a 2D Signed Distance Function|Crea un'immagine in scala di grigi da una forma descritta come Signed Distance Function 2D
+The width of the gradient at the edges of the shape|La larghezza del gradiente ai bordi della forma
+Base|Base
+The base value of the output|Il valore di base dell'output
+Shows the shape as a greyscale image|Mostra la forma come un'immagine in scala di grigi
+sdSmoothBoolean|sdSmoothBoolean
+sdTranslate|sdTranslate
+Translates its input shape described as signed distance function|Trasla la sua forma di input descritta come signed distance function
+The translated shape|La forma traslata
+The type of shape drawn by this node|Il tipo di forma disegnata da questo nodo
+Circle|Cerchio
+Star|Stella
+Curved star|Stella curva
+Rays|Raggi
+Sides count|Conteggio lati
+The number of sides of the generated shape (unused for Circle)|Il numero di lati della forma generata (non utilizzato per Cerchio)
+Shape size|Dimensione forma
+The size of the generated shape|La dimensione della forma generata
+Edge width|Larghezza bordo
+The edge width of the generated shape|La larghezza del bordo della forma generata
+Size map|Mappa dimensione
+An input map that affects the shape size|Una mappa di input che influenza la dimensione della forma
+Edge map|Mappa bordo
+An input map that affects the edge width|Una mappa di input che influenza la larghezza del bordo
+Shows a white shape on a black background|Mostra una forma bianca su uno sfondo nero
+Sharpen|Nitidezza (Sharpen)
+Sharpens it input image|Aumenta la nitidezza dell'immagine di input
+Shows the generated sharpened image|Mostra l'immagine nitida generata
+Shear|Inclinazione (Shear)
+Performs a shear stress transform on its input|Esegue una trasformazione di inclinazione/taglio sul suo input
+The direction of the shear transform (horizontal or vertical)|La direzione della trasformazione di inclinazione (orizzontale o verticale)
+The amount of the transform|L'entità della trasformazione
+Center|Centro
+The position of the shear center|La posizione del centro di inclinazione
+Sine Wave|Onda sinusoidale
+Sine wave pattern|Pattern a onda sinusoidale
+Draws a greyscale sine wave pattern|Disegna un pattern a onda sinusoidale in scala di grigi
+Amplitude|Ampiezza
+The amplitude of the sine wave function|L'ampiezza della funzione dell'onda sinusoidale
+Frequency|Frequenza
+The frequency of the sine wave function (i.e. the number of oscillations shown in the generated image).|La frequenza della funzione dell'onda sinusoidale (ovvero il numero di oscillazioni mostrate nell'immagine generata).
+Phase|Fase
+The phase of the sine wave function|La fase della funzione dell'onda sinusoidale
+Shows a greyscale image of a sine wave|Mostra un'immagine in scala di grigi di un'onda sinusoidale
+Skew|Distorci (Skew)
+Slope Blur|Sfocatura pendenza (Slope Blur)
+Slope blur|Sfocatura pendenza
+Applies a blur effect on its input, following slopes of an input height map|Applica un effetto di sfocatura sul suo input, seguendo le pendenze di una mappa delle altezze (heightmap) di input
+A height map whose slopes control the strength and direction of the blur filter|Una mappa delle altezze le cui pendenze controllano l'intensità e la direzione del filtro di sfocatura
+Smooth Curvature|Curvatura fluida
+Creates a smooth curvature map from a height map|Crea una mappa della curvatura fluida da una mappa delle altezze (heightmap)
+The generated curvature map|La mappa della curvatura generata
+The buffer size for the filter|La dimensione del buffer per il filtro
+The contrast of the generated highlights|Il contrasto dei punti di luce generati
+Smooth Curvature 2|Curvatura fluida 2
+The resolution of the curvature map if buffer is used|La risoluzione della mappa della curvatura se viene utilizzato il buffer
+How many times the input is sampled to generate the curvature map|Quante volte viene campionato l'input per generare la mappa della curvatura
+The intensity of the curvature map|L'intensità della mappa della curvatura
+The radius of the smoothing of the curvature effect|Il raggio di smussamento dell'effetto curvatura
+Heightmap|Mappa delle altezze (Heightmap)
+Shows the generated curvature map|Mostra la mappa della curvatura generata
+Position of the center along the X axis|Posizione del centro lungo l'asse X
+Position of the center along the Y axis|Posizione del centro lungo l'asse Y
+Radius of the sphere|Raggio della sfera
+A heightmap of the specified sphere|Una mappa delle altezze (heightmap) della sfera specificata
+Splatter|Spargimento (Splatter)
+Spreads several occurences of an input image randomly.|Distribuisce diverse istanze di un'immagine di input in modo casuale.
+Variations|Varianti
+Check to splat variations of the input|Seleziona per spargere varianti dell'input
+Color Splatter|Spargimento a colori
+Supersample|Supercampionamento (Supersample)
+A filter that samples sub-pixel details to make them visible|Un filtro che campiona i dettagli sub-pixel per renderli visibili
+The resolution of the output|La risoluzione dell'output
+The number of samples on each axis. High values will badly impact performances.|Il numero di campioni su ciascun asse. Valori elevati influiranno negativamente sulle prestazioni.
+The width of the sampled area. Setting this value higher than 1 will sample neighbouring pixels and antialias the result.|La larghezza dell'area campionata. Impostare questo valore su un valore superiore a 1 campionerà i pixel vicini e applicherà l'anti-aliasing al risultato.
+Shows the supersampled image. Due to the performance cost of this node, it is recommended to connect a buffer directly to this output.|Mostra l'immagine supercampionata. A causa dell'impatto sulle prestazioni di questo nodo, si consiglia di collegare un buffer direttamente a questo output.
+Swap channels|Scambia canali
+Swaps the channels of its RGBA input|Scambia i canali del suo input RGBA
+The input channel to be assigned to the Red channel|Il canale di input da assegnare al canale Rosso
+The input channel to be assigned to the Green channel|Il canale di input da assegnare al canale Verde
+The input channel to be assigned to the Blue channel|Il canale di input da assegnare al canale Blu
+The input channel to be assigned to the Alpha channel|Il canale di input da assegnare al canale Alfa
+The input RGBA image|L'immagine RGBA di input
+The output RGBA image|L'immagine RGBA di output
+TEX3D Apply|Applica TEX3D
+Tex3D Apply|Applica Tex3D
+Applies 3D textures to a rendered 3D signed distance function scene.|Applica texture 3D a una scena renderizzata con signed distance function 3D.
+The height map generated by the Render node|La mappa delle altezze generata dal nodo Render
+The color map generated by the Render node|La mappa dei colori generata dal nodo Render
+Tex3D|Tex3D
+The 3D texture|La texture 3D
+The textured 3D scene|La scena 3D texturizzata
+This node applies a 3D texture to an object using its inverse UV map.|Questo nodo applica una texture 3D a un oggetto utilizzando la sua mappa UV inversa.
+The input 3D texture|La texture 3D di input
+Inv. UV Map|Mappa UV inv.
+InvUVMap|InvUVMap
+The inverse UV map of the object|La mappa UV inversa dell'oggetto
+The generated texture|La texture generata
+TEX3D Blend|Miscela TEX3D
+Tex3D Blend|Miscela Tex3D
+Blends its 3D texture inputs, using an optional mask|Miscela i suoi input di texture 3D, utilizzando una maschera opzionale
+The 3D texture generated by the blend operation|La texture 3D generata dall'operazione di miscelazione
+TEX3D Colorize|Colora TEX3D
+Tex3D Colorize|Colora Tex3D
+Remaps a greyscale 3D texture to a custom gradient|Rimappa una texture 3D in scala di grigi su un gradiente personalizzato
+The input greyscale 3D texture|La texture 3D in scala di grigi di input
+The remapped color 3D texture |La texture 3D a colori rimappata
+TEX3D Distort|Distorci TEX3D
+Tex3D Distort|Distorci Tex3D
+Distorts its input 3D texture using another 3D texture|Distorce la sua texture 3D di input utilizzando un'altra texture 3D
+Distort|Distorci
+The strength of the distort effect|L'intensità dell'effetto di distorsione
+The 3D texture to be distorted|La texture 3D da distorcere
+The 3D texture used to distort Input1|La texture 3D utilizzata per distorcere l'Input1
+The distorted 3D texture|La texture 3D distorta
+TEX3D FBM|FBM TEX3D
+Tex3D FBM|FBM Tex3D
+Generates a 3D noise made of several octaves of a simple noise|Genera un rumore 3D composto da diverse ottave di un rumore semplice
+Value (no wrap)|Valore (senza ripetizione/wrap)
+Perlin (no wrap)|Perlin (senza ripetizione/wrap)
+Cellular (no wrap)|Cellulare (senza ripetizione/wrap)
+Scale Z|Scala Z
+Scale.z|Scala.z
+The scale of the first octave along the Z axis|La scala della prima ottava lungo l'asse Z
+Shows a greyscale 3D texture of the generated noise|Mostra una texture 3D in scala di grigi del rumore generato
+TEX3D From2D|TEX3D Da2D
+Tex3D From 2D|Tex3D Da 2D
+Creates a 3D texture from a 2D texture|Crea una texture 3D da una texture 2D
+The input 2D texture|La texture 2D di input
+The generated 3D texture|La texture 3D generata
+TEX3D Pattern|Pattern TEX3D
+Tex3D Pattern|Pattern Tex3D
+A greyscale 3D texture that combines patterns along all 3 axes|Una texture 3D in scala di grigi che combina i pattern lungo tutti e 3 gli assi
+The operation used to combine the X, Y and Z patterns|L'operazione utilizzata per combinare i pattern X, Y e Z
+Pattern.x|Pattern.x
+Repeat.x|Ripeti.x
+Pattern.y|Pattern.y
+Repeat.y|Ripeti.y
+Pattern.z|Pattern.z
+Pattern generated along the Z axis|Pattern generato lungo l'asse Z
+Repeat.z|Ripeti.z
+Repetitions of the pattern along Z axis|Ripetizioni del pattern lungo l'asse Z
+TEX3D Rotate|Ruota TEX3D
+Tex3D Rotate|Ruota Tex3D
+Rotates a 3D texture|Ruota una texture 3D
+The rotated 3D texture|La texture 3D ruotata
+TEX3D Select|Seleziona TEX3D
+Tex3D Select|Seleziona Tex3D
+Selects a 3D texture for a given color index. This can be used to map several textures into a single 3D scene.|Seleziona una texture 3D per un determinato indice di colore. Questo può essere utilizzato per mappare diverse texture in una singola scena 3D.
+The value of the selected color index|Il valore dell'indice di colore selezionato
+The tolerance used when comparing color indices|La tolleranza utilizzata nel confronto degli indici di colore
+The 3D texture associated to the specified color index|La texture 3D associata all'indice di colore specificato
+The 3D texture(s) associated to other color indices|La texture o le texture 3D associate ad altri indici di colore
+The merged 3D texture|La texture 3D unita
+TEX3D Shape Select|Seleziona forma TEX3D
+Tex3D Shape Select|Seleziona forma Tex3D
+Selects a 3D texture inside, and another outside a shape. This can be used to map several textures into a single 3D scene.|Seleziona una texture 3D all'interno e un'altra all'esterno di una forma. Questo può essere utilizzato per mappare diverse texture in una singola scena 3D.
+The width of the transition area between both textures|La larghezza dell'area di transizione tra le due texture
+shape|forma
+The shape in which input1 is applied|La forma in cui viene applicato l'input1
+Tile2x2|Tile2x2
+Places 4 input images into a single output to create an atlas of 4 images. Chaining Tile2x2 nodes can be useful to create 16 images atlases.\nAtlases are used by remapping nodes such as CustomUV, Tiler and Splatter.|Dispone 4 immagini di input in un unico output per creare un atlante di 4 immagini. Concatenare i nodi Tile2x2 può essere utile per creare atlanti da 16 immagini.\nGli atlanti sono utilizzati dai nodi di rimappatura come CustomUV, Tiler e Splatter.
+The first input|Il primo input
+The second input|Il secondo input
+in3|in3
+The third input|Il terzo input
+in4|in4
+The fourth input|Il quarto input
+Shows the generated atlas|Mostra l'atlante generato
+Tile2x2 Variations|Varianti Tile2x2
+Tiler|Ripetitore (Tiler)
+Tiles several occurences of an input image while adding randomness.|Dispone a piastrelle (tiles) diverse istanze di un'immagine di input aggiungendo elementi casuali.
+Tile X|Ripetizione X (Tile X)
+Tile.x|Tile.x
+The number of columns of the tiles pattern|Il numero di colonne del pattern a piastrelle
+Tile Y|Ripetizione Y (Tile Y)
+Tile.y|Tile.y
+The number of rows of the tiles pattern|Il numero di righe del pattern a piastrelle
+Overlap|Sovrapposizione (Overlap)
+The number of neighbour tiles an instance of the input image can overlap. Set this parameter to the lowest value that generates the expected result (where all instances are fully visible) to improve performance.|Il numero di piastrelle vicine che un'istanza dell'immagine di input può sovrapporre. Imposta questo parametro sul valore più basso che genera il risultato atteso (in cui tutte le istanze sono completamente visibili) per migliorare le prestazioni.
+Fixed Offset|Offset fisso
+FixedOffset|OffsetFisso
+The relative offset of odd rows|L'offset relativo delle righe dispari
+Rnd Offset|Offset casuale
+Check to tile variations of the input|Seleziona per disporre a piastrelle le varianti dell'input
+Advanced Tiler|Ripetitore avanzato (Advanced Tiler)
+Translate X|Trasla X
+The translation along the X axis applied to the instances|La traslazione lungo l'asse X applicata alle istanze
+Translate Y|Trasla Y
+The translation along the Y axis applied to the instances|La traslazione lungo l'asse Y applicata alle istanze
+The angle of instances of the input|L'angolo delle istanze dell'input
+Color map 1|Mappa colore 1
+An input color map used to generate the Instance map 1 output|Una mappa colore di input utilizzata per generare l'output Mappa delle istanze 1
+Color map 2|Mappa colore 2
+An input color map used to generate the Instance map 2 output|Una mappa colore di input utilizzata per generare l'output Mappa delle istanze 2
+Translate map X|Mappa traslazione X
+A map for translation along the X axis|Una mappa per la traslazione lungo l'asse X
+Translate map Y|Mappa traslazione Y
+A map for translation along the Y axis|Una mappa per la traslazione lungo l'asse Y
+Rotate map|Mappa rotazione
+A map for rotation|Una mappa per la rotazione
+Scale map X|Mappa scala X
+A map for scale along the X axis|Una mappa per la scala lungo l'asse X
+Scale map Y|Mappa scala Y
+A map for scale along the Y axis|Una mappa per la scala lungo l'asse Y
+Instance map 1|Mappa delle istanze 1
+Shows a color for each instance of the input image|Mostra un colore per ciascuna istanza dell'immagine di input
+Instance map 2|Mappa delle istanze 2
+Advanced Tiler Color|Advanced Tiler a colori
+color1|colore1
+color2|colore2
+tr_x|tr_x
+tr_y|tr_y
+sc_x|sc_x
+sc_y|sc_y
+Color Tiler|Tiler a colori
+Instance Map|Mappa delle istanze
+Tonality|Tonalità (Tonality)
+Remaps a greyscale image tonality using a curve|Rimappa la tonalità di un'immagine in scala di grigi utilizzando una curva
+The tonality curve to which the input is remapped|La curva di tonalità su cui viene rimappato l'input
+The remapped greyscale image|L'immagine in scala di grigi rimappata
+Tones map|Mappa dei toni
+Maps linearly an input tones interval to an output tones interval.|Mappa linearmente un intervallo di toni di input su un intervallo di toni di output.
+Input min|Min input
+InputMin|MinInput
+The minimum value of the input interval|Il valore minimo dell'intervallo di input
+Input max|Max input
+InputMax|MaxInput
+The maximum value of the input interval|Il valore massimo dell'intervallo di input
+Output min|Min output
+OutputMin|MinOutput
+The minimum value of the output interval|Il valore minimo dell'intervallo di output
+Output max|Max output
+OutputMax|MaxOutput
+The maximum value of the output interval|Il valore massimo dell'intervallo di output
+Tones Range|Intervallo toni
+Outputs the tone range around a specified value,|Restituisce l'intervallo di toni attorno a un valore specificato,
+The center value of the selection|Il valore centrale della selezione
+The width (in tones space) of the selection area|La larghezza (nello spazio dei toni) dell'area di selezione
+Adjusts the falloff of the output|Regola l'attenuazione (falloff) dell'output
+Invert the generated image if set|Inverte l'immagine generata se selezionato
+Shows the generated high contrast image|Mostra l'immagine ad alto contrasto generata
+Tones step|Passo dei toni
+Emphasizes dark and light tones around a specified value|Enfatizza i toni scuri e chiari attorno a un valore specificato
+The value of the input that separate dark and light zones of the result|Il valore dell'input che separa le zone scure e chiare del risultato
+width|larghezza
+The width (in tones space) of the transition area|La larghezza (nello spazio dei toni) dell'area di transizione
+Transform|Trasforma (Transform)
+2:Translate X|2:Trasla X
+The scaling factor along the X axis|Il fattore di scala lungo l'asse X
+The scaling factor along the Y axis|Il fattore di scala lungo l'asse Y
+Repeat the input if checked, clamps otherwise|Ripete l'input se selezionato, altrimenti lo limita (clamp)
+TranslateMap.x|MappaTraslazione.x
+An optional map for translation along the X axis|Una mappa opzionale per la traslazione lungo l'asse X
+TranslateMap.y|MappaTraslazione.y
+An optional map for translation along the Y axis|Una mappa opzionale per la traslazione lungo l'asse Y
+RotateMap|MappaRotazione
+An optional map for rotation|Una mappa opzionale per la rotazione
+ScaleMap.x|MappaScala.x
+An optional map for scaling along the X axis|Una mappa opzionale per il ridimensionamento lungo l'asse X
+ScaleMap.y|MappaScala.y
+An optional map for scaling along the Y axis|Una mappa opzionale per il ridimensionamento lungo l'asse Y
+Defines the behavior beyond the limits or the input image:\n- Clamp stretches the edges\n- Repeat tiles the input\n- Extend shows parts of the input that are beyond the edges|Definisce il comportamento oltre i limiti dell'immagine di input:\n- Clamp: estende i bordi\n- Repeat: dispone l'input a piastrelle\n- Extend: mostra le parti dell'input che si trovano oltre i bordi
+Extend|Estendi (Extend)
+tx|tx
+ty|ty
+sx|sx
+sy|sy
+Translates its input|Trasla il suo input
+Shows the translated image|Mostra l'immagine traslata
+Truchet|Truchet
+Truchet pattern|Pattern Truchet
+Generates a truchet pattern|Genera un pattern Truchet
+The base shape of each tile of the truchet pattern|La forma di base di ciascuna piastrella del pattern Truchet
+Line|Linea
+The number of rows and columns of the truchet pattern|Il numero di righe e colonne del pattern Truchet
+Shows a greyscale image of the truchet pattern.|Mostra un'immagine in scala di grigi del pattern Truchet.
+Generic Truchet|Truchet generico
+Uniform|Uniforme
+Draws a uniform image|Disegna un'immagine uniforme
+Color of the uniform image|Colore dell'immagine uniforme
+A uniform image of the selected color|Un'immagine uniforme del colore selezionato
+Greyscale Uniform|Uniforme in scala di grigi
+Draws a uniform greyscale image|Disegna un'immagine in scala di grigi uniforme
+The value of the uniform greyscale image|Il valore dell'immagine in scala di grigi uniforme
+A uniform image of the selected value|Un'immagine uniforme del valore selezionato
+Generates variations for its input|Genera varianti per il suo input
+Output1|Output1
+Shows a variation of the input|Mostra una variante dell'input
+Output2|Output2
+Output3|Output3
+Output4|Output4
+Output5|Output5
+Voronoi|Voronoi
+Voronoi Noise|Rumore Voronoi
+Generates several images from a tileable voronoi noise|Genera diverse immagini da un rumore Voronoi ripetibile (tileable)
+Stretch X|Dilatazione X (Stretch X)
+Stretch.x|Stretch.x
+The stretch factor along the X axis|Il fattore di dilatazione lungo l'asse X
+Stretch Y|Dilatazione Y (Stretch Y)
+Stretch.y|Stretch.y
+The stretch factor along the Y axis|Il fattore di dilatazione lungo l'asse Y
+A value factor for greyscale outputs|Un fattore di valore per gli output in scala di grigi
+The randomness of cell centers positions|La casualità delle posizioni dei centri delle celle
+Nodes|Nodi
+A greyscale pattern based on the distance to cell centers|Un pattern in scala di grigi basato sulla distanza dai centri delle celle
+Borders|Bordi
+A greyscale pattern based on the distance to borders|Un pattern in scala di grigi basato sulla distanza dai bordi
+A color pattern that assigns a random color to each cell|Un pattern di colore che assegna un colore casuale a ciascuna cella
+An output that should be plugged into a Fill companion node|Un output che dovrebbe essere collegato a un nodo correlato Fill
+Warp|Distorsione (Warp)
+Warps its input according to a heightmap|Distorce il suo input in base a una mappa delle altezze (heightmap)
+Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.|Entrambe le modalità di distorsione (warp) ricavano la loro direzione dalle pendenze della mappa delle altezze:\n- L'intensità di Slope warp dipende solo dalla pendenza\n- L'intensità di Distance to top warp dipende dalla pendenza e dalla distanza dalla cima, e può essere utilizzata per creare pattern simili a mosaici\n\nUn nodo Transform con mappe di traslazione può produrre effetti simili a Slope Warp ed è generalmente più veloce.
+Slope|Pendenza (Slope)
+Distance to top|Distanza dalla cima (Distance to top)
+The strength of the warp effect|L'intensità dell'effetto warp
+Epsilon|Epsilon
+The offset used to measure slopes|L'offset utilizzato per misurare le pendenze
+The input image to be warped|L'immagine di input da distorcere
+Shows the warped image|Mostra l'immagine distorta
+Warp Dilation|Dilatazione Warp
+port1|port1
+mode|modalità
+Dilates its input following the contours or slope of an input heightmap|Dilata il suo input seguendo i contorni o la pendenza di una mappa delle altezze (heightmap) di input
+The dilate mode (clockwise contour, counter clockwise contour or slope)|La modalità di dilatazione (contorno in senso orario, contorno in senso antiorario o pendenza)
+Contour (cw)|Contorno (orario)
+Contour (ccw)|Contorno (antiorario)
+The resolution at which the contours or slopes are followed (higher values will be more precise but rendering time will be higher)|La risoluzione con cui vengono seguiti i contorni o le pendenze (valori più elevati saranno più precisi, ma il tempo di rendering sarà maggiore)
+The distance along which the contours or slopes are followed|La distanza lungo la quale vengono seguiti i contorni o le pendenze
+Attenuation|Attenuazione
+The attenuation applied along the path|L'attenuazione applicata lungo il percorso
+hm|hm
+The height map whose contours or slopes are followed|La mappa delle altezze (heightmap) i cui contorni o pendenze vengono seguiti
+The dilated image|L'immagine dilatata
+Weave|Intreccio (Weave)
+Weave pattern|Pattern di intreccio
+Generates a simple weave pattern|Genera un semplice pattern di intreccio
+The width of each row/column|La larghezza di ciascuna riga/colonna
+width_map|mappa_larghezza
+An input map that affects the width parameter|Una mappa di input che influenza il parametro larghezza
+Shows the generated greyscale weave pattern.|Mostra il pattern di intreccio in scala di grigi generato.
+Width X|Larghezza X
+Width Y|Larghezza Y
+Stitch|Punto (Stitch)
+The length of each stitch|La lunghezza di ciascun punto
+Horizontal mask|Maschera orizzontale
+Mask for horizontal stripes|Maschera per le strisce orizzontali
+Vertical mask|Maschera verticale
+Mask for vertical stripes|Maschera per le strisce verticali
+Base library|Libreria di base
+Simple|Semplice
+Curved Star|Stella curva
+Image|Immagine
+Text|Testo
+Circular|Circolare
+SDF|SDF
+Shapes|Forme
+Operators|Operatori
+sdCircleRepeat|sdCircleRepeat
+Transforms|Trasformazioni
+CircleRepeat|RipetizioneCerchio
+ToInvUvMap|A Mappa UV Inv
+From2D|Da 2D
+Generic|Generico
+Checkerboard|Scacchiera
+Tiles|Piastrelle
+BasketWeave|IntreccioCesto
+SpanishBond|BlocchiSpagnolo
+UnevenBricks|MattoniIrregolari
+Fibers|Fibre
+Warp1|Warp1
+Warp2|Warp2
+Filter|Filtro
+BrightnessContrast|LuminositàContrasto
+Tones|Toni
+Rainbow|Arcobaleno
+SwapChannels|ScambiaCanali
+Blur|Sfocatura
+Directional|Direzionale
+Axis aligned|Allineato agli assi
+Diagonal|Diagonale
+To Position|A posizione
+To Size|A dimensione
+To Color|A colore
+To random grey|A grigio casuale
+To random color|A colore casuale
+To UV|A UV
+MakeTileable|RendiRipetibile
+CustomUV|UVPersonalizzati
+CircleSplatter|SpargimentoCircolare
+WarpDilation|DilatazioneWarp
+Workflow|Flusso di lavoro (Workflow)
+CreateMap|CreaMappa
+MixMap|MiscelaMappa
+ApplyMap|ApplicaMappa
+Materials|Materiali
+Marble|Marmo
+Metal|Metallo
+Wood|Legno
+Template|Modello (Template)
+Splat|Splat
+Effects|Effetti
+Paint1|Pittura1
+Paint2|Pittura2
+Miscellaneous|Varie
+Iterate Buffer|Itera buffer
+Custom Shader|Shader personalizzato
+Switch|Interruttore (Switch)
+Remote|Remoto
+Comment|Commento
+Debug|Debug
+Advanced|Avanzate
+SmoothCurvature|CurvaturaFluida
+Range|Intervallo (Range)
+SmoothCurvature2|CurvaturaFluida2
+Anisotropic|Anisotropico
+HeightToAngle|DaAltezzaAdAngolo
+RGBA|RGBA
+ArcPavement|PavimentazioneAdArco
+Vec3|Vec3
+SDF2D|SDF2D
+SDF3D|SDF3D
+TEX3D|TEX3D
+Convert|Converti
+Patterns|Pattern
+Screws|Viti
+Arrows|Frecce
+Snow|Neve
+RustyIron|FerroArrugginito
+Dribble|Gocciolamento (Dribble)
+Zipper|Cerniera (Zipper)
+Triplanar|Triplanare
