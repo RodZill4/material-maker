@@ -202,15 +202,21 @@ func setup_icons() -> void:
 
 func animate_connection_start() -> void:
 	$AnimationPlayer.play("start_connection")
+	$TimeAnimator.play("start_time")
 
 func animate_disconnected(is_error : bool = false) -> void:
 	$AnimationPlayer.play("disconnected_%s" % ["error" if is_error else "normal"] )
+	await $AnimationPlayer.animation_finished
+	$TimeAnimator.play("RESET")
 
 func animate_connected() -> void:
 	$AnimationPlayer.play("connected")
+	await $AnimationPlayer.animation_finished
+	$TimeAnimator.play("RESET")
 
 func reset_animation() -> void:
 	$AnimationPlayer.play("RESET")
+	$TimeAnimator.play("RESET")
 
 func set_enable_buttons() -> void:
 	const logged_in : Color = Color(0.127, 0.645, 0.462, 1.0)
