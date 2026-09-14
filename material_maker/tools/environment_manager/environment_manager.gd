@@ -204,6 +204,8 @@ func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
 
 func set_hdr(index, hdr_path) -> bool:
+	if not FileAccess.file_exists(hdr_path):
+		return false
 	print("Setting hdr "+hdr_path)
 	var hdr_image : Image = Image.load_from_file(hdr_path)
 	if hdr_image == null:
