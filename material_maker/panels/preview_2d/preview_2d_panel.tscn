@@ -397,6 +397,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 25.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_type_variation = &"MM_PanelMenuBackground"
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
@@ -404,6 +405,7 @@ vertical_scroll_mode = 0
 [node name="HBox" type="HFlowContainer" parent="MenuBar" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="MainMenu" type="PanelContainer" parent="MenuBar/HBox" index="0"]
 layout_mode = 2
