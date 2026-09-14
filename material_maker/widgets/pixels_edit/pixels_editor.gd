@@ -1,19 +1,30 @@
 @tool
 extends "res://material_maker/widgets/pixels_edit/pixels_view.gd"
 
-
-var current_color: int = -1
+var current_color: int = -1:
+	set(v):
+		current_color = v
+		colors.current_color = v
+		colors.queue_redraw()
 
 var last_mouse_pos : Vector2
+var is_sampling_pixel : bool = false:
+	set(v):
+		is_sampling_pixel = v
+		if is_sampling_pixel:
+			Input.set_custom_mouse_cursor(
+				preload("res://material_maker/icons/pixel_sample.svg"),
+				Input.CURSOR_ARROW, Vector2(4.0, 19.8))
+		else:
+			Input.set_custom_mouse_cursor(null)
 
-@onready var menu_bar: Control = $PixelMenu
-@onready var colors: Control = %Colors
+@onready var menu_bar : Control = $PixelMenu
+@onready var colors : Control = %Colors
 
 signal value_changed(value : MMPixels)
 signal unhandled_event(event : InputEvent)
 
 var achievement_submitted : bool = false
-
 
 func _ready() -> void:
 	super()
@@ -23,23 +34,32 @@ func _ready() -> void:
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
 
+func is_mouse_in_canvas() -> bool:
+	return Rect2(draw_offset, draw_size).has_point(get_local_mouse_position())
 
 func _draw() -> void:
 	super._draw()
 	var val : Vector2 = reverse_transform_point(get_local_mouse_position())
 	var pixels_size : Vector2 = Vector2(pixels.size)
 	val = snapped(val - (Vector2(0.5, 0.5) / pixels_size), Vector2.ONE / pixels_size)
-	if Rect2(draw_offset, draw_size).has_point(get_local_mouse_position()):
+	if is_mouse_in_canvas():
+		# line preview
+		if Input.is_key_pressed(KEY_SHIFT):
+			for pixel : Vector2i in get_bresenham_line_pixels(
+					last_mouse_pos, get_local_mouse_position()):
+				var lr : Rect2 = Rect2(transform_point(Vector2(pixel)/pixels_size),
+						draw_size / pixels_size) 
+				draw_rect(lr, pixels.palette[current_color])
+
+		# current pixel preview
 		var rect = Rect2(transform_point(val), draw_size / pixels_size)
 		draw_rect(rect.grow(-1.0), Color.BLACK, false, 1.0)
 		draw_rect(rect, Color.WHITE, false, 1.0)
-
 
 func set_pixels(p : MMPixels) -> void:
 	pixels = p
 	queue_redraw()
 	update_color_buttons()
-
 
 func update_color_buttons() -> void:
 	var palette_size : int = pixels.palette.size()
@@ -71,14 +91,22 @@ func update_color_buttons() -> void:
 	if current_color < 0 or current_color >= palette_size:
 		current_color = 0
 
-
 func set_current_color(c : int) -> void:
 	current_color = c
+	if is_sampling_pixel:
+		var prev_focus : Control = get_viewport().gui_get_focus_owner()
+		if prev_focus is ColorPickerButton:
+			prev_focus.release_focus()
 
 func set_palette_color(c : Color, i : int) -> void:
 	pixels.palette[i] = c
 	queue_redraw()
 	self.value_changed.emit(pixels)
+
+func sample_pixel() -> int:
+	var click_position : Vector2 = reverse_transform_point(get_local_mouse_position())
+	var pixel_position : Vector2i = Vector2i(Vector2(pixels.size)*click_position)
+	return pixels.get_color_index(pixel_position.x, pixel_position.y)
 
 func draw_pixel() -> void:
 	var click_position : Vector2 = reverse_transform_point(get_local_mouse_position())
@@ -91,11 +119,7 @@ func draw_pixel() -> void:
 		achievement_submitted = true
 
 func draw_pixel_line() -> void:
-	var from : Vector2 = reverse_transform_point(last_mouse_pos)
-	var to : Vector2 = reverse_transform_point(get_local_mouse_position())
-	var pixel_from : Vector2i = Vector2i(Vector2(pixels.size) * from)
-	var pixel_to : Vector2i = Vector2i(Vector2(pixels.size) * to)
-	for pixel : Vector2i in Geometry2D.bresenham_line(pixel_from, pixel_to):
+	for pixel in get_bresenham_line_pixels(last_mouse_pos, get_local_mouse_position()):
 		pixels.set_color_index(pixel.x, pixel.y, current_color)
 	queue_redraw()
 	self.value_changed.emit(pixels)
@@ -103,19 +127,45 @@ func draw_pixel_line() -> void:
 		mm_steam.unlock_achievement("ACH_MARGOTS_FAVORITE")
 		achievement_submitted = true
 
-func _on_PixelsEditor_gui_input(event : InputEvent):
+func get_bresenham_line_pixels(from : Vector2, to : Vector2) -> Array[Vector2i]:
+	var start : Vector2 = reverse_transform_point(from)
+	var end : Vector2 = reverse_transform_point(to)
+	var pixel_from : Vector2i = Vector2i(Vector2(pixels.size) * start)
+	var pixel_to : Vector2i = Vector2i(Vector2(pixels.size) * end)
+	return Geometry2D.bresenham_line(pixel_from, pixel_to)
+
+func _input(event : InputEvent) -> void:
+	if is_mouse_in_canvas() and event is InputEventKey:
+		match event.keycode:
+			KEY_ALT:
+				is_sampling_pixel = event.pressed
+			KEY_SHIFT:
+				queue_redraw()
+
+func _on_PixelsEditor_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if event.shift_pressed and last_mouse_pos:
 				draw_pixel_line()
+			elif event.alt_pressed and is_mouse_in_canvas():
+				set_current_color(sample_pixel())
+				return
 			last_mouse_pos = get_local_mouse_position()
 			draw_pixel()
 			return
 	elif event is InputEventMouseMotion:
 		queue_redraw()
-		if event.button_mask == MOUSE_BUTTON_MASK_LEFT:
+		if event.button_mask == MOUSE_BUTTON_MASK_LEFT and not event.alt_pressed:
 			draw_pixel()
 			return
+		if is_mouse_in_canvas():
+			var tip : String = "#LMB: Draw pixel,"
+			tip += " Shift + #LMB: Draw line,"
+			tip += " Alt + #LMB: Sample color"
+			mm_globals.set_tip_text(tip, 2.0)
+		else:
+			is_sampling_pixel = false
+			mm_globals.set_tip_text("")
 	unhandled_event.emit(event)
 
 
