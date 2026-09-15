@@ -107,13 +107,14 @@ func _enter_tree():
 		# only include static backgrounds on android
 		var filtered_backgrounds : Array[Dictionary]
 		for group in splash_backgrounds:
-			var entries : Array[Dictionary]
+			var entries : Array[Dictionary] = []
 			if group.has("entries"):
 				for e in group.entries:
 					if e.file.get_extension() == "png":
 						entries.append(e)
 			if entries.is_empty():
 				continue
+			group.entries = entries
 			filtered_backgrounds.append(group)
 		splash_backgrounds = filtered_backgrounds
 	
