@@ -7,13 +7,13 @@ var active_touch_drag : int = 0
 
 var touch_info : Dictionary[int, Vector2] = {}
 
-var long_press_timer : float = 0.0
-var has_long_pressed : bool = false
+#var long_press_timer : float = 0.0
+#var has_long_pressed : bool = false
 
 ## time in seconds until [signal long_pressed] is emitted
-const LONG_PRESS_THRESHOLD : float = 0.8
+#const LONG_PRESS_THRESHOLD : float = 0.8
 
-signal long_pressed(at_position : Vector2)
+#signal long_pressed(at_position : Vector2)
 signal back_pressed()
 
 func _ready() -> void:
@@ -25,8 +25,8 @@ func _input(event : InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			active_touch = event.index
-			has_long_pressed = false
-			long_press_timer = 0.0
+			#has_long_pressed = false
+			#long_press_timer = 0.0
 			touch_info[event.index] = event.position
 	elif event is InputEventScreenDrag:
 		active_touch_drag = event.index
@@ -37,18 +37,18 @@ func _input(event : InputEvent) -> void:
 		active_touch_drag = 0
 		touch_info.clear()
 
-func _process(delta : float) -> void:
-	if has_long_pressed:
-		return
-
-	if long_press_timer >= LONG_PRESS_THRESHOLD:
-		has_long_pressed = true
-
-		if touch_info.size():
-			long_pressed.emit(touch_info[0])
-	else:
-		if active_touch == 0:
-			long_press_timer += delta
+#func _process(delta : float) -> void:
+	#if has_long_pressed:
+		#return
+#
+	#if long_press_timer >= LONG_PRESS_THRESHOLD:
+		#has_long_pressed = true
+#
+		#if touch_info.size():
+			#long_pressed.emit(touch_info[0])
+	#else:
+		#if active_touch == 0:
+			#long_press_timer += delta
 
 func setup_window_touch(window : Window) -> void:
 	if not window.window_input.is_connected(_input):
