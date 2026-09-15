@@ -292,9 +292,6 @@ func _input(event: InputEvent) -> void:
 			_:
 				get_window().mode = Window.MODE_MAXIMIZED
 
-	if event is InputEventKey and event.keycode == KEY_BACK and event.pressed:
-		quit_on_back_pressed()
-
 func on_config_changed() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
 	# Convert FPS to microseconds per frame.
@@ -1557,11 +1554,3 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
-
-func quit_on_back_pressed() -> void:
-	# only quit if there are no other popups
-	for node in get_children():
-		if node is Window:
-			return
-		else:
-			quit()

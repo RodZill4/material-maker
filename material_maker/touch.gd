@@ -23,8 +23,6 @@ func _input(event : InputEvent) -> void:
 			touch_info[event.index] = event.position
 		elif not event.pressed and touch_info.has(event.index):
 			touch_info.erase(event.index)
-	elif event is InputEventKey and event.keycode == KEY_BACK and event.pressed:
-		back_pressed.emit()
 
 func setup_window_touch(window : Window) -> void:
 	if not window.window_input.is_connected(_input):
@@ -38,3 +36,15 @@ func setup_dialog(window : Window) -> void:
 	window.position = Vector2.ZERO
 	window.size = DisplayServer.screen_get_size() / mm_globals.get_ui_scale()
 	window.show()
+
+func _notification(what : int) -> void:
+	match what:
+		NOTIFICATION_WM_GO_BACK_REQUEST:
+			back_pressed.emit()
+
+			# quit if there are no other dialogs
+			if mm_globals.main_window:
+				for node in mm_globals.main_window.get_children():
+					if node is Window and node.name not in ["AcceptDialog", "AddNodePopup"]:
+						return
+				mm_globals.main_window.quit()
