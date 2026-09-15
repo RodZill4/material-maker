@@ -33,15 +33,12 @@ func _ready():
 	v.add_theme_constant_override("padding_left", 8)
 
 	if OS.get_name() == "Android":
-		mm_touch.setup_window_touch(self)
-		min_size = Vector2.ZERO
-		size = DisplayServer.screen_get_size(
-				DisplayServer.window_get_current_screen()) / mm_globals.get_ui_scale()
-		size /= Vector2i(1, 2)
-		show()
+		$Main.custom_minimum_size = Vector2.ZERO
+		mm_touch.setup_dialog(self)
 	else:
 		hide()
 		popup_centered()
+
 	connect_controls()
 	environment_manager.environment_updated.connect(self.on_environment_updated)
 	environment_manager.name_updated.connect(self.on_name_updated)

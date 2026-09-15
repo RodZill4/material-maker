@@ -258,7 +258,6 @@ func _ready() -> void:
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 
-
 var menu_update_requested : bool = false
 
 func update_menus() -> void:
@@ -292,6 +291,9 @@ func _input(event: InputEvent) -> void:
 				get_window().mode = Window.MODE_WINDOWED
 			_:
 				get_window().mode = Window.MODE_MAXIMIZED
+
+	if event is InputEventKey and event.keycode == KEY_BACK and event.pressed:
+		quit_on_back_pressed()
 
 func on_config_changed() -> void:
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
@@ -1268,8 +1270,6 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
-	about_box.hide()
-	about_box.popup_centered()
 
 func show_example_projects() -> void:
 	var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
@@ -1557,3 +1557,11 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+func quit_on_back_pressed() -> void:
+	# only quit if there are no other popups
+	for node in get_children():
+		if node is Window:
+			return
+		else:
+			quit()

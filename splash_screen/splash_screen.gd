@@ -100,24 +100,27 @@ const ACTIVITY_MESSAGES : Array[String] = [
 	"Let’s make something awesome."
 ]
 
+func filter_splash_screens() -> void:
+	# only use static backgrounds
+	var filtered_backgrounds : Array[Dictionary]
+	for group in splash_backgrounds:
+		var entries : Array[Dictionary] = []
+		if group.has("entries"):
+			for e in group.entries:
+				if e.file.get_extension() == "png":
+					entries.append(e)
+		if entries.is_empty():
+			continue
+		group.entries = entries
+		filtered_backgrounds.append(group)
+	splash_backgrounds = filtered_backgrounds
+
 func _enter_tree():
 	if OS.get_name() == "Android":
+		filter_splash_screens()
 		size = DisplayServer.screen_get_size() / mm_globals.get_ui_scale()
 		$SplashScreen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		# only include static backgrounds on android
-		var filtered_backgrounds : Array[Dictionary]
-		for group in splash_backgrounds:
-			var entries : Array[Dictionary] = []
-			if group.has("entries"):
-				for e in group.entries:
-					if e.file.get_extension() == "png":
-						entries.append(e)
-			if entries.is_empty():
-				continue
-			group.entries = entries
-			filtered_backgrounds.append(group)
-		splash_backgrounds = filtered_backgrounds
-	
+
 	var date : Dictionary = Time.get_date_dict_from_system()
 	var date_int : int = date.month*33+date.day
 	var screen : int = 0

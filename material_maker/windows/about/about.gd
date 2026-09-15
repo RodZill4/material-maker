@@ -154,6 +154,12 @@ func _ready() -> void:
 			continue
 		patrons_list.add_item(p)
 
+	if OS.get_name() == "Android":
+		mm_touch.setup_dialog(self)
+	else:
+		hide()
+		popup_centered()
+
 func _name_control_gui_input(event : InputEvent, url : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		open_url(url)
