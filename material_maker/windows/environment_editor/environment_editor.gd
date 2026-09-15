@@ -33,6 +33,7 @@ func _ready():
 	v.add_theme_constant_override("padding_left", 8)
 
 	if OS.get_name() == "Android":
+		mm_touch.setup_window_touch(self)
 		min_size = Vector2.ZERO
 		size = DisplayServer.screen_get_size(
 				DisplayServer.window_get_current_screen()) / mm_globals.get_ui_scale()
