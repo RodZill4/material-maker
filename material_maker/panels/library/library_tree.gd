@@ -3,6 +3,7 @@ extends Tree
 @export var supports_drag : bool = true
 
 var scroll_position = 0.0
+var force_drag_started : bool
 
 func get_last_item(parent : TreeItem):
 	while true:
@@ -13,7 +14,7 @@ func get_last_item(parent : TreeItem):
 			return parent
 		parent = items.back()
 
-func _draw():
+func _draw() -> void:
 	if get_root() == null:
 		return
 	var last_tree_item = get_last_item(get_root())
@@ -33,14 +34,29 @@ func _draw():
 			draw_rect(Rect2(1, rect.position.y, 4, last_rect.position.y-rect.position.y+last_rect.size.y), color)
 		item = item.get_next()
 
-func _get_drag_data(_position):
-	if !supports_drag:
+func _get_drag_data(_position) -> Variant:
+	var _data_preview : Dictionary = _get_data_preview()
+	if _data_preview.is_empty():
 		return null
+	else:
+		set_drag_preview(_data_preview.preview)
+		return _data_preview.data
+
+func _on_gui_input(event : InputEvent) -> void:
+	# handle one-finger item drag from library
+	if not force_drag_started:
+		if event is InputEventMouseMotion:
+			if event.device == InputEvent.DEVICE_ID_EMULATION:
+				if mm_touch.active_touch == 0:
+					_force_drag()
+					accept_event()
+
+func _get_data_preview() -> Dictionary:
 	var selected_item = get_selected()
 	if selected_item != null:
 		var data = selected_item.get_metadata(0)
 		if data == null:
-			return null
+			return {}
 		var preview : Control
 		var preview_texture = selected_item.get_icon(1)
 		if preview_texture != null:
@@ -55,6 +71,14 @@ func _get_drag_data(_position):
 		else:
 			preview = Label.new()
 			preview.text = data.tree_item
-		set_drag_preview(preview)
-		return data
-	return null
+		return { "preview": preview, "data": data } 
+	return {}
+
+func _force_drag() -> void:
+	if force_drag_started:
+		return
+	force_drag_started = true
+	var drag_data = _get_data_preview()
+	if not drag_data.is_empty():
+		force_drag(drag_data.data, drag_data.preview)
+	force_drag_started = false
