@@ -282,6 +282,7 @@ jobs:
           GODOT_ANDROID_KEYSTORE_DEBUG_USER: "androiddebugkey"
           GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: "android"
         run: |
+          sed -i 's/ANDROID_VERSION_NAME/v${MM_RELEASE//_/.}/g' export_presets.cfg
           ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless --export-debug "Android" ./build/android/${EXPORT_NAME}_${MM_RELEASE}_android_debug.apk
       - name: Export Android release apk
         if: ${{ github.event.inputs.android_release == 'true' }}  
@@ -291,6 +292,7 @@ jobs:
           GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           echo "${{ secrets.KEYSTORE }}" | base64 -d > /tmp/release.keystore
+          sed -i 's/ANDROID_VERSION_NAME/v${MM_RELEASE//_/.}/g' export_presets.cfg
           ./Godot_v${GODOT_VERSION}-${GODOT_SUB}_linux.x86_64 --headless --export-release "Android" ./build/android/${EXPORT_NAME}_${MM_RELEASE}_android_release.apk
       - name: Upload Android debug artifact
         if: ${{ github.event.inputs.artifacts == 'true' }}
