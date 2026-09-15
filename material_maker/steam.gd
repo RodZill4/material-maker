@@ -11,7 +11,7 @@ signal avatar_ready()
 
 
 func _ready():
-	if not Engine.has_singleton("Steam"):
+	if not Engine.has_singleton("Steam") or OS.get_name() == "Android":
 		return
 	steam_api = Engine.get_singleton("Steam")
 	var initialize_response: Dictionary = steam_api.steamInitEx()
