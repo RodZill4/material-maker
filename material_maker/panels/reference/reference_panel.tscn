@@ -120,6 +120,7 @@ tooltip_text = "Remove Image"
 icon_alignment = 1
 
 [node name="CheckClipboardImage" type="Timer" parent="MenuBar/HBox/MainMenu/HBox" unique_id=2067403748]
+unique_name_in_owner = true
 autostart = true
 
 [node name="NavigationMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=1551415023]

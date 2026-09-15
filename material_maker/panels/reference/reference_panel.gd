@@ -38,6 +38,11 @@ func _ready():
 
 	%GradientSlot.toggled.connect(_on_slot_toggled.bind(%GradientSlot))
 
+	if OS.get_name() == "Android":
+		%PasteImageButton.hide()
+		%CheckClipboardImage.stop()
+		%CheckClipboardImage.queue_free()
+
 
 ## This is magically called by the main window :)
 func on_drop_image_file(file_name: String) -> void:
