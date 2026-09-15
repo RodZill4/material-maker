@@ -237,6 +237,14 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
+		# handle undo/redo from taps
+		if event.device == InputEvent.DEVICE_ID_EMULATION:
+			if not event.pressed:
+				if mm_touch.active_touch == 1: # two-finger
+					mm_globals.main_window.edit_undo()
+				elif mm_touch.active_touch == 2: # three-finger
+					mm_globals.main_window.edit_redo()
+
 		# reverted to default GraphEdit behavior
 		if false and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
 			if event.control:
@@ -338,6 +346,13 @@ func _gui_input(event) -> void:
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
 	elif event is InputEventMouseMotion:
+		# handle two-finger pan
+		if event.device == InputEvent.DEVICE_ID_EMULATION:
+			if mm_touch.active_touch == 1:
+				cancel_drag_selection()
+				scroll_offset -= event.relative
+				accept_event()
+
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
@@ -2044,3 +2059,9 @@ func _on_button_reroll_pressed() -> void:
 
 func _on_button_reroll_mouse_entered() -> void:
 	mm_globals.set_tip_text("#LMB: Reroll all nodes, Shift+#LMB: Reroll selected nodes")
+
+func cancel_drag_selection() -> void:
+	var e : InputEventMouseButton = InputEventMouseButton.new()
+	e.button_index = MOUSE_BUTTON_LEFT
+	e.pressed = false
+	Input.parse_input_event(e)

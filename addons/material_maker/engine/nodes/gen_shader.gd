@@ -822,8 +822,12 @@ func do_edit(node, edit_window_scene : PackedScene, tab : String = "") -> void:
 			edit_window.title = "%s - %s" % [material, edit_window.title]
 		edit_window.get_window().content_scale_factor = mm_globals.ui_scale_factor()
 		edit_window.get_window().min_size = Vector2(950, 450) * edit_window.get_window().content_scale_factor
-		edit_window.hide()
-		edit_window.popup_centered()
+
+		if OS.get_name() == "Android":
+			mm_touch.setup_dialog(edit_window)
+		else:
+			edit_window.hide()
+			edit_window.popup_centered()
 		if tab != "":
 			edit_window.show_tab(tab)
 

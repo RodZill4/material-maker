@@ -20,6 +20,7 @@ config/tags=PackedStringArray("material_maker")
 run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker_2"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.7")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
@@ -44,6 +45,7 @@ mm_deps="*res://addons/material_maker/engine/dependencies.gd"
 mm_renderer="*res://addons/material_maker/engine/multi_renderer.gd"
 mm_sdf_builder="*res://addons/material_maker/sdf_builder/sdf_builder.tscn"
 mm_preprocessor="*res://addons/material_maker/engine/preprocessor.gd"
+mm_touch="*uid://uyvqjubc7arn"
 Html5="*res://material_maker/html5.gd"
 
 [debug]
@@ -60,8 +62,8 @@ window/size/borderless=true
 window/size/transparent=true
 window/size/window_width_override=1
 window/size/window_height_override=1
-window/per_pixel_transparency/allowed=true
 window/subwindows/embed_subwindows=false
+window/per_pixel_transparency/allowed=true
 window/handheld/orientation.Android="sensor_landscape"
 
 [editor]
@@ -132,6 +134,10 @@ left_click={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(80, 13),"global_position":Vector2(89, 61),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
+
+[input_devices]
+
+pointing/android/enable_long_press_as_right_click=true
 
 [internationalization]
 

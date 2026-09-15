@@ -32,8 +32,13 @@ func _ready():
 	v.add_theme_stylebox_override("scroll", grabber_sb)
 	v.add_theme_constant_override("padding_left", 8)
 
-	hide()
-	popup_centered()
+	if OS.get_name() == "Android":
+		$Main.custom_minimum_size = Vector2.ZERO
+		mm_touch.setup_dialog(self)
+	else:
+		hide()
+		popup_centered()
+
 	connect_controls()
 	environment_manager.environment_updated.connect(self.on_environment_updated)
 	environment_manager.name_updated.connect(self.on_name_updated)

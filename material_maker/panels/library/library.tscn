@@ -90,6 +90,7 @@ item_5/id = 5
 
 [connection signal="text_changed" from="Library/Filter/Filter" to="." method="_on_Filter_text_changed"]
 [connection signal="about_to_popup" from="Library/Filter/Libraries" to="." method="_on_Libraries_about_to_show"]
+[connection signal="gui_input" from="Library/Tree" to="Library/Tree" method="_on_gui_input"]
 [connection signal="item_collapsed" from="Library/Tree" to="." method="_on_Tree_item_collapsed"]
 [connection signal="item_mouse_selected" from="Library/Tree" to="." method="_on_tree_item_mouse_selected"]
 [connection signal="pressed" from="Library/GetFromWebsite" to="." method="_on_GetFromWebsite_pressed"]

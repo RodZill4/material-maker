@@ -237,3 +237,11 @@ func ui_scale_factor() -> float:
 	if get_tree().root.gui_embed_subwindows:
 		return 1.0
 	return get_tree().root.content_scale_factor
+
+func get_ui_scale() -> float:
+	var ui_scale = mm_globals.get_config("ui_scale")
+	if ui_scale <= 0:
+		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
+		# This prevents UI elements from being too small on hiDPI displays.
+		return 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
+	return ui_scale

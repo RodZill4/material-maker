@@ -44,8 +44,8 @@ offset_bottom = 40.0
 script = ExtResource("1_q7nii")
 
 [node name="SplashScreen" type="TextureRect" parent="." unique_id=1261927513]
-clip_contents = true
 custom_minimum_size = Vector2(760, 430)
+clip_contents = true
 layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_jeaul")
 expand_mode = 1
@@ -139,18 +139,6 @@ anchor_bottom = 1.0
 offset_top = 331.0
 offset_bottom = 1.0
 
-[node name="URL" type="Label" parent="SplashScreen" unique_id=710870014]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 4.0
-offset_top = 414.0
-offset_right = 134.0
-offset_bottom = 433.0
-mouse_filter = 0
-mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 11
-text = "materialmaker.org"
-
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=986076381]
 layout_mode = 2
 mouse_filter = 2
@@ -160,9 +148,23 @@ theme_override_constants/margin_bottom = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=383891881]
 layout_mode = 2
-size_flags_horizontal = 8
 size_flags_vertical = 8
 alignment = 2
+
+[node name="URLSpacer" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1549656315]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+
+[node name="URL" type="Label" parent="MarginContainer/HBoxContainer" unique_id=710870014]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 8
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 11
+text = "materialmaker.org"
+vertical_alignment = 2
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer" unique_id=736839233]
 unique_name_in_owner = true
@@ -251,6 +253,6 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_587d8")
 
 [connection signal="gui_input" from="SplashScreen/TextureRect/SecretButton" to="." method="_on_secret_button_gui_input"]
-[connection signal="gui_input" from="SplashScreen/URL" to="." method="_on_url_gui_input"]
+[connection signal="gui_input" from="MarginContainer/HBoxContainer/URL" to="." method="_on_url_gui_input"]
 [connection signal="pressed" from="BackgroundSelect/Previous" to="." method="_on_previous_pressed"]
 [connection signal="pressed" from="BackgroundSelect/Next" to="." method="_on_next_pressed"]

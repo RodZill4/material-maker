@@ -12,7 +12,7 @@ var mm_scene : PackedScene = null
 
 
 const BACKGROUNDS_DIR : String = "res://splash_screen/backgrounds/"
-const BACKGROUNDS : Array[Dictionary] = [
+var splash_backgrounds : Array[Dictionary] = [
 	{ author="Angel", entries=[
 		{ title="Beanbag Chair", file="angel_beanbag_chair.png" },
 		{ title="Soft Nurball", file="angel_soft_nurball.png" },
@@ -100,7 +100,27 @@ const ACTIVITY_MESSAGES : Array[String] = [
 	"Let’s make something awesome."
 ]
 
+func filter_splash_screens() -> void:
+	# only use static backgrounds
+	var filtered_backgrounds : Array[Dictionary]
+	for group in splash_backgrounds:
+		var entries : Array[Dictionary] = []
+		if group.has("entries"):
+			for e in group.entries:
+				if e.file.get_extension() == "png":
+					entries.append(e)
+		if entries.is_empty():
+			continue
+		group.entries = entries
+		filtered_backgrounds.append(group)
+	splash_backgrounds = filtered_backgrounds
+
 func _enter_tree():
+	if OS.get_name() == "Android":
+		filter_splash_screens()
+		size = DisplayServer.screen_get_size() / mm_globals.get_ui_scale()
+		$SplashScreen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+
 	var date : Dictionary = Time.get_date_dict_from_system()
 	var date_int : int = date.month*33+date.day
 	var screen : int = 0
@@ -108,16 +128,16 @@ func _enter_tree():
 		_:
 			randomize()
 			var sum : float = 0.0
-			for i in BACKGROUNDS.size():
-				if BACKGROUNDS[i].has("odds"):
-					sum += BACKGROUNDS[i].odds
+			for i in splash_backgrounds.size():
+				if splash_backgrounds[i].has("odds"):
+					sum += splash_backgrounds[i].odds
 				else:
 					sum += 1
 			var value : float = randf_range(0, sum)
 			sum = 0.0
-			for i in BACKGROUNDS.size():
-				if BACKGROUNDS[i].has("odds"):
-					sum += BACKGROUNDS[i].odds
+			for i in splash_backgrounds.size():
+				if splash_backgrounds[i].has("odds"):
+					sum += splash_backgrounds[i].odds
 				else:
 					sum += 1
 				if sum >= value:
@@ -133,7 +153,7 @@ func _enter_tree():
 
 func set_screen(bi : int, sub_index = -1) -> void:
 	background_index = bi
-	var background : Dictionary = BACKGROUNDS[background_index]
+	var background : Dictionary = splash_backgrounds[background_index]
 	var author : String = background.author if background.has("author") else ""
 	var file : String = background.file if background.has("file") else ""
 	var title : String = background.title if background.has("title") else ""
@@ -260,16 +280,16 @@ func _on_secret_button_gui_input(event):
 			mm_steam.unlock_achievement("ACH_EAGLE_EYE")
 
 func _on_previous_pressed():
-	if BACKGROUNDS[background_index].has("entries") and background_subindex > 0:
+	if splash_backgrounds[background_index].has("entries") and background_subindex > 0:
 		set_screen(background_index, background_subindex-1)
 	else:
-		set_screen(background_index-1 if background_index > 0 else BACKGROUNDS.size()-1, 1000)
+		set_screen(background_index-1 if background_index > 0 else splash_backgrounds.size()-1, 1000)
 
 func _on_next_pressed():
-	if BACKGROUNDS[background_index].has("entries") and background_subindex < BACKGROUNDS[background_index].entries.size()-1:
+	if splash_backgrounds[background_index].has("entries") and background_subindex < splash_backgrounds[background_index].entries.size()-1:
 		set_screen(background_index, background_subindex+1)
 	else:
-		set_screen(background_index+1 if background_index < BACKGROUNDS.size()-1 else 0, 0)
+		set_screen(background_index+1 if background_index < splash_backgrounds.size()-1 else 0, 0)
 
 func _on_title_gui_input(event, url : String):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

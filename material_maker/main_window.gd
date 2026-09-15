@@ -258,7 +258,6 @@ func _ready() -> void:
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 
-
 var menu_update_requested : bool = false
 
 func update_menus() -> void:
@@ -307,12 +306,7 @@ func on_config_changed() -> void:
 		if OS.get_name() == "macOS":
 			mm_globals.main_window.update_menus()
 
-	var ui_scale = mm_globals.get_config("ui_scale")
-	if ui_scale <= 0:
-		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
-		# This prevents UI elements from being too small on hiDPI displays.
-		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
-	get_viewport().content_scale_factor = ui_scale
+	get_viewport().content_scale_factor = mm_globals.get_ui_scale()
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
@@ -1273,8 +1267,6 @@ func bug_report() -> void:
 func about() -> void:
 	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
 	add_child(about_box)
-	about_box.hide()
-	about_box.popup_centered()
 
 func show_example_projects() -> void:
 	var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
