@@ -25,6 +25,12 @@ func _ready() -> void:
 	%List.set_drag_forwarding(get_list_drag_data, Callable(), Callable())
 	update_list()
 
+
+func focus_filter() -> void:
+	filter.grab_focus()
+	filter.edit()
+
+
 func filter_entered(_filter) -> void:
 	_on_list_item_activated(0)
 	mm_steam.unlock_achievement("ACH_TREASURE_HUNTER")
@@ -86,7 +92,7 @@ func show_popup(node_name : String = "", slot : int = -1, slot_type : int = -1, 
 	if filter.text != "":
 		filter.text = ""
 	update_list(filter.text)
-	filter.grab_focus()
+	focus_filter.call_deferred()
 
 
 func check_quick_connect(obj : Dictionary) -> bool:
