@@ -49,8 +49,8 @@ var mode := Modes.IDLE:
 			$Edit.editable = true
 			$Edit.mouse_filter = MOUSE_FILTER_STOP
 			$Edit.grab_focus()
+			$Edit.edit()
 			$Edit.select_all()
-			$Edit.caret_column = len($Edit.text)
 			$Edit.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			$Slider.value = min_value
 		else:
