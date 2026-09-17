@@ -75,7 +75,7 @@ func update_node() -> void:
 	for c in grid.get_children():
 		grid.remove_child(c)
 		c.free()
-	title = generator.get_type_name()
+	update_title()
 	controls = {}
 	var parameter_count : int = generator.get_parameter_defs().size()
 	for i in range(parameter_count):

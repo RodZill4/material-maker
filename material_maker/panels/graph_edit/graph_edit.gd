@@ -297,6 +297,12 @@ func _gui_input(event) -> void:
 		if event.pressed:
 			var scancode_with_modifiers = event.get_keycode_with_modifiers()
 			match scancode_with_modifiers:
+				KEY_F2:
+					if has_focus() and !event.echo and !has_grab:
+						var selection : Array = get_selected_nodes()
+						if selection.size() == 1 and selection[0] is MMGraphNodeBase:
+							accept_event()
+							selection[0].rename_node()
 				KEY_H:
 					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
@@ -964,6 +970,16 @@ func get_selected_nodes() -> Array:
 			selected_nodes.append(n)
 	return selected_nodes
 
+func set_node_display_name(node : MMGenBase, value : String) -> void:
+	value = value.strip_edges()
+	if node.display_name == value:
+		return
+	var undo_action = { type="setdisplayname", node=node.get_hier_name(), display_name=node.display_name }
+	var redo_action = { type="setdisplayname", node=node.get_hier_name(), display_name=value }
+	node.display_name = value
+	undoredo.add("Rename node", [undo_action], [redo_action], false)
+	set_need_save()
+
 func remove_selection() -> void:
 	var prev = generator.serialize()
 	for c in get_children():
@@ -1301,6 +1317,10 @@ func undoredo_post(pre_returnvalue) -> void:
 
 func undoredo_command(command : Dictionary) -> void:
 	match command.type:
+		"setdisplayname":
+			var g = get_node_from_hier_name(command.node)
+			g.display_name = command.display_name
+			set_need_save()
 		"add_to_graph":
 			var parent_generator = get_node_from_hier_name(command.parent)
 			var node_position : Vector2 = command.position if command.has("position") else Vector2(0, 0)
