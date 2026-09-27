@@ -38,6 +38,10 @@ func _ready():
 
 	%GradientSlot.toggled.connect(_on_slot_toggled.bind(%GradientSlot))
 
+	if OS.get_name() == "iOS":
+		%CheckClipboardImage.disconnect("timeout", _on_check_clipboard_image_timeout)
+		%CheckClipboardImage.stop()
+		%PasteImageButton.hide()
 
 ## This is magically called by the main window :)
 func on_drop_image_file(file_name: String) -> void:
