@@ -200,359 +200,375 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "47",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 620,
-				"y": 40
+				"x": 620.0,
+				"y": 40.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1.0,
 				"depth_scale": 0.05,
-				"emission_energy": 1,
-				"metallic": 0,
-				"normal_scale": 1,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 0.0,
+				"normal": 1.0,
 				"roughness": 0.85,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": 24380.0,
 			"type": "material"
 		},
 		{
 			"name": "bricks",
 			"node_position": {
-				"x": -820,
-				"y": 100
+				"x": -820.0,
+				"y": 100.0
 			},
 			"parameters": {
-				"bevel": 0,
-				"columns": 6,
-				"corner": 0,
+				"bevel": 0.0,
+				"columns": 6.0,
+				"corner": 0.0,
 				"mortar": 0.087751,
-				"pattern": 1,
-				"repeat": 1,
-				"round": 0,
+				"pattern": 1.0,
+				"repeat": 1.0,
+				"round": 0.0,
 				"row_offset": 0.5,
-				"rows": 20
+				"rows": 20.0
 			},
+			"seed": -44848.0,
 			"type": "bricks"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": -240,
-				"y": -60
+				"x": -240.0,
+				"y": -60.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.273875,
-							"g": 0.292765,
+							"a": 1.0,
+							"b": 0.273874998092651,
+							"g": 0.292764991521835,
 							"pos": 0.476686,
-							"r": 0.529121
+							"r": 0.529120981693268
 						},
 						{
-							"a": 1,
-							"b": 0.185466,
-							"g": 0.193957,
+							"a": 1.0,
+							"b": 0.185466006398201,
+							"g": 0.19395700097084,
 							"pos": 0.477339,
-							"r": 0.276042
+							"r": 0.276042014360428
 						},
 						{
-							"a": 1,
-							"b": 0.185466,
-							"g": 0.193957,
+							"a": 1.0,
+							"b": 0.185466006398201,
+							"g": 0.19395700097084,
 							"pos": 0.733221,
-							"r": 0.276042
+							"r": 0.276042014360428
 						},
 						{
-							"a": 1,
-							"b": 0.566243,
-							"g": 0.625829,
+							"a": 1.0,
+							"b": 0.56624299287796,
+							"g": 0.625828981399536,
 							"pos": 0.734721,
-							"r": 0.739583
+							"r": 0.739583015441895
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 11572.0,
 			"type": "colorize"
 		},
 		{
 			"name": "blend",
 			"node_position": {
-				"x": 20,
-				"y": -20
+				"x": 20.0,
+				"y": -20.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": -28288.0,
 			"type": "blend"
 		},
 		{
 			"name": "colorize_3",
 			"node_position": {
-				"x": -260,
-				"y": 200
+				"x": -260.0,
+				"y": 200.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.822917,
-							"g": 0.822917,
-							"pos": 0,
-							"r": 0.822917
+							"a": 1.0,
+							"b": 0.822916984558105,
+							"g": 0.822916984558105,
+							"pos": 0.0,
+							"r": 0.822916984558105
 						},
 						{
-							"a": 1,
-							"b": 0.239583,
-							"g": 0.239583,
-							"pos": 1,
-							"r": 0.239583
+							"a": 1.0,
+							"b": 0.239583000540733,
+							"g": 0.239583000540733,
+							"pos": 1.0,
+							"r": 0.239583000540733
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -39860.0,
 			"type": "colorize"
 		},
 		{
 			"name": "perlin",
 			"node_position": {
-				"x": -820,
-				"y": 340
+				"x": -820.0,
+				"y": 340.0
 			},
 			"parameters": {
-				"iterations": 8,
+				"iterations": 8.0,
 				"persistence": 0.5,
-				"scale_x": 16,
-				"scale_y": 16
+				"scale_x": 16.0,
+				"scale_y": 16.0
 			},
+			"seed": -44576.0,
 			"type": "perlin"
 		},
 		{
 			"name": "colorize_4",
 			"node_position": {
-				"x": -520,
-				"y": 360
+				"x": -520.0,
+				"y": 360.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 0.898039,
-							"b": 0,
-							"g": 0,
+							"a": 0.898038983345032,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.163636,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 0,
-							"b": 0.984314,
-							"g": 0.984314,
+							"a": 0.0,
+							"b": 0.984314024448395,
+							"g": 0.984314024448395,
 							"pos": 0.463636,
-							"r": 0.984314
+							"r": 0.984314024448395
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -14240.0,
 			"type": "colorize"
 		},
 		{
 			"name": "perlin_2",
 			"node_position": {
-				"x": -820,
-				"y": 500
+				"x": -820.0,
+				"y": 500.0
 			},
 			"parameters": {
-				"iterations": 8,
+				"iterations": 8.0,
 				"persistence": 0.5,
-				"scale_x": 128,
-				"scale_y": 128
+				"scale_x": 128.0,
+				"scale_y": 128.0
 			},
+			"seed": -44736.0,
 			"type": "perlin"
 		},
 		{
 			"name": "colorize_5",
 			"node_position": {
-				"x": -520,
-				"y": 480
+				"x": -520.0,
+				"y": 480.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 0.588235,
-							"b": 0,
-							"g": 0,
+							"a": 0.588235020637512,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.272727,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 0,
-							"b": 1,
-							"g": 1,
+							"a": 0.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.407774,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -14104.0,
 			"type": "colorize"
 		},
 		{
 			"name": "perlin_3",
 			"node_position": {
-				"x": -820,
-				"y": 700
+				"x": -820.0,
+				"y": 700.0
 			},
 			"parameters": {
-				"iterations": 8,
+				"iterations": 8.0,
 				"persistence": 0.8,
-				"scale_x": 16,
-				"scale_y": 16
+				"scale_x": 16.0,
+				"scale_y": 16.0
 			},
+			"seed": -44536.0,
 			"type": "perlin"
 		},
 		{
 			"name": "blend_4",
 			"node_position": {
-				"x": -160,
-				"y": 660
+				"x": -160.0,
+				"y": 660.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": -29132.0,
 			"type": "blend"
 		},
 		{
 			"name": "uniform",
 			"node_position": {
-				"x": -444.088257,
-				"y": 600.058838
+				"x": -444.088256835938,
+				"y": 600.058837890625
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0.047059,
-					"g": 0.078431,
-					"r": 0.12549,
+					"a": 1.0,
+					"b": 0.0470589995384216,
+					"g": 0.0784310027956963,
+					"r": 0.125489994883537,
 					"type": "Color"
 				}
 			},
+			"seed": -64412.0,
 			"type": "uniform"
 		},
 		{
 			"name": "colorize_8",
 			"node_position": {
-				"x": -500,
-				"y": 700
+				"x": -500.0,
+				"y": 700.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.302083,
-							"g": 0.302083,
-							"pos": 0,
-							"r": 0.302083
+							"a": 1.0,
+							"b": 0.302082985639572,
+							"g": 0.302082985639572,
+							"pos": 0.0,
+							"r": 0.302082985639572
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.710145,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -51768.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_7",
 			"node_position": {
-				"x": -240,
-				"y": -200
+				"x": -240.0,
+				"y": -200.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.559601,
-							"r": 1
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0.286458,
-							"g": 0.286458,
+							"a": 1.0,
+							"b": 0.286457985639572,
+							"g": 0.286457985639572,
 							"pos": 0.781818,
-							"r": 0.286458
+							"r": 0.286457985639572
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 11720.0,
 			"type": "colorize"
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
+				"a": 1.0,
+				"b": 0.0,
 				"g": 0.5,
-				"r": 1,
+				"r": 1.0,
 				"type": "Color"
 			},
 			"name": "comment",
 			"node_position": {
-				"x": -1405.656738,
-				"y": -1153.276611
+				"x": -1405.65673828125,
+				"y": -1153.27661132812
 			},
-			"parameters": {
-				"size": 4
-			},
+			"parameters": {},
+			"seed": 51618.0,
 			"size": {
-				"x": 264.319916,
-				"y": 165.399994
+				"x": 264.319915771484,
+				"y": 165.399993896484
 			},
 			"text": "Realistic Bricks by Rafe Hall\n\nProcedural brick material that supports brick color, wear, ambient occlusion, grime, and depth.\n\nTODO: Edge wear, plaster and better layering.",
 			"title": "Comment",
@@ -561,289 +577,293 @@
 		{
 			"name": "perlin_4",
 			"node_position": {
-				"x": -1080,
-				"y": 0
+				"x": -1080.0,
+				"y": 0.0
 			},
 			"parameters": {
-				"iterations": 8,
-				"persistence": 1,
-				"scale_x": 4,
-				"scale_y": 4
+				"iterations": 8.0,
+				"persistence": 1.0,
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": -19144.0,
 			"type": "perlin"
 		},
 		{
 			"name": "blend_6",
 			"node_position": {
-				"x": -540,
-				"y": -40
+				"x": -540.0,
+				"y": -40.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": 42308.0,
 			"type": "blend"
 		},
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": -520,
-				"y": 200
+				"x": -520.0,
+				"y": 200.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.715167,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 0,
-							"b": 1,
-							"g": 1,
+							"a": 0.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.715269,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -13888.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_9",
 			"node_position": {
-				"x": -820,
-				"y": 0
+				"x": -820.0,
+				"y": 0.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.354167,
-							"g": 0.354167,
+							"a": 1.0,
+							"b": 0.354167014360428,
+							"g": 0.354167014360428,
 							"pos": 0.209091,
-							"r": 0.354167
+							"r": 0.354167014360428
 						},
 						{
-							"a": 1,
-							"b": 0.536458,
-							"g": 0.536458,
+							"a": 1.0,
+							"b": 0.536458015441895,
+							"g": 0.536458015441895,
 							"pos": 0.5,
-							"r": 0.536458
+							"r": 0.536458015441895
 						},
 						{
-							"a": 1,
-							"b": 0.166667,
-							"g": 0.166667,
+							"a": 1.0,
+							"b": 0.166666999459267,
+							"g": 0.166666999459267,
 							"pos": 0.936364,
-							"r": 0.166667
+							"r": 0.166666999459267
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -44876.0,
 			"type": "colorize"
 		},
 		{
 			"name": "blend_2",
 			"node_position": {
-				"x": -260,
-				"y": 400
+				"x": -260.0,
+				"y": 400.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": -39660.0,
 			"type": "blend"
 		},
 		{
 			"name": "bricks_2",
 			"node_position": {
-				"x": -820,
-				"y": -240
+				"x": -820.0,
+				"y": -240.0
 			},
 			"parameters": {
 				"bevel": 0.087751,
-				"columns": 6,
-				"corner": 0,
-				"mortar": 0,
-				"pattern": 1,
-				"repeat": 1,
-				"round": 0,
+				"columns": 6.0,
+				"corner": 0.0,
+				"mortar": 0.0,
+				"pattern": 1.0,
+				"repeat": 1.0,
+				"round": 0.0,
 				"row_offset": 0.5,
-				"rows": 20
+				"rows": 20.0
 			},
+			"seed": 44964.0,
 			"type": "bricks"
 		},
 		{
 			"name": "normal_map",
 			"node_position": {
-				"x": 20,
-				"y": 400
+				"x": 20.0,
+				"y": 400.0
 			},
 			"parameters": {
-				"amount": 0.5,
-				"param0": 11,
-				"param1": 1,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param0": 11.0,
+				"param1": 1.0,
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 28668.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "colorize_6",
 			"node_position": {
-				"x": -260,
-				"y": 280
+				"x": -260.0,
+				"y": 280.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -39524.0,
 			"type": "colorize"
 		},
 		{
 			"name": "blend_3",
 			"node_position": {
-				"x": 280,
-				"y": 260
+				"x": 280.0,
+				"y": 260.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": 2284.0,
 			"type": "blend"
 		},
 		{
 			"name": "normal_map_2",
 			"node_position": {
-				"x": -20,
-				"y": 260
+				"x": -20.0,
+				"y": 260.0
 			},
 			"parameters": {
-				"amount": 0.5,
-				"param0": 11,
-				"param1": 1,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param0": 11.0,
+				"param1": 1.0,
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": -28528.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "colorize_10",
 			"node_position": {
-				"x": -520,
-				"y": -140
+				"x": -520.0,
+				"y": -140.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.710909,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.72,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 13948.0,
 			"type": "colorize"
 		},
 		{
 			"name": "normal_map_3",
 			"node_position": {
-				"x": 60,
-				"y": -240
+				"x": 60.0,
+				"y": -240.0
 			},
 			"parameters": {
-				"amount": 0.5,
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.42,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": -19372.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "blend_7",
 			"node_position": {
-				"x": 309,
-				"y": -128
+				"x": 309.0,
+				"y": -128.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": -36885.0,
 			"type": "blend"
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
+				"a": 1.0,
+				"b": 0.0,
 				"g": 0.5,
-				"r": 1,
+				"r": 1.0,
 				"type": "Color"
 			},
 			"name": "comment_2",
 			"node_position": {
-				"x": -202.672852,
-				"y": 93.677933
+				"x": -202.6728515625,
+				"y": 93.6779327392578
 			},
-			"parameters": {
-				"size": 4
-			},
+			"parameters": {},
+			"seed": -36393.0,
 			"size": {
-				"x": 371,
-				"y": 49
+				"x": 371.0,
+				"y": 49.0
 			},
 			"text": "Improved bricks, by Rafe Hall (aka MrDiamondGold)",
 			"title": "Comment",
 			"type": "comment"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "UklGRhIFAABXRUJQVlA4WAoAAAAQAAAALwAALwAAQUxQSJQCAAANoCNteyJJevXrV9HAMpNX7Q9UrMd4gGEea5ksZmYGi3n3AG12ZIzVFT0X4BmrrOXdqqiUUlooyNIJImICmFOsBzh//bn89tcvAK6K1C9SVmbLdb1uM1Y0ZXysX6yVaIx1aRmvObyDqe3OZd3edRt/+PQkGmqR5K945gZIFWIwJFLELu3cv/LMWWPifFry8D0QxFomGoxAjK2Dj374ZtIwjxtd9BN4dcwrksL6lzZvGzg/mxtu+gavDeo0msLNn+xZdX4WN7z2PXyHuo36S5fvP+L8NB1teo/QZoEuNIv7VzVMkvKibwgtFqqhubxnIHFC4id8mwWrv/STbYn/q38Y32Hhzt+8+U0NIOUV96BkqLz04VmJSHwa38jB+PWPPCtRymtuQMlSObhyUmx1GN/Iw/jOvk+tNzuwZGrZ+UPJFlI2kpY2rnEdVTZU9rqCHln3+nSRfITusfObmHwMl43XR7LuyLkVJh9Du0n2vzXbyWSTzGj8l3TIeRh/GV+WTDbJDOBYN0o2UY5Bv0fOfSius/lYCljbuBQlk2iP/YErf9hZ2Uwq+z2u4tN9nWSySA3/FVXUkysHg2YR9HO0JPLsI+uTySA1xq8QIerZD18KmkHQx9ASCObNzTd7tzDfKY4az/9N2vbJpUEXFNo/34lJE6IO9iw3gy4ktKo70JLJwa3eXzS9W4BvV9fhRkz37sj9y5d6NTWl0Pn5DtyQWb1b3fPJzXg1NaTQ0OJO3JDZvQ62bX5pPUFkjhidjh87io6YN0h688NHD7ZIFWIwJFLEWgmfv4wxJfNH9OwzK/t3LlkmGozAse+/BPWJWoPIyU9/2Hhdr3tZp81oODjWL/4AjSV1xyi2XCv6x8bSZBz5v6tKZgdWUDggWAIAAHAOAJ0BKjAAMAA+kTyYSCWjoiEuOAswsBIJYwC2+4huwKrz29kt2fevxrYepFyqER3jTentngvgmCaGGDFuLVQ1leM9alaGZHkP3AN89j0Od7udWpCLhqJRFE8jcD5azPLQ3NM9r7Z6loeFu43hyFFlzK56eOu6ltpaiAAA/v620TwZZA77QPXR91RgIQeq2faOOCWXVvGpbhVMd+56Nw9nzQtdADXXB4Sj0jo2FIgmzVcw0UxLkF35TIWdZC+zKqwVIDLS3GE35fA1eu9IVU57Iyfw6IRO2ETztf4qkbT8dwipHWf+n+A+F1DzF5/AqvoV298YEZc7N1HNW5VCyO4Nkrvnb3ujamQjFALP4rLMnjNIq2jfHWWdYMFvrQ//sL8hF3ArVzNViA//ldl08wJSxpsbNtL5a7k5e1fi7JyyEOPhLCgl32QY4LVzKr9IOr1HEF/z6o18AVrQdBKMbtd1/jr4E0gQzP2uS932gnpm6quKwg4vL8TYqKLqJIVKSLV+vJC84Ml+KSuLV5ffXnYVEAYRTH2e3pNs+apfBLUeCe8lhcQP/8OpF39tomYuOoZEixrBSo1ii0HK0ZMkeQFodUsSDxigZ9qNEUpEnFWrgHzuuox9VHEOgC4I3uZgR6Wjj8Wy5a6ei5ya2Ytl+IE9XuLcEvy6ymaGmpfheElHPHs6zdhOfYGAuHm4HqPN7uJY0+y1/s6kD20hVGLwz20lcQsJCtXSC3jljNfZaI7eAXw0EC9IpO3SD5TJqQwxomXCwmEfveY+L/XPsnSUbvqrBCLbnowAAA==",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }
