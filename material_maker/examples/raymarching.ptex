@@ -56,52 +56,53 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "49",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": -336,
-				"y": 266
+				"x": -336.0,
+				"y": 266.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal_scale": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": -55718.0,
 			"type": "material"
 		},
 		{
 			"name": "sdrotate",
 			"node_position": {
-				"x": -722.057617,
-				"y": 347.909668
+				"x": -722.0576171875,
+				"y": 347.90966796875
 			},
 			"parameters": {
-				"a": 0,
-				"ax": 18,
-				"ay": -28,
-				"az": -29,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
+				"ax": 18.0,
+				"ay": -28.0,
+				"az": -29.0
 			},
+			"seed": -50231.0,
 			"shader_model": {
 				"code": "",
 				"global": "vec3 rotate3d(vec3 p, vec3 a) {\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -123,30 +124,30 @@
 				],
 				"parameters": [
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "X",
-						"max": 180,
-						"min": -180,
+						"max": 180.0,
+						"min": -180.0,
 						"name": "ax",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "Y",
-						"max": 180,
-						"min": -180,
+						"max": 180.0,
+						"min": -180.0,
 						"name": "ay",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "Z",
-						"max": 180,
-						"min": -180,
+						"max": 180.0,
+						"min": -180.0,
 						"name": "az",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
@@ -156,37 +157,35 @@
 		{
 			"name": "sdrhombus_2",
 			"node_position": {
-				"x": -1116.057617,
-				"y": 261.159668
+				"x": -1116.0576171875,
+				"y": 261.15966796875
 			},
 			"parameters": {
-				"cx": 0,
-				"cy": 0,
+				"cx": 0.0,
+				"cy": 0.0,
 				"h": 0.29,
-				"r": 0.3,
 				"w": 0.3
 			},
+			"seed": -43559.0,
 			"type": "sdrhombus"
 		},
 		{
 			"name": "sdbox",
 			"node_position": {
-				"x": -1119.057617,
-				"y": 401.159668
+				"x": -1119.0576171875,
+				"y": 401.15966796875
 			},
 			"parameters": {
-				"cx": 0,
-				"cy": 0,
+				"cx": 0.0,
+				"cy": 0.0,
 				"h": 0.2,
-				"r": 0.3,
 				"w": 0.2
 			},
+			"seed": -2322.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_d = abs($uv-0.5*vec2($cx+1.0, $cy+1.0))-vec2($w, $h);\n",
 				"global": "",
-				"inputs": [
-
-				],
+				"inputs": [],
 				"instance": "",
 				"name": "sdBox",
 				"outputs": [
@@ -199,35 +198,35 @@
 					{
 						"default": 0.5,
 						"label": "Width",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "w",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
-						"default": 1,
+						"default": 1.0,
 						"label": "Height",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "h",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "Center X",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "cx",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "Center Y",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "cy",
 						"step": 0.01,
 						"type": "float"
@@ -239,31 +238,26 @@
 		{
 			"name": "sdboolean",
 			"node_position": {
-				"x": -894.057617,
-				"y": 297.159668
+				"x": -894.0576171875,
+				"y": 297.15966796875
 			},
 			"parameters": {
-				"bevel": 0,
-				"cx": 0,
-				"cy": 0,
-				"h": 0.08,
-				"op": 0,
-				"r": 0.3,
-				"w": 0.28
+				"op": 0.0
 			},
+			"seed": -44905.0,
 			"type": "sdboolean"
 		},
 		{
 			"name": "_4_2_3",
 			"node_position": {
-				"x": -903.047241,
-				"y": 363.697357
+				"x": -903.047241210938,
+				"y": 363.697357177734
 			},
 			"parameters": {
-				"x": 0,
-				"y": 0,
-				"z": 0
+				"x": 0.0,
+				"y": 0.0
 			},
+			"seed": -50996.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -285,19 +279,19 @@
 				],
 				"parameters": [
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "X",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "x",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
-						"default": 0,
+						"default": 0.0,
 						"label": "Y",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "y",
 						"step": 0.01,
 						"type": "float"
@@ -309,17 +303,13 @@
 		{
 			"name": "sdf3d_revolution",
 			"node_position": {
-				"x": -714.403931,
-				"y": 295.330994
+				"x": -714.403930664062,
+				"y": 295.330993652344
 			},
 			"parameters": {
-				"a": 0,
-				"d": 0.43,
-				"s": 1,
-				"x": 0.35,
-				"y": 0,
-				"z": 0
+				"d": 0.43
 			},
+			"seed": -52563.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_w = vec2($in($uv.xz+vec2(0.5)),abs($uv.y)-$d);\n",
 				"global": "",
@@ -343,8 +333,8 @@
 					{
 						"default": 0.25,
 						"label": "",
-						"max": 1,
-						"min": 0,
+						"max": 1.0,
+						"min": 0.0,
 						"name": "d",
 						"step": 0.01,
 						"type": "float"
@@ -356,34 +346,35 @@
 		{
 			"name": "raymarching",
 			"node_position": {
-				"x": -522.23468,
-				"y": 348.748474
+				"x": -522.234680175781,
+				"y": 348.748474121094
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -29802.0,
 			"type": "raymarching"
 		},
 		{
 			"name": "uniform",
 			"node_position": {
-				"x": -576.760742,
-				"y": 211.755493
+				"x": -576.7607421875,
+				"y": 211.755493164062
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 0.415686,
-					"r": 0,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 0.415686011314392,
+					"r": 0.0,
 					"type": "Color"
 				}
 			},
+			"seed": -1389.0,
 			"type": "uniform"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

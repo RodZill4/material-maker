@@ -110,91 +110,96 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "505",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 938,
-				"y": 96
+				"x": 938.0,
+				"y": 96.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal_scale": 1,
-				"resolution": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": 2038.0,
 			"type": "material"
 		},
 		{
 			"name": "colorize_3",
 			"node_position": {
-				"x": 487.633789,
-				"y": 65
+				"x": 487.6337890625,
+				"y": 65.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.5,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.672727,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 13240.0,
 			"type": "colorize"
 		},
 		{
 			"name": "bricks_0",
 			"node_position": {
-				"x": -21,
+				"x": -21.0,
 				"y": 70.5
 			},
 			"parameters": {
 				"bevel": 0.007813,
-				"columns": 5,
-				"corner": 0,
+				"columns": 5.0,
+				"corner": 0.0,
 				"mortar": 0.025469,
-				"pattern": 0,
-				"repeat": 1,
-				"round": 0,
+				"pattern": 0.0,
+				"repeat": 1.0,
+				"round": 0.0,
 				"row_offset": 0.5,
-				"rows": 1
+				"rows": 1.0
 			},
+			"seed": -36301.0,
 			"type": "bricks"
 		},
 		{
 			"name": "colorize_0",
 			"node_position": {
-				"x": 472,
+				"x": 472.0,
 				"y": -41.5
 			},
 			"parameters": {
@@ -202,186 +207,192 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.336914,
-							"pos": 0,
-							"r": 0.598958
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.336914002895355,
+							"pos": 0.0,
+							"r": 0.598958015441895
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.454102,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.454102009534836,
 							"pos": 0.118182,
-							"r": 0.807292
+							"r": 0.807291984558105
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.37793,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.377929985523224,
 							"pos": 0.245455,
 							"r": 0.671875
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.427734,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.427733987569809,
 							"pos": 0.345455,
-							"r": 0.760417
+							"r": 0.760416984558105
 						},
 						{
-							"a": 1,
-							"b": 0.017795,
-							"g": 0.488254,
+							"a": 1.0,
+							"b": 0.0177950002253056,
+							"g": 0.488254010677338,
 							"pos": 0.527273,
-							"r": 0.854167
+							"r": 0.854166984558105
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.37793,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.377929985523224,
 							"pos": 0.645455,
 							"r": 0.671875
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.439453,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.43945300579071,
 							"pos": 0.845455,
 							"r": 0.78125
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.357422,
-							"pos": 1,
-							"r": 0.635417
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.35742199420929,
+							"pos": 1.0,
+							"r": 0.635416984558105
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -24833.0,
 			"type": "colorize"
 		},
 		{
 			"name": "perlin_1",
 			"node_position": {
-				"x": 110.633789,
+				"x": 110.6337890625,
 				"y": -143.5
 			},
 			"parameters": {
-				"iterations": 7,
+				"iterations": 7.0,
 				"persistence": 0.55,
-				"scale_x": 4,
-				"scale_y": 4
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": -24541.0,
 			"type": "perlin"
 		},
 		{
 			"name": "blend_2",
 			"node_position": {
-				"x": 690.633789,
+				"x": 690.6337890625,
 				"y": 201.5
 			},
 			"parameters": {
 				"amount": 0.4,
-				"blend_type": 0
+				"blend_type": 0.0
 			},
+			"seed": 57671.0,
 			"type": "blend"
 		},
 		{
 			"name": "perlin_2",
 			"node_position": {
-				"x": 232.633789,
-				"y": 40
+				"x": 232.6337890625,
+				"y": 40.0
 			},
 			"parameters": {
-				"iterations": 6,
+				"iterations": 6.0,
 				"persistence": 0.65,
-				"scale_x": 4,
-				"scale_y": 4
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": 13360.0,
 			"type": "perlin"
 		},
 		{
 			"name": "normal_map_0",
 			"node_position": {
-				"x": 724.633789,
+				"x": 724.6337890625,
 				"y": 345.5
 			},
 			"parameters": {
-				"amount": 0.15,
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.99,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 757.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "blend_1",
 			"node_position": {
-				"x": 707.633789,
-				"y": -68
+				"x": 707.6337890625,
+				"y": -68.0
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": -62175.0,
 			"type": "blend"
 		},
 		{
 			"name": "blend_0",
 			"node_position": {
-				"x": 222,
+				"x": 222.0,
 				"y": 265.5
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 2
+				"amount": 1.0,
+				"blend_type": 2.0
 			},
+			"seed": 65003.0,
 			"type": "blend"
 		},
 		{
 			"name": "uniform_1",
 			"node_position": {
-				"x": 753,
-				"y": 116
+				"x": 753.0,
+				"y": 116.0
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"r": 0,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0,
 					"type": "Color"
 				}
 			},
+			"seed": 35419.0,
 			"type": "uniform"
 		},
 		{
 			"name": "uniform_0",
 			"node_position": {
-				"x": 540,
-				"y": 234
+				"x": 540.0,
+				"y": 234.0
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				}
 			},
+			"seed": 42382.0,
 			"type": "uniform"
 		},
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 454.633789,
+				"x": 454.6337890625,
 				"y": -189.5
 			},
 			"parameters": {
@@ -389,111 +400,107 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
 							"r": 0.515625
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.145455,
 							"r": 0.25
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.445455,
 							"r": 0.515625
 						},
 						{
-							"a": 1,
-							"b": 0.013184,
-							"g": 0.013184,
+							"a": 1.0,
+							"b": 0.0131839998066425,
+							"g": 0.0131839998066425,
 							"pos": 0.745455,
 							"r": 0.28125
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0.322917
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.322917014360428
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -12359.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_1",
 			"node_position": {
-				"x": 461.329102,
-				"y": -116.699997
+				"x": 461.3291015625,
+				"y": -116.699996948242
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.034912,
-							"g": 0.129532,
-							"pos": 0,
+							"a": 1.0,
+							"b": 0.0349120013415813,
+							"g": 0.129531994462013,
+							"pos": 0.0,
 							"r": 0.203125
 						},
 						{
-							"a": 1,
-							"b": 0.038791,
-							"g": 0.074319,
-							"pos": 1,
-							"r": 0.114583
+							"a": 1.0,
+							"b": 0.0387910008430481,
+							"g": 0.0743189975619316,
+							"pos": 1.0,
+							"r": 0.114583000540733
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -2721.0,
 			"type": "colorize"
 		},
 		{
 			"name": "combine_0",
 			"node_position": {
-				"x": 942.329102,
+				"x": 942.3291015625,
 				"y": -55.5
 			},
-			"parameters": {
-				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
-					"type": "Color"
-				},
-				"name": 0
-			},
+			"parameters": {},
+			"seed": -33829.0,
 			"type": "combine"
 		},
 		{
 			"name": "perlin_0",
 			"node_position": {
-				"x": -20,
+				"x": -20.0,
 				"y": 279.5
 			},
 			"parameters": {
-				"iterations": 6,
+				"iterations": 6.0,
 				"persistence": 0.7,
-				"scale_x": 20,
-				"scale_y": 3
+				"scale_x": 20.0,
+				"scale_y": 3.0
 			},
+			"seed": -28541.0,
 			"type": "perlin"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "UklGRp4GAABXRUJQVlA4WAoAAAAQAAAALwAALwAAQUxQSJQCAAANoCNteyJJevXrV9HAMpNX7Q9UrMd4gGEea5ksZmYGi3n3AG12ZIzVFT0X4BmrrOXdqqiUUlooyNIJImICmFOsBzh//bn89tcvAK6K1C9SVmbLdb1uM1Y0ZXysX6yVaIx1aRmvObyDqe3OZd3edRt/+PQkGmqR5K945gZIFWIwJFLELu3cv/LMWWPifFry8D0QxFomGoxAjK2Dj374ZtIwjxtd9BN4dcwrksL6lzZvGzg/mxtu+gavDeo0msLNn+xZdX4WN7z2PXyHuo36S5fvP+L8NB1teo/QZoEuNIv7VzVMkvKibwgtFqqhubxnIHFC4id8mwWrv/STbYn/q38Y32Hhzt+8+U0NIOUV96BkqLz04VmJSHwa38jB+PWPPCtRymtuQMlSObhyUmx1GN/Iw/jOvk+tNzuwZGrZ+UPJFlI2kpY2rnEdVTZU9rqCHln3+nSRfITusfObmHwMl43XR7LuyLkVJh9Du0n2vzXbyWSTzGj8l3TIeRh/GV+WTDbJDOBYN0o2UY5Bv0fOfSius/lYCljbuBQlk2iP/YErf9hZ2Uwq+z2u4tN9nWSySA3/FVXUkysHg2YR9HO0JPLsI+uTySA1xq8QIerZD18KmkHQx9ASCObNzTd7tzDfKY4az/9N2vbJpUEXFNo/34lJE6IO9iw3gy4ktKo70JLJwa3eXzS9W4BvV9fhRkz37sj9y5d6NTWl0Pn5DtyQWb1b3fPJzXg1NaTQ0OJO3JDZvQ62bX5pPUFkjhidjh87io6YN0h688NHD7ZIFWIwJFLEWgmfv4wxJfNH9OwzK/t3LlkmGozAse+/BPWJWoPIyU9/2Hhdr3tZp81oODjWL/4AjSV1xyi2XCv6x8bSZBz5v6tKZgdWUDgg5AMAAPATAJ0BKjAAMAA+fS6SR6SioaE422wAkA+JbACxJUF+AcQo4/w/mQ22xJrg3oM2xnmA88j8QPcZvDXoAeWv7L0+XZYFAjgbQXSQ4ve9MM66Bvq7/q+4b0Uv2U9hb9XVORRtSqH+yns1PlxzHWqF4BDS/e6aShIJJb4lgMPIRhwroqr5HFa9dWO8z4MJVAXn745ph3aFzmy5znd7kNaE2NxPXV3Ya91dgAD+/rdYnQEMJ072A9VCFOg+MRh9YwLfK97Nn0QpTBtWxMrOuAA2FnxZ6hLuMUUxgrkFQCp6m+otpcoQL0Pg0aFjVYyy7AeJbDcRLa7AHx6YckWr1BnF5e712rQx2Ui6JxfM/sU2nfM2D/A26cVC4nBygqgrFT4R0u8igiRGxmYtLI7t45zBrBcHAPNNJX/9O8A5OfxyTN+489K2py2dxMlCvWjyn8JUgir7586YhX5r/ICV3F4mo7n12yCMEzPbObRL0HzLIGmtv9nIRAd6FMHmDN/3tpNWWXyluBsZHyqvTDYZJfyq8LF6XVjinQVqnqrhweW7cziVrFej2ao922XXGzfDszp0yuG5TB3PKvI55loTqI1/BYASF4Dw5NUBzjXThwCNP1wAez//vUfNc5iwaOgx/JqSPl1YY2UF3PfvUtaJ7Jof4mFrDpY7kOp3ENTCiGETirwKgGRjf+mWXhENXureExI9n/QXXzelfHyGC6k8kt0+xbLk43lvM1sd0fK/HiA+ton+JQAXO6ZcvQH0RB4qgX/1IS2UYo3Uq0erGHnLY5HgSBeRUlEQRtm7+b/YJ2BavVRqF5eNV4txSlYy+p+Znygs8HRkEBkYJkcKiVTmwx2FIJHpECdsO0Lvff/C3v72f/9oJanalzEjruOHmm1BYakeFhxA5xcOGOzjXYzjRxQH7OPZcm+Qdp8YNRi1+SzD2inNRnJTqODe+SqQMynlokE+q18Nsvm9+bPIuxxJ5ZRtYUKxubXkQxbVAsY7uGMzGyl258Hvo6DQrK2U+2SPVUq267/59mylP6ulpDcBRw1i79yjMDduwKn/gLiu/Kdvhzx0awP6VdeLbVJ6fQSNLY/5PUnaxGeqKP+DeIsh6uPAtl6hdqveXcRzklhUxtBtlByW7u4pBTPB8FupDDBINvqsnt7c8goypfR5kNd5Z5xc5sYLp+cv5FPlrSojuZjCaX+EGpEcue+s2WQuWyRvPF3DTf3g6NvkEwJJjHp4hIw0erdS+Um9CO4oYHktZLPEDQ5HJghoeyhM0136pvFuyPDCX9BLbAjDbLJRcO4+t+P1Aace+LiF4xgZKUxZtnUKpT5rPEwAAA==",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

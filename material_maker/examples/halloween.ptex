@@ -74,35 +74,39 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "49",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 593,
-				"y": -325
+				"x": 593.0,
+				"y": -325.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1.0,
 				"depth_scale": 0.3,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal_scale": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": -6028.0,
 			"type": "material"
 		},
 		{
@@ -187,83 +191,89 @@
 				}
 			],
 			"label": "Face",
+			"longdesc": "",
 			"name": "graph",
 			"node_position": {
-				"x": 111.13147,
-				"y": 63.364738
+				"x": 111.131469726562,
+				"y": 63.3647384643555
 			},
 			"nodes": [
 				{
 					"name": "shape",
 					"node_position": {
 						"x": -411.5,
-						"y": -220
+						"y": -220.0
 					},
 					"parameters": {
 						"edge": 0.051546,
 						"radius": 0.106667,
-						"shape": 1,
-						"sides": 3
+						"shape": 1.0,
+						"sides": 3.0
 					},
+					"seed": 63007.0,
 					"type": "shape"
 				},
 				{
 					"name": "transform_2",
 					"node_position": {
 						"x": -413.5,
-						"y": -84
+						"y": -84.0
 					},
 					"parameters": {
 						"repeat": false,
-						"rotate": 180,
-						"scale_x": 1,
-						"scale_y": 1,
-						"translate_x": 0,
-						"translate_y": 0
+						"rotate": 180.0,
+						"scale_x": 1.0,
+						"scale_y": 1.0,
+						"translate_x": 0.0,
+						"translate_y": 0.0
 					},
+					"seed": 13649.0,
 					"type": "transform"
 				},
 				{
 					"name": "transform",
 					"node_position": {
 						"x": -225.5,
-						"y": -294
+						"y": -294.0
 					},
 					"parameters": {
 						"repeat": false,
-						"rotate": 0,
-						"scale_x": 1,
-						"scale_y": 1,
+						"rotate": 0.0,
+						"scale_x": 1.0,
+						"scale_y": 1.0,
 						"translate_x": 0.13,
 						"translate_y": -0.24
 					},
+					"seed": 23323.0,
 					"type": "transform"
 				},
 				{
 					"name": "blend",
 					"node_position": {
 						"x": -105.5,
-						"y": -81
+						"y": -81.0
 					},
 					"parameters": {
-						"amount": 1,
-						"blend_type": 9
+						"amount": 1.0,
+						"blend_type": 9.0
 					},
+					"seed": 50150.0,
 					"type": "blend"
 				},
 				{
 					"name": "pattern",
 					"node_position": {
 						"x": -424.5,
-						"y": 135
+						"y": 135.0
 					},
 					"parameters": {
-						"mix": 0,
-						"x_scale": 4,
-						"x_wave": 1,
-						"y_scale": 1,
-						"y_wave": 1
+						"mix": 0.0,
+						"x_scale": 4.0,
+						"x_wave": 1.0,
+						"y_scale": 1.0,
+						"y_wave": 1.0
 					},
+					"seed": -35793.0,
 					"type": "pattern"
 				},
 				{
@@ -274,12 +284,13 @@
 					},
 					"parameters": {
 						"repeat": false,
-						"rotate": 0,
+						"rotate": 0.0,
 						"scale_x": 0.5,
 						"scale_y": 0.2,
 						"translate_x": -0.035,
 						"translate_y": 0.25
 					},
+					"seed": -51934.0,
 					"type": "transform"
 				},
 				{
@@ -290,30 +301,32 @@
 					},
 					"parameters": {
 						"repeat": false,
-						"rotate": 0,
+						"rotate": 0.0,
 						"scale_x": 0.5,
 						"scale_y": 0.2,
 						"translate_x": 0.035,
 						"translate_y": 0.25
 					},
+					"seed": -37544.0,
 					"type": "transform"
 				},
 				{
 					"name": "blend_2",
 					"node_position": {
-						"x": 195.654541,
+						"x": 195.654541015625,
 						"y": 265.25
 					},
 					"parameters": {
-						"amount": 1,
-						"blend_type": 9
+						"amount": 1.0,
+						"blend_type": 9.0
 					},
+					"seed": 46484.0,
 					"type": "blend"
 				},
 				{
 					"name": "colorize",
 					"node_position": {
-						"x": 198.654541,
+						"x": 198.654541015625,
 						"y": 154.25
 					},
 					"parameters": {
@@ -321,328 +334,332 @@
 							"interpolation": 1,
 							"points": [
 								{
-									"a": 1,
-									"b": 0,
-									"g": 0,
+									"a": 1.0,
+									"b": 0.0,
+									"g": 0.0,
 									"pos": 0.209091,
-									"r": 0
+									"r": 0.0
 								},
 								{
-									"a": 1,
-									"b": 1,
-									"g": 1,
+									"a": 1.0,
+									"b": 1.0,
+									"g": 1.0,
 									"pos": 0.436364,
-									"r": 1
+									"r": 1.0
 								}
 							],
 							"type": "Gradient"
 						}
 					},
+					"seed": 4448.0,
 					"type": "colorize"
 				},
 				{
 					"name": "blend_3",
 					"node_position": {
-						"x": 177.654541,
+						"x": 177.654541015625,
 						"y": 28.25
 					},
 					"parameters": {
-						"amount": 1,
-						"blend_type": 9
+						"amount": 1.0,
+						"blend_type": 9.0
 					},
+					"seed": 33907.0,
 					"type": "blend"
 				},
 				{
+					"generic_size": 1,
 					"name": "mirror",
 					"node_position": {
-						"x": 459.654541,
+						"x": 459.654541015625,
 						"y": 120.25
 					},
 					"parameters": {
-						"direction": 0,
-						"offset": 0
+						"direction": 0.0,
+						"flip_sides": false,
+						"offset": 0.0
 					},
+					"seed": 52461.0,
 					"type": "mirror"
 				},
 				{
 					"name": "gen_inputs",
 					"node_position": {
 						"x": -724.5,
-						"y": 38.772728
+						"y": 38.7727279663086
 					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
+					"parameters": {},
+					"ports": [],
+					"seed": -910.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": 759.654541,
-						"y": 38.772728
+						"x": 759.654541015625,
+						"y": 38.7727279663086
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
 							"type": "rgba"
 						}
 					],
+					"seed": 17615.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -266.716522,
-						"y": -594
+						"x": -266.716522216797,
+						"y": -594.0
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
+					"seed": 21604.0,
 					"type": "remote",
-					"widgets": [
-
-					]
+					"widgets": []
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 32334.0,
+			"shortdesc": "",
 			"type": "graph"
 		},
 		{
 			"name": "pattern",
 			"node_position": {
-				"x": -45.994606,
-				"y": -298.009094
+				"x": -45.9946060180664,
+				"y": -298.009094238281
 			},
 			"parameters": {
-				"mix": 0,
-				"x_scale": 8,
-				"x_wave": 0,
-				"y_scale": 4,
-				"y_wave": 4
+				"mix": 0.0,
+				"x_scale": 8.0,
+				"x_wave": 0.0,
+				"y_scale": 4.0,
+				"y_wave": 4.0
 			},
+			"seed": 31067.0,
 			"type": "pattern"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": 180.245361,
-				"y": -386.92511
+				"x": 180.245361328125,
+				"y": -386.925109863281
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.481818,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -57422.0,
 			"type": "colorize"
 		},
 		{
 			"name": "normal_map",
 			"node_position": {
-				"x": 320.245361,
-				"y": -267.92511
+				"x": 320.245361328125,
+				"y": -267.925109863281
 			},
 			"parameters": {
-				"amount": 0.5,
-				"param0": 10,
+				"param0": 10.0,
 				"param1": 0.185,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": -59339.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "perlin",
 			"node_position": {
-				"x": -222.799255,
-				"y": -154.92511
+				"x": -222.799255371094,
+				"y": -154.925109863281
 			},
 			"parameters": {
-				"iterations": 1,
+				"iterations": 1.0,
 				"persistence": 0.5,
-				"scale_x": 4,
-				"scale_y": 2
+				"scale_x": 4.0,
+				"scale_y": 2.0
 			},
+			"seed": 64632.0,
 			"type": "perlin"
 		},
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 95.200745,
-				"y": -152.92511
+				"x": 95.2007446289062,
+				"y": -152.925109863281
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
+							"a": 1.0,
+							"b": 0.0,
 							"g": 0.4375,
-							"pos": 0,
-							"r": 1
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0.072917,
-							"g": 0.565429,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 0.0729169994592667,
+							"g": 0.565428972244263,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -35863.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_3",
 			"node_position": {
-				"x": 258.305359,
-				"y": -59.92511
+				"x": 258.305358886719,
+				"y": -59.9251098632812
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.130208,
-							"g": 0.130208,
-							"pos": 0,
-							"r": 0.130208
+							"a": 1.0,
+							"b": 0.130208000540733,
+							"g": 0.130208000540733,
+							"pos": 0.0,
+							"r": 0.130208000540733
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -23813.0,
 			"type": "colorize"
 		},
 		{
 			"name": "transform",
 			"node_position": {
-				"x": 281.277344,
-				"y": 42.32489
+				"x": 281.27734375,
+				"y": 42.3248901367188
 			},
 			"parameters": {
 				"repeat": false,
-				"rotate": 0,
+				"rotate": 0.0,
 				"scale_x": 0.4,
 				"scale_y": 0.4,
-				"translate_x": 0,
-				"translate_y": 0
+				"translate_x": 0.0,
+				"translate_y": 0.0
 			},
+			"seed": 10541.0,
 			"type": "transform"
 		},
 		{
 			"name": "blend",
 			"node_position": {
-				"x": 561.277344,
-				"y": 43.32489
+				"x": 561.27734375,
+				"y": 43.3248901367188
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 9
+				"amount": 1.0,
+				"blend_type": 9.0
 			},
+			"seed": 12996.0,
 			"type": "blend"
 		},
 		{
 			"name": "colorize_4",
 			"node_position": {
-				"x": 395.277344,
-				"y": -121.67511
+				"x": 395.27734375,
+				"y": -121.675109863281
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.272727,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
+							"a": 1.0,
 							"b": 0.515625,
-							"g": 0.984863,
+							"g": 0.984862983226776,
 							"pos": 0.572727,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -1198.0,
 			"type": "colorize"
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
+				"a": 1.0,
+				"b": 0.0,
 				"g": 0.5,
-				"r": 1,
+				"r": 1.0,
 				"type": "Color"
 			},
 			"name": "comment",
 			"node_position": {
-				"x": 40.787872,
-				"y": -50.572266
+				"x": 40.7878723144531,
+				"y": -50.572265625
 			},
-			"parameters": {
-				"size": 4
-			},
+			"parameters": {},
+			"seed": -56554.0,
 			"size": {
-				"x": 148,
-				"y": 69
+				"x": 148.0,
+				"y": 69.0
 			},
 			"text": "Best viewed on \"Sphere\" mesh",
 			"title": "Comment",
 			"type": "comment"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }
