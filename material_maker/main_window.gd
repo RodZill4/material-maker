@@ -1520,8 +1520,8 @@ func _on_Tip_Timer_timeout():
 # Add dialog
 
 func add_dialog(dialog : Window):
-	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
 	if mm_globals.get_config("dialog_dim_background"):
+		var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
 		add_child(background)
 		dialog.tree_exited.connect(background.queue_free)
 	add_child(dialog)
