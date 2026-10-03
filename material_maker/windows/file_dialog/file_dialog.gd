@@ -12,7 +12,19 @@ enum Thumbnail {
 	PROJECT,
 }
 
+func _context_menu_about_to_popup(menu : PopupMenu, root : Control) -> void:
+	menu.position = root.get_screen_transform() * root.get_local_mouse_position()
+
+func _fix_context_menu() -> void:
+	if not get_tree().root.gui_embed_subwindows and mm_globals.ui_scale_factor() > 1.0:
+		for m in get_children(true):
+			if m is PopupMenu:
+				m.about_to_popup.connect(
+						_context_menu_about_to_popup.bind(m, get_child(0, true)))
+				break
+
 func _ready() -> void:
+	_fix_context_menu()
 	load_fav_recents()
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
 		ok_button_text = tr("Save")
