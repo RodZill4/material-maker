@@ -356,12 +356,11 @@ func _on_Cancel_pressed() -> void:
 	queue_free()
 
 func _notification(what: int) -> void:
-	match what:
-		NOTIFICATION_THEME_CHANGED:
-			var theme_path : String = mm_globals.main_window.theme.resource_path
-			if "dark" in theme_path:
+	if what == NOTIFICATION_THEME_CHANGED:
+		match mm_globals.current_theme():
+			mm_globals.DEFAULT_DARK:
 				$BG.color = Color("0b0b0c")
-			elif "classic" in theme_path:
+			mm_globals.CLASSIC:
 				$BG.color = Color("1e2330")
-			else:
+			mm_globals.DEFAULT_LIGHT:
 				$BG.color = Color("eaeaea")

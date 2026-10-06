@@ -15,6 +15,7 @@ position = Vector2i(0, 36)
 size = Vector2i(700, 450)
 exclusive = true
 script = ExtResource("2")
+metadata/android_fullscreen_dim = true
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1807450959]
 anchors_preset = 15
@@ -159,6 +160,7 @@ step = 0.01
 float_only = true
 
 [node name="GuiUseNativeFileDialogs" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=912910531]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiUseNativeFileDialogs" unique_id=1637894285]
@@ -193,6 +195,7 @@ flat = false
 config_variable = "dialog_dim_background"
 
 [node name="GuiSingleWindowMode" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2099467585]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiSingleWindowMode" unique_id=721519803]
@@ -200,7 +203,7 @@ layout_mode = 2
 mouse_filter = 1
 text = "Single window mode (requires restart)"
 
-[node name="GuiSingleWindowMode" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiSingleWindowMode" unique_id=1386250423 instance=ExtResource("1")]
+[node name="SingleWindowMode" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiSingleWindowMode" unique_id=1386250423 instance=ExtResource("1")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -368,6 +371,24 @@ min_value = 1.0
 max_value = 20.0
 step = 1.0
 float_only = true
+
+[node name="KeepScreenOn" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1389077131]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/KeepScreenOn" unique_id=1745336321]
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Whether screen should stay on after a period of inactivity (based on OS settings)"
+mouse_filter = 1
+text = "Keep Screen On"
+
+[node name="KeepScreenOn" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/KeepScreenOn" unique_id=760988835 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "On"
+flat = false
+config_variable = "keep_screen_on"
 
 [node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1280062657]
 custom_minimum_size = Vector2(0, 10)
@@ -611,6 +632,71 @@ tooltip_text = "Whether to save export parameters in the export animation dialog
 text = "On"
 flat = false
 config_variable = "remember_anim_export"
+
+[node name="Touch" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=881994305]
+visible = false
+layout_mode = 2
+theme_type_variation = &"MM_PreferenceTab"
+metadata/_tab_index = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch" unique_id=276816290]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TouchNodeActions" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer" unique_id=1309858269]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchNodeActions" unique_id=895456211]
+layout_mode = 2
+text = "Enable node actions panel (requires restart)"
+
+[node name="NodeActions" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchNodeActions" unique_id=307131792 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "A touch-friendly panel that provides access to common actions
+(such as delete, minimize, randomize etc.) for selected node(s) in graph panel.
+
+This is enabled by default on Android."
+text = "On"
+flat = false
+config_variable = "touch_node_actions"
+
+[node name="TouchOptimizations" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer" unique_id=315705879]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchOptimizations" unique_id=1640622729]
+layout_mode = 2
+text = "Enable touch optimizations (requires restart)"
+
+[node name="TouchOptimize" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchOptimizations" unique_id=1259798418 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, this increases the touch area of scrollbars, makes vertical seperation between popup menu items
+larger, enables a touch dragger for panel splits etc. to increase usability on smaller screens.
+
+This is enabled by default on Android."
+text = "On"
+flat = false
+config_variable = "touch_optimization"
+
+[node name="TouchFullScreen" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer" unique_id=860528142]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchFullScreen" unique_id=93076913]
+layout_mode = 2
+text = "Enable full screen"
+
+[node name="FullScreen" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchFullScreen" unique_id=1590147791 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, this extends the window towards screen edges."
+text = "On"
+flat = false
+config_variable = "touch_full_screen"
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=245791047]
 layout_mode = 2

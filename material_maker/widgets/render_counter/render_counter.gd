@@ -53,6 +53,9 @@ func _ready() -> void:
 	# GPU RAM tooltip
 	$GpuRam.tooltip_text = "Adapter: %s\nVendor: %s" % [ RenderingServer.get_video_adapter_name(), RenderingServer.get_video_adapter_vendor() ]
 
+	if OS.get_name() == "Android":
+		mm_touch.handle_tap_show_tooltip($GpuRam)
+
 func on_counter_change(count : int, pending : int) -> void:
 	if pending == 0:
 		$ProgressBar.max_value = 1

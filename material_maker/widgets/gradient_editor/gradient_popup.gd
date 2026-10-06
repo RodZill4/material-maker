@@ -1,3 +1,4 @@
+class_name GradientPopup
 extends Control
 
 signal updated(value, merge_undos)

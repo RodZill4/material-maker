@@ -24,6 +24,10 @@ func _fix_context_menu() -> void:
 				break
 
 func _ready() -> void:
+	if OS.get_name() == "Android":
+		OS.request_permissions()
+		mm_touch.make_dialog_fullscreen(self)
+
 	_fix_context_menu()
 	load_fav_recents()
 	if file_mode == FileMode.FILE_MODE_SAVE_FILE:
@@ -34,7 +38,7 @@ func _ready() -> void:
 
 	setup_thumbnail_callbacks()
 
-	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs")
+	use_native_dialog = mm_globals.get_config("ui_use_native_file_dialogs") and not OS.get_name() == "Android"
 	content_scale_factor = mm_globals.ui_scale_factor()
 
 	min_size = get_contents_minimum_size().max(Vector2i(750, 500)) * content_scale_factor
@@ -45,8 +49,8 @@ func _ready() -> void:
 			left_panel = n.get_child(1).get_children()[0]
 			favorites_list = left_panel.get_child(0).get_child(1)
 			recents_list = left_panel.get_child(1).get_child(1)
-			favorites_list.gui_input.connect(_on_favorites_list_gui_input)
-			recents_list.gui_input.connect(_on_recents_list_gui_input)
+			favorites_list.gui_input.connect(_on_recent_faves_list_gui_input.bind(favorites_list))
+			recents_list.gui_input.connect(_on_recent_faves_list_gui_input.bind(recents_list))
 
 			# setup display list/thumbnail buttons signals
 			var thumb_list_btns : HBoxContainer = n.get_child(1).get_child(1).get_child(0).get_child(3)
@@ -55,23 +59,23 @@ func _ready() -> void:
 			thumbnail_button.pressed.connect(set_thumbnail_mode_callback)
 			list_button.pressed.connect(set_list_mode_callback)
 
-func _on_favorites_list_gui_input(event : InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
-		if not favorites_list.get_selected_items().is_empty():
-			var fav = get_favorite_list()
-			fav.remove_at(favorites_list.get_selected_items()[0])
-			favorites_list.remove_item(favorites_list.get_selected_items()[0])
-			set_favorite_list(fav)
-			left_panel.accept_event()
+func _on_recent_faves_list_gui_input(event : InputEvent, list : ItemList) -> void:
+	if _should_delete_recents_faves(event) and not list.get_selected_items().is_empty():
+		var list_data = get_recent_list() if list == recents_list else get_favorite_list()
+		list_data.remove_at(list.get_selected_items()[0])
+		list.remove_item(list.get_selected_items()[0])
+		if list == recents_list:
+			set_recent_list(list_data)
+		else:
+			set_favorite_list(list_data)
+		left_panel.accept_event()
 
-func _on_recents_list_gui_input(event : InputEvent) -> void:
+func _should_delete_recents_faves(event : InputEvent) -> bool:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_DELETE:
-		if not recents_list.get_selected_items().is_empty():
-			var recents = get_recent_list()
-			recents.remove_at(recents_list.get_selected_items()[0])
-			recents_list.remove_item(recents_list.get_selected_items()[0])
-			set_recent_list(recents)
-			left_panel.accept_event()
+		return true
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		return OS.get_name() == "Android"
+	return false
 
 func _on_FileDialog_file_selected(path) -> void:
 	emit_signal("return_paths", [ path ])
@@ -86,7 +90,7 @@ func _on_FileDialog_popup_hide() -> void:
 	emit_signal("return_paths", [ ])
 
 func select_files() -> Array:
-	mm_globals.main_window.add_dialog(self)
+	mm_globals.main_window.add_dialog(self, OS.get_name() == "Android")
 	hide()
 	popup_centered()
 	var result = await self.return_paths

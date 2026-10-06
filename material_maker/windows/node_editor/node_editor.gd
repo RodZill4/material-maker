@@ -143,7 +143,8 @@ func _on_Functions_text_changed():
 				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
 
 func _on_Sizer_minimum_size_changed():
-	size = $Sizer.get_combined_minimum_size() + Vector2(4, 4)
+	if OS.get_name() != "Android":
+		size = $Sizer.get_combined_minimum_size() + Vector2(4, 4)
 
 # OK/Apply/Cancel buttons
 
@@ -159,12 +160,11 @@ func _on_Cancel_pressed() -> void:
 	queue_free()
 
 func _notification(what: int) -> void:
-	match what:
-		NOTIFICATION_THEME_CHANGED:
-			var theme_path : String = mm_globals.main_window.theme.resource_path
-			if "dark" in theme_path:
+	if what == NOTIFICATION_THEME_CHANGED:
+		match mm_globals.current_theme():
+			mm_globals.DEFAULT_DARK:
 				$BG.color = Color("0b0b0c")
-			elif "classic" in theme_path:
+			mm_globals.CLASSIC:
 				$BG.color = Color("1e2330")
-			else:
+			mm_globals.DEFAULT_LIGHT:
 				$BG.color = Color("eaeaea")

@@ -11,14 +11,15 @@
 [ext_resource type="Script" uid="uid://bxwor0k6svci8" path="res://material_maker/panels/graph_edit/graph_view_menu.gd" id="8_nl2qi"]
 [ext_resource type="Script" uid="uid://pqxjwlcff5ko" path="res://material_maker/panels/graph_edit/graph_align_menu.gd" id="8_r5hxx"]
 [ext_resource type="ButtonGroup" uid="uid://biv6we3po8wbb" path="res://material_maker/line_style_btn_group.tres" id="10_lbgjg"]
+[ext_resource type="Script" uid="uid://c7hvi7bvtgwbd" path="res://material_maker/panels/graph_edit/graph_actions_menu.gd" id="12_qnupl"]
 
-[sub_resource type="Shader" id="Shader_r5hxx"]
+[sub_resource type="Shader" id="Shader_qnupl"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qnupl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uk6aw"]
 resource_local_to_scene = true
-shader = SubResource("Shader_r5hxx")
+shader = SubResource("Shader_qnupl")
 
 [sub_resource type="InputEventKey" id="InputEventKey_r5hxx"]
 device = -1
@@ -45,8 +46,8 @@ keycode = 93
 events = [SubResource("InputEventKey_lbgjg")]
 
 [node name="ProjectsPanel" type="Control" unique_id=235293066]
-clip_contents = true
 custom_minimum_size = Vector2(100, 100)
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,7 +76,7 @@ theme_type_variation = &"MM_ProjectsBackground"
 
 [node name="Preview2D" parent="BackgroundPreviews" unique_id=1300413402 instance=ExtResource("2_oiaqi")]
 visible = false
-material = SubResource("ShaderMaterial_qnupl")
+material = SubResource("ShaderMaterial_uk6aw")
 layout_mode = 1
 offset_right = 64.0
 offset_bottom = 64.0
@@ -419,6 +420,26 @@ icon_alignment = 1
 script = ExtResource("7_qnupl")
 icon_name = "arrange_nodes"
 
+[node name="ActionsMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=1156734553]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+script = ExtResource("12_qnupl")
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/ActionsMenu" unique_id=1846468046]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="KnifeTool" type="Button" parent="MenuBar/HBox/ActionsMenu/HBox" unique_id=409994758]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Knife tool"
+toggle_mode = true
+shortcut_in_tooltip = false
+icon_alignment = 1
+script = ExtResource("7_qnupl")
+icon_name = "knife"
+
 [node name="AlignMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=243111021]
 layout_mode = 2
 size_flags_vertical = 0
@@ -522,6 +543,7 @@ Scroll to zoom the 3D Preview."
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Thickness/LineThickness" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_thickness_value_changed"]
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu" method="_on_line_curvature_value_changed"]
 [connection signal="value_changed" from="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel/VBoxContainer/VBoxContainer2/Curvature/LineCurvature" to="MenuBar/HBox/MainGraphMenuBar/HBox/ViewMenu/ViewMenuPanel" method="_on_line_curvature_value_changed"]
+[connection signal="toggled" from="MenuBar/HBox/ActionsMenu/HBox/KnifeTool" to="MenuBar/HBox/ActionsMenu" method="_on_knife_tool_toggled"]
 [connection signal="pressed" from="MenuBar/HBox/AlignMenu/HBox/AlignStart" to="MenuBar/HBox/AlignMenu" method="_on_align_start_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/AlignMenu/HBox/AlignCenter" to="MenuBar/HBox/AlignMenu" method="_on_align_center_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/AlignMenu/HBox/AlignEnd" to="MenuBar/HBox/AlignMenu" method="_on_align_end_pressed"]

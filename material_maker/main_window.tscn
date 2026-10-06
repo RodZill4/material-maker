@@ -104,10 +104,10 @@ func _on_Timer_timeout():
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -160.0
-offset_top = -21.0
-offset_right = 430.0
-offset_bottom = 311.0
+offset_left = -54.99
+offset_top = 18.19
+offset_right = 535.01
+offset_bottom = 350.19
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -141,29 +141,35 @@ config_section = "brush_lib"
 
 [node name="EnvironmentManager" parent="." unique_id=2064810205 instance=ExtResource("13")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=257055939]
+[node name="MainContainer" type="MarginContainer" parent="." unique_id=1229937872]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer" unique_id=257055939]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TopBar" type="HBoxContainer" parent="VBoxContainer" unique_id=1671198557]
+[node name="TopBar" type="HBoxContainer" parent="MainContainer/VBoxContainer" unique_id=1671198557]
 layout_mode = 2
 
-[node name="Menu" type="HBoxContainer" parent="VBoxContainer/TopBar" unique_id=1359206080]
+[node name="Menu" type="HBoxContainer" parent="MainContainer/VBoxContainer/TopBar" unique_id=1359206080]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Layout" type="HBoxContainer" parent="VBoxContainer" unique_id=1034731775]
+[node name="Layout" type="HBoxContainer" parent="MainContainer/VBoxContainer" unique_id=1034731775]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("2")
 
-[node name="FlexibleLayout" parent="VBoxContainer/Layout" unique_id=2116126116 instance=ExtResource("6_ygla4")]
+[node name="FlexibleLayout" parent="MainContainer/VBoxContainer/Layout" unique_id=2116126116 instance=ExtResource("6_ygla4")]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_undock = true
 
-[node name="Main" parent="VBoxContainer/Layout/FlexibleLayout" unique_id=1335562493 instance=ExtResource("7_ih0ps")]
+[node name="Main" parent="MainContainer/VBoxContainer/Layout/FlexibleLayout" unique_id=1335562493 instance=ExtResource("7_ih0ps")]
+unique_name_in_owner = true
 layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
@@ -175,13 +181,13 @@ offset_bottom = 32.0
 grow_horizontal = 1
 grow_vertical = 1
 
-[node name="ConsoleResizer" type="Control" parent="VBoxContainer" unique_id=2025564150]
+[node name="ConsoleResizer" type="Control" parent="MainContainer/VBoxContainer" unique_id=2025564150]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_default_cursor_shape = 9
 
-[node name="ResizerBar" type="PanelContainer" parent="VBoxContainer/ConsoleResizer" unique_id=606354979]
+[node name="ResizerBar" type="PanelContainer" parent="MainContainer/VBoxContainer/ConsoleResizer" unique_id=606354979]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 1
 anchors_preset = 14
@@ -194,28 +200,29 @@ size_flags_horizontal = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2cpsi")
 
-[node name="Console" type="HBoxContainer" parent="VBoxContainer" unique_id=9505509]
+[node name="Console" type="HBoxContainer" parent="MainContainer/VBoxContainer" unique_id=9505509]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 script = ExtResource("8_1tb00")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Console" unique_id=223286998]
+[node name="RichTextLabel" type="RichTextLabel" parent="MainContainer/VBoxContainer/Console" unique_id=223286998]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 bbcode_enabled = true
 scroll_following = true
 
-[node name="StatusBar" type="PanelContainer" parent="VBoxContainer" unique_id=1997079745]
+[node name="StatusBar" type="PanelContainer" parent="MainContainer/VBoxContainer" unique_id=1997079745]
 layout_mode = 2
 theme_type_variation = &"MM_StatusBarBackground"
 
-[node name="HBox" type="HBoxContainer" parent="VBoxContainer/StatusBar" unique_id=860693887]
+[node name="HBox" type="HBoxContainer" parent="MainContainer/VBoxContainer/StatusBar" unique_id=860693887]
 layout_mode = 2
 
-[node name="Tip" type="RichTextLabel" parent="VBoxContainer/StatusBar/HBox" unique_id=2056192730]
+[node name="Tip" type="RichTextLabel" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=2056192730]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -223,9 +230,9 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/Tip" unique_id=654728135]
+[node name="Timer" type="Timer" parent="MainContainer/VBoxContainer/StatusBar/HBox/Tip" unique_id=654728135]
 
-[node name="UndoRedoLabel" type="Label" parent="VBoxContainer/StatusBar/HBox" unique_id=984075942]
+[node name="UndoRedoLabel" type="Label" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=984075942]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -233,51 +240,51 @@ size_flags_horizontal = 4
 text = "Undo/Redo action added"
 script = SubResource("6")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/StatusBar/HBox/UndoRedoLabel" unique_id=955898904]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MainContainer/VBoxContainer/StatusBar/HBox/UndoRedoLabel" unique_id=955898904]
 libraries/ = SubResource("AnimationLibrary_kxf7t")
 
-[node name="ConsoleButton" type="TextureButton" parent="VBoxContainer/StatusBar/HBox" unique_id=1288312618]
+[node name="ConsoleButton" type="TextureButton" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=1288312618]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Show console"
 texture_normal = SubResource("8")
 
-[node name="VSeparator1" type="VSeparator" parent="VBoxContainer/StatusBar/HBox" unique_id=398470012]
+[node name="VSeparator1" type="VSeparator" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=398470012]
 layout_mode = 2
 
-[node name="Share" parent="VBoxContainer/StatusBar/HBox" unique_id=798130657 instance=ExtResource("12")]
+[node name="Share" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=798130657 instance=ExtResource("12")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/StatusBar/HBox" unique_id=46983986]
+[node name="VSeparator2" type="VSeparator" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=46983986]
 layout_mode = 2
 
-[node name="ClipBoardAnalyzer" type="HBoxContainer" parent="VBoxContainer/StatusBar/HBox" unique_id=500957646]
+[node name="ClipBoardAnalyzer" type="HBoxContainer" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=500957646]
 layout_mode = 2
 script = SubResource("9")
 
-[node name="Clipboard" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=1605541228]
+[node name="Clipboard" type="TextureRect" parent="MainContainer/VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=1605541228]
 visible = false
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = SubResource("8")
 
-[node name="Contents" type="TextureRect" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=795860269]
+[node name="Contents" type="TextureRect" parent="MainContainer/VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=795860269]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 texture = ExtResource("15")
 
-[node name="Timer" type="Timer" parent="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=358487496]
+[node name="Timer" type="Timer" parent="MainContainer/VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" unique_id=358487496]
 wait_time = 0.5
 autostart = true
 
-[node name="VSeparator3" type="VSeparator" parent="VBoxContainer/StatusBar/HBox" unique_id=1220214490]
+[node name="VSeparator3" type="VSeparator" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=1220214490]
 layout_mode = 2
 
-[node name="RenderCounter" parent="VBoxContainer/StatusBar/HBox" unique_id=57795798 instance=ExtResource("11")]
+[node name="RenderCounter" parent="MainContainer/VBoxContainer/StatusBar/HBox" unique_id=57795798 instance=ExtResource("11")]
 layout_mode = 2
 
 [node name="NodeFactory" type="Node" parent="." unique_id=738541505]
@@ -286,12 +293,12 @@ script = ExtResource("9")
 [node name="AddNodePopup" parent="." unique_id=142473620 instance=ExtResource("7")]
 visible = false
 
-[connection signal="layout_changed" from="VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
-[connection signal="gui_input" from="VBoxContainer/ConsoleResizer" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
-[connection signal="gui_input" from="VBoxContainer/ConsoleResizer/ResizerBar" to="VBoxContainer/Console" method="_on_console_resizer_gui_input"]
-[connection signal="meta_clicked" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
-[connection signal="meta_hover_ended" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_hover_ended"]
-[connection signal="meta_hover_started" from="VBoxContainer/Console/RichTextLabel" to="VBoxContainer/Console" method="_on_rich_text_label_meta_hover_started"]
-[connection signal="timeout" from="VBoxContainer/StatusBar/HBox/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
-[connection signal="pressed" from="VBoxContainer/StatusBar/HBox/ConsoleButton" to="VBoxContainer/Console" method="toggle"]
-[connection signal="timeout" from="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer/Timer" to="VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" method="_on_Timer_timeout"]
+[connection signal="layout_changed" from="MainContainer/VBoxContainer/Layout/FlexibleLayout" to="." method="update_menus"]
+[connection signal="gui_input" from="MainContainer/VBoxContainer/ConsoleResizer" to="MainContainer/VBoxContainer/Console" method="_on_console_resizer_gui_input"]
+[connection signal="gui_input" from="MainContainer/VBoxContainer/ConsoleResizer/ResizerBar" to="MainContainer/VBoxContainer/Console" method="_on_console_resizer_gui_input"]
+[connection signal="meta_clicked" from="MainContainer/VBoxContainer/Console/RichTextLabel" to="MainContainer/VBoxContainer/Console" method="_on_rich_text_label_meta_clicked"]
+[connection signal="meta_hover_ended" from="MainContainer/VBoxContainer/Console/RichTextLabel" to="MainContainer/VBoxContainer/Console" method="_on_rich_text_label_meta_hover_ended"]
+[connection signal="meta_hover_started" from="MainContainer/VBoxContainer/Console/RichTextLabel" to="MainContainer/VBoxContainer/Console" method="_on_rich_text_label_meta_hover_started"]
+[connection signal="timeout" from="MainContainer/VBoxContainer/StatusBar/HBox/Tip/Timer" to="." method="_on_Tip_Timer_timeout"]
+[connection signal="pressed" from="MainContainer/VBoxContainer/StatusBar/HBox/ConsoleButton" to="MainContainer/VBoxContainer/Console" method="toggle"]
+[connection signal="timeout" from="MainContainer/VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer/Timer" to="MainContainer/VBoxContainer/StatusBar/HBox/ClipBoardAnalyzer" method="_on_Timer_timeout"]

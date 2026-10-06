@@ -6,9 +6,13 @@ const WEBSITE_ADDRESS : String = "https://www.materialmaker.org"
 
 const STD_GENDEF_PATH = "res://addons/material_maker/nodes"
 
+const DOC_ADDRESS : String = "https://rodzill4.github.io/material-maker/doc"
+
 static func get_resource_dir() -> String:
 	if Engine.is_editor_hint():
 		return ProjectSettings.globalize_path("res://material_maker")
+	if OS.get_name() == "Android":
+		return "user:/"
 	return OS.get_executable_path().get_base_dir()
 
 static func get_nodes_paths() -> Array:

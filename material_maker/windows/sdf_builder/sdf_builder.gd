@@ -45,9 +45,16 @@ func _ready():
 
 	await get_tree().process_frame
 	content_scale_factor = mm_globals.ui_scale_factor()
-	min_size = Vector2(800, 400) * content_scale_factor
-	size = min_size
-	move_to_center()
+
+	if OS.get_name() == "Android":
+		mm_touch.make_dialog_fullscreen(self)
+		show()
+		$TopContainer/Main/Tree/AddMenuHint.text = "Tap and hold to add shapes"
+	else:
+		min_size = Vector2(800, 400) * content_scale_factor
+		size = min_size
+		move_to_center()
+	_update_tree_menu_hint_visibility()
 
 func get_next_index() -> int:
 	next_index += 1
@@ -266,6 +273,7 @@ func rebuild_scene(item : TreeItem = tree.get_root()) -> Dictionary:
 	var scene_list : Array = []
 	for child in item.get_children():
 		scene_list.push_back(rebuild_scene(child))
+	_update_tree_menu_hint_visibility()
 	if item == tree.get_root():
 		scene = scene_list
 		return {}
@@ -376,6 +384,7 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	item.add_button(2, BUTTON_SHOWN, 0)
 	set_preview(scene)
 	item.select(0)
+	_update_tree_menu_hint_visibility()
 
 func _on_Tree_item_edited():
 	var item : TreeItem = tree.get_selected()
@@ -744,3 +753,7 @@ func _input(event):
 
 func _on_VBoxContainer_minimum_size_changed():
 	min_size = $TopContainer.get_combined_minimum_size()+Vector2(4, 4)
+
+func _update_tree_menu_hint_visibility() -> void:
+	var should_show : bool = tree.get_root().get_child_count() == 0
+	$TopContainer/Main/Tree/AddMenuHint.visible = should_show

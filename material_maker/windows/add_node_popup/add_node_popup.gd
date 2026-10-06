@@ -13,6 +13,10 @@ var qc_slot : int
 var qc_slot_type : int
 var qc_is_output : bool
 
+## Whether a drag has initiated from item's icon.
+var dragging_from_icon : bool = false
+const ICON_DRAG_MARGIN : int = 12
+
 @onready var library_manager = get_node("/root/MainWindow/NodeLibraryManager")
 
 func get_current_graph():
@@ -20,6 +24,14 @@ func get_current_graph():
 
 
 func _ready() -> void:
+	if mm_globals.get_config("touch_optimization"):
+		%List.add_theme_constant_override("v_separation", 4)
+		$PanelContainer.custom_minimum_size.y = 325
+		size.y = 325
+		%List.icon_scale = 1.5
+		for i in $PanelContainer/VBoxContainer/Buttons.get_children():
+			i.custom_minimum_size *= 1.25
+
 	filter.connect("text_changed", Callable(self, "update_list"))
 	filter.connect("text_submitted", Callable(self, "filter_entered"))
 	%List.set_drag_forwarding(get_list_drag_data, Callable(), Callable())
@@ -201,23 +213,58 @@ func _on_filter_gui_input(event: InputEvent) -> void:
 		%List.grab_focus()
 		%List.select(1)
 
+var click_start : int
 
-func _on_list_gui_input(event: InputEvent) -> void:
+func _on_list_gui_input(event : InputEvent) -> void:
 	if event.is_action("ui_up"):
 		if not %List.item_count or %List.is_selected(0):
 			%Filter.grab_focus()
 
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
-		if idx != -1:
-			_on_list_item_activated(idx)
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			click_start = Time.get_ticks_msec()
+		else:
+			# releasing a pan gesture also triggers a left click release
+			# use click down/up duration to tell them part
+			if Time.get_ticks_msec() - click_start > 150 and\
+					event.device == InputEvent.DEVICE_ID_EMULATION:
+				return
+			activate_item_at_current_position()
+	elif event is InputEventScreenTouch and event.index == 0:
+		var icon_width : float = get_icon_size().x + ICON_DRAG_MARGIN
+		dragging_from_icon = event.pressed and event.position.x < icon_width
+		if event.pressed:
+			%Filter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			%Filter.mouse_filter = Control.MOUSE_FILTER_STOP
+	elif event is InputEventScreenDrag and event.index == 0:
+		# allow drag to only occur on text
+		if event.position.x > get_icon_size().x + ICON_DRAG_MARGIN and not dragging_from_icon:
+			%List.get_v_scroll_bar().value -= event.relative.y
+		%List.accept_event()
 
+func activate_item_at_current_position() -> void:
+	var idx: int = %List.get_item_at_position(%List.get_local_mouse_position(), true)
+	if idx != -1:
+		_on_list_item_activated(idx)
 
-func get_list_drag_data(m_position):
+func get_list_drag_data(m_position : Vector2) -> Variant:
+	if OS.get_name() == "Android":
+		if m_position.x > get_icon_size().x + ICON_DRAG_MARGIN:
+			return ""
+
 	var data = %List.get_item_metadata(%List.get_item_at_position(m_position))
 	var texture_rect : TextureRect = TextureRect.new()
 	texture_rect.texture = data.icon
 	texture_rect.scale = Vector2(0.35, 0.35)
+
+	if mm_globals.get_config("touch_optimization"):
+		texture_rect.scale = Vector2(0.8, 0.8)
+		var offset : Vector2 = texture_rect.texture.get_size()
+		texture_rect.offset_transform_enabled = true
+		texture_rect.offset_transform_visual_only = false
+		texture_rect.offset_transform_position = -offset * 0.5
+
 	%List.set_drag_preview(texture_rect)
 	return data.item.tree_item
 
@@ -241,3 +288,6 @@ func _on_sort_menu_pressed() -> void:
 		panel.show()
 	else:
 		panel.popup(Rect2(panel.get_mouse_position() * content_scale_factor, panel.size))
+
+func get_icon_size() -> Vector2:
+	return %List.fixed_icon_size * %List.icon_scale

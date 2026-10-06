@@ -16,7 +16,10 @@ func _ready() -> void:
 	if !parameters.has("size"):
 		parameters.size = 4
 	if color == null:
-		color = Color.WHITE if "light" in mm_globals.main_window.theme.resource_path else Color.BLACK
+		if mm_globals.current_theme() == mm_globals.DEFAULT_LIGHT:
+			color = Color.WHITE
+		else:
+			color = Color.BLACK
 
 func get_type() -> String:
 	return "comment"

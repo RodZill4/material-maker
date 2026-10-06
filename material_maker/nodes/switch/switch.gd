@@ -1,3 +1,4 @@
+class_name MMGraphSwitch
 extends MMGraphNodeGeneric
 
 var fixed_lines : int = 0

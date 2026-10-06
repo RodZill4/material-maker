@@ -154,6 +154,13 @@ func _ready() -> void:
 			continue
 		patrons_list.add_item(p)
 
+	if OS.get_name() == "Android":
+		mm_touch.make_dialog_fullscreen(self)
+		show()
+	else:
+		hide()
+		popup_centered()
+
 func _name_control_gui_input(event : InputEvent, url : String) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		open_url(url)
@@ -165,7 +172,8 @@ func open_url(url) -> void:
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_THEME_CHANGED:
-			var is_light_theme : bool = "light" in mm_globals.main_window.theme.resource_path
+			var is_light_theme : bool = (
+					mm_globals.current_theme() == mm_globals.DEFAULT_LIGHT)
 			%EpicLogo.material.set_shader_parameter("invert", is_light_theme)
 			$BG.color.a = float(is_light_theme)
 			for logo in $HBoxContainer/MarginContainer/SocialNetworks.get_children():

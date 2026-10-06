@@ -161,6 +161,8 @@ func read_hdr(index : int, url : String) -> bool:
 	while progress_window != null:
 		await get_tree().process_frame
 	environment_textures[index].erase("hdri")
+	if OS.get_name() == "Android" and android_set_hdr(index, url):
+		return true
 	if set_hdr(index, base_dir+"/environments/hdris/"+url.get_file()):
 		return true
 	if set_hdr(index, "res://material_maker/environments/hdris/"+url.get_file()):
@@ -203,7 +205,7 @@ func read_hdr(index : int, url : String) -> bool:
 func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
 
-func set_hdr(index, hdr_path) -> bool:
+func set_hdr(index : int, hdr_path : String) -> bool:
 	if not FileAccess.file_exists(hdr_path):
 		return false
 	print("Setting hdr "+hdr_path)
@@ -263,3 +265,13 @@ func do_update_thumbnail() -> void:
 			emit_signal("thumbnail_updated", index, t)
 	thumbnail_update_list = []
 	rendering = false
+
+func android_set_hdr(index : int, hdr_path : String) -> bool:
+	var res : String = "res://material_maker/environments/hdris"
+	for f in DirAccess.get_files_at(res):
+		var file_name : String = f.trim_suffix(".import")
+		if file_name == hdr_path.get_file():
+			print("Setting hdr "+ res.path_join(file_name))
+			environment_textures[index].hdri = load(res.path_join(file_name))
+			return true
+	return false
