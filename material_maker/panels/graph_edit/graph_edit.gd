@@ -952,10 +952,12 @@ func remove_selection() -> void:
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
 
 func minimize_selection() -> void:
+	undoredo.start_group()
 	for c in get_children():
 		if c is GraphElement and c.selected:
 			if c.has_method("on_minimize_pressed"):
 				c.on_minimize_pressed()
+	undoredo.end_group()
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
