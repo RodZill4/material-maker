@@ -94,14 +94,6 @@ func get_graph_edit():
 	return self
 
 
-func do_zoom(factor : float):
-	accept_event()
-	var old_zoom : float = zoom
-	zoom *= factor
-	var global_mouse_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
-	await get_tree().process_frame
-	scroll_offset += (zoom/old_zoom-1.0)*old_zoom*global_mouse_position
-
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
 
@@ -237,20 +229,7 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		# reverted to default GraphEdit behavior
-		if false and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
-			if event.control:
-				event.control = false
-			elif !event.shift_pressed:
-				event.control = true
-				do_zoom(1.1)
-		elif false and event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.is_pressed():
-			if event.control:
-				event.control = false
-			elif !event.shift_pressed:
-				event.control = true
-				do_zoom(1.0/1.1)
-		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			valid_drag_cut_entry = true
 			if event.is_command_or_control_pressed() and event.shift_pressed:
 				create_portals()
