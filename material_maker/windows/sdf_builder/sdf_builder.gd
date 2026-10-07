@@ -31,7 +31,7 @@ signal editor_window_closed
 
 const BUTTON_SHOWN = preload("res://material_maker/icons/eye_open.tres")
 const BUTTON_HIDDEN = preload("res://material_maker/icons/eye_closed.tres")
-
+var button_drag_hint : Texture2D
 
 func _ready():
 	tree.set_hide_root(true)
@@ -48,12 +48,20 @@ func _ready():
 
 	if OS.get_name() == "Android":
 		mm_touch.make_dialog_fullscreen(self, true)
+		var top_spacer : Control = Control.new()
+		top_spacer.custom_minimum_size.y = 24
+		$TopContainer.add_child(top_spacer)
+		$TopContainer.move_child(top_spacer, 0)
 		$TopContainer/Main/Tree/AddMenuHint.text = "Tap and hold to add shapes"
 	else:
 		min_size = Vector2(800, 400) * content_scale_factor
 		size = min_size
 		move_to_center()
 	_update_tree_menu_hint_visibility()
+
+func _notification(what : int) -> void:
+	if what == NOTIFICATION_THEME_CHANGED:
+		button_drag_hint = get_theme_icon("drag_hint", "MM_Icons")
 
 func get_next_index() -> int:
 	next_index += 1
@@ -160,9 +168,9 @@ func update_node_parameters_grid():
 	if button != null:
 		button.disabled = true
 
-func node_parameter_exists_already(name : String, param_index : int) -> bool:
+func node_parameter_exists_already(_name : String, param_index : int) -> bool:
 	for pi in range($GenSDF.node_parameters.size()):
-		if pi != param_index and $GenSDF.node_parameters[pi].name == name:
+		if pi != param_index and $GenSDF.node_parameters[pi].name == _name:
 			return true
 	return false
 
@@ -265,6 +273,7 @@ func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 		item.set_icon(0, icon)
 	i.index = get_next_index()
 	item.add_button(2, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
+	add_mobile_drag_hint_button(item, 1)
 	item.set_meta("scene", i)
 	set_sdf_scene(i.children, item)
 	if i.has("collapsed") and i.collapsed:
@@ -392,20 +401,23 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
 	item.add_button(2, BUTTON_SHOWN, 0)
+	add_mobile_drag_hint_button(item, 1)
 	set_preview(scene)
 	item.select(0)
 	_update_tree_menu_hint_visibility()
 
 func _on_Tree_item_edited():
 	var item : TreeItem = tree.get_selected()
+	if not item:
+		return
 	item.set_editable(0, false)
 	var item_scene : Dictionary = item.get_meta("scene")
-	var name : String = item.get_text(0)
-	if name == "" or name == item_scene.type:
+	var _name : String = item.get_text(0)
+	if _name == "" or _name == item_scene.type:
 		item_scene.erase("name")
 		item.set_text(0, item_scene.type)
 	else:
-		item_scene.name = name
+		item_scene.name = _name
 
 func _on_Tree_item_collapsed(item):
 	var item_scene : Dictionary = item.get_meta("scene")
@@ -642,16 +654,18 @@ func _on_Tree_item_selected():
 			preview_3d.setup_controls("n%d" % index)
 			$GenSDF.set_parameter("index", float(index))
 
-func _on_tree_button_clicked(item, _column, _id, mouse_button_index):
+func _on_tree_button_clicked(item : Variant, _column : Variant,
+		id : int, mouse_button_index : Variant):
 	if mouse_button_index != MOUSE_BUTTON_LEFT:
 		return
 	var item_scene : Dictionary = item.get_meta("scene")
-	if item_scene.has("hidden") and item_scene.hidden:
-		item_scene.erase("hidden")
-		item.set_button(2, 0, BUTTON_SHOWN)
-	else:
-		item_scene.hidden = true
-		item.set_button(2, 0, BUTTON_HIDDEN)
+	if id == 0:
+		if item_scene.has("hidden") and item_scene.hidden:
+			item_scene.erase("hidden")
+			item.set_button(2, 0, BUTTON_SHOWN)
+		else:
+			item_scene.hidden = true
+			item.set_button(2, 0, BUTTON_HIDDEN)
 	set_preview(scene)
 	_on_Tree_item_selected()
 
@@ -677,16 +691,17 @@ func duplicate_item(item : TreeItem, parent : TreeItem, index : int = -1):
 	new_item.set_text(0, item.get_text(0))
 	new_item.set_icon(0, item.get_icon(0))
 	new_item.add_button(2, item.get_button(2, 0), 0)
+	add_mobile_drag_hint_button(new_item, 1)
 	new_item.set_meta("scene", item.get_meta("scene"))
 	for c in item.get_children():
 		duplicate_item(c, new_item)
 	return new_item
 
-func move_item(item, dest, position):
+func move_item(item, dest, target_position):
 	var source_transform : Transform3D = get_item_transform_3d(item)
 	var dest_transform : Transform3D = get_item_transform_3d(dest)
 	var new_transform : Transform3D = dest_transform.affine_inverse()*source_transform
-	var new_item : TreeItem = duplicate_item(item, dest, position)
+	var new_item : TreeItem = duplicate_item(item, dest, target_position)
 	item.get_parent().remove_child(item)
 	# update copy's transform parameters
 	rebuild_scene()
@@ -705,8 +720,8 @@ func move_item(item, dest, position):
 	parameters["n%d_position_z" % index] = new_transform.origin.z
 	set_node_parameters($GenSDF, parameters)
 
-func _on_Tree_drop_item(item, dest, position):
-	move_item(item, dest, position)
+func _on_Tree_drop_item(item, dest, target_position):
+	move_item(item, dest, target_position)
 
 
 # OK/Apply/Cancel buttons
@@ -767,3 +782,12 @@ func _on_VBoxContainer_minimum_size_changed():
 func _update_tree_menu_hint_visibility() -> void:
 	var should_show : bool = tree.get_root().get_child_count() == 0
 	$TopContainer/Main/Tree/AddMenuHint.visible = should_show
+
+#region android specific
+
+func add_mobile_drag_hint_button(item : TreeItem, id : int = -1) -> void:
+	if OS.get_name() == "Android":
+		item.add_button(3, button_drag_hint, id)
+		item.set_icon_modulate(3, Color.RED)
+
+#endregion
