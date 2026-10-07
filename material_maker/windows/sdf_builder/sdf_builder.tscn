@@ -56,6 +56,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 select_mode = 1
+auto_tooltip = false
 script = ExtResource("4")
 
 [node name="AddMenuHint" type="Label" parent="TopContainer/Main/Tree" unique_id=909843201]
