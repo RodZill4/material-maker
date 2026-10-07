@@ -118,8 +118,7 @@ func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_col
 
 	if bg_color != Color.TRANSPARENT or force_color:
 		custom_bg_color = true
-
-		e.background_mode = Environment.BG_COLOR
+		e.background_mode = Environment.BG_CLEAR_COLOR
 		e.background_color = bg_color
 		e.background_energy_multiplier = 1
 	elif env.show_color:
