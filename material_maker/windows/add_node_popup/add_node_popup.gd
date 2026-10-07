@@ -175,6 +175,10 @@ func check_quick_connect(obj : Dictionary) -> bool:
 	return true
 
 func update_list(filter_text : String = "") -> void:
+	var isize : Vector2i = %List.fixed_icon_size
+	var empty : Image = Image.create_empty(isize.x, isize.y, false, Image.FORMAT_RGBA8)
+	var placeholder_icon = ImageTexture.create_from_image(empty)
+
 	filter_text = filter_text.to_lower()
 	%List.clear()
 	var idx : int = 0
@@ -192,7 +196,8 @@ func update_list(filter_text : String = "") -> void:
 		var _name : String = obj.display_name
 		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
 
-		%List.add_item(_name, i.icon)
+		var icon : ImageTexture = i.icon if i.icon else placeholder_icon
+		%List.add_item(_name, icon)
 		%List.set_item_custom_fg_color(idx, color)
 		%List.set_item_metadata(idx, i)
 		%List.set_item_tooltip_enabled(idx, false)
@@ -249,23 +254,32 @@ func activate_item_at_current_position() -> void:
 		_on_list_item_activated(idx)
 
 func get_list_drag_data(m_position : Vector2) -> Variant:
+	var idx : int = %List.get_item_at_position(m_position)
 	if OS.get_name() == "Android":
 		if m_position.x > get_icon_size().x + ICON_DRAG_MARGIN:
 			return ""
 
-	var data = %List.get_item_metadata(%List.get_item_at_position(m_position))
-	var texture_rect : TextureRect = TextureRect.new()
-	texture_rect.texture = data.icon
-	texture_rect.scale = Vector2(0.35, 0.35)
+	var preview : Control
+	var data : Dictionary = %List.get_item_metadata(idx)
+
+	if data.icon:
+		preview = TextureRect.new()
+		preview.texture = data.icon
+		preview.scale = Vector2(0.35, 0.35)
+	else:
+		preview = Label.new()
+		preview.text = %List.get_item_text(idx)
 
 	if mm_globals.get_config("touch_optimization"):
-		texture_rect.scale = Vector2(0.8, 0.8)
-		var offset : Vector2 = texture_rect.texture.get_size()
-		texture_rect.offset_transform_enabled = true
-		texture_rect.offset_transform_visual_only = false
-		texture_rect.offset_transform_position = -offset * 0.5
+		var offset : Vector2
+		preview.scale = Vector2.ONE * (1.5 if preview is Label else 0.8)
+		if preview is TextureRect:
+			offset = preview.texture.get_size() if data.icon else preview.size
+			preview.offset_transform_enabled = true
+			preview.offset_transform_visual_only = false
+			preview.offset_transform_position = -offset * 0.5
 
-	%List.set_drag_preview(texture_rect)
+	%List.set_drag_preview(preview)
 	return data.item.tree_item
 
 
