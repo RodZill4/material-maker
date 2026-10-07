@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/facebook.svg-2f550f44fa3ea7594c7d29449485f705
 base_scale=1.0
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true

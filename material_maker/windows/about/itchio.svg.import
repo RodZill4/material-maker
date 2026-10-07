@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/itchio.svg-63f445caf1335fc89e7a0da6ed05f43a.d
 base_scale=1.0
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true
