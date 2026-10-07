@@ -62,7 +62,7 @@ func _ready() -> void:
 	gui_input.connect(self._on_gui_input)
 	update.call_deferred()
 
-func init_buttons():
+func init_buttons() -> void:
 	super.init_buttons()
 	minimize_button = add_button(MINIMIZE_ICON, on_minimize_pressed)
 	minimize_button.tooltip_text = tr("Minimize the node")
