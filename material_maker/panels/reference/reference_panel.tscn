@@ -34,13 +34,11 @@ allow_unpress = true
 
 [node name="ReferencePanel" type="Panel" unique_id=329764457]
 clip_children = 2
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 171.0
 offset_bottom = 237.0
-grow_horizontal = 2
-grow_vertical = 2
 theme_type_variation = &"MM_PanelBackground"
 script = ExtResource("1")
 

@@ -45,16 +45,15 @@ reflected_light_source = 2
 environment = SubResource("Environment_qxxdb")
 camera_attributes = SubResource("CameraAttributesPractical_g4ldw")
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_j6uuq"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_jy7sc"]
 
 [node name="Preview3D" unique_id=308580129 instance=ExtResource("1")]
 custom_minimum_size = Vector2(250, 200)
+anchors_preset = -1
 offset_left = -1.0
 offset_top = -2.0
 offset_right = 248.0
 offset_bottom = 253.0
-grow_horizontal = 2
-grow_vertical = 2
 script = ExtResource("3")
 click_material = SubResource("2")
 
@@ -97,16 +96,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Speed_Pause" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" parent_id_path=PackedInt32Array(530040303) index="0" unique_id=1158744206]
-button_group = SubResource("ButtonGroup_j6uuq")
+button_group = SubResource("ButtonGroup_jy7sc")
 
 [node name="Speed_Slow" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" parent_id_path=PackedInt32Array(530040303) index="1" unique_id=1454681268]
-button_group = SubResource("ButtonGroup_j6uuq")
+button_group = SubResource("ButtonGroup_jy7sc")
 
 [node name="Speed_Medium" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" parent_id_path=PackedInt32Array(530040303) index="2" unique_id=1024390903]
-button_group = SubResource("ButtonGroup_j6uuq")
+button_group = SubResource("ButtonGroup_jy7sc")
 
 [node name="Speed_Fast" parent="MainMenu/HBox/ModelMenu/ModelMenuPanel/VBoxContainer/Model/RotationSpeeds" parent_id_path=PackedInt32Array(530040303) index="3" unique_id=1976754458]
-button_group = SubResource("ButtonGroup_j6uuq")
+button_group = SubResource("ButtonGroup_jy7sc")
 
 [connection signal="mouse_entered" from="." to="." method="_on_Preview3D_mouse_entered"]
 [connection signal="resized" from="." to="." method="_on_resized"]

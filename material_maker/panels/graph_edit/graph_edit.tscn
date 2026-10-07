@@ -23,14 +23,12 @@ atlas = ExtResource("2")
 region = Rect2(0, 48, 16, 16)
 
 [node name="GraphEdit" type="GraphEdit" unique_id=909518343 groups=["mm_graphedit"]]
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = -1.0
 offset_right = 1529.0
 offset_bottom = 1193.0
-grow_horizontal = 2
-grow_vertical = 2
 grid_pattern = 1
 right_disconnects = true
 zoom_min = 0.25
