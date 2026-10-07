@@ -22,6 +22,7 @@ const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/prev
 
 const MENU_PROPAGATE_CHANGES : int = 1000
 const MENU_SHARE_NODE : int        = 1001
+const MENU_RENAME_NODE : int       = 1002
 
 const MENU_BUFFER_PAUSE : int  = 0
 const MENU_BUFFER_RESUME : int = 1
@@ -260,8 +261,67 @@ func draw_portgroup_stylebox(first_port : Vector2, last_port : Vector2) -> void:
 	draw_style_box(portgroup_stylebox, Rect2(stylebox_position, stylebox_size))
 
 func set_generator(g) -> void:
+	if generator != null and generator.display_name_changed.is_connected(update_title):
+		generator.display_name_changed.disconnect(update_title)
 	super.set_generator(g)
 	g.rendering_time_updated.connect(self.update_rendering_time)
+	g.display_name_changed.connect(update_title)
+	update_title()
+
+func get_display_title() -> String:
+	return generator.display_name if !generator.display_name.is_empty() else tr(generator.get_type_name())
+
+func update_title() -> void:
+	if generator == null:
+		return
+	title = get_display_title()
+	for child in get_titlebar_hbox().get_children():
+		if child is Label:
+			# Default titles are translated above; user labels must stay literal.
+			child.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+	if generator.minimized or !generator.display_name.is_empty():
+		var font : Font = get_theme_font("default_font")
+		var max_title_width : int = 28 if generator.minimized else 240
+		if font.get_string_size(title).x > max_title_width:
+			for i in range(1, title.length()):
+				if font.get_string_size(title.left(i)+"...").x > max_title_width:
+					title = title.left(i-1)+"..."
+					break
+
+func rename_node() -> void:
+	var graph : MMGraphEdit = get_parent()
+	var target : MMGenBase = generator
+	var initial_title : String = get_display_title()
+	var dialog := ConfirmationDialog.new()
+	dialog.title = tr("Rename node")
+	dialog.content_scale_factor = mm_globals.ui_scale_factor()
+	var content := VBoxContainer.new()
+	var hint := Label.new()
+	hint.text = tr("Node label (leave empty to restore the default):")
+	content.add_child(hint)
+	var field := LineEdit.new()
+	field.text = initial_title
+	field.custom_minimum_size.x = 360
+	content.add_child(field)
+	dialog.add_child(content)
+	dialog.register_text_enter(field)
+	# LineEdit otherwise consumes Escape to end editing before the dialog sees it.
+	field.gui_input.connect(func(event : InputEvent):
+		if event.is_action_pressed("ui_cancel"):
+			field.accept_event()
+			dialog.canceled.emit())
+	dialog.confirmed.connect(func():
+		if field.text != initial_title:
+			graph.set_node_display_name(target, field.text)
+		dialog.queue_free())
+	dialog.canceled.connect(dialog.queue_free)
+	mm_globals.main_window.add_dialog(dialog)
+	dialog.popup_centered()
+	var focus_field := func():
+		field.grab_focus()
+		field.edit()
+		field.select_all()
+	focus_field.call_deferred()
 
 func update_rendering_time(_t : int) -> void:
 	queue_redraw()
@@ -339,12 +399,18 @@ func _on_gui_input(event) -> void:
 				edit_generator()
 	elif event is InputEventMouseMotion:
 		var epos : Vector2 = event.position
-		if Rect2(0.0, 0.0, size.x - 56.0 , 16.0).abs().has_point(epos):
+		if get_titlebar_hbox().get_rect().has_point(epos):
 			var description = generator.get_description()
-			if description != "":
+			if !generator.display_name.is_empty():
+				tooltip_text = generator.display_name + "\n" + tr(generator.get_type_name())
+				if description != "":
+					tooltip_text += "\n" + wrap_string(description)
+			elif description != "":
 				tooltip_text = MMGraphNodeBase.wrap_string(description)
 			elif generator.model != null:
 				tooltip_text = TranslationServer.translate(generator.model)
+			else:
+				tooltip_text = tr(generator.get_type_name())
 			return
 		tooltip_text = ""
 
@@ -404,6 +470,7 @@ func clear_connection_labels() -> void:
 
 func create_context_menu() -> PopupMenu:
 	var menu : PopupMenu = PopupMenu.new()
+	menu.add_item(tr("Rename node..."), MENU_RENAME_NODE, KEY_F2)
 	if generator != null and generator.model == null and (generator is MMGenShader or generator is MMGenGraph):
 		var share_button = mm_globals.main_window.get_share_button()
 		if share_button.can_share():
@@ -414,6 +481,8 @@ func create_context_menu() -> PopupMenu:
 
 func _on_menu_id_pressed(id : int) -> void:
 	match id:
+		MENU_RENAME_NODE:
+			rename_node()
 		MENU_PROPAGATE_CHANGES:
 			var dialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
 			dialog.dialog_text = "Propagate changes from %s to %d nodes?" % [ generator.get_type_name(), get_parent().get_propagation_targets(generator).size() ]
