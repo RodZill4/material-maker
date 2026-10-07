@@ -22,6 +22,7 @@ func _ready() -> void:
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
+	
 
 
 func _draw() -> void:
@@ -69,6 +70,7 @@ func update_color_buttons() -> void:
 			color_button.button_mask = MOUSE_BUTTON_MASK_RIGHT
 			colors.add_child(color_button)
 			if OS.get_name() == "Android":
+				color_button.custom_minimum_size = Vector2i(32, 32)
 				color_button.gui_input.connect(color_button_gui_input.bind(color_button))
 			color_button.focus_entered.connect(self.set_current_color.bind(button_count))
 			color_button.color_changed.connect(self.set_palette_color.bind(button_count))
