@@ -131,6 +131,8 @@ func _on_image_pressed() -> void:
 			file_dialog.title = 'Save Image'
 			file_dialog.add_filter("*.png; PNG image file")
 			file_dialog.add_filter("*.exr; EXR image file")
+			file_dialog.add_filter("*.jpg; JPG image file")
+			file_dialog.add_filter("*.webp; WebP image file")
 
 		file_dialog.current_dir = mm_globals.config.get_value("path", "save_preview", mm_globals.get_home_directory())
 
@@ -168,17 +170,19 @@ func export_notification(text:String) -> void:
 	%ExportNotificationLabel.visible = not text.is_empty()
 
 
-func interpret_file_name(file_name: String, path:="") -> String:
+func interpret_file_name(file_name : String, path : String ="") -> String:
 	if path.is_empty():
 		path = %ExportFolder.text
 
 	if not owner.generator:
 		additional_ids["$name"] = "unnamed"
 
-	var extension := ""
+	var extension : String = ""
 	match %FileType.selected:
 		0: extension += ".png"
 		1: extension += ".exr"
+		2: extension += ".jpg"
+		3: extension += ".webp"
 	
 	var resolution : String
 	if %CustomResolutionSection.visible:
@@ -191,9 +195,9 @@ func interpret_file_name(file_name: String, path:="") -> String:
 	return MMLoader.interpret_file_name(file_name, path, extension, graph_node, additional_ids, resolution)
 
 
-func _on_custom_resolution_x_value_changed(value: Variant) -> void:
+func _on_custom_resolution_x_value_changed(_value : Variant) -> void:
 	update()
 
 
-func _on_custom_resolution_y_value_changed(value: Variant) -> void:
+func _on_custom_resolution_y_value_changed(_value : Variant) -> void:
 	update()
