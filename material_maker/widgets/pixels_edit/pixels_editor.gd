@@ -42,6 +42,8 @@ func set_pixels(p : MMPixels) -> void:
 
 
 func update_color_buttons() -> void:
+	if not is_visible_in_tree():
+		return
 	var palette_size : int = pixels.palette.size()
 	var button_count : int = colors.get_child_count()
 	if palette_size < button_count:
