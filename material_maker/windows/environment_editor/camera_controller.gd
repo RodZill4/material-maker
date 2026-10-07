@@ -56,8 +56,13 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			return true
 	elif event is InputEventPanGesture:
-		camera_rotation2.rotate_x(-0.05*event.delta.y)
-		camera_rotation1.rotate_y(-0.05*event.delta.x)
+		if event.shift_pressed and OS.get_name() == "macOS":
+			var factor : float = 0.0025 * camera_position.position.z
+			camera_target_position.translate(-factor*event.delta.x*camera_position.global_transform.basis.x)
+			camera_target_position.translate(factor*event.delta.y*camera_position.global_transform.basis.y)
+		else:
+			camera_rotation2.rotate_x(-0.05*event.delta.y)
+			camera_rotation1.rotate_y(-0.05*event.delta.x)
 		return true
 	elif event is InputEventMagnifyGesture:
 		camera_position.position.z /= event.factor
