@@ -597,7 +597,20 @@ func get_uid(index : int) -> String:
 		uids[index] = uid
 	return uids[index]
 
+func get_uuid(index : int) -> String:
+	# Same id as get_uid(), in canonical hyphenated (8-4-4-4-12) UUIDv4 form
+	var uid : String = get_uid(index)
+	return uid.substr(0, 8)+"-"+uid.substr(8, 4)+"-"+uid.substr(12, 4)+"-"+uid.substr(16, 4)+"-"+uid.substr(20, 12)
+
 func process_uids(template : String) -> String:
+	var uuid_regexp : RegEx = RegEx.new()
+	uuid_regexp.compile("\\$uuid\\((\\w+)\\)")
+	while true:
+		var result = uuid_regexp.search(template)
+		if ! result:
+			break
+		var uuid = get_uuid(int(result.strings[1]))
+		template = template.replace(result.strings[0], uuid)
 	var uid_regexp : RegEx = RegEx.new()
 	uid_regexp.compile("\\$uid\\((\\w+)\\)")
 	while true:
