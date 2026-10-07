@@ -10,6 +10,15 @@ func _ready():
 	set_column_expand(2, false)
 	set_column_custom_minimum_width(2, 28)
 
+	if mm_globals.get_config("touch_optimization"):
+		add_theme_constant_override("v_separation", 12)
+
+
+
+func _gui_input(event : InputEvent) -> void:
+	if event is InputEventScreenDrag or event is InputEventScreenTouch:
+		accept_event()
+
 func get_sdf_item_type(item : TreeItem) -> Object:
 	if item == null or not item.has_meta("scene"):
 		return null
@@ -29,8 +38,8 @@ func get_nearest_parent(item : TreeItem, type : String) -> TreeItem:
 		item = item.get_parent()
 	return item
 
-func _get_drag_data(position):
-	var item : TreeItem = get_item_at_position(position)
+func _get_drag_data(at_position : Vector2):
+	var item : TreeItem = get_item_at_position(at_position)
 	if item == null:
 		return null
 	else:
@@ -62,10 +71,10 @@ func get_valid_children_types(parent : TreeItem):
 		valid_children_types.push_back(parent_type.item_category)
 	return valid_children_types
 
-func _can_drop_data(position, data):
+func _can_drop_data(at_position : Vector2, data : Variant):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
-		var destination : TreeItem = get_item_at_position(position)
-		if destination != null and get_drop_section_at_position(position) != 0:
+		var destination : TreeItem = get_item_at_position(at_position)
+		if destination != null and get_drop_section_at_position(at_position) != 0:
 			destination = destination.get_parent()
 		if not mm_sdf_builder.scene_get_type(data.item.get_meta("scene")).item_category in get_valid_children_types(destination):
 			return false
@@ -82,10 +91,10 @@ func get_item_index(item : TreeItem) -> int:
 		index += 1
 	return -1
 
-func _drop_data(position, data):
+func _drop_data(at_position : Vector2, data : Variant):
 	if data is Dictionary and data.has("item") and data.item is TreeItem:
-		var item = get_item_at_position(position)
-		match get_drop_section_at_position(position):
+		var item = get_item_at_position(at_position)
+		match get_drop_section_at_position(at_position):
 			0:
 				emit_signal("drop_item", data.item, item, -1)
 			-1:

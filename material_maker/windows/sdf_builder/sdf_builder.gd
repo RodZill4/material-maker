@@ -259,7 +259,10 @@ func add_sdf_item(i : Dictionary, parent_item : TreeItem) -> TreeItem:
 	var item_type = mm_sdf_builder.item_types[mm_sdf_builder.item_ids[i.type]]
 	var item_icon = item_type.get("icon")
 	if item_icon != null:
-		item.set_icon(0, item_icon)
+		var icon : Texture2D = item_icon
+		if mm_globals.get_config("touch_optimization"):
+			icon = resize_icon(item_icon, 24)
+		item.set_icon(0, icon)
 	i.index = get_next_index()
 	item.add_button(2, BUTTON_HIDDEN if i.has("hidden") and i.hidden else BUTTON_SHOWN, 0)
 	item.set_meta("scene", i)
@@ -356,6 +359,11 @@ func _on_menu(id : int, current_item : TreeItem):
 		MENU_DUMP:
 			print(current_item.get_meta("scene"))
 
+func resize_icon(icon : Texture2D, width : int, height = width) -> ImageTexture:
+	var img : Image = icon.get_image()
+	img.resize(width, height)
+	return ImageTexture.create_from_image(img)
+
 func _on_menu_add_shape(id : int, current_item : TreeItem):
 	var shape = mm_sdf_builder.item_types[id]
 	var shape_name = shape.item_type
@@ -376,7 +384,10 @@ func _on_menu_add_shape(id : int, current_item : TreeItem):
 		current_item.get_meta("scene").children.push_back(data)
 	var item_icon = shape.get("icon")
 	if item_icon != null:
-		item.set_icon(0, item_icon)
+		var icon : Texture2D = item_icon
+		if mm_globals.get_config("touch_optimization"):
+			icon = resize_icon(item_icon, 24)
+		item.set_icon(0, icon)
 	data.index = get_next_index()
 	item.set_text(0, shape_name)
 	item.set_meta("scene", data)
