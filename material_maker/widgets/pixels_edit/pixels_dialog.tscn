@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4i6k8ehbdp3d"]
+[gd_scene format=3 uid="uid://b4i6k8ehbdp3d"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/pixels_edit/pixels_dialog.gd" id="1_ohhhw"]
+[ext_resource type="Script" uid="uid://yadmqxchgo1r" path="res://material_maker/widgets/pixels_edit/pixels_dialog.gd" id="1_ohhhw"]
 [ext_resource type="PackedScene" uid="uid://b51634rcdiyr" path="res://material_maker/widgets/pixels_edit/pixels_editor.tscn" id="2_ie4b0"]
 
-[node name="PixelsDialog" type="Window"]
+[node name="PixelsDialog" type="Window" unique_id=1444843000]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
 script = ExtResource("1_ohhhw")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2002619879]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,7 +17,7 @@ offset_top = 5.0
 offset_right = -5.0
 offset_bottom = -5.0
 
-[node name="EditorContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="EditorContainer" type="MarginContainer" parent="VBoxContainer" unique_id=640905477]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -25,23 +27,23 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="PixelsEditor" parent="VBoxContainer/EditorContainer" instance=ExtResource("2_ie4b0")]
+[node name="PixelsEditor" parent="VBoxContainer/EditorContainer" unique_id=1803201388 instance=ExtResource("2_ie4b0")]
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=2105633765]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=579644617]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="OK" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=574628499]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Cancel" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1191231047]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Cancel"
