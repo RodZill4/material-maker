@@ -585,7 +585,7 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 		@warning_ignore("int_as_enum_without_match")
 		menu.add_item("Quick Export", MENU_QUICK_EXPORT, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_E )
 
-func _on_ExportMaterial_id_pressed(id) -> void:
+func _on_ExportMaterial_id_pressed(id : int) -> void:
 	if id == MENU_QUICK_EXPORT:
 		quick_export()
 		return
@@ -602,7 +602,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if export_extension == "":
 		export_material("", profile)
 	else:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+		var dialog : FileDialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
@@ -611,14 +611,22 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		if last_profile_name_slash != -1:
 			profile_name = profile_name.right(-(last_profile_name_slash+1))
 		dialog.add_filter("*."+export_extension+";"+profile_name+" Material")
-		var last_export_path = material_node.get_export_path(profile)
+		var last_export_path : String = material_node.get_export_path(profile)
 		if last_export_path != "":
 			dialog.current_path = last_export_path
 		else:
-			var config_key = export_profile_config_key(profile)
+			var config_key : String = export_profile_config_key(profile)
 			dialog.current_dir = mm_globals.config.get_value("path", config_key, mm_globals.get_home_directory())
+
+		# pre-fill material export filename from project filename
+		var graph : MMGraphEdit = get_current_graph_edit()
+		if graph.generator and graph.generator.has_meta("file_path"):
+			dialog.current_file = graph.generator.get_meta("file_path").get_basename()
+		else:
+			dialog.current_file = tr("unnamed")
+
 		add_child(dialog)
-		var files = await dialog.select_files()
+		var files : Array = await dialog.select_files()
 		if files.size() > 0:
 			export_material(files[0], profile)
 
