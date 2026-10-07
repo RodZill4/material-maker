@@ -5,7 +5,7 @@ var previous_color : Color
 signal color_changed_undo(c, previous)
 
 func _ready():
-	custom_minimum_size = Vector2(24, 24)
+	custom_minimum_size = Vector2(22, 22)
 	connect("color_changed",Callable(self,"on_color_changed"))
 	connect("picker_created",Callable(self,"on_picker_created"))
 	connect("popup_closed",Callable(self,"on_popup_closed"))
