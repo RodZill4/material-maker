@@ -97,6 +97,13 @@ func get_graph_edit():
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
 
+var selection_isolation_candidate : GraphElement
+var selection_isolation_moved : bool = false
+var selection_isolation_motion : Vector2 = Vector2.ZERO
+
+const SELECTION_ISOLATION_DRAG_THRESHOLD := 4.0
+
+
 func get_nodes_under_mouse() -> Array:
 	var array : Array = []
 	for c in get_children():
@@ -132,6 +139,34 @@ func process_port_click(pressed : bool):
 
 
 func _input(event : InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			selection_isolation_candidate = null
+			selection_isolation_moved = false
+			selection_isolation_motion = Vector2.ZERO
+			var local_mouse_position := get_local_mouse_position()
+			if (not has_grab and Rect2(Vector2.ZERO, size).has_point(local_mouse_position)
+					and not event.is_command_or_control_pressed()
+					and not event.shift_pressed and not event.alt_pressed):
+				var clicked_element := get_graph_element_at_position(local_mouse_position)
+				if (clicked_element != null and clicked_element.selected
+						and clicked_element is not MMGraphComment):
+					for c in get_children():
+						if (c is MMGraphComment and c.selected
+								and c.get_rect().encloses(clicked_element.get_rect())):
+							selection_isolation_candidate = clicked_element
+							break
+		else:
+			if selection_isolation_candidate != null and not selection_isolation_moved:
+				call_deferred("isolate_selection", selection_isolation_candidate)
+			selection_isolation_candidate = null
+			selection_isolation_moved = false
+			selection_isolation_motion = Vector2.ZERO
+	elif event is InputEventMouseMotion:
+		if selection_isolation_candidate != null and event.relative.length() > 0.0:
+			selection_isolation_motion += event.relative
+			selection_isolation_moved = selection_isolation_motion.length() > SELECTION_ISOLATION_DRAG_THRESHOLD
+
 	# Handle node grab
 	if has_grab:
 		var selected_nodes := get_selected_nodes()
@@ -1139,6 +1174,25 @@ func _on_ButtonTransmitsSeed_toggled(button_pressed) -> void:
 # Node selection
 
 var highlighting_connections : bool = false
+
+func get_graph_element_at_position(mouse_position : Vector2) -> GraphElement:
+	for i in range(get_child_count() - 1, -1, -1):
+		var graph_element : GraphElement = get_child(i) as GraphElement
+		if graph_element == null or not graph_element.is_visible():
+			continue
+		if Rect2(Vector2.ZERO, graph_element.size).has_point(
+				(mouse_position - graph_element.position) / zoom):
+			return graph_element
+	return null
+
+func isolate_selection(node : GraphElement) -> void:
+	for c in get_children():
+		if c is GraphElement and c != node:
+			c.selected = false
+	node.selected = true
+	if node is GraphNode and node.get_output_port_count():
+		set_current_preview(0, node)
+	mm_globals.main_window.update_menus()
 
 func highlight_connections() -> void:
 	if highlighting_connections:
