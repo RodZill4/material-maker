@@ -329,11 +329,11 @@ func _on_Libraries_about_to_show():
 		if i > 1:
 			unload.add_item(library_manager.get_child(i).library_name, i)
 	if not unload.item_count:
-		unload.add_item("No custom library loaded")
+		unload.add_item(tr("No custom library loaded"))
 		unload.set_item_disabled(0, true)
 	popup.add_separator()
-	popup.add_item("Create library", MENU_CREATE_LIBRARY)
-	popup.add_item("Load library", MENU_LOAD_LIBRARY)
+	popup.add_item(tr("Create library"), MENU_CREATE_LIBRARY)
+	popup.add_item(tr("Load library"), MENU_LOAD_LIBRARY)
 	popup.add_submenu_item("Unload", "Unload")
 	if not popup.window_input.is_connected(_on_Libraries_window_input):
 		popup.window_input.connect(_on_Libraries_window_input.bind(popup))
@@ -440,7 +440,7 @@ func _on_PopupMenu_index_pressed(index):
 			dialog.content_scale_factor = mm_globals.ui_scale_factor()
 			dialog.min_size = Vector2(400, 90) * dialog.content_scale_factor
 			add_child(dialog)
-			var status = await dialog.enter_text("Library item aliases", "Updated aliases for "+item_path, aliases)
+			var status = await dialog.enter_text(tr("Library item aliases"), tr("Updated aliases for %s") % [item_path], aliases)
 			if ! status.ok:
 				return
 			library_manager.set_aliases(item_path, status.text)

@@ -377,14 +377,14 @@ func set_current_mode(mode : String) -> void:
 func create_menu_load_recent(menu) -> void:
 	menu.clear()
 	if recent_files.is_empty():
-		menu.add_item("No items found", 0)
+		menu.add_item(tr("No items found"), 0)
 		menu.set_item_disabled(0, true)
 	else:
 		for i in recent_files.size():
 			menu.add_item(recent_files[i], i)
 		menu.connect_id_pressed(self._on_LoadRecent_id_pressed)
 		menu.add_separator()
-		menu.add_item("Clear recent files", RECENTS_MENU_CLEAR)
+		menu.add_item(tr("Clear recent files"), RECENTS_MENU_CLEAR)
 
 func _on_LoadRecent_id_pressed(id) -> void:
 	match id:
@@ -655,7 +655,7 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
 	var panels = layout.get_panel_list()
 	for i in range(panels.size()):
-		menu.add_check_item(panels[i], i)
+		menu.add_check_item(tr(panels[i]), i)
 		menu.set_item_checked(i, layout.is_panel_visible(panels[i]))
 		if current_mode:
 			menu.set_item_disabled(i, panels[i] in layout.HIDE_PANELS[current_mode])
@@ -663,8 +663,8 @@ func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 
 func create_menu_panels_preset(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
-	menu.add_item("Save Preset", MENU_SAVE_PRESET)
-	menu.add_item("Manage Presets", MENU_MANAGE_PRESETS)
+	menu.add_item(tr("Save Preset"), MENU_SAVE_PRESET)
+	menu.add_item(tr("Manage Presets"), MENU_MANAGE_PRESETS)
 	if not layout.presets.is_empty():
 		menu.add_separator()
 		for id in layout.presets.size():

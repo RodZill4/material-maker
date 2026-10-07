@@ -29,7 +29,7 @@ const CONTRIBUTORS = [
 	{ name="Easynam", contribution="Propagate Changes function in subgraph nodes", url="https://github.com/RodZill4/material-maker/commits/master/?author=easynam" },
 	{ name="Zhibade", contribution="Auto size new comment nodes to current selection", url="https://github.com/RodZill4/material-maker/commits/master/?author=Zhibade" },
 	{ name="paddy-exe", contribution="New modes in the Blend node", url="https://github.com/RodZill4/material-maker/commits/master/?author=paddy-exe" },
-	{ name="Variable", contribution="UI fixes", url="https://github.com/RodZill4/material-maker/commits/master/?author=Variable-ind" },
+	{ name="Variable-ind", contribution="UI fixes", url="https://github.com/RodZill4/material-maker/commits/master/?author=Variable-ind" },
 	{ name="jeremybeier", contribution="Unity export fixes", url="https://github.com/RodZill4/material-maker/commits/master/?author=jeremybeier" },
 	{ name="Caroline Tilly", contribution="Steam trailer production and music for all showreels", url="https://tilcamusic.com/" },
 	{ name="Margot Rindone", contribution="Steam achievements icons", url="https://www.artstation.com/margot_rindone" },
