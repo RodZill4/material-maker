@@ -158,339 +158,368 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "49",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
-			"export_paths": {
-
-			},
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 356,
-				"y": 1343
+				"x": 356.0,
+				"y": 1343.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal": 1,
-				"roughness": 1,
-				"size": 11,
-				"sss": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 0.0
 			},
+			"seed": 16931.0,
 			"type": "material"
 		},
 		{
 			"name": "perlin",
 			"node_position": {
-				"x": -404.399658,
-				"y": 1199.349854
+				"x": -404.399658203125,
+				"y": 1199.34985351562
 			},
 			"parameters": {
-				"iterations": 5,
+				"iterations": 5.0,
 				"persistence": 0.7,
-				"scale_x": 32,
-				"scale_y": 32
+				"scale_x": 32.0,
+				"scale_y": 32.0
 			},
+			"seed": -6213.0,
 			"type": "perlin"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": -371.399658,
-				"y": 1324.349976
+				"x": -371.399658203125,
+				"y": 1324.34997558594
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.118182,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.909091,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -7361.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": -120,
-				"y": 1180
+				"x": -120.0,
+				"y": 1180.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.994792,
-							"g": 0.999512,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 0.994791984558105,
+							"g": 0.999512016773224,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0.885417,
-							"g": 0.989258,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 0.885416984558105,
+							"g": 0.989257991313934,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -37404.0,
 			"type": "colorize"
 		},
 		{
 			"name": "uniform_greyscale",
 			"node_position": {
-				"x": 122.446899,
-				"y": 1231.272949
+				"x": 122.446899414062,
+				"y": 1231.27294921875
 			},
 			"parameters": {
 				"color": 0.31
 			},
+			"seed": 53257.0,
 			"type": "uniform_greyscale"
 		},
 		{
 			"name": "colorize_3",
 			"node_position": {
-				"x": 45.446899,
-				"y": 1704.272949
+				"x": 45.4468994140625,
+				"y": 1704.27294921875
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.663637,
-							"r": 0
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 32475.0,
 			"type": "colorize"
 		},
 		{
 			"name": "occlusion",
 			"node_position": {
-				"x": 19.088623,
-				"y": 1626.272949
+				"x": 19.088623046875,
+				"y": 1626.27294921875
 			},
 			"parameters": {
-				"param0": 10,
-				"param2": 15
+				"param0": 10.0,
+				"param2": 15.0
 			},
+			"seed": 18711.0,
 			"type": "occlusion"
 		},
 		{
 			"name": "colorize_4",
 			"node_position": {
-				"x": -120,
-				"y": 1246
+				"x": -120.0,
+				"y": 1246.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.300774,
-							"pos": 0,
-							"r": 0.458333
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.30077400803566,
+							"pos": 0.0,
+							"r": 0.458332985639572
 						},
 						{
-							"a": 1,
-							"b": 0,
+							"a": 1.0,
+							"b": 0.0,
 							"g": 0.046875,
-							"pos": 1,
+							"pos": 1.0,
 							"r": 0.1875
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -37466.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_5",
 			"node_position": {
-				"x": -120.127869,
-				"y": 1312.013184
+				"x": -120.127868652344,
+				"y": 1312.01318359375
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 0,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0,
-							"r": 1
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0.520833,
-							"g": 0.520833,
-							"pos": 0.036364,
-							"r": 0.520833
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.018172,
+							"r": 1.0
+						},
+						{
+							"a": 1.0,
+							"b": 0.520833015441895,
+							"g": 0.520833015441895,
+							"pos": 0.018192,
+							"r": 0.520833015441895
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -37800.0,
 			"type": "colorize"
 		},
 		{
 			"name": "blend",
 			"node_position": {
-				"x": 117.872131,
-				"y": 1129.013184
+				"x": 117.872131347656,
+				"y": 1129.01318359375
 			},
 			"parameters": {
 				"amount": 0.5,
-				"blend_type": 0
+				"blend_type": 0.0
 			},
+			"seed": 15682.0,
 			"type": "blend"
 		},
 		{
 			"name": "sdf3d_boolean_2_2",
 			"node_position": {
-				"x": -716.264893,
-				"y": 1477.128418
+				"x": -716.264892578125,
+				"y": 1477.12841796875
 			},
 			"parameters": {
-				"op": 0
+				"op": 0.0
 			},
+			"seed": -3959.0,
 			"type": "sdf3d_boolean"
 		},
 		{
 			"name": "normal_map",
 			"node_position": {
-				"x": 52.85556,
-				"y": 1392.238892
+				"x": 52.8555603027344,
+				"y": 1392.23889160156
 			},
 			"parameters": {
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 1.02,
-				"param2": 0,
-				"param4": 1
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 22332.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "blend_2",
 			"node_position": {
-				"x": 30.85556,
-				"y": 1522.238892
+				"x": 30.8555603027344,
+				"y": 1522.23889160156
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 0
+				"amount": 1.0,
+				"blend_type": 0.0
 			},
+			"seed": 41040.0,
 			"type": "blend"
 		},
 		{
 			"name": "colorize_5_2",
 			"node_position": {
-				"x": -190.144485,
-				"y": 1443.488892
+				"x": -190.144485473633,
+				"y": 1443.48889160156
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 0,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0.027272,
-							"r": 1
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.013626,
+							"r": 0.0
+						},
+						{
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.013646,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -7331.0,
 			"type": "colorize"
 		},
 		{
 			"name": "buffer",
 			"node_position": {
-				"x": -382.830994,
-				"y": 1550.222534
+				"x": -382.830993652344,
+				"y": 1550.22253417969
 			},
 			"parameters": {
-				"lod": 0,
-				"size": 11
+				"lod": 0.0,
+				"size": 11.0
 			},
+			"seed": -30288.0,
 			"type": "buffer"
 		},
 		{
 			"name": "blend_3",
 			"node_position": {
-				"x": 116.334427,
-				"y": 1285.834595
+				"x": 116.334426879883,
+				"y": 1285.83459472656
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 3
+				"amount": 1.0,
+				"blend_type": 3.0
 			},
+			"seed": 7945.0,
 			"type": "blend"
 		},
 		{
 			"name": "raymarching",
 			"node_position": {
-				"x": -563.992065,
-				"y": 1480.176514
+				"x": -563.992065429688,
+				"y": 1480.17651367188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -29925.0,
 			"type": "raymarching"
 		},
 		{
@@ -539,23 +568,26 @@
 				}
 			],
 			"label": "Skulls",
+			"longdesc": "",
 			"name": "graph",
 			"node_position": {
-				"x": -875.801453,
-				"y": 1470.12146
+				"x": -875.801452636719,
+				"y": 1470.12145996094
 			},
 			"nodes": [
 				{
+					"generic_size": 1,
 					"name": "sdf3d_translate_4",
 					"node_position": {
-						"x": -987.195313,
-						"y": 1473.797363
+						"x": -987.1953125,
+						"y": 1473.79736328125
 					},
 					"parameters": {
 						"x": 0.4,
 						"y": 0.35,
-						"z": 0
+						"z": 0.0
 					},
+					"seed": -63814.0,
 					"type": "sdf3d_translate"
 				},
 				{
@@ -766,230 +798,255 @@
 						}
 					],
 					"label": "Skull",
+					"longdesc": "",
 					"name": "graph_3",
 					"node_position": {
-						"x": -1141.932495,
-						"y": 1276.712646
+						"x": -1141.93249511719,
+						"y": 1276.71264648438
 					},
 					"nodes": [
 						{
 							"name": "sdf3d_smoothboolean_3",
 							"node_position": {
-								"x": -841.989258,
-								"y": 938.422729
+								"x": -841.9892578125,
+								"y": 938.422729492188
 							},
 							"parameters": {
 								"k": 0.04,
-								"op": 0
+								"op": 0.0
 							},
+							"seed": -16253.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4",
 							"node_position": {
-								"x": -1309.989258,
-								"y": 736.422729
+								"x": -1309.9892578125,
+								"y": 736.422729492188
 							},
 							"parameters": {
 								"x": 0.52,
 								"y": -0.22,
-								"z": 0
+								"z": 0.0
 							},
+							"seed": -9059.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3_2",
 							"node_position": {
-								"x": -629.489258,
-								"y": 873.422729
+								"x": -629.4892578125,
+								"y": 873.422729492188
 							},
 							"parameters": {
 								"k": 0.17,
-								"op": 1
+								"op": 1.0
 							},
+							"seed": -29764.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
 							"name": "sdf3d_sphere_2_2",
 							"node_position": {
-								"x": -830.318359,
-								"y": 1023.672852
+								"x": -830.318359375,
+								"y": 1023.6728515625
 							},
 							"parameters": {
 								"r": 0.07
 							},
+							"seed": -58751.0,
 							"type": "sdf3d_sphere"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_3",
 							"node_position": {
-								"x": -834.318359,
-								"y": 1078.672852
+								"x": -834.318359375,
+								"y": 1078.6728515625
 							},
 							"parameters": {
 								"x": 0.13,
 								"y": -0.04,
 								"z": 0.18
 							},
+							"seed": -26316.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_sphere_2_2_2",
 							"node_position": {
-								"x": -831.318359,
-								"y": 1179.672852
+								"x": -831.318359375,
+								"y": 1179.6728515625
 							},
 							"parameters": {
 								"r": 0.08
 							},
+							"seed": -316.0,
 							"type": "sdf3d_sphere"
 						},
 						{
 							"name": "sdf3d_sphere_2",
 							"node_position": {
-								"x": -1297.989258,
-								"y": 844.922729
+								"x": -1297.9892578125,
+								"y": 844.922729492188
 							},
 							"parameters": {
 								"r": 0.28
 							},
+							"seed": -44867.0,
 							"type": "sdf3d_sphere"
 						},
 						{
 							"name": "sdf3d_box_2",
 							"node_position": {
-								"x": -855.193726,
-								"y": 1338.172852
+								"x": -855.193725585938,
+								"y": 1338.1728515625
 							},
 							"parameters": {
-								"r": 0,
+								"r": 0.0,
 								"sx": 0.05,
 								"sy": 0.05,
 								"sz": 0.05
 							},
+							"seed": -62899.0,
 							"type": "sdf3d_box"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_3_2",
 							"node_position": {
-								"x": -834.318359,
-								"y": 1232.672852
+								"x": -834.318359375,
+								"y": 1232.6728515625
 							},
 							"parameters": {
 								"x": 0.12,
 								"y": -0.03,
 								"z": 0.18
 							},
+							"seed": -26158.0,
 							"type": "sdf3d_translate"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_rotate_2",
 							"node_position": {
-								"x": -839.193726,
-								"y": 1471.172852
+								"x": -839.193725585938,
+								"y": 1471.1728515625
 							},
 							"parameters": {
-								"ax": -30,
-								"ay": 45,
-								"az": 0
+								"ax": -30.0,
+								"ay": 45.0,
+								"az": 0.0
 							},
+							"seed": -64296.0,
 							"type": "sdf3d_rotate"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_3_2_2",
 							"node_position": {
-								"x": -835.193726,
-								"y": 1573.172852
+								"x": -835.193725585938,
+								"y": 1573.1728515625
 							},
 							"parameters": {
-								"x": 0,
+								"x": 0.0,
 								"y": 0.11,
 								"z": 0.19
 							},
+							"seed": -33850.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3_2_3",
 							"node_position": {
-								"x": -623.818359,
-								"y": 1236.172852
+								"x": -623.818359375,
+								"y": 1236.1728515625
 							},
 							"parameters": {
 								"k": 0.09,
-								"op": 1
+								"op": 1.0
 							},
+							"seed": -47269.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3_2_2",
 							"node_position": {
-								"x": -622.818359,
-								"y": 1073.172852
+								"x": -622.818359375,
+								"y": 1073.1728515625
 							},
 							"parameters": {
 								"k": 0.15,
-								"op": 0
+								"op": 0.0
 							},
+							"seed": -39265.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_2_2",
 							"node_position": {
-								"x": -832.989258,
-								"y": 826.922729
+								"x": -832.9892578125,
+								"y": 826.922729492188
 							},
 							"parameters": {
-								"x": 0,
+								"x": 0.0,
 								"y": 0.24,
 								"z": 0.01
 							},
+							"seed": -10118.0,
 							"type": "sdf3d_translate"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_scale",
 							"node_position": {
-								"x": -823.989258,
-								"y": 776.422729
+								"x": -823.9892578125,
+								"y": 776.422729492188
 							},
 							"parameters": {
 								"s": 0.48
 							},
+							"seed": -4001.0,
 							"type": "sdf3d_scale"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3_2_3_2",
 							"node_position": {
-								"x": -602.693726,
-								"y": 1454.672852
+								"x": -602.693725585938,
+								"y": 1454.6728515625
 							},
 							"parameters": {
 								"k": 0.03,
-								"op": 1
+								"op": 1.0
 							},
+							"seed": -11084.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_2",
 							"node_position": {
-								"x": -1141.989258,
-								"y": 1070.922729
+								"x": -1141.9892578125,
+								"y": 1070.92272949219
 							},
 							"parameters": {
-								"x": 0,
+								"x": 0.0,
 								"y": 0.21,
 								"z": 0.08
 							},
+							"seed": -45317.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_translate_4_3_3",
 							"node_position": {
-								"x": -363.318359,
-								"y": 1762.672852
+								"x": -363.318359375,
+								"y": 1762.6728515625
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
+							"seed": -9751.0,
 							"shader_model": {
 								"code": "",
 								"global": "",
@@ -1009,92 +1066,88 @@
 										"type": "sdf3d"
 									}
 								],
-								"parameters": [
-
-								]
+								"parameters": []
 							},
 							"type": "shader"
 						},
 						{
 							"name": "gen_inputs",
 							"node_position": {
-								"x": -1375.989258,
-								"y": 1121.935181
+								"x": -1375.9892578125,
+								"y": 1121.93518066406
 							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
+							"parameters": {},
+							"ports": [],
+							"seed": -9186.0,
 							"type": "ios"
 						},
 						{
 							"name": "gen_outputs",
 							"node_position": {
-								"x": -194.318359,
-								"y": 1767.935181
+								"x": -194.318359375,
+								"y": 1767.93518066406
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
 									"type": "sdf3d"
 								}
 							],
+							"seed": -37787.0,
 							"type": "ios"
 						},
 						{
 							"name": "gen_parameters",
 							"node_position": {
-								"x": -1028.995361,
-								"y": 476.422729
+								"x": -1028.99536132812,
+								"y": 476.422729492188
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
+							"seed": -63912.0,
 							"type": "remote",
-							"widgets": [
-
-							]
+							"widgets": []
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_3_2_2_2",
 							"node_position": {
-								"x": -1172.482544,
-								"y": 1931.119385
+								"x": -1172.48254394531,
+								"y": 1931.11938476562
 							},
 							"parameters": {
-								"x": 0,
+								"x": 0.0,
 								"y": 0.14,
-								"z": 0
+								"z": 0.0
 							},
+							"seed": -32353.0,
 							"type": "sdf3d_translate"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_rotate_2_2",
 							"node_position": {
-								"x": -1172.482544,
-								"y": 1829.119385
+								"x": -1172.48254394531,
+								"y": 1829.11938476562
 							},
 							"parameters": {
-								"ax": 0,
-								"ay": 0,
-								"az": 45
+								"ax": 0.0,
+								"ay": 0.0,
+								"az": 45.0
 							},
+							"seed": -32463.0,
 							"type": "sdf3d_rotate"
 						},
 						{
 							"name": "sdf3d_repeat",
 							"node_position": {
-								"x": -1166.482544,
-								"y": 2035.119385
+								"x": -1166.48254394531,
+								"y": 2035.11938476562
 							},
 							"parameters": {
-								"c": 15
+								"c": 15.0
 							},
+							"seed": -47299.0,
 							"shader_model": {
 								"code": "",
 								"global": "vec3 circle_repeat_transform(vec3 p, float count) {\n\tfloat r = 6.28/count;\n\tfloat pa = atan(p.x, p.y);\n\tfloat a = mod(pa+0.5*r, r)-0.5*r;\n\tvec3 rv;\n\tfloat c = cos(a-pa);\n\tfloat s = sin(a-pa);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -1116,12 +1169,12 @@
 								],
 								"parameters": [
 									{
-										"default": 4,
+										"default": 4.0,
 										"label": "",
-										"max": 32,
-										"min": 1,
+										"max": 32.0,
+										"min": 1.0,
 										"name": "c",
-										"step": 1,
+										"step": 1.0,
 										"type": "float"
 									}
 								]
@@ -1129,125 +1182,139 @@
 							"type": "shader"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_rotate_2_2_2",
 							"node_position": {
-								"x": -791.235718,
-								"y": 1859.869385
+								"x": -791.235717773438,
+								"y": 1859.86938476562
 							},
 							"parameters": {
-								"ax": -90,
-								"ay": 0,
-								"az": 0
+								"ax": -90.0,
+								"ay": 0.0,
+								"az": 0.0
 							},
+							"seed": -12172.0,
 							"type": "sdf3d_rotate"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_3_2_2_2_2",
 							"node_position": {
-								"x": -788.235718,
-								"y": 1967.869385
+								"x": -788.235717773438,
+								"y": 1967.86938476562
 							},
 							"parameters": {
-								"x": 0,
+								"x": 0.0,
 								"y": 0.315,
 								"z": 0.08
 							},
+							"seed": -52421.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_cylinder",
 							"node_position": {
-								"x": -1161,
+								"x": -1161.0,
 								"y": 994.5
 							},
 							"parameters": {
+								"axis": 1.0,
 								"l": 0.06,
 								"r": 0.15
 							},
+							"seed": -8309.0,
 							"type": "sdf3d_cylinder"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3_3",
 							"node_position": {
-								"x": -1104.305908,
+								"x": -1104.30590820312,
 								"y": 815.75
 							},
 							"parameters": {
 								"k": 0.1,
-								"op": 1
+								"op": 1.0
 							},
+							"seed": -13953.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
 							"name": "sdf3d_box_2_2",
 							"node_position": {
-								"x": -1190.880981,
-								"y": 1701
+								"x": -1190.88098144531,
+								"y": 1701.0
 							},
 							"parameters": {
-								"r": 0,
+								"r": 0.0,
 								"sx": 0.01,
 								"sy": 0.01,
 								"sz": 0.015
 							},
+							"seed": -44221.0,
 							"type": "sdf3d_box"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3_2_3_2_2",
 							"node_position": {
-								"x": -562.468933,
+								"x": -562.468933105469,
 								"y": 1761.75
 							},
 							"parameters": {
 								"k": 0.05,
-								"op": 0
+								"op": 0.0
 							},
+							"seed": -21741.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
 							"name": "sdf3d_sphere_2_3",
 							"node_position": {
-								"x": -1165.397095,
+								"x": -1165.39709472656,
 								"y": 2204.25
 							},
 							"parameters": {
 								"r": 0.28
 							},
+							"seed": -43151.0,
 							"type": "sdf3d_sphere"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_3_2_2_2_3",
 							"node_position": {
-								"x": -1175.397095,
+								"x": -1175.39709472656,
 								"y": 2261.5
 							},
 							"parameters": {
-								"x": 0,
+								"x": 0.0,
 								"y": 0.28,
-								"z": 0
+								"z": 0.0
 							},
+							"seed": -57246.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_boolean",
 							"node_position": {
-								"x": -990.397095,
-								"y": 2076
+								"x": -990.397094726562,
+								"y": 2076.0
 							},
 							"parameters": {
-								"op": 2
+								"op": 2.0
 							},
+							"seed": -20990.0,
 							"type": "sdf3d_boolean"
 						},
 						{
 							"name": "sdroundedshape",
 							"node_position": {
-								"x": -794.225342,
+								"x": -794.225341796875,
 								"y": 2070.75
 							},
 							"parameters": {
 								"r": 0.01
 							},
+							"seed": -36404.0,
 							"shader_model": {
 								"code": "",
 								"global": "",
@@ -1269,10 +1336,10 @@
 								],
 								"parameters": [
 									{
-										"default": 0,
+										"default": 0.0,
 										"label": "",
-										"max": 1,
-										"min": 0,
+										"max": 1.0,
+										"min": 0.0,
 										"name": "r",
 										"step": 0.01,
 										"type": "float"
@@ -1282,121 +1349,123 @@
 							"type": "shader"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_rotate_2_2_3",
 							"node_position": {
-								"x": -1172.268311,
+								"x": -1172.26831054688,
 								"y": 2085.75
 							},
 							"parameters": {
-								"ax": 0,
-								"ay": 0,
-								"az": 11
+								"ax": 0.0,
+								"ay": 0.0,
+								"az": 11.0
 							},
+							"seed": -29135.0,
 							"type": "sdf3d_rotate"
 						}
 					],
-					"parameters": {
-
-					},
+					"parameters": {},
+					"seed": -45527.0,
+					"shortdesc": "",
 					"type": "graph"
 				},
 				{
+					"generic_size": 1,
 					"name": "sdf3d_scale",
 					"node_position": {
-						"x": -1151.911377,
-						"y": 1325.772949
+						"x": -1151.91137695312,
+						"y": 1325.77294921875
 					},
 					"parameters": {
 						"s": 0.3
 					},
+					"seed": -59726.0,
 					"type": "sdf3d_scale"
 				},
 				{
 					"name": "sdf3d_boolean_2",
 					"node_position": {
-						"x": -793.79303,
-						"y": 1373.297363
+						"x": -793.793029785156,
+						"y": 1373.29736328125
 					},
 					"parameters": {
-						"op": 0
+						"op": 0.0
 					},
+					"seed": -25180.0,
 					"type": "sdf3d_boolean"
 				},
 				{
 					"name": "sdf3d_repeat",
 					"node_position": {
-						"x": -986.79303,
-						"y": 1373.297363
+						"x": -986.793029785156,
+						"y": 1373.29736328125
 					},
 					"parameters": {
 						"r": 0.25,
-						"rx": 4,
-						"ry": 4
+						"rx": 4.0,
+						"ry": 4.0,
+						"variations": false
 					},
+					"seed": -55353.0,
 					"type": "sdf3d_repeat"
 				},
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -1451.911377,
-						"y": 1349.12146
+						"x": -1451.91137695312,
+						"y": 1349.12145996094
 					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
+					"parameters": {},
+					"ports": [],
+					"seed": -25074.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -493.79303,
-						"y": 1349.12146
+						"x": -493.793029785156,
+						"y": 1349.12145996094
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
 							"type": "sdf3dc"
 						}
 					],
+					"seed": -60408.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -1207.801514,
-						"y": 971.851807
+						"x": -1207.80151367188,
+						"y": 971.851806640625
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
+					"seed": -47332.0,
 					"type": "remote",
-					"widgets": [
-
-					]
+					"widgets": []
 				},
 				{
 					"name": "sdf3d_repeat_2",
 					"node_position": {
-						"x": -986.70166,
-						"y": 1268.091553
+						"x": -986.70166015625,
+						"y": 1268.09155273438
 					},
 					"parameters": {
 						"r": 0.25,
-						"rx": 4,
-						"ry": 4
+						"rx": 4.0,
+						"ry": 4.0,
+						"variations": false
 					},
+					"seed": -55698.0,
 					"type": "sdf3d_repeat"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -23371.0,
+			"shortdesc": "",
 			"type": "graph"
 		},
 		{
@@ -1451,71 +1520,81 @@
 				}
 			],
 			"label": "Bones",
+			"longdesc": "",
 			"name": "graph_3",
 			"node_position": {
-				"x": -876.000732,
-				"y": 1520.518677
+				"x": -876.000732421875,
+				"y": 1520.51867675781
 			},
 			"nodes": [
 				{
 					"name": "sdf3d_boolean_2_2_2",
 					"node_position": {
-						"x": -727.344666,
-						"y": 1629.128418
+						"x": -727.344665527344,
+						"y": 1629.12841796875
 					},
 					"parameters": {
-						"op": 0
+						"op": 0.0
 					},
+					"seed": -26454.0,
 					"type": "sdf3d_boolean"
 				},
 				{
+					"generic_size": 1,
 					"name": "sdf3d_translate_4_2_2",
 					"node_position": {
-						"x": -904.32666,
-						"y": 1690.727051
+						"x": -904.32666015625,
+						"y": 1690.72705078125
 					},
 					"parameters": {
 						"x": 0.51,
 						"y": 0.38,
 						"z": 0.02
 					},
+					"seed": -58350.0,
 					"type": "sdf3d_translate"
 				},
 				{
 					"name": "sdf3d_repeat_2_2",
 					"node_position": {
-						"x": -1087.362671,
-						"y": 1690.529785
+						"x": -1087.36267089844,
+						"y": 1690.52978515625
 					},
 					"parameters": {
 						"r": 0.5,
-						"rx": 4,
-						"ry": 4
+						"rx": 4.0,
+						"ry": 4.0,
+						"variations": false
 					},
+					"seed": -8763.0,
 					"type": "sdf3d_repeat"
 				},
 				{
+					"generic_size": 1,
 					"name": "sdf3d_translate_4_2",
 					"node_position": {
-						"x": -904.844666,
-						"y": 1585.628418
+						"x": -904.844665527344,
+						"y": 1585.62841796875
 					},
 					"parameters": {
 						"x": 0.35,
 						"y": 0.52,
 						"z": 0.02
 					},
+					"seed": -58183.0,
 					"type": "sdf3d_translate"
 				},
 				{
+					"generic_size": 1,
 					"name": "sdf3d_scale_3",
 					"node_position": {
-						"x": -1281.764893,
-						"y": 1630.628418
+						"x": -1281.76489257812,
+						"y": 1630.62841796875
 					},
 					"parameters": {
 						"s": 0.4
 					},
+					"seed": -48193.0,
 					"type": "sdf3d_scale"
 				},
 				{
@@ -1582,52 +1661,55 @@
 						}
 					],
 					"label": "Bone",
+					"longdesc": "",
 					"name": "graph_2",
 					"node_position": {
-						"x": -1263.480713,
-						"y": 1580.556274
+						"x": -1263.48071289062,
+						"y": 1580.55627441406
 					},
 					"nodes": [
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_2_2",
 							"node_position": {
-								"x": -935.880676,
-								"y": 1383.431152
+								"x": -935.880676269531,
+								"y": 1383.43115234375
 							},
 							"parameters": {
 								"x": -0.03,
 								"y": -0.22,
-								"z": 0
+								"z": 0.0
 							},
+							"seed": -44896.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_sphere_2",
 							"node_position": {
-								"x": -930.880676,
-								"y": 1327.931152
+								"x": -930.880676269531,
+								"y": 1327.93115234375
 							},
 							"parameters": {
 								"r": 0.03
 							},
+							"seed": -2995.0,
 							"type": "sdf3d_sphere"
 						},
 						{
 							"name": "sdf3d_sphere_2_2_2",
 							"node_position": {
-								"x": -937.880676,
-								"y": 1638.431152
+								"x": -937.880676269531,
+								"y": 1638.43115234375
 							},
 							"parameters": {
 								"h": 0.4,
 								"r": 0.025
 							},
+							"seed": -60945.0,
 							"shader_model": {
 								"code": "vec3 $(name_uv)_p = $uv;\n$(name_uv)_p.y -= clamp($(name_uv)_p.y, -0.5*$h, 0.5*$h);\n",
 								"global": "",
-								"inputs": [
-
-								],
+								"inputs": [],
 								"instance": "",
 								"name": "Sphere",
 								"outputs": [
@@ -1640,8 +1722,8 @@
 									{
 										"default": 0.5,
 										"label": "H",
-										"max": 1,
-										"min": 0,
+										"max": 1.0,
+										"min": 0.0,
 										"name": "h",
 										"step": 0.01,
 										"type": "float"
@@ -1650,7 +1732,7 @@
 										"default": 0.1,
 										"label": "R",
 										"max": 0.5,
-										"min": 0,
+										"min": 0.0,
 										"name": "r",
 										"step": 0.01,
 										"type": "float"
@@ -1662,25 +1744,27 @@
 						{
 							"name": "sdf3d_smoothboolean_3_2",
 							"node_position": {
-								"x": -744.380676,
-								"y": 1604.931152
+								"x": -744.380676269531,
+								"y": 1604.93115234375
 							},
 							"parameters": {
 								"k": 0.02,
-								"op": 0
+								"op": 0.0
 							},
+							"seed": -29780.0,
 							"type": "sdf3d_smoothboolean"
 						},
 						{
 							"name": "sdf3d_smoothboolean_3",
 							"node_position": {
-								"x": -744.880676,
-								"y": 1527.931152
+								"x": -744.880676269531,
+								"y": 1527.93115234375
 							},
 							"parameters": {
 								"k": 0.01,
-								"op": 0
+								"op": 0.0
 							},
+							"seed": -30689.0,
 							"shader_model": {
 								"code": "",
 								"global": "float sdf3SmoothUnion(float d1, float d2, float k) {\n    float h = clamp(0.5+0.5*(d2-d1)/k, 0.0, 1.0);\n    return mix(d2, d1, h)-k*h*(1.0-h);\n}\n\nfloat sdf3SmoothSubtraction( float d1, float d2, float k ) {\n    float h = clamp(0.5-0.5*(d2+d1)/k, 0.0, 1.0);\n    return mix( d2, -d1, h )+k*h*(1.0-h);\n}\n\nfloat sdf3SmoothIntersection( float d1, float d2, float k ) {\n    float h = clamp(0.5-0.5*(d2-d1)/k, 0.0, 1.0);\n    return mix(d2, d1, h)+k*h*(1.0-h);\n}\n",
@@ -1708,7 +1792,7 @@
 								],
 								"parameters": [
 									{
-										"default": 0,
+										"default": 0.0,
 										"label": "",
 										"name": "op",
 										"type": "enum",
@@ -1728,10 +1812,10 @@
 										]
 									},
 									{
-										"default": 0,
+										"default": 0.0,
 										"label": "",
-										"max": 1,
-										"min": 0,
+										"max": 1.0,
+										"min": 0.0,
 										"name": "k",
 										"step": 0.01,
 										"type": "float"
@@ -1743,180 +1827,176 @@
 						{
 							"name": "sdf3d_sphere_2_2",
 							"node_position": {
-								"x": -929.880676,
-								"y": 1483.431152
+								"x": -929.880676269531,
+								"y": 1483.43115234375
 							},
 							"parameters": {
 								"r": 0.04
 							},
+							"seed": -60086.0,
 							"type": "sdf3d_sphere"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_2",
 							"node_position": {
-								"x": -934.880676,
-								"y": 1534.431152
+								"x": -934.880676269531,
+								"y": 1534.43115234375
 							},
 							"parameters": {
 								"x": 0.02,
 								"y": -0.25,
-								"z": 0
+								"z": 0.0
 							},
+							"seed": -36584.0,
 							"type": "sdf3d_translate"
 						},
 						{
+							"generic_size": 1,
 							"name": "sdf3d_translate_4_2_3",
 							"node_position": {
-								"x": -936.380676,
-								"y": 1792.181152
+								"x": -936.380676269531,
+								"y": 1792.18115234375
 							},
 							"parameters": {
 								"x": -0.04,
 								"y": 0.21,
-								"z": 0
+								"z": 0.0
 							},
+							"seed": -52824.0,
 							"type": "sdf3d_translate"
 						},
 						{
 							"name": "sdf3d_sphere_2_2_3",
 							"node_position": {
-								"x": -931.380676,
-								"y": 1741.181152
+								"x": -931.380676269531,
+								"y": 1741.18115234375
 							},
 							"parameters": {
 								"r": 0.06
 							},
+							"seed": -11122.0,
 							"type": "sdf3d_sphere"
 						},
 						{
 							"name": "sdf3d_boolean_2_2",
 							"node_position": {
-								"x": -747.380676,
-								"y": 1680.681152
+								"x": -747.380676269531,
+								"y": 1680.68115234375
 							},
 							"parameters": {
-								"op": 1
+								"op": 1.0
 							},
+							"seed": -51685.0,
 							"type": "sdf3d_boolean"
 						},
 						{
 							"name": "gen_inputs",
 							"node_position": {
-								"x": -1237.880615,
-								"y": 1568.556274
+								"x": -1237.88061523438,
+								"y": 1568.55627441406
 							},
-							"parameters": {
-
-							},
-							"ports": [
-
-							],
+							"parameters": {},
+							"ports": [],
+							"seed": -26347.0,
 							"type": "ios"
 						},
 						{
 							"name": "gen_outputs",
 							"node_position": {
-								"x": -447.380676,
-								"y": 1568.556274
+								"x": -447.380676269531,
+								"y": 1568.55627441406
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
 									"type": "sdf3d"
 								}
 							],
+							"seed": -20737.0,
 							"type": "ios"
 						},
 						{
 							"name": "gen_parameters",
 							"node_position": {
-								"x": -1079.480713,
-								"y": 1027.931152
+								"x": -1079.48071289062,
+								"y": 1027.93115234375
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
+							"seed": -12204.0,
 							"type": "remote",
-							"widgets": [
-
-							]
+							"widgets": []
 						}
 					],
-					"parameters": {
-
-					},
+					"parameters": {},
+					"seed": -36829.0,
+					"shortdesc": "",
 					"type": "graph"
 				},
 				{
 					"name": "sdf3d_repeat_2",
 					"node_position": {
-						"x": -1082.880615,
-						"y": 1585.431152
+						"x": -1082.88061523438,
+						"y": 1585.43115234375
 					},
 					"parameters": {
 						"r": 0.46,
-						"rx": 4,
-						"ry": 4
+						"rx": 4.0,
+						"ry": 4.0,
+						"variations": false
 					},
+					"seed": -36661.0,
 					"type": "sdf3d_repeat"
 				},
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -1581.764893,
-						"y": 1627.518677
+						"x": -1581.76489257812,
+						"y": 1627.51867675781
 					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
+					"parameters": {},
+					"ports": [],
+					"seed": -13354.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -427.344666,
-						"y": 1627.518677
+						"x": -427.344665527344,
+						"y": 1627.51867675781
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
 							"type": "sdf3dc"
 						}
 					],
+					"seed": -61168.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -1236.000732,
-						"y": 1280.556274
+						"x": -1236.00073242188,
+						"y": 1280.55627441406
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
+					"seed": -17580.0,
 					"type": "remote",
-					"widgets": [
-
-					]
+					"widgets": []
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -31716.0,
+			"shortdesc": "",
 			"type": "graph"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

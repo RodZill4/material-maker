@@ -98,93 +98,97 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "408",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 956,
-				"y": 271
+				"x": 956.0,
+				"y": 271.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
+				"ao": 1.0,
 				"depth_scale": 0.45,
-				"emission_energy": 2,
-				"metallic": 1,
-				"normal_scale": 1,
-				"resolution": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"emission_energy": 2.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": 14027.0,
 			"type": "material"
 		},
 		{
 			"name": "colorize_0",
 			"node_position": {
-				"x": 666,
-				"y": 27
+				"x": 666.0,
+				"y": 27.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.479167,
-							"g": 0.479167,
+							"a": 1.0,
+							"b": 0.479167014360428,
+							"g": 0.479167014360428,
 							"pos": 0.045455,
-							"r": 0.479167
+							"r": 0.479167014360428
 						},
 						{
-							"a": 1,
+							"a": 1.0,
 							"b": 0.875,
 							"g": 0.875,
 							"pos": 0.3,
 							"r": 0.875
 						},
 						{
-							"a": 1,
-							"b": 0.442708,
-							"g": 0.442708,
+							"a": 1.0,
+							"b": 0.442707985639572,
+							"g": 0.442707985639572,
 							"pos": 0.518182,
-							"r": 0.442708
+							"r": 0.442707985639572
 						},
 						{
-							"a": 1,
-							"b": 0.069093,
-							"g": 0.069093,
+							"a": 1.0,
+							"b": 0.0690929964184761,
+							"g": 0.0690929964184761,
 							"pos": 0.818182,
-							"r": 0.069093
+							"r": 0.0690929964184761
 						},
 						{
-							"a": 1,
+							"a": 1.0,
 							"b": 0.40625,
 							"g": 0.40625,
-							"pos": 1,
+							"pos": 1.0,
 							"r": 0.40625
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 63165.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 653,
+				"x": 653.0,
 				"y": 140.5
 			},
 			"parameters": {
@@ -192,83 +196,83 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.272727,
-							"r": 1
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.563636,
-							"r": 0
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 25247.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_1",
 			"node_position": {
-				"x": 646,
-				"y": 223
+				"x": 646.0,
+				"y": 223.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
+							"a": 1.0,
+							"b": 0.0,
 							"g": 0.765625,
-							"pos": 0,
-							"r": 1
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.154545,
-							"r": 1
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.245455,
-							"r": 0
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 35045.0,
 			"type": "colorize"
 		},
 		{
 			"name": "normal_map_0",
 			"node_position": {
-				"x": 658,
+				"x": 658.0,
 				"y": 309.5
 			},
 			"parameters": {
-				"amount": 0.9,
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.99,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 2
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 64667.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "colorize_3",
 			"node_position": {
-				"x": 658,
+				"x": 658.0,
 				"y": 404.25
 			},
 			"parameters": {
@@ -276,83 +280,90 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.345455,
-							"g": 0.345455,
-							"pos": 0,
-							"r": 0.345455
+							"a": 1.0,
+							"b": 0.3454549908638,
+							"g": 0.3454549908638,
+							"pos": 0.0,
+							"r": 0.3454549908638
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 64570.0,
 			"type": "colorize"
 		},
 		{
 			"name": "blend_0",
 			"node_position": {
-				"x": 475,
-				"y": -30
+				"x": 475.0,
+				"y": -30.0
 			},
 			"parameters": {
 				"amount": 0.83125,
-				"blend_type": 0
+				"blend_type": 0.0
 			},
+			"seed": -48793.0,
 			"type": "blend"
 		},
 		{
+			"generic_size": 1,
 			"name": "warp_0",
 			"node_position": {
-				"x": 338,
-				"y": 196
+				"x": 338.0,
+				"y": 196.0
 			},
 			"parameters": {
 				"amount": 0.3,
 				"eps": 0.045,
-				"epsilon": 0
+				"mode": 0.0
 			},
+			"seed": 5674.0,
 			"type": "warp"
 		},
 		{
 			"name": "voronoi_0",
 			"node_position": {
-				"x": 130,
-				"y": 299
+				"x": 130.0,
+				"y": 299.0
 			},
 			"parameters": {
 				"intensity": 0.55,
-				"randomness": 1,
-				"scale_x": 6,
-				"scale_y": 6,
-				"stretch_x": 1,
-				"stretch_y": 1
+				"randomness": 1.0,
+				"scale_x": 6.0,
+				"scale_y": 6.0,
+				"stretch_x": 1.0,
+				"stretch_y": 1.0
 			},
+			"seed": 52373.0,
 			"type": "voronoi"
 		},
 		{
 			"name": "perlin_0",
 			"node_position": {
-				"x": 190,
-				"y": -14
+				"x": 190.0,
+				"y": -14.0
 			},
 			"parameters": {
-				"iterations": 8,
+				"iterations": 8.0,
 				"persistence": 0.75,
-				"scale_x": 4,
-				"scale_y": 4
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": -6416.0,
 			"type": "perlin"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "UklGRvwIAABXRUJQVlA4WAoAAAAQAAAALwAALwAAQUxQSJQCAAANoCNteyJJevXrV9HAMpNX7Q9UrMd4gGEea5ksZmYGi3n3AG12ZIzVFT0X4BmrrOXdqqiUUlooyNIJImICmFOsBzh//bn89tcvAK6K1C9SVmbLdb1uM1Y0ZXysX6yVaIx1aRmvObyDqe3OZd3edRt/+PQkGmqR5K945gZIFWIwJFLELu3cv/LMWWPifFry8D0QxFomGoxAjK2Dj374ZtIwjxtd9BN4dcwrksL6lzZvGzg/mxtu+gavDeo0msLNn+xZdX4WN7z2PXyHuo36S5fvP+L8NB1teo/QZoEuNIv7VzVMkvKibwgtFqqhubxnIHFC4id8mwWrv/STbYn/q38Y32Hhzt+8+U0NIOUV96BkqLz04VmJSHwa38jB+PWPPCtRymtuQMlSObhyUmx1GN/Iw/jOvk+tNzuwZGrZ+UPJFlI2kpY2rnEdVTZU9rqCHln3+nSRfITusfObmHwMl43XR7LuyLkVJh9Du0n2vzXbyWSTzGj8l3TIeRh/GV+WTDbJDOBYN0o2UY5Bv0fOfSius/lYCljbuBQlk2iP/YErf9hZ2Uwq+z2u4tN9nWSySA3/FVXUkysHg2YR9HO0JPLsI+uTySA1xq8QIerZD18KmkHQx9ASCObNzTd7tzDfKY4az/9N2vbJpUEXFNo/34lJE6IO9iw3gy4ktKo70JLJwa3eXzS9W4BvV9fhRkz37sj9y5d6NTWl0Pn5DtyQWb1b3fPJzXg1NaTQ0OJO3JDZvQ62bX5pPUFkjhidjh87io6YN0h688NHD7ZIFWIwJFLEWgmfv4wxJfNH9OwzK/t3LlkmGozAse+/BPWJWoPIyU9/2Hhdr3tZp81oODjWL/4AjSV1xyi2XCv6x8bSZBz5v6tKZgdWUDggQgYAABAfAJ0BKjAAMAA+bSiPR6QioSE8YIANiWwAsSVBfgHJJOY8R5glUfwGsIk46p5wHmAfq50gP1j9QH7Xeg76gPQA/nH9m9Tv1AP6B/qvYA/YD1Sf8J+1nwEfsH+wXwB/rv/9eAA2Gf7Z4H+I713lZ4M+ePUU7K/0HCD745IOvbmO8nf6x3iGpBHQ5AnfXsAflf1Tv4f/z+R359/7v+R+AL+Zf2//n+rN67f3F9l39snW4o2obIOHBopKMamAvop1XbghhS8TaBuJrDs27/idipzJ/5RSg7s91h1H7M4FPP/Jin0O2/0ut+YXk1gfCm/esiPnq+6248x/IRGFzhMavKwAAP7/h6O+MTY7MBEw/bCKlbI+iKaWQqZ0O4ISaC9J6H+g4dfHkMtPPZJUpm07t5onW8+ryUajIydWrlTz4F9tZsDM2WHS1tOEiYIemiwtD4sSLbR9rODVfwwmV3sS/xhiN6A/8hDSkTI6jytKrw1NCN12sLOpAfeEl7pD15bRqFkLgZEncS3TTXZUd+r/qKTm5TSyIUTbhOvM69XMND6AUPJaEOzEZVP+88juhdpxpgAp9NjvibdeIJkZtmOhrBny82qh8Ic1LEhu29mGSAFgjvBj6X2NA1CglMjPxBfdEv5CVm9eAV0v4U1fWvL7QJ5o38gTQg5IB67RrtqjZSSrdO1qA+trxlwi9Yq+4mXZEsLG9R9vTGR8tx5ny9oO2voJpSJyD5Gxn+0BRTyZk4rqYtdLrqHmDv9FecSNkvpOjFqmKo64Eyz1rLvLQl8FuflXRdstSLrgW/nOes+417K7mO59hXhctu3hrmG21WeIZYkxCpf9MjS7NLD/0CPWmPX6u2ZZvufXHsJYiOxl/oOOMSs53wMsGSd4UWeXwz/B1wx/ztZbBTBEi+SRcmnUWOZ1JvbQUch53RI6ANgXHk1IcpgtPVQ5x/lCtOREsdRsrjbDAGIXgbadeyYP5Znl+w8VXRJcTd+pSxwad7j39cczV0cPuH2JgvBHMdCGJVrEkU/+FLO6UIkYO2+4hP6xxb+Zez5pFo8gFGUJozKYiJSGpZa5QAE8Z6+DseVR/INvOyjUC//jKE7R/4moFII05B0/GANZbIYOQQyx9hg2flL3Kn8Aft2UM7RumUKSkp+yq7UbckMpepderjNTypBMkwLI75pUJ+eDCHhO2UoMuIiiTkx75YqdiI/Hfj0bIiHAc5Dwu1jLZU0hUfu/o/eFI6JmC1mBzG96d7t04o0n+OKia6Ich+DEcb7GMv1pVtW4fDK6/mb4LivSZ4N7nLqAvLEZxPHbhEY1t3N303TIPry694IYff1hQHIRSszGg57JPFd1My3G0d23B37A3MQOgKrcIxcEzn/ictpFjmP+qWQPJcaOhBjrelD1XDTC6yOaWNUnmm5CmSKmr/YlbbTQPwJ1duMxP7P0DiDP9nB78FUWmrwVKXHIYLOdpLVVlUmbmHBeaPj3qbzx5/IYQyF/XSVz2/ez2GODdzzZ1sa7v9o0LIrgIeMqVGGH/OqWSJvtPsjsNVyQqBxJ3b1/dyJJUh6pD6eq8WhGN1nrKV9cWpbs0qvlQRmPkbcli1JGSZiaNzTqsnsQVIi1R0No2/LvKAKtuBrHjbQ/hr9oAzZ/6qZLPslgZLAVLO7wqZpzQOvGdqc7fDNgIiRYJ8ymFC8K2UexIs2BfDBrkf8En47u2VMGUkzdS5wQ1X5qQW30MPrWPg8P6SsBXRHCKK2c+rJ8SKXGDdAyZdtDvoXzqhOFCcBQ718YT+An1DdTQx+RMGPwdLwI8SVkauV9tW9p0Pz/sTEWKH9In5zaJIJ7mNZA/dPIDRLcmo40HzCTuyxa9S8W9KlQ3nfZ13uVP/ZPqrp0Ju4Z7QViJE1kiE/dO896RCQBrP/7TAQPkgXhfq4R0zpjwXMVkR3xqyrHzcjjXai7n6DsZzSd4HwBEcj8/my0iJT67ssyPwsU5YClXsIbA13S4+Yfl75Ww5S2TOeA+nGz2C/judINDYgSkBnARoio0ztianlOm8Etya/4XeyQOlPN2XHvnMVTCyhgL/6rR7Fi1UQCHywfXpcMoMDEjYFUeNf2xtJDAQEFjwZ+o70yMHnG0AH7fEZinjGNWTVKJ3wmSlAAAA==",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

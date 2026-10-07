@@ -86,16 +86,17 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "490",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
 			"name": "colorize_0",
 			"node_position": {
-				"x": 524,
+				"x": 524.0,
 				"y": -100.75
 			},
 			"parameters": {
@@ -103,178 +104,176 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 0.213623,
-							"g": 0.391325,
+							"a": 1.0,
+							"b": 0.213623002171516,
+							"g": 0.391324996948242,
 							"pos": 0.145455,
-							"r": 0.651042
+							"r": 0.651041984558105
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": -45848.0,
 			"type": "colorize"
 		},
 		{
 			"name": "normal_map_0",
 			"node_position": {
-				"x": 740,
+				"x": 740.0,
 				"y": 135.25
 			},
 			"parameters": {
-				"amount": 0.3,
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.2,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 4
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 62747.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "uniform_0",
 			"node_position": {
-				"x": 781,
-				"y": 58
+				"x": 781.0,
+				"y": 58.0
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"r": 0,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0,
 					"type": "Color"
 				}
 			},
+			"seed": 61865.0,
 			"type": "uniform"
 		},
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 992,
-				"y": 42
+				"x": 992.0,
+				"y": 42.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal_scale": 1,
-				"resolution": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": 38922.0,
 			"type": "material"
 		},
 		{
 			"name": "combine_0",
 			"node_position": {
-				"x": 866,
-				"y": -78
+				"x": 866.0,
+				"y": -78.0
 			},
-			"parameters": {
-				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
-					"type": "Color"
-				},
-				"name": 0
-			},
+			"parameters": {},
+			"seed": -18068.0,
 			"type": "combine"
 		},
 		{
 			"name": "perlin_0",
 			"node_position": {
-				"x": 69,
+				"x": 69.0,
 				"y": 81.25
 			},
 			"parameters": {
-				"iterations": 6,
+				"iterations": 6.0,
 				"persistence": 0.75,
-				"scale_x": 4,
-				"scale_y": 20
+				"scale_x": 4.0,
+				"scale_y": 20.0
 			},
+			"seed": 25354.0,
 			"type": "perlin"
 		},
 		{
 			"name": "decompose_0",
 			"node_position": {
-				"x": 97,
-				"y": 236
+				"x": 97.0,
+				"y": 236.0
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 51795.0,
 			"type": "decompose"
 		},
 		{
 			"name": "bricks_0",
 			"node_position": {
-				"x": 79,
+				"x": 79.0,
 				"y": -124.75
 			},
 			"parameters": {
-				"bevel": 0,
-				"columns": 1,
-				"corner": 0,
+				"bevel": 0.0,
+				"columns": 1.0,
+				"corner": 0.0,
 				"mortar": 0.02,
-				"pattern": 0,
-				"repeat": 1,
-				"round": 0,
+				"pattern": 0.0,
+				"repeat": 1.0,
+				"round": 0.0,
 				"row_offset": 0.5,
-				"rows": 10
+				"rows": 10.0
 			},
+			"seed": -39659.0,
 			"type": "bricks"
 		},
 		{
 			"name": "transform_1",
 			"node_position": {
-				"x": 290,
-				"y": 120
+				"x": 290.0,
+				"y": 120.0
 			},
 			"parameters": {
 				"repeat": true,
-				"rotate": 0,
-				"scale_x": 1,
-				"scale_y": 1,
-				"translate_x": 1,
-				"translate_y": 1
+				"rotate": 0.0,
+				"scale_x": 1.0,
+				"scale_y": 1.0,
+				"translate_x": 1.0,
+				"translate_y": 1.0
 			},
+			"seed": 16742.0,
 			"type": "transform"
 		},
 		{
 			"name": "blend_0",
 			"node_position": {
-				"x": 492,
+				"x": 492.0,
 				"y": -13.75
 			},
 			"parameters": {
 				"amount": 0.554688,
-				"blend_type": 0
+				"blend_type": 0.0
 			},
+			"seed": -53145.0,
 			"type": "blend"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "UklGRpwFAABXRUJQVlA4WAoAAAAQAAAALwAALwAAQUxQSJQCAAANoCNteyJJevXrV9HAMpNX7Q9UrMd4gGEea5ksZmYGi3n3AG12ZIzVFT0X4BmrrOXdqqiUUlooyNIJImICmFOsBzh//bn89tcvAK6K1C9SVmbLdb1uM1Y0ZXysX6yVaIx1aRmvObyDqe3OZd3edRt/+PQkGmqR5K945gZIFWIwJFLELu3cv/LMWWPifFry8D0QxFomGoxAjK2Dj374ZtIwjxtd9BN4dcwrksL6lzZvGzg/mxtu+gavDeo0msLNn+xZdX4WN7z2PXyHuo36S5fvP+L8NB1teo/QZoEuNIv7VzVMkvKibwgtFqqhubxnIHFC4id8mwWrv/STbYn/q38Y32Hhzt+8+U0NIOUV96BkqLz04VmJSHwa38jB+PWPPCtRymtuQMlSObhyUmx1GN/Iw/jOvk+tNzuwZGrZ+UPJFlI2kpY2rnEdVTZU9rqCHln3+nSRfITusfObmHwMl43XR7LuyLkVJh9Du0n2vzXbyWSTzGj8l3TIeRh/GV+WTDbJDOBYN0o2UY5Bv0fOfSius/lYCljbuBQlk2iP/YErf9hZ2Uwq+z2u4tN9nWSySA3/FVXUkysHg2YR9HO0JPLsI+uTySA1xq8QIerZD18KmkHQx9ASCObNzTd7tzDfKY4az/9N2vbJpUEXFNo/34lJE6IO9iw3gy4ktKo70JLJwa3eXzS9W4BvV9fhRkz37sj9y5d6NTWl0Pn5DtyQWb1b3fPJzXg1NaTQ0OJO3JDZvQ62bX5pPUFkjhidjh87io6YN0h688NHD7ZIFWIwJFLEWgmfv4wxJfNH9OwzK/t3LlkmGozAse+/BPWJWoPIyU9/2Hhdr3tZp81oODjWL/4AjSV1xyi2XCv6x8bSZBz5v6tKZgdWUDgg4gIAAJARAJ0BKjAAMAA+kUCZSSWkIiEnLJCwEgljAK5Vjdh1YPfX0YbcvnjtNc3oifX/adaXby7Jb/S9Z+Jh0MID1S9HH0z7BPQ2/Xf2Fv2MOiKNqVQ/2RT4fNj58yCcyDOgS0+IZ7IYny3q7p6svq9sxYA7YA0E3S2xiN4HfcuDF8osrYL9f4ve/dK67Kn7u+P77C3FonpQAP7+h9MD5hCp0s1JbQiomx5KP7tHK1JOn/C1OHCle1LWPjn+LJjz2MQo0yBjQht86y3xc3iHpPzbNK1J2jMybrKmQbOGqspJlz+mz7Ir9l622eBLmX1v248KHETvfxsu5PkmFArki4qz9Rys/uzeBEAbSjfQN90khEgepo4dYO0UJTXLEAVCV8ftHLmjGXXl6suGxHwezJgSn/tP0SWxmgqQz9eRX92nsFJjOacy4UdMESbGjLSthjPRft49mUzd27IqO0ALg5i0UlTslesJC6DznoEw1t5t1bZFlv9Z2Y0A8bklD+yj/KmR60qbELEpKOKM4aOjKn71FVZf6FdsZ1i2TNbOstv18oGMf1ybcGloD5QFOIfym5Oip1yY6wVInroGZm7yJvQc8pZM61rWP2VPOtVvZhP/ewXHYjACvFvHu9Qt6/5z+/iWoGpwV4lcbdeaYvY2PTlHyavOuE1Y9AEx+3Ebb9KJObrOzWmoo4mwkv5n9Roqk4TX2SbbuTXmAgConJJVdTjWgc27gLpJTBgKvjND993xQ74xof/kbBF9u52xwpFPZ0yro6QXIH9RPkc7vyBVJkTqN98oKF/CmCS6vtcqIqP59AC2ISYRdkrSjBJ58l8f91nesPTy863uMRPeaKjtculSxLDhWkKJiWiVhuZw+DsIlhBnQbTW8rq3XlzbWFYujDgafditzbQlauuIcyGthNtsB4X21BvIPyHRADjWEo4zoLBdMM1qTsrDAhR7netCg3qyscJP9FOmDO8S7EPYVdjSTjGQAA==",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

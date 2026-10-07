@@ -68,38 +68,39 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "39",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
-			"export_paths": {
-
-			},
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 217,
-				"y": -183
+				"x": 217.0,
+				"y": -183.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
 				"metallic": 0.05,
-				"normal": 1,
+				"normal": 1.0,
 				"roughness": 0.75,
-				"size": 11,
-				"sss": 0
+				"size": 11.0,
+				"sss": 0.0
 			},
+			"seed": -25074.0,
 			"type": "material"
 		},
 		{
@@ -109,11 +110,12 @@
 				"y": -300.5
 			},
 			"parameters": {
-				"iterations": 6,
+				"iterations": 6.0,
 				"persistence": 0.5,
-				"scale_x": 8,
-				"scale_y": 8
+				"scale_x": 8.0,
+				"scale_y": 8.0
 			},
+			"seed": 39770.0,
 			"type": "perlin"
 		},
 		{
@@ -127,51 +129,52 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
+							"a": 1.0,
+							"b": 1.0,
 							"g": 0.1875,
 							"pos": 0.081818,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 0.447917,
-							"g": 0.827474,
+							"a": 1.0,
+							"b": 0.447917014360428,
+							"g": 0.827473998069763,
 							"pos": 0.109091,
-							"r": 1
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.489583,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.489582985639572,
 							"pos": 0.227273,
-							"r": 0.107096
+							"r": 0.107096001505852
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.19043,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.190430000424385,
 							"pos": 0.554545,
-							"r": 0.338542
+							"r": 0.338542014360428
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0.172852,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.172851994633675,
 							"pos": 0.927273,
-							"r": 0.307292
+							"r": 0.307292014360428
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 19314.0,
 			"type": "colorize"
 		},
 		{
@@ -185,23 +188,24 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.5,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.836364,
-							"r": 1
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 11422.0,
 			"type": "colorize"
 		},
 		{
@@ -215,23 +219,24 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 27223.0,
 			"type": "colorize"
 		},
 		{
@@ -241,11 +246,12 @@
 				"y": -93.5
 			},
 			"parameters": {
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.99,
-				"param2": 0,
-				"param4": 1
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 55684.0,
 			"type": "normal_map"
 		},
 		{
@@ -255,12 +261,13 @@
 				"y": -582.25
 			},
 			"parameters": {
-				"mix": 0,
-				"x_scale": 4,
-				"x_wave": 4,
-				"y_scale": 1,
-				"y_wave": 0
+				"mix": 0.0,
+				"x_scale": 4.0,
+				"x_wave": 4.0,
+				"y_scale": 1.0,
+				"y_wave": 0.0
 			},
+			"seed": 45261.0,
 			"type": "pattern"
 		},
 		{
@@ -274,30 +281,31 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
+							"a": 1.0,
 							"b": 0.75,
 							"g": 0.75,
 							"pos": 0.045455,
 							"r": 0.75
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
 							"pos": 0.363636,
-							"r": 0
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 31115.0,
 			"type": "colorize"
 		},
 		{
@@ -308,37 +316,38 @@
 			},
 			"parameters": {
 				"amount": 0.819444,
-				"blend_type": 3
+				"blend_type": 3.0
 			},
+			"seed": 31197.0,
 			"type": "blend"
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
+				"a": 1.0,
+				"b": 0.0,
 				"g": 0.5,
-				"r": 1,
+				"r": 1.0,
 				"type": "Color"
 			},
 			"name": "comment",
 			"node_position": {
 				"x": -605.5,
-				"y": -386.194458
+				"y": -386.194458007812
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 36291.0,
 			"size": {
-				"x": 251,
-				"y": 54
+				"x": 251.0,
+				"y": 54.0
 			},
 			"text": "Best viewed on SphereTess\n mesh",
 			"title": "Comment",
 			"type": "comment"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }
