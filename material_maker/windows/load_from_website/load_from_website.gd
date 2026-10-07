@@ -19,6 +19,11 @@ enum AssetID {
 }
 
 const MAX_CONNECTIONS : int = 8
+var existing_connections : int = 0
+
+var thumbnail_tasks : PackedInt32Array = []
+
+var loading_tween : Tween
 
 func _ready() -> void:
 	for c in range(MAX_CONNECTIONS):
@@ -27,6 +32,8 @@ func _ready() -> void:
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
 
 func _on_ItemList_item_activated(index) -> void:
+	if loading_tween.is_running():
+		return
 	if only_return_index:
 		emit_signal("return_asset", { index=displayed_assets[index] })
 	else:
@@ -47,6 +54,9 @@ func _on_LoadFromWebsite_popup_hide() -> void:
 	emit_signal("return_asset", {})
 
 func _on_OK_pressed() -> void:
+	$VBoxContainer.modulate.a = 0.5
+	$VBoxContainer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	if item_list.get_selected_items().is_empty():
 		emit_signal("return_asset", {})
 		return
@@ -75,59 +85,83 @@ func fill_list(filter : String) -> void:
 	prioritized.append_array(missing_thumbnail_indexes)
 	missing_thumbnail_indexes = prioritized
 
+func process_data(_result : int, _response_code : int,
+		_headers : PackedStringArray, body : PackedByteArray,
+		type : int = 0, return_index : bool = false) -> void:
+
+	if _response_code != HTTPClient.RESPONSE_OK:
+		const scene : String = "res://material_maker/windows/accept_dialog/accept_dialog.tscn"
+		var dialog : AcceptDialog = load(scene).instantiate()
+		dialog.dialog_text = "Cannot get assets from the website"
+		mm_globals.main_window.add_child(dialog)
+		await dialog.ask()
+		queue_free()
+		return
+
+	var data : String = body.get_string_from_utf8()
+
+	var json : JSON = JSON.new()
+	if json.parse(data) == OK and json.get_data() is Array:
+		only_return_index = return_index
+		var parse_result : Array = json.get_data()
+		assets = []
+		var placeholder_tex : ImageTexture = ImageTexture.\
+				create_from_image(get_placeholder_icon(type))
+		for i in range(parse_result.size() - 1, -1, -1):
+			var m = parse_result[i]
+			m.id = int(m.id)
+			m.type = int(m.type)
+			if m.type & 15 == type:
+				m.texture = placeholder_tex
+				assets.push_back(m)
+		loading_tween.kill()
+		item_list.modulate.a = 1.0
+		fill_list("")
+		update_thumbnails()
+
 func select_asset(type : int = 0, return_index : bool = false) -> Dictionary:
-	# Hide the window until the asset list is loaded
-	visible = false
-	content_scale_factor = mm_globals.ui_scale_factor()
 	mm_globals.main_window.add_dialog(self)
-	var error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
-	if error == OK:
-		var data = ( await $HTTPRequest.request_completed )[3].get_string_from_utf8()
-		var json = JSON.new()
-		if json.parse(data) == OK and json.get_data() is Array:
-			only_return_index = return_index
-			var parse_result : Array = json.get_data()
-			visible = true
-			%Filter.grab_focus()
-			size = get_contents_minimum_size()
-			hide()
-			popup_centered()
-			var tmp_assets : Array = parse_result
-			tmp_assets.reverse()
-			assets = []
-			for i in range(tmp_assets.size()):
-				var m = tmp_assets[i]
-				m.id = int(m.id)
-				m.type = int(m.type)
-				if m.type & 15 == type:
-					m.texture = ImageTexture.new()
-					m.texture.set_image(get_placeholder_icon(type))
-					assets.push_back(m)
-			fill_list("")
-			update_thumbnails()
-			var result = await self.return_asset
-			queue_free()
-			return result
-	queue_free()
-	var dialog : AcceptDialog = load("res://material_maker/windows/accept_dialog/accept_dialog.tscn").instantiate()
-	dialog.dialog_text = "Cannot get assets from the website"
-	mm_globals.main_window.add_child(dialog)
-	dialog.ask()
-	return {}
+	var placeholder : ImageTexture = ImageTexture.create_from_image(
+			get_placeholder_icon(type))
+	for i in range(250):
+		item_list.add_item("loading...", placeholder, false)
+
+	loading_tween = get_tree().create_tween()
+	loading_tween.set_trans(Tween.TRANS_QUAD).set_loops()
+	loading_tween.tween_property(item_list, "modulate:a", 0.2, 0.7)
+	loading_tween.tween_property(item_list, "modulate:a", 0.7, 0.7)
+
+	content_scale_factor = mm_globals.ui_scale_factor()
+	$VBoxContainer.minimum_size_changed.emit()
+	hide()
+	popup_centered()
+	start_download_asset(type, return_index)
+
+	return_asset.connect(queue_free.unbind(1))
+	return await return_asset
+
+func process_thumbnail(m : Dictionary, id : int) -> void:
+	var cache_filename : String = "user://website_cache/thumbnail_%d.webp" % m.id
+	var image : Image = Image.new()
+	if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
+		missing_thumbnail_indexes.append.call_deferred(id)
+		if existing_connections < MAX_CONNECTIONS:
+			existing_connections += 1
+			download_thumbnail.call_deferred()
+	else:
+		thumbnail_set.call_deferred(m, image)
+
+func thumbnail_set(material : Dictionary, image : Image) -> void:
+	material.texture = ImageTexture.create_from_image(image)
+	var displayed : int = displayed_assets.find(material.id)
+	if displayed != -1:
+		item_list.set_item_icon(displayed, material.texture)
 
 func update_thumbnails() -> void:
 	missing_thumbnail_indexes = []
 	for i in range(assets.size()):
-		var m = assets[i]
-		var cache_filename : String = "user://website_cache/thumbnail_%d.webp" % m.id
-		var image : Image = Image.new()
-		if ! FileAccess.file_exists(cache_filename) or image.load(cache_filename) != OK:
-			missing_thumbnail_indexes.append(i)
-		else:
-			m.texture.set_image(image)
-
-	for connection in range(MAX_CONNECTIONS):
-		download_thumbnail()
+		thumbnail_tasks.append(WorkerThreadPool.add_task(
+				process_thumbnail.bind(assets[i], i)))
 
 func download_thumbnail() -> void:
 	if missing_thumbnail_indexes.is_empty():
@@ -140,15 +174,18 @@ func download_thumbnail() -> void:
 		if http.get_http_client_status() == HTTPClient.Status.STATUS_DISCONNECTED:
 			var _error : Error = http.request(address)
 			http.request_completed.connect(
-				(func(_result : int, _response_code : int,
+				(func(_result : int, response_code : int,
 						_headers : PackedStringArray, body : PackedByteArray,
 						index : int) -> void:
+					if response_code != HTTPClient.RESPONSE_OK:
+						return
+					existing_connections -= 1
 					var material : Dictionary = assets[index]
 					var save_path : String = "user://website_cache/thumbnail_%d.webp" % material.id
 					var image : Image = Image.new()
 					image.load_webp_from_buffer(body)
 					image.save_webp(save_path)
-					material.texture.set_image(image)
+					thumbnail_set(material, image)
 					download_thumbnail()).bind(missing_index), CONNECT_ONE_SHOT)
 			return
 
@@ -177,3 +214,12 @@ func get_placeholder_icon(type : AssetID) -> Image:
 			return preload(icons % "environment.svg").get_image()
 		_:
 			return Image.new()
+
+func start_download_asset(type : int = 0, return_index : bool = false) -> void:
+	var error : Error = $HTTPRequest.request(MMPaths.WEBSITE_ADDRESS+"/api/getMaterials")
+	if error == OK:
+		$HTTPRequest.request_completed.connect(process_data.bind(type, return_index))
+
+func _exit_tree() -> void:
+	for t in thumbnail_tasks:
+		WorkerThreadPool.wait_for_task_completion(t)
