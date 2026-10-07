@@ -32,9 +32,12 @@ func get_drag_handle_pos(item : TreeItem) -> float:
 var dragged_from_handle : bool = false
 
 func _gui_input(event : InputEvent) -> void:
-	if event is InputEventScreenDrag and event.index == 0:
+	if event is InputEventMouseButton:
+		if event.device == InputEvent.DEVICE_ID_EMULATION:
+			accept_event()
+	elif event is InputEventScreenDrag and event.index == 0:
 		var item : TreeItem = get_item_at_position(event.position)
-		if dragged_from_handle and item and event.position.x < get_drag_handle_pos(item):
+		if not dragged_from_handle and item and event.position.x < get_drag_handle_pos(item):
 			tree_scrollbar.value -= event.relative.y
 		accept_event()
 	elif event is InputEventScreenTouch and event.index == 0:
@@ -48,7 +51,6 @@ func _gui_input(event : InputEvent) -> void:
 				deselect_all()
 		else:
 			dragged_from_handle = false
-		accept_event()
 
 func get_sdf_item_type(item : TreeItem) -> Object:
 	if item == null or not item.has_meta("scene"):
