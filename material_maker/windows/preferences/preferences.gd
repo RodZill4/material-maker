@@ -17,8 +17,7 @@ func edit_preferences(c : ConfigFile) -> void:
 	update_controls(self)
 
 	if OS.get_name() == "Android":
-		mm_touch.make_dialog_fullscreen(self)
-		show()
+		mm_touch.make_dialog_fullscreen(self, true)
 	else:
 		size *= content_scale_factor
 		hide()

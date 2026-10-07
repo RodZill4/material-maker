@@ -824,8 +824,7 @@ func do_edit(node, edit_window_scene : PackedScene, tab : String = "") -> void:
 		edit_window.get_window().min_size = Vector2(950, 450) * edit_window.get_window().content_scale_factor
 
 		if OS.get_name() == "Android":
-			mm_touch.make_dialog_fullscreen.call_deferred(edit_window)
-			edit_window.show.call_deferred()
+			mm_touch.make_dialog_fullscreen.call_deferred(edit_window, true)
 		else:
 			edit_window.hide()
 			edit_window.popup_centered()

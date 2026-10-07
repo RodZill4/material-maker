@@ -155,8 +155,7 @@ func _ready() -> void:
 		patrons_list.add_item(p)
 
 	if OS.get_name() == "Android":
-		mm_touch.make_dialog_fullscreen(self)
-		show()
+		mm_touch.make_dialog_fullscreen(self, true)
 	else:
 		hide()
 		popup_centered()

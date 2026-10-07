@@ -75,7 +75,7 @@ func corner_radius(corner : Corner, scale : float = mm_globals.get_ui_scale()) -
 func cutout_margins(side : Side, scale : float = mm_globals.get_ui_scale()) -> int:
 	return ceili(_dispalay_cutout_margins[side] / scale)
 
-func make_dialog_fullscreen(window : Window) -> void:
+func make_dialog_fullscreen(window : Window, show : bool = false) -> void:
 	window.borderless = true
 	window.size = mm_globals.main_window.size
 	window.min_size = Vector2.ZERO
@@ -83,6 +83,8 @@ func make_dialog_fullscreen(window : Window) -> void:
 	# offset by MM_MainBackground stylebox content margins
 	window.position.x += maxi(0, calc_margins(Side.SIDE_LEFT) - 10)
 	window.size.x -= (window.position.x + calc_margins(Side.SIDE_RIGHT))
+	if show:
+		window.show()
 
 ## Get display safe margins accounting for cutouts and corner radii.
 ## [param side] can be either Side.SIDE_LEFT or Side.SIDE_RIGHT
