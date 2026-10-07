@@ -73,7 +73,7 @@ func on_parameter_changed(n : String, v : Variant) -> void:
 		notify_redraw()
 
 func _draw_port(_slot_index : int, pos : Vector2i, _left : bool, color : Color) -> void:
-	draw_circle(pos, 5, color, true, -1, true)
+	draw_texture(MMGraphNodeBase.port_tex, pos - Vector2i(5, 5), color)
 
 func _exit_tree() -> void:
 	var source_node : MMGraphPortal = get_link_source(get_link(), get_parent())
