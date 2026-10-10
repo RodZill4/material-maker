@@ -191,9 +191,9 @@ func interpret_file_name(file_name: String, path:="") -> String:
 	return MMLoader.interpret_file_name(file_name, path, extension, graph_node, additional_ids, resolution)
 
 
-func _on_custom_resolution_x_value_changed(value: Variant) -> void:
+func _on_custom_resolution_x_value_changed(_value: Variant) -> void:
 	update()
 
 
-func _on_custom_resolution_y_value_changed(value: Variant) -> void:
+func _on_custom_resolution_y_value_changed(_value: Variant) -> void:
 	update()
