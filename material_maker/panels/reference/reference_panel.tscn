@@ -7,7 +7,9 @@
 [sub_resource type="Shader" id="1"]
 code = "shader_type canvas_item;
 
-uniform sampler2D image : hint_default_transparent;
+uniform sampler2D image : hint_default_transparent, filter_linear;
+uniform sampler2D image_nearest : hint_default_transparent, filter_nearest;
+uniform bool nearest_filter = false;
 uniform vec2 canvas_size;
 uniform vec2 image_size;
 uniform float scale;
@@ -17,11 +19,15 @@ uniform vec4 bg_color : source_color;
 void fragment() {
 	vec2 ratio = canvas_size/image_size;
 	vec2 uv = center+(UV-0.5)*scale*ratio/min(ratio.x, ratio.y);
-	COLOR = mix(vec4(0.0), texture(image, uv), step(length(uv-clamp(uv, vec2(0.0), vec2(1.0))), 0.0001));
+	vec4 display_image = texture(image, uv);
+	if (nearest_filter)
+		display_image = texture(image_nearest, uv);
+	COLOR = mix(vec4(0.0), display_image, step(length(uv-clamp(uv, vec2(0.0), vec2(1.0))), 0.0001));
 }"
 
 [sub_resource type="ShaderMaterial" id="3"]
 shader = SubResource("1")
+shader_parameter/nearest_filter = false
 shader_parameter/canvas_size = Vector2(200, 200)
 shader_parameter/image_size = Vector2(256, 256)
 shader_parameter/scale = 2.02
@@ -122,6 +128,23 @@ icon_alignment = 1
 [node name="CheckClipboardImage" type="Timer" parent="MenuBar/HBox/MainMenu/HBox" unique_id=2067403748]
 autostart = true
 
+[node name="ViewMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=2108939916]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="HBox" type="HBoxContainer" parent="MenuBar/HBox/ViewMenu" unique_id=887230300]
+layout_mode = 2
+theme_type_variation = &"MM_PanelMenuBar"
+
+[node name="NearestFilterButton" type="Button" parent="MenuBar/HBox/ViewMenu/HBox" unique_id=1719452204]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Nearest Filtering"
+toggle_mode = true
+icon_alignment = 1
+
 [node name="NavigationMenu" type="PanelContainer" parent="MenuBar/HBox" unique_id=1551415023]
 unique_name_in_owner = true
 layout_mode = 2
@@ -217,5 +240,6 @@ button_group = SubResource("ButtonGroup_82qg5")
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/PasteImageButton" to="." method="_on_paste_image_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/MainMenu/HBox/RemoveImageButton" to="." method="_on_remove_image_button_pressed"]
 [connection signal="timeout" from="MenuBar/HBox/MainMenu/HBox/CheckClipboardImage" to="." method="_on_check_clipboard_image_timeout"]
+[connection signal="toggled" from="MenuBar/HBox/ViewMenu/HBox/NearestFilterButton" to="." method="_on_nearest_filter_button_toggled"]
 [connection signal="pressed" from="MenuBar/HBox/NavigationMenu/HBox/PrevImageButton" to="." method="_on_prev_image_button_pressed"]
 [connection signal="pressed" from="MenuBar/HBox/NavigationMenu/HBox/NextImageButton" to="." method="_on_next_image_button_pressed"]
