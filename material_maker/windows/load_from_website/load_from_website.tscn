@@ -4,7 +4,7 @@
 
 [node name="LoadFromWebsite" type="Window" unique_id=81371415]
 oversampling_override = 1.0
-title = "Load from website"
+title = "Load From Website"
 position = Vector2i(0, -36)
 exclusive = true
 script = ExtResource("1")

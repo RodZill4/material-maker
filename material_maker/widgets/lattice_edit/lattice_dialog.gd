@@ -15,7 +15,7 @@ func _ready():
 
 func set_closed(c : bool = true):
 	closed = c
-	title = "Edit lattice" if closed else "Edit polyline"
+	title = "Edit Lattice" if closed else "Edit Polyline"
 	$VBoxContainer/EditorContainer/LatticeEditor.set_closed(closed)
 
 func _on_CurveDialog_popup_hide():

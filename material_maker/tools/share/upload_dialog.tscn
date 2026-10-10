@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://bkpwlw0cvm7a3" path="res://material_maker/tools/share/upload_dialog.gd" id="1"]
 
 [node name="UploadDialog" type="Window"]
-title = "Share asset"
+oversampling_override = 1.0
+title = "Share Asset"
 position = Vector2i(0, 36)
 size = Vector2i(600, 500)
 script = ExtResource("1")
