@@ -479,6 +479,27 @@ text = "On"
 flat = false
 config_variable = "auto_size_comment"
 
+[node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=343504782]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="AutoInsertNode" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=1679099489]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/AutoInsertNode" unique_id=1911272184]
+layout_mode = 2
+text = "Automatic node insertion"
+
+[node name="AutoInsertNode" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/AutoInsertNode" unique_id=1933611024 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, a node positioned on top of a connection line will be automatically inserted into the connection if compatible.
+(The 'D' key can be used to block the action while dragging a node)."
+text = "On"
+flat = false
+config_variable = "auto_node_insertion"
+
 [node name="Spacer1" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=826818285]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
