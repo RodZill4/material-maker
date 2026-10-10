@@ -64,7 +64,11 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_minimize_button = true,
 	node_close_button = true,
 	ui_field_sensitivity = 1.0,
-	color_picker_floating = false
+	color_picker_floating = false,
+	ui_use_system_font = false,
+	ui_font_size = 16,
+	ui_code_font_size = 12,
+	ui_font_enable_msdf = true,
 }
 
 
@@ -237,3 +241,6 @@ func ui_scale_factor() -> float:
 	if get_tree().root.gui_embed_subwindows:
 		return 1.0
 	return get_tree().root.content_scale_factor
+
+func is_classic_theme() -> bool:
+	return "classic" in mm_globals.main_window.theme.resource_path

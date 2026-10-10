@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b7ko0gpbs5mqa"]
+
+[ext_resource type="Script" uid="uid://bv04peqautr3c" path="res://material_maker/windows/preferences/file_option.gd" id="1_3nbpc"]
+[ext_resource type="PackedScene" uid="uid://cfyio0a1b27t0" path="res://material_maker/widgets/file_picker_button/file_picker_button.tscn" id="2_8arj1"]
+[ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="2_wpo6d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0r3o7"]
+atlas = ExtResource("2_wpo6d")
+region = Rect2(96, 192, 16, 16)
+
+[node name="FileOption" type="HBoxContainer" unique_id=1399365702]
+offset_right = 94.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+script = ExtResource("1_3nbpc")
+config_variable = "code_font"
+
+[node name="Reset" type="Button" parent="." unique_id=1833752383]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+icon = SubResource("AtlasTexture_0r3o7")
+
+[node name="FilePickerButton" parent="." unique_id=275857412 instance=ExtResource("2_8arj1")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="pressed" from="Reset" to="." method="_on_reset_pressed"]
+[connection signal="file_selected" from="FilePickerButton" to="." method="_on_file_picker_button_file_selected"]

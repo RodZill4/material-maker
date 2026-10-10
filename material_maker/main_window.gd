@@ -165,6 +165,11 @@ func _ready() -> void:
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
 
+	# Update fonts
+	FontUtils.rebuild_fonts()
+	theme.default_font = FontUtils.main_font
+	theme.default_font_size = FontUtils.ui_font_size
+
 	# Restore the theme
 	var theme_name: String = "default dark"
 	if mm_globals.config.has_section_key("window", "theme"):
@@ -631,14 +636,21 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 func change_theme(theme_name) -> void:
 	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
 		theme_name = "default dark"
-	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
+	var _theme : Theme = load("res://material_maker/theme/"+theme_name+".tres")
 	if _theme == theme:
 		return
 	if _theme is EnhancedTheme:
 		_theme.update()
-	await get_tree().process_frame
 	theme = _theme
+	theme.default_font = FontUtils.main_font
+	theme.set_font("title_font", "TooltipPanel", FontUtils.main_font)
+	theme.set_font("font", "TooltipLabel", FontUtils.main_font)
+
 	if "classic" in theme_name:
+		if not FontUtils.has_font_config("main_font"):
+			theme.default_font = FontUtils.classic_font
+			theme.set_font("title_font", "TooltipPanel", FontUtils.classic_font)
+			theme.set_font("font", "TooltipLabel", FontUtils.classic_font)
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
 	else:
 		RenderingServer.set_default_clear_color(

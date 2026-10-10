@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3 uid="uid://b3d8p401jppew"]
+
+[ext_resource type="FontFile" uid="uid://lro0qdrhfytt" path="res://material_maker/theme/font_rubik/Rubik-Light.ttf" id="1_c62ru"]
+[ext_resource type="FontFile" uid="uid://btybkvkb8rtol" path="res://material_maker/fonts/DroidSansFallback.ttf" id="2_waneu"]
+[ext_resource type="FontFile" uid="uid://buwvapsuukd0n" path="res://material_maker/fonts/DroidSansJapanese.ttf" id="3_waneu"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("1_c62ru"), ExtResource("2_waneu"), ExtResource("3_waneu")])
