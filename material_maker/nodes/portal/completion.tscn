@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://s1vtfefwu7cr"]
+
+[ext_resource type="Script" uid="uid://buqmwxkc40t11" path="res://material_maker/nodes/portal/completion.gd" id="1_v4kch"]
+
+[node name="Completion" type="Panel" unique_id=1214631678]
+custom_minimum_size = Vector2(225, 0)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_right = 100.0
+grow_horizontal = 2
+script = ExtResource("1_v4kch")
+slot_svg = "<svg width=\"16\" height=\"16\">
+		<circle cx=\"8\" cy=\"8\" r=\"6\" fill=\"#FFF\" stroke=\"#000\" stroke-width=\"1\"/>
+</svg>"
+
+[node name="ItemList" type="ItemList" parent="." unique_id=1794413207]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+allow_search = false
+wraparound_items = false
+fixed_column_width = 200
+metadata/_edit_use_anchors_ = true
