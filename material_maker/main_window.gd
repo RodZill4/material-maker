@@ -255,6 +255,7 @@ func _ready() -> void:
 							DirAccess.remove_absolute(f)
 
 	if get_current_graph_edit() == null:
+		await get_tree().process_frame
 		new_material()
 
 	size = get_window().size
@@ -648,6 +649,7 @@ func change_theme(theme_name) -> void:
 		return
 	if _theme is EnhancedTheme:
 		_theme.update()
+	await get_tree().process_frame
 
 	if mm_globals.get_config("touch_optimization"):
 		android_set_theme_overrides(_theme)

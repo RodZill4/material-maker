@@ -718,7 +718,7 @@ func new_material(init_nodes = {nodes=[{name="Material", type="material",paramet
 		add_child(top_generator)
 		move_child(top_generator, 0)
 		update_view(top_generator)
-		center_view.call_deferred()
+		center_view()
 		set_save_path("")
 		set_need_save(false)
 
