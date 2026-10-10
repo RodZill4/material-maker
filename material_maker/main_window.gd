@@ -642,7 +642,7 @@ func change_theme(theme_name) -> void:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
 	else:
 		RenderingServer.set_default_clear_color(
-				Color("4d4d4d") if "light" in theme_name else Color("1f1f1f"))
+				Color.WHITE if "light" in theme_name else Color("1f1f1f"))
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id) -> void:
