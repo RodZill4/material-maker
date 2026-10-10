@@ -14,11 +14,7 @@ static func load_gltf_mesh(file_path) -> ArrayMesh:
 	if not FileAccess.file_exists(file_path):
 		printerr("GLTF/GLB file does not exists or is not accesible")
 		return null
-	var glb_filebytes = FileAccess.get_file_as_bytes(file_path)
-	if glb_filebytes == null:
-		printerr("GLTF/GLB file data is null")
-		return null
-	var err = gltf.append_from_buffer(glb_filebytes, "", gltf_state)
+	var err = gltf.append_from_file(file_path, gltf_state)
 	if err != OK:
 		printerr("Failure during parsing GLTF/GLB buffer")
 		return null
