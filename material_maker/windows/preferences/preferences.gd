@@ -12,12 +12,16 @@ func edit_preferences(c : ConfigFile) -> void:
 	config = c
 	var main_window = mm_globals.main_window
 	main_window.add_dialog(self)
-	config_changed.connect(main_window.on_config_changed)
+	config_changed.connect(mm_globals.preferences_updated.emit)
 	content_scale_factor = mm_globals.ui_scale_factor()
 	update_controls(self)
-	size *= content_scale_factor
-	hide()
-	popup_centered(size)
+
+	if OS.get_name() == "Android":
+		mm_touch.make_dialog_fullscreen(self, true)
+	else:
+		size *= content_scale_factor
+		hide()
+		popup_centered(size)
 
 func update_controls(p : Node) -> void:
 	for c in p.get_children():
@@ -72,3 +76,10 @@ func _on_DownloadLanguage_closed():
 func _on_ready() -> void:
 	%WinTabletDriver.visible = OS.get_name() == "Windows"
 	%WinTabletDriverSpacer.visible = OS.get_name() == "Windows"
+	%GuiSingleWindowMode.visible = OS.get_name() != "Android"
+	%GuiUseNativeFileDialogs.visible = OS.get_name() != "Android"
+	%TouchFullScreen.visible = OS.get_name() == "Android"
+
+	if OS.get_name() == "Android":
+		config_changed.connect(mm_touch.make_dialog_fullscreen.bind(self),
+				ConnectFlags.CONNECT_DEFERRED)

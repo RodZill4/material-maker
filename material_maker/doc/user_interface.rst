@@ -6,6 +6,7 @@ User interface
 
    user_interface_overview
    user_interface_shortcuts
+   user_interface_gestures
    user_interface_first_steps
    user_interface_main_menu
    user_interface_panels

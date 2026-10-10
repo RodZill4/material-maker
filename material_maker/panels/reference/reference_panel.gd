@@ -38,6 +38,12 @@ func _ready():
 
 	%GradientSlot.toggled.connect(_on_slot_toggled.bind(%GradientSlot))
 
+	if OS.get_name() == "Android":
+		%PasteImageButton.hide()
+		%CheckClipboardImage.stop()
+		%CheckClipboardImage.queue_free()
+		$Empty/Label.text = "Add reference image to get started"
+
 
 ## This is magically called by the main window :)
 func on_drop_image_file(file_name: String) -> void:
@@ -160,7 +166,7 @@ func _on_image_resized() -> void:
 	%Image.material.set_shader_parameter("canvas_size", %Image.get_size())
 
 
-func _on_image_gui_input(event: InputEvent) -> void:
+func _on_image_gui_input(event : InputEvent) -> void:
 	if opened_images.is_empty():
 		return
 
@@ -170,8 +176,8 @@ func _on_image_gui_input(event: InputEvent) -> void:
 		handle_movement(event)
 
 
-func handle_movement(event: InputEvent) -> void:
-	var m: ShaderMaterial = %Image.material
+func handle_movement(event : InputEvent) -> void:
+	var m : ShaderMaterial = %Image.material
 
 	var canvas_size : Vector2 = %Image.get_size()
 	var image_size : Vector2 = m.get_shader_parameter("image_size")
@@ -205,9 +211,12 @@ func handle_movement(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		if is_dragging:
 			new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
-
 		elif is_zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 3)
+	elif event is InputEventMagnifyGesture:
+		new_scale = clamp(new_scale / event.factor, 0.005, 3)
+	elif event is InputEventScreenDrag and event.index == 0:
+		new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
 
 	if new_scale != image_scale:
 		m.set_shader_parameter("scale", new_scale)

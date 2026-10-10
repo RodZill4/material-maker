@@ -30,6 +30,7 @@ title = "Easy SDF"
 position = Vector2i(0, 36)
 exclusive = true
 script = ExtResource("3")
+metadata/android_fullscreen_dim = true
 
 [node name="TopContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(800, 400)
@@ -53,9 +54,26 @@ custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 3
+columns = 4
 select_mode = 1
+auto_tooltip = false
 script = ExtResource("4")
+
+[node name="AddMenuHint" type="Label" parent="TopContainer/Main/Tree" unique_id=909843201]
+modulate = Color(1, 1, 1, 0.5176471)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Right click to add shapes"
 
 [node name="Preview2D" parent="TopContainer/Main" instance=ExtResource("2")]
 unique_name_in_owner = true

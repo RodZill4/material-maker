@@ -22,6 +22,7 @@ func _ready() -> void:
 	if get_parent().has_method("add_menu_bar"):
 		menu_bar.get_parent().remove_child(menu_bar)
 		get_parent().add_menu_bar(menu_bar, self)
+	
 
 
 func _draw() -> void:
@@ -40,6 +41,9 @@ func set_pixels(p : MMPixels) -> void:
 	queue_redraw()
 	update_color_buttons()
 
+func color_button_gui_input(event : InputEvent, button : ColorPickerButton) -> void:
+	if event is InputEventScreenTouch:
+		button.accept_event()
 
 func update_color_buttons() -> void:
 	if not is_visible_in_tree():
@@ -65,6 +69,9 @@ func update_color_buttons() -> void:
 			color_button.toggle_mode = true
 			color_button.button_mask = MOUSE_BUTTON_MASK_RIGHT
 			colors.add_child(color_button)
+			if OS.get_name() == "Android":
+				color_button.custom_minimum_size = Vector2i(32, 32)
+				color_button.gui_input.connect(color_button_gui_input.bind(color_button))
 			color_button.focus_entered.connect(self.set_current_color.bind(button_count))
 			color_button.color_changed.connect(self.set_palette_color.bind(button_count))
 			button_count += 1

@@ -109,7 +109,8 @@ class FlexSplit:
 	var draggers : Array[Control] = []
 	
 	const DRAGGER_SCENE = preload("res://addons/flexible_layout/flexible_dragger.tscn")
-	
+	var grip_size : int = 4 if mm_globals.get_config("touch_optimization") else 10
+
 	func _init(p : FlexNode, fl : FlexLayout):
 		super._init(p, fl, "FlexSplit")
 	
@@ -122,13 +123,13 @@ class FlexSplit:
 	func get_minimum_size() -> Vector2i:
 		var s : Vector2i
 		if vertical:
-			s = Vector2i(0, (10*children.size()-1))
+			s = Vector2i(0, (grip_size*children.size()-1))
 			for c in children:
 				var ms : Vector2i = c.get_minimum_size()
 				s.x = max(s.x, ms.x)
 				s.y += ms.y
 		else:
-			s = Vector2i(10*(children.size()-1), 0)
+			s = Vector2i(grip_size*(children.size()-1), 0)
 			for c in children:
 				var ms : Vector2i = c.get_minimum_size()
 				s.x += ms.x
@@ -185,7 +186,6 @@ class FlexSplit:
 	
 	func layout(r : Rect2):
 		#print("Layout FlexSplit (%d children) - %s" % [ children.size(), str(r) ])
-		var grip_size : int = 10
 		rect = r
 		var children_count : int = children.size()
 		var draggers_count : int = draggers.size()
@@ -240,19 +240,19 @@ class FlexSplit:
 		var min_c1_size : Vector2i = c1.get_minimum_size()
 		var min_c2_size : Vector2i = c2.get_minimum_size()
 		if vertical:
-			return Vector2i(c1.rect.position.y+min_c1_size.y, c2.rect.position.y+c2.rect.size.y-min_c2_size.y-10)
+			return Vector2i(c1.rect.position.y+min_c1_size.y, c2.rect.position.y+c2.rect.size.y-min_c2_size.y-grip_size)
 		else:
-			return Vector2i(c1.rect.position.x+min_c1_size.x, c2.rect.position.x+c2.rect.size.x-min_c2_size.x-10)
+			return Vector2i(c1.rect.position.x+min_c1_size.x, c2.rect.position.x+c2.rect.size.x-min_c2_size.x-grip_size)
 
 	func drag(dragger_index : int, p : int):
 		var c1 = children[dragger_index]
 		var c2 = children[dragger_index+1]
 		if vertical:
 			c1.layout(Rect2(c1.rect.position, Vector2(c1.rect.size.x, p-c1.rect.position.y)))
-			c2.layout(Rect2(c2.rect.position.x, p+10, c1.rect.size.x, c2.rect.position.y+c2.rect.size.y-(p+10)))
+			c2.layout(Rect2(c2.rect.position.x, p+grip_size, c1.rect.size.x, c2.rect.position.y+c2.rect.size.y-(p+grip_size)))
 		else:
 			c1.layout(Rect2(c1.rect.position, Vector2(p-c1.rect.position.x, c1.rect.size.y)))
-			c2.layout(Rect2(p+10, c2.rect.position.y, c2.rect.position.x+c2.rect.size.x-(p+10), c1.rect.size.y))
+			c2.layout(Rect2(p+grip_size, c2.rect.position.y, c2.rect.position.x+c2.rect.size.x-(p+grip_size), c1.rect.size.y))
 
 
 class FlexTab:

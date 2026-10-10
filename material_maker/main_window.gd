@@ -1,3 +1,4 @@
+class_name MainWindow
 extends Control
 
 var quitting : bool = false
@@ -23,10 +24,11 @@ var preview_tesselation_detail : int = 256
 @onready var node_library_manager = $NodeLibraryManager
 @onready var brush_library_manager = $BrushLibraryManager
 
+@onready var tip_label : RichTextLabel = %Tip
 
-@onready var projects_panel = $VBoxContainer/Layout/FlexibleLayout/Main
+@onready var projects_panel = %Main
 
-@onready var layout = $VBoxContainer/Layout
+@onready var layout = %Layout
 var library
 var preview_2d : Array
 var histogram
@@ -131,6 +133,12 @@ enum WinTabletDriver { WININK, WINTAB, DISABLED }
 
 func _enter_tree() -> void:
 	mm_globals.main_window = self
+	if OS.get_name() == "Android":
+		ready.connect(android_setup_margins)
+		mm_globals.preferences_updated.connect(android_setup_margins)
+
+	if mm_globals.get_config("touch_optimization"):
+		android_setup_status_bar()
 
 func _ready() -> void:
 	get_window().borderless = false
@@ -144,26 +152,28 @@ func _ready() -> void:
 	if mm_globals.get_config("locale") == "":
 		mm_globals.set_config("locale", TranslationServer.get_locale())
 
+	mm_globals.preferences_updated.connect(on_config_changed)
 	on_config_changed()
 
-	# Set a minimum window size to prevent UI elements from collapsing on each other.
-	get_window().min_size = Vector2(1024, 600)
+	if OS.get_name() != "Android":
+		# Set a minimum window size to prevent UI elements from collapsing on each other.
+		get_window().min_size = Vector2(1024, 600)
 
-	# Restore the window position/size if values are present in the configuration cache
-	if mm_globals.config.has_section_key("window", "screen"):
-		get_window().current_screen = mm_globals.config.get_value("window", "screen")
+		# Restore the window position/size if values are present in the configuration cache
+		if mm_globals.config.has_section_key("window", "screen"):
+			get_window().current_screen = mm_globals.config.get_value("window", "screen")
 
-	if mm_globals.config.has_section_key("window", "maximized"):
-		get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
+		if mm_globals.config.has_section_key("window", "maximized"):
+			get_window().mode = Window.MODE_MAXIMIZED if (mm_globals.config.get_value("window", "maximized")) else Window.MODE_WINDOWED
 
-	if get_window().mode != Window.MODE_MAXIMIZED:
-		if mm_globals.config.has_section_key("window", "position"):
-			get_window().position = mm_globals.config.get_value("window", "position")
-		else:
-			get_window().min_size *= get_window().content_scale_factor
-			get_window().move_to_center()
-		if mm_globals.config.has_section_key("window", "size"):
-			get_window().size = mm_globals.config.get_value("window", "size")
+		if get_window().mode != Window.MODE_MAXIMIZED:
+			if mm_globals.config.has_section_key("window", "position"):
+				get_window().position = mm_globals.config.get_value("window", "position")
+			else:
+				get_window().min_size *= get_window().content_scale_factor
+				get_window().move_to_center()
+			if mm_globals.config.has_section_key("window", "size"):
+				get_window().size = mm_globals.config.get_value("window", "size")
 
 	# Restore the theme
 	var theme_name: String = "default dark"
@@ -258,6 +268,10 @@ func _ready() -> void:
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 
+	if OS.get_name() == "Android":
+		# copy image node's default mm_icon.png
+		android_copy_examples("png")
+		tip_label.hide()
 
 var menu_update_requested : bool = false
 
@@ -273,7 +287,7 @@ func do_update_menus() -> void:
 		menu_bar_class = mm_globals.menu_manager.MenuBarDisplayServer
 	else:
 		menu_bar_class = mm_globals.menu_manager.MenuBarGodot
-	var menu_bar = menu_bar_class.new($VBoxContainer/TopBar/Menu)
+	var menu_bar = menu_bar_class.new($MainContainer/VBoxContainer/TopBar/Menu)
 	mm_globals.menu_manager.create_menus(MENU, self, menu_bar)
 	menu_update_requested = false
 
@@ -294,6 +308,7 @@ func _input(event: InputEvent) -> void:
 				get_window().mode = Window.MODE_MAXIMIZED
 
 func on_config_changed() -> void:
+	DisplayServer.screen_set_keep_on(mm_globals.get_config("keep_screen_on"))
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if (mm_globals.get_config("vsync")) else DisplayServer.VSYNC_DISABLED)
 	# Convert FPS to microseconds per frame.
 	# Clamp the FPS to reasonable values to avoid locking up the UI.
@@ -307,12 +322,7 @@ func on_config_changed() -> void:
 		if OS.get_name() == "macOS":
 			mm_globals.main_window.update_menus()
 
-	var ui_scale = mm_globals.get_config("ui_scale")
-	if ui_scale <= 0:
-		# If scale is set to 0 (auto), scale everything if the display requires it (crude hiDPI support).
-		# This prevents UI elements from being too small on hiDPI displays.
-		ui_scale = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
-	get_viewport().content_scale_factor = ui_scale
+	get_viewport().content_scale_factor = mm_globals.get_ui_scale()
 	size = get_viewport().size/get_viewport().content_scale_factor
 	position = Vector2i(0, 0)
 	#ProjectSettings.set_setting("display/window/stretch/scale", scale)
@@ -331,6 +341,8 @@ func on_config_changed() -> void:
 				DisplayServer.tablet_set_current_driver("wintab")
 			WinTabletDriver.DISABLED:
 				DisplayServer.tablet_set_current_driver("dummy")
+	elif OS.get_name() == "Android":
+		android_setup_margins()
 
 	# update minimize/close button visibility
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -343,6 +355,7 @@ func on_config_changed() -> void:
 
 	if not get_window().gui_embed_subwindows:
 		get_window().gui_embed_subwindows = mm_globals.get_config("ui_single_window_mode")
+
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -637,7 +650,12 @@ func change_theme(theme_name) -> void:
 	if _theme is EnhancedTheme:
 		_theme.update()
 	await get_tree().process_frame
+
+	if mm_globals.get_config("touch_optimization"):
+		android_set_theme_overrides(_theme)
+
 	theme = _theme
+
 	if "classic" in theme_name:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
 	else:
@@ -706,15 +724,15 @@ func _on_PanelsPreset_id_pressed(id : int) -> void:
 						var replace_status : String = await accept_dialog(
 							"Preset \"%s\" already exists. Do you want to replace it?" % [preset_name], true)
 						if replace_status == "ok":
-							existing_preset.preset = $VBoxContainer/Layout/FlexibleLayout.serialize()
+							existing_preset.preset = $MainContainer/VBoxContainer/Layout/FlexibleLayout.serialize()
 					else:
 						var new_preset : Dictionary = {
 							"name": preset_name,
-							"preset": $VBoxContainer/Layout/FlexibleLayout.serialize()
+							"preset": $MainContainer/VBoxContainer/Layout/FlexibleLayout.serialize()
 						}
 						layout.presets.push_back(new_preset)
 		_:
-			$VBoxContainer/Layout/FlexibleLayout.init(layout.presets[id].preset)
+			$MainContainer/VBoxContainer/Layout/FlexibleLayout.init(layout.presets[id].preset)
 	update_menus()
 
 func create_menu_create(menu : MMMenuManager.MenuBase) -> void:
@@ -900,11 +918,13 @@ func quit() -> void:
 			quitting = false
 			return
 	if mm_globals.get_config("confirm_close_project"):
-		var result = await $VBoxContainer/Layout/FlexibleLayout/Main/Projects.check_save_tabs()
+		var result = await $MainContainer/VBoxContainer/Layout/FlexibleLayout/Main/Projects.check_save_tabs()
 		if !result:
 			quitting = false
 			return
 	await mm_renderer.stop_rendering_thread()
+	if OS.get_name() == "Android":
+		mm_globals.android_move_task_to_back()
 	dim_window()
 	get_tree().quit()
 	quitting = false
@@ -1105,10 +1125,10 @@ func view_reset_zoom() -> void:
 	graph_edit.zoom = 1
 
 func view_reset_panels() -> void:
-	$VBoxContainer/Layout.reset_panels()
+	$MainContainer/VBoxContainer/Layout.reset_panels()
 
 func toggle_side_panels() -> void:
-	$VBoxContainer/Layout.toggle_side_panels()
+	$MainContainer/VBoxContainer/Layout.toggle_side_panels()
 
 func get_selected_nodes() -> Array:
 	var graph_edit : MMGraphEdit = get_current_graph_edit()
@@ -1223,7 +1243,7 @@ func _on_PaintEnvironment_id_pressed(id) -> void:
 
 func environment_editor() -> Node:
 	var env_editor : Node = load("res://material_maker/windows/environment_editor/environment_editor.tscn").instantiate()
-	add_child(env_editor)
+	add_dialog(env_editor)
 	return env_editor
 
 # -----------------------------------------------------------------------
@@ -1231,6 +1251,9 @@ func environment_editor() -> Node:
 # -----------------------------------------------------------------------
 
 func get_doc_dir() -> String:
+	if OS.get_name() == "Android":
+		return MMPaths.DOC_ADDRESS
+
 	var base_dir = MMPaths.get_resource_dir().replace("\\", "/")
 	# In release builds, documentation is expected to be located in
 	# a subdirectory of the program directory
@@ -1244,6 +1267,9 @@ func get_doc_dir() -> String:
 	return ""
 
 func show_doc() -> void:
+	if OS.get_name() == "Android":
+		mm_globals.android_open_url(MMPaths.DOC_ADDRESS)
+		return
 	var doc_dir = get_doc_dir()
 	if doc_dir != "":
 		OS.shell_open(doc_dir+"/index.html")
@@ -1251,39 +1277,54 @@ func show_doc() -> void:
 
 
 func show_doc_is_disabled() -> bool:
+	if OS.get_name() == "Android":
+		return false
 	return get_doc_dir() == ""
 
 func show_library_item_doc() -> void:
 	var doc_dir : String = get_doc_dir()
 	if doc_dir != "":
 		var doc_name = library.get_selected_item_doc_name()
+		var doc_path : String = doc_dir+"/node_"+doc_name+".html"
+
+		if OS.get_name() == "Android":
+			if library.get_selected_item_name() == "" or not library.is_inside_tree():
+				mm_globals.android_make_toast("Please select an item in the libary panel.")
+			else:
+				var path : String = android_process_doc_path(doc_dir, doc_name)
+				mm_globals.android_open_url(path)
+			return
+
 		while doc_name != "":
-			var doc_path : String = doc_dir+"/node_"+doc_name+".html"
 			if FileAccess.file_exists(doc_path):
 				OS.shell_open(doc_path)
 				break
 			doc_name = doc_name.left(doc_name.rfind("_"))
 
 func show_library_item_doc_is_disabled() -> bool:
+	if OS.get_name() == "Android":
+		return false
 	return get_doc_dir() == "" or !library.is_inside_tree() or library.get_selected_item_doc_name() == ""
 
 func bug_report() -> void:
 	OS.shell_open("https://github.com/RodZill4/godot-procedural-textures/issues")
 
 func about() -> void:
-	var about_box = preload("res://material_maker/windows/about/about.tscn").instantiate()
-	add_child(about_box)
-	about_box.hide()
-	about_box.popup_centered()
+	var about_box : Window = preload("res://material_maker/windows/about/about.tscn").instantiate()
+	add_dialog(about_box)
 
 func show_example_projects() -> void:
-	var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
-	var release_examples_path : String = base_dir.path_join("examples")
-	var devel_examples_path : String = ProjectSettings.globalize_path("res://material_maker/examples")
-	for p in [ release_examples_path, devel_examples_path ]:
-		if DirAccess.dir_exists_absolute(p):
-			OS.shell_open(p)
-			return
+	if OS.get_name() == "Android":
+		android_copy_examples()
+		android_load_example_project()
+	else:
+		var base_dir : String = MMPaths.get_resource_dir().replace("\\", "/")
+		var release_examples_path : String = base_dir.path_join("examples")
+		var devel_examples_path : String = ProjectSettings.globalize_path("res://material_maker/examples")
+		for p in [ release_examples_path, devel_examples_path ]:
+			if DirAccess.dir_exists_absolute(p):
+				OS.shell_open(p)
+				return
 
 # Preview
 
@@ -1505,8 +1546,8 @@ func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
 	if priority >= tip_priority:
 		tip_priority = priority
-		$VBoxContainer/StatusBar/HBox/Tip.text = tip
-		var tip_timer : Timer = $VBoxContainer/StatusBar/HBox/Tip/Timer
+		tip_label.text = tip
+		var tip_timer : Timer = tip_label.get_node("Timer")
 		tip_timer.stop()
 		if timeout > 0.0:
 			tip_timer.one_shot = true
@@ -1515,15 +1556,20 @@ func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 
 func _on_Tip_Timer_timeout():
 	tip_priority = 0
-	$VBoxContainer/StatusBar/HBox/Tip.text = ""
+	tip_label.text = ""
 
 # Add dialog
 
-func add_dialog(dialog : Window):
-	if mm_globals.get_config("dialog_dim_background"):
-		var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
-		add_child(background)
-		dialog.tree_exited.connect(background.queue_free)
+func add_dialog(dialog : Window) -> void:
+	var opaque_dim : bool = mm_globals.should_dim_fullscreen(dialog)
+	if opaque_dim or mm_globals.get_config("dialog_dim_background"):
+		var bg : ColorRect = ColorRect.new()
+		bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+		bg.color = theme.get_stylebox("panel", "Panel").bg_color
+		bg.color.a = 1.0 if opaque_dim else 0.8
+
+		get_tree().root.add_child(bg)
+		dialog.tree_exited.connect(bg.queue_free)
 	add_child(dialog)
 
 # Accept dialog
@@ -1562,3 +1608,130 @@ func draw_children(p, x):
 
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
+
+#region android-specific setups
+
+func android_setup_margins() -> void:
+	# offset by MM_MainBackground stylebox content margins
+	if not mm_globals.get_config("touch_full_screen"):
+		$MainContainer.add_theme_constant_override("margin_left",
+				maxi(mm_touch.cutout_margins(SIDE_LEFT) - 10, 0))
+		$MainContainer.add_theme_constant_override("margin_right",
+				maxi(mm_touch.cutout_margins(SIDE_RIGHT) - 10, 0))
+	else:
+		$MainContainer.remove_theme_constant_override("margin_right")
+		$MainContainer.remove_theme_constant_override("margin_left")
+
+func android_setup_status_bar() -> void:
+	# move status bar items to menu bar
+	var status_bar_hbox : HBoxContainer =  $MainContainer/VBoxContainer/StatusBar/HBox
+	var menu_bar_hbox : HBoxContainer = $MainContainer/VBoxContainer/TopBar/Menu
+
+	status_bar_hbox.owner = null
+	status_bar_hbox.reparent(menu_bar_hbox.get_parent())
+	status_bar_hbox.owner = self
+
+	var status_spacer : Control = Control.new()
+	status_spacer.name = "StatusBarSpacer"
+	status_bar_hbox.add_child(status_spacer)
+
+	var menu_spacer : Control = Control.new()
+	menu_spacer.name = "MenuBarSpacer"
+	menu_bar_hbox.add_child(menu_spacer)
+	menu_bar_hbox.move_child(menu_spacer, 0)
+
+	android_update_spacers(menu_spacer, status_spacer)
+	mm_globals.preferences_updated.connect(
+			android_update_spacers.bind(menu_spacer, status_spacer))
+
+	await status_bar_hbox.ready
+	status_bar_hbox.get_node("Tip").hide()
+	$MainContainer/VBoxContainer/StatusBar.hide()
+
+func android_update_spacers(menu : Control, status : Control) -> void:
+	android_update_spacer_margins(status, SIDE_RIGHT, CORNER_BOTTOM_RIGHT)
+	android_update_spacer_margins(menu, SIDE_LEFT, CORNER_TOP_RIGHT)
+
+func android_update_spacer_margins(spacer : Control,
+		side : Side, corner : Corner) -> void:
+	var corner_reach : float = 0.0
+
+	# avoid screen corners
+	var r : float = mm_touch.corner_radius(corner)
+	if r > 0.0:
+		var h : float = 36.0 # window title_height theme constant
+		corner_reach = sqrt(maxf((r) ** 2.0 - (r-h) ** 2.0, 0.0))
+		corner_reach /= mm_globals.get_ui_scale()
+
+	if mm_globals.get_config("touch_full_screen"):
+		DisplayServer.get_display_cutouts()
+		spacer.custom_minimum_size.x = corner_reach
+	else:
+		# account for main container's already-applied margins
+		spacer.custom_minimum_size.x = maxf(corner_reach - mm_touch.cutout_margins(side), 0.0)
+
+func android_set_theme_overrides(t : Theme) -> void:
+	const vh_scroll_width : int = 10
+	var sv : StyleBoxFlat = t.get_stylebox("scroll", "VScrollBar")
+	sv.set_border_width(SIDE_LEFT, vh_scroll_width)
+	sv.set_border_width(SIDE_RIGHT, vh_scroll_width)
+
+	var sh : StyleBoxFlat = t.get_stylebox("scroll", "HScrollBar")
+	sh.set_border_width(SIDE_TOP, vh_scroll_width)
+	sh.set_border_width(SIDE_BOTTOM, vh_scroll_width)
+
+	t.set_constant("v_separation", "PopupMenu", 16)
+	t.set_constant("v_separation", "ItemList", 16)
+	t.set_constant("resize_margin", "Window", 32)
+
+	t.set_stylebox("pressed", "Button", t.get_stylebox("hover_pressed", "Button"))
+	t.set_stylebox("hover", "Button", t.get_stylebox("normal", "Button"))
+
+func android_copy_examples(ext : String = "ptex") -> void:
+	# copy example projects from exported examples
+	var base : String = "res://material_maker/examples/"
+	var examples : String = "user://examples/"
+	DirAccess.make_dir_absolute("user://examples/")
+	var dir : DirAccess = DirAccess.open(base)
+	dir.list_dir_begin()
+	var arr : PackedStringArray
+	while true:
+		var f : String = dir.get_next()
+		arr.push_back(f)
+		if f.is_empty():
+			break
+		if f.get_extension() == ext and not FileAccess.file_exists(examples.path_join(f)):
+			dir.copy(base.path_join(f), examples.path_join(f))
+	dir.list_dir_end()
+
+func android_load_example_project() -> void:
+	const fd : String = "res://material_maker/windows/file_dialog/file_dialog.tscn"
+	var dialog : FileDialog = preload(fd).instantiate()
+	dialog.access = FileDialog.ACCESS_USERDATA
+	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILES
+	dialog.current_dir = "examples"
+	dialog.add_filter("*.ptex;Procedural Textures File")
+	var files = await dialog.select_files()
+	if files.size() > 0:
+		do_load_project(files[0])
+
+func android_process_doc_path(doc_dir : String, doc_name : String) -> String:
+	const mappings : Dictionary[String, String] = {
+		"miscellaneous_aperture_in": "aperture_nodes",
+		"miscellaneous_aperture_out": "aperture_nodes",
+		"miscellaneous_aperture": "aperture_nodes",
+		"miscellaneous_reroute": "reroute_nodes",
+		"miscellaneous": "miscellaneous_nodes",
+		"workflow": "nodes_workflow",
+		"transform": "nodes_transform",
+		"filter": "nodes_filter",
+		"noise": "nodes_noise",
+		"pattern": "nodes_pattern",
+		"3d": "nodes_3d",
+		"simple": "nodes_simple",
+	}
+	if mappings.has(doc_name):
+		return doc_dir.path_join(mappings[doc_name]+".html")
+	return doc_dir+"/node_"+doc_name+".html"
+
+#endregion
