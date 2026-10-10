@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bne3k0g56crmy" path="res://material_maker/tools/undo_redo/undo_redo.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://buj231c2gxm4o" path="res://material_maker/widgets/desc_button/desc_button.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://1s0c37uoj4rf" path="res://material_maker/theme/default_theme_icons.svg" id="4_u5byk"]
+[ext_resource type="Script" uid="uid://dlah77kjy12l6" path="res://material_maker/panels/graph_edit/highlights_overlay.gd" id="5_u5byk"]
 
 [sub_resource type="AtlasTexture" id="3"]
 atlas = ExtResource("4_u5byk")
@@ -22,7 +23,17 @@ region = Rect2(96, 64, 16, 16)
 atlas = ExtResource("2")
 region = Rect2(0, 48, 16, 16)
 
-[node name="GraphEdit" type="GraphEdit" unique_id=909518343 groups=["mm_graphedit"]]
+[sub_resource type="Shader" id="Shader_u5byk"]
+code = "shader_type canvas_item;
+
+void fragment() {
+	COLOR = vec4(vec3(0.0), 0.25 * sin(UV.x - TIME * TAU) + 0.25);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nlxn2"]
+shader = SubResource("Shader_u5byk")
+
+[node name="GraphEdit" type="GraphEdit" unique_id=175822157 groups=["mm_graphedit"]]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -101,6 +112,11 @@ layout_mode = 2
 
 [node name="UndoRedo" type="Node" parent="." unique_id=118784873]
 script = ExtResource("3")
+
+[node name="HighlightsOverlay" type="Control" parent="." unique_id=2128156926]
+anchors_preset = 0
+script = ExtResource("5_u5byk")
+line_material = SubResource("ShaderMaterial_nlxn2")
 
 [connection signal="connection_drag_ended" from="." to="." method="_on_connection_drag_ended"]
 [connection signal="connection_drag_started" from="." to="." method="_on_connection_drag_started"]
