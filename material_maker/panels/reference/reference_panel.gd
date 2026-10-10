@@ -28,6 +28,11 @@ func _ready():
 	%PasteImageButton.icon = get_theme_icon("paste_image", "MM_Icons")
 	%RemoveImageButton.icon = get_theme_icon("delete", "MM_Icons")
 
+	var should_nearest_filter : bool = mm_globals.get_config("nearest_filter_reference")
+	%NearestFilterButton.icon = get_theme_icon("steps", "MM_Icons")
+	%NearestFilterButton.button_pressed = should_nearest_filter
+	_on_nearest_filter_button_toggled(should_nearest_filter)
+
 	%PrevImageButton.icon = get_theme_icon("arrow_left", "MM_Icons")
 	%NextImageButton.icon = get_theme_icon("arrow_right", "MM_Icons")
 
@@ -96,11 +101,13 @@ func go_to_image(index:int) -> void:
 	var m : ShaderMaterial = %Image.material
 	if len(opened_images) == 0:
 		m.set_shader_parameter("image", null)
+		m.set_shader_parameter("image_nearest", null)
 		return
 
 	var i := opened_images[current_image_index]
 	var t: Texture2D = i.texture
 	m.set_shader_parameter("image", t)
+	m.set_shader_parameter("image_nearest", t)
 	m.set_shader_parameter("image_size", t.get_image().get_size())
 	m.set_shader_parameter("scale", i.scale)
 	m.set_shader_parameter("center", i.center)
@@ -270,3 +277,7 @@ func _on_paste_image_button_pressed() -> void:
 
 func _on_check_clipboard_image_timeout() -> void:
 	$%PasteImageButton.disabled = not DisplayServer.clipboard_has_image()
+
+func _on_nearest_filter_button_toggled(toggled_on : bool) -> void:
+	mm_globals.set_config("nearest_filter_reference", toggled_on)
+	%Image.material.set_shader_parameter("nearest_filter", toggled_on)
