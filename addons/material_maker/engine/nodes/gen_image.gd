@@ -27,7 +27,8 @@ func get_parameter_defs() -> Array:
 	return [
 		{ name="image", type="image_path", label="", default="" },
 		{ name="fix_ar", type="boolean", label="Fix Aspect Ratio", default=false },
-		{ name="clamp", type="boolean", label="Clamp", default=false }
+		{ name="clamp", type="boolean", label="Clamp", default=false },
+		{ name="filter", type="boolean", label="Filter", default=true }
 	]
 
 func get_filetime(file_path : String) -> int:
@@ -48,6 +49,10 @@ func get_adjusted_uv(uv : String) -> String:
 		uv = "clamp(%s, 0.0, 1.0)" % uv
 	else:
 		uv = "mod(%s, 1.0)" % uv
+
+	if not get_parameter("filter"):
+		var tex_size : String = "vec2(%s, %s)" % [texture.get_width(), texture.get_height()]
+		uv = "(floor(fract(%s) * %s)+vec2(0.5))/%s" % [uv, tex_size, tex_size]
 
 	return uv
 

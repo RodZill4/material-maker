@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bn6ydyuw23efa"]
+
+[ext_resource type="Script" uid="uid://da8n541arydab" path="res://material_maker/nodes/image/image.gd" id="1_nmtan"]
+
+[node name="Image" type="GraphNode" unique_id=1981257459]
+script = ExtResource("1_nmtan")

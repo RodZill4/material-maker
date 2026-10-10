@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://csobd8p72hgfx"]
+[gd_scene format=3 uid="uid://csobd8p72hgfx"]
 
-[ext_resource type="Script" path="res://material_maker/widgets/image_picker_button/image_picker_button.gd" id="2"]
+[ext_resource type="Script" uid="uid://cuhrwknj8xk5d" path="res://material_maker/widgets/image_picker_button/image_picker_button.gd" id="2"]
 
 [sub_resource type="Shader" id="Shader_ttwu0"]
 code = "shader_type canvas_item;
@@ -20,16 +20,16 @@ shader = SubResource("Shader_ttwu0")
 shader_parameter/background_color_1 = Vector4(0.4, 0.4, 0.4, 0.4)
 shader_parameter/background_color_2 = Vector4(0.6, 0.6, 0.6, 0.6)
 
-[node name="ImageEdit" type="PanelContainer"]
+[node name="ImageEdit" type="PanelContainer" unique_id=288133158]
 offset_right = 180.0
 offset_bottom = 64.0
 theme_type_variation = &"MM_NodeImageEdit"
 script = ExtResource("2")
 
-[node name="Image" type="TextureRect" parent="."]
+[node name="Image" type="TextureRect" parent="." unique_id=1084856842]
 unique_name_in_owner = true
-clip_contents = true
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -37,7 +37,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Transparency" type="ColorRect" parent="Image"]
+[node name="Transparency" type="ColorRect" parent="Image" unique_id=1343613309]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_y2gye")
 layout_mode = 1
@@ -50,7 +50,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1118834451]
 wait_time = 2.0
 autostart = true
 
