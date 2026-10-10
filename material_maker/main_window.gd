@@ -648,11 +648,11 @@ func change_theme(theme_name) -> void:
 		return
 	if _theme is EnhancedTheme:
 		_theme.update()
-	await get_tree().process_frame
-	theme = _theme
 
 	if mm_globals.get_config("touch_optimization"):
-		android_set_theme_overrides(theme)
+		android_set_theme_overrides(_theme)
+
+	theme = _theme
 
 	if "classic" in theme_name:
 		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
