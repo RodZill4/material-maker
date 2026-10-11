@@ -151,6 +151,9 @@ Nodes
 | :kbd:`MMB`                                            | Jump to the source remote node which this          |
 |                                                       | parameter (linked control) is influenced by.       |
 +-------------------------------------------------------+----------------------------------------------------+
+| :kbd:`Wheel`                                          | Adjust float parameter editor sliding sensitivity  |
+|                                                       | (while sliding)                                    |
++-------------------------------------------------------+----------------------------------------------------+
 
 Reference
 +++++++++
