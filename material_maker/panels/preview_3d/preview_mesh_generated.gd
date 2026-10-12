@@ -1,10 +1,15 @@
-extends "res://material_maker/panels/preview_3d/preview_mesh.gd"
+class_name PreviewMeshGenerated
+extends PreviewMesh
 
 
 @export_multiline var compute_shader : String
 @export var vertex_count_expression : String
 @export var index_count_expression : String
 
+## Fallback mesh to use if generated meshes are disabled in settings.
+@export var fallback_mesh : Mesh
+
+const SETTING_3D_PREVIEW_GEN_MESH : String = "ui_3d_preview_generated_mesh"
 
 static var shader : MMComputeShader = MMComputeShader.new()
 static var shader_string : String = ""
@@ -13,7 +18,12 @@ static var shader_size : int = 0
 
 func _ready():
 	super._ready()
-	can_tesselate = false
+	if mm_globals.get_config(SETTING_3D_PREVIEW_GEN_MESH):
+		can_tesselate = false
+	else:
+		can_tesselate = true
+		mesh = fallback_mesh
+		parameters.clear()
 
 func get_expression_value_from_string(expression_string : String, values: Dictionary) -> int:
 	var expression : Expression = Expression.new()
@@ -65,11 +75,14 @@ var need_update : bool = false
 var updating : bool = false
 
 func update_mesh() -> void:
-	need_update = true
-	if updating:
-		return
-	while need_update:
-		need_update = false
-		updating = true
-		await do_update_mesh()
-	updating = false
+	if mm_globals.get_config(SETTING_3D_PREVIEW_GEN_MESH):
+		need_update = true
+		if updating:
+			return
+		while need_update:
+			need_update = false
+			updating = true
+			await do_update_mesh()
+		updating = false
+	else:
+		super.update_mesh()

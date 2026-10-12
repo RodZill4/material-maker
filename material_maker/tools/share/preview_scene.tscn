@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cq4jf2i8qyhqw"]
+[gd_scene format=3 uid="uid://cq4jf2i8qyhqw"]
 
 [ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_gyiei"]
 [ext_resource type="Texture2D" uid="uid://bm0yyipaorsh4" path="res://material_maker/tools/share/hdri/kloofendal_48d_partly_cloudy_1k.exr" id="2_2mtav"]
@@ -11,7 +11,14 @@ rings = 128
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2mtav"]
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_2mtav"]
+height = 1.0
+cap_top = false
+cap_bottom = false
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_fvxxt"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_2mtav"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_fvxxt"]
 panorama = ExtResource("2_2mtav")
@@ -115,6 +122,7 @@ void main() {
 "
 vertex_count_expression = "(size+1)*(size+1)"
 index_count_expression = "2*size*(size+2)-2"
+fallback_mesh = SubResource("CylinderMesh_2mtav")
 can_tesselate = false
 uv_scale = Vector2(3, 2)
 parameters = [{
@@ -264,6 +272,7 @@ void main() {
 "
 vertex_count_expression = "6*(size+1)*(size+1)"
 index_count_expression = "12*size*(size+2)-2"
+fallback_mesh = SubResource("BoxMesh_2mtav")
 can_tesselate = false
 uv_scale = Vector2(3, 2)
 parameters = [{
