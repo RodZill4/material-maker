@@ -166,3 +166,6 @@ texinfo_documents = [
      author, 'MaterialMaker', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+# Do not include sources files(*.rst.txt) when building the html pages
+html_copy_source = False
