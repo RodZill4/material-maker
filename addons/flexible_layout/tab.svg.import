@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/tab.svg-ccf47035ab2d2b2098f3b421c7a32000.dpit
 base_scale=1.0
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true
