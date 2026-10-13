@@ -31,7 +31,7 @@ config/actual_release="1.7"
 
 [audio]
 
-driver="Dummy"
+driver/driver="Dummy"
 
 [autoload]
 
