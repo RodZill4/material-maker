@@ -21,11 +21,11 @@ static func create_italic_variation(font : FontVariation) -> FontVariation:
 			Vector2(1.0, 0.22), Vector2(0.0, 1.0), Vector2.ZERO)
 	return f
 
-static func has_font_config(config : String) -> bool:
+static func _has_font_config(config : String) -> bool:
 	return (mm_globals.has_config(config)
 			and not mm_globals.get_config(config).is_empty())
 
-static func setup_rendering(font : FontVariation) -> void:
+static func _setup_rendering(font : FontVariation) -> void:
 	if mm_globals.get_config("ui_font_enable_msdf"):
 		font.base_font.msdf_pixel_range = 32
 		font.base_font.msdf_size = 48
@@ -59,7 +59,7 @@ static func rebuild_fonts() -> void:
 				font_var.base_font = SystemFont.new()
 				font_var.base_font.font_names.append(cfg.name)
 				font_var.base_font.font_weight = cfg.weight
-			setup_rendering(font_var)
+			_setup_rendering(font_var)
 		return
 
 	var fonts : Dictionary[String, FontVariation] = {
@@ -72,7 +72,7 @@ static func rebuild_fonts() -> void:
 	for font : String in fonts:
 		var font_variation : FontVariation = fonts[font]
 		var custom_font_path : String = mm_globals.get_config(font)
-		if has_font_config(font) and FileAccess.file_exists(custom_font_path):
+		if _has_font_config(font) and FileAccess.file_exists(custom_font_path):
 			font_variation.base_font = FontFile.new()
 			font_variation.base_font.load_dynamic_font(custom_font_path)
 			font_variation.base_font.emit_changed()
@@ -80,4 +80,13 @@ static func rebuild_fonts() -> void:
 			mm_globals.set_config(font, "")
 			font_variation.base_font = load(font_variation.fallbacks[0].resource_path)
 			font_variation.base_font.emit_changed()
-		setup_rendering(font_variation)
+		_setup_rendering(font_variation)
+
+static func setup_theme_fonts(theme : Theme, theme_name : String) -> void:
+	var font : FontVariation = main_font
+	if "classic" in theme_name and not _has_font_config("main_font"):
+		font = classic_font
+
+	theme.default_font = font
+	theme.set_font("title_font", "TooltipPanel", font)
+	theme.set_font("font", "TooltipLabel", font)
