@@ -1414,7 +1414,7 @@ func generate_graph_screenshot():
 	graph_edit.zoom = 1
 	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
-	var scale_factor : float = mm_globals.ui_scale_factor()
+	var scale_factor : float = get_tree().root.content_scale_factor
 	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(25, 90))
 	graph_edit_rect = Rect2(scale_factor*graph_edit_rect.position, scale_factor*graph_edit_rect.size)
 	var graph_rect = null
