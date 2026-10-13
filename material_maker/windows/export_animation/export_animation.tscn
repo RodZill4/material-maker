@@ -183,7 +183,7 @@ focus_neighbor_right = NodePath("../Size")
 focus_next = NodePath("../../Buttons/Export")
 focus_previous = NodePath("../Images")
 selected = 0
-item_count = 5
+item_count = 6
 popup/item_0/text = "PNG files"
 popup/item_0/id = 0
 popup/item_1/text = "1 line spritesheet"
@@ -192,8 +192,10 @@ popup/item_2/text = "2 lines spritesheet"
 popup/item_2/id = 2
 popup/item_3/text = "4 lines spritesheet"
 popup/item_3/id = 4
-popup/item_4/text = "1 column spritesheet"
-popup/item_4/id = 1001
+popup/item_4/text = "8 lines spritesheet"
+popup/item_4/id = 8
+popup/item_5/text = "1 column spritesheet"
+popup/item_5/id = 1001
 
 [node name="Images" type="MarginContainer" parent="VBox" unique_id=272376275]
 layout_mode = 2
