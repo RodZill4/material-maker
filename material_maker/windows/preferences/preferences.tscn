@@ -273,6 +273,23 @@ text = "On"
 flat = false
 config_variable = "ui_3d_preview_sun_shadow"
 
+[node name="Gui3DPreviewGeneratedMeshes" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=282556027]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewGeneratedMeshes" unique_id=1180650648]
+layout_mode = 2
+text = "3D preview generated meshes (requires restart)"
+
+[node name="Gui3DPreviewGenMesh" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewGeneratedMeshes" unique_id=1887354945 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "If enabled, generated meshes are used for Cube, Cylinder and Plane models instead of static meshes.
+These allow a custom chamfer to be applied but may not be supported in older or lower-end GPUs."
+text = "On"
+flat = false
+config_variable = "ui_3d_preview_generated_mesh"
+
 [node name="WinTabletDriverSpacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1614702595]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
