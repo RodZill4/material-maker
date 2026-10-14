@@ -5,6 +5,7 @@
 [node name="Point" type="TextureRect"]
 mouse_filter = 0
 mouse_default_cursor_shape = 13
+stretch_mode = 3
 script = ExtResource("1")
 
 [connection signal="gui_input" from="." to="." method="_on_Point_gui_input"]
