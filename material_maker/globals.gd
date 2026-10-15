@@ -66,6 +66,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	ui_field_sensitivity = 1.0,
 	color_picker_floating = false,
 	ui_3d_preview_generated_mesh = true,
+	nearest_filter_reference = false,
 }
 
 
