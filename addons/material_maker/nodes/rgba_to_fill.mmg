@@ -23,7 +23,7 @@
 		],
 		"instance": "",
 		"longdesc": "A node that encodes Fill information from RGBA",
-		"name": "RGBA to Fill",
+		"name": "Fill from RGBA",
 		"outputs": [
 			{
 				"fill": "$in($uv)",
@@ -35,7 +35,7 @@
 		"parameters": [
 
 		],
-		"shortdesc": "RGBA to Fill"
+		"shortdesc": "Fill from RGBA"
 	},
 	"type": "shader"
 }
