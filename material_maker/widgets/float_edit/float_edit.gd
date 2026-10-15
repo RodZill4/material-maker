@@ -40,7 +40,7 @@ var should_receive_input : bool = true
 
 var adjusting_sensitivity : bool = false
 var adjust_increment : float = 0.1
-static var sensitivity : float = mm_globals.get_config("ui_field_sensitivity")
+static var sensitivity : float = -1.0
 
 signal value_changed(value)
 signal value_changed_undo(value, merge_undo)
@@ -326,9 +326,9 @@ func _draw_sensitivity_bar() -> void:
 	var accent : Color = get_theme_color("icon_pressed_color", "Button").darkened(0.2)
 	const line_width : float = 3.0
 	const bg_white : Color = Color.WHITE
-	var end : float = size.x * sensitivity
+	var end : float = maxf((size.x - 2.0) * sensitivity, 2.0)
 	var height : float = size.y - 2.0
-	var from : Vector2 = Vector2(0.0, height)
+	var from : Vector2 = Vector2(2.0, height)
 
 	# outline
 	$Edit.draw_circle(from, (line_width + 1.0) * 0.5, bg_white)
@@ -353,6 +353,10 @@ func _update_sensitivity(direction : float) -> void:
 	$Edit.queue_redraw()
 	_show_sensitivity_tip()
 	accept_event()
+
+func _enter_tree() -> void:
+	if sensitivity == -1.0:
+		sensitivity = mm_globals.get_config("ui_field_sensitivity")
 
 func _exit_tree() -> void:
 	mm_globals.set_config("ui_field_sensitivity", sensitivity)
