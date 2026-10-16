@@ -169,7 +169,7 @@ jobs:
       - name: Download and extract Godot and export templates 💾
         run: |
           wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.arm64.zip
-          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.arm64.zip
           wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mkdir -v -p "/Users/runner/Library/Application Support/Godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}"
