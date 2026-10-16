@@ -470,7 +470,7 @@ region = Rect2(0, 64, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l22ac"]
 atlas = ExtResource("1_fw8f4")
-region = Rect2(80, 240, 16, 16)
+region = Rect2(96, 240, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oy0ko"]
 atlas = ExtResource("1_fw8f4")
@@ -547,9 +547,12 @@ region = Rect2(0, 240, 16, 16)
 filter_clip = true
 metadata/scale = 3.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5e0gw"]
+load_path = "res://.godot/imported/default_theme_icons.svg-68308e5a0a34a69fc6ba57ebd6c4baca.ctex"
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fh3ks"]
-atlas = ExtResource("1_fw8f4")
-region = Rect2(64, 240, 16, 16)
+atlas = SubResource("CompressedTexture2D_5e0gw")
+region = Rect2(80, 240, 16, 16)
 metadata/scale = 2.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dsr33"]
