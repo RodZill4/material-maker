@@ -30,7 +30,7 @@ func _notification(what: int) -> void:
 		if is_instance_valid(preview):
 			preview.queue_free()
 
-func init_buttons():
+func init_buttons() -> void:
 	super.init_buttons()
 	generic_button = add_button(GENERIC_ICON, self.on_generic_pressed, self.generic_button_create_popup)
 	generic_button.tooltip_text = tr("Add more ports/parameters (left mouse button) / Variadic node menu (right mouse button)")
