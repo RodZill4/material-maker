@@ -965,6 +965,8 @@ func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
 	if nodes.is_empty():
 		for c in get_children():
 			if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
+				if generator != top_generator and c is MMGraphNodeIOs:
+					continue
 				nodes.append(c)
 	if nodes.is_empty():
 		return {}
@@ -993,6 +995,8 @@ func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
 func can_copy() -> bool:
 	for c in get_children():
 		if c is GraphElement and c.selected and c.name != "Material" and c.name != "Brush":
+			if generator != top_generator and c is MMGraphNodeIOs:
+					return false
 			return true
 	return false
 
