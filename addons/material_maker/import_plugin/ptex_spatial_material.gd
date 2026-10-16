@@ -14,8 +14,8 @@ func set_ptex(s : String) -> void :
 
 func update_texture() -> void:
 	var test_json_conv = JSON.new()
-	test_json_conv.parse(ptex))
-	var mm_graph = mm_loader.create_gen(test_json_conv.get_data()
+	test_json_conv.parse(ptex)
+	var mm_graph : MMGenBase = await mm_loader.create_gen(test_json_conv.get_data())
 	if mm_graph == null:
 		return
 	var mm_material : MMGenMaterial = mm_graph.get_node("Material")
@@ -23,8 +23,6 @@ func update_texture() -> void:
 		return
 	mm_renderer.add_child(mm_graph)
 	var status = mm_material.render_textures()
-	while status is GDScriptFunctionState:
-		status = await status.completed
+	status = await status.completed
 	mm_material.update_material(self)
 	mm_graph.queue_free()
-

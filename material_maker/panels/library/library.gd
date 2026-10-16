@@ -62,9 +62,7 @@ func _notification(what: int) -> void:
 
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
-
-	var is_theme_classic : bool = "classic" in mm_globals.main_window.theme.resource_path
-	library_manager.update_section_colors(is_theme_classic)
+	library_manager.update_section_colors(ThemeUtils.is_classic_theme())
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)

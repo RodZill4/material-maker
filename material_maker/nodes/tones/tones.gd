@@ -99,6 +99,8 @@ func update_node() -> void:
 	# Preview
 	restore_preview_widget()
 
+	close_button.visible = mm_globals.get_config(SETTINGS_NODE_CLOSE_BUTTON)
+
 var moving_cursor : bool = false
 
 func on_parameter_changed(p, _v) -> void:

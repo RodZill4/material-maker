@@ -132,8 +132,7 @@ func _ready():
 			i += 1
 		print("Output dir: ", output_dir)
 		if ! dir.dir_exists(output_dir):
-			show_error("ERROR: Output directory '%s' does not exist" % output_dir)
-			return
+			dir.make_dir(output_dir)
 		var expanded_files = []
 		for f : String in files:
 			var basedir : String = f.get_base_dir()

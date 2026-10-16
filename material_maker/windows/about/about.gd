@@ -165,7 +165,7 @@ func open_url(url) -> void:
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_THEME_CHANGED:
-			var is_light_theme : bool = "light" in mm_globals.main_window.theme.resource_path
+			var is_light_theme : bool = ThemeUtils.is_light_theme()
 			%EpicLogo.material.set_shader_parameter("invert", is_light_theme)
 			$BG.color.a = float(is_light_theme)
 			for logo in $HBoxContainer/MarginContainer/SocialNetworks.get_children():

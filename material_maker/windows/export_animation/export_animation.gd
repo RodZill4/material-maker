@@ -109,7 +109,6 @@ func _on_Export_pressed():
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	dialog.add_filter("*.png;PNG image files")
-	add_child(dialog)
 	var files = await dialog.select_files()
 	if files.size() > 0:
 		var filename : String = files[0]

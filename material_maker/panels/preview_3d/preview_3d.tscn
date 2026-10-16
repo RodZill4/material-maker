@@ -433,6 +433,7 @@ button_pressed = true
 text = "Tonemap"
 
 [node name="ResetTonemapSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader" unique_id=1271704596]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Reset tonemap settings"
 script = ExtResource("8_13pve")
@@ -539,6 +540,7 @@ button_pressed = true
 text = "Glow"
 
 [node name="ResetGlowSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/GlowHeader" unique_id=1059164030]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Reset glow settings"
 script = ExtResource("8_13pve")
@@ -685,6 +687,7 @@ button_pressed = true
 text = "Adjustment"
 
 [node name="ResetAdjustmentSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/AdjustmentHeader" unique_id=510470537]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Reset adjustment settings"
 script = ExtResource("8_13pve")
@@ -755,6 +758,7 @@ button_pressed = true
 text = "Depth Of Field"
 
 [node name="ResetDofSection" type="Button" parent="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/DepthOfFieldHeader" unique_id=1240901115]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Reset depth of field settings"
 script = ExtResource("8_13pve")
@@ -874,7 +878,6 @@ float_only = true
 [connection signal="item_selected" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapsSection/ExportFile/BoxContainer/MapFileType" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_map_file_type_item_selected"]
 [connection signal="pressed" from="MainMenu/HBox/ExportMenu/ExportMenuPanel/VBoxContainer/GenerateMapButton" to="MainMenu/HBox/ExportMenu/ExportMenuPanel" method="_on_generate_map_button_pressed"]
 [connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_minimum_size_changed"]
-[connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_scroll_container_minimum_size_changed"]
 [connection signal="minimum_size_changed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_v_box_container_minimum_size_changed"]
 [connection signal="toggled" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader/Tonemap" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_tonemap_toggled"]
 [connection signal="pressed" from="MainMenu/HBox/PostProcessMenu/PostProcessPanel/ScrollContainer/VBoxContainer/TonemapHeader/ResetTonemapSection" to="MainMenu/HBox/PostProcessMenu/PostProcessPanel" method="_on_reset_tonemap_section_pressed"]

@@ -1,3 +1,4 @@
+
 extends Control
 
 var quitting : bool = false
@@ -50,8 +51,6 @@ const RECENTS_MENU_CLEAR = 1001
 
 const MENU_SAVE_PRESET : int = 1002
 const MENU_MANAGE_PRESETS : int = 1003
-
-const THEMES = ["Default Dark", "Default Light", "Classic"]
 
 const MENU : Array[Dictionary] = [
 	{ menu="File/New material", command="new_material", shortcut="Control+N" },
@@ -342,6 +341,10 @@ func on_config_changed() -> void:
 
 	if not get_window().gui_embed_subwindows:
 		get_window().gui_embed_subwindows = mm_globals.get_config("ui_single_window_mode")
+	
+	# set custom theme
+	if mm_globals.config.get_value("window", "theme") == "custom":
+		change_theme("custom")
 
 func get_panel(panel_name : String) -> Control:
 	return layout.get_panel(panel_name)
@@ -584,7 +587,7 @@ func create_menu_export_material(menu : MMMenuManager.MenuBase, prefix : String 
 		@warning_ignore("int_as_enum_without_match")
 		menu.add_item("Quick Export", MENU_QUICK_EXPORT, KEY_MASK_CTRL | KEY_MASK_SHIFT | KEY_E )
 
-func _on_ExportMaterial_id_pressed(id) -> void:
+func _on_ExportMaterial_id_pressed(id : int) -> void:
 	if id == MENU_QUICK_EXPORT:
 		quick_export()
 		return
@@ -601,7 +604,7 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 	if export_extension == "":
 		export_material("", profile)
 	else:
-		var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
+		var dialog : FileDialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
 		dialog.min_size = Vector2(500, 500)
 		dialog.access = FileDialog.ACCESS_FILESYSTEM
 		dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
@@ -610,45 +613,44 @@ func _on_ExportMaterial_id_pressed(id) -> void:
 		if last_profile_name_slash != -1:
 			profile_name = profile_name.right(-(last_profile_name_slash+1))
 		dialog.add_filter("*."+export_extension+";"+profile_name+" Material")
-		var last_export_path = material_node.get_export_path(profile)
+		var last_export_path : String = material_node.get_export_path(profile)
 		if last_export_path != "":
 			dialog.current_path = last_export_path
 		else:
-			var config_key = export_profile_config_key(profile)
+			var config_key : String = export_profile_config_key(profile)
 			dialog.current_dir = mm_globals.config.get_value("path", config_key, mm_globals.get_home_directory())
+
+		# pre-fill material export filename from project filename
+		var graph : MMGraphEdit = get_current_graph_edit()
+		if graph.generator and graph.generator.has_meta("file_path"):
+			dialog.current_file = graph.generator.get_meta("file_path").get_basename()
+		else:
+			dialog.current_file = tr("unnamed")
+
 		add_child(dialog)
-		var files = await dialog.select_files()
+		var files : Array = await dialog.select_files()
 		if files.size() > 0:
 			export_material(files[0], profile)
 
 func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
-	for t in THEMES:
+	for t in ThemeUtils.THEMES:
 		menu.add_item(t)
 	menu.connect_id_pressed(self._on_SetTheme_id_pressed)
 
-func change_theme(theme_name) -> void:
-	if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
-		theme_name = "default dark"
-	var _theme = load("res://material_maker/theme/"+theme_name+".tres")
-	if _theme == theme:
+func change_theme(theme_name : String) -> void:
+	ThemeUtils.set_theme(theme_name)
+	var _theme : Theme = ThemeUtils.get_theme(theme_name)
+	if _theme == null or _theme == theme:
 		return
-	if _theme is EnhancedTheme:
-		_theme.update()
 	await get_tree().process_frame
 	theme = _theme
-	if "classic" in theme_name:
-		RenderingServer.set_default_clear_color(Color(0.14, 0.17,0.23))
-	else:
-		RenderingServer.set_default_clear_color(
-				Color("4d4d4d") if "light" in theme_name else Color("1f1f1f"))
 	$NodeFactory.on_theme_changed()
 
-func _on_SetTheme_id_pressed(id) -> void:
-	var theme_name : String = THEMES[id].to_lower()
+func _on_SetTheme_id_pressed(id : int) -> void:
+	var theme_name : String = ThemeUtils.THEMES[id].to_lower()
 	change_theme(theme_name)
 	mm_globals.config.set_value("window", "theme", theme_name)
-
 
 func create_menu_show_panels(menu : MMMenuManager.MenuBase) -> void:
 	menu.clear()
@@ -1165,6 +1167,7 @@ func add_selection_to_library(index: int, should_ask_item_name: bool = true, upd
 		dialog.content_scale_factor = mm_globals.ui_scale_factor()
 		dialog.min_size = Vector2(250, 90) * dialog.content_scale_factor
 		add_child(dialog)
+		current_item_name = selected_nodes[0].title
 		var status = await dialog.enter_text("New library element", "Select a name for the new library element", current_item_name)
 		if ! status.ok:
 			return
@@ -1377,6 +1380,9 @@ func _notification(what : int) -> void:
 			OS.low_processor_usage_mode_sleep_usec = (1.0 / clamp(mm_globals.get_config("fps_limit"), FPS_LIMIT_MIN, FPS_LIMIT_MAX)) * 1_000_000
 		NOTIFICATION_WM_ABOUT:
 			about.call_deferred()
+		NOTIFICATION_THEME_CHANGED:
+			%ConsoleButton.texture_normal = get_theme_icon("console", "MM_Icons")
+			%ClearConsoleButton.texture_normal = get_theme_icon("clean", "MM_Icons")
 
 func on_close_requested():
 	await get_tree().process_frame
@@ -1413,7 +1419,7 @@ func generate_graph_screenshot():
 	graph_edit.zoom = 1
 	await get_tree().process_frame
 	var graph_edit_rect = graph_edit.get_global_rect()
-	var scale_factor : float = mm_globals.ui_scale_factor()
+	var scale_factor : float = get_tree().root.content_scale_factor
 	graph_edit_rect = Rect2(graph_edit_rect.position+Vector2(15, 80), graph_edit_rect.size-Vector2(25, 90))
 	graph_edit_rect = Rect2(scale_factor*graph_edit_rect.position, scale_factor*graph_edit_rect.size)
 	var graph_rect = null
@@ -1502,6 +1508,8 @@ func set_tip_text(tip : String, timeout : float = 0.0, priority: int = 0):
 	tip = tip.replace("#LMB", "[img]res://material_maker/icons/lmb.tres[/img]")
 	tip = tip.replace("#RMB", "[img]res://material_maker/icons/rmb.tres[/img]")
 	tip = tip.replace("#MMB", "[img]res://material_maker/icons/mmb.tres[/img]")
+	tip = tip.replace("#LEFT", "[img]res://material_maker/icons/left_arrow.tres[/img]")
+	tip = tip.replace("#RIGHT", "[img]res://material_maker/icons/right_arrow.tres[/img]")
 	if priority >= tip_priority:
 		tip_priority = priority
 		$VBoxContainer/StatusBar/HBox/Tip.text = tip
@@ -1519,8 +1527,8 @@ func _on_Tip_Timer_timeout():
 # Add dialog
 
 func add_dialog(dialog : Window):
-	var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
 	if mm_globals.get_config("dialog_dim_background"):
+		var background : ColorRect = load("res://material_maker/darken.tscn").instantiate()
 		add_child(background)
 		dialog.tree_exited.connect(background.queue_free)
 	add_child(dialog)

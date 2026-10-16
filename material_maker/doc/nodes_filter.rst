@@ -50,6 +50,8 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_fill_to_orientation
 	node_filter_fill_to_gradient
 	node_filter_fill_select
+	node_filter_fill_from_rgba
+	node_filter_fill_to_rgba
 	node_filter_math
 	node_filter_vec3_math
 	node_filter_smooth_minmax
@@ -69,3 +71,4 @@ The filter nodes accept one or several inputs and generate one or several images
 	node_filter_classic_kuwahara
 	node_filter_generalized_kuwahara
 	node_filter_symmetric_nearest_neighbor
+	node_filter_set_alpha
