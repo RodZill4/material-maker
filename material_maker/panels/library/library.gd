@@ -68,7 +68,8 @@ func _notification(what: int) -> void:
 			button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
 			update_category_button_styleboxes(button, s)
 		update_theme()
-		$Library/Filter.get_node("GetFromWebsite").icon = get_theme_icon("download", "MM_Icons")
+		if mm_globals.get_config("touch_optimization"):
+			$Library/Filter.get_node("GetFromWebsite").icon = get_theme_icon("download", "MM_Icons")
 
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
