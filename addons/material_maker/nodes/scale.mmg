@@ -60,7 +60,7 @@
 				"control": "P1.y",
 				"default": 0,
 				"label": "Center Y",
-				"longdesc": "The poisition of the scale center",
+				"longdesc": "The position of the scale center",
 				"max": 1,
 				"min": -1,
 				"name": "cy",
