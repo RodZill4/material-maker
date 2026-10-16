@@ -426,17 +426,6 @@ func do_update_preview() -> void:
 	preview.size = size - Vector2.ONE*margin*2 - Vector2(0,title_bar_height)
 	preview.visible = true
 
-func update_title() -> void:
-	title = TranslationServer.translate(generator.get_type_name())
-	if generator == null or generator.minimized:
-		var font : Font = get_theme_font("default_font")
-		var max_title_width = 28
-		if font.get_string_size(title).x > max_title_width:
-			for i in range(1, title.length()-1):
-				if font.get_string_size(title.left(i)+"...").x > max_title_width:
-					title = title.left(i-1)+"..."
-					break
-
 func update_node() -> void:
 	var minimum_line_height = get_theme_constant("minimum_line_height", "MM_Node") if has_theme_constant("minimum_line_height", "MM_Node") else 25
 	# Clean node

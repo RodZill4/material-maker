@@ -199,6 +199,13 @@ var model = null
 var orig_name = null
 var parameters = {}
 
+## Optional instance label. Independent of the node ID and generator type.
+var display_name : String = "":
+	set(value):
+		if display_name != value:
+			display_name = value
+			display_name_changed.emit()
+
 var seed_locked : bool = false
 var seed_value : float = 0
 
@@ -218,6 +225,7 @@ const BUFFERS_RUNNING : int = 2
 
 signal parameter_changed(n, v)
 signal rendering_time_updated(t)
+signal display_name_changed()
 
 
 func _ready() -> void:
@@ -715,6 +723,8 @@ func _serialize_data(data: Dictionary) -> Dictionary:
 
 func serialize() -> Dictionary:
 	var rv = { name=name, type=get_type(), parameters={}, node_position={ x=position.x, y=position.y } }
+	if !display_name.is_empty():
+		rv.display_name = display_name
 	for p in get_parameter_defs():
 		if parameters.has(p.name):
 			rv.parameters[p.name] = MMType.serialize_value(parameters[p.name])
@@ -742,6 +752,7 @@ func _deserialize(_data : Dictionary) -> void:
 
 func deserialize(data : Dictionary) -> void:
 	await _deserialize(data)
+	display_name = data.get("display_name", "")
 	if data.has("name"):
 		name = data.name
 	if data.has("node_position"):
