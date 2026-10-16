@@ -664,13 +664,15 @@ func change_theme(theme_name : String) -> void:
 	if _theme == theme or _theme == null: 
 		return
 
-	if mm_globals.get_config("touch_optimization"):
-		android_set_theme_overrides(_theme)
-
 	if _theme is EnhancedTheme:
 		_theme.update()
+
 	await get_tree().process_frame
 	theme = _theme
+
+	if mm_globals.get_config("touch_optimization"):
+		android_set_theme_overrides(theme)
+
 	ThemeUtils.setup_clear_color()
 	$NodeFactory.on_theme_changed()
 
