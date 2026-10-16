@@ -641,11 +641,24 @@ func create_menu_set_theme(menu : MMMenuManager.MenuBase) -> void:
 
 func change_theme(theme_name : String) -> void:
 	ThemeUtils.set_theme(theme_name)
-	var _theme : Theme = ThemeUtils.get_theme(theme_name)
-	if _theme == null or _theme == theme:
+	var _theme
+	if theme_name == "custom":
+		if ThemeUtils.did_custom_params_change():
+			_theme = ThemeUtils.generate_custom_theme()
+	else:
+		ThemeUtils.clear_custom_params()
+		if not ResourceLoader.exists("res://material_maker/theme/"+theme_name+".tres"):
+			theme_name = "default dark"
+		_theme = load("res://material_maker/theme/"+theme_name+".tres")
+
+	if _theme == theme or _theme == null: 
 		return
+
+	if _theme is EnhancedTheme:
+		_theme.update()
 	await get_tree().process_frame
 	theme = _theme
+	ThemeUtils.setup_clear_color()
 	$NodeFactory.on_theme_changed()
 
 func _on_SetTheme_id_pressed(id : int) -> void:
