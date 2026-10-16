@@ -40,6 +40,10 @@ func _ready() -> void:
 		button.custom_minimum_size = Vector2(32, 32)
 		button.theme_type_variation = "MM_LibrarySectionButton"
 
+		# do not change icon colors from theme
+		for i in ["normal", "pressed", "hover", "focus", "hover_pressed"]:
+			button.add_theme_color_override("icon_%s_color" % i, Color.WHITE)
+
 		update_category_button_styleboxes(button, s)
 		%SectionButtons.add_child(button)
 		category_buttons[s] = button
