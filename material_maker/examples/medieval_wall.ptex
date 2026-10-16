@@ -400,13 +400,11 @@
 	},
 	"nodes": [
 		{
-			"export_paths": {
-
-			},
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
 				"x": -608.008056640625,
-				"y": 397.047973632813
+				"y": 397.047973632812
 			},
 			"parameters": {
 				"albedo_color": {
@@ -472,12 +470,10 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -765.102172851563,
+						"x": -765.102172851562,
 						"y": -689.245544433594
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": 64786.0,
 					"type": "ios"
@@ -488,9 +484,7 @@
 						"x": -181.102203369141,
 						"y": -766.245544433594
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
@@ -503,12 +497,10 @@
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -401.102172851563,
+						"x": -401.102172851562,
 						"y": -875.24560546875
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 48356.0,
 					"type": "remote",
 					"widgets": []
@@ -516,7 +508,7 @@
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -653.602172851563,
+						"x": -653.602172851562,
 						"y": -818.12060546875
 					},
 					"parameters": {
@@ -529,9 +521,7 @@
 					"type": "shape"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -14511.0,
 			"shortdesc": "",
 			"type": "graph"
@@ -562,7 +552,7 @@
 				{
 					"name": "transform_4_2",
 					"node_position": {
-						"x": -433.346313476563,
+						"x": -433.346313476562,
 						"y": -555.995544433594
 					},
 					"parameters": {
@@ -579,12 +569,10 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -792.346313476563,
+						"x": -792.346313476562,
 						"y": -487.995544433594
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": 17921.0,
 					"type": "ios"
@@ -592,12 +580,10 @@
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -159.346313476563,
+						"x": -159.346313476562,
 						"y": -507.995544433594
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
@@ -610,12 +596,10 @@
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -381.346313476563,
+						"x": -381.346313476562,
 						"y": -612.995544433594
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 21313.0,
 					"type": "remote",
 					"widgets": []
@@ -623,7 +607,7 @@
 				{
 					"name": "shape",
 					"node_position": {
-						"x": -674.096313476563,
+						"x": -674.096313476562,
 						"y": -530.370544433594
 					},
 					"parameters": {
@@ -636,9 +620,7 @@
 					"type": "shape"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -7158.0,
 			"shortdesc": "",
 			"type": "graph"
@@ -721,9 +703,7 @@
 						"x": -482.5,
 						"y": -447.997772216797
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": 39395.0,
 					"type": "ios"
@@ -734,9 +714,7 @@
 						"x": 305.43896484375,
 						"y": -496.997772216797
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
@@ -752,9 +730,7 @@
 						"x": -9.530517578125,
 						"y": -577.0
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 6742.0,
 					"type": "remote",
 					"widgets": []
@@ -962,9 +938,7 @@
 								"x": -626.363220214844,
 								"y": -205.58154296875
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -980,9 +954,7 @@
 								"x": 549.263366699219,
 								"y": -205.58154296875
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -1002,9 +974,7 @@
 					"type": "graph"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -5702.0,
 			"seed_locked": true,
 			"shortdesc": "",
@@ -1168,7 +1138,7 @@
 				{
 					"name": "perlin",
 					"node_position": {
-						"x": -1268.82446289063,
+						"x": -1268.82446289062,
 						"y": -678.0458984375
 					},
 					"parameters": {
@@ -1242,7 +1212,7 @@
 				{
 					"name": "transform",
 					"node_position": {
-						"x": -1025.07250976563,
+						"x": -1025.07250976562,
 						"y": -641.934875488281
 					},
 					"parameters": {
@@ -1259,7 +1229,7 @@
 				{
 					"name": "colorize_7",
 					"node_position": {
-						"x": -1006.07250976563,
+						"x": -1006.07250976562,
 						"y": -379.934875488281
 					},
 					"parameters": {
@@ -1290,12 +1260,10 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -1344.82446289063,
-						"y": -619.990356445313
+						"x": -1344.82446289062,
+						"y": -619.990356445312
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": 24789.0,
 					"type": "ios"
@@ -1304,11 +1272,9 @@
 					"name": "gen_outputs",
 					"node_position": {
 						"x": -325.072509765625,
-						"y": -596.990356445313
+						"y": -596.990356445312
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "Color",
@@ -1336,9 +1302,7 @@
 						"x": -960.448486328125,
 						"y": -764.0458984375
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 46788.0,
 					"type": "remote",
 					"widgets": []
@@ -1460,9 +1424,7 @@
 						"x": -551.764038085938,
 						"y": -586.0
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 63985.0,
 					"type": "combine"
 				},
@@ -1500,9 +1462,7 @@
 					"type": "normal_map"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -34406.0,
 			"shortdesc": "",
 			"type": "graph"
@@ -1567,7 +1527,7 @@
 					"longdesc": "",
 					"name": "graph_2",
 					"node_position": {
-						"x": -1451.62622070313,
+						"x": -1451.62622070312,
 						"y": -179.766540527344
 					},
 					"nodes": [
@@ -1592,7 +1552,7 @@
 							"name": "transform_3",
 							"node_position": {
 								"x": -1873.41259765625,
-								"y": -405.498657226563
+								"y": -405.498657226562
 							},
 							"parameters": {
 								"repeat": false,
@@ -1639,9 +1599,7 @@
 								"x": -2384.7666015625,
 								"y": -292.766540527344
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [],
 							"seed": 53644.0,
 							"type": "ios"
@@ -1652,9 +1610,7 @@
 								"x": -1317.91284179688,
 								"y": -292.766540527344
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -1667,20 +1623,16 @@
 						{
 							"name": "gen_parameters",
 							"node_position": {
-								"x": -2062.62622070313,
-								"y": -705.498657226563
+								"x": -2062.62622070312,
+								"y": -705.498657226562
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"seed": 43377.0,
 							"type": "remote",
 							"widgets": []
 						}
 					],
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 25606.0,
 					"shortdesc": "",
 					"type": "graph"
@@ -1691,9 +1643,7 @@
 						"x": -1629.53356933594,
 						"y": -76.8981170654297
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": 2057.0,
 					"type": "ios"
@@ -1704,9 +1654,7 @@
 						"x": -933.906982421875,
 						"y": -171.89811706543
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
@@ -1722,9 +1670,7 @@
 						"x": -1456.35546875,
 						"y": -249.766540527344
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 183.0,
 					"type": "remote",
 					"widgets": []
@@ -1901,9 +1847,7 @@
 								"x": -626.363220214844,
 								"y": -205.58154296875
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -1919,9 +1863,7 @@
 								"x": 549.263366699219,
 								"y": -205.58154296875
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -1941,9 +1883,7 @@
 					"type": "graph"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": 38903.0,
 			"seed_locked": true,
 			"shortdesc": "",
@@ -2065,9 +2005,7 @@
 						"x": -1057.21569824219,
 						"y": -264.848937988281
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": 32761.0,
 					"type": "ios"
@@ -2078,9 +2016,7 @@
 						"x": 295.593933105469,
 						"y": -261.848937988281
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
@@ -2096,9 +2032,7 @@
 						"x": -640.703491210938,
 						"y": -701.020812988281
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": 53187.0,
 					"type": "remote",
 					"widgets": []
@@ -2322,9 +2256,7 @@
 								"x": -626.363220214844,
 								"y": -205.58154296875
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -2340,9 +2272,7 @@
 								"x": 549.263366699219,
 								"y": -205.58154296875
 							},
-							"parameters": {
-
-							},
+							"parameters": {},
 							"ports": [
 								{
 									"name": "port0",
@@ -2362,9 +2292,7 @@
 					"type": "graph"
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -49342.0,
 			"seed_locked": true,
 			"shortdesc": "",
@@ -2488,9 +2416,7 @@
 						"x": 469.87451171875,
 						"y": -748.578857421875
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [],
 					"seed": -289.0,
 					"type": "ios"
@@ -2501,9 +2427,7 @@
 						"x": 1132.81494140625,
 						"y": -778.578857421875
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
@@ -2523,17 +2447,13 @@
 						"x": 976.557434082031,
 						"y": -981.24560546875
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"seed": -42469.0,
 					"type": "remote",
 					"widgets": []
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -59752.0,
 			"seed_locked": true,
 			"shortdesc": "",
@@ -2609,7 +2529,7 @@
 			"name": "uniform",
 			"node_position": {
 				"x": -1765.89367675781,
-				"y": 693.386352539063
+				"y": 693.386352539062
 			},
 			"parameters": {
 				"color": {
@@ -2636,9 +2556,7 @@
 				"x": -2427.0068359375,
 				"y": 554.200073242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -2255.0,
 			"size": {
 				"x": 321.0,
@@ -2661,9 +2579,7 @@
 				"x": -1654.28076171875,
 				"y": 203.200073242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -62011.0,
 			"size": {
 				"x": 180.0,
@@ -2686,9 +2602,7 @@
 				"x": -1404.78076171875,
 				"y": 270.700073242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -55166.0,
 			"size": {
 				"x": 215.181823730469,
@@ -2711,9 +2625,7 @@
 				"x": -1430.28076171875,
 				"y": 603.200073242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -38134.0,
 			"size": {
 				"x": 201.454498291016,
@@ -2736,9 +2648,7 @@
 				"x": -1141.28076171875,
 				"y": 246.700073242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -7240.0,
 			"size": {
 				"x": 154.0,
@@ -2758,12 +2668,10 @@
 			},
 			"name": "comment_2_2_2_2_2",
 			"node_position": {
-				"x": -936.626586914063,
+				"x": -936.626586914062,
 				"y": 331.700073242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -54982.0,
 			"size": {
 				"x": 285.0,
@@ -2780,9 +2688,7 @@
 				"x": -1113.66552734375,
 				"y": 400.812194824219
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -57064.0,
 			"type": "mwf_mix"
 		},
@@ -2790,7 +2696,7 @@
 			"name": "mwf_output",
 			"node_position": {
 				"x": -889.301940917969,
-				"y": 436.266723632813
+				"y": 436.266723632812
 			},
 			"parameters": {
 				"param0": 0.5,
@@ -2805,29 +2711,25 @@
 				"x": -1406.40539550781,
 				"y": 665.468688964844
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -3874.0,
 			"type": "mwf_map"
 		},
 		{
 			"name": "mwf_map_2",
 			"node_position": {
-				"x": -1374.94653320313,
+				"x": -1374.94653320312,
 				"y": 361.153076171875
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -21323.0,
 			"type": "mwf_map"
 		},
 		{
 			"name": "mwf_create_map",
 			"node_position": {
-				"x": -1890.53735351563,
-				"y": 218.516723632813
+				"x": -1890.53735351562,
+				"y": 218.516723632812
 			},
 			"parameters": {
 				"angle": 0.0,
@@ -2839,8 +2741,8 @@
 		{
 			"name": "mwf_create_map_2",
 			"node_position": {
-				"x": -1887.53735351563,
-				"y": 308.516723632813
+				"x": -1887.53735351562,
+				"y": 308.516723632812
 			},
 			"parameters": {
 				"angle": 90.0,
@@ -2852,8 +2754,8 @@
 		{
 			"name": "mwf_create_map_2_2",
 			"node_position": {
-				"x": -1893.53735351563,
-				"y": 398.516723632813
+				"x": -1893.53735351562,
+				"y": 398.516723632812
 			},
 			"parameters": {
 				"angle": -45.0,
@@ -2865,8 +2767,8 @@
 		{
 			"name": "mwf_create_map_2_2_2",
 			"node_position": {
-				"x": -1893.53735351563,
-				"y": 481.516723632813
+				"x": -1893.53735351562,
+				"y": 481.516723632812
 			},
 			"parameters": {
 				"angle": 45.0,
@@ -2893,7 +2795,7 @@
 		{
 			"name": "uniform_2",
 			"node_position": {
-				"x": -1768.02270507813,
+				"x": -1768.02270507812,
 				"y": 771.613647460938
 			},
 			"parameters": {
@@ -2915,17 +2817,15 @@
 				"x": -1636.94177246094,
 				"y": 253.581619262695
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -18471.0,
 			"type": "mwf_mix_maps"
 		},
 		{
 			"name": "mwf_create_map_3",
 			"node_position": {
-				"x": -1823.44555664063,
-				"y": 586.679321289063
+				"x": -1823.44555664062,
+				"y": 586.679321289062
 			},
 			"parameters": {
 				"angle": 0.0,
@@ -2967,9 +2867,7 @@
 				"x": -766.951721191406,
 				"y": -358.848541259766
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -57064.0,
 			"type": "mwf_mix"
 		},
@@ -2980,9 +2878,7 @@
 				"x": 135.055084228516,
 				"y": -887.924682617188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -57064.0,
 			"type": "mwf_mix"
 		},
@@ -3012,9 +2908,7 @@
 				"x": -95.8273315429688,
 				"y": -440.669860839844
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -54982.0,
 			"size": {
 				"x": 285.0,
@@ -3037,9 +2931,7 @@
 				"x": -308.481628417969,
 				"y": -509.669860839844
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -7240.0,
 			"size": {
 				"x": 154.0,
@@ -3056,9 +2948,7 @@
 				"x": -282.957214355469,
 				"y": -352.375915527344
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"seed": -57064.0,
 			"type": "mwf_mix"
 		},
@@ -3076,9 +2966,8 @@
 			"type": "mwf_output"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
 	"seed_int": 0,
 	"shortdesc": "",
 	"type": "graph"

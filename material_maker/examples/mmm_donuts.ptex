@@ -404,50 +404,50 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "53",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
-			"export_paths": {
-
-			},
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 1596.135986,
-				"y": -86.800011
+				"x": 1596.13598632812,
+				"y": -86.8000106811523
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao": 1,
+				"ao": 1.0,
 				"depth_scale": 0.3,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal": 1,
-				"roughness": 1,
-				"size": 11,
-				"sss": 0
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 0.0
 			},
+			"seed": -1298.0,
 			"type": "material"
 		},
 		{
 			"name": "raymarching",
 			"node_position": {
-				"x": -101.683472,
-				"y": 134.825012
+				"x": -101.683471679688,
+				"y": 134.825012207031
 			},
-			"parameters": {
-
-			},
-			"seed_value": -20022,
+			"parameters": {},
+			"seed": -20022.0,
+			"seed_locked": true,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_d = raymarch_$name($uv);\n",
 				"global": "",
@@ -476,9 +476,7 @@
 						"type": "f"
 					}
 				],
-				"parameters": [
-
-				]
+				"parameters": []
 			},
 			"type": "shader"
 		},
@@ -564,21 +562,23 @@
 				}
 			],
 			"label": "Donut",
+			"longdesc": "",
 			"name": "graph",
 			"node_position": {
-				"x": -660.759155,
-				"y": 14.905704
+				"x": -660.759155273438,
+				"y": 14.9057035446167
 			},
 			"nodes": [
 				{
 					"name": "sdf3d_rounded_2_3",
 					"node_position": {
-						"x": -552.595459,
-						"y": 249.420105
+						"x": -552.595458984375,
+						"y": 249.420104980469
 					},
 					"parameters": {
 						"c": 0.31
 					},
+					"seed": -6703.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -601,10 +601,10 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 0,
+								"default": 0.0,
 								"label": "",
-								"max": 1,
-								"min": 0,
+								"max": 1.0,
+								"min": 0.0,
 								"name": "c",
 								"step": 0.01,
 								"type": "float"
@@ -616,12 +616,13 @@
 				{
 					"name": "sdf3d_boolean_2",
 					"node_position": {
-						"x": -557.354126,
-						"y": 320.541656
+						"x": -557.354125976562,
+						"y": 320.541656494141
 					},
 					"parameters": {
-						"op": 2
+						"op": 2.0
 					},
+					"seed": -46899.0,
 					"shader_model": {
 						"code": "",
 						"global": "vec2 sdf3dc_union(vec2 a, vec2 b) {\n\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));\n}\nvec2 sdf3dc_sub(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, -b.x), a.y);\n}\nvec2 sdf3dc_inter(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));\n}\n",
@@ -649,7 +650,7 @@
 						],
 						"parameters": [
 							{
-								"default": 2,
+								"default": 2.0,
 								"label": "",
 								"name": "op",
 								"type": "enum",
@@ -673,30 +674,33 @@
 					"type": "shader"
 				},
 				{
+					"generic_size": 1,
 					"name": "sdf3d_translate_3_2_2_2",
 					"node_position": {
-						"x": -768.354126,
-						"y": 429.041656
+						"x": -768.354125976562,
+						"y": 429.041656494141
 					},
 					"parameters": {
-						"x": 0,
-						"y": 0,
+						"x": 0.0,
+						"y": 0.0,
 						"z": 0.05
 					},
+					"seed": -23891.0,
 					"type": "sdf3d_translate"
 				},
 				{
 					"name": "sdf3d_repeat",
 					"node_position": {
-						"x": -768.854126,
-						"y": 281.291656
+						"x": -768.854125976562,
+						"y": 281.291656494141
 					},
 					"parameters": {
 						"r": 0.51,
-						"rx": 16,
-						"ry": 16,
-						"rz": 16
+						"rx": 16.0,
+						"ry": 16.0,
+						"rz": 16.0
 					},
+					"seed": -24039.0,
 					"shader_model": {
 						"code": "",
 						"global": "vec3 sdf3d_repeat(vec3 p, vec3 r, float seed, float randomness) {\n\tvec3 i = floor(p/r+0.5);\n\tvec3 a = rand3(i.xy+i.yz+vec2(seed))*6.28*randomness;\n\tp = mod(p+0.5*r,r)-0.5*r;\n\tvec3 rv;\n\tfloat c;\n\tfloat s;\n\tc = cos(a.x);\n\ts = sin(a.x);\n\trv.x = p.x;\n\trv.y = p.y*c+p.z*s;\n\trv.z = -p.y*s+p.z*c;\n\tc = cos(a.y);\n\ts = sin(a.y);\n\tp.x = rv.x*c+rv.z*s;\n\tp.y = rv.y;\n\tp.z = -rv.x*s+rv.z*c;\n\tc = cos(a.z);\n\ts = sin(a.z);\n\trv.x = p.x*c+p.y*s;\n\trv.y = -p.x*s+p.y*c;\n\trv.z = p.z;\n\treturn rv;\n}\n",
@@ -719,40 +723,40 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 4,
+								"default": 4.0,
 								"label": "X",
-								"max": 32,
-								"min": 1,
+								"max": 32.0,
+								"min": 1.0,
 								"name": "rx",
-								"step": 1,
+								"step": 1.0,
 								"type": "float"
 							},
 							{
 								"control": "None",
-								"default": 4,
+								"default": 4.0,
 								"label": "Y",
-								"max": 32,
-								"min": 1,
+								"max": 32.0,
+								"min": 1.0,
 								"name": "ry",
-								"step": 1,
+								"step": 1.0,
 								"type": "float"
 							},
 							{
 								"control": "None",
-								"default": 1,
+								"default": 1.0,
 								"label": "Z",
-								"max": 32,
-								"min": 1,
+								"max": 32.0,
+								"min": 1.0,
 								"name": "rz",
-								"step": 1,
+								"step": 1.0,
 								"type": "float"
 							},
 							{
 								"control": "None",
 								"default": 0.5,
 								"label": "R",
-								"max": 1,
-								"min": 0,
+								"max": 1.0,
+								"min": 0.0,
 								"name": "r",
 								"step": 0.01,
 								"type": "float"
@@ -764,51 +768,72 @@
 				{
 					"name": "sdf3d_capsule",
 					"node_position": {
-						"x": -786.854126,
-						"y": 197.291656
+						"x": -786.854125976562,
+						"y": 197.291656494141
 					},
 					"parameters": {
-						"axis": 1,
+						"axis": 1.0,
 						"l": 0.02,
+						"profile": {
+							"points": [
+								{
+									"ls": 0.0,
+									"rs": 0.0,
+									"x": 0.0,
+									"y": 1.0
+								},
+								{
+									"ls": 0.0,
+									"rs": 0.0,
+									"x": 1.0,
+									"y": 1.0
+								}
+							],
+							"type": "Curve"
+						},
 						"r": 0.01
 					},
+					"seed": -36329.0,
 					"type": "sdf3d_capsule"
 				},
 				{
 					"name": "sdf3d_torus_2",
 					"node_position": {
-						"x": -768.354126,
-						"y": -82.208344
+						"x": -768.354125976562,
+						"y": -82.2083435058594
 					},
 					"parameters": {
 						"R": 0.3,
-						"axis": 2,
+						"axis": 2.0,
 						"r": 0.14
 					},
+					"seed": 23726.0,
 					"type": "sdf3d_torus"
 				},
 				{
 					"name": "sdf3d_torus",
 					"node_position": {
-						"x": -759.854126,
-						"y": -236.708344
+						"x": -759.854125976562,
+						"y": -236.708343505859
 					},
 					"parameters": {
 						"R": 0.3,
-						"axis": 2,
+						"axis": 2.0,
 						"r": 0.15
 					},
+					"seed": 17411.0,
 					"type": "sdf3d_torus"
 				},
 				{
 					"name": "sdf3d_boolean",
 					"node_position": {
-						"x": -521.333313,
-						"y": -3.083344
+						"x": -521.333312988281,
+						"y": -3.08334398269653
 					},
 					"parameters": {
-						"op": 0
+						"op": 0.0
 					},
+					"seed": 22036.0,
 					"shader_model": {
 						"code": "",
 						"global": "vec2 sdf3dc_union(vec2 a, vec2 b) {\n\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));\n}\nvec2 sdf3dc_sub(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, -b.x), a.y);\n}\nvec2 sdf3dc_inter(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));\n}\n",
@@ -836,7 +861,7 @@
 						],
 						"parameters": [
 							{
-								"default": 2,
+								"default": 2.0,
 								"label": "",
 								"name": "op",
 								"type": "enum",
@@ -862,12 +887,13 @@
 				{
 					"name": "sdf3d_rounded_2_2",
 					"node_position": {
-						"x": -751.833313,
-						"y": -156.583344
+						"x": -751.833312988281,
+						"y": -156.583343505859
 					},
 					"parameters": {
 						"c": 0.08
 					},
+					"seed": 19307.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -890,10 +916,10 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 0,
+								"default": 0.0,
 								"label": "",
-								"max": 1,
-								"min": 0,
+								"max": 1.0,
+								"min": 0.0,
 								"name": "c",
 								"step": 0.01,
 								"type": "float"
@@ -903,27 +929,30 @@
 					"type": "shader"
 				},
 				{
+					"generic_size": 1,
 					"name": "sdf3d_translate_3_2_2",
 					"node_position": {
-						"x": -774.833313,
-						"y": 16.666656
+						"x": -774.833312988281,
+						"y": 16.6666564941406
 					},
 					"parameters": {
-						"x": 0,
-						"y": 0,
+						"x": 0.0,
+						"y": 0.0,
 						"z": 0.03
 					},
+					"seed": -6058.0,
 					"type": "sdf3d_translate"
 				},
 				{
 					"name": "sdf3d_rounded_2",
 					"node_position": {
-						"x": -763.333313,
-						"y": 130.166656
+						"x": -763.333312988281,
+						"y": 130.166656494141
 					},
 					"parameters": {
 						"c": 0.87
 					},
+					"seed": -49639.0,
 					"shader_model": {
 						"code": "",
 						"global": "",
@@ -946,10 +975,10 @@
 						"parameters": [
 							{
 								"control": "None",
-								"default": 0,
+								"default": 0.0,
 								"label": "",
-								"max": 1,
-								"min": 0,
+								"max": 1.0,
+								"min": 0.0,
 								"name": "c",
 								"step": 0.01,
 								"type": "float"
@@ -961,12 +990,13 @@
 				{
 					"name": "sdf3d_boolean_3",
 					"node_position": {
-						"x": -526.595459,
-						"y": 127.920105
+						"x": -526.595458984375,
+						"y": 127.920104980469
 					},
 					"parameters": {
-						"op": 0
+						"op": 0.0
 					},
+					"seed": -61903.0,
 					"shader_model": {
 						"code": "",
 						"global": "vec2 sdf3dc_union(vec2 a, vec2 b) {\n\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));\n}\nvec2 sdf3dc_sub(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, -b.x), a.y);\n}\nvec2 sdf3dc_inter(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));\n}\n",
@@ -994,7 +1024,7 @@
 						],
 						"parameters": [
 							{
-								"default": 2,
+								"default": 2.0,
 								"label": "",
 								"name": "op",
 								"type": "enum",
@@ -1020,63 +1050,57 @@
 				{
 					"name": "gen_inputs",
 					"node_position": {
-						"x": -1086.854126,
-						"y": 105.729713
+						"x": -1086.85412597656,
+						"y": 105.729713439941
 					},
-					"parameters": {
-
-					},
-					"ports": [
-
-					],
+					"parameters": {},
+					"ports": [],
+					"seed": -1513.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_outputs",
 					"node_position": {
-						"x": -221.333313,
-						"y": 105.729713
+						"x": -221.333312988281,
+						"y": 105.729713439941
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
 					"ports": [
 						{
 							"name": "port0",
 							"type": "sdf3dc"
 						}
 					],
+					"seed": -56748.0,
 					"type": "ios"
 				},
 				{
 					"name": "gen_parameters",
 					"node_position": {
-						"x": -891.679138,
-						"y": -536.708374
+						"x": -891.679138183594,
+						"y": -536.708374023438
 					},
-					"parameters": {
-
-					},
+					"parameters": {},
+					"seed": 21235.0,
 					"type": "remote",
-					"widgets": [
-
-					]
+					"widgets": []
 				}
 			],
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -15334.0,
+			"shortdesc": "",
 			"type": "graph"
 		},
 		{
 			"name": "sdf3d_scale_2",
 			"node_position": {
-				"x": -670.842224,
-				"y": 66.030228
+				"x": -670.842224121094,
+				"y": 66.0302276611328
 			},
 			"parameters": {
 				"s": 0.37
 			},
+			"seed": -29540.0,
 			"shader_model": {
 				"code": "vec2 $(name_uv)_in = $in(($uv)/$s);",
 				"global": "",
@@ -1099,10 +1123,10 @@
 				"parameters": [
 					{
 						"control": "Scale1.x",
-						"default": 1,
+						"default": 1.0,
 						"label": "",
-						"max": 5,
-						"min": 0,
+						"max": 5.0,
+						"min": 0.0,
 						"name": "s",
 						"step": 0.01,
 						"type": "float"
@@ -1114,14 +1138,15 @@
 		{
 			"name": "sdf3d_translate_3_2_2",
 			"node_position": {
-				"x": -478.952209,
-				"y": 207.034912
+				"x": -478.952209472656,
+				"y": 207.034912109375
 			},
 			"parameters": {
 				"x": 0.18,
 				"y": 0.11,
 				"z": 0.14
 			},
+			"seed": -6959.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -1144,30 +1169,30 @@
 				"parameters": [
 					{
 						"control": "P1.x",
-						"default": 0,
+						"default": 0.0,
 						"label": "X",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "x",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "P1.y",
-						"default": 0,
+						"default": 0.0,
 						"label": "Y",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "y",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 0,
+						"default": 0.0,
 						"label": "Z",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "z",
 						"step": 0.01,
 						"type": "float"
@@ -1179,12 +1204,13 @@
 		{
 			"name": "sdf3d_boolean",
 			"node_position": {
-				"x": -265.248779,
-				"y": 76.092621
+				"x": -265.248779296875,
+				"y": 76.0926208496094
 			},
 			"parameters": {
-				"op": 0
+				"op": 0.0
 			},
+			"seed": -14171.0,
 			"shader_model": {
 				"code": "",
 				"global": "vec2 sdf3dc_union(vec2 a, vec2 b) {\n\treturn vec2(min(a.x, b.x), mix(b.y, a.y, step(a.x, b.x)));\n}\nvec2 sdf3dc_sub(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, -b.x), a.y);\n}\nvec2 sdf3dc_inter(vec2 a, vec2 b) {\n\treturn vec2(max(a.x, b.x), mix(a.y, b.y, step(a.x, b.x)));\n}\n",
@@ -1212,7 +1238,7 @@
 				],
 				"parameters": [
 					{
-						"default": 2,
+						"default": 2.0,
 						"label": "",
 						"name": "op",
 						"type": "enum",
@@ -1238,14 +1264,15 @@
 		{
 			"name": "sdf3d_translate_3_2_2_2",
 			"node_position": {
-				"x": -278.344788,
-				"y": 149.892624
+				"x": -278.344787597656,
+				"y": 149.892623901367
 			},
 			"parameters": {
-				"x": 0,
-				"y": 0,
+				"x": 0.0,
+				"y": 0.0,
 				"z": 0.07
 			},
+			"seed": -52029.0,
 			"shader_model": {
 				"code": "",
 				"global": "",
@@ -1268,30 +1295,30 @@
 				"parameters": [
 					{
 						"control": "P1.x",
-						"default": 0,
+						"default": 0.0,
 						"label": "X",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "x",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "P1.y",
-						"default": 0,
+						"default": 0.0,
 						"label": "Y",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "y",
 						"step": 0.01,
 						"type": "float"
 					},
 					{
 						"control": "None",
-						"default": 0,
+						"default": 0.0,
 						"label": "Z",
-						"max": 1,
-						"min": -1,
+						"max": 1.0,
+						"min": -1.0,
 						"name": "z",
 						"step": 0.01,
 						"type": "float"
@@ -1302,23 +1329,22 @@
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 1,
+				"a": 1.0,
+				"b": 1.0,
 				"g": 0.0625,
-				"r": 0,
+				"r": 0.0,
 				"type": "Color"
 			},
 			"name": "comment",
 			"node_position": {
-				"x": -681.957275,
-				"y": -50.802036
+				"x": -681.957275390625,
+				"y": -50.8020362854004
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 51527.0,
 			"size": {
-				"x": 757.167969,
-				"y": 382.903992
+				"x": 757.16796875,
+				"y": 382.903991699219
 			},
 			"text": "\n",
 			"title": "Render donuts with color indexes",
@@ -1327,298 +1353,314 @@
 		{
 			"name": "mwf_create_map",
 			"node_position": {
-				"x": 360.571991,
-				"y": -128.630447
+				"x": 360.571990966797,
+				"y": -128.630447387695
 			},
 			"parameters": {
-				"angle": 0,
-				"height": 1
+				"angle": 0.0,
+				"height": 1.0
 			},
+			"seed": -50152.0,
 			"type": "mwf_create_map"
 		},
 		{
 			"name": "mwf_create_map_2",
 			"node_position": {
-				"x": 369.417175,
-				"y": 399.369568
+				"x": 369.417175292969,
+				"y": 399.369567871094
 			},
 			"parameters": {
-				"angle": 0,
-				"height": 1
+				"angle": 0.0,
+				"height": 1.0
 			},
+			"seed": 55840.0,
 			"type": "mwf_create_map"
 		},
 		{
 			"name": "mwf_create_map_3",
 			"node_position": {
-				"x": 378.417175,
-				"y": 137.369568
+				"x": 378.417175292969,
+				"y": 137.369567871094
 			},
 			"parameters": {
-				"angle": 0,
-				"height": 1
+				"angle": 0.0,
+				"height": 1.0
 			},
+			"seed": 62287.0,
 			"type": "mwf_create_map"
 		},
 		{
 			"name": "mwf_map",
 			"node_position": {
-				"x": 652.417175,
-				"y": -128.630447
+				"x": 652.417175292969,
+				"y": -128.630447387695
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -17036.0,
 			"type": "mwf_map"
 		},
 		{
 			"name": "mwf_map_2",
 			"node_position": {
-				"x": 647.693909,
-				"y": 136.369553
+				"x": 647.693908691406,
+				"y": 136.369552612305
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 42961.0,
 			"type": "mwf_map"
 		},
 		{
 			"name": "mwf_map_2_2",
 			"node_position": {
-				"x": 651.693909,
-				"y": 406.119568
+				"x": 651.693908691406,
+				"y": 406.119567871094
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 8771.0,
 			"type": "mwf_map"
 		},
 		{
 			"name": "uniform",
 			"node_position": {
-				"x": 415.193909,
-				"y": 217.119568
+				"x": 415.193908691406,
+				"y": 217.119567871094
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 0.165865,
-					"r": 0.280273,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.165865004062653,
+					"r": 0.280272990465164,
 					"type": "Color"
 				}
 			},
+			"seed": 29592.0,
 			"type": "uniform"
 		},
 		{
+			"generic_size": 2,
 			"name": "mwf_mix",
 			"node_position": {
-				"x": 853.900879,
-				"y": 164.927567
+				"x": 853.90087890625,
+				"y": 164.92756652832
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": 45807.0,
 			"type": "mwf_mix"
 		},
 		{
+			"generic_size": 2,
 			"name": "mwf_mix_2",
 			"node_position": {
-				"x": 1083.009155,
-				"y": -87.618446
+				"x": 1083.00915527344,
+				"y": -87.6184463500977
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -43124.0,
 			"type": "mwf_mix"
 		},
 		{
 			"name": "uniform_2",
 			"node_position": {
-				"x": 415.732727,
-				"y": 272.369568
+				"x": 415.732727050781,
+				"y": 272.369567871094
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 0.105882,
-					"r": 1,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.105881996452808,
+					"r": 1.0,
 					"type": "Color"
 				}
 			},
+			"seed": 29265.0,
 			"type": "uniform"
 		},
 		{
 			"name": "uniform_2_2",
 			"node_position": {
-				"x": 408.002197,
-				"y": 17.994553
+				"x": 408.002197265625,
+				"y": 17.9945526123047
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				}
 			},
+			"seed": 39289.0,
 			"type": "uniform"
 		},
 		{
 			"name": "uniform_3",
 			"node_position": {
-				"x": 407.463379,
-				"y": -37.255447
+				"x": 407.46337890625,
+				"y": -37.2554473876953
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0.914063,
-					"g": 0,
-					"r": 1,
+					"a": 1.0,
+					"b": 0.914062976837158,
+					"g": 0.0,
+					"r": 1.0,
 					"type": "Color"
 				}
 			},
+			"seed": -31342.0,
 			"type": "uniform"
 		},
 		{
 			"name": "uniform_2_3_2",
 			"node_position": {
-				"x": 413.800964,
-				"y": 708.119568
+				"x": 413.800964355469,
+				"y": 708.119567871094
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 0.886275,
-					"r": 1,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.886274993419647,
+					"r": 1.0,
 					"type": "Color"
 				}
 			},
+			"seed": 14279.0,
 			"type": "uniform"
 		},
 		{
+			"generic_size": 2,
 			"name": "mwf_mix_3",
 			"node_position": {
-				"x": 845.760559,
-				"y": -242.048431
+				"x": 845.760559082031,
+				"y": -242.048431396484
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -47523.0,
 			"type": "mwf_mix"
 		},
 		{
 			"name": "uniform_greyscale",
 			"node_position": {
-				"x": 398.856934,
-				"y": -337.380432
+				"x": 398.85693359375,
+				"y": -337.380432128906
 			},
 			"parameters": {
 				"color": 0.05
 			},
+			"seed": -25443.0,
 			"type": "uniform_greyscale"
 		},
 		{
 			"name": "uniform_4",
 			"node_position": {
-				"x": 400.856934,
-				"y": -273.880432
+				"x": 400.85693359375,
+				"y": -273.880432128906
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 1,
-					"g": 0.415686,
-					"r": 0,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 0.415686011314392,
+					"r": 0.0,
 					"type": "Color"
 				}
 			},
+			"seed": -41313.0,
 			"type": "uniform"
 		},
 		{
 			"name": "uniform_4_2",
 			"node_position": {
-				"x": 399.718628,
-				"y": -217.130432
+				"x": 399.718627929688,
+				"y": -217.130432128906
 			},
 			"parameters": {
 				"color": {
-					"a": 1,
-					"b": 0,
-					"g": 1,
-					"r": 0,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 1.0,
+					"r": 0.0,
 					"type": "Color"
 				}
 			},
+			"seed": -33162.0,
 			"type": "uniform"
 		},
 		{
 			"name": "perlin",
 			"node_position": {
-				"x": 363.92984,
-				"y": 499.119568
+				"x": 363.929840087891,
+				"y": 499.119567871094
 			},
 			"parameters": {
-				"iterations": 8,
+				"iterations": 8.0,
 				"persistence": 0.95,
-				"scale_x": 4,
-				"scale_y": 4
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": 8454.0,
 			"type": "perlin"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": 378.92981,
-				"y": 637.119568
+				"x": 378.929809570312,
+				"y": 637.119567871094
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 0,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.240099,
-							"g": 0.613979,
+							"a": 1.0,
+							"b": 0.240098997950554,
+							"g": 0.613978981971741,
 							"pos": 0,
-							"r": 0.869792
+							"r": 0.869791984558105
 						},
 						{
-							"a": 1,
-							"b": 0.233941,
-							"g": 0.553521,
-							"pos": 1,
-							"r": 0.802083
+							"a": 1.0,
+							"b": 0.240098997950554,
+							"g": 0.613978981971741,
+							"pos": 0.49999,
+							"r": 0.869791984558105
+						},
+						{
+							"a": 1.0,
+							"b": 0.233941003680229,
+							"g": 0.553520977497101,
+							"pos": 0.50001,
+							"r": 0.802083015441895
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 61883.0,
 			"type": "colorize"
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
-				"g": 1,
+				"a": 1.0,
+				"b": 0.0,
+				"g": 1.0,
 				"r": 0.9375,
 				"type": "Color"
 			},
 			"name": "comment_2",
 			"node_position": {
-				"x": 82.468719,
-				"y": -50.148132
+				"x": 82.4687194824219,
+				"y": -50.1481323242188
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -63456.0,
 			"size": {
-				"x": 255.271576,
-				"y": 432.232056
+				"x": 255.271575927734,
+				"y": 432.232055664062
 			},
 			"text": "",
 			"title": "Separate colors",
@@ -1626,23 +1668,22 @@
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
-				"g": 1,
+				"a": 1.0,
+				"b": 0.0,
+				"g": 1.0,
 				"r": 0.09375,
 				"type": "Color"
 			},
 			"name": "comment_2_2",
 			"node_position": {
-				"x": 346.962891,
-				"y": -373.398132
+				"x": 346.962890625,
+				"y": -373.398132324219
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -3731.0,
 			"size": {
-				"x": 464,
-				"y": 1149
+				"x": 464.0,
+				"y": 1149.0
 			},
 			"text": "",
 			"title": "Create maps and materials and combine them",
@@ -1650,23 +1691,22 @@
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 1,
-				"g": 0,
+				"a": 1.0,
+				"b": 1.0,
+				"g": 0.0,
 				"r": 0.96875,
 				"type": "Color"
 			},
 			"name": "comment_2_2_2",
 			"node_position": {
-				"x": 828.579407,
-				"y": -289.750183
+				"x": 828.579406738281,
+				"y": -289.750183105469
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -43365.0,
 			"size": {
-				"x": 743.688171,
-				"y": 725.975952
+				"x": 743.688171386719,
+				"y": 725.975952148438
 			},
 			"text": "",
 			"title": "Mix the result and generate output",
@@ -1675,80 +1715,89 @@
 		{
 			"name": "mul_detect",
 			"node_position": {
-				"x": 90.234436,
-				"y": -13.032837
+				"x": 90.2344360351562,
+				"y": -13.0328369140625
 			},
 			"parameters": {
 				"t": 0.01,
 				"v": 0.31
 			},
+			"seed": -61675.0,
 			"type": "mul_detect"
 		},
 		{
 			"name": "mul_detect_2",
 			"node_position": {
-				"x": 94.964081,
-				"y": 132.26152
+				"x": 94.9640808105469,
+				"y": 132.261520385742
 			},
 			"parameters": {
 				"t": 0.01,
 				"v": 0.87
 			},
+			"seed": 28134.0,
 			"type": "mul_detect"
 		},
 		{
 			"name": "mul_detect_2_2",
 			"node_position": {
-				"x": 90.964081,
-				"y": 288.261536
+				"x": 90.9640808105469,
+				"y": 288.261535644531
 			},
 			"parameters": {
 				"t": 0.01,
 				"v": 0.08
 			},
+			"seed": 61894.0,
 			"type": "mul_detect"
 		},
 		{
 			"name": "sdf3d_repeat_3",
 			"node_position": {
-				"x": -479.340515,
-				"y": 4.22731
+				"x": -479.340515136719,
+				"y": 4.22731018066406
 			},
 			"parameters": {
 				"r": 0.2,
-				"rx": 3,
-				"ry": 3
+				"rx": 3.0,
+				"ry": 3.0,
+				"variations": false
 			},
+			"seed": -15109.0,
 			"type": "sdf3d_repeat"
 		},
 		{
 			"name": "sdf3d_repeat_3_2",
 			"node_position": {
-				"x": -479.107727,
-				"y": 105.348923
+				"x": -479.107727050781,
+				"y": 105.348922729492
 			},
 			"parameters": {
 				"r": 0.2,
-				"rx": 3,
-				"ry": 3
+				"rx": 3.0,
+				"ry": 3.0,
+				"variations": false
 			},
+			"seed": -15210.0,
 			"type": "sdf3d_repeat"
 		},
 		{
 			"name": "mwf_output_2",
 			"node_position": {
-				"x": 1286.272217,
-				"y": -79.138245
+				"x": 1286.27221679688,
+				"y": -79.1382446289062
 			},
 			"parameters": {
-				"param0": 1,
-				"param2": 1
+				"param0": 1.0,
+				"param2": 1.0
 			},
+			"seed": -22005.0,
 			"type": "mwf_output"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }
