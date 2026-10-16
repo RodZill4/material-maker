@@ -644,7 +644,6 @@ func change_theme(theme_name : String) -> void:
 	var _theme : Theme = ThemeUtils.get_theme(theme_name)
 	if _theme == null or _theme == theme:
 		return
-	await get_tree().process_frame
 	theme = _theme
 	$NodeFactory.on_theme_changed()
 
