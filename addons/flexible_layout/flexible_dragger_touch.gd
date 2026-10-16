@@ -81,11 +81,14 @@ func get_drag_offset() -> int:
 func update_theme_colors() -> void:
 	if not sb_normal or not sb_pressed:
 		init_styleboxes()
-	match mm_globals.current_theme():
-		mm_globals.DEFAULT_DARK:
+	match ThemeUtils.current_theme:
+		ThemeUtils.CUSTOM_THEME:
+			update_stylebox_colors(ThemeUtils.base_color.lightened(0.3),
+					ThemeUtils.base_color.darkened(0.2), 0.25, 0.8)
+		ThemeUtils.DARK_THEME:
 			update_stylebox_colors(Color.WHITE, Color.BLACK, 0.25, 0.8)
-		mm_globals.DEFAULT_LIGHT:
+		ThemeUtils.LIGHT_THEME:
 			update_stylebox_colors(Color.BLACK, Color.WHITE, 0.6, 0.25)
-		mm_globals.CLASSIC:
+		ThemeUtils.CLASSIC_THEME:
 			update_stylebox_colors(Color("506396ff"), Color("768ac2ff"), .25, .8)
 	queue_redraw()
