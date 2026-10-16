@@ -243,6 +243,48 @@
 					}
 				]
 			},
+			"Imaginando VS 2": {
+				"custom": [
+					"func process_option_vs2(s : String, is_declaration : bool = false) -> String:",
+					"\ts = s.replace(\"elapsed_time\", \"time\")",
+					"\ts = s.replace(\"uniform vec2\", \"const vec2\")",
+					"\ts = s.replace(\"uniform vec3\", \"const vec3\")",
+					"\ts = s.replace(\"uniform mat2\", \"const mat2\")",
+					"\treturn s"
+				],
+				"export_extension": "vs2.frag",
+				"files": [
+					{
+						"file_name": "$(path_prefix).vs2.frag",
+						"template": [
+							"/*",
+							"{",
+							"\t\"author\": \"\",",
+							"\t\"color\": \"white\",",
+							"\t\"movement\": true,",
+							"\t\"name\": \"$(file_prefix)\",",
+							"\t\"parameters\": [],",
+							"\t\"url\": \"\",",
+							"\t\"uuid\": \"$uid(0)\"",
+							"}",
+							"*/",
+							"// mm2vs: exported-by=material-maker | target=imaginando-vs2",
+							"// mm2vs: finalize with `mm2vs convert <this file>` to normalize the uuid and lift exposed parameters.",
+							"$definitions float_uniform_to_const,vs2",
+							"void main() {",
+							"\tfloat _seed_variation_ = 0.0;",
+							"\tvec4 _controlled_variation_ = vec4(0.0);",
+							"\tvec2 uv = fract(texCoord);",
+							"$begin_generate vs2",
+							"\tvec4 generatedColor = $color_tex(uv);",
+							"$end_generate",
+							"\tfragColor = vec4(generatedColor.rgb, generatedColor.a * alpha);",
+							"}"
+						],
+						"type": "template"
+					}
+				]
+			},
 			"Unity": {
 				"export_extension": "mat",
 				"files": [
