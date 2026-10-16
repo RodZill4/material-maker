@@ -168,7 +168,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Download and extract Godot and export templates 💾
         run: |
-          wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
+          wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.arm64.zip
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
           wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
