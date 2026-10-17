@@ -672,7 +672,7 @@ func change_theme(theme_name : String) -> void:
 	theme = _theme
 
 	if mm_globals.get_config("touch_optimization"):
-			android_set_theme_overrides(theme)
+		mobile_set_theme_overrides(theme)
 
 	ThemeUtils.setup_clear_color()
 	$NodeFactory.on_theme_changed()
@@ -1628,7 +1628,7 @@ func draw_children(p, x):
 func _draw_debug():
 	draw_children(self, get_global_mouse_position())
 
-#region android-specific setups
+#region mobile-specific setups
 
 func android_setup_margins() -> void:
 	# offset by MM_MainBackground stylebox content margins
@@ -1689,7 +1689,7 @@ func android_update_spacer_margins(spacer : Control,
 		# account for main container's already-applied margins
 		spacer.custom_minimum_size.x = maxf(corner_reach - mm_touch.cutout_margins(side), 0.0)
 
-func android_set_theme_overrides(t : Theme) -> void:
+func mobile_set_theme_overrides(t : Theme) -> void:
 	const vh_scroll_width : int = 10
 	var sv : StyleBoxFlat = t.get_stylebox("scroll", "VScrollBar")
 	sv.set_border_width(SIDE_LEFT, vh_scroll_width)

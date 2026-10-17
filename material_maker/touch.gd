@@ -17,8 +17,8 @@ func _ready() -> void:
 	else:
 		if OS.get_name() == "Android":
 			android_runtime = Engine.get_singleton("AndroidRuntime")
-		_display_corner_radii = _get_corner_radius()
-		_dispalay_cutout_margins = _get_cutout_margins()
+			_display_corner_radii = _get_corner_radius()
+			_dispalay_cutout_margins = _get_cutout_margins()
 
 var _touch_start : int = -1
 
