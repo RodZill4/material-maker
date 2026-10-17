@@ -323,7 +323,7 @@ func _gui_input(event : InputEvent) -> void:
 						var rect = get_padded_node_rect(c)
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
-
+	elif event is InputEventMouseMotion:
 		var found_tip : bool = false
 		for c in get_children():
 			if c.has_method("get_slot_tooltip"):
@@ -720,7 +720,7 @@ func new_material(init_nodes = {nodes=[{name="Material", type="material",paramet
 		add_child(top_generator)
 		move_child(top_generator, 0)
 		update_view(top_generator)
-		center_view.call_deferred()
+		center_view()
 		set_save_path("")
 		set_need_save(false)
 
