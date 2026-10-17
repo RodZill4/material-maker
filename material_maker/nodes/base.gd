@@ -326,13 +326,6 @@ var doubleclicked : bool = false
 
 func _on_gui_input(event) -> void:
 	if event is InputEventMouseButton:
-		# Handle two-finger tap -> context menu
-		if event.device == InputEvent.DEVICE_ID_EMULATION:
-			if (event.button_index == MOUSE_BUTTON_LEFT
-					and MMGraphEdit.active_touch == 2 and not event.pressed):
-				accept_event()
-				show_context_menu()
-
 		if event.pressed:
 			if event.double_click:
 				doubleclicked = true

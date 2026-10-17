@@ -323,12 +323,6 @@ func _gui_input(event : InputEvent) -> void:
 						var rect = get_padded_node_rect(c)
 						if rect.has_point(get_global_mouse_position()):
 							found_tip = found_tip or c.set_slot_tip_text(get_global_mouse_position()-c.global_position)
-	elif event is InputEventMouseMotion:
-		# Handle two-finger pan
-		if active_touch_dragging == 2:
-			cancel_drag_selection()
-			scroll_offset -= event.relative
-			accept_event()
 
 		var found_tip : bool = false
 		for c in get_children():
