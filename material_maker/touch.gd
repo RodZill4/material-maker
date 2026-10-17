@@ -11,9 +11,6 @@ var android_runtime : JNISingleton
 # workaround for godot issue #123454 for Android 16
 var last_go_back_request : int = 0
 
-## Emitted when back button is pressed on Android.
-signal back_pressed()
-
 func _ready() -> void:
 	if OS.get_name() not in ["iOS", "Android"]:
 		set_process_input(false)
@@ -48,8 +45,6 @@ func _notification(what : int) -> void:
 				if Time.get_ticks_msec() - last_go_back_request < 125:
 					return
 				last_go_back_request = Time.get_ticks_msec()
-
-			back_pressed.emit()
 
 			var main_window : MainWindow = mm_globals.main_window
 			var exclude : PackedStringArray = PackedStringArray(["AddNodePopup"])
