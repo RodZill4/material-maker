@@ -39,9 +39,9 @@ on:
         default: false
 
 env:
-  GODOT_VERSION: 4.7.2
-  GODOT_SUB: stable
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable
+  GODOT_VERSION: 4.8
+  GODOT_SUB: beta1
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.8-beta1
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_7
   EXPORT_TARGET_SUFFIX: "${{ github.event.inputs.steam == 'true' && ' Steam' || '' }}"
@@ -173,8 +173,8 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Download and extract Godot and export templates 💾
         run: |
-          wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
-          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.universal.zip
+          wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.arm64.zip
+          unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_macos.arm64.zip
           wget ${GODOT_DOWNLOAD_DIR}/Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           unzip -a Godot_v${GODOT_VERSION}-${GODOT_SUB}_export_templates.tpz
           mkdir -v -p "/Users/runner/Library/Application Support/Godot/export_templates/${GODOT_VERSION}.${GODOT_SUB}"
