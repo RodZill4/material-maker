@@ -15,10 +15,11 @@ var last_go_back_request : int = 0
 signal back_pressed()
 
 func _ready() -> void:
-	if OS.get_name() != "Android":
+	if OS.get_name() not in ["iOS", "Android"]:
 		set_process_input(false)
 	else:
-		android_runtime = Engine.get_singleton("AndroidRuntime")
+		if OS.get_name() == "Android":
+			android_runtime = Engine.get_singleton("AndroidRuntime")
 		_display_corner_radii = _get_corner_radius()
 		_dispalay_cutout_margins = _get_cutout_margins()
 
