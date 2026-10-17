@@ -331,15 +331,7 @@ func _on_gui_input(event) -> void:
 				doubleclicked = true
 			if event.button_index == MOUSE_BUTTON_RIGHT:
 				accept_event()
-				var menu : PopupMenu = create_context_menu()
-				if menu != null:
-					if menu.get_item_count() != 0:
-						add_child(menu)
-						menu.popup_hide.connect(menu.queue_free)
-						menu.id_pressed.connect(self._on_menu_id_pressed)
-						mm_globals.popup_menu(menu, self)
-					else:
-						menu.free()
+				show_context_menu()
 		elif doubleclicked:
 			doubleclicked = false
 			if generator is MMGenGraph:
@@ -420,6 +412,17 @@ func create_context_menu() -> PopupMenu:
 	if generator is MMGenGraph and !get_parent().get_propagation_targets(generator).is_empty():
 		menu.add_item(tr("Propagate changes"), MENU_PROPAGATE_CHANGES)
 	return menu
+
+func show_context_menu() -> void:
+	var menu : PopupMenu = create_context_menu()
+	if menu != null:
+		if menu.get_item_count() != 0:
+			add_child(menu)
+			menu.popup_hide.connect(menu.queue_free)
+			menu.id_pressed.connect(self._on_menu_id_pressed)
+			mm_globals.popup_menu(menu, self)
+		else:
+			menu.free()
 
 func _on_menu_id_pressed(id : int) -> void:
 	match id:
