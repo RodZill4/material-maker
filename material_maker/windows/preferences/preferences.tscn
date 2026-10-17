@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://b6irr1ykhui6l" path="res://material_maker/windows/preferences/preferences_tree.gd" id="3_mlqij"]
 [ext_resource type="Script" uid="uid://gmystrme5ayw" path="res://material_maker/windows/preferences/lang_option.gd" id="4"]
 [ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
+[ext_resource type="PackedScene" uid="uid://dk7ygrwx0h1k3" path="res://material_maker/windows/preferences/color_option.tscn" id="8_btfio"]
 
 [node name="Preferences" type="Window" unique_id=906006602]
 oversampling_override = 1.0
@@ -15,6 +16,7 @@ position = Vector2i(0, 36)
 size = Vector2i(700, 450)
 exclusive = true
 script = ExtResource("2")
+metadata/android_fullscreen_dim = true
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1807450959]
 anchors_preset = 15
@@ -159,6 +161,7 @@ step = 0.01
 float_only = true
 
 [node name="GuiUseNativeFileDialogs" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=912910531]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiUseNativeFileDialogs" unique_id=1637894285]
@@ -209,6 +212,57 @@ tooltip_text = "Enables single-window mode."
 text = "On"
 flat = false
 config_variable = "ui_single_window_mode"
+
+[node name="GuiCustomThemeBase" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2087466635]
+layout_mode = 2
+
+[node name="LabelThemeBaseCol" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeBase" unique_id=666414407]
+layout_mode = 2
+text = "Custom theme base color"
+
+[node name="GuiCustomThemeBase" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeBase" unique_id=2141949997 instance=ExtResource("8_btfio")]
+custom_minimum_size = Vector2(200, 25)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Base color used when deriving the custom theme."
+edit_intensity = false
+config_variable = "custom_theme_base_color"
+
+[node name="GuiCustomThemeAccent" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1496726889]
+layout_mode = 2
+
+[node name="LabelThemeBaseAccent" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeAccent" unique_id=820405633]
+layout_mode = 2
+text = "Custom theme accent"
+
+[node name="GuiCustomThemeAccent" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeAccent" unique_id=381059430 instance=ExtResource("8_btfio")]
+custom_minimum_size = Vector2(200, 25)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Accent used for highlighted ui elements.
+This includes text selections, icon colors in pressed/hovered buttons etc."
+edit_intensity = false
+config_variable = "custom_theme_accent_color"
+
+[node name="GuiCustomThemeContrast" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=132933454]
+layout_mode = 2
+
+[node name="LabelThemeContrast" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeContrast" unique_id=1590947111]
+layout_mode = 2
+text = "Custom theme contrast"
+
+[node name="GuiCustomThemeContrast" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeContrast" unique_id=1058520305 instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Contrast used when deriving base color for the custom theme.
+Postive values create darker colors."
+config_variable = "custom_theme_contrast"
+value = 0.8
+min_value = -2.0
+max_value = 2.0
+step = 0.01
+float_only = true
 
 [node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1191755573]
 custom_minimum_size = Vector2(0, 10)
@@ -274,6 +328,23 @@ text = "On"
 flat = false
 config_variable = "ui_3d_preview_sun_shadow"
 
+[node name="Gui3DPreviewGeneratedMeshes" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=282556027]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewGeneratedMeshes" unique_id=1180650648]
+layout_mode = 2
+text = "3D preview generated meshes (requires restart)"
+
+[node name="Gui3DPreviewGenMesh" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Gui3DPreviewGeneratedMeshes" unique_id=1887354945 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "If enabled, generated meshes are used for Cube, Cylinder and Plane models instead of static meshes.
+These allow a custom chamfer to be applied but may not be supported in older or lower-end GPUs."
+text = "On"
+flat = false
+config_variable = "ui_3d_preview_generated_mesh"
+
 [node name="WinTabletDriverSpacer" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1614702595]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 10)
@@ -284,6 +355,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/WinTabletDriver" unique_id=724900106]
+visible = false
 layout_mode = 2
 text = "Tablet Driver"
 
@@ -347,6 +419,7 @@ step = 1.0
 float_only = true
 
 [node name="IdleFPSLimit" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=918523289]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/IdleFPSLimit" unique_id=34014532]
@@ -369,6 +442,24 @@ min_value = 1.0
 max_value = 20.0
 step = 1.0
 float_only = true
+
+[node name="KeepScreenOn" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1389077131]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/KeepScreenOn" unique_id=1745336321]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 1
+text = "Keep Screen On"
+
+[node name="KeepScreenOn" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/KeepScreenOn" unique_id=760988835 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Whether screen should stay on after a period of inactivity (based on OS settings)"
+text = "On"
+flat = false
+config_variable = "keep_screen_on"
 
 [node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1280062657]
 custom_minimum_size = Vector2(0, 10)
@@ -547,29 +638,6 @@ config_variable = "aperture_label_position"
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="FloatEditSensitivity" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=1393451760]
-layout_mode = 2
-
-[node name="LabelFloatEditSensitivity" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/FloatEditSensitivity" unique_id=363806448]
-layout_mode = 2
-text = "Float parameter editor sliding sensitivity"
-
-[node name="Sensitivity" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/FloatEditSensitivity" unique_id=1159103913 instance=ExtResource("3")]
-custom_minimum_size = Vector2(200, 24)
-layout_mode = 2
-size_flags_horizontal = 10
-tooltip_text = "Adjusts sliding sensitivity for float parameter fields."
-config_variable = "ui_field_sensitivity"
-value = 1.0
-min_value = 0.1
-max_value = 2.0
-step = 0.01
-float_only = true
-
-[node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=888694524]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-
 [node name="ColorPickerFloating" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=717745548]
 layout_mode = 2
 
@@ -612,6 +680,94 @@ tooltip_text = "Whether to save export parameters in the export animation dialog
 text = "On"
 flat = false
 config_variable = "remember_anim_export"
+
+[node name="Touch" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer" unique_id=881994305]
+visible = false
+layout_mode = 2
+theme_type_variation = &"MM_PreferenceTab"
+metadata/_tab_index = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch" unique_id=276816290]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TouchNodeActions" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer" unique_id=1309858269]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchNodeActions" unique_id=895456211]
+layout_mode = 2
+text = "Enable node actions panel (requires restart)"
+
+[node name="NodeActions" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchNodeActions" unique_id=307131792 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "A touch-friendly panel that provides access to common actions
+(such as delete, minimize, randomize etc.) for selected node(s) in graph panel.
+
+This is enabled by default on Android."
+text = "On"
+flat = false
+config_variable = "touch_node_actions"
+
+[node name="TouchOptimizations" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer" unique_id=315705879]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchOptimizations" unique_id=1640622729]
+layout_mode = 2
+text = "Enable touch optimizations (requires restart)"
+
+[node name="TouchOptimize" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchOptimizations" unique_id=1259798418 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, this increases the touch area of scrollbars, makes vertical seperation between popup menu items
+larger, enables a touch dragger for panel splits etc. to increase usability on smaller screens.
+
+This is enabled by default on Android."
+text = "On"
+flat = false
+config_variable = "touch_optimization"
+
+[node name="TouchFullScreen" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer" unique_id=860528142]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchFullScreen" unique_id=93076913]
+layout_mode = 2
+text = "Enable full screen"
+
+[node name="FullScreen" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Touch/VBoxContainer/TouchFullScreen" unique_id=1590147791 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, this extends the window towards screen edges."
+text = "On"
+flat = false
+config_variable = "touch_full_screen"
+
+[node name="PreferenceTouchHint" type="PanelContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=328849096]
+visible = false
+layout_mode = 2
+theme_type_variation = &"MM_PanelBackground"
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/PreferenceTouchHint" unique_id=508458780]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/PreferenceTouchHint/MarginContainer" unique_id=1664878493]
+custom_minimum_size = Vector2(0, 60)
+custom_maximum_size = Vector2(-1, 60)
+layout_mode = 2
+
+[node name="TouchHintLabel" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/PreferenceTouchHint/MarginContainer/ScrollContainer" unique_id=1926624238]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=245791047]
 layout_mode = 2

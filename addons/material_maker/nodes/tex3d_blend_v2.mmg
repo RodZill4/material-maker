@@ -44,7 +44,7 @@
 			"}",
 			"",
 			"vec3 blend3d_hard_light(vec3 uv, vec3 c1, vec3 c2, float opacity) {",
-			"\treturn opacity*0.5*(c1*c2+blend3d_overlay(c1, c2, 1.0)) + (1.0-opacity)*c2;",
+			"\treturn opacity*0.5*(c1*c2+blend3d_overlay(uv, c1, c2, 1.0)) + (1.0-opacity)*c2;",
 			"}",
 			"",
 			"float blend3d_soft_light_f(float c1, float c2) {",
@@ -184,6 +184,7 @@
 			""
 		],
 		"includes": [
+			"adjust_hsv",
 			"blend2"
 		],
 		"inputs": [

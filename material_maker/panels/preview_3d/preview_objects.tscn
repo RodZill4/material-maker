@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxcw0mi4sfl2x"]
+[gd_scene format=3 uid="uid://cxcw0mi4sfl2x"]
 
 [ext_resource type="ArrayMesh" uid="uid://kvgtp30latgq" path="res://material_maker/meshes/suzanne.obj" id="1"]
 [ext_resource type="Script" uid="uid://dumc33fnias7j" path="res://material_maker/panels/preview_3d/preview_mesh_generated.gd" id="1_2ljk2"]
@@ -7,8 +7,15 @@
 [sub_resource type="ArrayMesh" id="ArrayMesh_mgw7t"]
 resource_local_to_scene = true
 
+[sub_resource type="BoxMesh" id="BoxMesh_obs4a"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_obs4a"]
 resource_local_to_scene = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mgw7t"]
+height = 1.0
+cap_top = false
+cap_bottom = false
 
 [sub_resource type="SphereMesh" id="3"]
 radius = 0.75
@@ -18,6 +25,9 @@ rings = 16
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_tqjv1"]
 resource_local_to_scene = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_obs4a"]
+size = Vector2(1, 1)
 
 [sub_resource type="PrismMesh" id="4"]
 
@@ -159,6 +169,7 @@ void main() {
 "
 vertex_count_expression = "6*(size+1)*(size+1)"
 index_count_expression = "12*size*(size+2)-2"
+fallback_mesh = SubResource("BoxMesh_obs4a")
 can_tesselate = false
 uv_scale = Vector2(3, 2)
 parameters = [{
@@ -247,6 +258,7 @@ void main() {
 "
 vertex_count_expression = "(size+1)*(size+1)"
 index_count_expression = "2*size*(size+2)-2"
+fallback_mesh = SubResource("CylinderMesh_mgw7t")
 can_tesselate = false
 uv_scale = Vector2(3, 1)
 parameters = [{
@@ -321,6 +333,7 @@ void main() {
 "
 vertex_count_expression = "(size+1)*(size+1)"
 index_count_expression = "2*size*(size+2)-2"
+fallback_mesh = SubResource("PlaneMesh_obs4a")
 can_tesselate = false
 uv_scale = Vector2(2, 2)
 parameters = [{

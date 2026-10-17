@@ -16,7 +16,7 @@ class Preview:
 
 var node_factory = null
 
-var save_path := "": set = set_save_path
+var save_path : String = "": set = set_save_path
 var need_save : bool = false
 var save_crash_recovery_path = ""
 var need_save_crash_recovery : bool = false
@@ -68,15 +68,17 @@ var is_dragging_connection : bool = false:
 		is_dragging_connection = v
 		set_process_if_necessary()
 
-static var active_touch_dragging : int = 0
-static var active_touch : int = 0
-static var touch_info : Dictionary[int, Vector2] = {}
+var has_double_tap : bool = false
+
+var node_actions_panel : NodeActionsPanel
 
 signal save_path_changed
 signal graph_changed
 signal view_updated
 signal preview_changed
 
+## Emitted when connections are cut using the knife tool.
+signal cut_drag_finished
 
 func _ready() -> void:
 	OS.low_processor_usage_mode = true
@@ -85,6 +87,13 @@ func _ready() -> void:
 		add_valid_connection_type(t, 42)
 		add_valid_connection_type(42, t)
 	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
+
+	if mm_globals.get_config("touch_node_actions"):
+		node_actions_panel = NodeActionsPanel.new(self)
+
+	if mm_globals.get_config("touch_optimization"):
+		$GraphUI/ButtonReroll.hide()
+		$GraphUI/ButtonShowTree.hide()
 
 func _exit_tree():
 	remove_crash_recovery_file()
@@ -97,14 +106,6 @@ func get_project_type() -> String:
 func get_graph_edit():
 	return self
 
-
-func do_zoom(factor : float):
-	accept_event()
-	var old_zoom : float = zoom
-	zoom *= factor
-	var global_mouse_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
-	await get_tree().process_frame
-	scroll_offset += (zoom/old_zoom-1.0)*old_zoom*global_mouse_position
 
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
@@ -143,11 +144,14 @@ func process_port_click(pressed : bool):
 						return
 
 func _input(event : InputEvent) -> void:
-	if event is InputEventScreenDrag:
-		active_touch_dragging = event.index + 1
-	elif event is InputEventScreenTouch and event.pressed:
-		active_touch = event.index + 1
-		touch_info[event.index] = event.position
+	if OS.get_name() == "Android":
+		if event.get("position") and get_rect().has_point(
+				make_input_local(event).position):
+			if event is InputEventPanGesture:
+				scroll_offset += event.delta
+				if is_dragging_connection:
+					force_connection_drag_end()
+				accept_event()
 
 	# Handle node grab
 	if has_grab:
@@ -192,7 +196,7 @@ func _input(event : InputEvent) -> void:
 		if event.unicode >= KEY_0 and event.unicode <= KEY_9 and event.pressed:
 			grab_focus()
 
-func _gui_input(event) -> void:
+func _gui_input(event : InputEvent) -> void:
 	if (
 		event.is_action_pressed("ui_library_popup")
 		and not Input.is_key_pressed(KEY_CTRL)
@@ -204,21 +208,7 @@ func _gui_input(event) -> void:
 		node_popup.position = Vector2i(get_screen_transform()*get_local_mouse_position())
 		node_popup.show_popup()
 	elif event.is_action_released("ui_cut_drag"):
-		var conns : Array[Dictionary]
-		for p in len(drag_cut_line) - 1:
-			var rect : Rect2
-			rect.position = drag_cut_line[p]
-			rect.end = drag_cut_line[p + 1]
-			conns = get_connections_intersecting_with_rect(rect.abs())
-			if conns.size():
-				connections_to_cut.append_array(conns)
-		if connections_to_cut.size():
-			on_cut_connections(connections_to_cut)
-			connections_to_cut.clear()
-		Input.set_custom_mouse_cursor(null)
-		drag_cut_line.clear()
-		conns.clear()
-		queue_redraw()
+		do_cut_drag()
 	elif event.is_action_released("ui_lasso_select", true):
 		for node in get_children():
 			if node is GraphElement:
@@ -246,29 +236,7 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		# handle node popup from two-finger tap
-		if event.device == InputEvent.DEVICE_ID_EMULATION:
-			if active_touch == 2 and not event.pressed and touch_info.size():
-				if get_nodes_under_mouse().is_empty():
-					var avg : Vector2 = (touch_info[0] + touch_info[1]) * 0.5
-					node_popup.position = Vector2i(avg)
-					node_popup.show_popup()
-					touch_info.clear()
-
-		# reverted to default GraphEdit behavior
-		if false and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
-			if event.control:
-				event.control = false
-			elif !event.shift_pressed:
-				event.control = true
-				do_zoom(1.1)
-		elif false and event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.is_pressed():
-			if event.control:
-				event.control = false
-			elif !event.shift_pressed:
-				event.control = true
-				do_zoom(1.0/1.1)
-		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			valid_drag_cut_entry = true
 			if event.is_command_or_control_pressed() and event.shift_pressed:
 				create_portals()
@@ -409,7 +377,29 @@ func _gui_input(event) -> void:
 				Input.set_custom_mouse_cursor(null)
 			lasso_points.clear()
 			queue_redraw()
-
+	elif event is InputEventScreenTouch:
+		if not event.pressed:
+			if mm_touch.last_touch_duration_msec < 150:
+				cut_drag_finished.emit()
+				valid_drag_cut_entry = false
+			if mm_touch.last_touch_duration_msec < 80:
+				if event.index == 1:
+					mm_globals.main_window.edit_undo()
+				elif event.index == 2:
+					mm_globals.main_window.edit_redo()
+			elif valid_drag_cut_entry and event.index == 0:
+				do_cut_drag()
+				valid_drag_cut_entry = false
+	elif event is InputEventScreenDrag and event.index == 0 and valid_drag_cut_entry:
+		# actions menu knife gesture
+		if is_dragging_connection:
+			force_connection_drag_end()
+		drag_cut_line.append(get_local_mouse_position())
+		queue_redraw()
+	else:
+		if not valid_drag_cut_entry:
+			drag_cut_line.clear()
+			queue_redraw()
 
 func get_padded_node_rect(graph_node:GraphNode) -> Rect2:
 	var rect : Rect2 = graph_node.get_global_rect()
@@ -624,7 +614,7 @@ func set_need_save(ns = true) -> void:
 		update_tab_title()
 	need_save_crash_recovery = true
 
-func set_save_path(path: String) -> void:
+func set_save_path(path : String) -> void:
 	if path != save_path:
 		remove_crash_recovery_file()
 		need_save_crash_recovery = false
@@ -997,10 +987,12 @@ func remove_selection() -> void:
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
 
 func minimize_selection() -> void:
+	undoredo.start_group()
 	for c in get_children():
 		if c is GraphElement and c.selected:
 			if c.has_method("on_minimize_pressed"):
 				c.on_minimize_pressed()
+	undoredo.end_group()
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
@@ -1292,7 +1284,7 @@ func check_previews() -> void:
 		emit_signal("preview_changed", self)
 
 func on_drop_image_file(file_name : String) -> void:
-	do_paste({type="image", image=file_name})
+	do_paste({type="image", image=file_name, filter=true})
 
 
 func _on_Description_descriptions_changed(short_description, long_description):
@@ -2068,8 +2060,20 @@ func _on_button_reroll_pressed() -> void:
 func _on_button_reroll_mouse_entered() -> void:
 	mm_globals.set_tip_text("#LMB: Reroll all nodes, Shift+#LMB: Reroll selected nodes")
 
-func cancel_drag_selection() -> void:
-	var e : InputEventMouseButton = InputEventMouseButton.new()
-	e.button_index = MOUSE_BUTTON_LEFT
-	e.pressed = false
-	Input.parse_input_event(e)
+func do_cut_drag() -> void:
+	var conns : Array[Dictionary]
+	for p in len(drag_cut_line) - 1:
+		var rect : Rect2
+		rect.position = drag_cut_line[p]
+		rect.end = drag_cut_line[p + 1]
+		conns = get_connections_intersecting_with_rect(rect.abs())
+		if conns.size():
+			connections_to_cut.append_array(conns)
+	if connections_to_cut.size():
+		on_cut_connections(connections_to_cut)
+		connections_to_cut.clear()
+	Input.set_custom_mouse_cursor(null)
+	drag_cut_line.clear()
+	conns.clear()
+	queue_redraw()
+	cut_drag_finished.emit()

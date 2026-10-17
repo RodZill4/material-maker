@@ -51,7 +51,7 @@ func get_tab_count() -> int:
 	return $TabBar.get_tab_count()
 
 func get_tab(i : int) -> Control:
-	return $TabBar.get_child(i) as Control
+	return get_child(i) as Control
 
 func check_save_tabs() -> bool:
 	for i in range($TabBar.get_tab_count()):

@@ -21,6 +21,14 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 func _ready() -> void:
 	super._ready()
 	add_to_group("updated_from_locale")
+	
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(preview_timer):
+			preview_timer.stop()
+			preview_timer.queue_free()
+		if is_instance_valid(preview):
+			preview.queue_free()
 
 func init_buttons():
 	super.init_buttons()
@@ -136,7 +144,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.color = MMType.deserialize_value(v)
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.path = v
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+		elif o is ImagePickerButton:
 			o.do_set_image_path(v)
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			var gradient : MMGradient = MMGradient.new()
@@ -199,7 +207,7 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("color_changed_undo",Callable(object,"_on_color_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.connect("file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+		elif o is ImagePickerButton:
 			o.connect("on_file_selected",Callable(object,"_on_file_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			o.connect("updated",Callable(object,"_on_gradient_changed").bind( o.name ))

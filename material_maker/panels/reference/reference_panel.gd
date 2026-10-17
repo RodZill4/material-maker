@@ -28,6 +28,11 @@ func _ready():
 	%PasteImageButton.icon = get_theme_icon("paste_image", "MM_Icons")
 	%RemoveImageButton.icon = get_theme_icon("delete", "MM_Icons")
 
+	var should_nearest_filter : bool = mm_globals.get_config("nearest_filter_reference")
+	%NearestFilterButton.icon = get_theme_icon("steps", "MM_Icons")
+	%NearestFilterButton.button_pressed = should_nearest_filter
+	_on_nearest_filter_button_toggled(should_nearest_filter)
+
 	%PrevImageButton.icon = get_theme_icon("arrow_left", "MM_Icons")
 	%NextImageButton.icon = get_theme_icon("arrow_right", "MM_Icons")
 
@@ -38,10 +43,12 @@ func _ready():
 
 	%GradientSlot.toggled.connect(_on_slot_toggled.bind(%GradientSlot))
 
-	if OS.get_name() == "iOS":
-		%CheckClipboardImage.disconnect("timeout", _on_check_clipboard_image_timeout)
-		%CheckClipboardImage.stop()
+	if OS.get_name() == "Android":
 		%PasteImageButton.hide()
+		%CheckClipboardImage.stop()
+		%CheckClipboardImage.queue_free()
+		$Empty/Label.text = "Add reference image to get started"
+
 
 ## This is magically called by the main window :)
 func on_drop_image_file(file_name: String) -> void:
@@ -100,11 +107,13 @@ func go_to_image(index:int) -> void:
 	var m : ShaderMaterial = %Image.material
 	if len(opened_images) == 0:
 		m.set_shader_parameter("image", null)
+		m.set_shader_parameter("image_nearest", null)
 		return
 
 	var i := opened_images[current_image_index]
 	var t: Texture2D = i.texture
 	m.set_shader_parameter("image", t)
+	m.set_shader_parameter("image_nearest", t)
 	m.set_shader_parameter("image_size", t.get_image().get_size())
 	m.set_shader_parameter("scale", i.scale)
 	m.set_shader_parameter("center", i.center)
@@ -164,7 +173,7 @@ func _on_image_resized() -> void:
 	%Image.material.set_shader_parameter("canvas_size", %Image.get_size())
 
 
-func _on_image_gui_input(event: InputEvent) -> void:
+func _on_image_gui_input(event : InputEvent) -> void:
 	if opened_images.is_empty():
 		return
 
@@ -174,8 +183,8 @@ func _on_image_gui_input(event: InputEvent) -> void:
 		handle_movement(event)
 
 
-func handle_movement(event: InputEvent) -> void:
-	var m: ShaderMaterial = %Image.material
+func handle_movement(event : InputEvent) -> void:
+	var m : ShaderMaterial = %Image.material
 
 	var canvas_size : Vector2 = %Image.get_size()
 	var image_size : Vector2 = m.get_shader_parameter("image_size")
@@ -209,9 +218,12 @@ func handle_movement(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		if is_dragging:
 			new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
-
 		elif is_zooming:
 			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 3)
+	elif event is InputEventMagnifyGesture:
+		new_scale = clamp(new_scale / event.factor, 0.005, 3)
+	elif event is InputEventScreenDrag and event.index == 0:
+		new_center = m.get_shader_parameter("center")-event.relative*image_scale/multiplier
 
 	if new_scale != image_scale:
 		m.set_shader_parameter("scale", new_scale)
@@ -274,3 +286,7 @@ func _on_paste_image_button_pressed() -> void:
 
 func _on_check_clipboard_image_timeout() -> void:
 	$%PasteImageButton.disabled = not DisplayServer.clipboard_has_image()
+
+func _on_nearest_filter_button_toggled(toggled_on : bool) -> void:
+	mm_globals.set_config("nearest_filter_reference", toggled_on)
+	%Image.material.set_shader_parameter("nearest_filter", toggled_on)

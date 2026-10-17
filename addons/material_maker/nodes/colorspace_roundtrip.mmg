@@ -122,7 +122,7 @@
 		}
 	],
 	"label": "Colorspace Roundtrip",
-	"longdesc": "",
+	"longdesc": "Converts input to another colorspace, applies a \"lambda subgraph\" to individual channels in that colorspace, and converts it back to RGB.",
 	"name": "colorspace_roundtrip",
 	"node_position": {
 		"x": 0,
@@ -390,6 +390,6 @@
 		"param0": 0
 	},
 	"seed_int": 0,
-	"shortdesc": "",
+	"shortdesc": "Colorspace Roundtrip",
 	"type": "graph"
 }

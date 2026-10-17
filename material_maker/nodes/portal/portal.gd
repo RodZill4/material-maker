@@ -10,7 +10,7 @@ var is_editing : bool = false
 var syncing_io : bool = false
 
 var is_navigating_source : bool = false
-const label_y_offset : float = 35.0
+const LABEL_Y_OFFSET : float = 35.0
 
 func _ready() -> void:
 	super._ready()
@@ -41,7 +41,7 @@ func _draw() -> void:
 		if generator.horizontal_label:
 			label_draw_pos += Vector2(31.0 if is_portal_in() else (-label_size.x - 31.0), 5.0)
 		else:
-			label_draw_pos -= Vector2(label_size.x * 0.5, label_y_offset)
+			label_draw_pos -= Vector2(label_size.x * 0.5, LABEL_Y_OFFSET)
 
 		draw_string_outline(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, 5, Color.BLACK)
 		draw_string(LABEL_FONT, label_draw_pos, get_link(), HORIZONTAL_ALIGNMENT_CENTER, -1, label_font_size, label_color)
@@ -73,7 +73,7 @@ func on_parameter_changed(n : String, v : Variant) -> void:
 		notify_redraw()
 
 func _draw_port(_slot_index : int, pos : Vector2i, _left : bool, color : Color) -> void:
-	draw_circle(pos, 5, color, true, -1, true)
+	draw_texture(MMGraphNodeBase.port_tex, pos - Vector2i(5, 5), color)
 
 func _exit_tree() -> void:
 	var source_node : MMGraphPortal = get_link_source(get_link(), get_parent())
@@ -299,6 +299,19 @@ func set_color(c : Color) -> void:
 	queue_redraw()
 	get_parent().send_changed_signal()
 
+func get_rect_with_link() -> Rect2:
+	var label_size : Vector2 = LABEL_FONT.get_string_size(
+			get_link(), HORIZONTAL_ALIGNMENT_CENTER)
+	var label_width_half = label_size.x * 0.5
+	var r : Rect2 = Rect2(Vector2.ZERO, size)
+	if generator.horizontal_label:
+		r = r.grow_side(SIDE_RIGHT if is_portal_in() else SIDE_LEFT, label_size.x + 31.0)
+	else:
+		r = r.grow_side(SIDE_LEFT, label_width_half)
+		r = r.grow_side(SIDE_RIGHT, label_width_half)
+		r = r.grow_side(SIDE_TOP, LABEL_Y_OFFSET)
+	return r
+
 #region portal link edit
 
 ## Replaces all links from [param from_link] to [param new_link].
@@ -317,7 +330,7 @@ func replace_links(new_link : String, from_link : String) -> void:
 				p.on_parameter_changed("link", new_link)
 
 func edit_box_set_position(edit : LineEdit) -> void:
-	var y_offset : float = label_y_offset + 21.0
+	var y_offset : float = LABEL_Y_OFFSET + 21.0
 	var g : MMGraphEdit = get_parent()
 	if g == null:
 		edit.queue_free()
@@ -416,6 +429,10 @@ static func draw_links(g : MMGraphEdit) -> void:
 			var to : Vector2 = graph_node_center(wo, g)
 			if wo.selected or wi.selected:
 				# link / io highlight
+				g.draw_dashed_line(from, to, Color.BLACK, link_width + 0.2, dash_length, true, true)
+				g.draw_circle(from, circle_r * zoom, Color.BLACK, false, (circle_outline_width + 1.0) * zoom, true)
+				g.draw_circle(to, circle_r * zoom, Color.BLACK, false, (circle_outline_width + 1.0) * zoom, true)
+
 				g.draw_dashed_line(from, to, link_color, link_width, dash_length, true, true)
 				g.draw_circle(from, circle_r * zoom, in_color, false, circle_outline_width * zoom, true)
 				g.draw_circle(to, circle_r * zoom, out_color, false, circle_outline_width * zoom, true)
@@ -425,6 +442,10 @@ static func draw_links(g : MMGraphEdit) -> void:
 				var dir_a : Vector2 = (from - to).normalized().rotated(-PI * 0.25)
 				var dir_b : Vector2 = (from - to).normalized().rotated(PI * 0.25)
 				var aw : float = maxf(20.0 * zoom, 15.0)
+				g.draw_multiline(PackedVector2Array([
+					mid, mid + dir_a * aw,
+					mid, mid + dir_b * aw]), Color.BLACK, link_width * 0.8 + 0.25, true)
+
 				g.draw_multiline(PackedVector2Array([
 					mid, mid + dir_a * aw,
 					mid, mid + dir_b * aw]), link_color, link_width*0.8, true)

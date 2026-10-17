@@ -49,6 +49,15 @@ func _ready() -> void:
 	init_expanded_items()
 	update_tree()
 	update_theme()
+	
+	if mm_globals.get_config("touch_optimization"):
+		var web_btn : Button = Button.new()
+		web_btn.name = "GetFromWebsite"
+		web_btn.pressed.connect(_on_GetFromWebsite_pressed)
+		$Library/Filter.add_child(web_btn)
+		$Library/Filter.move_child(web_btn, 1)
+		$Library/GetFromWebsite.hide()
+
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
@@ -59,12 +68,12 @@ func _notification(what: int) -> void:
 			button.icon = get_theme_icon("section_" + s.to_lower(), "MM_Icons")
 			update_category_button_styleboxes(button, s)
 		update_theme()
+		if mm_globals.get_config("touch_optimization"):
+			$Library/Filter.get_node("GetFromWebsite").icon = get_theme_icon("download", "MM_Icons")
 
 func update_theme() -> void:
 	libraries_button.icon = get_theme_icon("settings", "MM_Icons")
-
-	var is_theme_classic : bool = "classic" in mm_globals.main_window.theme.resource_path
-	library_manager.update_section_colors(is_theme_classic)
+	library_manager.update_section_colors(ThemeUtils.is_classic_theme())
 
 func init_expanded_items() -> void:
 	var f = FileAccess.open("user://expanded_items.bin", FileAccess.READ)
