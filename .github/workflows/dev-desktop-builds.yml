@@ -3,8 +3,6 @@ name: "Build Material Maker"
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
   workflow_dispatch:
     inputs:
       artifacts:
