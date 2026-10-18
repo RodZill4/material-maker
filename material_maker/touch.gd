@@ -15,7 +15,7 @@ var last_go_back_request : int = 0
 signal back_pressed()
 
 func _ready() -> void:
-	if OS.get_name() != "Android":
+	if not DisplayServer.is_touchscreen_available():
 		set_process_input(false)
 	else:
 		android_runtime = Engine.get_singleton("AndroidRuntime")
