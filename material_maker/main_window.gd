@@ -68,7 +68,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="File/Export material", submenu="export_material", not_in_ports=["HTML5"] },
 	{ menu="File/-" },
 	{ menu="File/Close", command="close_project", shortcut="Control+Shift+Q" },
-	{ menu="File/Quit", command="quit", shortcut="Control+Q", not_in_ports=["HTML5"] },
+	{ menu="File/Quit", command="quit", shortcut="Control+Q", not_in_ports=["HTML5", "iOS"] },
 
 	{ menu="Edit/Undo", command="edit_undo", shortcut="Control+Z" },
 	{ menu="Edit/Redo", command="edit_redo", shortcut="Control+Shift+Z" },
