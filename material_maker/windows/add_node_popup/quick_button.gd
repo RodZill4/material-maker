@@ -48,7 +48,7 @@ func _on_gui_input(event):
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			set_library_item("")
 			if OS.get_name() == "Android":
-				mm_globals.android_make_toast("Item cleared.")
+				Input.vibrate_handheld(80)
 			disable()
 
 func enable() -> void:
