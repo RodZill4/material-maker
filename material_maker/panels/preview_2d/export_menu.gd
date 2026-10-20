@@ -113,7 +113,7 @@ func get_export_resolution() -> Vector2i:
 
 
 func _on_image_pressed() -> void:
-	var path: String = %ExportFolder.text
+	var path : String = %ExportFolder.text
 	var file_name: String = %ExportFile.text
 
 	if file_name:

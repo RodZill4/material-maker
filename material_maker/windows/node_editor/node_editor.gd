@@ -143,7 +143,8 @@ func _on_Functions_text_changed():
 				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
 
 func _on_Sizer_minimum_size_changed():
-	size = $Sizer.get_combined_minimum_size() + Vector2(4, 4)
+	if OS.get_name() != "Android":
+		size = $Sizer.get_combined_minimum_size() + Vector2(4, 4)
 
 # OK/Apply/Cancel buttons
 

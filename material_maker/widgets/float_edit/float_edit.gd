@@ -362,6 +362,8 @@ func _exit_tree() -> void:
 	mm_globals.set_config("ui_field_sensitivity", sensitivity)
 
 func _handle_sensitivity_adjustment(event : InputEvent) -> void:
+	if OS.get_name() == "Android":
+		return
 	if mode == Modes.SLIDING:
 		adjust_increment = 0.05 if event.alt_pressed else 0.1
 		if event is InputEventMouseButton:
