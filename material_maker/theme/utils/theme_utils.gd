@@ -56,24 +56,6 @@ const CUSTOM_RULES : Dictionary[String, Dictionary] = {
 static func set_theme(name : String) -> void:
 	current_theme = THEMES.find(name.capitalize())
 
-static func get_theme(name : String) -> Theme:
-	const theme_path : String = "res://material_maker/theme/%s.tres"
-	var _theme : Theme
-
-	if name == "custom":
-		if _did_custom_params_change():
-			_theme = _generate_custom_theme()
-	else:
-		_clear_custom_params()
-		if not ResourceLoader.exists(theme_path % name):
-			name = "default dark"
-		_theme = load(theme_path % name)
-
-	if _theme is EnhancedTheme:
-		_theme.update()
-	_setup_clear_color()
-	return _theme
-
 static func is_base_color_dark() -> bool:
 	return base_color.get_luminance() < 0.5
 
@@ -103,12 +85,12 @@ static func get_editor_background() -> Color:
 		_:
 			return Color("0c0b0cff")
 
-static func _clear_custom_params():
+static func clear_custom_params() -> void:
 	base_color = Color(-1.0, -1.0, -1.0, 0.0)
 	accent = Color(-1.0, -1.0, -1.0, 0.0)
 	contrast = -3.0
 
-static func _setup_clear_color() -> void:
+static func setup_clear_color() -> void:
 	var color : Color = Color("1f1f1f")
 	match current_theme:
 		LIGHT_THEME:
@@ -147,13 +129,13 @@ static func _process_swap_rules(i : ColorSwap, base : Color, theme_type : String
 			i.target.s *= rule.sat
 	i.target = i.target.clamp()
 
-static func _did_custom_params_change() -> bool:
+static func did_custom_params_change() -> bool:
 	var _base : Color = mm_globals.get_config(SETTING_CUSTOM_BASE_COLOR)
 	var _accent : Color = mm_globals.get_config(SETTING_CUSTOM_ACCENT)
 	var _contrast : float = clampf(mm_globals.get_config(SETTING_CUSTOM_CONTRAST), -2.0, 2.0)
 	return base_color != _base or accent != _accent or contrast != _contrast
 
-static func _generate_custom_theme() -> Theme:
+static func generate_custom_theme() -> Theme:
 	base_color = mm_globals.get_config(SETTING_CUSTOM_BASE_COLOR)
 	accent = mm_globals.get_config(SETTING_CUSTOM_ACCENT)
 	contrast = clampf(mm_globals.get_config(SETTING_CUSTOM_CONTRAST), -2.0, 2.0)
