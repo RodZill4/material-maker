@@ -82,6 +82,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	touch_node_actions = false,
 	touch_optimization = false,
 	touch_full_screen = false,
+	sub_node_items = [],
 }
 
 const ANDROID_CONFIG : Dictionary[String, Variant] = {

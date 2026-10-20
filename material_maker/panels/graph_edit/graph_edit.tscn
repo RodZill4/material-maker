@@ -30,6 +30,7 @@ offset_top = -1.0
 offset_right = 1529.0
 offset_bottom = 1193.0
 grid_pattern = 1
+snapping_distance = 24
 right_disconnects = true
 zoom_min = 0.25
 zoom_max = 2.0
