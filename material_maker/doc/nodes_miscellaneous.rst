@@ -13,6 +13,7 @@ Miscellaneous nodes
 	node_miscellaneous_comment
 	node_miscellaneous_comment_line
 	node_miscellaneous_export
+	node_miscellaneous_autoexport
 	node_miscellaneous_debug
 	node_miscellaneous_variations
 	node_miscellaneous_variations_controlled
