@@ -258,7 +258,6 @@ func activate_item_at_current_position() -> void:
 	if idx != -1:
 		_on_list_item_activated(idx)
 
-<<<<<<< HEAD
 func get_list_drag_data(m_position : Vector2) -> Variant:
 	var idx : int = %List.get_item_at_position(m_position)
 	if OS.get_name() == "Android":
@@ -286,16 +285,6 @@ func get_list_drag_data(m_position : Vector2) -> Variant:
 			preview.offset_transform_position = -offset * 0.5
 
 	%List.set_drag_preview(preview)
-=======
-func get_list_drag_data(m_position : Vector2):
-	var idx : int = %List.get_item_at_position(m_position)
-	var data = %List.get_item_metadata(idx)
-	sub_node_disable_item_drag(data, idx)
-	var texture_rect : TextureRect = TextureRect.new()
-	texture_rect.texture = data.icon
-	texture_rect.scale = Vector2(0.35, 0.35)
-	%List.set_drag_preview(texture_rect)
->>>>>>> master
 	return data.item.tree_item
 
 
