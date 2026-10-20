@@ -1036,10 +1036,10 @@ func do_paste(data) -> void:
 	var node_position = scroll_offset+0.5*size
 	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
 		node_position = offset_from_global_position(get_global_mouse_position())
+	var new_nodes = await create_nodes(data, node_position)
 	for c in get_children():
 		if c is GraphElement:
 			c.selected = false
-	var new_nodes = await create_nodes(data, node_position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true

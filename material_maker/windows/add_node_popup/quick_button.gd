@@ -59,6 +59,16 @@ func disable() -> void:
 	disabled = true
 	material.set_shader_parameter("disabled", true)
 
+## Disable quick button temporarily, disallowing drag/drop.
+func temp_disable() -> void:
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	material.set_shader_parameter("disabled", true)
+
+## Restores quick button state from temp_disable().
+func temp_restore() -> void:
+	mouse_filter = Control.MOUSE_FILTER_PASS
+	material.set_shader_parameter("disabled", disabled)
+
 func _on_QuickButton_mouse_entered():
 	if ! disabled:
 		material.set_shader_parameter("brightness", 1.0)

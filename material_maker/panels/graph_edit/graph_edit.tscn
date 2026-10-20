@@ -32,6 +32,7 @@ offset_bottom = 1193.0
 grow_horizontal = 2
 grow_vertical = 2
 grid_pattern = 1
+snapping_distance = 24
 right_disconnects = true
 zoom_min = 0.25
 zoom_max = 2.0

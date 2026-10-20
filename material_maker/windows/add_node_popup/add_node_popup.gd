@@ -22,7 +22,6 @@ const ICON_DRAG_MARGIN : int = 12
 func get_current_graph():
 	return get_parent().get_current_graph_edit()
 
-
 func _ready() -> void:
 	if mm_globals.get_config("touch_optimization"):
 		%List.add_theme_constant_override("v_separation", 4)
@@ -182,8 +181,13 @@ func update_list(filter_text : String = "") -> void:
 	filter_text = filter_text.to_lower()
 	%List.clear()
 	var idx : int = 0
+
 	var items : Array = library_manager.get_items(filter_text, true)
 	items.sort_custom(SortMenu.sort_function(item_sort_mode, library_manager.item_usage))
+
+	# Add sub-node items
+	idx = sub_node_create_items(idx, filter_text)
+
 	for i in items:
 		var obj : Dictionary = i.item
 		if not obj.has("type"):
@@ -191,7 +195,7 @@ func update_list(filter_text : String = "") -> void:
 		if qc_slot_type != -1 and ! check_quick_connect(obj):
 			continue
 		var section : String = obj.tree_item.get_slice("/", 0)
-		var color : Color = get_node("/root/MainWindow/NodeLibraryManager").get_section_color(section)
+		var color : Color = library_manager.get_section_color(section)
 		color = color.lerp(get_theme_color("font_color", "Label"), 0.5)
 		var _name : String = obj.display_name
 		_name = obj.tree_item# + "("+str(i.quality)+")" + " ("+str(i.idx)+")"
@@ -206,6 +210,7 @@ func update_list(filter_text : String = "") -> void:
 
 	if %List.item_count:
 		%List.select(0)
+
 	%List.ensure_current_is_visible()
 
 func _unhandled_input(event) -> void:
@@ -253,6 +258,7 @@ func activate_item_at_current_position() -> void:
 	if idx != -1:
 		_on_list_item_activated(idx)
 
+<<<<<<< HEAD
 func get_list_drag_data(m_position : Vector2) -> Variant:
 	var idx : int = %List.get_item_at_position(m_position)
 	if OS.get_name() == "Android":
@@ -280,6 +286,16 @@ func get_list_drag_data(m_position : Vector2) -> Variant:
 			preview.offset_transform_position = -offset * 0.5
 
 	%List.set_drag_preview(preview)
+=======
+func get_list_drag_data(m_position : Vector2):
+	var idx : int = %List.get_item_at_position(m_position)
+	var data = %List.get_item_metadata(idx)
+	sub_node_disable_item_drag(data, idx)
+	var texture_rect : TextureRect = TextureRect.new()
+	texture_rect.texture = data.icon
+	texture_rect.scale = Vector2(0.35, 0.35)
+	%List.set_drag_preview(texture_rect)
+>>>>>>> master
 	return data.item.tree_item
 
 
@@ -305,3 +321,112 @@ func _on_sort_menu_pressed() -> void:
 
 func get_icon_size() -> Vector2:
 	return %List.fixed_icon_size * %List.icon_scale
+
+#region sub-node items
+
+## Cache mapping node(tree path) to its associated parameter list
+var node_params_cache : Dictionary[String, Array]
+
+func sub_node_create_items(idx : int, filter_text : String) ->  int:
+	var config_items : PackedStringArray = mm_globals.get_config("sub_node_items")
+	if config_items.is_empty():
+		return idx
+	for item in config_items:
+		idx = sub_node_add_items(idx, filter_text, item)
+	return idx
+
+func sub_node_add_items(idx : int, filter_text : String, tree : String) -> int:
+	var data : Dictionary = library_manager.get_item(tree)
+	var mmg : String = ""
+	for k in ["name", "type"]:
+		if data.item.has(k) and data.item[k].length() > mmg.length():
+			mmg = data.item[k] + ".mmg"
+	if mmg.is_empty():
+		return idx
+
+	filter_text = filter_text.strip_edges().to_lower()
+
+	var base_item : Dictionary = library_manager.get_item(tree)
+	if (qc_slot_type != -1 and not check_quick_connect(base_item.item)):
+		return idx
+
+	var nodes_path : String = OS.get_executable_path().get_base_dir() + "/nodes"
+	if OS.has_feature("editor"):
+		nodes_path = MMPaths.STD_GENDEF_PATH
+
+	var node_params : Array
+	if mmg not in node_params_cache:
+		var f : FileAccess = FileAccess.open(nodes_path + "/" + mmg, FileAccess.READ)
+		var node : Dictionary = JSON.parse_string(f.get_as_text())
+		if node == null:
+			return idx
+
+		if (node.has("type") and node.type == "graph"):
+			printerr("Sub-nodes are not supported for Nodegroup: %s" % tree)
+			return idx
+
+		node_params = node.shader_model.parameters
+		node_params_cache[mmg] = node.shader_model.parameters
+	else:
+		node_params = node_params_cache[mmg]
+
+	var node_ops : Array 
+	var op_str : String
+
+	# find the first enum parameter
+	for p in node_params:
+		if p.type == "enum":
+			node_ops = p.values
+			op_str = p.name.replace("#", "1")
+			break
+
+	var color : Color = library_manager.get_section_color(tree.get_slice("/", 0))
+	color = color.lerp(get_theme_color("font_color", "Label"), 0.6)
+
+	for op_id in node_ops.size():
+		var op : Dictionary = node_ops[op_id]
+
+		var include : bool = true
+		if filter_text:
+			include = (op.name.to_lower().begins_with(filter_text)
+					or filter_text in op.name.to_lower())
+
+			if not include:
+				var has_op : bool = false
+				var has_tree : bool = false
+				for word in filter_text.split(" "):
+					if word in op.name.to_lower():
+						has_op = true
+					if word in tree.split("/")[-1].to_lower():
+						has_tree = true
+				include = has_op and has_tree
+
+			if include:
+				var node : Dictionary = base_item.duplicate(true)
+				node.item.parameters[op_str] = op_id
+
+				%List.add_item(tree + "/" + op.name, node.icon)
+				%List.set_item_metadata(idx, node)
+				%List.set_item_custom_fg_color(idx, color)
+				%List.set_item_tooltip_enabled(idx, false)
+				idx += 1
+
+	return idx
+
+func sub_node_disable_item_drag(data, idx) -> void:
+	# quick buttons stores tree_item paths based on entries in the library
+	# and sub-nodes paths are virtual thus don't have a proper reference
+	for b in $PanelContainer/VBoxContainer/Buttons.get_children():
+		if %List.get_item_text(idx) != data.item.tree_item:
+			b.temp_disable()
+
+func sub_node_restore_item_drag() -> void:
+	for b in $PanelContainer/VBoxContainer/Buttons.get_children():
+		b.temp_restore()
+
+#endregion
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_DRAG_END:
+			sub_node_restore_item_drag()
