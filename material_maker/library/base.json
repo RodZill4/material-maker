@@ -8319,6 +8319,20 @@
 			},
 			"tree_item": "Filter/Blur/HQ",
 			"type": "gaussian_blur_hq"
+		},
+		{
+			"display_name": "Trimsheet",
+			"generic_size": 2,
+			"icon_data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAAXNSR0IArs4c6QAAAeZJREFUaIHtmD2ygjAQx9c3dpxAr5FDYKd9KkrPwSFi5wFoQplzcAf0DFC8V8ThMQHWGMismdlfxYz79c+HyQYgcXYA0LZtmHNRFMYYpdT5fA5wr+v6er3meX6/38MKOB6Pe/t1OBzCQhC6P59PAPhZk/gbYAHUsABqkhewB4C6rldGud1uhO5ps8vzHPnZGIMb4BhjAGBlhDfuv8sopWx6xAbh8XjYFG3bhkWwpSulEJvkNzELoIYFUMMCqNmfTqe3Rj42CEVRrHHXWmut10T4anYAYE/cALTWtqkPTm+b+svlEuwOEPmoR9jkqpL8JmYB1LAAapIX8Hobte+MwdC6J068g2Z4teeeGIMFUJO8gPlN3DSNlHKwEUJUVeW/+bquK8syyzLrnmVZWZZd1/lHqKpKCDEUIKVsmmbW0hUwLt0mHgL5yOj7fly6lNKJ1ve9f+lCCCfaVMa/gGnpQzIn6KwMZ9THyaaRZ2djKct0UMYyAC99fYKtBmgpC/iMDSLDp3RcxkdLdDrPH6zOJRmepS/JCPiTcGYj1Z7YXlWSPwdYADUsgBoWQA0L+Aai3tdn2bLfSP4yNxv0o+s00gngpQ+Dteo6HTtB7AHauKWcJou9RKM09c5sRO03+GmRGhZATfIC/gDT/IezYiuABQAAAABJRU5ErkJggg==",
+			"name": "trimsheet",
+			"parameters": {
+				"d": 1.0,
+				"size1": 0.5,
+				"size2": 0.5
+			},
+			"seed_int": 0,
+			"tree_item": "Transform/Trimsheet",
+			"type": "trimsheet"
 		}
 	],
 	"name": "Base library"

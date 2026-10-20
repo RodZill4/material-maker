@@ -1,0 +1,91 @@
+{
+	"generic_size": 2,
+	"name": "trimsheet",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"d": 1.0,
+		"size1": 0.5,
+		"size2": 0.5
+	},
+	"seed_int": 0,
+	"shader_model": {
+		"code": [
+			"vec4 $(name_uv)_c = vec4(0.0, 0.0, 0.0, 1.0);",
+			"bool $(name_uv)_f = false;",
+			"float $(name_uv)_$d = 0.0;",
+			"#for",
+			"$(name_uv)_$d += $size#;",
+			"if (! $(name_uv)_f && $(name_uv)_$d > uv.$d) {",
+			"\t$(name_uv)_c = $in#($uv);",
+			"\t$(name_uv)_f = true;",
+			"}",
+			"#end"
+		],
+		"global": [
+			"vec2 rotate(vec2 uv, float rotate) {",
+			" \tvec2 rv;",
+			"\trv.x = cos(rotate)*uv.x + sin(rotate)*uv.y;",
+			"\trv.y = -sin(rotate)*uv.x + cos(rotate)*uv.y;",
+			"\treturn rv;\t",
+			"}"
+		],
+		"inputs": [
+			{
+				"default": "vec4($uv, 0.0, 1.0)",
+				"label": "",
+				"longdesc": "An input image",
+				"name": "in#",
+				"shortdesc": "Input#",
+				"type": "rgba"
+			}
+		],
+		"instance": "",
+		"longdesc": "Create a trimsheet from its inputs",
+		"name": "Trimsheet",
+		"outputs": [
+			{
+				"longdesc": "Shows the trimsheet",
+				"rgba": "$(name_uv)_c",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"control": "None",
+				"default": 0.25,
+				"label": "Size",
+				"longdesc": "The size of the section of the trim sheet",
+				"max": 1.0,
+				"min": 0.0,
+				"name": "size#",
+				"shortdesc": "Size",
+				"step": 0.001,
+				"type": "float"
+			},
+			{
+				"default": 1.0,
+				"label": "Direction",
+				"longdesc": "The trimsheet direction",
+				"name": "d",
+				"shortdesc": "Direction",
+				"type": "enum",
+				"values": [
+					{
+						"name": "Horizontal",
+						"value": "x"
+					},
+					{
+						"name": "Vertical",
+						"value": "y"
+					}
+				]
+			}
+		],
+		"shortdesc": "Trimsheet"
+	},
+	"type": "shader"
+}
