@@ -8,6 +8,8 @@ var _dispalay_cutout_margins : PackedInt32Array = PackedInt32Array([0, 0, 0, 0])
 
 var android_runtime : JNISingleton
 
+var long_press_timer : Timer
+
 # workaround for godot issue #123454 for Android 16
 var last_go_back_request : int = 0
 
@@ -19,6 +21,12 @@ func _ready() -> void:
 			android_runtime = Engine.get_singleton("AndroidRuntime")
 			_display_corner_radii = _get_corner_radius()
 			_dispalay_cutout_margins = _get_cutout_margins()
+		elif OS.get_name() == "iOS":
+			long_press_timer = Timer.new()
+			long_press_timer.wait_time = 0.45
+			long_press_timer.autostart = false
+			long_press_timer.timeout.connect(_emulate_right_click)
+			add_child(long_press_timer)
 
 var _touch_start : int = -1
 
@@ -29,12 +37,31 @@ var last_touch_duration_msec : int = -1
 var time_since_touch_down : int = -1:
 	get: return Time.get_ticks_msec() - _touch_start
 
+var last_touch_position : Vector2
+
 func _input(event : InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			_touch_start = Time.get_ticks_msec()
+			long_press_timer.start()
+			last_touch_position = event.position
 		elif not event.pressed:
 			last_touch_duration_msec = Time.get_ticks_msec() - _touch_start
+			long_press_timer.stop()
+	else:
+		long_press_timer.stop()
+
+func _emulate_right_click() -> void:
+	var rmb : InputEventMouseButton = InputEventMouseButton.new()
+	rmb.pressed = true
+	rmb.position = last_touch_position * mm_globals.get_ui_scale()
+	rmb.global_position = last_touch_position * mm_globals.get_ui_scale()
+	rmb.button_index = MOUSE_BUTTON_RIGHT
+	rmb.button_mask = MOUSE_BUTTON_MASK_RIGHT
+	get_viewport().push_input(rmb, true)
+	await get_tree().process_frame
+	rmb.pressed = false
+	get_viewport().push_input(rmb, true)
 
 func _notification(what : int) -> void:
 	match what:

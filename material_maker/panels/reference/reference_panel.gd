@@ -43,7 +43,7 @@ func _ready():
 
 	%GradientSlot.toggled.connect(_on_slot_toggled.bind(%GradientSlot))
 
-	if OS.get_name() == "Android":
+	if DisplayServer.is_touchscreen_available():
 		%PasteImageButton.hide()
 		%CheckClipboardImage.stop()
 		%CheckClipboardImage.queue_free()

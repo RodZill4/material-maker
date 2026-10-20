@@ -144,14 +144,22 @@ func process_port_click(pressed : bool):
 						return
 
 func _input(event : InputEvent) -> void:
-	if OS.get_name() == "Android":
+	if DisplayServer.is_touchscreen_available():
 		if event.get("position") and get_rect().has_point(
 				make_input_local(event).position):
-			if event is InputEventPanGesture:
-				scroll_offset += event.delta
-				if is_dragging_connection:
-					force_connection_drag_end()
-				accept_event()
+			if OS.get_name() == "Android":
+				if event is InputEventPanGesture:
+					scroll_offset += event.delta
+					if is_dragging_connection:
+						force_connection_drag_end()
+					accept_event()
+			elif OS.get_name() == "iOS":
+				if event is InputEventScreenDrag and event.index == 1:
+					scroll_offset -= event.relative
+					force_selection_end()
+					if is_dragging_connection:
+						force_connection_drag_end()
+					accept_event()
 
 	# Handle node grab
 	if has_grab:
@@ -2071,3 +2079,14 @@ func do_cut_drag() -> void:
 	conns.clear()
 	queue_redraw()
 	cut_drag_finished.emit()
+
+#region mobile-specific
+
+func force_selection_end() -> void:
+	var e : InputEventMouseButton = InputEventMouseButton.new()
+	e.pressed = false
+	e.button_index = MOUSE_BUTTON_LEFT
+	e.position = get_local_mouse_position()
+	Input.parse_input_event(e)
+
+#endregion
