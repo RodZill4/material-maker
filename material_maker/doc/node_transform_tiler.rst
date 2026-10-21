@@ -22,7 +22,7 @@ Outputs
 
 The **Tiler** node outputs the splat image and a secondary output that assigns a random color to each tile.
 
-The grayscale tiler has a third output that assigns a UV layout to each tile.
+The grayscale tiler has a third output that assigns a UV layout to each tile, and a fourth output for the position of the center of each tile.
 
 Parameters
 ++++++++++
