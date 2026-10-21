@@ -623,8 +623,8 @@ func _on_ExportMaterial_id_pressed(id : int) -> void:
 
 		# pre-fill material export filename from project filename
 		var graph : MMGraphEdit = get_current_graph_edit()
-		if graph.generator and graph.generator.has_meta("file_path"):
-			dialog.current_file = graph.generator.get_meta("file_path").get_basename()
+		if not graph.save_path.is_empty():
+			dialog.current_file = graph.save_path.get_basename().get_file()
 		else:
 			dialog.current_file = tr("unnamed")
 
