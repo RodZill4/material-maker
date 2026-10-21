@@ -263,6 +263,7 @@ func create_gen(data : Dictionary, fix : bool = true) -> MMGenBase:
 	]
 	var types = {
 		material_export = MMGenMaterial,
+		autoexport = MMGenAutoExport,
 		buffer = MMGenBuffer,
 		image = MMGenImage,
 		text = MMGenText,
