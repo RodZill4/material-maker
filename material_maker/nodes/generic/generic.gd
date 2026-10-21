@@ -318,6 +318,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.min_size = p.first
 		control.max_size = p.last
 		control.size_value = p.first if !p.has("default") else p.default
+		control.add_theme_font_size_override("font_size", 13)
 	elif p.type == "enum":
 		control = preload("res://material_maker/widgets/option_edit/option_edit.tscn").instantiate()
 		for i in range(p.values.size()):
@@ -326,6 +327,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			control.selected = 0 if !p.has("default") else p.default
 		control.custom_minimum_size.x = 80
 		control.fit_to_longest_item = false
+		control.add_theme_font_size_override("font_size", 13)
 	elif p.type == "boolean":
 		control = CheckBox.new()
 		control.theme_type_variation = "MM_NodeCheckbox"
@@ -353,6 +355,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 	elif p.type == "string":
 		control = TextLineEdit.new()
 		control.custom_minimum_size = Vector2(80, 22)
+		control.add_theme_font_size_override("font_size", 13)
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()
 	elif p.type == "file":
