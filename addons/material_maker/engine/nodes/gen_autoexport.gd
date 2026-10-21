@@ -9,6 +9,13 @@ func get_type() -> String:
 func get_type_name() -> String:
 	return "Auto Export"
 
+func get_description() -> String:
+	var desc_list : PackedStringArray = PackedStringArray()
+	desc_list.push_back(TranslationServer.translate(get_type_name()))
+	desc_list.push_back(TranslationServer.translate(
+				"Defines a texture that will be saved together automatically when the node's input changes."))
+	return "\n".join(desc_list)
+
 func get_parameter_defs() -> Array:
 	var parameter_defs : Array = [
 		{ name="size",label="Size", type="size", first=4, last=13, default=4 },
