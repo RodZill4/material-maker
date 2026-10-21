@@ -62,7 +62,7 @@
 		"parameters": [
 			{
 				"default": 0,
-				"label": "",
+				"label": "Mode",
 				"longdesc": "Both warp modes extract their direction from the height map slopes:\n- Slope warp intensity only depends on the slope\n- Distance to top warp intensity depends on the slope and the distance to the top, and can be used to create mosaic-like patterns\n\nA Transform node with translate maps can produce effects similar to Slope Warp and is generally faster.",
 				"name": "mode",
 				"shortdesc": "Mode",
@@ -81,7 +81,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Amount",
 				"longdesc": "The strength of the warp effect",
 				"max": 1,
 				"min": 0,
@@ -93,7 +93,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Epsilon",
 				"longdesc": "The offset used to measure slopes",
 				"max": 0.2,
 				"min": 0.005,

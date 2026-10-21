@@ -29,7 +29,7 @@
 			{
 				"control": "Radius1.r",
 				"default": 0.5,
-				"label": "",
+				"label": "Radius",
 				"longdesc": "The radius of the sphere",
 				"max": 1,
 				"min": 0,

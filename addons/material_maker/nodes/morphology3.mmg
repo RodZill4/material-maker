@@ -390,7 +390,7 @@
 							}
 						]
 					},
-					"label": "",
+					"label": "Operation",
 					"linked_widgets": [
 						{
 							"node": "switch",
@@ -403,7 +403,7 @@
 					"type": "config_control"
 				},
 				{
-					"label": "",
+					"label": "Resolution",
 					"linked_widgets": [
 						{
 							"node": "shape_2",
@@ -436,7 +436,7 @@
 					"type": "linked_control"
 				},
 				{
-					"label": "",
+					"label": "Distance",
 					"linked_widgets": [
 						{
 							"node": "shape_2",
