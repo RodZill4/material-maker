@@ -41,7 +41,7 @@ env:
   GODOT_SUB: stable
   GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable
   EXPORT_NAME: material_maker
-  MM_RELEASE: 1_7
+  MM_RELEASE: 1_8
   EXPORT_TARGET_SUFFIX: "${{ github.event.inputs.steam == 'true' && ' Steam' || '' }}"
   PACKAGE_SUFFIX: "${{ github.event.inputs.steam == 'true' && '_steam' || '' }}"
 
@@ -342,7 +342,7 @@ jobs:
           username: ${{ secrets.STEAM_USERNAME }}
           configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
           appId: 4110830
-          buildDescription: v1.7
+          buildDescription: v1.8
           rootPath: build
           depot1Path: windows
           depot2Path: macos
