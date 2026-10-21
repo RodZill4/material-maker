@@ -271,7 +271,7 @@ jobs:
           username: ${{ secrets.STEAM_USERNAME }}
           configVdf: ${{ secrets.STEAM_CONFIG_VDF}}
           appId: 4110830
-          buildDescription: v1.7
+          buildDescription: v1.8
           rootPath: build
           depot1Path: windows
           depot2Path: macos
