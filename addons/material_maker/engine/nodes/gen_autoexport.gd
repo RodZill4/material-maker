@@ -23,6 +23,9 @@ func get_parameter_defs() -> Array:
 	]
 	return parameter_defs
 
+func get_output_defs(_show_hidden : bool = false) -> Array:
+	return []
+
 func set_parameter(n : String, v) -> void:
 	if n == "filename":
 		parameters[n] = v
