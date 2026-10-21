@@ -61,7 +61,7 @@
 			{
 				"control": "None",
 				"default": 0.30,
-				"label": "",
+				"label": "Length",
 				"longdesc": "The length of the extrusion operation",
 				"max": 1.0,
 				"min": 0.0,
