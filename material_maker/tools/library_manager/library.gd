@@ -1,3 +1,4 @@
+class_name Library
 extends Node
 
 var library_path : String = ""
@@ -9,6 +10,12 @@ var read_only : bool = false
 
 func _ready():
 	pass
+
+static func translate_item_path(from_item_path : String) -> String:
+	var path_items : PackedStringArray = from_item_path.split("/")
+	for n in path_items.size():
+		path_items[n] = str(TranslationServer.translate(path_items[n]))
+	return "/".join(path_items)
 
 func create_library(path : String, lib_name : String) -> void:
 	library_path = path
@@ -73,21 +80,21 @@ func get_items(filter : String, disabled_sections : Array, aliased_items : Array
 		var result_quality := 1.0
 		if filter:
 			include = false
-			if i.display_name.to_lower().begins_with(filter) or " "+filter in i.display_name.to_lower():
+			if tr(i.display_name).to_lower().begins_with(filter) or " "+filter in tr(i.display_name).to_lower():
 				include = true
 
 			if not include:
 				include = true
 				result_quality = 0.8
 				for word in filter.split(" "):
-					if not word in i.display_name.to_lower():
+					if not word in tr(i.display_name).to_lower():
 						include = false
 
 			if (not include) and i.has("name"):
 				include = true
 				result_quality = 0.8
 				for word in filter.split(" "):
-					if not word in i.name.to_lower():
+					if not word in tr(i.name).to_lower():
 						include = false
 
 			if not include:
@@ -102,8 +109,9 @@ func get_items(filter : String, disabled_sections : Array, aliased_items : Array
 			if not include:
 				include = true
 				result_quality = 0.4
+
 				for word in filter.split(" "):
-					if not word in i.tree_item.to_lower():
+					if not word in i.tree_item.to_lower() or not word in translate_item_path(i.tree_item).to_lower():
 						include = false
 
 		if include:
