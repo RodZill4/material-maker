@@ -29,6 +29,7 @@ func update_node() -> void:
 			var sizer = HBoxContainer.new()
 			var input_label = Label.new()
 			sizer.add_child(input_label)
+			sizer.custom_minimum_size.y = get_minimum_line_height()
 			if generator.editable:
 				var param_label = Label.new()
 				param_label.text = l.tooltip
@@ -39,7 +40,7 @@ func update_node() -> void:
 			control.min_value = l.min
 			control.max_value = l.max
 			control.step = 1
-			control.custom_minimum_size.x = 75
+			control.custom_minimum_size = Vector2(75, 22)
 			MMGraphNodeRemote.setup_linked_control_callbacks(control, true)
 			restore_remote_metadata(control)
 			if l.has("tooltip"):
@@ -60,6 +61,7 @@ func update_node() -> void:
 	controls["source"].max_value = generator.parameters.choices-1
 	while get_child_count() < input_count:
 		var sizer = HBoxContainer.new()
+		sizer.custom_minimum_size.y = get_minimum_line_height()
 		var input_label = Label.new()
 		sizer.add_child(input_label)
 		add_child(sizer)
@@ -79,3 +81,8 @@ func update_node() -> void:
 		set_slot(i, has_input, 42, Color(1.0, 1.0, 1.0, 1.0), has_output, 42, Color(1.0, 1.0, 1.0, 1.0))
 	# Preview
 	restore_preview_widget()
+
+func get_minimum_line_height() -> int:
+	if has_theme_constant("minimum_line_height", "MM_Node"):
+		return get_theme_constant("minimum_line_height", "MM_Node")
+	return 25
