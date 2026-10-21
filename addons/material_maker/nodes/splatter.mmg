@@ -18,7 +18,8 @@
 	"shader_model": {
 		"code": [
 			"vec3 $(name_uv)_instance_uv = vec3(0.0);",
-			"vec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), $(name_uv)_instance_uv, vec2(float($seed)));"
+			"vec3 $(name_uv)_center_uv = vec3(0.0);",
+			"vec4 $(name_uv)_rch = splatter_$(name)($uv, int($count), $(name_uv)_instance_uv, $(name_uv)_center_uv, vec2(float($seed)));"
 		],
 		"global": "",
 		"includes": [
@@ -45,14 +46,15 @@
 			}
 		],
 		"instance": [
-			"vec4 splatter_$(name)(vec2 uv, int count, inout vec3 instance_uv, vec2 seed) {",
+			"vec4 splatter_$(name)(vec2 uv, int count, inout vec3 instance_uv, inout vec3 center_uv, vec2 seed) {",
 			"\tfloat c = 0.0;",
 			"\tvec3 rc = vec3(0.0);",
 			"\tvec3 rc1;",
 			"\tfor (int i = 0; i < count; ++i) {",
 			"\t\tseed = rand2(seed);",
 			"\t\trc1 = rand3(seed);",
-			"\t\tfloat mask = $mask(fract(seed+vec2(0.5)));",
+			"\t\tvec2 pos = fract(seed+vec2(0.5));",
+			"\t\tfloat mask = $mask(pos);",
 			"\t\tif (mask > 0.01) {",
 			"\t\t\tvec2 pv = fract(uv - seed)-vec2(0.5);",
 			"\t\t\tseed = rand2(seed);",
@@ -74,6 +76,7 @@
 			"\t\t\tc = max(c, c1);",
 			"\t\t\trc = mix(rc, rc1, step(c, c1));",
 			"\t\t\tinstance_uv = mix(instance_uv, vec3(full_uv, seed.x), step(c, c1));",
+			"\t\t\tcenter_uv = mix(center_uv, vec3(pos, seed.x), step(c, c1));",
 			"\t\t}",
 			"\t}",
 			"\treturn vec4(rc, c);",
@@ -99,6 +102,10 @@
 				"longdesc": "Per instance UVs. Can be used with Custom UV node.",
 				"rgb": "$(name_uv)_instance_uv",
 				"shortdesc": "Instance UV",
+				"type": "rgb"
+			},
+			{
+				"rgb": "$(name_uv)_center_uv",
 				"type": "rgb"
 			}
 		],

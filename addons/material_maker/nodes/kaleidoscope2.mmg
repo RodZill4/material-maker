@@ -51,7 +51,7 @@
 			{
 				"control": "None",
 				"default": 5,
-				"label": "",
+				"label": "Count",
 				"longdesc": "The number of replications of an angle of the input",
 				"max": 10,
 				"min": 2,
@@ -63,7 +63,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Offset",
 				"longdesc": "The angular offset of the replicated angle of the input",
 				"max": 180,
 				"min": -180,
