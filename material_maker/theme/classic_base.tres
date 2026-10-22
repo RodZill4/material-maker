@@ -405,6 +405,10 @@ metadata/recolor = true
 atlas = ExtResource("1_fw8f4")
 region = Rect2(32, 96, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_l22ac"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(16, 208, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_t38jc"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(32, 224, 16, 16)
@@ -641,6 +645,15 @@ region = Rect2(96, 16, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_iofl8"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3428"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(48, 240, 16, 16)
+metadata/scale = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fh3ks"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(64, 240, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_en6gw"]
 atlas = ExtResource("1_fw8f4")
@@ -1236,6 +1249,7 @@ MM_Icons/icons/2D_preview = SubResource("AtlasTexture_1yu4y")
 MM_Icons/icons/3D_preview = SubResource("AtlasTexture_ao7ds")
 MM_Icons/icons/3D_preview_control = SubResource("AtlasTexture_hht3q")
 MM_Icons/icons/add_image = SubResource("AtlasTexture_c5jyp")
+MM_Icons/icons/align_top = SubResource("AtlasTexture_l22ac")
 MM_Icons/icons/alphabetical_ascending = SubResource("AtlasTexture_t38jc")
 MM_Icons/icons/alphabetical_descending = SubResource("AtlasTexture_j6702")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
@@ -1288,6 +1302,7 @@ MM_Icons/icons/spline_progressive = SubResource("AtlasTexture_70aex")
 MM_Icons/icons/spline_reverse = SubResource("AtlasTexture_ahanl")
 MM_Icons/icons/spline_unlink = SubResource("AtlasTexture_iofl8")
 MM_Icons/icons/steps = SubResource("AtlasTexture_l3428")
+MM_Icons/icons/straighten_connections = SubResource("AtlasTexture_fh3ks")
 MM_Icons/icons/view = SubResource("AtlasTexture_en6gw")
 MM_Icons/icons/zoom = SubResource("AtlasTexture_3gtjo")
 MM_LibrarySectionButton/base_type = &"Button"
