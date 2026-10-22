@@ -34,6 +34,7 @@ func create_context_menu():
 			menu.add_separator()
 		menu.add_item("Paste", MATERIAL_MENU_PASTE)
 	menu.add_separator()
+	menu.add_item(tr("Rename node..."), MENU_RENAME_NODE, KEY_F2)
 	menu.add_item("Edit export targets", MATERIAL_MENU_EDIT_EXPORTS)
 	return menu
 
@@ -44,6 +45,8 @@ func _on_MaterialExport_gui_input(event : InputEvent) -> void:
 func _on_menu_id_pressed(id : int) -> void:
 	await get_tree().process_frame
 	match id:
+		MENU_RENAME_NODE:
+			super._on_menu_id_pressed(id)
 		MATERIAL_MENU_COPY:
 			DisplayServer.clipboard_set(JSON.stringify(get_parent().serialize_selection([ self ])))
 		MATERIAL_MENU_PASTE:
