@@ -856,6 +856,7 @@ func save_as() -> bool:
 	return false
 
 func save_file(filename : String) -> bool:
+	generator.set_meta("file_path", filename)
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	data["project_thumbnail"] = await generate_project_thumbnail()
