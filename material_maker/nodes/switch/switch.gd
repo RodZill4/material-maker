@@ -28,6 +28,8 @@ func update_node() -> void:
 		for l in lines_list:
 			var sizer = HBoxContainer.new()
 			var input_label = Label.new()
+			input_label.mouse_filter = Control.MOUSE_FILTER_STOP
+			input_label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 			sizer.add_child(input_label)
 			sizer.custom_minimum_size.y = get_minimum_line_height()
 			if generator.editable:
@@ -63,6 +65,8 @@ func update_node() -> void:
 		var sizer = HBoxContainer.new()
 		sizer.custom_minimum_size.y = get_minimum_line_height()
 		var input_label = Label.new()
+		input_label.mouse_filter = Control.MOUSE_FILTER_STOP
+		input_label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		sizer.add_child(input_label)
 		add_child(sizer)
 	size = Vector2(0, 0)
@@ -76,8 +80,12 @@ func update_node() -> void:
 		else:
 			@warning_ignore("integer_division")
 			var source : int = i/output_count
-			sizer.get_child(0).text = PackedByteArray([65+i%int(output_count)]).get_string_from_ascii()+str(1+source)
-			sizer.get_child(0).add_theme_color_override("font_color", Color(1.0, 1.0, 1.0) if source == generator.parameters.source else Color(0.5, 0.5, 0.5))
+			var label : Label = sizer.get_child(0)
+			label.text = PackedByteArray([65+i%int(output_count)]).get_string_from_ascii()+str(1+source)
+			label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0) if source == generator.parameters.source else Color(0.5, 0.5, 0.5))
+			if label.gui_input.is_connected(_on_input_label_gui_input):
+				label.gui_input.disconnect(_on_input_label_gui_input)
+			label.gui_input.connect(_on_input_label_gui_input.bind(source))
 		set_slot(i, has_input, 42, Color(1.0, 1.0, 1.0, 1.0), has_output, 42, Color(1.0, 1.0, 1.0, 1.0))
 	# Preview
 	restore_preview_widget()
@@ -86,3 +94,9 @@ func get_minimum_line_height() -> int:
 	if has_theme_constant("minimum_line_height", "MM_Node"):
 		return get_theme_constant("minimum_line_height", "MM_Node")
 	return 25
+
+func _on_input_label_gui_input(ev : InputEvent, idx : int) -> void:
+	if ev is InputEventMouseButton and ev.button_index == MOUSE_BUTTON_LEFT and ev.pressed:
+		if generator.get_parameter("source") != idx:
+			generator.set_parameter.call_deferred("source", idx)
+		accept_event()
