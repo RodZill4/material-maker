@@ -45,11 +45,7 @@ keycode = 93
 [sub_resource type="Shortcut" id="Shortcut_7tisq"]
 events = [SubResource("InputEventKey_lbgjg")]
 
-<<<<<<< HEAD
 [node name="ProjectsPanel" type="Control" unique_id=235293066]
-=======
-[node name="ProjectsPanel" type="Control" unique_id=465748478]
->>>>>>> master
 custom_minimum_size = Vector2(100, 100)
 clip_contents = true
 layout_mode = 3
