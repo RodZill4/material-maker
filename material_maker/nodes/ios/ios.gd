@@ -1,3 +1,4 @@
+class_name MMGraphNodeIOs
 extends MMGraphNodeGeneric
 
 func _ready():
