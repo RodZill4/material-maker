@@ -1,13 +1,19 @@
 extends MMGraphNodeGeneric
 
+var material_button : TextureButton
 
 var material_nodes : Array = []
-
 
 const MATERIAL_MENU_COPY : int         = 10000
 const MATERIAL_MENU_PASTE : int        = 10001
 const MATERIAL_MENU_EDIT_EXPORTS : int = 10002
 
+const MATERIAL_ICON : Texture2D = preload("res://material_maker/icons/switch_material.svg")
+
+func init_buttons() -> void:
+	super.init_buttons()
+	material_button = add_button(MATERIAL_ICON, material_button_create_popup)
+	material_button.tooltip_text = tr("Set material type")
 
 func get_material_nodes() -> Array:
 	if material_nodes.is_empty():
@@ -65,3 +71,14 @@ func _on_menu_id_pressed(id : int) -> void:
 			generator.editable = false
 			update_shader_generator(mm_loader.predefined_generators[generator.model].shader_model)
 			get_node("/root/MainWindow").update_menus()
+
+func material_button_create_popup() -> void:
+	var menu : PopupMenu = create_context_menu()
+	if menu != null:
+		if menu.get_item_count() != 0:
+			add_child(menu)
+			menu.popup_hide.connect(menu.queue_free)
+			menu.id_pressed.connect(_on_menu_id_pressed)
+			mm_globals.popup_menu(menu, self)
+		else:
+			menu.free()

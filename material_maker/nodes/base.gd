@@ -71,7 +71,7 @@ func _ready() -> void:
 	if not port_tex:
 		port_tex = DPITexture.create_from_string(PORT_SVG)
 
-func init_buttons():
+func init_buttons() -> void:
 	super.init_buttons()
 	minimize_button = add_button(MINIMIZE_ICON, on_minimize_pressed)
 	minimize_button.tooltip_text = tr("Minimize the node")

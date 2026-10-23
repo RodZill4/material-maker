@@ -45,7 +45,7 @@ func add_button(texture : Texture2D, pressed_callback = null, popup_callback = n
 			print("unsupported callback")
 	return button
 
-func init_buttons():
+func init_buttons() -> void:
 	close_button = add_button(CLOSE_ICON, self.on_close_pressed)
 
 func on_close_pressed():
