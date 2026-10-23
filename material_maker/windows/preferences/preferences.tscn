@@ -220,61 +220,6 @@ config_variable = "ui_single_window_mode"
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="GuiCustomThemeBase" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2087466635]
-layout_mode = 2
-
-[node name="LabelThemeBaseCol" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeBase" unique_id=666414407]
-layout_mode = 2
-text = "Custom theme base color"
-
-[node name="GuiCustomThemeBase" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeBase" unique_id=2141949997 instance=ExtResource("8_btfio")]
-custom_minimum_size = Vector2(200, 25)
-layout_mode = 2
-size_flags_horizontal = 10
-tooltip_text = "Base color used when deriving the custom theme."
-edit_intensity = false
-config_variable = "custom_theme_base_color"
-
-[node name="GuiCustomThemeAccent" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1496726889]
-layout_mode = 2
-
-[node name="LabelThemeBaseAccent" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeAccent" unique_id=820405633]
-layout_mode = 2
-text = "Custom theme accent"
-
-[node name="GuiCustomThemeAccent" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeAccent" unique_id=381059430 instance=ExtResource("8_btfio")]
-custom_minimum_size = Vector2(200, 25)
-layout_mode = 2
-size_flags_horizontal = 10
-tooltip_text = "Accent used for highlighted ui elements.
-This includes text selections, icon colors in pressed/hovered buttons etc."
-edit_intensity = false
-config_variable = "custom_theme_accent_color"
-
-[node name="GuiCustomThemeContrast" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=132933454]
-layout_mode = 2
-
-[node name="LabelThemeContrast" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeContrast" unique_id=1590947111]
-layout_mode = 2
-text = "Custom theme contrast"
-
-[node name="GuiCustomThemeContrast" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/GuiCustomThemeContrast" unique_id=1058520305 instance=ExtResource("3")]
-custom_minimum_size = Vector2(200, 24)
-layout_mode = 2
-size_flags_horizontal = 10
-tooltip_text = "Contrast used when deriving base color for the custom theme.
-Postive values create darker colors."
-config_variable = "custom_theme_contrast"
-value = 0.8
-min_value = -2.0
-max_value = 2.0
-step = 0.01
-float_only = true
-
-[node name="Spacer5" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=1191755573]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-
 [node name="Gui3DPreviewResolution" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=581828549]
 layout_mode = 2
 
@@ -463,9 +408,69 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="SectionColor" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=316720492]
+layout_mode = 2
+text = "Colors"
+label_settings = SubResource("LabelSettings_btfio")
+
+[node name="GuiCustomThemeBase" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1501240832]
+layout_mode = 2
+
+[node name="LabelThemeBaseCol" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiCustomThemeBase" unique_id=704666187]
+layout_mode = 2
+text = "Custom theme base color"
+
+[node name="GuiCustomThemeBase" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiCustomThemeBase" unique_id=2141949997 instance=ExtResource("8_btfio")]
+custom_minimum_size = Vector2(200, 25)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Base color used when deriving the custom theme."
+edit_intensity = false
+config_variable = "custom_theme_base_color"
+
+[node name="GuiCustomThemeAccent" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1315429715]
+layout_mode = 2
+
+[node name="LabelThemeBaseAccent" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiCustomThemeAccent" unique_id=366579792]
+layout_mode = 2
+text = "Custom theme accent"
+
+[node name="GuiCustomThemeAccent" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiCustomThemeAccent" unique_id=1521101009 instance=ExtResource("8_btfio")]
+custom_minimum_size = Vector2(200, 25)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Accent used for highlighted ui elements.
+This includes text selections, icon colors in pressed/hovered buttons etc."
+edit_intensity = false
+config_variable = "custom_theme_accent_color"
+
+[node name="GuiCustomThemeContrast" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1217306784]
+layout_mode = 2
+
+[node name="LabelThemeContrast" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiCustomThemeContrast" unique_id=1951935188]
+layout_mode = 2
+text = "Custom theme contrast"
+
+[node name="GuiCustomThemeContrast" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer/GuiCustomThemeContrast" unique_id=1806930641 instance=ExtResource("3")]
+custom_minimum_size = Vector2(200, 24)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Contrast used when deriving base color for the custom theme.
+Postive values create darker colors."
+config_variable = "custom_theme_contrast"
+value = 0.8
+min_value = -2.0
+max_value = 2.0
+step = 0.01
+float_only = true
+
+[node name="Spacer3" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=1906220719]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
 [node name="SectionFont" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=486879697]
 layout_mode = 2
-text = "Fonts (requires restart)"
+text = "Display Fonts (requires restart)"
 label_settings = SubResource("LabelSettings_btfio")
 
 [node name="GuiInterfaceMainFont" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Theme/VBoxContainer" unique_id=758900584]
