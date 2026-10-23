@@ -7,7 +7,6 @@ var languages : Dictionary
 
 const INDEX_URL : String = "https://rodzill4.github.io/material-maker/languages.json"
 
-
 func _ready():
 	var error = http_request.request(INDEX_URL)
 	if error != OK:
@@ -32,19 +31,32 @@ func _ready():
 		button = Button.new()
 		button.text = "Download"
 		$ScrollContainer/Languages.add_child(button)
-		button.connect("pressed", Callable(self, "download_language").bind(l))
+		button.pressed.connect(download_language.bind(l, button))
 	var minimum_size : Vector2i = $ScrollContainer/Languages.get_minimum_size()
 	content_scale_factor = mm_globals.ui_scale_factor()
 	minimum_size *= content_scale_factor
 	popup(Rect2i($ScrollContainer.get_global_mouse_position()*content_scale_factor, minimum_size))
 
-func download_language(l : String):
+func download_language(l : String, button : Button):
+	http_request.cancel_request()
+
+	# darken the popup to hint language file is being downloaded
+	var darken : ColorRect = preload("res://material_maker/darken.tscn").instantiate()
+	add_child(darken)
+
+	button.text = tr("Loading..")
 	var locale = load("res://material_maker/locale/locale.gd").new()
 	locale.uninstall_translation(l)
 	locale.create_translations_dir()
 	var ext : String = languages[l].url.get_extension()
-	$HTTPRequest.download_file = locale.get_translations_dir().path_join(l+"."+ext)
-	var error = $HTTPRequest.request(languages[l].url)
+	http_request.download_file = locale.get_translations_dir().path_join(l+"."+ext)
+	var error = http_request.request(languages[l].url)
 	if error == OK:
 		#print("Downloading")
+		await http_request.request_completed
 		mm_steam.unlock_achievement("ACH_POLYGLOT")
+		queue_free()
+
+func _on_focus_exited() -> void:
+	if not $HTTPRequest.get_http_client_status() == HTTPClient.Status.STATUS_DISCONNECTED:
+		queue_free()

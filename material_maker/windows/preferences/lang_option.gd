@@ -12,6 +12,7 @@ func init_from_locales():
 	locales.insert(0, "en")
 	clear()
 	for l in locales:
+		print(l)
 		add_item(l+" - "+TranslationServer.get_locale_name(l))
 
 func init_from_config(config : ConfigFile) -> void:
