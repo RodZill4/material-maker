@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cucx3oayvvxhu"]
+[gd_scene format=3 uid="uid://cucx3oayvvxhu"]
 
-[ext_resource type="Script" path="res://addons/flexible_layout/flexible_dragger.gd" id="1_3i5mx"]
+[ext_resource type="Script" uid="uid://dgwcni3ebvc8s" path="res://addons/flexible_layout/flexible_dragger.gd" id="1_3i5mx"]
 
-[node name="Dragger" type="HBoxContainer"]
+[node name="Dragger" type="HBoxContainer" unique_id=1625650350]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -10,9 +10,10 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 script = ExtResource("1_3i5mx")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1745836958]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 6

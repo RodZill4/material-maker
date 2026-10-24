@@ -15,10 +15,13 @@ signal moved(index)
 signal removed(index)
 signal selected(index)
 
-func _ready():
-	pass # Replace with function body.
+func _ready() -> void:
+	if mm_globals.get_config("touch_optimization"):
+		offset_transform_scale = Vector2(2.5, 2.5)
+		offset_transform_visual_only = false
+		offset_transform_enabled = true
 
-func _draw():
+func _draw() -> void:
 	var current_theme : Theme = mm_globals.main_window.theme
 	var color : Color = current_theme.get_color("font_color", "Label")
 	var selected_color : Color = current_theme.get_color("icon_pressed_color", "Button")
@@ -29,8 +32,7 @@ func _draw():
 	draw_rect(Rect2(Vector2.ZERO, custom_minimum_size), color.inverted(), false)
 	if hovering or moving:
 		draw_rect(Rect2(-custom_minimum_size * 0.5, custom_minimum_size * 2.0), color, false, 1.0)
-		draw_rect(Rect2(-custom_minimum_size*0.5-Vector2(1.0,1.0),
-					custom_minimum_size*2.0+Vector2(2.0,2.0)), color.inverted(), false, 1.0)
+		draw_rect(Rect2(-custom_minimum_size * 0.5, custom_minimum_size * 2.0).grow(1.0), color.inverted(), false, 1.0)
 
 func initialize(p : MMCurve.Point) -> void:
 	position = get_parent().transform_point(p.p)-OFFSET
@@ -61,7 +63,7 @@ func _on_ControlPoint_gui_input(event):
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			emit_signal("removed", get_index())
 	elif moving and event is InputEventMouseMotion:
-		var new_pos : Vector2 = position + event.relative
+		var new_pos : Vector2 = position + event.relative * offset_transform_scale
 		if event.is_command_or_control_pressed():
 			if get_parent().axes_density > 1.0:
 				var snap : float = 1.0 / (get_parent().axes_density - 1.0)
