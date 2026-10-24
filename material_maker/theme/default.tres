@@ -434,10 +434,6 @@ metadata/recolor = true
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 96, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_khddu"]
-atlas = ExtResource("1_s43fy")
-region = Rect2(16, 208, 16, 16)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_xbfay"]
 atlas = ExtResource("1_s43fy")
 region = Rect2(32, 208, 16, 16)
@@ -542,6 +538,13 @@ atlas = ExtResource("1_s43fy")
 region = Rect2(32, 16, 16, 16)
 metadata/scale = 2.0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m27ao"]
+load_path = "res://.godot/imported/default_theme_icons.svg-68308e5a0a34a69fc6ba57ebd6c4baca.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7eii"]
+atlas = SubResource("CompressedTexture2D_m27ao")
+region = Rect2(0, 64, 16, 16)
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_asgc8"]
 load_path = "res://.godot/imported/default_theme_icons.svg-68308e5a0a34a69fc6ba57ebd6c4baca.ctex"
 
@@ -607,9 +610,6 @@ region = Rect2(0, 128, 16, 16)
 atlas = ExtResource("1_s43fy")
 region = Rect2(16, 240, 16, 16)
 metadata/scale = 3.0
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m27ao"]
-load_path = "res://.godot/imported/default_theme_icons.svg-68308e5a0a34a69fc6ba57ebd6c4baca.ctex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_npn74"]
 atlas = ExtResource("1_s43fy")
@@ -1502,7 +1502,6 @@ MM_Icons/icons/2D_preview = SubResource("AtlasTexture_1yu4y")
 MM_Icons/icons/3D_preview = SubResource("AtlasTexture_ao7ds")
 MM_Icons/icons/3D_preview_control = SubResource("AtlasTexture_hht3q")
 MM_Icons/icons/add_image = SubResource("AtlasTexture_86qok")
-MM_Icons/icons/align_center = SubResource("AtlasTexture_khddu")
 MM_Icons/icons/align_end = SubResource("AtlasTexture_xbfay")
 MM_Icons/icons/align_start = SubResource("AtlasTexture_nw6qx")
 MM_Icons/icons/align_top = SubResource("AtlasTexture_n4y2n")
@@ -1526,7 +1525,7 @@ MM_Icons/icons/connection_rounded = SubResource("AtlasTexture_1lfk8")
 MM_Icons/icons/console = SubResource("AtlasTexture_ov3t0")
 MM_Icons/icons/delete = SubResource("AtlasTexture_agwde")
 MM_Icons/icons/delete_2x = SubResource("AtlasTexture_u5byk")
-MM_Icons/icons/download = SubResource("AtlasTexture_n4y2n")
+MM_Icons/icons/download = SubResource("AtlasTexture_q7eii")
 MM_Icons/icons/drag_hint = SubResource("AtlasTexture_364xx")
 MM_Icons/icons/draw = SubResource("AtlasTexture_oy0ko")
 MM_Icons/icons/draw_2x = SubResource("AtlasTexture_omlq7")
