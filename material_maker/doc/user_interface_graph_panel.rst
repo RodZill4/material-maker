@@ -79,6 +79,19 @@ The node menu will also be shown when connecting a node's input or output into
 an empty space of the graph. In this case, only compatible nodes will be shown,
 and the newly created node will automatically be connected.
 
+Renaming nodes
+~~~~~~~~~~~~~~
+
+Select a single node and press **F2**, or right-click the node and choose
+**Rename node...**, to give that instance a custom label. The text is selected
+and ready to replace. Press **Enter** to apply the label, or **Escape** to cancel.
+An empty label restores the default title.
+
+Labels are saved with the graph and support undo/redo. They do not change the
+node's type, connections or library definition, and several nodes may share a
+label. Hover over a renamed node's title to see its original type and full label.
+Comments and portal links retain their existing editing controls.
+
 Selecting and copying nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

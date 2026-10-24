@@ -625,10 +625,14 @@ func apply_diff_from(graph : MMGenGraph) -> void:
 		
 		var node_serialized = node.serialize()
 		var other_node_serialized = other_node.serialize()
+		# Instance labels do not affect definition comparisons or propagation.
+		node_serialized.erase("display_name")
+		other_node_serialized.erase("display_name")
 		node_serialized.erase("seed")
 		other_node_serialized.erase("seed")
 		
 		if node_serialized.hash() != other_node_serialized.hash():
+			other_node_serialized.display_name = node.display_name
 			node.deserialize(other_node_serialized)
 			node.seed_value = node_seed
 			node.get_tree().call_group("generator_node", "on_generator_changed", node)

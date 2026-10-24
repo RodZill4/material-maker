@@ -18,7 +18,7 @@ func update_node() -> void:
 		remove_child(c)
 		c.free()
 	size = Vector2(0, 0)
-	title = generator.get_type_name()
+	update_title()
 	var color = Color(0.0, 0.5, 0.0, 0.5)
 	var io_defs = generator.get_io_defs()
 	var group_size = 0
