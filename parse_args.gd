@@ -107,7 +107,6 @@ func _ready():
 		#TODO: fix this
 		var output_dir : String = dir.get_current_dir()
 		var output_file : String = "%f"
-		var texture_size : int = 0
 		var files : Array[String] = []
 		var i = 1
 		while i < OS.get_cmdline_args().size():
@@ -123,9 +122,9 @@ func _ready():
 					output_file = OS.get_cmdline_args()[i]
 				"--size":
 					i += 1
-					texture_size = int(OS.get_cmdline_args()[i])
-					if texture_size < 0:
-						#show_error("ERROR: incorrect size "+OS.get_cmdline_args()[i])
+					image_size = int(OS.get_cmdline_args()[i])
+					if image_size < 0:
+						show_error("ERROR: incorrect size "+OS.get_cmdline_args()[i])
 						return
 				_:
 					files.push_back(OS.get_cmdline_args()[i])
