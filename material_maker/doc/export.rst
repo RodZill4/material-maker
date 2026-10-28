@@ -26,6 +26,30 @@ Godot game engine
 When exporting for the Godot game engine, Material Maker will generate a .tres file that
 describes a fully configured SpatialMaterial.
 
+Imaginando VS 2
+-----------------
+
+When exporting for `Imaginando VS 2 <https://www.imaginando.pt/products/vs-visual-synthesizer>`_
+(Visual Synthesizer), Material Maker generates a single ``.vs2.frag`` GLSL fragment
+shader that can be imported with the Import button of VS 2's Material Browser.
+
+The file contains the generated code for the material's albedo, emission and
+opacity channels (VS 2 layers are unlit, so lighting inputs such as roughness or
+normal are not exported), adapted to VS 2's predeclared environment (``time``,
+``alpha``, ``color``, ``resolution``, ``texCoord``, ``fragColor``) and preceded
+by the JSON manifest VS 2 requires. Named parameters referenced in the exported
+branch are included with their current values.
+
+Two limitations are worth knowing:
+
+* the manifest uuid is generated without hyphens; VS 2 uses the hyphenated form,
+  which can be obtained by inserting hyphens in 8-4-4-4-12 grouping (the
+  companion ``mm2vs`` tool does this automatically and can also turn named
+  parameters into live VS 2 controls),
+* materials that use buffer-based nodes (blur, warp, …) cannot be expressed as a
+  single VS 2 fragment shader; the exported file will reference textures that VS
+  2 cannot provide.
+
 Unity game engine
 -----------------
 
