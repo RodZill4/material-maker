@@ -65,12 +65,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_close_button = true,
 	ui_field_sensitivity = 1.0,
 	color_picker_floating = false,
-	custom_theme_base_color = Color(0.22, 0.243, 0.294),
-	custom_theme_accent_color = Color(0.702, 0.631, 1.0),
-	custom_theme_contrast = 0.8,
-	ui_3d_preview_generated_mesh = true,
-	nearest_filter_reference = false,
-	sub_node_items = [],
+	ui_prefer_global_menu = true,
 }
 
 

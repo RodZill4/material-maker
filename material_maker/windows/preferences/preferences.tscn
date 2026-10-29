@@ -211,6 +211,23 @@ text = "On"
 flat = false
 config_variable = "ui_single_window_mode"
 
+[node name="PreferGlobalMenu" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=115688506]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/PreferGlobalMenu" unique_id=562130085]
+layout_mode = 2
+text = "Prefer global menu"
+
+[node name="UseGlobalMenu" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/PreferGlobalMenu" unique_id=353802156 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Prefer the use of the global menu on macOS"
+text = "On"
+flat = false
+config_variable = "ui_prefer_global_menu"
+
 [node name="Spacer6" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer" unique_id=2007307925]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
