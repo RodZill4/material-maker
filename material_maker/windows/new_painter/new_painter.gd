@@ -31,6 +31,8 @@ func _on_ModelFile_pressed():
 	dialog.min_size = Vector2(500, 500)
 	dialog.access = FileDialog.ACCESS_FILESYSTEM
 	dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	if not Engine.is_editor_hint() and OS.get_name() == "macOS":
+		dialog.current_dir = dialog.current_dir.get_base_dir().path_join("MacOS")
 	dialog.add_filter("*.glb,*.gltf;GLTF file")
 	dialog.add_filter("*.obj;Wavefront OBJ file")
 	dialog.add_filter("*.fbx;FBX file")
