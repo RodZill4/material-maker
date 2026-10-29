@@ -165,6 +165,11 @@ func _ready() -> void:
 		if mm_globals.config.has_section_key("window", "size"):
 			get_window().size = mm_globals.config.get_value("window", "size")
 
+	# Update fonts
+	FontUtils.rebuild_fonts()
+	theme.default_font = FontUtils.main_font
+	theme.default_font_size = FontUtils.ui_font_size
+
 	# Restore the theme
 	var theme_name: String = "default dark"
 	if mm_globals.config.has_section_key("window", "theme"):
@@ -661,6 +666,7 @@ func change_theme(theme_name : String) -> void:
 	theme = _theme
 	ThemeUtils.setup_clear_color()
 	$NodeFactory.on_theme_changed()
+	FontUtils.setup_theme_fonts(theme, theme_name)
 
 func _on_SetTheme_id_pressed(id : int) -> void:
 	var theme_name : String = ThemeUtils.THEMES[id].to_lower()
