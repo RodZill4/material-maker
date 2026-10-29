@@ -58,8 +58,7 @@ func render_text(object: Object, text: String, font_path: String, font_size: int
 	$ColorRect.visible = false
 	#hdr = true
 	render_target_update_mode = SubViewport.UPDATE_ONCE
-	await get_tree().process_frame
-	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
 	texture = get_texture()
 	$Font.visible = false
 	$ColorRect.visible = true
