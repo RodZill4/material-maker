@@ -52,7 +52,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Default value"
 text = "0.0"
-context_menu_enabled = false
 
 [node name="PortGroupButton" parent="." instance=ExtResource("3")]
 layout_mode = 2
