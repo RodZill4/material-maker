@@ -80,94 +80,94 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "553",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
 			"name": "normal_map_0",
 			"node_position": {
-				"x": 583,
-				"y": 463
+				"x": 583.0,
+				"y": 463.0
 			},
 			"parameters": {
-				"amount": 0.5,
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.99,
-				"param2": 0,
-				"param3": 0,
-				"param4": 1,
-				"size": 2
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": 56918.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "colorize_1",
 			"node_position": {
-				"x": 533,
-				"y": 343
+				"x": 533.0,
+				"y": 343.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 0.260417,
-							"g": 0.260417,
-							"pos": 1,
-							"r": 0.260417
+							"a": 1.0,
+							"b": 0.260417014360428,
+							"g": 0.260417014360428,
+							"pos": 1.0,
+							"r": 0.260417014360428
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 51932.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_0",
 			"node_position": {
-				"x": 530,
-				"y": 171
+				"x": 530.0,
+				"y": 171.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.391927,
-							"g": 0.523519,
-							"pos": 0,
-							"r": 0.583333
+							"a": 1.0,
+							"b": 0.391927003860474,
+							"g": 0.523518979549408,
+							"pos": 0.0,
+							"r": 0.583333015441895
 						},
 						{
-							"a": 1,
-							"b": 0.240885,
-							"g": 0.276693,
+							"a": 1.0,
+							"b": 0.240885004401207,
+							"g": 0.276692986488342,
 							"pos": 0.345455,
 							"r": 0.3125
 						},
 						{
-							"a": 1,
-							"b": 0.391927,
-							"g": 0.523519,
+							"a": 1.0,
+							"b": 0.391927003860474,
+							"g": 0.523518979549408,
 							"pos": 0.645455,
-							"r": 0.583333
+							"r": 0.583333015441895
 						},
 						{
-							"a": 1,
-							"b": 0.240885,
-							"g": 0.276693,
+							"a": 1.0,
+							"b": 0.240885004401207,
+							"g": 0.276692986488342,
 							"pos": 0.945455,
 							"r": 0.3125
 						}
@@ -175,152 +175,164 @@
 					"type": "Gradient"
 				}
 			},
+			"seed": 28293.0,
 			"type": "colorize"
 		},
 		{
 			"name": "colorize_2",
 			"node_position": {
-				"x": 526,
-				"y": 258
+				"x": 526.0,
+				"y": 258.0
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0.364583,
-							"g": 0.364583,
-							"pos": 0,
-							"r": 0.364583
+							"a": 1.0,
+							"b": 0.364582985639572,
+							"g": 0.364582985639572,
+							"pos": 0.0,
+							"r": 0.364582985639572
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 1,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 1.0,
+							"r": 1.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 61616.0,
 			"type": "colorize"
 		},
 		{
 			"name": "perlin_0",
 			"node_position": {
-				"x": 105,
-				"y": 305
+				"x": 105.0,
+				"y": 305.0
 			},
 			"parameters": {
-				"iterations": 6,
+				"iterations": 6.0,
 				"persistence": 0.85,
-				"scale_x": 4,
-				"scale_y": 4
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": 49798.0,
 			"type": "perlin"
 		},
 		{
 			"name": "perlin_1",
 			"node_position": {
-				"x": 102,
-				"y": 166
+				"x": 102.0,
+				"y": 166.0
 			},
 			"parameters": {
-				"iterations": 3,
+				"iterations": 3.0,
 				"persistence": 0.65,
-				"scale_x": 4,
-				"scale_y": 4
+				"scale_x": 4.0,
+				"scale_y": 4.0
 			},
+			"seed": 26364.0,
 			"type": "perlin"
 		},
 		{
 			"name": "voronoi_1",
 			"node_position": {
-				"x": 115,
-				"y": 63
+				"x": 115.0,
+				"y": 63.0
 			},
 			"parameters": {
 				"intensity": 0.85,
-				"randomness": 1,
-				"scale_x": 4,
-				"scale_y": 4,
-				"stretch_x": 1,
-				"stretch_y": 1
+				"randomness": 1.0,
+				"scale_x": 4.0,
+				"scale_y": 4.0,
+				"stretch_x": 1.0,
+				"stretch_y": 1.0
 			},
+			"seed": 64210.0,
 			"type": "voronoi"
 		},
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 768,
-				"y": 239
+				"x": 768.0,
+				"y": 239.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal_scale": 1,
-				"resolution": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": 24047.0,
 			"type": "material"
 		},
 		{
+			"generic_size": 1,
 			"name": "warp_0",
 			"node_position": {
-				"x": 317,
-				"y": 139
+				"x": 317.0,
+				"y": 139.0
 			},
 			"parameters": {
 				"amount": 0.3,
 				"eps": 0.045,
-				"epsilon": 0
+				"mode": 0.0
 			},
+			"seed": 35304.0,
 			"type": "warp"
 		},
 		{
 			"name": "voronoi_0",
 			"node_position": {
-				"x": 117,
-				"y": 448
+				"x": 117.0,
+				"y": 448.0
 			},
 			"parameters": {
-				"intensity": 1,
-				"randomness": 1,
-				"scale_x": 4,
-				"scale_y": 4,
-				"stretch_x": 1,
-				"stretch_y": 1
+				"intensity": 1.0,
+				"randomness": 1.0,
+				"scale_x": 4.0,
+				"scale_y": 4.0,
+				"stretch_x": 1.0,
+				"stretch_y": 1.0
 			},
+			"seed": 14571.0,
 			"type": "voronoi"
 		},
 		{
 			"name": "blend_0",
 			"node_position": {
-				"x": 327,
-				"y": 411
+				"x": 327.0,
+				"y": 411.0
 			},
 			"parameters": {
 				"amount": 0.5,
-				"blend_type": 0
+				"blend_type": 0.0
 			},
+			"seed": 49410.0,
 			"type": "blend"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

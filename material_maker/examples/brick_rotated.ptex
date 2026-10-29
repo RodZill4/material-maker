@@ -62,38 +62,39 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "47",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
-			"export_paths": {
-
-			},
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 70,
-				"y": 113
+				"x": 70.0,
+				"y": 113.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 1,
-					"g": 1,
-					"r": 1,
+					"a": 1.0,
+					"b": 1.0,
+					"g": 1.0,
+					"r": 1.0,
 					"type": "Color"
 				},
-				"ao": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal": 1,
-				"roughness": 1,
-				"size": 11,
-				"sss": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 0.0
 			},
+			"seed": 33291.0,
 			"type": "material"
 		},
 		{
@@ -103,54 +104,57 @@
 				"y": 14.5
 			},
 			"parameters": {
-				"amount": 1,
-				"blend_type": 2
+				"amount": 1.0,
+				"blend_type": 2.0
 			},
+			"seed": -50352.0,
 			"type": "blend"
 		},
 		{
 			"name": "pattern",
 			"node_position": {
 				"x": -547.5,
-				"y": -227.068176
+				"y": -227.068176269531
 			},
 			"parameters": {
-				"mix": 0,
-				"x_scale": 1,
-				"x_wave": 3,
-				"y_scale": 0,
-				"y_wave": 4
+				"mix": 0.0,
+				"x_scale": 1.0,
+				"x_wave": 3.0,
+				"y_scale": 0.0,
+				"y_wave": 4.0
 			},
+			"seed": 32734.0,
 			"type": "pattern"
 		},
 		{
 			"name": "colorize",
 			"node_position": {
-				"x": -10.209106,
-				"y": -146.068176
+				"x": -10.2091064453125,
+				"y": -146.068176269531
 			},
 			"parameters": {
 				"gradient": {
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 1,
-							"r": 0
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 1.0,
+							"r": 0.0
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 14244.0,
 			"type": "colorize"
 		},
 		{
@@ -161,33 +165,33 @@
 			},
 			"parameters": {
 				"repeat": false,
-				"rotate": 360,
-				"scale_x": 1,
-				"scale_y": 1,
+				"rotate": 360.0,
+				"scale_x": 1.0,
+				"scale_y": 1.0,
 				"translate_x": 0.5,
 				"translate_y": 0.5
 			},
+			"seed": 24062.0,
 			"type": "transform"
 		},
 		{
 			"color": {
-				"a": 1,
-				"b": 0,
+				"a": 1.0,
+				"b": 0.0,
 				"g": 0.5,
-				"r": 1,
+				"r": 1.0,
 				"type": "Color"
 			},
 			"name": "comment",
 			"node_position": {
-				"x": -391.274048,
-				"y": 165.542206
+				"x": -391.274047851562,
+				"y": 165.542205810547
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
+			"seed": -35070.0,
 			"size": {
-				"x": 280,
-				"y": 85
+				"x": 280.0,
+				"y": 85.0
 			},
 			"text": "This example shows how to use the 3rd and 4th outputs of the bricks node to get the center of each brick.",
 			"title": "Comment",
@@ -196,39 +200,42 @@
 		{
 			"name": "normal_map",
 			"node_position": {
-				"x": 14.29071,
-				"y": -40.645294
+				"x": 14.2907104492188,
+				"y": -40.6452941894531
 			},
 			"parameters": {
-				"param0": 11,
+				"param0": 11.0,
 				"param1": 0.995,
-				"param2": 0,
-				"param4": 1
+				"param2": 0.0,
+				"param4": 1.0
 			},
+			"seed": -45974.0,
 			"type": "normal_map"
 		},
 		{
 			"name": "bricks_2",
 			"node_position": {
-				"x": -528.086548,
-				"y": -114.154938
+				"x": -528.086547851562,
+				"y": -114.154937744141
 			},
 			"parameters": {
 				"bevel": 0.1,
-				"columns": 3,
-				"corner": 0,
+				"columns": 3.0,
+				"corner": 0.0,
 				"mortar": 0.1,
-				"pattern": 0,
-				"repeat": 1,
-				"round": 0,
+				"pattern": 0.0,
+				"repeat": 1.0,
+				"round": 0.0,
 				"row_offset": 0.5,
-				"rows": 6
+				"rows": 6.0
 			},
+			"seed": 12190.0,
 			"type": "bricks"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }

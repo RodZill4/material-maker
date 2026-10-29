@@ -14,50 +14,54 @@
 		}
 	],
 	"label": "Graph",
+	"longdesc": "",
 	"name": "362",
 	"node_position": {
-		"x": 0,
-		"y": 0
+		"x": 0.0,
+		"y": 0.0
 	},
 	"nodes": [
 		{
+			"export_paths": {},
 			"name": "Material",
 			"node_position": {
-				"x": 200,
-				"y": 0
+				"x": 200.0,
+				"y": 0.0
 			},
 			"parameters": {
 				"albedo_color": {
-					"a": 1,
-					"b": 0,
-					"g": 0,
-					"r": 0,
+					"a": 1.0,
+					"b": 0.0,
+					"g": 0.0,
+					"r": 0.0,
 					"type": "Color"
 				},
-				"ao_light_affect": 1,
-				"depth_scale": 1,
-				"emission_energy": 1,
-				"metallic": 1,
-				"normal_scale": 1,
-				"resolution": 1,
-				"roughness": 1,
-				"size": 11,
-				"subsurf_scatter_strength": 0
+				"ao": 1.0,
+				"depth_scale": 1.0,
+				"emission_energy": 1.0,
+				"flags_transparent": true,
+				"metallic": 1.0,
+				"normal": 1.0,
+				"roughness": 1.0,
+				"size": 11.0,
+				"sss": 1.0
 			},
+			"seed": 20536.0,
 			"type": "material"
 		},
 		{
 			"name": "custom_0",
 			"node_position": {
-				"x": -211,
-				"y": 208
+				"x": -211.0,
+				"y": 208.0
 			},
 			"parameters": {
-				"contrast": 10,
-				"scale": 1,
-				"x": 0,
-				"y": 0
+				"contrast": 10.0,
+				"scale": 1.0,
+				"x": 0.0,
+				"y": 0.0
 			},
+			"seed": -42589.0,
 			"shader_model": {
 				"global": "float mandelbrot(vec2 uv) {\n    float di =  1.0;\n    vec2 z  = vec2(0.0);\n    float m2 = 0.0;\n    vec2 dz = vec2(0.0);\n    for( int i=0; i<200; i++ )\n    {\n        if (m2>1024.0 ) {\n\t\t\tdi=0.0;\n\t\t\tbreak;\n\t\t}\n\n\t\t// Z' -> 2·Z·Z' + 1\n        dz = 2.0*vec2(z.x*dz.x-z.y*dz.y, z.x*dz.y + z.y*dz.x) + vec2(1.0,0.0);\n\t\t\t\n        // Z -> Z² + c\t\t\t\n        z = vec2( z.x*z.x - z.y*z.y, 2.0*z.x*z.y ) + uv;\n\t\t\t\n        m2 = dot(z,z);\n    }\n\n    // distance\t\n\t// d(c) = |Z|·log|Z|/|Z'|\n\tfloat d = 0.5*sqrt(dot(z,z)/dot(dz,dz))*log(dot(z,z));\n    if( di>0.5 ) d=0.0;\n\treturn d;\n}",
 				"instance": "float $(name)_xyz(vec2 uv) {\n\treturn mandelbrot(uv);\n}",
@@ -71,8 +75,8 @@
 				"parameters": [
 					{
 						"label": "Scale",
-						"max": 3,
-						"min": 0,
+						"max": 3.0,
+						"min": 0.0,
 						"name": "scale",
 						"step": 0.0001,
 						"type": "float",
@@ -80,8 +84,8 @@
 					},
 					{
 						"label": "X",
-						"max": 2,
-						"min": -2,
+						"max": 2.0,
+						"min": -2.0,
 						"name": "x",
 						"step": 0.0001,
 						"type": "float",
@@ -89,8 +93,8 @@
 					},
 					{
 						"label": "Y",
-						"max": 2,
-						"min": -2,
+						"max": 2.0,
+						"min": -2.0,
 						"name": "y",
 						"step": 0.0001,
 						"type": "float",
@@ -98,8 +102,8 @@
 					},
 					{
 						"label": "Contrast",
-						"max": 10000,
-						"min": 1,
+						"max": 10000.0,
+						"min": 1.0,
 						"name": "contrast",
 						"step": 0.0001,
 						"type": "float",
@@ -120,56 +124,58 @@
 					"interpolation": 1,
 					"points": [
 						{
-							"a": 1,
-							"b": 0,
-							"g": 0,
-							"pos": 0,
-							"r": 1
+							"a": 1.0,
+							"b": 0.0,
+							"g": 0.0,
+							"pos": 0.0,
+							"r": 1.0
 						},
 						{
-							"a": 1,
-							"b": 0,
+							"a": 1.0,
+							"b": 0.0,
 							"g": 0.96875,
 							"pos": 0.2,
-							"r": 1
+							"r": 1.0
 						},
 						{
-							"a": 1,
+							"a": 1.0,
 							"b": 0.0625,
-							"g": 1,
+							"g": 1.0,
 							"pos": 0.4,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 1.0,
 							"pos": 0.618182,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 0.965909,
-							"g": 0,
+							"a": 1.0,
+							"b": 0.965909004211426,
+							"g": 0.0,
 							"pos": 0.818182,
-							"r": 0
+							"r": 0.0
 						},
 						{
-							"a": 1,
-							"b": 1,
-							"g": 0,
-							"pos": 1,
+							"a": 1.0,
+							"b": 1.0,
+							"g": 0.0,
+							"pos": 1.0,
 							"r": 0.9375
 						}
 					],
 					"type": "Gradient"
 				}
 			},
+			"seed": 2298.0,
 			"type": "colorize"
 		}
 	],
-	"parameters": {
-
-	},
+	"parameters": {},
+	"project_thumbnail": "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",
+	"seed_int": 0,
+	"shortdesc": "",
 	"type": "graph"
 }
