@@ -106,6 +106,7 @@
 			},
 			{
 				"rgb": "$(name_uv)_center_uv",
+				"shortdesc": "Instance center",
 				"type": "rgb"
 			}
 		],
