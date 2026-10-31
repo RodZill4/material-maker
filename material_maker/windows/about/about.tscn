@@ -52,6 +52,7 @@ title = "About Material Maker"
 position = Vector2i(0, 36)
 size = Vector2i(600, 500)
 script = ExtResource("1")
+metadata/android_fullscreen_dim = true
 
 [node name="BG" type="ColorRect" parent="."]
 anchors_preset = 15

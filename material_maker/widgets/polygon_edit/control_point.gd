@@ -14,7 +14,13 @@ signal moved(index)
 signal selected(index, control_pressed, shift_pressed)
 signal removed(index)
 
-func _draw():
+func _ready() -> void:
+	if mm_globals.get_config("touch_optimization"):
+		offset_transform_enabled = true
+		offset_transform_visual_only = false
+		offset_transform_scale = Vector2(2.5, 2.5)
+
+func _draw() -> void:
 	var current_theme : Theme = mm_globals.main_window.theme
 	var moving_color : Color = current_theme.get_color("icon_pressed_color", "Button")
 	var color : Color = Color(1.0, 0.0, 0.0) if is_selected else current_theme.get_color("font_color", "Label")
@@ -26,8 +32,8 @@ func _draw():
 		draw_rect(Rect2(Vector2(0, 0), custom_minimum_size), color.inverted(), false)
 		if is_moving or hovered:
 			draw_rect(Rect2(-custom_minimum_size*0.5, custom_minimum_size*2.0), current_theme.get_color("font_color", "Label"), false, 1.0)
-			draw_rect(Rect2(-custom_minimum_size*0.5-Vector2(1.0,1.0),
-					custom_minimum_size*2.0+Vector2(2.0,2.0)), current_theme.get_color("font_color", "Label").inverted(), false, 1.0)
+			draw_rect(Rect2(-custom_minimum_size*0.5, custom_minimum_size*2.0).grow(1.0),
+					current_theme.get_color("font_color", "Label").inverted(), false, 1.0)
 
 func initialize(p : Vector2, e : Control = null) -> void:
 	editor = e if e != null else get_parent()
@@ -62,7 +68,7 @@ func _on_ControlPoint_gui_input(event):
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			removed.emit(get_index())
 	elif is_moving and event is InputEventMouseMotion:
-		var new_pos : Vector2 = position + event.relative
+		var new_pos : Vector2 = position + event.relative * offset_transform_scale.x
 		if event.is_command_or_control_pressed():
 			var value : Vector2
 			var parent = get_parent().owner

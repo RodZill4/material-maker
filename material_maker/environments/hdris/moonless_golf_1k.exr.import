@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bqre7xkdgb655"
-path.bptc="res://.godot/imported/moonless_golf_1k.hdr-9cc5420e458979fa0268bbd265e3a765.bptc.ctex"
-path.astc="res://.godot/imported/moonless_golf_1k.hdr-9cc5420e458979fa0268bbd265e3a765.astc.ctex"
+path.bptc="res://.godot/imported/moonless_golf_1k.exr-dc79b74455e0bb044175d039bc8ecb2e.bptc.ctex"
+path.astc="res://.godot/imported/moonless_golf_1k.exr-dc79b74455e0bb044175d039bc8ecb2e.astc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://material_maker/environments/hdris/moonless_golf_1k.hdr"
-dest_files=["res://.godot/imported/moonless_golf_1k.hdr-9cc5420e458979fa0268bbd265e3a765.bptc.ctex", "res://.godot/imported/moonless_golf_1k.hdr-9cc5420e458979fa0268bbd265e3a765.astc.ctex"]
+source_file="res://material_maker/environments/hdris/moonless_golf_1k.exr"
+dest_files=["res://.godot/imported/moonless_golf_1k.exr-dc79b74455e0bb044175d039bc8ecb2e.bptc.ctex", "res://.godot/imported/moonless_golf_1k.exr-dc79b74455e0bb044175d039bc8ecb2e.astc.ctex"]
 
 [params]
 

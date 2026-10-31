@@ -12,7 +12,7 @@ var mm_scene : PackedScene = null
 
 
 const BACKGROUNDS_DIR : String = "res://splash_screen/backgrounds/"
-const BACKGROUNDS : Array[Dictionary] = [
+var splash_backgrounds : Array[Dictionary] = [
 	{ author="Angel", entries=[
 		{ title="Beanbag Chair", file="angel_beanbag_chair.png" },
 		{ title="Soft Nurball", file="angel_soft_nurball.png" },
@@ -101,6 +101,8 @@ const ACTIVITY_MESSAGES : Array[String] = [
 ]
 
 func _enter_tree():
+	if OS.get_name() == "Android":
+		android_filter_splash_screens()
 	var date : Dictionary = Time.get_date_dict_from_system()
 	var date_int : int = date.month*33+date.day
 	var screen : int = 0
@@ -108,32 +110,42 @@ func _enter_tree():
 		_:
 			randomize()
 			var sum : float = 0.0
-			for i in BACKGROUNDS.size():
-				if BACKGROUNDS[i].has("odds"):
-					sum += BACKGROUNDS[i].odds
+			for i in splash_backgrounds.size():
+				if splash_backgrounds[i].has("odds"):
+					sum += splash_backgrounds[i].odds
 				else:
 					sum += 1
 			var value : float = randf_range(0, sum)
 			sum = 0.0
-			for i in BACKGROUNDS.size():
-				if BACKGROUNDS[i].has("odds"):
-					sum += BACKGROUNDS[i].odds
+			for i in splash_backgrounds.size():
+				if splash_backgrounds[i].has("odds"):
+					sum += splash_backgrounds[i].odds
 				else:
 					sum += 1
 				if sum >= value:
 					screen = i
 					break
 	set_screen(screen)
+
 	var window : Window = get_window()
-	var current_screen_index = window.current_screen
-	var ui_scale : int = 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
-	window.position = (DisplayServer.screen_get_size(current_screen_index)-Vector2i(ui_scale*size))/2 + DisplayServer.screen_get_position(current_screen_index)
-	window.size = ui_scale*size
+	var ui_scale : int = _ui_scale()
 	window.content_scale_factor = ui_scale
+	if OS.get_name() == "Android":
+		android_setup_margins()
+		android_setup_artwork_details_size()
+		$SplashScreen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	else:
+		var current_screen_index = window.current_screen
+		@warning_ignore("integer_division")
+		window.position = (DisplayServer.screen_get_size(current_screen_index)-Vector2i(ui_scale*size))/2 + DisplayServer.screen_get_position(current_screen_index)
+		window.size = ui_scale*size
+
+func _ui_scale() -> int:
+	return 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 
 func set_screen(bi : int, sub_index = -1) -> void:
 	background_index = bi
-	var background : Dictionary = BACKGROUNDS[background_index]
+	var background : Dictionary = splash_backgrounds[background_index]
 	var author : String = background.author if background.has("author") else ""
 	var file : String = background.file if background.has("file") else ""
 	var title : String = background.title if background.has("title") else ""
@@ -173,6 +185,9 @@ func set_screen(bi : int, sub_index = -1) -> void:
 			%Title.gui_input.disconnect(c.callable)
 
 func _ready():
+	if OS.get_name() == "Android":
+		android_splash_fade_in()
+		await get_tree().create_timer(0.7).timeout
 	set_process(false)
 
 	resource_path = "res://material_maker/main_window.tscn"
@@ -260,16 +275,16 @@ func _on_secret_button_gui_input(event):
 			mm_steam.unlock_achievement("ACH_EAGLE_EYE")
 
 func _on_previous_pressed():
-	if BACKGROUNDS[background_index].has("entries") and background_subindex > 0:
+	if splash_backgrounds[background_index].has("entries") and background_subindex > 0:
 		set_screen(background_index, background_subindex-1)
 	else:
-		set_screen(background_index-1 if background_index > 0 else BACKGROUNDS.size()-1, 1000)
+		set_screen(background_index-1 if background_index > 0 else splash_backgrounds.size()-1, 1000)
 
 func _on_next_pressed():
-	if BACKGROUNDS[background_index].has("entries") and background_subindex < BACKGROUNDS[background_index].entries.size()-1:
+	if splash_backgrounds[background_index].has("entries") and background_subindex < splash_backgrounds[background_index].entries.size()-1:
 		set_screen(background_index, background_subindex+1)
 	else:
-		set_screen(background_index+1 if background_index < BACKGROUNDS.size()-1 else 0, 0)
+		set_screen(background_index+1 if background_index < splash_backgrounds.size()-1 else 0, 0)
 
 func _on_title_gui_input(event, url : String):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -279,3 +294,61 @@ func _on_title_gui_input(event, url : String):
 func _on_url_gui_input(event):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		OS.shell_open("https://www.materialmaker.org")
+
+#region android-specific
+
+func android_setup_artwork_details_size() -> void:
+	%URL.add_theme_font_size_override("font_size", 14)
+	%Title.add_theme_font_size_override("font_size", 22)
+	%Author.add_theme_font_size_override("font_size", 22)
+
+func android_setup_margins() -> void:
+	await get_tree().process_frame
+	var scale_fac : float = get_window().content_scale_factor
+
+	custom_minimum_size = Vector2.ZERO
+	$SplashScreen.custom_minimum_size = Vector2.ZERO
+	var nine_patch : NinePatchRect = $SplashScreen/TextureRect/LogoExtend
+	var logo : TextureRect = $SplashScreen/TextureRect
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	var safe_margin_left : int = mm_touch.calc_margins(SIDE_LEFT, scale_fac)
+	var safe_margin_right : int = mm_touch.calc_margins(SIDE_RIGHT, scale_fac)
+
+	# url / artwork details margins
+	$MarginContainer.add_theme_constant_override("margin_left", safe_margin_left)
+	$MarginContainer.add_theme_constant_override("margin_right", safe_margin_right)
+	$MarginContainer.add_theme_constant_override("margin_bottom", 12)
+
+	# keep logo/progress bar within safe area
+	logo.position.x += safe_margin_left
+	nine_patch.position.x -= safe_margin_left
+	nine_patch.patch_margin_left = safe_margin_left + 4
+	progress_bar.position.x -= safe_margin_left
+	progress_bar.size.x += safe_margin_left
+
+func android_filter_splash_screens() -> void:
+	# filter animated shaders
+	var filtered_backgrounds : Array[Dictionary]
+	for group in splash_backgrounds:
+		var entries : Array[Dictionary] = []
+		if group.has("entries"):
+			for e in group.entries:
+				if e.file.get_extension() == "png":
+					entries.append(e)
+		if entries.is_empty():
+			continue
+		group.entries = entries
+		filtered_backgrounds.append(group)
+	splash_backgrounds = filtered_backgrounds
+
+func android_splash_fade_in() -> void:
+	var darken : ColorRect = ColorRect.new()
+	darken.color = Color.BLACK
+	tree_exiting.connect(darken.queue_free)
+	add_child(darken)
+	var t : Tween = get_tree().create_tween()
+	t.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	t.tween_property(darken, "color:a", 0.0, 0.6).set_delay(0.5)
+
+#endregion

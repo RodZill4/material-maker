@@ -2,20 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://by6042vpo6i1o"
-path="res://.godot/imported/epping_forest_01_1k.hdr-deb5d85b1c0b655387fa44d4d061848a.ctex"
+uid="uid://ceqyb6morrwwp"
+path.bptc="res://.godot/imported/photo_studio_01_1k.exr-8c8b30710711710f3cfa9bec036e54ec.bptc.ctex"
+path.astc="res://.godot/imported/photo_studio_01_1k.exr-8c8b30710711710f3cfa9bec036e54ec.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://material_maker/environments/hdris/epping_forest_01_1k.hdr"
-dest_files=["res://.godot/imported/epping_forest_01_1k.hdr-deb5d85b1c0b655387fa44d4d061848a.ctex"]
+source_file="res://material_maker/environments/hdris/photo_studio_01_1k.exr"
+dest_files=["res://.godot/imported/photo_studio_01_1k.exr-8c8b30710711710f3cfa9bec036e54ec.bptc.ctex", "res://.godot/imported/photo_studio_01_1k.exr-8c8b30710711710f3cfa9bec036e54ec.astc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
