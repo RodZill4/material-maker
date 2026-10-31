@@ -35,7 +35,7 @@ func _ready() -> void:
 		get_parent().add_menu_bar(menu_bar, self)
 
 func is_mouse_in_canvas() -> bool:
-	return Rect2(draw_offset, draw_size).has_point(get_local_mouse_position())
+	return Rect2(draw_offset, draw_size).has_point(get_local_mouse_position()) and is_visible_in_tree()
 
 func _draw() -> void:
 	super._draw()
