@@ -47,7 +47,6 @@ func _ready():
 	content_scale_factor = mm_globals.ui_scale_factor()
 
 	if OS.get_name() == "Android":
-		mm_touch.make_dialog_fullscreen(self, true)
 		var top_spacer : Control = Control.new()
 		top_spacer.custom_minimum_size.y = 24
 		$TopContainer.add_child(top_spacer)

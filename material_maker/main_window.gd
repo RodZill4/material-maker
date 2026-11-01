@@ -1577,11 +1577,11 @@ func add_dialog(dialog : Window) -> void:
 		bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 		bg.color = theme.get_stylebox("panel", "Panel").bg_color
 		bg.color.a = 1.0 if should_fullscreen else 0.8
-
 		get_tree().root.add_child(bg)
+
+		dialog.tree_exited.connect(bg.queue_free)
 		if should_fullscreen:
 			dialog.ready.connect(mm_touch.make_dialog_fullscreen.bind(dialog))
-		dialog.tree_exited.connect(bg.queue_free)
 	add_child(dialog)
 
 # Accept dialog

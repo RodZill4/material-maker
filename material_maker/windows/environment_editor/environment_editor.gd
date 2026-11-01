@@ -33,9 +33,7 @@ func _ready():
 	v.add_theme_constant_override("padding_left", 8)
 
 	if OS.get_name() == "Android":
-		min_size = Vector2.ZERO
 		$Main.custom_minimum_size = Vector2.ZERO
-		mm_touch.make_dialog_fullscreen(self, true)
 	else:
 		hide()
 		popup_centered()

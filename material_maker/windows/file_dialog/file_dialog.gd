@@ -26,7 +26,6 @@ func _fix_context_menu() -> void:
 func _ready() -> void:
 	if OS.get_name() == "Android":
 		OS.request_permissions()
-		mm_touch.make_dialog_fullscreen(self)
 
 	_fix_context_menu()
 	load_fav_recents()
