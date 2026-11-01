@@ -668,7 +668,6 @@ func change_theme(theme_name : String) -> void:
 	if _theme is EnhancedTheme:
 		_theme.update()
 
-	await get_tree().process_frame
 	theme = _theme
 
 	if mm_globals.get_config("touch_optimization"):
