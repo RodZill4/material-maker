@@ -321,8 +321,8 @@ func android_open_url(url : String) -> void:
 	b.modulate.a = 0
 	b.pressed.emit()
 
-func should_dim_fullscreen(window : Window) -> bool:
-	const dim : String = "android_fullscreen_dim"
-	return OS.get_name() == "Android" and window.has_meta(dim) and window.get_meta(dim)
+func android_should_fullscreen(window : Window) -> bool:
+	const fs : String = "android_fullscreen"
+	return OS.get_name() == "Android" and window.has_meta(fs) and window.get_meta(fs)
 
 #endregion

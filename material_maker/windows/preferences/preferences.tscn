@@ -18,7 +18,7 @@ position = Vector2i(0, 36)
 size = Vector2i(700, 450)
 exclusive = true
 script = ExtResource("2")
-metadata/android_fullscreen_dim = true
+metadata/android_fullscreen = true
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1807450959]
 anchors_preset = 15

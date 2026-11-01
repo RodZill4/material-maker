@@ -16,9 +16,7 @@ func edit_preferences(c : ConfigFile) -> void:
 	content_scale_factor = mm_globals.ui_scale_factor()
 	update_controls(self)
 
-	if OS.get_name() == "Android":
-		mm_touch.make_dialog_fullscreen(self, true)
-	else:
+	if OS.get_name() != "Android":
 		size *= content_scale_factor
 		hide()
 		popup_centered(size)

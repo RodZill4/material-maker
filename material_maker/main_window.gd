@@ -1571,14 +1571,16 @@ func _on_Tip_Timer_timeout():
 # Add dialog
 
 func add_dialog(dialog : Window) -> void:
-	var opaque_dim : bool = mm_globals.should_dim_fullscreen(dialog)
-	if opaque_dim or mm_globals.get_config("dialog_dim_background"):
+	var should_fullscreen : bool = mm_globals.android_should_fullscreen(dialog)
+	if should_fullscreen or mm_globals.get_config("dialog_dim_background"):
 		var bg : ColorRect = ColorRect.new()
 		bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 		bg.color = theme.get_stylebox("panel", "Panel").bg_color
-		bg.color.a = 1.0 if opaque_dim else 0.8
+		bg.color.a = 1.0 if should_fullscreen else 0.8
 
 		get_tree().root.add_child(bg)
+		if should_fullscreen:
+			dialog.ready.connect(mm_touch.make_dialog_fullscreen.bind(dialog))
 		dialog.tree_exited.connect(bg.queue_free)
 	add_child(dialog)
 
