@@ -431,6 +431,10 @@ region = Rect2(48, 48, 16, 16)
 atlas = ExtResource("1_fw8f4")
 region = Rect2(112, 176, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7b7js"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(80, 192, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_50kh2"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(96, 224, 16, 16)
@@ -535,6 +539,10 @@ region = Rect2(64, 80, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_nkmvd"]
 atlas = ExtResource("1_fw8f4")
 region = Rect2(48, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jtuhu"]
+atlas = ExtResource("1_fw8f4")
+region = Rect2(96, 192, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lsxnf"]
 atlas = ExtResource("1_fw8f4")
@@ -1213,6 +1221,7 @@ MM_Icons/icons/alphabetical_descending = SubResource("AtlasTexture_j6702")
 MM_Icons/icons/arrow_left = SubResource("AtlasTexture_q32qs")
 MM_Icons/icons/arrow_right = SubResource("AtlasTexture_r3xak")
 MM_Icons/icons/arrow_updown = SubResource("AtlasTexture_dnklm")
+MM_Icons/icons/camera = SubResource("AtlasTexture_7b7js")
 MM_Icons/icons/category_ascending = SubResource("AtlasTexture_50kh2")
 MM_Icons/icons/category_descending = SubResource("AtlasTexture_ivx1c")
 MM_Icons/icons/clean = SubResource("AtlasTexture_rgi6n")
@@ -1236,6 +1245,7 @@ MM_Icons/icons/model = SubResource("AtlasTexture_dsr33")
 MM_Icons/icons/paste_image = SubResource("AtlasTexture_64fc4")
 MM_Icons/icons/pin_pinned = SubResource("AtlasTexture_du4od")
 MM_Icons/icons/pin_unpinned = SubResource("AtlasTexture_nkmvd")
+MM_Icons/icons/reset = SubResource("AtlasTexture_jtuhu")
 MM_Icons/icons/reset_view = SubResource("AtlasTexture_lsxnf")
 MM_Icons/icons/section_3d = SubResource("AtlasTexture_vbdqj")
 MM_Icons/icons/section_filter = SubResource("AtlasTexture_h5b0q")
