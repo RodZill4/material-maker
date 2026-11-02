@@ -19,8 +19,6 @@ const RANDOMNESS_ICON : Texture2D = preload("res://material_maker/icons/randomne
 const RANDOMNESS_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/randomness_locked.tres")
 const BUFFER_ICON : Texture2D = preload("res://material_maker/icons/buffer.tres")
 const BUFFER_PAUSED_ICON : Texture2D = preload("res://material_maker/icons/buffer_paused.tres")
-const PREVIEW_ICON : Texture2D = preload("res://material_maker/icons/preview.png")
-const PREVIEW_LOCKED_ICON : Texture2D = preload("res://material_maker/icons/preview_locked.png")
 
 const MENU_PROPAGATE_CHANGES : int = 1000
 const MENU_SHARE_NODE : int        = 1001
