@@ -29,7 +29,7 @@ func _ready() -> void:
 	
 	if mm_globals.get_config("touch_optimization"):
 		var buttons_hbox : HBoxContainer = get_child(-1, true)
-		buttons_hbox.custom_minimum_size.y = MMTouch.EDITOR_WINDOW_BUTTON_HEIGHT
+		buttons_hbox.custom_minimum_size.y = MMTouch.BUTTON_HEIGHT
 
 	_fix_context_menu()
 	load_fav_recents()

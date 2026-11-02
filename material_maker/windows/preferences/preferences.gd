@@ -86,4 +86,4 @@ func _on_ready() -> void:
 	
 	if mm_globals.get_config("touch_optimization"):
 		var buttonshbox : HBoxContainer = $HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer
-		buttonshbox.custom_minimum_size.y = MMTouch.EDITOR_WINDOW_BUTTON_HEIGHT
+		buttonshbox.custom_minimum_size.y = MMTouch.BUTTON_HEIGHT

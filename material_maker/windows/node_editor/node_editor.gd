@@ -22,7 +22,7 @@ signal editor_window_closed
 
 func _ready() -> void:
 	if mm_globals.get_config("touch_optimization"):
-		$Sizer/HBoxContainer.custom_minimum_size.y = MMTouch.EDITOR_WINDOW_BUTTON_HEIGHT
+		$Sizer/HBoxContainer.custom_minimum_size.y = MMTouch.BUTTON_HEIGHT
 
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()
