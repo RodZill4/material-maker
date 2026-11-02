@@ -83,7 +83,5 @@ func _on_ready() -> void:
 	if OS.get_name() == "Android":
 		config_changed.connect(mm_touch.make_dialog_fullscreen.bind(self),
 				ConnectFlags.CONNECT_DEFERRED)
-	
-	if mm_globals.get_config("touch_optimization"):
-		var buttonshbox : HBoxContainer = $HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer
-		buttonshbox.custom_minimum_size.y = MMTouch.BUTTON_HEIGHT
+
+	mm_touch.set_mobile_control_height(%Buttons)

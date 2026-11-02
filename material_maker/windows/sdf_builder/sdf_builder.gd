@@ -45,9 +45,8 @@ func _ready():
 
 	await get_tree().process_frame
 	content_scale_factor = mm_globals.ui_scale_factor()
-	
-	if mm_globals.get_config("touch_optimization"):
-		$TopContainer/Buttons.custom_minimum_size.y = MMTouch.BUTTON_HEIGHT
+
+	mm_touch.set_mobile_control_height($TopContainer/Buttons)
 
 	if OS.get_name() == "Android":
 		var top_spacer : Control = Control.new()

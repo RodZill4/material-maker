@@ -15,8 +15,7 @@ func _ready():
 
 func add_control(text : String, control : Control, is_named_param : bool, short_description : String = "", long_description : String = "") -> void:
 	var drag_button : Button = Button.new()
-	if mm_globals.get_config("touch_optimization"):
-		drag_button.custom_minimum_size.y = MMTouch.BUTTON_HEIGHT
+	mm_touch.set_mobile_control_height(drag_button)
 	drag_button.flat = true
 	drag_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	drag_button.icon = get_theme_icon("arrow_updown", "MM_Icons")

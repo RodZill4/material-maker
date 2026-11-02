@@ -821,21 +821,22 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer" unique_id=1234256494]
+[node name="Buttons" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer" unique_id=1234256494]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1772806855]
+[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons" unique_id=1772806855]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2018521444]
+[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons" unique_id=2018521444]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=447674289]
+[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons" unique_id=447674289]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Cancel"
@@ -847,6 +848,6 @@ text = "Cancel"
 [connection signal="minimum_size_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
-[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
-[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
-[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]

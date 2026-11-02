@@ -12,6 +12,7 @@ var android_runtime : JNISingleton
 var last_go_back_request : int = 0
 
 const BUTTON_HEIGHT : int = 32
+const SETTING_TOUCH_OPTIMIZATION : String = "touch_optimization"
 
 ## Emitted when back button is pressed on Android.
 signal back_pressed()
@@ -196,3 +197,7 @@ func _show_tooltip(at : Vector2, text : String) -> void:
 	tool_tip_panel.position = at.clamp(margin, vsize - tsize - margin)
 	tool_tip_panel.popup()
 	tool_tip_panel.popup_hide.connect(tool_tip_panel.queue_free)
+
+func set_mobile_control_height(c : Control) -> void:
+	if mm_globals.get_config(SETTING_TOUCH_OPTIMIZATION):
+		c.custom_minimum_size.y = BUTTON_HEIGHT
