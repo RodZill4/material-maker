@@ -20,6 +20,10 @@ const OutputEditor = preload("res://material_maker/windows/node_editor/output.ts
 signal node_changed(model_data)
 signal editor_window_closed
 
+func _ready() -> void:
+	if mm_globals.get_config("touch_optimization"):
+		$Sizer/HBoxContainer.custom_minimum_size.y = MMTouch.EDITOR_WINDOW_BUTTON_HEIGHT
+
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()
 	parent.add_child(object)

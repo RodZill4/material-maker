@@ -32,6 +32,9 @@ func _ready():
 	v.add_theme_stylebox_override("scroll", grabber_sb)
 	v.add_theme_constant_override("padding_left", 8)
 
+	if mm_globals.get_config("touch_optimization"):
+		$Main/Buttons.custom_minimum_size.y = MMTouch.EDITOR_WINDOW_BUTTON_HEIGHT
+	
 	if OS.get_name() == "Android":
 		$Main.custom_minimum_size = Vector2.ZERO
 	else:

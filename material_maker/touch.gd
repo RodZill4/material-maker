@@ -11,6 +11,8 @@ var android_runtime : JNISingleton
 # workaround for godot issue #123454 for Android 16
 var last_go_back_request : int = 0
 
+const EDITOR_WINDOW_BUTTON_HEIGHT : int = 32
+
 ## Emitted when back button is pressed on Android.
 signal back_pressed()
 

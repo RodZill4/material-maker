@@ -35,6 +35,13 @@ func _ready():
 			button.add_theme_color_override("icon_focus_color", Color("656565"))
 			button.add_theme_color_override("icon_pressed_color", Color("656565"))
 
+	if mm_globals.get_config("touch_optimization"):
+		var btn_height : int = MMTouch.EDITOR_WINDOW_BUTTON_HEIGHT
+		$MarginContainer/VBoxContainer/HBoxContainer.custom_minimum_size.y = btn_height
+		for m in ["bottom", "left", "right", "top"]:
+			$MarginContainer.add_theme_constant_override("margin_%s" % m, 4)
+
+
 func update_export_list() -> void:
 	export_target.clear()
 	for e in exports.keys():
