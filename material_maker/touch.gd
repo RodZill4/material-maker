@@ -78,9 +78,9 @@ func cutout_margins(side : Side, scale : float = mm_globals.get_ui_scale()) -> i
 	return ceili(_dispalay_cutout_margins[side] / scale)
 
 func make_dialog_fullscreen(window : Window, show : bool = false) -> void:
+	window.min_size = Vector2.ZERO
 	window.borderless = true
 	window.size = mm_globals.main_window.size
-	window.min_size = Vector2.ZERO
 	window.position = Vector2.ZERO
 	# offset by MM_MainBackground stylebox content margins
 	window.position.x += maxi(0, calc_margins(Side.SIDE_LEFT) - 10)
