@@ -132,11 +132,9 @@ enum WinTabletDriver { WININK, WINTAB, DISABLED }
 
 func _enter_tree() -> void:
 	mm_globals.main_window = self
-	if OS.get_name() == "Android":
-		ready.connect(android_setup_margins)
-		mm_globals.preferences_updated.connect(android_setup_margins)
-
 	if mm_globals.get_config("touch_optimization"):
+		mm_globals.preferences_updated.connect(android_setup_margins)
+		ready.connect(android_setup_margins)
 		android_setup_status_bar()
 
 func _ready() -> void:
@@ -270,7 +268,6 @@ func _ready() -> void:
 	if OS.get_name() == "Android":
 		# copy image node's default mm_icon.png
 		android_copy_examples("png")
-		tip_label.hide()
 
 var menu_update_requested : bool = false
 
