@@ -63,7 +63,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 texture = ExtResource("2_uba88")
-region_rect = Rect2(0, 0, 25, 144)
+region_rect = Rect2(4, 0, 25, 144)
 
 [node name="MM" type="Label" parent="SplashScreen/TextureRect" unique_id=1234938026]
 layout_mode = 0
