@@ -23,6 +23,7 @@ var container : VBoxContainer
 var buttons : Dictionary[String, ActionButton]
 
 func _init(graph : MMGraphEdit) -> void:
+	oversampling_with_scale = CanvasItem.OVERSAMPLING_WITH_SCALE_ENABLED
 	name = "NodeActionsPanel"
 	parent = graph
 	parent.add_child(self)
@@ -299,8 +300,8 @@ func should_custom_visible(g : MMGenBase) -> bool:
 func init_stylebox() -> void:
 	if not sb_selection:
 		sb_selection = StyleBoxFlat.new()
-		sb_selection.set_border_width_all(2)
-		sb_selection.set_corner_radius_all(4)
+		sb_selection.set_border_width_all(3)
+		sb_selection.set_corner_radius_all(7)
 		sb_selection.corner_detail = 4
 
 func update_stylebox() -> void:
@@ -312,14 +313,14 @@ func update_stylebox() -> void:
 			sb_selection.bg_color = ThemeUtils.base_color.darkened(0.5)
 			sb_selection.border_color = ThemeUtils.base_color.lightened(0.2)
 		ThemeUtils.CLASSIC_THEME:
-			sb_selection.bg_color = Color(0.22, 0.255, 0.36, 1.0)
-			sb_selection.border_color = Color(0.377, 0.482, 0.65, 1.0)
+			sb_selection.bg_color = Color(0.22, 0.255, 0.36)
+			sb_selection.border_color = Color(0.377, 0.482, 0.65)
 		ThemeUtils.DARK_THEME:
-			sb_selection.bg_color = Color(0.14, 0.14, 0.14, 1.0)
-			sb_selection.border_color = Color(0.355, 0.355, 0.355, 1.0)
+			sb_selection.bg_color = Color(0.14, 0.14, 0.14)
+			sb_selection.border_color = Color(0.3, 0.3, 0.3)
 		ThemeUtils.LIGHT_THEME:
-			sb_selection.bg_color = Color(0.62, 0.62, 0.62, 1.0)
-			sb_selection.border_color = Color(0.33, 0.33, 0.33, 1.0)
+			sb_selection.bg_color = Color(0.62, 0.62, 0.62)
+			sb_selection.border_color = Color(0.33, 0.33, 0.33)
 
 func draw_selection_area() -> void:
 	if selection_area.size != Vector2.ZERO and sb_selection and visible:
