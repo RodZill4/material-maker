@@ -323,7 +323,7 @@ func android_setup_margins() -> void:
 	# keep logo/progress bar within safe area
 	logo.position.x += safe_margin_left
 	nine_patch.position.x -= safe_margin_left
-	nine_patch.patch_margin_left = safe_margin_left
+	nine_patch.patch_margin_left = safe_margin_left + 1
 	progress_bar.position.x -= safe_margin_left
 	progress_bar.size.x += safe_margin_left
 
