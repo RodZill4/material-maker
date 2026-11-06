@@ -25,7 +25,7 @@ func get_type_name() -> String:
 
 func get_parameter_defs() -> Array:
 	return [
-		{ name="image", type="image_path", label="", default="" },
+		{ name="image", type="image_path", label="", default="", shortdesc="" },
 		{ name="fix_ar", type="boolean", label="Fix Aspect Ratio", default=false },
 		{ name="clamp", type="boolean", label="Clamp", default=false },
 		{ name="filter", type="boolean", label="Filter", default=true }
