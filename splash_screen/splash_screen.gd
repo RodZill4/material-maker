@@ -308,8 +308,7 @@ func android_setup_margins() -> void:
 
 	custom_minimum_size = Vector2.ZERO
 	$SplashScreen.custom_minimum_size = Vector2.ZERO
-	var nine_patch : NinePatchRect = $SplashScreen/TextureRect/LogoExtend
-	var logo : TextureRect = $SplashScreen/TextureRect
+	var logo : NinePatchRect = $SplashScreen/TextureRect
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	var safe_margin_left : int = mm_touch.calc_margins(SIDE_LEFT, scale_fac)
@@ -321,11 +320,11 @@ func android_setup_margins() -> void:
 	$MarginContainer.add_theme_constant_override("margin_bottom", 12)
 
 	# keep logo/progress bar within safe area
-	logo.position.x += safe_margin_left
-	nine_patch.position.x -= safe_margin_left
-	nine_patch.patch_margin_left = safe_margin_left + 1
-	progress_bar.position.x -= safe_margin_left
-	progress_bar.size.x += safe_margin_left
+	const padding : int = 32
+	$SplashScreen/TextureRect/MM.position.x += safe_margin_left
+	logo.patch_margin_right = 150
+	logo.size.x += safe_margin_left + padding
+	progress_bar.size.x += safe_margin_left + padding
 
 func android_filter_splash_screens() -> void:
 	# filter animated shaders

@@ -50,20 +50,14 @@ layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_jeaul")
 expand_mode = 1
 
-[node name="TextureRect" type="TextureRect" parent="SplashScreen" unique_id=547599219]
+[node name="TextureRect" type="NinePatchRect" parent="SplashScreen" unique_id=2031630344]
 layout_mode = 0
 offset_top = 34.0
 offset_right = 503.00006
 offset_bottom = 178.0
 texture = ExtResource("2_uba88")
-
-[node name="LogoExtend" type="NinePatchRect" parent="SplashScreen/TextureRect" unique_id=512569899]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-grow_vertical = 2
-texture = ExtResource("2_uba88")
-region_rect = Rect2(4, 0, 25, 144)
+region_rect = Rect2(4, 0, 503, 144)
+patch_margin_left = 140
 
 [node name="MM" type="Label" parent="SplashScreen/TextureRect" unique_id=1234938026]
 layout_mode = 0
