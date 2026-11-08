@@ -23,10 +23,10 @@ config/custom_user_dir_name="material_maker_2"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.7")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/show_image=false
-boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
+boot_splash/show_image=false
+boot_splash/use_filter=false
 config/release="1.8.0.0"
 config/actual_release="1.8"
 
@@ -163,6 +163,7 @@ limits/debugger/max_chars_per_second=204800000
 [rendering]
 
 rendering_device/driver.macos="vulkan"
+textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 shading/overrides/force_lambert_over_burley.mobile=false
 environment/defaults/default_environment="res://default_env.tres"
