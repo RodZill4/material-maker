@@ -1,7 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://bb76ty33yvxj2"]
+[gd_scene format=3 uid="uid://bb76ty33yvxj2"]
 
 [ext_resource type="PackedScene" uid="uid://cdkj3jrppq51u" path="res://material_maker/windows/environment_editor/environment_editor_scene.tscn" id="1"]
-[ext_resource type="Texture2D" uid="uid://by6042vpo6i1o" path="res://material_maker/environments/hdris/epping_forest_01_1k.hdr" id="1_r627v"]
+[ext_resource type="Texture2D" uid="uid://by6042vpo6i1o" path="res://material_maker/environments/hdris/epping_forest_01_1k.exr" id="1_r627v"]
 [ext_resource type="PackedScene" uid="uid://dw4wghi1pn4qr" path="res://material_maker/windows/environment_editor/camera_controller.tscn" id="3_iommd"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_f7v0t"]

@@ -20,6 +20,9 @@ const OutputEditor = preload("res://material_maker/windows/node_editor/output.ts
 signal node_changed(model_data)
 signal editor_window_closed
 
+func _ready() -> void:
+	mm_touch.set_mobile_control_height($Sizer/HBoxContainer)
+
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()
 	parent.add_child(object)
@@ -143,7 +146,8 @@ func _on_Functions_text_changed():
 				error_label.text = "Syntax error line "+str(globals_error_line+1)+": "+result.msg
 
 func _on_Sizer_minimum_size_changed():
-	size = $Sizer.get_combined_minimum_size() + Vector2(4, 4)
+	if OS.get_name() != "Android":
+		size = $Sizer.get_combined_minimum_size() + Vector2(4, 4)
 
 # OK/Apply/Cancel buttons
 

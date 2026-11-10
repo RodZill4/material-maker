@@ -14,6 +14,7 @@ func _on_AcceptDialog_popup_hide() -> void:
 	emit_signal("return_status", "cancel")
 
 func ask() -> String:
+	mm_touch.set_mobile_control_height(get_ok_button().get_parent())
 	get_window().content_scale_factor = mm_globals.ui_scale_factor()
 	get_window().set_size(get_contents_minimum_size()*get_window().content_scale_factor)
 	hide()

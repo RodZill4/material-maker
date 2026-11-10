@@ -8,6 +8,7 @@ func edit_descriptions(type : String, short : String, long : String) -> Array:
 	title = type+" Description"
 	$VBoxContainer/HBoxContainer/ShortDesc.text = short
 	$VBoxContainer/LongDesc.text = long
+	mm_touch.set_mobile_control_height($VBoxContainer/HBoxContainer2)
 	_on_WindowDialog_minimum_size_changed()
 	hide()
 	popup_centered()

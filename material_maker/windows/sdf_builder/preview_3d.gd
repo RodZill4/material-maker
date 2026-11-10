@@ -121,7 +121,7 @@ func _on_Preview3D_resized():
 		viewport.size = size
 		update_viewport()
 
-func navigation_input(ev) -> bool:
+func navigation_input(ev : InputEvent) -> bool:
 	if ! get_global_rect().has_point(get_global_mouse_position()):
 		return false
 	if ev is InputEventMouseMotion:
@@ -152,7 +152,26 @@ func navigation_input(ev) -> bool:
 			if zoom != 0.0:
 				camera.translate(Vector3(0.0, 0.0, zoom*(1.0 if ev.shift_pressed else 0.1)))
 			return true
+	elif ev is InputEventScreenDrag and ev.index == 0:
+		# one-finger drag: orbit
+		camera_rotation2.rotate_x(-0.01*ev.relative.y)
+		camera_rotation1.rotate_y(-0.01*ev.relative.x)
+		return true
+	elif ev is InputEventMagnifyGesture:
+		# two-finger pinch: zoom
+		camera.position.z /= ev.factor
+		return true
+	elif ev is InputEventPanGesture:
+		# two-finger pan: offset
+		var factor = camera.position.z
+		camera_position.translate(-factor/size.x*-4.0*ev.delta.x*camera.global_transform.basis.x)
+		camera_position.translate(factor/size.y*-4.0*ev.delta.y*camera.global_transform.basis.y)
+		return true
 	return false
+
+func _gui_input(event : InputEvent) -> void:
+	if event is InputEventMagnifyGesture or event is InputEventPanGesture:
+		_on_Background_input_event(null, event, null, null, null)
 
 func _on_Background_input_event(_camera, event, _position, _normal, _shape_idx):
 	if navigation_input(event):

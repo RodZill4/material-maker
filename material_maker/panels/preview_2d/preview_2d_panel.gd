@@ -57,6 +57,9 @@ var checker_brightness: int = 1:
 		material.set_shader_parameter("background_color_2", color_b)
 		mm_globals.set_config("preview"+config_var_suffix+"_checker_brightness", checker_brightness)
 
+const MIN_ZOOM : float = 0.005
+const MAX_ZOOM : float = 5.0
+
 const POSTPROCESS_OPTIONS : Array = [
 	{ name="None", function="preview_2d(uv)" },
 	{ name="Lowres 32x32", function="preview_2d((floor(uv*32.0)+vec2(0.5))/32.0)" },
@@ -259,6 +262,7 @@ func on_resized() -> void:
 
 var dragging : bool = false
 var zooming : bool = false
+var magnifying : bool = false
 
 func _input(event):
 	if event.is_pressed():
@@ -275,9 +279,9 @@ func _on_gui_input(event):
 		if event.pressed:
 			match event.button_index:
 				MOUSE_BUTTON_WHEEL_DOWN:
-					new_scale = min(new_scale*1.05, 5.0)
+					new_scale = min(new_scale*1.05, MAX_ZOOM)
 				MOUSE_BUTTON_WHEEL_UP:
-					new_scale = max(new_scale*0.95, 0.005)
+					new_scale = max(new_scale*0.95, MIN_ZOOM)
 				MOUSE_BUTTON_MIDDLE:
 					dragging = true
 				MOUSE_BUTTON_LEFT:
@@ -292,13 +296,21 @@ func _on_gui_input(event):
 		if dragging:
 			new_center = center-event.relative*view_scale/multiplier
 		elif zooming:
-			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), 0.005, 5.0)
-	elif event is InputEventPanGesture:
-		new_center = center-event.delta*10.0*view_scale/multiplier
+			new_scale = clamp(new_scale*(1.0+0.01*event.relative.y), MIN_ZOOM, MAX_ZOOM)
 	elif event is InputEventMagnifyGesture:
-		new_scale = clamp(new_scale/event.factor, 0.005, 5.0)
+		magnifying = true
+		new_scale = clampf(new_scale / event.factor, MIN_ZOOM, MAX_ZOOM)
+	elif event is InputEventScreenTouch and event.index == 1:
+		# two-finger tap: center view
+		if not event.pressed and mm_touch.last_touch_duration_msec < 80:
+			reset_view.call_deferred()
+	elif event is InputEventScreenDrag and event.index == 0:
+		new_center = center-event.relative * view_scale/multiplier
+	else:
+		magnifying = false
 	if new_scale != view_scale:
-		new_center = center+offset_from_center*(view_scale-new_scale)/multiplier
+		if not magnifying:
+			new_center = center+offset_from_center*(view_scale-new_scale)/multiplier
 		view_scale = new_scale
 		need_update = true
 	if new_center != center:

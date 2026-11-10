@@ -20,12 +20,13 @@ config/tags=PackedStringArray("material_maker")
 run/main_scene="res://parse_args.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="material_maker_2"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.7")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/show_image=false
-boot_splash/use_filter=false
 config/icon="res://icon.png"
 config/windows_native_icon="res://icon.ico"
+boot_splash/show_image=false
+boot_splash/use_filter=false
 config/release="1.8.0.0"
 config/actual_release="1.8"
 
@@ -35,6 +36,7 @@ driver/driver="Dummy"
 
 [autoload]
 
+mm_touch="*res://material_maker/touch.gd"
 mm_logger="*res://addons/material_maker/engine/logger.gd"
 mm_steam="*res://material_maker/steam.gd"
 mm_globals="*res://material_maker/globals.tscn"
@@ -60,9 +62,9 @@ window/size/borderless=true
 window/size/transparent=true
 window/size/window_width_override=1
 window/size/window_height_override=1
-window/per_pixel_transparency/allowed=true
 window/subwindows/embed_subwindows=false
-window/handheld/orientation.Android="sensor_landscape"
+window/per_pixel_transparency/allowed=true
+window/per_pixel_transparency/allowed.android=false
 
 [editor]
 
@@ -133,6 +135,11 @@ left_click={
 ]
 }
 
+[input_devices]
+
+pointing/android/enable_long_press_as_right_click=true
+pointing/android/enable_pan_and_scale_gestures=true
+
 [internationalization]
 
 rendering/root_node_layout_direction=1
@@ -156,6 +163,7 @@ limits/debugger/max_chars_per_second=204800000
 [rendering]
 
 rendering_device/driver.macos="vulkan"
+textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
 shading/overrides/force_lambert_over_burley.mobile=false
 environment/defaults/default_environment="res://default_env.tres"

@@ -4,16 +4,16 @@ var previous_color : Color
 
 signal color_changed_undo(c, previous)
 
-func _ready():
+func _ready() -> void:
 	custom_minimum_size = Vector2(22, 22)
 	connect("color_changed",Callable(self,"on_color_changed"))
 	connect("picker_created",Callable(self,"on_picker_created"))
 	connect("popup_closed",Callable(self,"on_popup_closed"))
 	get_popup().content_scale_factor = mm_globals.ui_scale_factor()
-	get_popup().min_size = get_popup().get_contents_minimum_size() * get_popup().content_scale_factor
 	get_popup().borderless = not mm_globals.get_config("color_picker_floating")
+	get_picker().presets_visible = mm_globals.get_config("color_picker_show_presets")
 
-func set_color(c):
+func set_color(c) -> void:
 	color = c
 
 func _get_drag_data(_position):

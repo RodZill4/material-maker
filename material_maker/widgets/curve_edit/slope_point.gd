@@ -8,16 +8,20 @@ var is_selected : bool = false
 
 const OFFSET = -Vector2(0, 0)
 
-func _ready():
-	pass # Replace with function body.
+func _ready() -> void:
+	if OS.get_name() == "Android":
+		offset_transform_scale = Vector2(2.5, 2.5)
+		offset_transform_visual_only = false
+		offset_transform_enabled = true
 
-func _draw():
+func _draw() -> void:
 	var current_theme : Theme = mm_globals.main_window.theme
 	var color : Color = current_theme.get_color("font_color", "Label")
 	var selected_color : Color = current_theme.get_color("icon_pressed_color", "Button")
-	draw_circle(custom_minimum_size*0.5, 3.0, selected_color if is_selected else color)
+	var adjusted_scale : float = offset_transform_scale.x
+	draw_circle(custom_minimum_size*0.5, 3.0 / adjusted_scale, selected_color if is_selected else color)
 	if hovering or is_selected:
-		draw_circle(custom_minimum_size*0.5, 6.0, color, false, 0.5, true)
+		draw_circle(custom_minimum_size*0.5, 6.0 / adjusted_scale, color, false, 0.5 / adjusted_scale, true)
 
 func _on_ControlPoint_gui_input(event : InputEvent):
 	if event is InputEventMouseButton:

@@ -12,6 +12,8 @@ func _ready():
 	content_scale_factor = mm_globals.ui_scale_factor()
 	min_size = Vector2(300, 100) * content_scale_factor
 
+	mm_touch.set_mobile_control_height($MarginContainer/VBoxContainer/HBoxContainer)
+
 
 func edit_parameter(wt : String, value : String, o : Object, m : String, ep : Array = [], ae : bool = false):
 	object = o
