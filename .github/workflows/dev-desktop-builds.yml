@@ -35,8 +35,8 @@ on:
 
 env:
   GODOT_VERSION: 4.8
-  GODOT_SUB: beta2
-  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.8-beta2
+  GODOT_SUB: beta3
+  GODOT_DOWNLOAD_DIR: https://github.com/godotengine/godot-builds/releases/download/4.8-beta3
   EXPORT_NAME: material_maker
   MM_RELEASE: 1_8
   EXPORT_TARGET_SUFFIX: "${{ github.event.inputs.steam == 'true' && ' Steam' || '' }}"
