@@ -242,6 +242,36 @@ jobs:
         with:
           name: macos_snapshot
           path: ./build/mac
+  build_windows_installer:
+    name: Build Windows Installer 📦
+    needs: export_windows_linux
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.artifacts == 'true' }}
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v7
+      - name: Setup 💻
+        run: |
+          mkdir -v -p ./build/
+          sudo apt-get update && sudo apt-get install -y python3 nsis
+      - name: Get Windows Build 🚀
+        uses: actions/download-artifact@v8
+        with:
+          name: windows_snapshot
+          path: ./build/
+      - name: Build Windows Installer 📦
+        run: |
+          sed -i '1s/# //' LICENSE.md
+          sed -i "s/VERSION_NAME/v${MM_RELEASE//_/.}/g" ./no_export/windows/materialmaker.nsi
+          unzip -a ./build/${EXPORT_NAME}_${MM_RELEASE}_windows.zip -d ./build/
+          mv ./build/"${EXPORT_NAME}_${MM_RELEASE}_windows"/* ./build/
+          makensis ./no_export/windows/materialmaker.nsi
+          mv ./no_export/windows/${EXPORT_NAME}_setup.exe ./build/${EXPORT_NAME}_${MM_RELEASE}_setup_x64.exe
+      - name: Upload Windows Installer Artifact 🚀
+        uses: actions/upload-artifact@v6
+        with:
+          name: windows_installer
+          path: ./build/${{ env.EXPORT_NAME }}_${{ env.MM_RELEASE }}_setup_x64.exe
   deploy_to_steam:
     name: Steam deploy 🎮
     runs-on: ubuntu-latest
