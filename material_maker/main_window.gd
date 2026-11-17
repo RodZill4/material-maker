@@ -123,7 +123,7 @@ const MENU : Array[Dictionary] = [
 	{ menu="Help/User manual", command="show_doc", shortcut="F1" },
 	{ menu="Help/Example projects", command="show_example_projects"},
 	{ menu="Help/Show selected library item documentation", command="show_library_item_doc", shortcut="Control+F1" },
-	{ menu="Help/Report a bug", command="bug_report" },
+	{ menu="Help/Report a bug", command="bug_report", not_in_ports=["Android"] }, #TODO remove not_in_ports for android when pr is ready
 	{ menu="Help/" },
 	{ menu="Help/About", command="about" }
 ]
@@ -132,11 +132,9 @@ enum WinTabletDriver { WININK, WINTAB, DISABLED }
 
 func _enter_tree() -> void:
 	mm_globals.main_window = self
-	if OS.get_name() == "Android":
-		ready.connect(android_setup_margins)
-		mm_globals.preferences_updated.connect(android_setup_margins)
-
 	if mm_globals.get_config("touch_optimization"):
+		mm_globals.preferences_updated.connect(android_setup_margins)
+		ready.connect(android_setup_margins)
 		android_setup_status_bar()
 
 func _ready() -> void:
@@ -272,7 +270,6 @@ func _ready() -> void:
 	if OS.get_name() == "Android":
 		# copy image node's default mm_icon.png
 		android_copy_examples("png")
-		tip_label.hide()
 
 var menu_update_requested : bool = false
 
@@ -1572,15 +1569,17 @@ func _on_Tip_Timer_timeout():
 # Add dialog
 
 func add_dialog(dialog : Window) -> void:
-	var opaque_dim : bool = mm_globals.should_dim_fullscreen(dialog)
-	if opaque_dim or mm_globals.get_config("dialog_dim_background"):
+	var should_fullscreen : bool = mm_globals.android_should_fullscreen(dialog)
+	if should_fullscreen or mm_globals.get_config("dialog_dim_background"):
 		var bg : ColorRect = ColorRect.new()
 		bg.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 		bg.color = theme.get_stylebox("panel", "Panel").bg_color
-		bg.color.a = 1.0 if opaque_dim else 0.8
-
+		bg.color.a = 1.0 if should_fullscreen else 0.8
 		get_tree().root.add_child(bg)
+
 		dialog.tree_exited.connect(bg.queue_free)
+		if should_fullscreen:
+			dialog.ready.connect(mm_touch.make_dialog_fullscreen.bind(dialog))
 	add_child(dialog)
 
 # Accept dialog

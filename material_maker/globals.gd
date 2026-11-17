@@ -9,10 +9,6 @@ var main_window : MainWindow
 signal preferences_updated
 
 
-const DEFAULT_DARK : int = 0
-const DEFAULT_LIGHT : int = 1
-const CLASSIC : int = 2
-
 var config : ConfigFile = ConfigFile.new()
 const DEFAULT_CONFIG : Dictionary = {
 	locale = "",
@@ -73,6 +69,7 @@ const DEFAULT_CONFIG : Dictionary = {
 	node_close_button = true,
 	ui_field_sensitivity = 1.0,
 	color_picker_floating = false,
+	color_picker_show_presets = true,
 	custom_theme_base_color = Color(0.22, 0.243, 0.294),
 	custom_theme_accent_color = Color(0.702, 0.631, 1.0),
 	custom_theme_contrast = 0.8,
@@ -92,6 +89,7 @@ const ANDROID_CONFIG : Dictionary[String, Variant] = {
 	touch_optimization = true,
 	touch_full_screen = true,
 	ui_3d_preview_generated_mesh = false,
+	color_picker_show_presets = false,
 }
 
 func _enter_tree() -> void:
@@ -285,19 +283,6 @@ func get_ui_scale() -> float:
 		return 2 if DisplayServer.screen_get_dpi() >= 192 and DisplayServer.screen_get_size().x >= 2048 else 1
 	return ui_scale
 
-## Returns current theme based on Main Window's theme resource path.
-func current_theme() -> int:
-	var t : String = main_window.theme.resource_path.get_file()
-	match t.trim_suffix(".tres").to_lower():
-		"default dark":
-			return DEFAULT_DARK
-		"default light":
-			return DEFAULT_LIGHT
-		"classic":
-			return CLASSIC
-		_:
-			return DEFAULT_DARK
-
 #region android utilties
 
 ## Creates a toast message.
@@ -336,8 +321,8 @@ func android_open_url(url : String) -> void:
 	b.modulate.a = 0
 	b.pressed.emit()
 
-func should_dim_fullscreen(window : Window) -> bool:
-	const dim : String = "android_fullscreen_dim"
-	return OS.get_name() == "Android" and window.has_meta(dim) and window.get_meta(dim)
+func android_should_fullscreen(window : Window) -> bool:
+	const fs : String = "android_fullscreen"
+	return OS.get_name() == "Android" and window.has_meta(fs) and window.get_meta(fs)
 
 #endregion

@@ -13,8 +13,14 @@ var long_press_timer : Timer
 # workaround for godot issue #123454 for Android 16
 var last_go_back_request : int = 0
 
+const BUTTON_HEIGHT : int = 32
+const SETTING_TOUCH_OPTIMIZATION : String = "touch_optimization"
+
+## Emitted when back button is pressed on Android.
+signal back_pressed()
+
 func _ready() -> void:
-	if OS.get_name() not in ["iOS", "Android"]:
+	if not DisplayServer.is_touchscreen_available():
 		set_process_input(false)
 	else:
 		if OS.get_name() == "Android":
@@ -99,9 +105,9 @@ func cutout_margins(side : Side, scale : float = mm_globals.get_ui_scale()) -> i
 	return ceili(_dispalay_cutout_margins[side] / scale)
 
 func make_dialog_fullscreen(window : Window, show : bool = false) -> void:
+	window.min_size = Vector2.ZERO
 	window.borderless = true
 	window.size = mm_globals.main_window.size
-	window.min_size = Vector2.ZERO
 	window.position = Vector2.ZERO
 	# offset by MM_MainBackground stylebox content margins
 	window.position.x += maxi(0, calc_margins(Side.SIDE_LEFT) - 10)
@@ -217,3 +223,7 @@ func _show_tooltip(at : Vector2, text : String) -> void:
 	tool_tip_panel.position = at.clamp(margin, vsize - tsize - margin)
 	tool_tip_panel.popup()
 	tool_tip_panel.popup_hide.connect(tool_tip_panel.queue_free)
+
+func set_mobile_control_height(c : Control) -> void:
+	if mm_globals.get_config(SETTING_TOUCH_OPTIMIZATION):
+		c.custom_minimum_size.y = BUTTON_HEIGHT

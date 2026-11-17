@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://d3h4xmek7b2vq" path="res://material_maker/windows/preferences/enum_option.gd" id="5_vp06c"]
 [ext_resource type="PackedScene" uid="uid://dk7ygrwx0h1k3" path="res://material_maker/windows/preferences/color_option.tscn" id="8_btfio"]
 [ext_resource type="Script" uid="uid://kac4whp71a8" path="res://material_maker/windows/preferences/enum_checklist.gd" id="9_7kd1x"]
+[ext_resource type="Script" uid="uid://c8mnypok072xm" path="res://material_maker/windows/preferences/preference_touch_hint.gd" id="10_lcx40"]
 
 [node name="Preferences" type="Window" unique_id=906006602]
 oversampling_override = 1.0
@@ -17,7 +18,7 @@ position = Vector2i(0, 36)
 size = Vector2i(700, 450)
 exclusive = true
 script = ExtResource("2")
-metadata/android_fullscreen_dim = true
+metadata/android_fullscreen = true
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1807450959]
 anchors_preset = 15
@@ -656,6 +657,23 @@ text = "On"
 flat = false
 config_variable = "color_picker_floating"
 
+[node name="ColorPickerPresets" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=697064263]
+layout_mode = 2
+
+[node name="LabelPickerPresets" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/ColorPickerPresets" unique_id=1859741716]
+layout_mode = 2
+text = "Show swatches and recent colors for color picker"
+
+[node name="ColorPickerPresets" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer/ColorPickerPresets" unique_id=1394913724 instance=ExtResource("1")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "When enabled, swatches and recent colors are visible in color picker."
+button_pressed = true
+text = "On"
+flat = false
+config_variable = "color_picker_show_presets"
+
 [node name="Spacer4" type="Control" parent="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/Graph/VBoxContainer" unique_id=2075313801]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
@@ -749,10 +767,8 @@ text = "Enable touch optimizations (requires restart)"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 10
-tooltip_text = "When enabled, this increases the touch area of scrollbars, makes vertical seperation between popup menu items
-larger, enables a touch dragger for panel splits etc. to increase usability on smaller screens.
-
-This is enabled by default on Android."
+tooltip_text = "When enabled, increases the touch area of scrollbars, makes vertical seperation between popup menu items
+larger, enables a touch dragger for panel splits etc. to increase usability on smaller screens."
 text = "On"
 flat = false
 config_variable = "touch_optimization"
@@ -777,7 +793,8 @@ config_variable = "touch_full_screen"
 [node name="PreferenceTouchHint" type="PanelContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=328849096]
 visible = false
 layout_mode = 2
-theme_type_variation = &"MM_PanelBackground"
+theme_type_variation = &"MM_PanelMenuSubPanel"
+script = ExtResource("10_lcx40")
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/PreferenceTouchHint" unique_id=508458780]
 layout_mode = 2
@@ -787,14 +804,15 @@ theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/PreferenceTouchHint/MarginContainer" unique_id=1664878493]
-custom_minimum_size = Vector2(0, 60)
-custom_maximum_size = Vector2(-1, 60)
+custom_minimum_size = Vector2(0, 64)
+custom_maximum_size = Vector2(-1, 64)
 layout_mode = 2
 
 [node name="TouchHintLabel" type="Label" parent="HSplitContainer/PreferencesPanel/VBoxContainer/PreferenceTouchHint/MarginContainer/ScrollContainer" unique_id=1926624238]
 custom_minimum_size = Vector2(1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 0
 autowrap_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer" unique_id=245791047]
@@ -803,21 +821,22 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer" unique_id=1234256494]
+[node name="Buttons" type="HBoxContainer" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer" unique_id=1234256494]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1772806855]
+[node name="Apply" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons" unique_id=1772806855]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Apply"
 
-[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2018521444]
+[node name="OK" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons" unique_id=2018521444]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "OK"
 
-[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer" unique_id=447674289]
+[node name="Cancel" type="Button" parent="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons" unique_id=447674289]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "Cancel"
@@ -829,6 +848,6 @@ text = "Cancel"
 [connection signal="minimum_size_changed" from="HSplitContainer/PreferencesPanel/VBoxContainer" to="." method="_on_VBoxContainer_minimum_size_changed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/InstallLanguage" to="." method="_on_InstallLanguage_pressed"]
 [connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/TabContainer/General/VBoxContainer/Language/HBoxContainer/DownloadLanguage" to="." method="_on_DownloadLanguage_pressed"]
-[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Apply" to="." method="_on_Apply_pressed"]
-[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/OK" to="." method="_on_OK_pressed"]
-[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/HBoxContainer/Cancel" to="." method="_on_Cancel_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons/Apply" to="." method="_on_Apply_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons/OK" to="." method="_on_OK_pressed"]
+[connection signal="pressed" from="HSplitContainer/PreferencesPanel/VBoxContainer/MarginContainer/Buttons/Cancel" to="." method="_on_Cancel_pressed"]

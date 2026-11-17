@@ -20,6 +20,9 @@ const OutputEditor = preload("res://material_maker/windows/node_editor/output.ts
 signal node_changed(model_data)
 signal editor_window_closed
 
+func _ready() -> void:
+	mm_touch.set_mobile_control_height($Sizer/HBoxContainer)
+
 func add_item(parent, scene) -> Node:
 	var object = scene.instantiate()
 	parent.add_child(object)

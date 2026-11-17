@@ -121,6 +121,7 @@ func select_color(cursor : GradientEditCursor) -> void:
 	color_picker.deferred_mode = true
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
+	color_picker.presets_visible = mm_globals.get_config("color_picker_show_presets")
 
 	if mm_globals.has_config("color_picker_color_mode"):
 		color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")

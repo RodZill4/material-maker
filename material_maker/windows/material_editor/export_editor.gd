@@ -35,6 +35,9 @@ func _ready():
 			button.add_theme_color_override("icon_focus_color", Color("656565"))
 			button.add_theme_color_override("icon_pressed_color", Color("656565"))
 
+	mm_touch.set_mobile_control_height($MarginContainer/VBoxContainer/HBoxContainer)
+
+
 func update_export_list() -> void:
 	export_target.clear()
 	for e in exports.keys():
