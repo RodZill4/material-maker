@@ -1,3 +1,4 @@
+class_name MMGraphDebug
 extends MMGraphNodeBase
 
 func _ready():

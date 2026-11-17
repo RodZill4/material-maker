@@ -195,8 +195,8 @@ func _notification(what : int) -> void:
 		setup_icons()
 
 func setup_icons() -> void:
-	$SendButton.texture_normal = owner.get_theme_icon("internet", "MM_Icons")
-	$ConnectButton.texture_normal = owner.get_theme_icon("logo", "MM_Icons")
+	$SendButton.texture_normal = mm_globals.main_window.get_theme_icon("internet", "MM_Icons")
+	$ConnectButton.texture_normal = mm_globals.main_window.get_theme_icon("logo", "MM_Icons")
 	$SendButton.texture_disabled = $SendButton.texture_normal
 	$ConnectButton.texture_disabled = $ConnectButton.texture_normal
 

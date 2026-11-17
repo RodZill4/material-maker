@@ -121,18 +121,20 @@ func select_color(cursor : GradientEditCursor) -> void:
 	color_picker.deferred_mode = true
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
+	color_picker.presets_visible = mm_globals.get_config("color_picker_show_presets")
 
 	if mm_globals.has_config("color_picker_color_mode"):
 		color_picker.color_mode = mm_globals.get_config("color_picker_color_mode")
 	if mm_globals.has_config("color_picker_shape"):
 		color_picker.picker_shape = mm_globals.get_config("color_picker_shape")
 
-	# find and focus/highlight hex code
-	for node in color_picker.get_child(0,true).get_child(0,true).get_children(true):
-		for hex in node.get_children(true):
-			if hex is LineEdit:
-				hex.grab_focus()
-				hex.select_all()
+	if OS.get_name() != "Android":
+		# find and focus/highlight hex code
+		for node in color_picker.get_child(0,true).get_child(0,true).get_children(true):
+			for hex in node.get_children(true):
+				if hex is LineEdit:
+					hex.grab_focus()
+					hex.select_all()
 
 	var content_scale_factor : float = mm_globals.ui_scale_factor()
 	color_picker_popup.content_scale_factor = content_scale_factor
@@ -279,7 +281,6 @@ func _on_popup_button_toggled(toggled_on: bool) -> void:
 
 		update_popup_position()
 		set_notify_transform(true)
-
 	else:
 		if is_instance_valid(popup):
 			popup.close()

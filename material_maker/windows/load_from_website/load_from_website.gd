@@ -25,6 +25,7 @@ func _ready() -> void:
 		$ImageHTTPRequestPool.add_child(HTTPRequest.new())
 
 	DirAccess.open("user://").make_dir_recursive("user://website_cache")
+	mm_touch.set_mobile_control_height($VBoxContainer/Buttons)
 
 func _on_ItemList_item_activated(index) -> void:
 	if only_return_index:

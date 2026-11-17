@@ -15,8 +15,20 @@ extends Node3D
 
 var mouse_start_position : Vector2
 
+var world_env : WorldEnvironment
+var parent_vp : SubViewport
+
 func _ready():
 	camera_path = camera_path
+
+	if has_node("../WorldEnvironment"):
+		world_env = get_node("../WorldEnvironment")
+
+	await get_tree().process_frame
+	for node in [get_parent(), get_parent().get_parent()]:
+		if node is SubViewport:
+			parent_vp = node
+			break
 
 func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 	if event is InputEventMouseMotion:
@@ -32,9 +44,13 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 			return true
 		elif event.button_mask & MOUSE_BUTTON_MASK_RIGHT != 0:
 			if event.shift_pressed:
-				var world_env : WorldEnvironment = get_node("../WorldEnvironment")
 				world_env.environment.sky_rotation.y += event.relative.x * 0.001
 			return false
+		elif event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0:
+			if event.device == InputEvent.DEVICE_ID_EMULATION:
+				camera_rotation2.rotate_x(-0.0125 * event.relative.y)
+				camera_rotation1.rotate_y(-0.0125 * event.relative.x)
+		return true
 	elif event is InputEventMouseButton:
 		if not event.is_command_or_control_pressed():
 			var zoom = 0.0
@@ -60,11 +76,16 @@ func process_event(event : InputEvent, viewport : Viewport = null) -> bool:
 			var factor : float = 0.01 * camera_position.position.z
 			camera_target_position.translate(-factor*event.delta.x*camera_position.global_transform.basis.x)
 			camera_target_position.translate(factor*event.delta.y*camera_position.global_transform.basis.y)
-		else:
+		elif OS.get_name() != "Android":
 			camera_rotation2.rotate_x(-0.05*event.delta.y)
 			camera_rotation1.rotate_y(-0.05*event.delta.x)
 		return true
 	elif event is InputEventMagnifyGesture:
 		camera_position.position.z /= event.factor
+		return true
+	elif event is InputEventScreenDrag:
+		if event.index == 0:
+			camera_rotation2.rotate_x(-4.0 * event.relative.y / parent_vp.size.x )
+			camera_rotation1.rotate_y(-4.0 * event.relative.x / parent_vp.size.y )
 		return true
 	return false

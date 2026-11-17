@@ -5,7 +5,6 @@
 [node name="Generic" type="GraphNode" unique_id=1189007728]
 offset_right = 95.0
 offset_bottom = 29.0
-scaling_menus = true
 title = "Generic"
 script = ExtResource("1")
 
