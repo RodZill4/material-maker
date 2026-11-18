@@ -1,5 +1,5 @@
+class_name MMGraphReroute
 extends MMGraphNodeMinimal
-
 
 const PREVIEW_SIZES : Array[int] = [ 0, 64, 128, 192]
 
