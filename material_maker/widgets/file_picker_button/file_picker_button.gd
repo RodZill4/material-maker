@@ -30,7 +30,6 @@ func _on_Control_pressed() -> void:
 	dialog.current_dir = path.get_base_dir()
 	for f in filters:
 		dialog.add_filter(f)
-	add_child(dialog)
 	var files = await dialog.select_files()
 	if files.size() == 1:
 		set_path(files[0])

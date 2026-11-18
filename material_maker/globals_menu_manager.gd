@@ -217,8 +217,6 @@ func create_menu(menu_def : Array, object : Object, menu_name : String, menu : M
 	for i in menu_def.size():
 		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
 			continue
-		if menu_def[i].has("not_in_ports") and menu_def[i].not_in_ports.find(OS.get_name()) != -1:
-			continue
 		if menu_def[i].has("standalone_only") and menu_def[i].standalone_only and Engine.is_editor_hint():
 			continue
 		if menu_def[i].has("editor_only") and menu_def[i].editor_only and !Engine.is_editor_hint():

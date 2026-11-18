@@ -27,6 +27,12 @@
 		{
 			"from": "shader_1",
 			"from_port": 0,
+			"to": "buffer_3",
+			"to_port": 0
+		},
+		{
+			"from": "buffer_3",
+			"from_port": 0,
 			"to": "gen_outputs",
 			"to_port": 0
 		}
@@ -42,15 +48,15 @@
 		{
 			"name": "gen_parameters",
 			"node_position": {
-				"x": -720,
-				"y": -200
+				"x": -720.0,
+				"y": -200.0
 			},
 			"parameters": {
-				"buffer": 1,
+				"buffer": 1.0,
 				"resolution": 10,
-				"size": 6
+				"size": 6.0
 			},
-			"seed": 56582,
+			"seed": 56582.0,
 			"type": "remote",
 			"widgets": [
 				{
@@ -63,6 +69,10 @@
 						{
 							"node": "shader_1",
 							"widget": "s"
+						},
+						{
+							"node": "buffer_3",
+							"widget": "size"
 						}
 					],
 					"longdesc": "Resolution used to sample the input",
@@ -87,14 +97,14 @@
 						"False": [
 							{
 								"node": "switch",
-								"value": 0,
+								"value": 0.0,
 								"widget": "source"
 							}
 						],
 						"True": [
 							{
 								"node": "switch",
-								"value": 1,
+								"value": 1.0,
 								"widget": "source"
 							}
 						]
@@ -116,65 +126,61 @@
 		{
 			"name": "gen_outputs",
 			"node_position": {
-				"x": -400,
-				"y": 40
+				"x": -400.0,
+				"y": 40.0
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Filtered Image",
 					"name": "out",
 					"shortdesc": "Output",
 					"type": "rgb"
 				}
 			],
-			"seed": -6314,
+			"seed": -6314.0,
 			"type": "ios"
 		},
 		{
 			"name": "gen_inputs",
 			"node_position": {
-				"x": -1080,
-				"y": 40
+				"x": -1080.0,
+				"y": 40.0
 			},
-			"parameters": {
-
-			},
+			"parameters": {},
 			"ports": [
 				{
-					"group_size": 0,
+					"group_size": 0.0,
 					"longdesc": "Input image",
 					"name": "in",
 					"shortdesc": "Input",
 					"type": "rgb"
 				}
 			],
-			"seed": 12483,
+			"seed": 12483.0,
 			"seed_locked": true,
 			"type": "ios"
 		},
 		{
 			"name": "switch",
 			"node_position": {
-				"x": -640,
-				"y": 140
+				"x": -640.0,
+				"y": 140.0
 			},
 			"parameters": {
-				"choices": 2,
-				"outputs": 1,
-				"source": 1
+				"choices": 2.0,
+				"outputs": 1.0,
+				"source": 1.0
 			},
-			"seed": -53264,
+			"seed": -53264.0,
 			"type": "switch"
 		},
 		{
 			"name": "buffer_2",
 			"node_position": {
-				"x": -900,
-				"y": 160
+				"x": -900.0,
+				"y": 160.0
 			},
 			"parameters": {
 				"size": 10
@@ -186,12 +192,12 @@
 		{
 			"name": "shader_1",
 			"node_position": {
-				"x": -660,
-				"y": 40
+				"x": -660.0,
+				"y": 40.0
 			},
 			"parameters": {
 				"s": 10,
-				"size": 6
+				"size": 6.0
 			},
 			"seed_int": 0,
 			"shader_model": {
@@ -298,32 +304,49 @@
 				],
 				"parameters": [
 					{
-						"default": 10,
-						"first": 4,
+						"default": 10.0,
+						"first": 4.0,
 						"label": "",
-						"last": 13,
+						"last": 13.0,
 						"name": "s",
 						"type": "size"
 					},
 					{
 						"control": "None",
-						"default": 10,
+						"default": 10.0,
 						"label": "Size",
-						"max": 50,
-						"min": 1,
+						"max": 50.0,
+						"min": 1.0,
 						"name": "size",
-						"step": 1,
+						"step": 1.0,
 						"type": "float"
 					}
 				]
 			},
 			"type": "shader"
+		},
+		{
+			"name": "buffer_3",
+			"node_position": {
+				"x": -413.416748046875,
+				"y": 181.083343505859
+			},
+			"parameters": {
+				"size": 10
+			},
+			"seed_int": 0,
+			"type": "buffer",
+			"version": 1
 		}
 	],
 	"parameters": {
-		"buffer": 1,
+		"buffer": 1.0,
 		"resolution": 10,
-		"size": 6
+		"size": 6.0
+	},
+	"scroll_offset": {
+		"x": -1048.41674804688,
+		"y": -258.916656494141
 	},
 	"seed_int": 0,
 	"shortdesc": "Generalized Kuwahara Filter",

@@ -118,8 +118,7 @@ func apply_environment(index: int, e: Environment, s: DirectionalLight3D, bg_col
 
 	if bg_color != Color.TRANSPARENT or force_color:
 		custom_bg_color = true
-
-		e.background_mode = Environment.BG_COLOR
+		e.background_mode = Environment.BG_CLEAR_COLOR
 		e.background_color = bg_color
 		e.background_energy_multiplier = 1
 	elif env.show_color:
@@ -204,6 +203,8 @@ func _physics_process(_delta) -> void:
 	progress_window.set_progress(float($HTTPRequest.get_downloaded_bytes())/float($HTTPRequest.get_body_size()))
 
 func set_hdr(index, hdr_path) -> bool:
+	if not FileAccess.file_exists(hdr_path):
+		return false
 	print("Setting hdr "+hdr_path)
 	var hdr_image : Image = Image.load_from_file(hdr_path)
 	if hdr_image == null:

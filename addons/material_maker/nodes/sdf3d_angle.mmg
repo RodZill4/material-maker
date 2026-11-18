@@ -38,7 +38,7 @@
 		"parameters": [
 			{
 				"default": 0,
-				"label": "",
+				"label": "Axis",
 				"longdesc": "The axis of the angle",
 				"name": "axis",
 				"shortdesc": "Axis",
@@ -61,7 +61,7 @@
 			{
 				"control": "None",
 				"default": 180,
-				"label": "",
+				"label": "Angle",
 				"longdesc": "The angle of the shape",
 				"max": 360,
 				"min": 0,

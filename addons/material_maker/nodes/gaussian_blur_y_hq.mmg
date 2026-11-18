@@ -1,0 +1,97 @@
+{
+	"name": "gaussian_blur_y_hq",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {
+		"quality": 100.0,
+		"sigma": 0.2,
+		"size": 11.0
+	},
+	"seed": 12279.0,
+	"seed_locked": true,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(1.0)",
+				"function": true,
+				"label": "",
+				"name": "in",
+				"type": "rgba"
+			},
+			{
+				"default": "1.0",
+				"function": true,
+				"label": "",
+				"name": "amount",
+				"type": "f"
+			}
+		],
+		"instance": [
+			"vec4 $(name)_fct(vec2 uv) {",
+			"\tfloat e = 1.0/$size;",
+			"\tfloat scaled_sigma = $sigma/10.0;",
+			"\t//range based on 68–95–99.7 rule",
+			"\tfloat sampling_range = scaled_sigma*3.0;",
+			"\tvec4 rv = vec4(0.0);",
+			"\tfloat sum = 0.0;",
+			"\tfloat sigma = max(0.000015, scaled_sigma*$amount(uv));",
+			"\tfloat mapped_quality = 1.0 + ($quality - 1.0) * ($size - 1.0) / (100.0 - 1.0);",
+			"\t",
+			"\tfloat step_size = max(e,1.0/mapped_quality);",
+			"\t//maxium number of loop iterations = 1024",
+			"\tstep_size = max(sampling_range*2.0/1024.0,step_size);",
+			"\tstep_size -= mod(step_size, e);",
+			"\tfloat coef_diff = 6.28318530718*sigma*sigma;",
+			"\tfor (float i = -sampling_range; i <= sampling_range; i += step_size) {",
+			"\t\tfloat i_sigma = i/sigma;",
+			"\t\tfloat coef = exp(-0.5*i_sigma*i_sigma)/coef_diff;",
+			"\t\trv += $in(uv+vec2(0.0, i))*coef;",
+			"\t\tsum += coef;",
+			"\t}",
+			"\treturn rv/sum;",
+			"}"
+		],
+		"name": "gaussian_blur_y_hq",
+		"outputs": [
+			{
+				"rgba": "$(name)_fct($uv)",
+				"type": "rgba"
+			}
+		],
+		"parameters": [
+			{
+				"default": 9,
+				"first": 4,
+				"label": "Size",
+				"last": 12,
+				"name": "size",
+				"type": "size"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Sigma",
+				"max": 2.0,
+				"min": 0.0,
+				"name": "sigma",
+				"step": 0.01,
+				"type": "float"
+			},
+			{
+				"control": "None",
+				"default": 0.5,
+				"label": "Quality",
+				"max": 100.0,
+				"min": 1.0,
+				"name": "quality",
+				"step": 1.0,
+				"type": "float"
+			}
+		]
+	},
+	"type": "shader"
+}

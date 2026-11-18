@@ -1,3 +1,4 @@
+class_name PreviewMesh
 extends MeshInstance3D
 
 

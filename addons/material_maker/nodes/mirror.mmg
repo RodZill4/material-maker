@@ -45,7 +45,7 @@
 		"parameters": [
 			{
 				"default": 0,
-				"label": "",
+				"label": "Direction",
 				"longdesc": "The mirror direction (horizontal or vertical)",
 				"name": "direction",
 				"shortdesc": "Direction",
@@ -64,7 +64,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Offset",
 				"longdesc": "The offset from the center",
 				"max": 1,
 				"min": 0,

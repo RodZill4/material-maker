@@ -37,7 +37,7 @@
 			{
 				"control": "Scale1.x",
 				"default": 1,
-				"label": "",
+				"label": "Scale",
 				"longdesc": "The scale factor",
 				"max": 5,
 				"min": 0,

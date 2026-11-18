@@ -23,10 +23,11 @@
 	"Filter/Swap Channels": "shuffle,change,bind",
 	"3D/Texture/Tonality": "curves",
 	"3D/Texture/Tones": "levels",
-	"3D/Texture/Tones/Step": "threshold",
+	"3D/Texture/Tones/Step": "threshold,scan,histogram scan",
 	"Filter/Tonality": "curves",
 	"Filter/Tones": "levels",
-	"Filter/Tones/Step": "threshold",
+	"Filter/Tones/Step": "threshold,scan,histogram scan",
+	"Filter/Tones/Range":"select, histogram select",
 	"Filter/Dilate": "distance",
 	"Miscellaneous/Buffer": "pause,wait,optimize",
 	"Miscellaneous/Variations/Color": "colour",
@@ -92,5 +93,6 @@
 	"Transform/Warp": "distortion,deform,shift,push",
 	"Transform/Circle Map": "polar",
 	"Transform/Inverse Circle Map": "cartesian",
-	"Filter/Quantize": "posterize"
+	"Filter/Quantize": "posterize",
+	"Filter/Set Alpha": "alpha,mask"
 }

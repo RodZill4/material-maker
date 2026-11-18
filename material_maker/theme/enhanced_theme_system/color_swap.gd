@@ -1,19 +1,21 @@
 class_name ColorSwap
 extends Resource
 
-@export var name := ""
+@export var name : String = ""
 
-@export var orig := Color():
+## Original color to be replaced
+@export var orig : Color = Color():
 	set(val):
 		orig = val
 		emit_changed()
 
-@export var target := Color():
+## Replacement color
+@export var target : Color = Color():
 	set(val):
 		target = val
 		emit_changed()
 
 
-func _init(_orig:=Color(), _target:=Color()):
+func _init(_orig : Color =Color(), _target : Color =Color()) -> void:
 	orig = _orig
 	target = _target

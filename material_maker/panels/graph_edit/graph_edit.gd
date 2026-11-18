@@ -89,12 +89,6 @@ func _ready() -> void:
 		add_valid_connection_type(42, t)
 	node_popup.about_to_popup.connect(func(): valid_drag_cut_entry = false)
 
-	# workaround for godot issue 120454
-	for node in get_children(true):
-		if "GraphEditFilter" in node.name:
-			node.get_child(0).use_parent_material = false
-			break
-
 func _exit_tree():
 	remove_crash_recovery_file()
 
@@ -106,14 +100,6 @@ func get_project_type() -> String:
 func get_graph_edit():
 	return self
 
-
-func do_zoom(factor : float):
-	accept_event()
-	var old_zoom : float = zoom
-	zoom *= factor
-	var global_mouse_position = offset_from_global_position(get_global_transform() * get_local_mouse_position())
-	await get_tree().process_frame
-	scroll_offset += (zoom/old_zoom-1.0)*old_zoom*global_mouse_position
 
 var port_click_node : GraphNode
 var port_click_port_index : int = -1
@@ -249,20 +235,7 @@ func _gui_input(event) -> void:
 		if selected_nodes.size() == 1 and selected_nodes[0].generator is MMGenGraph:
 			update_view(selected_nodes[0].generator)
 	elif event is InputEventMouseButton:
-		# reverted to default GraphEdit behavior
-		if false and event.button_index == MOUSE_BUTTON_WHEEL_UP and event.is_pressed():
-			if event.control:
-				event.control = false
-			elif !event.shift_pressed:
-				event.control = true
-				do_zoom(1.1)
-		elif false and event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.is_pressed():
-			if event.control:
-				event.control = false
-			elif !event.shift_pressed:
-				event.control = true
-				do_zoom(1.0/1.1)
-		elif event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			valid_drag_cut_entry = true
 			if event.is_command_or_control_pressed() and event.shift_pressed:
 				create_portals()
@@ -326,12 +299,6 @@ func _gui_input(event) -> void:
 					minimize_selection()
 				KEY_DELETE,KEY_BACKSPACE,KEY_X:
 					remove_selection()
-				KEY_C:
-					if OS.get_name() == "macOS":
-						center_view()
-				KEY_MASK_ALT | KEY_S:
-					if OS.get_name() == "macOS":
-						swap_node_inputs()
 				KEY_LEFT:
 					scroll_offset.x -= 0.5*size.x
 					accept_event()
@@ -368,6 +335,26 @@ func _gui_input(event) -> void:
 				_ when event.unicode >= KEY_0 and event.unicode <= KEY_9:
 					if get_nodes_under_mouse().is_empty():
 						quick_bar_shortcuts(event)
+
+			# macOS global menu does not support single-key accelerators
+			# and they also require Cmd/Ctrl to be present in them to work
+			# see https://github.com/godotengine/godot/issues/108622
+			# As a workaround the menu items are invoked here
+			if OS.get_name() == "macOS":
+				match scancode_with_modifiers:
+					KEY_C:
+						center_view()
+					KEY_MASK_ALT | KEY_S:
+						swap_node_inputs()
+					KEY_Q:
+						straighten_connections()
+					KEY_MASK_SHIFT | KEY_W:
+						align_top()
+					KEY_MASK_SHIFT | KEY_A:
+						align_start()
+					KEY_MASK_SHIFT | KEY_D:
+						align_end()
+
 		match event.get_keycode():
 			KEY_SHIFT, KEY_CTRL, KEY_ALT:
 				var found_tip : bool = false
@@ -729,8 +716,6 @@ func update_tab_title() -> void:
 	var title = "[unnamed]"
 	if not save_path.is_empty():
 		title = save_path.right(-(save_path.rfind("/")+1))
-		if generator:
-			generator.set_meta("file_path", title)
 	if need_save:
 		title += " *"
 	if get_parent().has_method("set_tab_title"):
@@ -1021,6 +1006,7 @@ func save_as() -> bool:
 	return false
 
 func save_file(filename : String) -> bool:
+	generator.set_meta("file_path", filename)
 	mm_loader.current_project_path = filename.get_base_dir()
 	var data = top_generator.serialize()
 	data["project_thumbnail"] = await generate_project_thumbnail()
@@ -1115,10 +1101,12 @@ func remove_selection() -> void:
 	undoredo_create_step("Delete nodes", generator.get_hier_name(), prev, next)
 
 func minimize_selection() -> void:
+	undoredo.start_group()
 	for c in get_children():
 		if c is GraphElement and c.selected:
 			if c.has_method("on_minimize_pressed"):
 				c.on_minimize_pressed()
+	undoredo.end_group()
 
 # Maybe move this to gen_graph...
 func serialize_selection(nodes = [], with_inputs : bool = false) -> Dictionary:
@@ -1168,10 +1156,10 @@ func do_paste(data) -> void:
 	var node_position = scroll_offset+0.5*size
 	if Rect2(Vector2(0, 0), size).has_point(get_local_mouse_position()):
 		node_position = offset_from_global_position(get_global_mouse_position())
+	var new_nodes = await create_nodes(data, node_position)
 	for c in get_children():
 		if c is GraphElement:
 			c.selected = false
-	var new_nodes = await create_nodes(data, node_position)
 	if new_nodes != null:
 		for c in new_nodes:
 			c.selected = true
@@ -1451,7 +1439,7 @@ func check_previews() -> void:
 		emit_signal("preview_changed", self)
 
 func on_drop_image_file(file_name : String) -> void:
-	do_paste({type="image", image=file_name})
+	do_paste({type="image", image=file_name, filter=true})
 
 
 func _on_Description_descriptions_changed(short_description, long_description):
@@ -2227,3 +2215,53 @@ func _on_button_reroll_pressed() -> void:
 
 func _on_button_reroll_mouse_entered() -> void:
 	mm_globals.set_tip_text("#LMB: Reroll all nodes, Shift+#LMB: Reroll selected nodes")
+
+func align_start() -> void:
+	var nodes : Array = get_selected_nodes()
+	var min_offset : float = INF
+
+	for node : GraphElement in nodes:
+		min_offset = minf(min_offset, node.position_offset.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = min_offset
+
+func align_end() -> void:
+	var nodes : Array = get_selected_nodes()
+	var max_offset : float = -INF
+
+	for node : GraphElement in nodes:
+		max_offset = maxf(max_offset, node.position_offset.x + node.size.x)
+	for node : GraphElement in nodes:
+		node.position_offset.x = max_offset - node.size.x
+
+func align_top() -> void:
+	var nodes : Array = get_selected_nodes().filter(func(n) -> bool: return n is GraphNode)
+	nodes.sort_custom(func(a: GraphNode, b: GraphNode):
+			return a.position_offset.x < b.position_offset.x)
+	for node in nodes:
+		node.position_offset.y = nodes[0].position_offset.y
+
+func straighten_connections() -> void:
+	# basic connection straightening
+	# expects selected nodes to be connected along a line
+	# and connections are made from left to right(in/out port position)
+	var nodes : Array = get_selected_nodes().filter(func(n) -> bool: return n is GraphNode)
+	if nodes.size() < 2:
+		return
+	nodes.sort_custom(func(a, b) -> bool:
+			return a.position_offset.x < b.position_offset.x)
+	for i in nodes.size() - 1:
+		var from_node : MMGraphNodeMinimal = nodes[i]
+		var to_node : MMGraphNodeMinimal = nodes[i + 1]
+		var conns : Array[Dictionary]
+		for c in connections:
+			if c.to_node == to_node.name:
+				conns.append(c)
+		if conns.is_empty():
+			return
+		for conn in conns:
+			if conn.from_node == from_node.name:
+				var from_pos_y = from_node.get_output_port_position(conn.from_port).y + from_node.position_offset.y
+				var to_pos_y = to_node.get_input_port_position(conn.to_port).y + to_node.position_offset.y
+				var y_diff = to_pos_y - from_pos_y
+				to_node.position_offset.y -= y_diff

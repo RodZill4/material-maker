@@ -21,6 +21,14 @@ const GENERIC_ICON : Texture2D = preload("res://material_maker/icons/add_generic
 func _ready() -> void:
 	super._ready()
 	add_to_group("updated_from_locale")
+	
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(preview_timer):
+			preview_timer.stop()
+			preview_timer.queue_free()
+		if is_instance_valid(preview):
+			preview.queue_free()
 
 func init_buttons():
 	super.init_buttons()
@@ -136,7 +144,7 @@ static func update_control_from_parameter(parameter_controls : Dictionary, p : S
 			o.color = MMType.deserialize_value(v)
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.path = v
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+		elif o is ImagePickerButton:
 			o.do_set_image_path(v)
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			var gradient : MMGradient = MMGradient.new()
@@ -199,7 +207,7 @@ static func initialize_controls_from_generator(control_list, gen, object) -> voi
 			o.connect("color_changed_undo",Callable(object,"_on_color_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/file_picker_button/file_picker_button.tscn":
 			o.connect("file_selected",Callable(object,"_on_file_changed").bind( o.name ))
-		elif o is Control and o.scene_file_path == "res://material_maker/widgets/image_picker_button/image_picker_button.tscn":
+		elif o is ImagePickerButton:
 			o.connect("on_file_selected",Callable(object,"_on_file_changed").bind( o.name ))
 		elif o is Control and o.scene_file_path == "res://material_maker/widgets/gradient_editor/gradient_edit.tscn":
 			o.connect("updated",Callable(object,"_on_gradient_changed").bind( o.name ))
@@ -310,6 +318,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.min_size = p.first
 		control.max_size = p.last
 		control.size_value = p.first if !p.has("default") else p.default
+		control.add_theme_font_size_override("font_size", 13)
 	elif p.type == "enum":
 		control = preload("res://material_maker/widgets/option_edit/option_edit.tscn").instantiate()
 		for i in range(p.values.size()):
@@ -318,6 +327,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 			control.selected = 0 if !p.has("default") else p.default
 		control.custom_minimum_size.x = 80
 		control.fit_to_longest_item = false
+		control.add_theme_font_size_override("font_size", 13)
 	elif p.type == "boolean":
 		control = CheckBox.new()
 		control.theme_type_variation = "MM_NodeCheckbox"
@@ -330,6 +340,7 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control.custom_minimum_size.x = 80
 	elif p.type == "curve":
 		control = preload("res://material_maker/widgets/curve_edit/curve_edit.tscn").instantiate()
+		control.custom_minimum_size.y = 22
 	elif p.type == "polygon":
 		control = preload("res://material_maker/widgets/polygon_edit/polygon_edit.tscn").instantiate()
 	elif p.type == "polyline":
@@ -343,12 +354,13 @@ static func create_parameter_control(p : Dictionary, accept_float_expressions : 
 		control = preload("res://material_maker/widgets/lattice_edit/lattice_edit.tscn").instantiate()
 	elif p.type == "string":
 		control = TextLineEdit.new()
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size = Vector2(80, 22)
+		control.add_theme_font_size_override("font_size", 13)
 	elif p.type == "image_path":
 		control = preload("res://material_maker/widgets/image_picker_button/image_picker_button.tscn").instantiate()
 	elif p.type == "file":
 		control = preload("res://material_maker/widgets/file_picker_button/file_picker_button.tscn").instantiate()
-		control.custom_minimum_size.x = 80
+		control.custom_minimum_size = Vector2(80, 22)
 		if p.has("filters"):
 			for f in p.filters:
 				control.add_filter(f)

@@ -36,7 +36,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Radius",
 				"longdesc": "The length of the dilate operation",
 				"max": 1,
 				"min": 0,

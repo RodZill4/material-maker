@@ -28,7 +28,7 @@
 		"parameters": [
 			{
 				"default": 2,
-				"label": "",
+				"label": "Axis",
 				"longdesc": "The axis of the plane",
 				"name": "axis",
 				"shortdesc": "Axis",

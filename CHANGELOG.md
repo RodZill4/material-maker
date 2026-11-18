@@ -1,3 +1,86 @@
+# Material Maker 1.8
+
+## User interface
+
+- Added sub-node searching for node items (contributed by williamchange)
+- Added a custom theme with base color option (contributed by williamchange)
+- Improved pixels editor (contributed by williamchange)
+- Implemented center offset on mac with two-finger pan + Shift key (contributed by williamchange)
+- Made generated meshes optional, enabled by default (contributed by williamchange)
+- Added a modifier to adjust sliding sensitivity (contributed by williamchange)
+- Added export for 8 lines spritesheet (contributed by williamchange)
+- Added a button to clear the console (contributed by williamchange)
+- Pre-fill material export filename from saved project (contributed by williamchange)
+- Improved render counter (contributed by williamchange)
+- Defined node title as default library item name (contributed by williamchange)
+- Added button to toggle nearest filtering in reference panel (contributed by williamchange)
+- Improved alignment shortcuts (contributed by williamchange)
+
+## Nodes
+
+- Added an Auto Export node that exports its input whenever it changes
+- Added a high quality Gaussian Blur (contributed by Wojtekpil and williamchange)
+- Added a Crop node (contributed by williamchange)
+- Added a Trimsheet node
+- Added instance position output to Tiler and Splatter nodes
+- Added support for switching switch inputs by clicking on input labels (contributed by williamchange)
+- Added parameter labels to most nodes that were missing labels (By DeerUwU)
+- Added an option to disable filtering for image node (contributed by williamchange)
+- Updated clouds noise node (contributed by williamchange)
+- Exposed Fill <-> RGBA conversion nodes (contributed by williamchange)
+
+## Miscellaneous
+
+- Upgraded Godot to 4.7.2 (contributed by williamchange)
+- Updated library thumbnail for Tex3D Invert node (contributed by williamchange)
+- Enabled deferred mode for GradientEdit color picker (contributed by williamchange)
+- Optimized the post process panel (contributed by williamchange)
+- Optimized zooming performance (contributed by williamchange)
+- Optimized SVG files (contributed by williamchange)
+- Optimized the share button shader (contributed by williamchange)
+- Added a couple new aliases (contributed by audiotrope)
+- Normalized control heights (contributed by williamchange)
+
+## Bug fixes
+
+- Forced left-to-right layout (contributed by williamchange)
+- Fixed problem that caused previews to vanish when zooming out the graph (contributed by williamchange)
+- Added missing TAU in HLSL definitions (contributed by williamchange)
+- Fixed remote link not updating when interacting with the graph (contributed by williamchange)
+- Fixed smooth curvature node size not linked to fast blur (contributed by williamchange)
+- Fixed MenuBar blocking gizmos from receiving input in Preview2D panel (contributed by williamchange)
+- Prevented infinite loop when cancelling load custom mesh dialog (contributed by williamchange)
+- Fixed classic theme missing item focus in add node popup (contributed by williamchange)
+- Fixed Tex3D Blend node (contributed by williamchange)
+- Fixed mesh configuration panel scale (contributed by williamchange)
+- Fixed upload dialog content scale factor (contributed by williamchange)
+- Fixed non-existent popup_hide signal connection errors (contributed by williamchange)
+- Added missing short/long descriptions for Colorspace Roundtrip (contributed by williamchange)
+- Fixed HDR read error (contributed by williamchange)
+- Fixed typo in gaussian blur direction description and doc format for various nodes 32-bit parameters (contributed by williamchange)
+- Made value stepping consistent for sdCross, sdStar5 and 3d pyramid nodes (contributed by williamchange)
+- Removed unused Blend node in Smooth Curvature 2 (contributed by williamchange)
+- Create output directory when it doesn't exist in command line mode
+- Fixed FileDialog context menu position (contributed by williamchange)
+- Fixed orphaned background nodes when creating dialogs (contributed by williamchange)
+- Fixed orphaned tab nodes in flexible layout (contributed by DevFika)
+- Free dynamically added preview nodes on deletion of generic graph nodes (contributed by DevFika)
+- Removed unused zoom handling code in graph input (contributed by williamchange)
+- Fixed crash when saving all projects (contributed by williamchange)
+- Fixed clear background not applying correctly in the 3D preview (contributed by williamchange)
+- Fixed crash selecting pixels when 2D preview is hidden (contributed by williamchange)
+- Fixed minimize actions not grouped for undo/redo (contributed by williamchange)
+- Fixed tones node not respecting close button visibility preference (contributed by williamchange)
+- Fixed missing buffer before output in generalized kuwahara node (contributed by williamchange)
+- Fixed redundant add_child call after instantiating file dialog scene (contributed by williamchange)
+- Removed redundant check for not_in_ports in globals_menu_manager.gd (contributed by williamchange)
+- Properly set audio driver to Dummy (contributed by williamchange)
+- Fixed loading theme causing app to hang in some cases (contributed by williamchange)
+- Fixed comment nodes added from quick access not framing properly (contributed by williamchange)
+- Limited font size changes to only node controls (contributed by williamchange)
+- Fixed environment not set properly when Preview3D loads (contributed by williamchange)
+- Fixed --size parameter in command-line export (contributed by williamchange)
+
 # Material Maker 1.7
 
 ## General

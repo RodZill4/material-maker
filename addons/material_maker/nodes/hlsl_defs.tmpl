@@ -1,3 +1,5 @@
+#define PI 3.14159265359
+#define TAU 2.0*PI
 #define hlsl_atan(x,y) atan2(x, y)
 #define mod(x,y) ((x)-(y)*floor((x)/(y)))
 
@@ -90,4 +92,3 @@ inline float4 tofloat4(float2 xy, float z, float w) {
 inline float2x2 tofloat2x2(float2 v1, float2 v2) {
     return float2x2(v1.x, v1.y, v2.x, v2.y);
 }
-

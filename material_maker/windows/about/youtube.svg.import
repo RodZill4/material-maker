@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/youtube.svg-db3de3f378029931964b0e5d9f49f0df.
 base_scale=1.0
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true

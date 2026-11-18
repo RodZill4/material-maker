@@ -1,23 +1,21 @@
+class_name ImagePickerButton
 extends PanelContainer
 
+var image_path : String = ""
+var filetime : int = 0
 
-var image_path := ""
-var filetime: int = 0
-
-signal on_file_selected(f)
-
+signal on_file_selected(f : String)
 
 func _ready() -> void:
 	%Image.custom_minimum_size = Vector2(64, 64)
 	_on_mouse_exited()
-
 
 func update_image() -> void:
 	if %Image.texture == null:
 		%Image.texture = ImageTexture.new()
 
 	if FileAccess.file_exists(image_path):
-		var image: Image = Image.new()
+		var image : Image = Image.new()
 		if image_path.get_extension() == "dds":
 			image.load_dds_from_buffer(FileAccess.get_file_as_bytes(image_path))
 		else:
@@ -25,14 +23,12 @@ func update_image() -> void:
 		%Image.texture.set_image(image)
 		queue_redraw()
 
-
-func _gui_input(event: InputEvent) -> void:
+func _gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		# Open dialog on mouse button key up to allow drag to register
 		open_image_dialog()
 
-
-func do_set_image_path(path:String) -> void:
+func do_set_image_path(path : String) -> void:
 	if path == null:
 		return
 	image_path = path
@@ -40,17 +36,20 @@ func do_set_image_path(path:String) -> void:
 	tooltip_text = path
 	filetime = get_filetime(image_path)
 
+func set_filter(should_filter : bool) -> void:
+	if should_filter:
+		texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	else:
+		texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
-func set_image_path(path:String) -> void:
+func set_image_path(path : String) -> void:
 	do_set_image_path(path)
 	emit_signal("on_file_selected", path)
 
-
-func get_filetime(file_path: String) -> int:
+func get_filetime(file_path : String) -> int:
 	if FileAccess.file_exists(file_path):
 		return FileAccess.get_modified_time(file_path)
 	return 0
-
 
 func open_image_dialog() -> void:
 	var dialog = preload("res://material_maker/windows/file_dialog/file_dialog.tscn").instantiate()
@@ -74,10 +73,8 @@ func open_image_dialog() -> void:
 	if files.size() > 0:
 		set_image_path(files[0])
 
-
 func on_drop_image_file(file_name : String) -> void:
 	set_image_path(file_name)
-
 
 func _on_timer_timeout() -> void:
 	var new_filetime : int = get_filetime(image_path)
@@ -85,24 +82,19 @@ func _on_timer_timeout() -> void:
 		update_image()
 		filetime = new_filetime
 
-
 func _on_mouse_entered() -> void:
 	add_theme_stylebox_override("panel", get_theme_stylebox("hover"))
-
 
 func _on_mouse_exited() -> void:
 	add_theme_stylebox_override("panel", get_theme_stylebox("normal"))
 
-
-func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+func _can_drop_data(_at_position : Vector2, data : Variant) -> bool:
 	return data is Dictionary and data.has("image_path")
 
-
-func _drop_data(_at_position: Vector2, data: Variant) -> void:
+func _drop_data(_at_position : Vector2, data : Variant) -> void:
 	on_drop_image_file(data.image_path)
 
-
-func _get_drag_data(_at_position: Vector2) -> Variant:
-	var preview = %Image.duplicate(true)
+func _get_drag_data(_at_position : Vector2) -> Variant:
+	var preview : TextureRect = %Image.duplicate(true)
 	set_drag_preview(preview)
 	return { "image_path": image_path }

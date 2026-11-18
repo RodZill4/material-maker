@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/discord.svg-8117f208b8ad543022c7adf2069a0c9b.
 base_scale=1.0
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true

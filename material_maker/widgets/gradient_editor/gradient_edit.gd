@@ -118,6 +118,7 @@ func select_color(cursor : GradientEditCursor) -> void:
 	add_child(color_picker_popup)
 
 	var color_picker : ColorPicker = color_picker_popup.get_node("ColorPicker")
+	color_picker.deferred_mode = true
 	color_picker.color = cursor.color
 	color_picker.color_changed.connect(cursor.set_cursor_color)
 
