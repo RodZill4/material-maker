@@ -417,9 +417,9 @@ func _gui_input(event) -> void:
 
 ## Detaches node(s) from connections if D is held down while dragging a node.
 ## [br][br]Unsets [param target_drop_connection]
-func handle_node_detach(event: InputEventMouseMotion) -> void:
+func handle_node_detach(event : InputEventMouseMotion) -> void:
 	if (Input.is_key_pressed(KEY_D) and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
-				and get_selected_nodes().size() and event.relative.length() > 0.0):
+			and get_selected_nodes().size() and event.relative.length() > 0.0):
 		if not get_nodes_under_mouse().is_empty():
 			remove_with_reconnections(true)
 			target_drop_connection.clear()
@@ -430,7 +430,7 @@ func handle_node_detach(event: InputEventMouseMotion) -> void:
 func handle_node_drop(event : InputEventMouseMotion) -> void:
 	if not mm_globals.get_config("auto_node_insertion"):
 		return
-	var single_node_selected := get_selected_nodes().size() == 1
+	var single_node_selected : bool = get_selected_nodes().size() == 1
 	if (single_node_selected and event.button_mask & MOUSE_BUTTON_MASK_LEFT != 0
 		and event.relative.length() > 0.0) or (has_grab and single_node_selected):
 		hint_node_drop_allowed(not Input.is_key_pressed(KEY_D))
@@ -443,7 +443,7 @@ func handle_node_drop(event : InputEventMouseMotion) -> void:
 				return
 		var active_conn : Dictionary
 		var node_rect := node.get_rect()
-		var conns := get_connections_intersecting_with_rect(node_rect)
+		var conns : Array[Dictionary] = get_connections_intersecting_with_rect(node_rect)
 		if not conns.is_empty():
 			if conns.size() > 1:
 				conns.sort_custom(compare_connection_by_port_height)
@@ -471,14 +471,14 @@ func compare_connection_by_port_height(a : Dictionary, b : Dictionary) -> bool:
 	if from_node_dist_to_target < to_node_dist_to_target:
 		var upper : MMGraphNodeMinimal = get_node(NodePath(a.from_node))
 		var lower : MMGraphNodeMinimal = get_node(NodePath(b.from_node))
-		var upper_slot_pos := upper.get_output_port_position(a.from_port) + upper.position_offset
-		var lower_slot_pos := lower.get_output_port_position(b.from_port) + lower.position_offset
+		var upper_slot_pos : Vector2 = upper.get_output_port_position(a.from_port) + upper.position_offset
+		var lower_slot_pos : Vector2 = lower.get_output_port_position(b.from_port) + lower.position_offset
 		return upper_slot_pos.y < lower_slot_pos.y
 	else:
 		var upper : MMGraphNodeMinimal = get_node(NodePath(a.to_node))
 		var lower : MMGraphNodeMinimal = get_node(NodePath(b.to_node))
-		var upper_slot_pos := upper.get_input_port_position(a.to_port) + upper.position_offset
-		var lower_slot_pos := lower.get_input_port_position(b.to_port) + lower.position_offset
+		var upper_slot_pos : Vector2 = upper.get_input_port_position(a.to_port) + upper.position_offset
+		var lower_slot_pos : Vector2 = lower.get_input_port_position(b.to_port) + lower.position_offset
 		return upper_slot_pos.y < lower_slot_pos.y
 
 func drop_node_on_connection(node : GraphNode, connection : Dictionary) -> void:
@@ -507,7 +507,7 @@ func hint_node_drop_allowed(should_allow : bool) -> void:
 	add_theme_color_override("connection_hover_tint_color", Color.TRANSPARENT)
 	get_node("_connection_layer").queue_redraw()
 
-func highlight_connection(connection: Dictionary, amount: float = 0.5) -> void:
+func highlight_connection(connection : Dictionary, amount : float = 0.5) -> void:
 	if not connection.is_empty():
 		set_connection_activity(connection.from_node, connection.from_port,
 				connection.to_node, connection.to_port, amount)
