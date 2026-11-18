@@ -442,7 +442,7 @@ func handle_node_drop(event : InputEventMouseMotion) -> void:
 			if node.name in c.values():
 				return
 		var active_conn : Dictionary
-		var node_rect := node.get_rect()
+		var node_rect : Rect2 = node.get_rect()
 		var conns : Array[Dictionary] = get_connections_intersecting_with_rect(node_rect)
 		if not conns.is_empty():
 			if conns.size() > 1:
@@ -466,8 +466,8 @@ func compare_connection_by_port_height(a : Dictionary, b : Dictionary) -> bool:
 		return false
 	var from_node : MMGraphNodeMinimal = get_node(NodePath(a.from_node))
 	var to_node : MMGraphNodeMinimal = get_node(NodePath(a.to_node))
-	var from_node_dist_to_target := target.position_offset.distance_squared_to(from_node.position_offset)
-	var to_node_dist_to_target := target.position_offset.distance_squared_to(to_node.position_offset)
+	var from_node_dist_to_target : float = target.position_offset.distance_squared_to(from_node.position_offset)
+	var to_node_dist_to_target : float = target.position_offset.distance_squared_to(to_node.position_offset)
 	if from_node_dist_to_target < to_node_dist_to_target:
 		var upper : MMGraphNodeMinimal = get_node(NodePath(a.from_node))
 		var lower : MMGraphNodeMinimal = get_node(NodePath(b.from_node))
@@ -1190,7 +1190,7 @@ func duplicate_selected_with_inputs() -> void:
 ## Detaches a node from an existing connection.
 ## Detached node will not be removed if [param keep_nodes] is set
 func remove_with_reconnections(keep_nodes: bool = false) -> void:
-	var selection := get_selected_nodes()
+	var selection : Array = get_selected_nodes()
 	var from_node : MMGraphNodeMinimal
 	var to_node : MMGraphNodeMinimal
 	var from_slot : int = -1
@@ -1213,8 +1213,8 @@ func remove_with_reconnections(keep_nodes: bool = false) -> void:
 					from_node = from
 					from_slot = c.from_port
 				if from_node and to_node and from_slot != -1 and to_slot != -1:
-					var from_slot_type := from_node.get_output_port_type(from_slot)
-					var to_slot_type := to_node.get_input_port_type(to_slot)
+					var from_slot_type : int = from_node.get_output_port_type(from_slot)
+					var to_slot_type : int = to_node.get_input_port_type(to_slot)
 					if (from_slot_type == to_slot_type
 							or from_slot_type == 42 or to_slot_type == 42):
 						on_connect_node(from_node.name, from_slot, to_node.name, to_slot)
