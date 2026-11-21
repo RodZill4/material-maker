@@ -22,6 +22,18 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 									"smoothstep", "length", "distance", "dot", "cross",
 									"normalize" ]
 
+func update_fonts() -> void:
+	#workaround for godot issue 125687
+	add_theme_font_override("font", FontVariation.new())
+	remove_theme_font_override("font")
+
+	add_theme_font_override("font", FontUtils.code_font)
+	add_theme_font_size_override("font_size", FontUtils.ui_code_font_size)
+
+func _init() -> void:
+	mm_globals.config_changed.connect(update_fonts)
+	update_fonts()
+
 func _ready():
 	syntax_highlighter.clear_color_regions()
 	for t in KEYWORDS:

@@ -57,7 +57,11 @@ func on_counter_change(count : int, pending : int) -> void:
 	if pending == 0:
 		$ProgressBar.max_value = 1
 		$ProgressBar.value = 1
-		$ProgressBar/Label.text = ""
+
+		# Workaround for "fd is null" errors when
+		# changing font at runtime (godot issue #125675)
+		# one character is good enough to prevent it from happening
+		$ProgressBar/Label.text = " "
 	else:
 		if count == pending:
 			$ProgressBar.max_value = count
