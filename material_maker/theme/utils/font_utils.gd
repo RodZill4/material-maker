@@ -75,11 +75,9 @@ static func rebuild_fonts() -> void:
 		if _has_font_config(font) and FileAccess.file_exists(custom_font_path):
 			font_variation.base_font = FontFile.new()
 			font_variation.base_font.load_dynamic_font(custom_font_path)
-			font_variation.base_font.emit_changed()
 		else:
 			mm_globals.set_config(font, "")
 			font_variation.base_font = load(font_variation.fallbacks[0].resource_path)
-			font_variation.base_font.emit_changed()
 		_setup_rendering(font_variation)
 
 static func setup_theme_fonts(theme : Theme, theme_name : String) -> void:
