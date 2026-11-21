@@ -667,7 +667,7 @@ func change_theme(theme_name : String) -> void:
 	theme = _theme
 	ThemeUtils.setup_clear_color()
 	$NodeFactory.on_theme_changed()
-	FontUtils.setup_theme_fonts(theme, theme_name)
+	FontUtils.setup_theme_fonts(theme)
 
 func _on_SetTheme_id_pressed(id : int) -> void:
 	var theme_name : String = ThemeUtils.THEMES[id].to_lower()

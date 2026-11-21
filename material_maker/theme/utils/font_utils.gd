@@ -80,9 +80,9 @@ static func rebuild_fonts() -> void:
 			font_variation.base_font = load(font_variation.fallbacks[0].resource_path)
 		_setup_rendering(font_variation)
 
-static func setup_theme_fonts(theme : Theme, theme_name : String) -> void:
+static func setup_theme_fonts(theme : Theme) -> void:
 	var font : FontVariation = main_font
-	if "classic" in theme_name and not _has_font_config("main_font"):
+	if ThemeUtils.is_classic_theme() and not _has_font_config("main_font"):
 		font = classic_font
 
 	theme.default_font = font
