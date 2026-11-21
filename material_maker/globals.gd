@@ -252,6 +252,3 @@ func ui_scale_factor() -> float:
 
 func is_custom_theme() -> bool:
 	return config.get_value("window", "theme") == "custom"
-
-func is_classic_theme() -> bool:
-	return "classic" in mm_globals.main_window.theme.resource_path
