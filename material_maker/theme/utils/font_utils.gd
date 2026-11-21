@@ -1,12 +1,12 @@
 class_name FontUtils
 extends RefCounted
 
-static var main_font : FontVariation = preload("res://material_maker/theme/fonts/ui/main_font.tres")
-static var medium_font : FontVariation = preload("res://material_maker/theme/fonts/ui/medium_font.tres")
-static var bold_font : FontVariation = preload("res://material_maker/theme/fonts/ui/bold_font.tres")
-static var code_font : FontVariation = preload("res://material_maker/theme/fonts/ui/code_font.tres")
+static var main_font : FontVariation = load("res://material_maker/theme/fonts/ui/main_font.tres")
+static var medium_font : FontVariation = load("res://material_maker/theme/fonts/ui/medium_font.tres")
+static var bold_font : FontVariation = load("res://material_maker/theme/fonts/ui/bold_font.tres")
+static var code_font : FontVariation = load("res://material_maker/theme/fonts/ui/code_font.tres")
 
-static var classic_font : FontVariation = preload("res://material_maker/theme/fonts/ui/classic_font.tres")
+static var classic_font : FontVariation = load("res://material_maker/theme/fonts/ui/classic_font.tres")
 
 static var ui_font_size : int
 static var ui_code_font_size : int
@@ -41,10 +41,10 @@ static func rebuild_fonts() -> void:
 		ui_code_font_size = mm_globals.get_config(SETTINGS_UI_CODE_FONT_SIZE)
 
 	if mm_globals.get_config(SETTINGS_UI_USE_SYSTEM_FONT):
-		main_font = load("res://material_maker/theme/fonts/system/system_main_font.tres")
-		medium_font = load("res://material_maker/theme/fonts/system/system_medium_font.tres")
-		bold_font = load("res://material_maker/theme/fonts/system/system_bold_font.tres")
-		code_font = load("res://material_maker/theme/fonts/system/system_code_font.tres")
+		main_font.base_font = load("res://material_maker/theme/fonts/system/main_font.tres")
+		medium_font.base_font = load("res://material_maker/theme/fonts/system/medium_font.tres")
+		bold_font.base_font = load("res://material_maker/theme/fonts/system/bold_font.tres")
+		code_font.base_font = load("res://material_maker/theme/fonts/system/code_font.tres")
 
 		var config : Dictionary[FontVariation, Dictionary] = {
 			main_font : { "weight": 400, "name": "Segoe UI" },
