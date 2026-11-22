@@ -91,8 +91,8 @@ static func rebuild_fonts() -> void:
 				font_variation.base_font = FontFile.new()
 				font_variation.base_font.load_dynamic_font(custom_font_path)
 		else:
-			mm_globals.set_config(font, "")
 			font_paths[font] = ""
+			mm_globals.set_config(font, "")
 			font_variation.base_font = load(font_variation.fallbacks[0].resource_path)
 		_setup_rendering(font_variation)
 
