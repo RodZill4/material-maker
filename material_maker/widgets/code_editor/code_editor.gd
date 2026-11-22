@@ -22,9 +22,6 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 									"smoothstep", "length", "distance", "dot", "cross",
 									"normalize" ]
 
-func update_fonts() -> void:
-	FontUtils.add_font_override(self, FontUtils.code_font, FontUtils.ui_code_font_size)
-
 func _init() -> void:
 	mm_globals.config_changed.connect(update_fonts)
 	update_fonts()
@@ -65,6 +62,9 @@ func _on_gui_input(event):
 
 func _on_close_pressed():
 	%Find.visible = false
+
+func update_fonts() -> void:
+	FontUtils.add_font_override(self, FontUtils.code_font, FontUtils.ui_code_font_size)
 
 func update_find_occurrences():
 	var find_string : String = %FindString.text
