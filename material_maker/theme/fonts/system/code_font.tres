@@ -1,0 +1,6 @@
+[gd_resource type="SystemFont" format=3 uid="uid://b1rg3mmo631xn"]
+
+[resource]
+font_names = PackedStringArray("Monospace")
+multichannel_signed_distance_field = true
+msdf_pixel_range = 32

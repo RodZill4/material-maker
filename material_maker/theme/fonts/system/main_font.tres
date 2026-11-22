@@ -1,0 +1,6 @@
+[gd_resource type="SystemFont" format=3 uid="uid://35iyrrkn1o1a"]
+
+[resource]
+font_names = PackedStringArray("Sans-Serif")
+multichannel_signed_distance_field = true
+msdf_pixel_range = 32
