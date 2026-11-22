@@ -15,12 +15,6 @@ const SETTINGS_UI_FONT_SIZE : String = "ui_font_size"
 const SETTINGS_UI_CODE_FONT_SIZE : String = "ui_code_font_size"
 const SETTINGS_UI_USE_SYSTEM_FONT : String = "ui_use_system_font"
 
-static func create_italic_variation(font : FontVariation) -> FontVariation:
-	var f : FontVariation = font.duplicate()
-	f.variation_transform = Transform2D(
-			Vector2(1.0, 0.22), Vector2(0.0, 1.0), Vector2.ZERO)
-	return f
-
 static func _has_font_config(config : String) -> bool:
 	return (mm_globals.has_config(config)
 			and not mm_globals.get_config(config).is_empty())
@@ -32,6 +26,17 @@ static func _setup_rendering(font : FontVariation) -> void:
 		font.base_font.multichannel_signed_distance_field = true
 	else:
 		font.base_font.multichannel_signed_distance_field = false
+
+static func create_italic_variation(font : FontVariation) -> FontVariation:
+	var f : FontVariation = font.duplicate()
+	f.variation_transform = Transform2D(
+			Vector2(1.0, 0.22), Vector2(0.0, 1.0), Vector2.ZERO)
+	return f
+
+static func add_font_override(c : Control, fv : FontVariation, fsize : int) -> void:
+	c.remove_theme_font_override("font") #workaround for godot issue 125687
+	c.add_theme_font_override("font", fv)
+	c.add_theme_font_size_override("font", fsize)
 
 static func rebuild_fonts() -> void:
 	if mm_globals.has_config(SETTINGS_UI_FONT_SIZE):

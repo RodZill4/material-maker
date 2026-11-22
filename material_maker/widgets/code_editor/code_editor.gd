@@ -23,12 +23,7 @@ const FUNCTIONS : Array[String] = [ "radians", "degrees", "sin", "cos", "tan", "
 									"normalize" ]
 
 func update_fonts() -> void:
-	#workaround for godot issue 125687
-	add_theme_font_override("font", FontVariation.new())
-	remove_theme_font_override("font")
-
-	add_theme_font_override("font", FontUtils.code_font)
-	add_theme_font_size_override("font_size", FontUtils.ui_code_font_size)
+	FontUtils.add_font_override(self, FontUtils.code_font, FontUtils.ui_code_font_size)
 
 func _init() -> void:
 	mm_globals.config_changed.connect(update_fonts)
