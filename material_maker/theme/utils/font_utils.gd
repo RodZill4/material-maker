@@ -11,6 +11,13 @@ static var classic_font : FontVariation = load("res://material_maker/theme/fonts
 static var ui_font_size : int
 static var ui_code_font_size : int
 
+static var font_paths : Dictionary[String, String] = {
+	"main_font": "",
+	"medium_font": "",
+	"bold_font": "",
+	"code_font": ""
+}
+
 const SETTINGS_UI_FONT_SIZE : String = "ui_font_size"
 const SETTINGS_UI_CODE_FONT_SIZE : String = "ui_code_font_size"
 const SETTINGS_UI_USE_SYSTEM_FONT : String = "ui_use_system_font"
@@ -33,9 +40,11 @@ static func create_italic_variation(font : FontVariation) -> FontVariation:
 	return f
 
 static func add_font_override(c : Control, fv : FontVariation, fsize : int) -> void:
+	if not is_instance_valid(c):
+		return
 	c.remove_theme_font_override("font") #workaround for godot issue 125687
 	c.add_theme_font_override("font", fv)
-	c.add_theme_font_size_override("font", fsize)
+	c.add_theme_font_size_override("font_size", fsize)
 
 static func rebuild_fonts() -> void:
 	if mm_globals.has_config(SETTINGS_UI_FONT_SIZE):
@@ -77,10 +86,13 @@ static func rebuild_fonts() -> void:
 		var font_variation : FontVariation = fonts[font]
 		var custom_font_path : String = mm_globals.get_config(font)
 		if _has_font_config(font) and FileAccess.file_exists(custom_font_path):
-			font_variation.base_font = FontFile.new()
-			font_variation.base_font.load_dynamic_font(custom_font_path)
+			if font_paths[font] != custom_font_path:
+				font_paths[font] = custom_font_path
+				font_variation.base_font = FontFile.new()
+				font_variation.base_font.load_dynamic_font(custom_font_path)
 		else:
 			mm_globals.set_config(font, "")
+			font_paths[font] = ""
 			font_variation.base_font = load(font_variation.fallbacks[0].resource_path)
 		_setup_rendering(font_variation)
 
