@@ -29,8 +29,7 @@ static func _setup_rendering(font : FontVariation) -> void:
 
 static func create_italic_variation(font : FontVariation) -> FontVariation:
 	var f : FontVariation = font.duplicate()
-	f.variation_transform = Transform2D(
-			Vector2(1.0, 0.22), Vector2(0.0, 1.0), Vector2.ZERO)
+	f.variation_transform = Transform2D(Vector2(1.0, 0.22), Vector2(0.0, 1.0), Vector2.ZERO)
 	return f
 
 static func add_font_override(c : Control, fv : FontVariation, fsize : int) -> void:
