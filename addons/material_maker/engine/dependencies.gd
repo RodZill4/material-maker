@@ -53,11 +53,16 @@ func create_buffer(buffer_name : String, object : Object = null):
 		object.connect("tree_exiting", self.delete_buffers_from_object.bind(object))
 
 func delete_buffer(buffer_name : String):
+	if not buffers.has(buffer_name):
+		return
 	buffer_clear_dependencies(buffer_name)
-	buffers.erase(buffer_name)
 	if dependencies.has(buffer_name):
 		for b in dependencies[buffer_name]:
-			buffers[b].dependencies.erase(buffer_name)
+			if buffers.has(b):
+				buffers[b].dependencies.erase(buffer_name)
+				buffers[b].pending_dependencies = max(0, buffers[b].pending_dependencies - 1)
+		dependencies.erase(buffer_name)
+	buffers.erase(buffer_name)
 	dependencies_values.erase(buffer_name)
 
 func delete_buffers_from_object(object : Object):
@@ -155,14 +160,15 @@ func dependency_update(dependency_name : String, value = null, internal : bool =
 		#print("Resetting stats because of %s" % dependency_name)
 		reset_stats = true
 	if dependencies.has(dependency_name):
-		for d in dependencies[dependency_name]:
-			assert(buffers.has(d))
+		for d in dependencies[dependency_name].duplicate():
+			if not buffers.has(d):
+				continue
 			var b : Buffer = buffers[d]
 			if is_buffer_just_updated:
 				b.pending_dependencies -= 1
 				if b.pending_dependencies == 0:
 					need_update = true
-			if b.object.has_method("on_dep_update_value") and await b.object.on_dep_update_value(d, dependency_name, value):
+			if b.object != null and b.object.has_method("on_dep_update_value") and await b.object.on_dep_update_value(d, dependency_name, value):
 				continue
 			buffer_invalidate(d)
 			need_update = true
@@ -198,10 +204,10 @@ func do_update():
 			if buffer.object != null and buffer.object is MMGenBase and buffer.status != Buffer.Updated:
 				invalidated_buffers += 1
 			if (buffer.status == Buffer.Invalidated or buffer.status == Buffer.UpdatingInvalidated) and buffer.pending_dependencies == 0:
-				if buffer.object.has_method("on_dep_update_buffer"):
+				if buffer.object != null and buffer.object.has_method("on_dep_update_buffer"):
 					buffer.status = Buffer.Updating
 					var status = await buffer.object.on_dep_update_buffer(b)
-					if status is bool and ! status:
+					if status is bool and ! status and buffers.get(b) == buffer and buffer.status == Buffer.Updating:
 						buffer.status = Buffer.Error
 		if reset_stats:
 			render_queue_size = invalidated_buffers
@@ -226,12 +232,17 @@ func material_update_params(material : MMShaderBase):
 			material.set_parameter(p, dependencies_values[p])
 
 func buffer_create_compute_material(buffer_name : String, material : MMShaderBase):
+	if not buffers.has(buffer_name):
+		return
 	buffer_clear_dependencies(buffer_name)
 	for p in material.get_parameters().keys():
+		if not buffers.has(buffer_name):
+			return
 		var value = buffer_add_dependency(buffer_name, p)
 		if value != null:
 			await material.set_parameter(p, value)
-	buffers[buffer_name].shader_generations += 1
+	if buffers.has(buffer_name):
+		buffers[buffer_name].shader_generations += 1
 
 func buffer_create_shader_material(buffer_name : String, material : MMShaderBase, shader : String):
 	if await material.set_shader(shader):
@@ -261,7 +272,7 @@ func print_stats(object = null):
 			print("  Pending: 0")
 		print("  Renders: %d" % buffers[b].renders)
 		print("  Shader generations: %d" % buffers[b].shader_generations)
-		if buffers[b].object.has_method("on_dep_shader_generations"):
+		if buffers[b].object != null and buffers[b].object.has_method("on_dep_shader_generations"):
 			var count = buffers[b].object.on_dep_shader_generations(b)
 	for s in Buffer.STATUS:
 		print("%s: %s" % [ s, ", ".join(statuses[s]) ])
