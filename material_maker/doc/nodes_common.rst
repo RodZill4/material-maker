@@ -14,9 +14,9 @@ Outputs
 Nodes can have several outputs that represent the data they provide. Each node output can be
 connected to several node inputs. Each node output (and input) can be:
 
-* a **grayscale image** (shown in grey) 
+* a **grayscale image** (shown in gray)
 
-* a **color image** (shown in blue)
+* a **color image** (shown in light blue)
 
 * an **RGBA image** (shown in blue)
 
