@@ -26,7 +26,7 @@ The **White Noise** node accepts the following parameters:
 Notes
 +++++
 
-Although this node has a grid size, it generates a resolution independant texture.
+Although this node has a grid size, it generates a resolution independent texture.
 
 Example images
 ++++++++++++++
