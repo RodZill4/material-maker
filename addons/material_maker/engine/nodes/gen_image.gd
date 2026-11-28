@@ -15,7 +15,7 @@ func _ready() -> void:
 	add_child(timer)
 	timer.wait_time = 2
 	timer.start()
-	timer.connect("timeout", Callable(self, "_on_timeout"))
+	timer.timeout.connect(_on_timeout)
 
 func get_type() -> String:
 	return "image"
@@ -30,6 +30,30 @@ func get_parameter_defs() -> Array:
 		{ name="clamp", type="boolean", label="Clamp", default=false },
 		{ name="filter", type="boolean", label="Filter", default=true }
 	]
+
+func get_output_defs(_show_hidden : bool = false) -> Array:
+	return [
+		{ type="rgba", shortdesc="Image" },
+		{ name="width", type="f", shortdesc="Width" },
+		{ name="height", type="f", shortdesc="Height" }
+	]
+
+func _get_shader_code(uv : String, output_index : int, context : MMGenContext) -> ShaderCode:
+	if output_index == 0:
+		return super._get_shader_code(uv, output_index, context)
+	else:
+		var genname : String = "o" + str(get_instance_id())
+		var def : Dictionary = get_output_defs()[output_index]
+		var type : String = mm_io_types.types[def.type].type
+		var rv : ShaderCode = ShaderCode.new()
+
+		var wh : String = "w" if output_index == 1 else "h"
+		var value : int = texture.get_width() if output_index == 1 else texture.get_height()
+
+		rv.code = "%s %s_i%s = %.1f;\n" % [ type, genname, wh, value ]
+		rv.output_type = def.type
+		rv.output_values[rv.output_type] = "%s_i%s" % [ genname, wh ]
+		return rv
 
 func get_filetime(file_path : String) -> int:
 	if FileAccess.file_exists(file_path):

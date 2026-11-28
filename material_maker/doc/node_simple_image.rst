@@ -14,7 +14,19 @@ The image node does not accept any input.
 Outputs
 +++++++
 
-The image node provides a single color texture.
+The **Image** node provides three outputs:
+
+* An RGBA texture of the image.
+
+* Width of the image in pixels.
+
+* Height of the image in pixels.
+
+The *Width* and *Height* outputs can be used with the
+:doc:`Transform Node </node_transform>` to fix aspect ratio manually:
+
+.. image:: images/node_image_fix_aspect.png
+	:align: center
 
 Parameters
 ++++++++++
