@@ -458,6 +458,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_4t3lu"]
 resource_name = "start_time"
 length = 10.0
+loop_mode = 1
 step = 0.06666667
 tracks/0/type = "value"
 tracks/0/imported = false
