@@ -309,6 +309,11 @@ func restore_adjustment_settings() -> void:
 	setting_changed.emit(Section.ADJUSTMENT)
 
 func restore_dof_settings() -> void:
+	if not DepthOfField.button_pressed:
+		camera_attributes.dof_blur_far_enabled = false
+		camera_attributes.dof_blur_near_enabled = false
+		return
+
 	if mm_globals.has_config(SETTINGS_PREVIEW_DOF_FAR):
 		FarEnabled.button_pressed = mm_globals.get_config(SETTINGS_PREVIEW_DOF_FAR)
 		camera_attributes.dof_blur_far_enabled = FarEnabled.button_pressed
