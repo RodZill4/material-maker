@@ -351,7 +351,7 @@ func on_config_changed() -> void:
 		get_window().gui_embed_subwindows = mm_globals.get_config("ui_single_window_mode")
 	
 	# set custom theme
-	if mm_globals.config.get_value("window", "theme") == "custom":
+	if mm_globals.config.get_value("window", "theme", "default dark") == "custom":
 		change_theme("custom")
 
 
@@ -1152,6 +1152,7 @@ func frame_nodes() -> void:
 			# Avoid calling resize twice
 			if not mm_globals.get_config("auto_size_comment"):
 				nodes[0].resize_to_selection()
+			await get_tree().process_frame
 			nodes[0].selected = true
 		graph_edit.undoredo.end_group()
 

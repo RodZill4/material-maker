@@ -4,17 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://rflulhsuy3ax" path="res://material_maker/widgets/float_edit/float_edit.tscn" id="2"]
 [ext_resource type="Script" uid="uid://cwmujy6n8f23a" path="res://material_maker/widgets/size_option_button/size_option_button.gd" id="3"]
 
-[sub_resource type="Shader" id="1"]
-
 [sub_resource type="ShaderMaterial" id="2"]
-render_priority = 0
-shader = SubResource("1")
-
-[sub_resource type="Shader" id="3"]
 
 [sub_resource type="ShaderMaterial" id="4"]
-render_priority = 0
-shader = SubResource("3")
 
 [sub_resource type="Shader" id="5"]
 code = "shader_type canvas_item;
@@ -73,11 +65,7 @@ _data = {
 &"show": SubResource("9")
 }
 
-[sub_resource type="Shader" id="10"]
-
 [sub_resource type="ShaderMaterial" id="11"]
-render_priority = 0
-shader = SubResource("10")
 
 [node name="ExportAnimation" type="Window" unique_id=2007371789]
 oversampling_override = 1.0

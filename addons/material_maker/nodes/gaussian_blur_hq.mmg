@@ -74,7 +74,7 @@
 		}
 	],
 	"label": "Gaussian Blur HQ",
-	"longdesc": "Applys a gaussian blur on its input",
+	"longdesc": "Applies a high-quality gaussian blur on its input",
 	"name": "gaussian_blur_hq",
 	"node_position": {
 		"x": 0,

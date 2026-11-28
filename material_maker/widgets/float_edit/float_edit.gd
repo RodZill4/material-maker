@@ -364,15 +364,13 @@ func _exit_tree() -> void:
 func _handle_sensitivity_adjustment(event : InputEvent) -> void:
 	if OS.get_name() == "Android":
 		return
-	if mode == Modes.SLIDING:
+	if mode == Modes.SLIDING and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		adjust_increment = 0.05 if event.alt_pressed else 0.1
-		if event is InputEventMouseButton:
-			if event.pressed:
-				if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-					_update_sensitivity(-1.0)
-				elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-					_update_sensitivity(1.0)
-			else:
-				if event.button_index == MOUSE_BUTTON_LEFT:
-					adjusting_sensitivity = false
-					$Edit.queue_redraw()
+		if event is InputEventMouseButton and event.pressed:
+			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_update_sensitivity(-1.0)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_update_sensitivity(1.0)
+	elif adjusting_sensitivity:
+		adjusting_sensitivity = false
+		$Edit.queue_redraw()

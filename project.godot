@@ -23,10 +23,10 @@ config/custom_user_dir_name="material_maker_2"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.7")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-config/icon="res://icon.png"
-config/windows_native_icon="res://icon.ico"
 boot_splash/show_image=false
 boot_splash/use_filter=false
+config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 config/release="1.8.0.0"
 config/actual_release="1.8"
 

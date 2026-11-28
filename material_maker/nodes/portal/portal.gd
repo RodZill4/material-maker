@@ -136,7 +136,7 @@ func _input(event : InputEvent) -> void:
 			KEY_ALT:
 				set_link_hint(event.pressed)
 			KEY_R:
-				if selected:
+				if selected and not is_editing:
 					generator.horizontal_label = !generator.horizontal_label
 					queue_redraw()
 	elif event is InputEventMouseMotion:

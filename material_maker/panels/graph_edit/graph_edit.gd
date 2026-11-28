@@ -1055,6 +1055,8 @@ func do_paste(data) -> void:
 			c.selected = false
 	if new_nodes != null:
 		for c in new_nodes:
+			if c is MMGraphComment:
+				await get_tree().process_frame
 			c.selected = true
 
 func paste() -> void:
