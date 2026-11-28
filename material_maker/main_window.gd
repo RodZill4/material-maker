@@ -1139,6 +1139,7 @@ func frame_nodes() -> void:
 			# Avoid calling resize twice
 			if not mm_globals.get_config("auto_size_comment"):
 				nodes[0].resize_to_selection()
+			await get_tree().process_frame
 			nodes[0].selected = true
 		graph_edit.undoredo.end_group()
 
