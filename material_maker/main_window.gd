@@ -345,7 +345,7 @@ func on_config_changed() -> void:
 		get_window().gui_embed_subwindows = mm_globals.get_config("ui_single_window_mode")
 	
 	# set custom theme
-	if mm_globals.config.get_value("window", "theme") == "custom":
+	if mm_globals.config.get_value("window", "theme", "default dark") == "custom":
 		change_theme("custom")
 
 func get_panel(panel_name : String) -> Control:
