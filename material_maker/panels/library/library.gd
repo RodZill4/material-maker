@@ -368,6 +368,7 @@ func _on_Libraries_id_pressed(id : int) -> void:
 			var status = await dialog.enter_info()
 			if status.ok:
 				library_manager.create_library(status.path, status.name)
+				mm_globals.main_window.update_menus()
 		MENU_LOAD_LIBRARY:
 			if OS.get_name() == "HTML5":
 				pass
