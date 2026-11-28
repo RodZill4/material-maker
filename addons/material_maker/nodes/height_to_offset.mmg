@@ -57,7 +57,7 @@
 			{
 				"control": "None",
 				"default": 0.5,
-				"label": "",
+				"label": "Target",
 				"longdesc": "The target value on the heightmap",
 				"max": 1,
 				"min": 0,

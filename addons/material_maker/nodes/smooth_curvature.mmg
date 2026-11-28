@@ -321,6 +321,10 @@
 						{
 							"node": "buffer_2",
 							"widget": "size"
+						},
+						{
+							"node": "fast_blur_6",
+							"widget": "param0"
 						}
 					],
 					"longdesc": "The buffer size for the filter",

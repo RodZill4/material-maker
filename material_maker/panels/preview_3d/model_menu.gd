@@ -55,7 +55,7 @@ func update_model_selector() -> void:
 	for i in min(custom_models.size(), MAX_CUSTOM_MODELS):
 		Model.add_item(custom_models[i].get_file(), i+objects_count)
 
-func _on_model_item_selected(index: int, custom_model_path : String = "") -> void:
+func _on_model_item_selected(index : int, custom_model_path : String = "") -> void:
 	var objects_count : int = preview3D.objects.get_child_count()
 	if index >= objects_count:
 		custom_model_path = custom_models[index-objects_count]
@@ -77,8 +77,13 @@ func _on_model_item_selected(index: int, custom_model_path : String = "") -> voi
 
 	# Return to the previous model, if the selection failed (can happen on custom models)
 	elif mm_globals.has_config(SETTING_3D_PREVIEW_MODEL):
-		Model.select(mm_globals.get_config(SETTING_3D_PREVIEW_MODEL))
-		_on_model_item_selected(mm_globals.get_config(SETTING_3D_PREVIEW_MODEL))
+		var config_index : int = mm_globals.get_config(SETTING_3D_PREVIEW_MODEL)
+		if index != config_index:
+			Model.select(config_index)
+			_on_model_item_selected(config_index)
+		else:
+			Model.select(0)
+			_on_model_item_selected(0)
 	else:
 		Model.select(0)
 		_on_model_item_selected(0)

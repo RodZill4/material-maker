@@ -87,7 +87,7 @@
 		"parameters": [
 			{
 				"default": 0,
-				"label": "",
+				"label": "Shape",
 				"longdesc": "The type of shape drawn by this node",
 				"name": "shape",
 				"shortdesc": "Shape",
@@ -118,7 +118,7 @@
 			{
 				"control": "None",
 				"default": 3,
-				"label": "",
+				"label": "Sides",
 				"longdesc": "The number of sides of the generated shape (unused for Circle)",
 				"max": 32,
 				"min": 2,
@@ -130,7 +130,7 @@
 			{
 				"control": "None",
 				"default": 1,
-				"label": "",
+				"label": "Radius",
 				"longdesc": "The size of the generated shape",
 				"max": 1,
 				"min": 0,
@@ -142,7 +142,7 @@
 			{
 				"control": "None",
 				"default": 0.2,
-				"label": "",
+				"label": "Edge",
 				"longdesc": "The edge width of the generated shape",
 				"max": 1,
 				"min": 0,

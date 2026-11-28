@@ -54,10 +54,8 @@ func reattach_menu(node:Node) -> Node:
 
 
 func _notification(what: int) -> void:
-	if not is_node_ready():
-		return
 	if what == NOTIFICATION_THEME_CHANGED:
-		set_environment(current_environment)
+		set_environment.call_deferred(current_environment)
 
 
 func set_model(id : int, custom_model_path : String = "") -> bool:

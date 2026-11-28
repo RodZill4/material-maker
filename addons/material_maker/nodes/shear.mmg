@@ -37,7 +37,7 @@
 		"parameters": [
 			{
 				"default": 1,
-				"label": "",
+				"label": "Direction",
 				"longdesc": "The direction of the shear transform (horizontal or vertical)",
 				"name": "direction",
 				"shortdesc": "Direction",
@@ -56,7 +56,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Amount",
 				"longdesc": "The amount of the transform",
 				"max": 1,
 				"min": -1,
@@ -68,7 +68,7 @@
 			{
 				"control": "None",
 				"default": 0,
-				"label": "",
+				"label": "Center",
 				"longdesc": "The position of the shear center",
 				"max": 1,
 				"min": 0,

@@ -48,6 +48,10 @@ func write(l: String, m : String):
 	else:
 		$RichTextLabel.text += l+": "+m+"\n"
 
+func clear() -> void:
+	$RichTextLabel.text = ""
+	mm_logger.message("Material Maker " + ProjectSettings.get_setting("application/config/actual_release"))
+
 var generator = null
 
 func _on_rich_text_label_meta_clicked(meta):

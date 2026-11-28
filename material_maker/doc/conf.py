@@ -24,7 +24,7 @@ copyright = '2018-present, Rodolphe Suescun and contributors'
 author = 'Rodolphe Suescun'
 
 # The short X.Y version
-version = '1.7'
+version = '1.8'
 # The full version, including alpha/beta/rc tags
 release = ''
 
@@ -166,3 +166,6 @@ texinfo_documents = [
      author, 'MaterialMaker', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+# Do not include sources files(*.rst.txt) when building the html pages
+html_copy_source = False

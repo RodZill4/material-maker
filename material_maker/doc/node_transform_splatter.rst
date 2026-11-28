@@ -23,7 +23,10 @@ Outputs
 
 The **Splatter** node outputs the splat image.
 
-The grayscale splatter has two additional outputs, one that assigns a random color to each splat instance and one that assigns a UV layout to each splat instance.
+The grayscale splatter has three additional outputs:
+* one that assigns a random color to each splat instance
+* one that assigns a UV layout to each splat instance
+* one that outputs the position of the center of each splat instance
 
 Parameters
 ++++++++++

@@ -15,4 +15,6 @@ dest_files=["res://.godot/imported/arrow.svg-e1254f39413b91d100a308431d762230.dp
 base_scale=1.0
 saturation=1.0
 color_map={}
+fix_alpha_border=false
+premult_alpha=false
 compress=true

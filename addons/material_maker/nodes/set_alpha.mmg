@@ -1,0 +1,44 @@
+{
+	"name": "set_alpha",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"parameters": {},
+	"seed_int": 0,
+	"shader_model": {
+		"code": "",
+		"global": "",
+		"inputs": [
+			{
+				"default": "vec4(0.0)",
+				"label": "Input",
+				"longdesc": "Input image",
+				"name": "in",
+				"shortdesc": "Input",
+				"type": "rgba"
+			},
+			{
+				"default": "$in(uv).a",
+				"label": "Alpha",
+				"name": "a",
+				"shortdesc": "Alpha",
+				"type": "f"
+			}
+		],
+		"instance": "",
+		"longdesc": "Sets alpha channel for the input Image. When no alpha is provided, the alpha from the input image is used.",
+		"name": "Set Alpha",
+		"outputs": [
+			{
+				"longdesc": "Output image with alpha applied",
+				"rgba": "vec4($in($uv).rgb, $a($uv))",
+				"shortdesc": "Output",
+				"type": "rgba"
+			}
+		],
+		"parameters": [],
+		"shortdesc": "Set Alpha"
+	},
+	"type": "shader"
+}

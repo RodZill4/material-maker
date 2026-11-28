@@ -62,7 +62,7 @@
 			{
 				"control": "None",
 				"default": 0.25,
-				"label": "",
+				"label": "Offset",
 				"longdesc": "The offset applied to the input shape during the revolution operation",
 				"max": 1,
 				"min": 0,
