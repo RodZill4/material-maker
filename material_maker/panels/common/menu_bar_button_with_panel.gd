@@ -15,7 +15,7 @@ func _ready() -> void:
 
 	panel.hide()
 
-	theme_arrow_icon = get_theme_icon("arrow", "OptionButton")
+	theme_arrow_icon = get_theme_icon("dropdown", "MM_Icons")
 	icon = get_theme_icon(icon_name, "MM_Icons")
 	mouse_entered.connect(func():
 		mm_globals.set_tip_text("#LMB: Open/Close panel, #RMB: Pin/Unpin Panel"))
